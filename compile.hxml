@@ -1,2 +1,3 @@
 --class-path src
---js Minilang.js
+--main Main
+-cpp out

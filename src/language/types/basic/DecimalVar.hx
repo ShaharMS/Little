@@ -4,24 +4,24 @@ import language.features.MemoryTree;
 import language.features.Variable;
 
 /**
- * The standart Minilang Number type.
+ * The standart Minilang DecimalNumber type.
  */
-class NumberVar implements Variable {
+class DecimalVar implements Variable {
     
 
-	public function new(int:Int, name:String) {
-		intValue = int;
-		MemoryTree.pushKey(name, int);
+	public function new(float:Float, name:String) {
+		floatValue = float;
+		MemoryTree.pushKey(name, float);
 	}
     /**
-     * The variable's haxe `Int` value
+     * The variable's haxe `Float` value
      */
-    public var intValue(default, set):Int;
+    public var floatValue(default, set):Float;
 
-	function set_intValue(v:Int) {
+	function set_floatValue(v:Float) {
 		MemoryTree.removeKey(name);
 		MemoryTree.pushKey(name, v);
-		return intValue = v;
+		return floatValue = v;
 	}
 
     /**
@@ -31,7 +31,7 @@ class NumberVar implements Variable {
 
 	function set_name(v:String) {
 		MemoryTree.removeKey(name);
-		MemoryTree.pushKey(v, intValue);
+		MemoryTree.pushKey(v, floatValue);
 		return name = v;
 	}
 
@@ -46,38 +46,39 @@ class NumberVar implements Variable {
 	public var valueTree(get, set):Dynamic;
 
 	public function toString():String {
-		return  'value: $intValue, name: $name';
+		return  'value: $floatValue, name: $name';
 	}
 
 	function get_basicValue():Dynamic {
-		return intValue;
+		return floatValue;
 	}
 
 	function set_basicValue(value:Dynamic):Dynamic {
-        intValue = cast value;
-		return intValue;
+        floatValue = cast value;
+		return floatValue;
 	}
 
 	function get_valueTree():Dynamic {
-		return intValue;
+		return floatValue;
 	}
 
 	function set_valueTree(value:Dynamic):Dynamic {
-        intValue = cast value;
+        floatValue = cast value;
 		return value;
 	}
 
-    public static function readIsolate(varLine:String):NumberVar {
-		var result = {name: "", intValue: 0};
+    public static function readIsolate(varLine:String):DecimalVar {
+		var result = {name: "", floatValue: 0.};
         var info = StringTools.replace(varLine, 'define ', '');
 		if (info.length == varLine.length) return null;
-		final gatherType = ~/(?:= *([+-]?[0-9]+) *)$/m;
+		final gatherType = ~/(?:= *[+-]?([0-9]+\.?[0-9]*|\.[0-9]+))$/m;
 		if (gatherType.match(info)) {
-			result.intValue = Std.parseInt(gatherType.matched(1));
+			result.floatValue = Std.parseFloat(gatherType.matched(1));
+            #if cpp if (gatherType.matched(0).indexOf('-') != -1) result.floatValue = -result.floatValue; #end
 			var name = ~/^ *(\w+)/m;
-			name.match(info);
+			trace(name.match(info));
 			result.name = name.matched(1);
-			return new NumberVar(result.intValue, result.name);
+			return new DecimalVar(result.floatValue, result.name);
 		} 
 		return null;
     }
