@@ -11,7 +11,8 @@ class DecimalVar implements Variable {
 
 	public function new(float:Float, name:String) {
 		floatValue = float;
-		MemoryTree.pushKey(name, float);
+        this.name = name;
+		MemoryTree.pushKey(name, float, this);
 	}
     /**
      * The variable's haxe `Float` value
@@ -20,7 +21,7 @@ class DecimalVar implements Variable {
 
 	function set_floatValue(v:Float) {
 		MemoryTree.removeKey(name);
-		MemoryTree.pushKey(name, v);
+		MemoryTree.pushKey(name, v, this);
 		return floatValue = v;
 	}
 
@@ -31,7 +32,7 @@ class DecimalVar implements Variable {
 
 	function set_name(v:String) {
 		MemoryTree.removeKey(name);
-		MemoryTree.pushKey(v, floatValue);
+		MemoryTree.pushKey(v, floatValue, this);
 		return name = v;
 	}
 
@@ -67,16 +68,14 @@ class DecimalVar implements Variable {
 		return value;
 	}
 
-    public static function readIsolate(varLine:String):DecimalVar {
+    public static function process(varLine:String):DecimalVar {
 		var result = {name: "", floatValue: 0.};
         var info = StringTools.replace(varLine, 'define ', '');
 		if (info.length == varLine.length) return null;
-		final gatherType = ~/(?:= *[+-]?([0-9]+\.?[0-9]*|\.[0-9]+))$/m;
+		final gatherType = ~/(?:= *([+-]?[0-9]+\.?[0-9]*|\.[0-9]+))$/m;
 		if (gatherType.match(info)) {
 			result.floatValue = Std.parseFloat(gatherType.matched(1));
-            #if cpp if (gatherType.matched(0).indexOf('-') != -1) result.floatValue = -result.floatValue; #end
 			var name = ~/^ *(\w+)/m;
-			trace(name.match(info));
 			result.name = name.matched(1);
 			return new DecimalVar(result.floatValue, result.name);
 		} 

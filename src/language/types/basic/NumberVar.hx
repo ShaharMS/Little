@@ -11,7 +11,8 @@ class NumberVar implements Variable {
 
 	public function new(int:Int, name:String) {
 		intValue = int;
-		MemoryTree.pushKey(name, int);
+		this.name = name;
+		MemoryTree.pushKey(name, int, this);
 	}
     /**
      * The variable's haxe `Int` value
@@ -20,7 +21,7 @@ class NumberVar implements Variable {
 
 	function set_intValue(v:Int) {
 		MemoryTree.removeKey(name);
-		MemoryTree.pushKey(name, v);
+		MemoryTree.pushKey(name, v, this);
 		return intValue = v;
 	}
 
@@ -31,7 +32,7 @@ class NumberVar implements Variable {
 
 	function set_name(v:String) {
 		MemoryTree.removeKey(name);
-		MemoryTree.pushKey(v, intValue);
+		MemoryTree.pushKey(v, intValue, this);
 		return name = v;
 	}
 
@@ -67,7 +68,7 @@ class NumberVar implements Variable {
 		return value;
 	}
 
-    public static function readIsolate(varLine:String):NumberVar {
+    public static function process(varLine:String):NumberVar {
 		var result = {name: "", intValue: 0};
         var info = StringTools.replace(varLine, 'define ', '');
 		if (info.length == varLine.length) return null;
@@ -77,6 +78,7 @@ class NumberVar implements Variable {
 			var name = ~/^ *(\w+)/m;
 			name.match(info);
 			result.name = name.matched(1);
+			trace(result.name);
 			return new NumberVar(result.intValue, result.name);
 		} 
 		return null;

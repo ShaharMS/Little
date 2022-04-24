@@ -5,13 +5,13 @@ package language.features;
  */
 class MemoryTree {
     
-    public static var tree:Map<String, Dynamic> = [
+    public static var tree:Map<String, {value:Dynamic, parent:Variable}> = [
 
     ];
 
-    public static function pushKey(name:String, value:Dynamic) {
+    public static function pushKey(name:String, value:Dynamic, parent:Dynamic){
         if (name == null) return;
-        tree.set(name, value);
+        tree.set(name, {value: value, parent: parent});
     }
 
     public static function removeKey(name:String) {

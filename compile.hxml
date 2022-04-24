@@ -1,3 +1,4 @@
+--library formula
 --class-path src
 --main Main
 -cpp out
