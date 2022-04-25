@@ -82,7 +82,6 @@ class NumberVar implements Variable {
 			var name = ~/^ *(\w+)/m;
 			name.match(info);
 			result.name = name.matched(1);
-			trace(result.name);
 			return new NumberVar(result.intValue, result.name);
 		} 
 		return null;

@@ -53,6 +53,7 @@ class BasicMath {
     public overload extern inline static function divide(a:DecimalVar, b:DecimalVar) return new DecimalVar(a.floatValue / b.floatValue, a.name);
 
     public static function condense(equLine:String):String {
+        if (equLine.indexesFromArray(["+", "-", "*", "/", "%"]).length == 0) return equLine;
         var finalValue = 0.;
         var defValueDetector = ~/([a-zA-Z_]+)/;
         var equation:String;
@@ -66,11 +67,19 @@ class BasicMath {
             return equation.substring(i.startIndex, i.endIndex);
         });
         params.sortByLength().reverse();
+        trace(params);
         for (i in params) {
-            final value = MemoryTree.tree[i].parent.basicValue;
-            if (value == null) throw "Non-existent Definition: You're trying to reference a defention that doesnt exist";
+            try {
+                trace(i);
+                final value = MemoryTree.tree[i].parent.basicValue;
+                trace(value);
+                equation = StringTools.replace(equation, i, value);
+                trace(equation);
+            } catch (e) {
+                throw "Non-existent Definition: You're trying to reference a defintion that doesnt exist. are you sure your'e trying to get the definition: '" + i + "'?";
+            }
         }
-        //finalValue = formula.result;
+        finalValue = Formula.fromString(equation).simplify().result;
         var eSplit = equLine.split("=");
         eSplit.pop();
         eSplit.push(finalValue + '');
