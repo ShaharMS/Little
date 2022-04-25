@@ -2,7 +2,7 @@ package language.types.basic;
 
 import language.constraints.Types;
 import language.features.MemoryTree;
-import language.features.Variable;
+import language.constraints.Variable;
 
 /**
  * The standart Minilang DecimalNumber type.
@@ -14,18 +14,12 @@ class DecimalVar implements Variable {
 	public function new(float:Float, name:String) {
 		floatValue = float;
         this.name = name;
-		MemoryTree.pushKey(name, float, this);
+		MemoryTree.pushKey(name, this);
 	}
     /**
      * The variable's haxe `Float` value
      */
-    public var floatValue(default, set):Null<Float>;
-
-	function set_floatValue(v:Float) {
-		MemoryTree.removeKey(name);
-		MemoryTree.pushKey(name, v, this);
-		return floatValue = v;
-	}
+    public var floatValue:Null<Float>;
 
     /**
      * The assigned name of the variable
@@ -34,7 +28,7 @@ class DecimalVar implements Variable {
 
 	function set_name(v:String) {
 		MemoryTree.removeKey(name);
-		MemoryTree.pushKey(v, floatValue, this);
+		MemoryTree.pushKey(v, this);
 		return name = v;
 	}
 

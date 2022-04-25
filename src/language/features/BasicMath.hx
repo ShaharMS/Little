@@ -1,6 +1,6 @@
 package language.features;
 
-import haxe.ds.Either;
+using texter.general.TextTools;
 import language.types.basic.DecimalVar;
 import language.types.basic.NumberVar;
 
@@ -61,12 +61,16 @@ class BasicMath {
         } else {
             equation = equLine;
         }
-        trace(equation);
-        var formula = Formula.fromString(equation);
-        for (s in formula.params()) {
-            formula.bind(MemoryTree.tree[s].value, s);
+        var paramPositions = TextTools.indexesFromEReg(equation, defValueDetector);
+        var params = paramPositions.map( (i) -> {
+            return equation.substring(i.startIndex, i.endIndex);
+        });
+        params.sortByLength().reverse();
+        for (i in params) {
+            final value = MemoryTree.tree[i].parent.basicValue;
+            if (value == null) throw "Non-existent Definition: You're trying to reference a defention that doesnt exist";
         }
-        finalValue = formula.result;
+        //finalValue = formula.result;
         var eSplit = equLine.split("=");
         eSplit.pop();
         eSplit.push(finalValue + '');

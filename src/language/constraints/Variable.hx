@@ -1,4 +1,4 @@
-package language.features;
+package language.constraints;
 
 import language.constraints.Types;
 

@@ -2,7 +2,7 @@ package language.types.basic;
 
 import language.constraints.Types;
 import language.features.MemoryTree;
-import language.features.Variable;
+import language.constraints.Variable;
 
 /**
  * The standart Minilang Number type.
@@ -14,18 +14,12 @@ class NumberVar implements Variable {
 	public function new(int:Int, name:String) {
 		intValue = int;
 		this.name = name;
-		MemoryTree.pushKey(name, int, this);
+		MemoryTree.pushKey(name, this);
 	}
     /**
      * The variable's haxe `Int` value
      */
-    public var intValue(default, set):Null<Int>;
-
-	function set_intValue(v:Int) {
-		MemoryTree.removeKey(name);
-		MemoryTree.pushKey(name, v, this);
-		return intValue = v;
-	}
+    public var intValue:Null<Int>;
 
     /**
      * The assigned name of the variable
@@ -34,7 +28,7 @@ class NumberVar implements Variable {
 
 	function set_name(v:String) {
 		MemoryTree.removeKey(name);
-		MemoryTree.pushKey(v, intValue, this);
+		MemoryTree.pushKey(v, this);
 		return name = v;
 	}
 

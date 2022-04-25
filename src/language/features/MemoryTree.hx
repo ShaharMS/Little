@@ -1,17 +1,19 @@
 package language.features;
 
+import language.constraints.Variable;
+
 /**
  * The memory class contains all in-memory references defined by the user.
  */
 class MemoryTree {
     
-    public static var tree:Map<String, {value:Dynamic, parent:Variable}> = [
+    public static var tree:Map<String, {parent:Variable}> = [
 
     ];
 
-    public static function pushKey(name:String, value:Dynamic, parent:Dynamic){
+    public static function pushKey(name:String, parent:Dynamic){
         if (name == null) return;
-        tree.set(name, {value: value, parent: parent});
+        tree.set(name, parent);
     }
 
     public static function removeKey(name:String) {
