@@ -1,5 +1,6 @@
 package language.types.basic;
 
+import language.constraints.Types;
 import language.features.MemoryTree;
 import language.features.Variable;
 
@@ -8,6 +9,7 @@ import language.features.Variable;
  */
 class NumberVar implements Variable {
     
+	public var type(default, never):Types = Types.NUMBER;
 
 	public function new(int:Int, name:String) {
 		intValue = int;
@@ -17,7 +19,7 @@ class NumberVar implements Variable {
     /**
      * The variable's haxe `Int` value
      */
-    public var intValue(default, set):Int;
+    public var intValue(default, set):Null<Int>;
 
 	function set_intValue(v:Int) {
 		MemoryTree.removeKey(name);
@@ -66,6 +68,14 @@ class NumberVar implements Variable {
 	function set_valueTree(value:Dynamic):Dynamic {
         intValue = cast value;
 		return value;
+	}
+
+	//dispose
+	public function dispose():Void {
+		MemoryTree.removeKey(name);
+		basicValue = null;
+		valueTree = null;
+		name = null;
 	}
 
     public static function process(varLine:String):NumberVar {

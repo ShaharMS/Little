@@ -1,5 +1,6 @@
 package language.types.basic;
 
+import language.constraints.Types;
 import language.features.MemoryTree;
 import language.features.Variable;
 
@@ -8,6 +9,7 @@ import language.features.Variable;
  */
 class DecimalVar implements Variable {
     
+	public var type(default, never):Types = Types.DECIMAL_NUMBER;
 
 	public function new(float:Float, name:String) {
 		floatValue = float;
@@ -17,7 +19,7 @@ class DecimalVar implements Variable {
     /**
      * The variable's haxe `Float` value
      */
-    public var floatValue(default, set):Float;
+    public var floatValue(default, set):Null<Float>;
 
 	function set_floatValue(v:Float) {
 		MemoryTree.removeKey(name);
@@ -36,37 +38,28 @@ class DecimalVar implements Variable {
 		return name = v;
 	}
 
-	/**
-	 * Same as `intValue`
-	 */
-	public var basicValue(get, set):Dynamic;
+	/** Same as `intValue` */ public var basicValue(get, set):Dynamic;
+	/** Same as `intValue` */ public var valueTree(get, set):Dynamic;
 
-	/**
-	 * Same as `intValue`
-	 */
-	public var valueTree(get, set):Dynamic;
+	@:noCompletion inline function get_basicValue() return floatValue;
+	@:noCompletion inline function set_basicValue(value:Dynamic) return floatValue = cast value;
+
+	@:noCompletion inline function get_valueTree() return floatValue;
+	@:noCompletion inline function set_valueTree(value:Dynamic) return floatValue = cast value;
 
 	public function toString():String {
 		return  'value: $floatValue, name: $name';
 	}
 
-	function get_basicValue():Dynamic {
-		return floatValue;
+	public function dispose() {
+		MemoryTree.removeKey(name);
+		basicValue = null;
+		valueTree = null;
+		name = null;
+		floatValue = null;
 	}
 
-	function set_basicValue(value:Dynamic):Dynamic {
-        floatValue = cast value;
-		return floatValue;
-	}
 
-	function get_valueTree():Dynamic {
-		return floatValue;
-	}
-
-	function set_valueTree(value:Dynamic):Dynamic {
-        floatValue = cast value;
-		return value;
-	}
 
     public static function process(varLine:String):DecimalVar {
 		var result = {name: "", floatValue: 0.};
