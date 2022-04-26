@@ -7,8 +7,8 @@ package transpiler.syntax;
  */
 class SyntaxFixer {
     
-    public static function removeDoubleSemicolons(code:String):String {
-        return ~/;;$/gm.replace(code, ";");
+    public static function removeSemicolonOverloads(code:String):String {
+        return ~/;[2,]$/gm.replace(code, ";");
     }
 
 }

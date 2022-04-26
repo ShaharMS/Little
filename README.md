@@ -8,14 +8,47 @@ The language isn't very feature-rich, but it can be used to create lots of (mini
 
 Because of the minimal and simple nature of this language, you don't have to write it's source code specifically in English.
 
-### How does it compile then?
-After code compilation has started, the language will try to detect if any other language that isn't English is used. If found, the language will translate the code over to english via a different compiler. you can read about that second compiler down below.
+## Syntax
 
-Now, when the code is in English, the main compiler gets to do its job, in steps
+The language is very minimal by design, and only has a couple of reserved words:
 
-1. **Desugering**
-   - **naming conventions** - to avoid naming conflicts, variables named by a keyword, or TitleCased variables will throw a detailed exception and lowercase the first char, rezpectively.
-1. **Condensing**
-   - **variable condensing** - variables only used once which never change values will get their value inlined
-   - **equation condensing** - simplifies math equations to their shortest form, taking variable values into account
+ - **define** used for defining variables.
+ - **action** used for defining functions.
+ - **new** used for instances.
+ - **return** used for returning action values.
+ - **nothing** the language is always type safe by default, but this can be used to explicitly make a defenition throw an error when accessed.
+ - **hide** disables access for instance fields
 
+Examples:
+
+```
+define x = 5
+define y = new ImprovedNumber(5)
+y.increment(4)
+print(y)
+
+action increment(x:Number) = {
+    return x + 1
+}
+```
+
+Instances:
+
+File name - ImprovedNumber
+```
+define baseNumber
+
+action new(number:Number) = {
+    baseNumber = number
+}
+
+//write comments with a double /!
+// + types for actions are automatically inferred
+action increment(x:Number) = {
+    return baseNumber += x
+}
+
+hide action renew(number:Number) = {
+    return new ImprovedNumber(number)
+}
+```

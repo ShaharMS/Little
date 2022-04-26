@@ -19,9 +19,10 @@ class Main {
         n = StringTools.replace(n, ";", "\n");
         n = VariableRecognition.parse(n);
         n = FunctionRecognition.parse(n);
-        n = SyntaxFixer.removeDoubleSemicolons(n);
+        n = SyntaxFixer.removeSemicolonOverloads(n);
         var w = File.write(path + "codeHX.hx");
         w.writeString(n);
         w.close();
+        var trace = 5;
     }
 }
