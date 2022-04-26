@@ -1,8 +1,8 @@
-package language.types.basic;
+package interpreter.types.basic;
 
-import language.constraints.Types;
-import language.features.MemoryTree;
-import language.constraints.Variable;
+import interpreter.constraints.Types;
+import interpreter.features.MemoryTree;
+import interpreter.constraints.Variable;
 
 /**
  * The standart Minilang DecimalNumber type.

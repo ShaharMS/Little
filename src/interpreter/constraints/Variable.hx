@@ -1,6 +1,6 @@
-package language.constraints;
+package interpreter.constraints;
 
-import language.constraints.Types;
+import interpreter.constraints.Types;
 
 interface Variable {
     public var basicValue(get, set):Dynamic;

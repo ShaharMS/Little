@@ -1,7 +1,7 @@
-package language.features;
+package interpreter.features;
 
-import language.types.basic.DecimalVar;
-import language.types.basic.NumberVar;
+import interpreter.types.basic.DecimalVar;
+import interpreter.types.basic.NumberVar;
 
 /**
  * Takes care of variable assignments (x = y)

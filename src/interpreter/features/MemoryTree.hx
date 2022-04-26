@@ -1,6 +1,6 @@
-package language.features;
+package interpreter.features;
 
-import language.constraints.Variable;
+import interpreter.constraints.Variable;
 
 /**
  * The memory class contains all in-memory references defined by the user.

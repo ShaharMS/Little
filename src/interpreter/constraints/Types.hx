@@ -1,4 +1,4 @@
-package language.constraints;
+package interpreter.constraints;
 
 enum Types {
 
