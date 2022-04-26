@@ -1,23 +1,27 @@
 package;
 
-import transpiler.parity.FunctionRecognition;
-import transpiler.parity.VariableRecognition;
-import interpreter.features.BasicMath;
-import interpreter.types.basic.DecimalVar;
-import interpreter.features.MemoryTree;
-import interpreter.types.basic.NumberVar;
+import haxe.Timer;
+import sys.io.File;
+import sys.FileSystem;
+import transpiler.syntax.FunctionRecognition;
+import transpiler.syntax.VariableRecognition;
+import transpiler.syntax.SyntaxFixer;
 
 class Main {
 
-    static var n = Sys.args()[0] != null ? Sys.args()[0] : "define name = 1000";
+    static var path = "C:/Users/shahar/Documents/GitHub/Multilang-Coder/";
 
     static function main() {
-        transpile();
+        new Timer(500).run = transpile;
     }
     static function transpile() {
+        var n = File.getContent(path + "code.txt");
         n = StringTools.replace(n, ";", "\n");
         n = VariableRecognition.parse(n);
         n = FunctionRecognition.parse(n);
-        trace(n);
+        n = SyntaxFixer.removeDoubleSemicolons(n);
+        var w = File.write(path + "codeHX.hx");
+        w.writeString(n);
+        w.close();
     }
 }

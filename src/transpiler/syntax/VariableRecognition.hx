@@ -1,4 +1,4 @@
-package transpiler.parity;
+package transpiler.syntax;
 
 using StringTools;
 /**
@@ -18,7 +18,7 @@ class VariableRecognition {
         var name = clearVarParse.matched(1);
         var value = clearVarParse.matched(2);
         var type = Typer.getValueType(value);
-        return 'var $name:$type = $value;';
+        return 'var ${name}${if (type != "") ':$type' else ''} = $value;';
     }
 
     public static  function parse(code:String) {

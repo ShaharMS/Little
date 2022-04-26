@@ -1,0 +1,6 @@
+define hello = 5
+
+action hey() = {
+
+    c
+}

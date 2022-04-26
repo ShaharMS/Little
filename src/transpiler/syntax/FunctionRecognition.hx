@@ -1,4 +1,4 @@
-package transpiler.parity;
+package transpiler.syntax;
 
 /**
  * This class is used to to compile Haxe functions from Minilang functions.
@@ -19,7 +19,7 @@ class FunctionRecognition {
             var body:String = clearFuncRecongnition.matched(3);
             trace(body);
             var lines = body.split("\n");
-            for (i in 1...lines.length) if (lines[i] == "" && lines[i].indexOf(';') != lines[i].length) lines[i] += ";";
+            for (i in 0...lines.length) if (lines[i] != "") lines[i] += ";";
             body = lines.join("\n");
             code = clearFuncRecongnition.replace(code, "function " + name + "(" + args + ") { " + body + " }");
         }
