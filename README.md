@@ -12,12 +12,12 @@ Because of the minimal and simple nature of this language, you don't have to wri
 
 The language is very minimal by design, and only has a couple of reserved words:
 
- - **define** used for defining variables.
- - **action** used for defining functions.
- - **new** used for instances.
+ - **define** - used for defining variables.
+ - **action** - used for defining functions.
+ - **new** - used for instances.
  - **return** used for returning action values.
- - **nothing** the language is always type safe by default, but this can be used to explicitly make a defenition throw an error when accessed.
- - **hide** disables access for instance fields
+ - **nothing** - the language is always type safe by default, but this can be used to explicitly make a definition throw an error when accessed.
+ - **hide** - disables access from outside that instance file
 
 Examples:
 
