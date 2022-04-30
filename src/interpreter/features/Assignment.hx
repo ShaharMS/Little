@@ -1,18 +1,18 @@
 package interpreter.features;
 
-import interpreter.types.basic.DecimalVar;
-import interpreter.types.basic.NumberVar;
+import interpreter.constraints.Variable;
+
 
 /**
  * Takes care of variable assignments (x = y)
  */
 class Assignment {
     
-    public static function assign(parent:Dynamic, value:Dynamic) {
-        if (parent is NumberVar && value is Int) {
-            parent.intValue = value;
-        } else if (parent is DecimalVar && (value is Int || value is Float)) {
-            parent.floatValue = value;
+    public static function assign(parent:Variable, value:Dynamic) {
+        if (parent.type.getName() != "Other") {
+            parent.basicValue = value;
+        } else {
+            parent.valueTree = value;
         }
     }
 

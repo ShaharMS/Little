@@ -11,7 +11,6 @@ class Memory {
 
     public static function safePush(v:Variable) {
         if (variableMemory.exists(v.name)) {
-            var definition:Variable = variableMemory[v.name];
             if (variableMemory[v.name].type != v.type) {
                 throw "Defenition Type Missmatch: " + v.name + " has been defined with the type " + v.type + " but is being redefined with the type " + variableMemory[v.name].type;
             }

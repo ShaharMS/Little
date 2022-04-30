@@ -1,7 +1,7 @@
 package transpiler;
 
 /**
- * Typer is a helper class for finding out information about Minilang types.
+ * Typer is a helper class for finding out information about types.
  * 
  * Its used for strongly typing variables when only the value is present.
  * 

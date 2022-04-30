@@ -2,7 +2,7 @@ package transpiler.syntax;
 
 using StringTools;
 /**
- * Contains methods for parsing and converting Minilang defenitions into haxe variables.
+ * Contains methods for parsing and converting `Little` definitions into `Haxe` variables.
  * 
  * It also does some extra things for optimization:
  * 

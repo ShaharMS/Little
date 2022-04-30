@@ -1,11 +1,11 @@
 package transpiler.syntax;
 
 /**
- * This class is used to to compile Haxe functions from Minilang functions.
+ * This class is used to to compile `Haxe` functions from `Little` functions.
  * 
  * It also includes some features to generate nicer code, such as:
  * 
- *  - intuitive syntax (not useing :Void)
+ *  - intuitive syntax (not using :Void)
  *  - inline styles (for now unsupported, but can alter the positioning of curly brackets/remove them)
  */
 class FunctionRecognition {
