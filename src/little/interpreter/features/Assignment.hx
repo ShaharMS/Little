@@ -1,6 +1,6 @@
-package interpreter.features;
+package little.interpreter.features;
 
-import interpreter.constraints.Variable;
+import little.interpreter.constraints.Variable;
 
 
 /**

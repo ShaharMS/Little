@@ -1,4 +1,4 @@
-package transpiler;
+package little. transpiler;
 
 /**
  * Typer is a helper class for finding out information about types.

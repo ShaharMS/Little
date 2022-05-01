@@ -1,6 +1,6 @@
-package interpreter.constraints;
+package little.interpreter.constraints;
 
-import interpreter.constraints.Types;
+import little.interpreter.constraints.Types;
 
 interface Variable {
     /**

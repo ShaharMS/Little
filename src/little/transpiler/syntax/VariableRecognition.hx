@@ -1,4 +1,4 @@
-package transpiler.syntax;
+package little. transpiler.syntax;
 
 using StringTools;
 /**

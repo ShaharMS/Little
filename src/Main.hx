@@ -1,9 +1,9 @@
 package;
 
 import haxe.Timer;
-import transpiler.syntax.FunctionRecognition;
-import transpiler.syntax.VariableRecognition;
-import transpiler.syntax.SyntaxFixer;
+import little. transpiler.syntax.FunctionRecognition;
+import little. transpiler.syntax.VariableRecognition;
+import little. transpiler.syntax.SyntaxFixer;
 
 class Main {
     static function main() {

@@ -1,4 +1,4 @@
-package transpiler.syntax;
+package little. transpiler.syntax;
 
 /**
  * This class is used to to compile `Haxe` functions from `Little` functions.

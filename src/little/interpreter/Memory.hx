@@ -1,6 +1,6 @@
-package interpreter;
+package little. interpreter;
 
-import interpreter.constraints.Variable;
+import little.interpreter.constraints.Variable;
 
 /**
  * This class contains methods used to get information about the application's memory status.

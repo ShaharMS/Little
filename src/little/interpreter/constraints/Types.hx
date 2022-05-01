@@ -1,4 +1,4 @@
-package interpreter.constraints;
+package little.interpreter.constraints;
 
 enum Types {
 
