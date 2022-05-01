@@ -8,6 +8,7 @@ package little. transpiler.syntax;
 class SyntaxFixer {
     
     public static function removeSemicolonOverloads(code:String):String {
+        code = ~/{ *;[1,]/gm.replace(code, "");
         return ~/;[2,]$/gm.replace(code, ";");
     }
 

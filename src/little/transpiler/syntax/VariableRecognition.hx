@@ -25,10 +25,12 @@ class VariableRecognition {
 
     public static  function parse(code:String) {
         while (clearVarParse.match(code)) {
-            final name = clearVarParse.matched(1);
-            final value = clearVarParse.matched(2);
+            var modifier = clearVarParse.matched(1).replace("hide", "private").replace("external", "");
+            if (modifier == "") modifier = "public";
+            final name = clearVarParse.matched(2);
+            final value = clearVarParse.matched(3);
             final type = Typer.getValueType(value);
-            code = clearVarParse.replace(code, 'var $name:$type = $value;');
+            code = clearVarParse.replace(code, '$modifier var $name${if (type != "") ':$type' else ''} = $value;');
         }
         return code;
     }
