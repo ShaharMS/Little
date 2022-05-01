@@ -28,7 +28,7 @@ class Typer {
     
     /**
      * Gets the type of a given value.
-     * @param value a string representation of the value: `"1.23`, `"hello"`, `"new Child()"`
+     * @param value a string representation of the value: `1.23`, `"hello"`, `new Child()`
      */
     public static function getValueType(value:String):String {
         final instanceDetector:EReg = ~/new +([a-zA-z0-9_])/;

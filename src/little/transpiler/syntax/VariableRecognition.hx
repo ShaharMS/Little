@@ -10,15 +10,17 @@ using StringTools;
  */
 class VariableRecognition {
     
-    public static final clearVarParse:EReg = ~/define +([a-zA-Z0-9_]+) += +(.+)/;
+    public static final clearVarParse:EReg = ~/([^\n]*) define +([a-zA-Z0-9_]+) += +(.+)/;
 
     public static function parseLine(line:String):String {
         var condensed = line.trim() + ";";
         clearVarParse.match(condensed);
-        var name = clearVarParse.matched(1);
-        var value = clearVarParse.matched(2);
+        var modifier = clearVarParse.matched(1).replace("hide", "private").replace("external", "");
+        if (modifier == "") modifier = "public";
+        var name = clearVarParse.matched(2);
+        var value = clearVarParse.matched(3);
         var type = Typer.getValueType(value);
-        return 'var ${name}${if (type != "") ':$type' else ''} = $value;';
+        return '${modifier} var ${name}${if (type != "") ':$type' else ''} = $value;';
     }
 
     public static  function parse(code:String) {
