@@ -14,7 +14,8 @@ Other than teaching, the language has a lot of benefits, some I already mentione
 
  - cross platform
  - small bundle size
- - fast interpreter 
+ - fast interpreter
+ - Multilingual coding
  - interfaces with external H⁹axe code (Haxe transpiler only)
  - makes it easy to implement code interfacing in games
  - Understandable errors that actually explain what went wrong and where
