@@ -10,27 +10,16 @@ using StringTools;
  */
 class VariableRecognition {
     
-    public static final clearVarParse:EReg = ~/([^\n]*) define +([a-zA-Z0-9_]+) += +(.+)/;
-
-    public static function parseLine(line:String):String {
-        var condensed = line.trim() + ";";
-        clearVarParse.match(condensed);
-        var modifier = clearVarParse.matched(1).replace("hide", "private").replace("external", "");
-        if (modifier == "") modifier = "public";
-        var name = clearVarParse.matched(2);
-        var value = clearVarParse.matched(3);
-        var type = Typer.getValueType(value);
-        return '${modifier} var ${name}${if (type != "") ':$type' else ''} = $value;';
-    }
+    public static final clearVarParse:EReg = ~/((?:external: |hide | |\t|^)+)define +([a-zA-Z0-9_]+)(:[a-zA-Z0-9]+|) += +(.+)/m;
 
     public static  function parse(code:String) {
         while (clearVarParse.match(code)) {
-            var modifier = clearVarParse.matched(1).replace("hide", "private").replace("external", "");
+            var modifier = clearVarParse.matched(1).replace("hide", "private").replace("external: ", "");
             if (modifier == "") modifier = "public";
             final name = clearVarParse.matched(2);
-            final value = clearVarParse.matched(3);
-            final type = Typer.getValueType(value);
-            code = clearVarParse.replace(code, '$modifier var $name${if (type != "") ':$type' else ''} = $value;');
+            final value = clearVarParse.matched(4);
+            final type = clearVarParse.matched(3).contains(":") ? Typer.basicTypeToHaxe[clearVarParse.matched(3).replace(":", "")] : Typer.getValueType(value);
+            code = clearVarParse.replace(code, '$modifier var $name${if (type != "") ':$type' else ''} = $value');
         }
         return code;
     }

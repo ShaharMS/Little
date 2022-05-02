@@ -4,7 +4,7 @@ using StringTools;
 
 class ClassRecognition {
     
-    public static final clearClassParse:EReg = ~/className: +([a-zA-Z_]) *[ \n\r](.+)/s;
+    public static final clearClassParse:EReg = ~/className: +([a-zA-Z_]+) *(?:[ \n\r]((?:.|\n)+)| *)/s;
 
     public static function parse(code:String, ?style:WriteStyle = SAME_LEVEL) {
         final parts = code.split("className: ");
@@ -15,7 +15,6 @@ class ClassRecognition {
                 final className = clearClassParse.matched(1);
                 var body = clearClassParse.matched(2);
                 final lines = body.split("\n");
-                for (i in 0...lines.length) if (lines[i] != "") lines[i] += ";";
                 body = lines.join("\n");
                 parts[i] = 'class $className';
                 function writeStyle() {
@@ -34,5 +33,6 @@ class ClassRecognition {
                 }
             }
         }
+        return parts.join("");
     }
 }

@@ -31,7 +31,7 @@ class Typer {
      * @param value a string representation of the value: `1.23`, `"hello"`, `new Child()`
      */
     public static function getValueType(value:String):String {
-        final instanceDetector:EReg = ~/new +([a-zA-z0-9_])/;
+        final instanceDetector:EReg = ~/new +([a-zA-z0-9_]+)/;
         final numberDetector:EReg = ~/([0-9.])/;
         final stringDetector:EReg = ~/"[^"]*"/;
         final booleanDetector:EReg = ~/true|false/;
@@ -45,5 +45,12 @@ class Typer {
         else if (booleanDetector.match(value)) return "Bool";
         return "";
     }
+
+    public static final basicTypeToHaxe:Map<String, String> = [
+        "Number" => "Int",
+        "Decimal" => "Float",
+        "Letters" => "String",
+        "Boolean" => "Bool"
+    ];
 
 }
