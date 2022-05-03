@@ -13,13 +13,14 @@ import little.transpiler.syntax.VariableRecognition;
  */
 class Transpiler {
     
-
+    //TODO #2 Handle overloaded functions
+    //TODO #3 Handle classes and static functions
     public static function transpile(code:String, ?options:TranspilerOptions):String {
         code = VariableRecognition.parse(code);
         code = FunctionRecognition.parse(code);
         code = ClassRecognition.parse(code);
-        code = SyntaxFixer.addSemicolons(code);
         code = SyntaxFixer.removeTrailingNewlines(code);
+        code = SyntaxFixer.addSemicolons(code);
         return code;
     }
 
