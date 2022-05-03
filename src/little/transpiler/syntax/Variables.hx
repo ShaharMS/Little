@@ -8,7 +8,7 @@ using StringTools;
  * 
  *  - strongly types the variables on static platforms to improve performance
  */
-class VariableRecognition {
+class Variables {
     
     public static final clearVarParse:EReg = ~/((?:external: |hide | |\t|^)+)define +([a-zA-Z0-9_]+)(:[a-zA-Z0-9]+|) += +(.+)/m;
 

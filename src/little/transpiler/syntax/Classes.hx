@@ -2,7 +2,7 @@ package little.transpiler.syntax;
 
 using StringTools;
 
-class ClassRecognition {
+class Classes {
     
     public static final clearClassParse:EReg = ~/className: +([a-zA-Z_]+) *(?:[ \n\r]((?:.|\n)+)| *)/s;
 

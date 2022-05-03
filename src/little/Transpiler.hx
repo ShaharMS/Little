@@ -1,10 +1,11 @@
 package little;
 
+import haxe.Timer;
 import little.transpiler.syntax.SyntaxFixer;
-import little.transpiler.syntax.ClassRecognition;
+import little.transpiler.syntax.Classes;
 import little.transpiler.syntax.WriteStyle;
-import little.transpiler.syntax.FunctionRecognition;
-import little.transpiler.syntax.VariableRecognition;
+import little.transpiler.syntax.Functions;
+import little.transpiler.syntax.Variables;
 
 /**
  * The `Transpiler` class is some sort of a bridge between the transpiler
@@ -15,14 +16,30 @@ class Transpiler {
     
     //TODO #2 Handle overloaded functions
     //TODO #3 Handle classes and static functions
+
+    /**
+     * Takes some `Little` code and transpiles it over to haxe, to achive complete
+     * cross-platforms capabilities.
+     * @param code A string representatin of the code
+     * @param options Some transpiler options to customize the output code
+     * @return A string representation of the transpiled code
+     */
     public static function transpile(code:String, ?options:TranspilerOptions):String {
-        code = VariableRecognition.parse(code);
-        code = FunctionRecognition.parse(code);
-        code = ClassRecognition.parse(code);
+        final st = Timer.stamp();
+        code = Variables.parse(code);
+        code = Classes.parse(code);
         code = SyntaxFixer.removeTrailingNewlines(code);
         code = SyntaxFixer.addSemicolons(code);
+        wholeTranspileTime = Timer.stamp() - st;
         return code;
     }
+
+    /**
+     * The time it took to transpile everything from `Little` to `Haxe`
+     */
+    public static var wholeTranspileTime(default, null):Null<Float>;
+
+    public static var transpileTimes:TranspileTimes;
 
 }
 
@@ -40,5 +57,18 @@ class TranspilerOptions {
     /**When defined, writes the resulting code to the defined path**/   public var codePath:String = "";
     /**Decides in what way a function is written**/                     public var functionWriteStyle:WriteStyle = SAME_LEVEL;
     /**Decides in what way a function is written**/                     public var classWriteStyle:WriteStyle = SAME_LEVEL;
+    /**Whether or not to generate a Main class**/                       public var generateMainClass:Bool = true;
+}
 
+typedef TranspileTimes = {
+    //desugering
+    inlines:Float,
+    loopUnrolls:Float,
+    deadCodeElimination:Float,
+    desugering:Float,
+    //syntax
+    classes:Float,
+    functions:Float,
+    variables:Float,
+    syntax:Float,
 }

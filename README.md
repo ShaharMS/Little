@@ -48,6 +48,10 @@ define fileWriter = File.write("idk.txt")
 fileWriter.writeString("Yay Haxe")
 fileWriter.close();
 
+for name from 0 to 9 {
+    print(i)
+}
+
 //also supports classes:
 
 className: ImprovedNumber
@@ -87,6 +91,10 @@ public static function main()
     var fileWriter = File.write("idk.txt")
     fileWriter.writeString("Yay Haxe")
     fileWriter.close();
+
+    for (i in 0...9) {
+        trace(i);
+    }
     
 }
 
