@@ -13,45 +13,36 @@ using texter.general.TextTools;
  */
 class Functions {
     
-    public static final clearFuncParse:EReg = ~/((?:external: |hide | |\t|^)+)action +([a-zA-Z0-9_]+) *\(([^)]*)\) *=/m;
-
-    public static function parse(code:String, ?style:WriteStyle = SAME_LEVEL):String {
+    //detect a python function body and report its name, arguments and function body
+    public static final clearFuncParse:EReg = ~/(.+?)* +action +([a-zA-Z0-9_]+) *\(([^)]*)\):/m;
+    //now, create a public static function named parse using that regex that detects the function name, arguments and body - that function is in as3
+    //that function should be written in Haxe
+    public static function parse(code:String):String {
         while (clearFuncParse.match(code)) {
-            var modifier = clearFuncParse.matched(1).replace("hide", "private").replace("external", ""); if (modifier == "") modifier = "public";
-            final name:String = clearFuncParse.matched(2);
-            final args:String = clearFuncParse.matched(3);
-            final positions = clearFuncParse.matchedPos();
-            final li = getLineIndexOfChar(code, positions.pos);
-            var line = code.split("\n")[li].replace("    ", "\t");
-            var indentLevel = line.length - line.replace("\t", "").length + 1;
-            var potentCode = code.split("\n").slice(li);
-            for (i in 0...potentCode.length) {
-                if (potentCode[i].length == 0) continue;
-                if (potentCode[i].length - potentCode[i].replace("\t", "").length < indentLevel) {
-                    potentCode = potentCode.slice(0, i);
-                    break;
-                }
-            }            
-            var body = potentCode.join("\n");
-            
-            
+            //get the function name, arguments and visibility modifiers
+            var name:String = clearFuncParse.matched(2);
+            var args:String = clearFuncParse.matched(3);
+            var mods:String = clearFuncParse.matched(1);
         }
         return code;
     }
+    
 
-    /**
-     * Base 0
-     * @param string 
-     * @param index 
-     * @return Int
-     */
-    static function getLineIndexOfChar(string:String, index:Int):Int {
-        var stringToCalc = string.substring(0, index + 1), sum = 0;
-        for (i in 0... stringToCalc.length) {
-            if (stringToCalc.charAt(i) == "\n") sum++;
+
+
+    public static function getLineIndexOfChar(code:String, charIndex:Int):Int {
+        var lines = code.split("\n");
+        var lineIndex = 0;
+        var charCount = 0;
+        for (i in 0...lines.length) {
+            var line = lines[i];
+            charCount += line.length + 1;
+            if (charCount > charIndex) {
+                return lineIndex;
+            }
+            lineIndex++;
         }
-
-        return sum;
+        return -1;
     }
 
 }

@@ -58,18 +58,17 @@ className: ImprovedNumber
 
     define baseNumber:Number
 
-    action new(number:Number) = {
+    action new(number:Number)
         baseNumber = number
-    }
+    
 
     //write comments with a double /!
     // + types for actions are automatically inferred
-    action increment(x:Number) = {
+    action increment(x:Number)
         return baseNumber += x
-    }
-    hide action dispose() = {
+
+    hide action dispose()
         //nothing
-    }
 
 className: AnotherClass
 external: className: File
