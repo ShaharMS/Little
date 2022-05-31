@@ -2,6 +2,7 @@ package little;
 
 import little.interpreter.Memory;
 import little.interpreter.constraints.Variable;
+import little.Exceptions.ExceptionStack;
 
 /**
  * The `Runtime` class is some sort of a bridge, 
@@ -12,6 +13,7 @@ import little.interpreter.constraints.Variable;
  */
 class Runtime {
     
+    public static var exceptionStack:ExceptionStack = new ExceptionStack();
     /**
      * `onNextLine` is called **after** the interpreter successfully parses
      * and executes a line and moves on to the next line
