@@ -1,8 +1,9 @@
 package little;
 
 import little.interpreter.Memory;
+import little.interpreter.ExceptionStack;
+import little.interpreter.constraints.Exception;
 import little.interpreter.constraints.Variable;
-import little.Exceptions.ExceptionStack;
 
 /**
  * The `Runtime` class is some sort of a bridge, 
@@ -59,5 +60,9 @@ class Runtime {
 
     public static function getMemoryStructure():Map<String, Variable> {
         return Memory.variableMemory.copy();
+    }
+
+    public static function safeThrow(exception:Exception) {
+        exceptionStack.push(exception);
     }
 }
