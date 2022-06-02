@@ -1,5 +1,6 @@
 package little;
 
+import haxe.Log;
 import little.interpreter.Memory;
 import little.interpreter.ExceptionStack;
 import little.interpreter.constraints.Exception;
@@ -28,8 +29,8 @@ class Runtime {
      * `preNextLine` is called **after** the interpreter successfully parses and executes a line,
      * but **before** the interpreter moves on to the next line
      * 
-     * @param firstParameter the line number that was just parsed
-     * @param secondParameter the line that was just parsed
+     * @param thisLine the line number that was just parsed
+     * @param nextLine the line that was just parsed
      */
     public static var preNextLine:(Int, Int) -> Void = (a, b) -> return;
 
@@ -38,9 +39,9 @@ class Runtime {
      * 
      * @param name the name of the variable
      * @param variable the `Variable` reference associated with the name
-     * @param line the line where the number was found
+     * @param line the line where the variable was initialized
      */
-    public static var onVariableInitialized:(String, Variable, Int, Int) -> Void = (a, b, c, d) -> return;
+    public static var onVariableInitialized:(String, Variable, Int) -> Void = (a, b, c) -> return;
 
     /**
      * The interpreter reads the code from top to bottom, starting at line 1.  

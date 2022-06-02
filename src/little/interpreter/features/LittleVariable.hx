@@ -4,7 +4,7 @@ import little.interpreter.constraints.VariableScope;
 import little.interpreter.constraints.Types;
 import little.interpreter.constraints.Variable;
 
-class ExternalVariable implements Variable {
+class LittleVariable implements Variable {
     
 	public var basicValue(get, set):Dynamic;
 
