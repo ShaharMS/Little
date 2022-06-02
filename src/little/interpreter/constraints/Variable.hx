@@ -16,7 +16,7 @@ interface Variable {
     /**
      * The type of the variable (primitive or object).
      */
-    public var type(default, never):Types;
+    public var type(default, never):String;
 
     /**
      * The variable's asscoiated name, should be used to get its value in memory.

@@ -1,5 +1,9 @@
 package little;
 
+import little.exceptions.VariableRegistrationError;
+import little.transpiler.Typer;
+import little.interpreter.features.ExternalVariable;
+import little.interpreter.Memory;
 import little.Runtime.*;
 using StringTools;
 
@@ -8,7 +12,8 @@ using StringTools;
  * 
  * From here, you can run pieces of code, and get the results, without the need for compilation.
  * 
- * This interpreter is currently syntax-based, which means that very difficult to parse code might not work.
+ * This class supplies methods for registering certain objects/variables/functions,
+ * Running code pieces, and getting the results of course.
  * 
  * For information mid-interpretation, see the `Runtime` class.
  */
@@ -26,5 +31,34 @@ class Interpreter {
         code = ~/\n{2,}/g.replace(code, "\n");
     }
 
+    public static function registerVariable<T>(name:String, value:T) {
+        final hType = Type.getClassName(Type.getClass(value));
+        var v = new ExternalVariable();
+        v.name = name;
+        v.basicValue = value;
+        v.valueTree = value;
+        v.type = switch hType {
+            case "String": "Letters";
+            case "Number": "number";
+            case "Boolean": "Boolean";
+            case "Array": "Lineup";
+            case "Dynamic": "Everything";
+            case _: "Unknown";
+        };
+        if (v.type == "Unknown") {
+            safeThrow(new VariableRegistrationError(hType));
+            return;
+        }
+        v.scope = {scope: GLOBAL, info: "Registered externally"};
+        Memory.safePush(v);
+    }
+        
+    public static function registerFunction(name:String, func:Dynamic) {
+        
+    }
+
+    public static function registerObject(name:String, obj:Dynamic) {
+        
+    }
 
 }
