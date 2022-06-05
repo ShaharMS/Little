@@ -2,5 +2,6 @@
 --library texter
 --class-path src
 --main Main
---cpp bin
+--js interp.js
 --debug
+--dce full

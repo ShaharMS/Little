@@ -11,7 +11,7 @@ interface Variable {
     /**
      * Mostly used with object types, contains the object's variable and function tree.
      */
-    public var valueTree(get, set):Dynamic;
+    public var valueTree:Map<String, Dynamic>;
 
     /**
      * The type of the variable (primitive or object).

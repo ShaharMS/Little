@@ -6,25 +6,17 @@ import little.interpreter.constraints.Variable;
 
 class LittleVariable implements Variable {
     
-	public var basicValue(get, set):Dynamic;
+	@:isVar public var basicValue(get, set):Dynamic;
 
 	public function get_basicValue():Dynamic {
-		throw new haxe.exceptions.NotImplementedException();
+		return basicValue;
 	}
 
 	public function set_basicValue(value:Dynamic):Dynamic {
-		throw new haxe.exceptions.NotImplementedException();
+		return basicValue = value;
 	}
 
-	public function get_valueTree():Dynamic {
-		throw new haxe.exceptions.NotImplementedException();
-	}
-
-	public function set_valueTree(value:Dynamic):Dynamic {
-		throw new haxe.exceptions.NotImplementedException();
-	}
-
-	public var valueTree(get, set):Dynamic;
+	public var valueTree:Map<String, Dynamic> = new Map<String, Dynamic>();
 
 	public var type:String;
 
@@ -33,7 +25,7 @@ class LittleVariable implements Variable {
 	public var scope:{scope:VariableScope, info:String};
 
 	public function toString():String {
-		throw new haxe.exceptions.NotImplementedException();
+		return 'name: $name, value: $basicValue';
 	}
 
 	public function dispose() {}

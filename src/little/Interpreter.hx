@@ -1,5 +1,9 @@
 package little;
 
+import little.exceptions.Typo;
+import js.Error.TypeError;
+import little.interpreter.features.Evaluator;
+import little.Runtime;
 import little.exceptions.DefinitionTypeMismatch;
 import little.interpreter.constraints.Variable;
 import little.exceptions.VariableRegistrationError;
@@ -19,7 +23,15 @@ using StringTools;
  * 
  * For information mid-interpretation, see the `Runtime` class.
  */
+@:expose
+@:native("LittleInterpreter")
 class Interpreter {
+
+    /**
+     * The interpreter reads the code from top to bottom, starting at line 1.  
+     * if equals to 0, it means the interpreter hasnt started yet.
+    */
+    public static var currentLine:Int = 0;
 
     /**
      * Registers a haxe, basic type variable, to be used in the language.
@@ -36,15 +48,17 @@ class Interpreter {
      * - `Bool`
      * - `Dynamic`
      * 
+     * Also notice that the variable isnt present in `Memory` - this is to prevent the user from completely overwriting the variable.
+     * 
      * @param name The variable's name. you might want to save it yourself too if you want to access the variable in memory
      * @param value The variable's value. should be a haxe, basic type, or Dynamic.
      */
     public static function registerVariable<T>(name:String, value:T) {
-        final hType = Type.getClassName(Type.getClass(value));
+        final hType:String = Type.typeof(value).getName().substring(1);
         var v = new LittleVariable();
         v.name = name;
         v.basicValue = value;
-        v.valueTree = value;
+        v.valueTree["%basicValue%"] = value;
         v.type = switch hType {
             case "String": "Letters";
             case "Int": "Number";
@@ -58,7 +72,6 @@ class Interpreter {
             return;
         }
         v.scope = {scope: GLOBAL, info: "Registered externally"};
-        Memory.safePush(v);
         registeredVariables.set(name, v);
     }
         
@@ -81,13 +94,15 @@ class Interpreter {
      * @param code 
      */
     public static function run(code:String) {
+        currentLine = 0;
+        Memory.clear();
         code = code.replace("\r", "");
         code = code.replace(";", "\n");
         code = code.replace("    ", "\t");
         code = ~/\n{2,}/g.replace(code, "\n");
         var codeLines = code.split("\n");
 
-        var currentIndent:Int = 0, lastIndent:Int = 0, blockNumber:Int = 0;
+        var currentIndent:Int = 0, lastIndent:Int = 0, blockNumber:Int = 0, currentlyClass:Bool = false;
 
         for (l in codeLines) {
             lastIndent = currentIndent;
@@ -99,7 +114,15 @@ class Interpreter {
             if (lastIndent != currentIndent) {
                 blockNumber++;
             }
+            //new variables
+            var lv = detectVariables(l);
+            if (lv != null) {
+                Memory.safePush(lv);
+            }
+            //print function
+            detectPrint(l);
 
+            currentLine++;
         }
     }
 
@@ -107,22 +130,65 @@ class Interpreter {
 
 }
 
-@:noCompletion function detectVariables(line:String):Variable {
+/**
+ * Should detect variables inside:
+ * 
+ *     define x = 3
+ *     define y:Number = x
+ *     define z:Letters = "Hello"
+ *     global define a:Boolean = true
+ * 
+ * @param line a line of code
+ * @return the Variable insance, or null if it doesn't exist
+ */
+function detectVariables(line:String):LittleVariable {
     var v:LittleVariable = new LittleVariable();
-    line = line.trim();
-    if (!line.startsWith("define ")) return null;
+    line = " " + line.trim();
+    if (!line.contains(" define ") ) return null;
     //replace the starting "define" with ""
-    line = line.substring(7);    
-    var parts = line.split("=");
+    var defParts = line.split(" define ");    
+
+    // gets the variable name, type and value.
+    var parts = defParts[1].split("=");
     if (parts[0].contains(":")) {
-        var type = parts[0].split(":")[1];
-        var name = parts[0].split(":")[0];
+        var type = parts[0].split(":")[1].replace(" ", "");
+        var name = parts[0].split(":")[0].replace(" ", "");
         v.name = name;
         v.type = type;
     }
-    var valueType:String = Typer.getValueType(parts[1].trim());
-    if (valueType != v.type) safeThrow(new DefinitionTypeMismatch(v.name, v.type, valueType));
+    if (!parts[0].contains(":")) {
+        v.name = parts[0].replace(" ", "");
+        v.type = "Everything";
+    }
+    if (parts[1] != null) {
+        var valueType:String = Typer.getValueType(parts[1].trim());
+        if (valueType != v.type && v.type != "Everything") safeThrow(new DefinitionTypeMismatch(v.name, v.type, valueType));
+        v.basicValue = parts[1].trim();
+        v.valueTree = processVariableValueTree(v.basicValue);
+    }
+    if (parts[1] == null) {
+        v.basicValue = {};
+        v.valueTree["%basicValue%"] = v.basicValue;
+    }
 
     return v;
 
+}
+
+function processVariableValueTree(val:String):Dynamic {
+    return {};
+}
+
+function detectPrint(line:String) {
+    if (!line.contains("print(") && !line.endsWith(")")) return;
+    //remove the print(
+    line = line.substring(6);
+    //remove the ending )
+    if (!line.endsWith(")")) {
+        Runtime.safeThrow(new Typo("When using the print function, you need to end it with a )"));
+        return;
+    }
+    line = line.substring(0, line.length - 1);
+    var value = Evaluator.getValueOf(line);
+    Runtime.print(value);
 }

@@ -1,20 +1,18 @@
 package;
 
+import little.Runtime;
+import little.interpreter.Memory;
+import little.interpreter.features.LittleVariable;
+import little.Interpreter;
 import little.Transpiler;
 using StringTools;
-import sys.FileSystem;
-import sys.io.File;
 class Main {
     static function main() {
-        var s = File.getContent("C:\\Users\\shahar\\Documents\\GitHub\\Multilang-Coder\\testltl.md");
-        var lines = s.split("\n"), lineWrite = 0;
-        for (i in 0...lines.length) if (lines[i].contains("/////")) lineWrite = i + 1;
-        final kept = lines.slice(0, lineWrite).join("\n");
-        var writer = File.write("C:\\Users\\shahar\\Documents\\GitHub\\Multilang-Coder\\testltl.md");
-
-        final regex = ~/```(.+)```/s;
-        regex.match(s);
-        final transpiled = "```haxe\n" + Transpiler.transpile(regex.matched(1)) + "\n```";
-        writer.writeString(kept + transpiled);
+        var a = 18;
+        Interpreter.registerVariable("a", a);
+        Interpreter.run("define e = 19");
+        trace(Memory.variableMemory);
+        a = 19;
+        trace(Runtime.getMemorySnapshot());
     }
 }

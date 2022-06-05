@@ -1,5 +1,6 @@
 package little;
 
+import js.Browser;
 import haxe.Log;
 import little.interpreter.Memory;
 import little.interpreter.ExceptionStack;
@@ -47,7 +48,9 @@ class Runtime {
      * The interpreter reads the code from top to bottom, starting at line 1.  
      * if equals to 0, it means the interpreter hasnt started yet.
      */
-    public static var currentLine(default, null):Int = 0;
+    public static var currentLine(get, null):Int = 0;
+
+    
 
     /**
      * Returns a stringified version of the currently used values in memory.
@@ -56,7 +59,7 @@ class Runtime {
      * That value will be stringified according to the provided `toString` function.
      */
     public static function getMemorySnapshot():String {
-        return Memory.variableMemory.copy().toString(); //TODO: #1 Very incomplete, needs string formatting
+        return Memory.variableMemory.toString(); //TODO: #1 Very incomplete, needs string formatting
     }
 
     public static function getMemoryStructure():Map<String, Variable> {
@@ -65,5 +68,13 @@ class Runtime {
 
     public static function safeThrow(exception:Exception) {
         exceptionStack.push(exception);
+        print('Error! (from line $currentLine):\n\t---\n\t' + exception.content + "\n\t---");
     }
+    public static function print(expression:String) {
+        Browser.console.log('Line $currentLine: ' + expression);
+    }
+
+	static function get_currentLine():Int {
+		return Interpreter.currentLine;
+	}
 }

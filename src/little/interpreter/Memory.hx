@@ -20,11 +20,29 @@ class Memory {
                 Runtime.safeThrow(new DefinitionTypeMismatch(v.name, variableMemory[v.name].type, v.type));
             }
             variableMemory[v.name] = v;
+        } else {
+            variableMemory[v.name] = v;
         }
+    }
+
+    public static function unsafePush(v:Variable) {
+        variableMemory[v.name] = v;
     }
 
     //TODO: #4 garbage collector for the interpreter
     public static function collectGarbage() {
         
+    }
+
+    public static function hasLoadedVar(variableName:String):Bool {
+        return variableMemory.exists(variableName);
+    }
+
+    public static function getLoadedVar(variableName:String):Variable {
+        return variableMemory[variableName];
+    }
+
+    public static function clear() {
+        return variableMemory = [];
     }
 }
