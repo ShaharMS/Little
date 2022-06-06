@@ -48,6 +48,7 @@ class Interpreter {
      * - `Float`
      * - `Bool`
      * - `Dynamic`
+     * - `Any`
      * 
      * Also notice that the variable isnt present in `Memory` - this is to prevent the user from completely overwriting the variable.
      * 
@@ -61,11 +62,11 @@ class Interpreter {
         v.basicValue = value;
         v.valueTree["%basicValue%"] = value;
         v.type = switch hType {
-            case "String": "Letters";
+            case "String": "Characters";
             case "Int": "Number";
             case "Float": "Decimal";
             case "Bool": "Boolean";
-            case "Dynamic": "Everything";
+            case "Dynamic" | "Any": "Everything";
             case _: "Unknown";
         };
         if (v.type == "Unknown") {
@@ -142,7 +143,7 @@ class Interpreter {
  * 
  *     define x = 3
  *     define y:Number = x
- *     define z:Letters = "Hello"
+ *     define z:Characters = "Hello"
  *     global define a:Boolean = true
  * 
  * @param line a line of code

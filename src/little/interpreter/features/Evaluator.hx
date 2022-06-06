@@ -1,6 +1,9 @@
 package little.interpreter.features;
 
+import little.exceptions.UnknownDefinition;
 import haxe.ds.Either;
+using TextTools;
+using StringTools;
 
 /**
  * Used to evaluate the value of an expression
@@ -9,16 +12,30 @@ class Evaluator {
     
 
     public static function getValueOf(value:String) {
-        final numberDetector:EReg = ~/([0-9.])/;
-        final stringDetector:EReg = ~/"[^"]*"/;
-        final booleanDetector:EReg = ~/true|false/;
+        value = simplifyEquation(value);
+        trace("Evaluating: " + value);
+        final numberDetector:EReg = ~/([0-9\.]+)/;
+        final booleanDetector:EReg = ~/(true|false)/;
 
-        if (numberDetector.match(value)) return numberDetector.matched(1);
-        else if (stringDetector.match(value)) return stringDetector.matched(1);
-        else if (booleanDetector.match(value)) return booleanDetector.matched(1);
-        else {
-            if (Memory.hasLoadedVar(value)) return Memory.getLoadedVar(value).toString();
+        if (numberDetector.match(value)) {
+            trace("Found Number: " + numberDetector.matched(0));
+            return numberDetector.matched(1);
         }
+        else if (value.indexesOf("\"").length == 2) {
+            trace("Found string: " + value);
+            return value;
+        } 
+        else if (booleanDetector.match(value)) {
+            trace("Found boolean: " + value);
+            return booleanDetector.matched(1);
+        }
+        else {
+            if (Memory.hasLoadedVar(value)) {
+                trace("Found variable: " + value);
+                return Memory.getLoadedVar(value).toString();
+            }
+        }
+        trace("Unknown value: " + value);
         return "Nothing";
     }
 
@@ -29,16 +46,31 @@ class Evaluator {
      * @return The value of the expression, as a string
      */
     public static function simplifyEquation(expression:String):String {
-        var value = "";
-
-        //first, build the abstract syntax tree
-        var ast:Node = {};
-        
-        
-        return value;
+        trace("Evaluating: " + expression);
+        if (expression.contains("\"")) return expression;
+        else if (Memory.hasLoadedVar(expression)) return Memory.getLoadedVar(expression).basicValue;
+        trace("Complicated expression: " + expression);
+        expression = expression.replace("+", " + ").replace("-", " - ").replace("*", " * ").replace("/", " / ").replace("(", " ( ").replace(")", " ) ");
+        //first, replace all variables with their values
+        var tempExpression = expression;
+        var variableDetector:EReg = ~/ ([a-zA-Z_]+[0-9]*) /;
+        while (variableDetector.match(tempExpression)) {
+            var variable = variableDetector.matched(1);
+            if (!Memory.hasLoadedVar(variable)) {
+                Runtime.safeThrow(new UnknownDefinition(variable));
+                return expression;
+            } else {
+                tempExpression = tempExpression.replacefirst(variable, Memory.getLoadedVar(variable).basicValue);
+            }
+        }
+        if (tempExpression == "") return expression;
+        var res = Formula.fromString(tempExpression).simplify().result;
+        return res + "";
     }
 
-    
+    public static function calculateStrings(expression:String):String {
+        return expression;
+    }
 }
 
 

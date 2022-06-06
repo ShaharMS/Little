@@ -21,7 +21,7 @@ class Typer {
             if (value.indexOf(".") != -1) return "Decimal";
             else return "Number";
         } 
-        else if (stringDetector.match(value)) return "Letters";
+        else if (stringDetector.match(value)) return "Characters";
         else if (booleanDetector.match(value)) return "Boolean";
         else {
             //if it doesnt match any type, its probably a reference to another object/value
@@ -42,7 +42,7 @@ class Typer {
     public static final basicTypeToHaxe:Map<String, String> = [
         "Number" => "Int",
         "Decimal" => "Float",
-        "Letters" => "String",
+        "Characters" => "String",
         "Boolean" => "Bool"
     ];
 

@@ -71,7 +71,7 @@ class Runtime {
         print('Error! (from line $currentLine):\n\t---\n\t' + exception.content + "\n\t---");
     }
     public static function print(expression:String) {
-        Browser.console.log('Line $currentLine: ' + expression);
+        Log.trace('Line $currentLine: ' + expression, null);
     }
 
 	static function get_currentLine():Int {

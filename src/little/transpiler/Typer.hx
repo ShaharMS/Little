@@ -49,7 +49,7 @@ class Typer {
     public static final basicTypeToHaxe:Map<String, String> = [
         "Number" => "Int",
         "Decimal" => "Float",
-        "Letters" => "String",
+        "Characters" => "String",
         "Boolean" => "Bool"
     ];
 
