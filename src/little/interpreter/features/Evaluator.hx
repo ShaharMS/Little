@@ -13,29 +13,23 @@ class Evaluator {
 
     public static function getValueOf(value:String) {
         value = simplifyEquation(value);
-        trace("Evaluating: " + value);
         final numberDetector:EReg = ~/([0-9\.]+)/;
         final booleanDetector:EReg = ~/(true|false)/;
 
         if (numberDetector.match(value)) {
-            trace("Found Number: " + numberDetector.matched(0));
             return numberDetector.matched(1);
         }
         else if (value.indexesOf("\"").length == 2) {
-            trace("Found string: " + value);
             return value;
         } 
         else if (booleanDetector.match(value)) {
-            trace("Found boolean: " + value);
             return booleanDetector.matched(1);
         }
         else {
             if (Memory.hasLoadedVar(value)) {
-                trace("Found variable: " + value);
                 return Memory.getLoadedVar(value).toString();
             }
         }
-        trace("Unknown value: " + value);
         return "Nothing";
     }
 
@@ -46,10 +40,8 @@ class Evaluator {
      * @return The value of the expression, as a string
      */
     public static function simplifyEquation(expression:String):String {
-        trace("Evaluating: " + expression);
         if (expression.contains("\"")) return expression;
         else if (Memory.hasLoadedVar(expression)) return Memory.getLoadedVar(expression).basicValue;
-        trace("Complicated expression: " + expression);
         expression = expression.replace("+", " + ").replace("-", " - ").replace("*", " * ").replace("/", " / ").replace("(", " ( ").replace(")", " ) ");
         //first, replace all variables with their values
         var tempExpression = expression;
