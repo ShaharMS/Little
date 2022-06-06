@@ -44,11 +44,11 @@ class Evaluator {
 
 
 typedef Node = {
-    public var term:Term;
-    public var left:Node;
-    public var right:Node;
+    @:optional public var term:Term;
+    @:optional public var left:Node;
+    @:optional public var right:Node;
 }
 
 typedef Term = {
-    public var value:String;
+    @:optional public var value:String;
 }

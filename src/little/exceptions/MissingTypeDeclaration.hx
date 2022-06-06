@@ -12,7 +12,7 @@ class MissingTypeDeclaration implements Exception {
 	public var content(get, null):String;
 
     public function new(varName:String) {
-        details = 'When initializing $varName, you left the type after the : empty.\nIf you don\'t want to specify a type, remove the : after the definition\'s name.';
+        details = 'When initializing $varName, you left the type after the : empty.\n\tIf you don\'t want to specify a type, remove the : after the definition\'s name.';
     }
 
 	public function get_content():String {

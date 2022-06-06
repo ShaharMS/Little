@@ -398,7 +398,7 @@ LittleInterpreter.registerObject = function(name,obj) {
 LittleInterpreter.registerClass = function(name,cls) {
 };
 LittleInterpreter.run = function(code) {
-	LittleInterpreter.currentLine = 0;
+	LittleInterpreter.currentLine = 1;
 	little_interpreter_Memory.clear();
 	code = StringTools.replace(code,"\r","");
 	code = StringTools.replace(code,";","\n");
@@ -534,7 +534,7 @@ little_exceptions_DefinitionTypeMismatch.prototype = {
 };
 var little_exceptions_MissingTypeDeclaration = function(varName) {
 	this.type = "Missing Type Declaration";
-	this.details = "When initializing " + varName + ", you left the type after the : empty.\nIf you don't want to specify a type, remove the : after the definition's name.";
+	this.details = "When initializing " + varName + ", you left the type after the : empty.\n\tIf you don't want to specify a type, remove the : after the definition's name.";
 };
 little_exceptions_MissingTypeDeclaration.__name__ = true;
 little_exceptions_MissingTypeDeclaration.prototype = {
@@ -664,7 +664,7 @@ String.prototype.__class__ = String;
 String.__name__ = true;
 Array.__name__ = true;
 js_Boot.__toStr = ({ }).toString;
-LittleInterpreter.currentLine = 0;
+LittleInterpreter.currentLine = 1;
 LittleInterpreter.registeredVariables = new haxe_ds_StringMap();
 little_Runtime.exceptionStack = new little_interpreter_ExceptionStack();
 little_Runtime.currentLine = 0;

@@ -32,7 +32,7 @@ class Interpreter {
      * The interpreter reads the code from top to bottom, starting at line 1.  
      * if equals to 0, it means the interpreter hasnt started yet.
     */
-    public static var currentLine:Int = 0;
+    public static var currentLine:Int = 1;
 
     /**
      * Registers a haxe, basic type variable, to be used in the language.
@@ -101,7 +101,7 @@ class Interpreter {
      * @param code The code to run.
      */
     public static function run(code:String) {
-        currentLine = 0;
+        currentLine = 1;
         Memory.clear();
         code = code.replace("\r", "");
         code = code.replace(";", "\n");
