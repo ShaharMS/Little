@@ -57,10 +57,10 @@ Main.__name__ = true;
 Main.main = function() {
 	var a = 18;
 	LittleInterpreter.registerVariable("a",a);
-	LittleInterpreter.run("define e = 19");
-	console.log("src/Main.hx:14:",little_interpreter_Memory.variableMemory == null ? "null" : haxe_ds_StringMap.stringify(little_interpreter_Memory.variableMemory.h));
+	Little.interpreter.run("define e = 19");
+	console.log("src/Main.hx:15:",little_interpreter_Memory.variableMemory == null ? "null" : haxe_ds_StringMap.stringify(little_interpreter_Memory.variableMemory.h));
 	a = 19;
-	console.log("src/Main.hx:16:",little_Runtime.getMemorySnapshot());
+	console.log("src/Main.hx:17:",little_Runtime.getMemorySnapshot());
 };
 Math.__name__ = true;
 var Std = function() { };
@@ -388,6 +388,7 @@ LittleInterpreter.registerVariable = function(name,value) {
 		return;
 	}
 	v.scope = { scope : little_interpreter_constraints_VariableScope.GLOBAL, info : "Registered externally"};
+	little_interpreter_Memory.safePush(v);
 	LittleInterpreter.registeredVariables.h[name] = v;
 };
 LittleInterpreter.registerFunction = function(name,func) {
@@ -441,6 +442,10 @@ function little_Interpreter_detectVariables(line) {
 	if(parts[0].indexOf(":") != -1) {
 		var type = StringTools.replace(parts[0].split(":")[1]," ","");
 		var name = StringTools.replace(parts[0].split(":")[0]," ","");
+		if(type == "") {
+			little_Runtime.safeThrow(new little_exceptions_MissingTypeDeclaration(name));
+			return null;
+		}
 		v.name = name;
 		v.type = type;
 	}
@@ -453,7 +458,7 @@ function little_Interpreter_detectVariables(line) {
 		if(valueType != v.type && v.type != "Everything") {
 			little_Runtime.safeThrow(new little_exceptions_DefinitionTypeMismatch(v.name,v.type,valueType));
 		}
-		v.set_basicValue(StringTools.trim(parts[1]));
+		v.set_basicValue(little_interpreter_features_Evaluator.getValueOf(StringTools.trim(parts[1])));
 		v.valueTree = little_Interpreter_processVariableValueTree(v.get_basicValue());
 	}
 	if(parts[1] == null) {
@@ -512,6 +517,10 @@ little_Runtime.print = function(expression) {
 little_Runtime.get_currentLine = function() {
 	return LittleInterpreter.currentLine;
 };
+var little_Transpiler = function() { };
+little_Transpiler.__name__ = true;
+var Little = $hx_exports["Little"] = function() { };
+Little.__name__ = true;
 var little_exceptions_DefinitionTypeMismatch = function(name,originalType,wrongType) {
 	this.type = "Definition Type Mismatch";
 	this.details = "You tried to set the definition: \n\n\t\t" + name + "\n\n\tof type: \n\n\t\t" + originalType + "\n\n\twith a value of type: \n\n\t\t" + wrongType + "\n\n\tOnce a definition is set, it's value can only be set again with the same type.";
@@ -522,6 +531,17 @@ little_exceptions_DefinitionTypeMismatch.prototype = {
 		return "" + this.type + ": " + this.details;
 	}
 	,__class__: little_exceptions_DefinitionTypeMismatch
+};
+var little_exceptions_MissingTypeDeclaration = function(varName) {
+	this.type = "Missing Type Declaration";
+	this.details = "When initializing " + varName + ", you left the type after the : empty.\nIf you don't want to specify a type, remove the : after the definition's name.";
+};
+little_exceptions_MissingTypeDeclaration.__name__ = true;
+little_exceptions_MissingTypeDeclaration.prototype = {
+	get_content: function() {
+		return "" + this.type + ": " + this.details;
+	}
+	,__class__: little_exceptions_MissingTypeDeclaration
 };
 var little_exceptions_Typo = function(details) {
 	this.type = "Typo";
@@ -605,7 +625,7 @@ little_interpreter_features_LittleVariable.prototype = {
 		return this.basicValue = value;
 	}
 	,toString: function() {
-		return "name: " + this.name + ", value: " + Std.string(this.get_basicValue());
+		return "" + Std.string(this.get_basicValue());
 	}
 	,__class__: little_interpreter_features_LittleVariable
 };
@@ -648,6 +668,9 @@ LittleInterpreter.currentLine = 0;
 LittleInterpreter.registeredVariables = new haxe_ds_StringMap();
 little_Runtime.exceptionStack = new little_interpreter_ExceptionStack();
 little_Runtime.currentLine = 0;
+Little.interpreter = LittleInterpreter;
+Little.runtime = little_Runtime;
+Little.transpiler = little_Transpiler;
 little_interpreter_Memory.variableMemory = new haxe_ds_StringMap();
 Main.main();
 })(typeof exports != "undefined" ? exports : typeof window != "undefined" ? window : typeof self != "undefined" ? self : this, typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);

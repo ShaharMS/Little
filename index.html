@@ -25,7 +25,7 @@
             logBackup.apply(console, arguments);
         };
         var text = document.getElementById('text');
-        text.addEventListener("keydown", function() {
+        text.addEventListener("keyup", function() {
             var text = document.getElementById('text').value;
             LittleInterpreter.run(text);
             var resEl = document.getElementById('result');

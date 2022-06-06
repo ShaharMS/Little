@@ -25,7 +25,7 @@ class LittleVariable implements Variable {
 	public var scope:{scope:VariableScope, info:String};
 
 	public function toString():String {
-		return 'name: $name, value: $basicValue';
+		return '$basicValue';
 	}
 
 	public function dispose() {}

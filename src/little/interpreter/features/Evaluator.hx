@@ -1,5 +1,7 @@
 package little.interpreter.features;
 
+import haxe.ds.Either;
+
 /**
  * Used to evaluate the value of an expression
  */
@@ -19,4 +21,34 @@ class Evaluator {
         }
         return "Nothing";
     }
+
+    /**
+     * Evaluates the expression and returns its value. This also supports strings.
+     * 
+     * @param expression The expression to evaluate
+     * @return The value of the expression, as a string
+     */
+    public static function simplifyEquation(expression:String):String {
+        var value = "";
+
+        //first, build the abstract syntax tree
+        var ast:Node = {};
+        
+        
+        return value;
+    }
+
+    
+}
+
+
+
+typedef Node = {
+    public var term:Term;
+    public var left:Node;
+    public var right:Node;
+}
+
+typedef Term = {
+    public var value:String;
 }

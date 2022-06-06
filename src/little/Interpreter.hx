@@ -1,5 +1,6 @@
 package little;
 
+import little.exceptions.MissingTypeDeclaration;
 import little.exceptions.Typo;
 import js.Error.TypeError;
 import little.interpreter.features.Evaluator;
@@ -72,6 +73,7 @@ class Interpreter {
             return;
         }
         v.scope = {scope: GLOBAL, info: "Registered externally"};
+        Memory.safePush(v);
         registeredVariables.set(name, v);
     }
         
@@ -91,7 +93,12 @@ class Interpreter {
      * Runs a piece of code programmed in the `little` language.
      * 
      * lines of code may be separated by `\n`,`\r\n` or a semicolon.
-     * @param code 
+     * 
+     * As you notice, threres no return value. If you want to get the exit
+     * value of the code, you can use the `exitCode` method.
+     * 
+     * For other runtime information, see the `Runtime` class.
+     * @param code The code to run.
      */
     public static function run(code:String) {
         currentLine = 0;
@@ -153,6 +160,12 @@ function detectVariables(line:String):LittleVariable {
     if (parts[0].contains(":")) {
         var type = parts[0].split(":")[1].replace(" ", "");
         var name = parts[0].split(":")[0].replace(" ", "");
+
+        if (type == "") {
+            safeThrow(new MissingTypeDeclaration(name));
+            return null;
+        }
+
         v.name = name;
         v.type = type;
     }
@@ -163,7 +176,7 @@ function detectVariables(line:String):LittleVariable {
     if (parts[1] != null) {
         var valueType:String = Typer.getValueType(parts[1].trim());
         if (valueType != v.type && v.type != "Everything") safeThrow(new DefinitionTypeMismatch(v.name, v.type, valueType));
-        v.basicValue = parts[1].trim();
+        v.basicValue = Evaluator.getValueOf(parts[1].trim());
         v.valueTree = processVariableValueTree(v.basicValue);
     }
     if (parts[1] == null) {
