@@ -98,12 +98,6 @@ HxOverrides.now = function() {
 var Main = function() { };
 Main.__name__ = true;
 Main.main = function() {
-	var a = 18;
-	LittleInterpreter.registerVariable("a",a);
-	Little.interpreter.run("define e = 19");
-	haxe_Log.trace(little_interpreter_Memory.variableMemory == null ? "null" : haxe_ds_StringMap.stringify(little_interpreter_Memory.variableMemory.h),{ fileName : "src/Main.hx", lineNumber : 15, className : "Main", methodName : "main"});
-	a = 19;
-	haxe_Log.trace(little_Runtime.getMemorySnapshot(),{ fileName : "src/Main.hx", lineNumber : 17, className : "Main", methodName : "main"});
 };
 Math.__name__ = true;
 var Reflect = function() { };
@@ -3950,15 +3944,6 @@ var haxe_ds_StringMap = function() {
 	this.h = Object.create(null);
 };
 haxe_ds_StringMap.__name__ = true;
-haxe_ds_StringMap.stringify = function(h) {
-	var s = "{";
-	var first = true;
-	for (var key in h) {
-		if (first) first = false; else s += ',';
-		s += key + ' => ' + Std.string(h[key]);
-	}
-	return s + "}";
-};
 haxe_ds_StringMap.prototype = {
 	__class__: haxe_ds_StringMap
 };
@@ -4248,9 +4233,6 @@ little_interpreter_ExceptionStack.prototype = {
 };
 var little_Runtime = function() { };
 little_Runtime.__name__ = true;
-little_Runtime.getMemorySnapshot = function() {
-	return haxe_ds_StringMap.stringify(little_interpreter_Memory.variableMemory.h);
-};
 little_Runtime.safeThrow = function(exception) {
 	little_Runtime.exceptionStack.push(exception);
 	little_Runtime.print("Error! (from line " + little_Runtime.get_currentLine() + "):\n\t---\n\t" + exception.get_content() + "\n\t---");
@@ -4355,33 +4337,25 @@ var little_interpreter_features_Evaluator = function() { };
 little_interpreter_features_Evaluator.__name__ = true;
 little_interpreter_features_Evaluator.getValueOf = function(value) {
 	value = little_interpreter_features_Evaluator.simplifyEquation(value);
-	haxe_Log.trace("Evaluating: " + value,{ fileName : "src/little/interpreter/features/Evaluator.hx", lineNumber : 16, className : "little.interpreter.features.Evaluator", methodName : "getValueOf"});
 	var numberDetector = new EReg("([0-9\\.]+)","");
 	var booleanDetector = new EReg("(true|false)","");
 	if(numberDetector.match(value)) {
-		haxe_Log.trace("Found Number: " + numberDetector.matched(0),{ fileName : "src/little/interpreter/features/Evaluator.hx", lineNumber : 21, className : "little.interpreter.features.Evaluator", methodName : "getValueOf"});
 		return numberDetector.matched(1);
 	} else if(TextTools.indexesOf(value,"\"").length == 2) {
-		haxe_Log.trace("Found string: " + value,{ fileName : "src/little/interpreter/features/Evaluator.hx", lineNumber : 25, className : "little.interpreter.features.Evaluator", methodName : "getValueOf"});
 		return value;
 	} else if(booleanDetector.match(value)) {
-		haxe_Log.trace("Found boolean: " + value,{ fileName : "src/little/interpreter/features/Evaluator.hx", lineNumber : 29, className : "little.interpreter.features.Evaluator", methodName : "getValueOf"});
 		return booleanDetector.matched(1);
 	} else if(little_interpreter_Memory.hasLoadedVar(value)) {
-		haxe_Log.trace("Found variable: " + value,{ fileName : "src/little/interpreter/features/Evaluator.hx", lineNumber : 34, className : "little.interpreter.features.Evaluator", methodName : "getValueOf"});
 		return little_interpreter_Memory.getLoadedVar(value).toString();
 	}
-	haxe_Log.trace("Unknown value: " + value,{ fileName : "src/little/interpreter/features/Evaluator.hx", lineNumber : 38, className : "little.interpreter.features.Evaluator", methodName : "getValueOf"});
 	return "Nothing";
 };
 little_interpreter_features_Evaluator.simplifyEquation = function(expression) {
-	haxe_Log.trace("Evaluating: " + expression,{ fileName : "src/little/interpreter/features/Evaluator.hx", lineNumber : 49, className : "little.interpreter.features.Evaluator", methodName : "simplifyEquation"});
 	if(expression.indexOf("\"") != -1) {
 		return expression;
 	} else if(little_interpreter_Memory.hasLoadedVar(expression)) {
 		return little_interpreter_Memory.getLoadedVar(expression).get_basicValue();
 	}
-	haxe_Log.trace("Complicated expression: " + expression,{ fileName : "src/little/interpreter/features/Evaluator.hx", lineNumber : 52, className : "little.interpreter.features.Evaluator", methodName : "simplifyEquation"});
 	expression = StringTools.replace(StringTools.replace(StringTools.replace(StringTools.replace(StringTools.replace(StringTools.replace(expression,"+"," + "),"-"," - "),"*"," * "),"/"," / "),"("," ( "),")"," ) ");
 	var tempExpression = expression;
 	var variableDetector = new EReg(" ([a-zA-Z_]+[0-9]*) ","");
