@@ -33,9 +33,107 @@ EReg.prototype = {
 		var sz = this.r.m.index + this.r.m[0].length;
 		return HxOverrides.substr(this.r.s,sz,this.r.s.length - sz);
 	}
+	,matchedPos: function() {
+		if(this.r.m == null) {
+			throw haxe_Exception.thrown("No string matched");
+		}
+		return { pos : this.r.m.index, len : this.r.m[0].length};
+	}
 	,__class__: EReg
 };
 var Formula = {};
+Formula.bind = function(this1,formula,paramName) {
+	if(paramName != null) {
+		if(!TermNode.nameRegFull.match(paramName)) {
+			throw haxe_Exception.thrown("Not allowed characters for name " + paramName + "\".");
+		}
+		var _g = new haxe_ds_StringMap();
+		_g.h[paramName] = formula;
+		var params = _g;
+		if(Reflect.compareMethods(this1.operation,TermNode.opParam)) {
+			if(Object.prototype.hasOwnProperty.call(params.h,this1.symbol)) {
+				this1.left = params.h[this1.symbol];
+			}
+		} else {
+			if(this1.left != null) {
+				var _this = this1.left;
+				if(Reflect.compareMethods(_this.operation,TermNode.opParam)) {
+					if(Object.prototype.hasOwnProperty.call(params.h,_this.symbol)) {
+						_this.left = params.h[_this.symbol];
+					}
+				} else {
+					if(_this.left != null) {
+						_this.left.bind(params);
+					}
+					if(_this.right != null) {
+						_this.right.bind(params);
+					}
+				}
+			}
+			if(this1.right != null) {
+				var _this = this1.right;
+				if(Reflect.compareMethods(_this.operation,TermNode.opParam)) {
+					if(Object.prototype.hasOwnProperty.call(params.h,_this.symbol)) {
+						_this.left = params.h[_this.symbol];
+					}
+				} else {
+					if(_this.left != null) {
+						_this.left.bind(params);
+					}
+					if(_this.right != null) {
+						_this.right.bind(params);
+					}
+				}
+			}
+		}
+		return this1;
+	} else {
+		if((Reflect.compareMethods(formula.operation,TermNode.opName) ? formula.symbol : null) == null) {
+			throw haxe_Exception.thrown("Can't bind unnamed formula:\"" + formula.toString(null,null) + "\" as parameter.");
+		}
+		var _g = new haxe_ds_StringMap();
+		var key = Reflect.compareMethods(formula.operation,TermNode.opName) ? formula.symbol : null;
+		_g.h[key] = formula;
+		var params = _g;
+		if(Reflect.compareMethods(this1.operation,TermNode.opParam)) {
+			if(Object.prototype.hasOwnProperty.call(params.h,this1.symbol)) {
+				this1.left = params.h[this1.symbol];
+			}
+		} else {
+			if(this1.left != null) {
+				var _this = this1.left;
+				if(Reflect.compareMethods(_this.operation,TermNode.opParam)) {
+					if(Object.prototype.hasOwnProperty.call(params.h,_this.symbol)) {
+						_this.left = params.h[_this.symbol];
+					}
+				} else {
+					if(_this.left != null) {
+						_this.left.bind(params);
+					}
+					if(_this.right != null) {
+						_this.right.bind(params);
+					}
+				}
+			}
+			if(this1.right != null) {
+				var _this = this1.right;
+				if(Reflect.compareMethods(_this.operation,TermNode.opParam)) {
+					if(Object.prototype.hasOwnProperty.call(params.h,_this.symbol)) {
+						_this.left = params.h[_this.symbol];
+					}
+				} else {
+					if(_this.left != null) {
+						_this.left.bind(params);
+					}
+					if(_this.right != null) {
+						_this.right.bind(params);
+					}
+				}
+			}
+		}
+		return this1;
+	}
+};
 Formula.fromString = function(a) {
 	var s = a;
 	var bindings = null;
@@ -459,7 +557,22 @@ TermNode.getBrackets = function(s,errPos) {
 	}
 };
 TermNode.prototype = {
-	copy: function(depth) {
+	bind: function(params) {
+		if(Reflect.compareMethods(this.operation,TermNode.opParam)) {
+			if(Object.prototype.hasOwnProperty.call(params.h,this.symbol)) {
+				this.left = params.h[this.symbol];
+			}
+		} else {
+			if(this.left != null) {
+				this.left.bind(params);
+			}
+			if(this.right != null) {
+				this.right.bind(params);
+			}
+		}
+		return this;
+	}
+	,copy: function(depth) {
 		if(depth == null) {
 			depth = -1;
 		}
@@ -3816,11 +3929,6 @@ TermTransform.arrangeAddition = function(t) {
 };
 var TextTools = function() { };
 TextTools.__name__ = true;
-TextTools.replacefirst = function(string,replace,by) {
-	var place = string.indexOf(replace);
-	var result = string.substring(0,place) + by + string.substring(place + replace.length);
-	return result;
-};
 TextTools.indexesOf = function(string,sub) {
 	var indexArray = [];
 	var removedLength = 0;
@@ -4358,20 +4466,20 @@ little_interpreter_features_Evaluator.simplifyEquation = function(expression) {
 	}
 	expression = StringTools.replace(StringTools.replace(StringTools.replace(StringTools.replace(StringTools.replace(StringTools.replace(expression,"+"," + "),"-"," - "),"*"," * "),"/"," / "),"("," ( "),")"," ) ");
 	var tempExpression = expression;
-	var variableDetector = new EReg(" ([a-zA-Z_]+[0-9]*) ","");
+	var variableDetector = new EReg("([a-zA-Z_]+)","");
+	var f = Formula.fromString(tempExpression);
 	while(variableDetector.match(tempExpression)) {
 		var variable = variableDetector.matched(1);
-		if(!little_interpreter_Memory.hasLoadedVar(variable)) {
+		if(little_interpreter_Memory.hasLoadedVar(variable)) {
+			Formula.bind(f,Formula.fromString(little_interpreter_Memory.getLoadedVar(variable).get_basicValue()),variable);
+			var pos = variableDetector.matchedPos();
+			tempExpression = tempExpression.substring(pos.pos + pos.len);
+		} else {
 			little_Runtime.safeThrow(new little_exceptions_UnknownDefinition(variable));
 			return expression;
-		} else {
-			tempExpression = TextTools.replacefirst(tempExpression,variable,little_interpreter_Memory.getLoadedVar(variable).get_basicValue());
 		}
 	}
-	if(tempExpression == "") {
-		return expression;
-	}
-	var _this = Formula.fromString(tempExpression).simplify();
+	var _this = f.simplify();
 	var res = _this.operation(_this);
 	return res + "";
 };
@@ -4568,6 +4676,7 @@ TermNode.oneParamOpRegFull = new EReg("^(" + TermNode.oneParamOp.join("|") + ")$
 TermNode.twoParamOpRegFull = new EReg("^(" + TermNode.twoParamOp.join("|") + ")$","i");
 TermNode.twoSideOpRegFull = new EReg("^(" + "\\" + TermNode.twoSideOp.join("|\\") + ")$","");
 TermNode.nameReg = new EReg("^([a-z]+)(\\s*[:=]\\s*)","i");
+TermNode.nameRegFull = new EReg("^([a-z]+)$","i");
 TermNode.signReg = new EReg("^([-+\\s]+)","i");
 TermTransform.newOperation = TermNode.newOperation;
 TermTransform.newValue = TermNode.newValue;

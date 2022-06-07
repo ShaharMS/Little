@@ -45,18 +45,20 @@ class Evaluator {
         expression = expression.replace("+", " + ").replace("-", " - ").replace("*", " * ").replace("/", " / ").replace("(", " ( ").replace(")", " ) ");
         //first, replace all variables with their values
         var tempExpression = expression;
-        var variableDetector:EReg = ~/ ([a-zA-Z_]+[0-9]*) /;
+        var variableDetector:EReg = ~/([a-zA-Z_]+)/;
+        var f = Formula.fromString(tempExpression);
         while (variableDetector.match(tempExpression)) {
             var variable = variableDetector.matched(1);
-            if (!Memory.hasLoadedVar(variable)) {
+            if (Memory.hasLoadedVar(variable)) {
+                f.bind(Formula.fromString(Memory.getLoadedVar(variable).basicValue), variable);
+                var pos = variableDetector.matchedPos();
+                tempExpression = tempExpression.substring(pos.pos + pos.len);
+            } else {
                 Runtime.safeThrow(new UnknownDefinition(variable));
                 return expression;
-            } else {
-                tempExpression = tempExpression.replacefirst(variable, Memory.getLoadedVar(variable).basicValue);
             }
         }
-        if (tempExpression == "") return expression;
-        var res = Formula.fromString(tempExpression).simplify().result;
+        var res = f.simplify().result;
         return res + "";
     }
 
