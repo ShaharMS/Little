@@ -1,7 +1,6 @@
 package little.interpreter.features;
 
 import little.exceptions.UnknownDefinition;
-import haxe.ds.Either;
 using TextTools;
 using StringTools;
 
@@ -40,7 +39,7 @@ class Evaluator {
      * @return The value of the expression, as a string
      */
     public static function simplifyEquation(expression:String):String {
-        if (expression.contains("\"")) return expression;
+        if (expression.contains("\"")) return calculateStrings(expression);
         else if (Memory.hasLoadedVar(expression)) return Memory.getLoadedVar(expression).basicValue;
         expression = expression.replace("+", " + ").replace("-", " - ").replace("*", " * ").replace("/", " / ").replace("(", " ( ").replace(")", " ) ");
         //first, replace all variables with their values
@@ -63,18 +62,65 @@ class Evaluator {
     }
 
     public static function calculateStrings(expression:String):String {
+        //first, make the ast and referencing stuff for easier node access
+        var ast:AST = new AST(), nodeArray:Array<Node> = [];
+        //second, we need to detect multiplication, and construct the AST
+        var multiplicationSplit = expression.split("*");
+
+        for (i in 0...multiplicationSplit.length) {
+            //multiplication left side
+            final leftString = multiplicationSplit[i];
+            //used to calculate the equation in the ast later
+            if (ast.currentNode == null) ast.currentNode = {};
+            ast.currentNode.sign = "*";
+            //assign to the left node
+            if (ast.currentNode.left == null) ast.currentNode.left = {};
+            ast.currentNode.left.value = leftString;
+            //push the reference to the node array for easy access later
+            nodeArray.push(ast.currentNode.left);
+            nodeArray.push(ast.currentNode);
+            ast.moveLeft();
+            //continue calculations by going to the right side
+            trace("Passed: " + leftString);
+        }
+        trace(nodeArray[-1]);
         return expression;
     }
+    
 }
-
-
-
 typedef Node = {
-    @:optional public var term:Term;
+    @:optional public var parent:Node;
+    @:optional public var sign:String;
+    @:optional public var value:String;
     @:optional public var left:Node;
     @:optional public var right:Node;
 }
 
-typedef Term = {
-    @:optional public var value:String;
+@:structInit class AST {
+
+    public var currentNode:Node = {};
+
+    public function new() {
+
+        currentNode = {
+            parent: null,
+            left: {},
+            right: {},
+            value: "",
+            sign: ""
+        };
+    }
+
+    public function moveLeft():Node {
+        return currentNode.left;
+    }
+
+    public function moveRight() {
+        return currentNode.right;
+    }
+
+    public function initializeNode(n:Node) {
+        n = {parent: currentNode, sign: "", value: ""};
+    }
+
 }

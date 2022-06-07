@@ -2,7 +2,6 @@ package little;
 
 import little.exceptions.MissingTypeDeclaration;
 import little.exceptions.Typo;
-import js.Error.TypeError;
 import little.interpreter.features.Evaluator;
 import little.Runtime;
 import little.exceptions.DefinitionTypeMismatch;

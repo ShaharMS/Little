@@ -1,6 +1,5 @@
 package little;
 
-import js.Browser;
 import haxe.Log;
 import little.interpreter.Memory;
 import little.interpreter.ExceptionStack;

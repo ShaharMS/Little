@@ -1,5 +1,6 @@
 package;
 
+import little.interpreter.features.Evaluator;
 import little.Little;
 import little.Runtime;
 import little.interpreter.Memory;
@@ -9,5 +10,6 @@ import little.Transpiler;
 using StringTools;
 class Main {
     static function main() {
+        Evaluator.calculateStrings('"hey" * 3 * 3 + "heythere" + "hello"');
     }
 }
