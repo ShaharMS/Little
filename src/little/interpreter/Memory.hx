@@ -39,7 +39,7 @@ class Memory {
     }
 
     public static function getLoadedVar(variableName:String):Variable {
-        return variableMemory[variableName];
+        return variableMemory[variableName] != null ? variableMemory[variableName] : null;
     }
 
     public static function clear() {

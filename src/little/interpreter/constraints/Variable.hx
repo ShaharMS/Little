@@ -16,7 +16,7 @@ interface Variable {
     /**
      * The type of the variable (primitive or object).
      */
-    public var type(default, never):String;
+    public var type:String;
 
     /**
      * The variable's asscoiated name, should be used to get its value in memory.
@@ -26,7 +26,7 @@ interface Variable {
     /**
      * The variable's scope and place of creation.
      */
-    public var scope:{scope:VariableScope, info:String};
+    public var scope:{scope:VariableScope, info:String, initializationLine:Int};
 
     /**
      * A String representation of the variable, to be used for printing.

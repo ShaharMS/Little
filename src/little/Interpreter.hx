@@ -1,5 +1,6 @@
 package little;
 
+import little.interpreter.features.Assignment;
 import little.exceptions.MissingTypeDeclaration;
 import little.exceptions.Typo;
 import little.interpreter.features.Evaluator;
@@ -72,7 +73,7 @@ class Interpreter {
             safeThrow(new VariableRegistrationError(v.name, hType));
             return;
         }
-        v.scope = {scope: GLOBAL, info: "Registered externally"};
+        v.scope = {scope: GLOBAL, info: "Registered externally", initializationLine: 0};
         Memory.safePush(v);
         registeredVariables.set(name, v);
     }
@@ -126,6 +127,7 @@ class Interpreter {
             if (lv != null) {
                 Memory.safePush(lv);
             }
+            Assignment.assign(l);
             //print function
             detectPrint(l);
 
@@ -157,9 +159,10 @@ function detectVariables(line:String):LittleVariable {
 
     // gets the variable name, type and value.
     var parts = defParts[1].split("=");
+    v.scope.initializationLine = currentLine;
     if (parts[0].contains(":")) {
-        var type = parts[0].split(":")[1].replace(" ", "");
-        var name = parts[0].split(":")[0].replace(" ", "");
+        final type = parts[0].split(":")[1].replace(" ", "");
+        final name = parts[0].split(":")[0].replace(" ", "");
 
         if (type == "") {
             safeThrow(new MissingTypeDeclaration(name));
@@ -172,16 +175,6 @@ function detectVariables(line:String):LittleVariable {
     if (!parts[0].contains(":")) {
         v.name = parts[0].replace(" ", "");
         v.type = "Everything";
-    }
-    if (parts[1] != null) {
-        var valueType:String = Typer.getValueType(parts[1].trim());
-        if (valueType != v.type && v.type != "Everything") safeThrow(new DefinitionTypeMismatch(v.name, v.type, valueType));
-        v.basicValue = Evaluator.getValueOf(parts[1].trim());
-        v.valueTree = processVariableValueTree(v.basicValue);
-    }
-    if (parts[1] == null) {
-        v.basicValue = {};
-        v.valueTree["%basicValue%"] = v.basicValue;
     }
 
     return v;

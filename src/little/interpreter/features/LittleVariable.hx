@@ -22,7 +22,7 @@ class LittleVariable implements Variable {
 
 	public var name:String;
 
-	public var scope:{scope:VariableScope, info:String};
+	public var scope:{scope:VariableScope, info:String, initializationLine:Int};
 
 	public function toString():String {
 		return '$basicValue';
