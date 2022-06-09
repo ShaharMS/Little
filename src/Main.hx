@@ -10,6 +10,6 @@ import little.Transpiler;
 using StringTools;
 class Main {
     static function main() {
-        Evaluator.calculateStrings('"hey" * 3 * 3 + "heythere" + "hello"');
+        Evaluator.calculateStringAddition('"hey" + "heythere" + "hello"');
     }
 }

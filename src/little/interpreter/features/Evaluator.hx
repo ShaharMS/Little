@@ -1,5 +1,6 @@
 package little.interpreter.features;
 
+import haxe.io.Encoding;
 import little.exceptions.UnknownDefinition;
 using TextTools;
 using StringTools;
@@ -39,7 +40,7 @@ class Evaluator {
      * @return The value of the expression, as a string
      */
     public static function simplifyEquation(expression:String):String {
-        if (expression.contains("\"")) return calculateStrings(expression);
+        if (expression.contains("\"")) return expression;
         else if (Memory.hasLoadedVar(expression)) return Memory.getLoadedVar(expression).basicValue;
         expression = expression.replace("+", " + ").replace("-", " - ").replace("*", " * ").replace("/", " / ").replace("(", " ( ").replace(")", " ) ");
         //first, replace all variables with their values
@@ -57,33 +58,27 @@ class Evaluator {
                 return expression;
             }
         }
-        var res = f.simplify().result;
+        var res = f.result;
         return res + "";
     }
 
-    public static function calculateStrings(expression:String):String {
-        //first, make the ast and referencing stuff for easier node access
-        var ast:AST = new AST(), nodeArray:Array<Node> = [];
-        //second, we need to detect multiplication, and construct the AST
-        var multiplicationSplit = expression.split("*");
+    public static function calculateStringAddition(expression:String, ?currentNode:Node):String {
+        if (currentNode == null) currentNode = {};
 
-        for (i in 0...multiplicationSplit.length) {
-            //multiplication left side
-            final leftString = multiplicationSplit[i];
-            //used to calculate the equation in the ast later
-            if (ast.currentNode == null) ast.currentNode = {};
-            ast.currentNode.sign = "*";
-            //assign to the left node
-            if (ast.currentNode.left == null) ast.currentNode.left = {};
-            ast.currentNode.left.value = leftString;
-            //push the reference to the node array for easy access later
-            nodeArray.push(ast.currentNode.left);
-            nodeArray.push(ast.currentNode);
-            ast.moveLeft();
-            //continue calculations by going to the right side
-            trace("Passed: " + leftString);
+        if (expression.contains("+")) {
+            var additionSplit = expression.split("+");
+            var leftString = additionSplit[0];
+            currentNode.left = {};
+            currentNode.left.value =  leftString;
+            currentNode.sign = "+";
+            additionSplit.shift();
+            currentNode.right = {};
+            calculateStringAddition(additionSplit.join("+"), currentNode.right);
+        } else if (expression.contains("\"")) {
+            currentNode.left = {}
+            currentNode.left.value = expression;
         }
-        trace(nodeArray[-1]);
+        trace(currentNode);
         return expression;
     }
     
@@ -94,33 +89,4 @@ typedef Node = {
     @:optional public var value:String;
     @:optional public var left:Node;
     @:optional public var right:Node;
-}
-
-@:structInit class AST {
-
-    public var currentNode:Node = {};
-
-    public function new() {
-
-        currentNode = {
-            parent: null,
-            left: {},
-            right: {},
-            value: "",
-            sign: ""
-        };
-    }
-
-    public function moveLeft():Node {
-        return currentNode.left;
-    }
-
-    public function moveRight() {
-        return currentNode.right;
-    }
-
-    public function initializeNode(n:Node) {
-        n = {parent: currentNode, sign: "", value: ""};
-    }
-
 }
