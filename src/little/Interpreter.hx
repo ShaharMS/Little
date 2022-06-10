@@ -1,5 +1,6 @@
 package little;
 
+import little.interpreter.Lexer;
 import little.interpreter.features.Assignment;
 import little.exceptions.MissingTypeDeclaration;
 import little.exceptions.Typo;
@@ -123,13 +124,13 @@ class Interpreter {
                 blockNumber++;
             }
             //new variables
-            var lv = detectVariables(l);
+            var lv = Lexer.detectVariables(l);
             if (lv != null) {
                 Memory.safePush(lv);
             }
             Assignment.assign(l);
             //print function
-            detectPrint(l);
+            Lexer.detectPrint(l);
 
             currentLine++;
         }
@@ -137,64 +138,4 @@ class Interpreter {
 
     public static var registeredVariables(default, null):Map<String, Variable> = [];
 
-}
-
-/**
- * Should detect variables inside:
- * 
- *     define x = 3
- *     define y:Number = x
- *     define z:Characters = "Hello"
- *     global define a:Boolean = true
- * 
- * @param line a line of code
- * @return the Variable insance, or null if it doesn't exist
- */
-function detectVariables(line:String):LittleVariable {
-    var v:LittleVariable = new LittleVariable();
-    line = " " + line.trim();
-    if (!line.contains(" define ") ) return null;
-    //replace the starting "define" with ""
-    var defParts = line.split(" define ");    
-
-    // gets the variable name, type and value.
-    var parts = defParts[1].split("=");
-    v.scope.initializationLine = currentLine;
-    if (parts[0].contains(":")) {
-        final type = parts[0].split(":")[1].replace(" ", "");
-        final name = parts[0].split(":")[0].replace(" ", "");
-
-        if (type == "") {
-            safeThrow(new MissingTypeDeclaration(name));
-            return null;
-        }
-
-        v.name = name;
-        v.type = type;
-    }
-    if (!parts[0].contains(":")) {
-        v.name = parts[0].replace(" ", "");
-        v.type = "Everything";
-    }
-
-    return v;
-
-}
-
-function processVariableValueTree(val:String):Dynamic {
-    return {};
-}
-
-function detectPrint(line:String) {
-    if (!line.contains("print(") && !line.endsWith(")")) return;
-    //remove the print(
-    line = line.substring(6);
-    //remove the ending )
-    if (!line.endsWith(")")) {
-        Runtime.safeThrow(new Typo("When using the print function, you need to end it with a )"));
-        return;
-    }
-    line = line.substring(0, line.length - 1);
-    var value = Evaluator.getValueOf(line);
-    Runtime.print(value);
 }

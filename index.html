@@ -17,6 +17,7 @@
     <textarea id="result" style="height: 80vw; width: 45vw;">
     </textarea>
     <script>
+        var interpNum = 0;
         var logBackup = console.log;
         var logMessages = [];
 
@@ -26,10 +27,11 @@
         };
         var text = document.getElementById('text');
         text.addEventListener("keyup", function() {
+            interpNum++;
             var text = document.getElementById('text').value;
             LittleInterpreter.run(text);
             var resEl = document.getElementById('result');
-            resEl.value = logMessages.join("\n");
+            resEl.value = `Interpreter started, Launch Number ${interpNum}\n——————————\n` +logMessages.join("\n");
             logMessages = [];
         });
     </script>

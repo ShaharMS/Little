@@ -23,18 +23,17 @@ class Typer {
         } 
         else if (stringDetector.match(value)) return "Characters";
         else if (booleanDetector.match(value)) return "Boolean";
-        else {
+        else if (value.contains(".")){
             //if it doesnt match any type, its probably a reference to another object/value
             //object:
-            if (value.contains(".")) 
-            {
-                //cut the string on the first dot
-                var object:String = value.substring(0, value.indexOf("."));
-                value = value.substring(value.indexOf(".") + 1);
-                if (value == "") {
-                    Runtime.safeThrow(new Typo('While trying to access a definition inside $object, you didn\'t specify a property name (the property name is the part after the dot).'));
-                }
+            //cut the string on the first dot
+            var object:String = value.substring(0, value.indexOf("."));
+            value = value.substring(value.indexOf(".") + 1);
+            if (value == "") {
+                Runtime.safeThrow(new Typo('While trying to access a definition inside $object, you didn\'t specify a property name (the property name is the part after the dot).'));
             }
+        } else {
+            return getValueType(Memory.getLoadedVar(value).basicValue);
         }
         return "";
     }

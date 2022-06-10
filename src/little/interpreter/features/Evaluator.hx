@@ -42,6 +42,7 @@ class Evaluator {
     public static function simplifyEquation(expression:String):String {
         if (expression.contains("\"")) return expression;
         else if (Memory.hasLoadedVar(expression)) return Memory.getLoadedVar(expression).basicValue;
+        if (expression.trim() == "false" || expression.trim() == "true") return expression.trim();
         expression = expression.replace("+", " + ").replace("-", " - ").replace("*", " * ").replace("/", " / ").replace("(", " ( ").replace(")", " ) ");
         //first, replace all variables with their values
         var tempExpression = expression;
