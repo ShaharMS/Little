@@ -1,5 +1,6 @@
 package little.interpreter.features;
 
+import little.exceptions.DefinitionTypeMismatch;
 import haxe.io.Encoding;
 import little.exceptions.UnknownDefinition;
 using TextTools;
@@ -19,7 +20,7 @@ class Evaluator {
         if (numberDetector.match(value)) {
             return numberDetector.matched(1);
         }
-        else if (value.indexesOf("\"").length == 2) {
+        else if (value.indexesOf("\"").length >= 2) {
             return value;
         } 
         else if (booleanDetector.match(value)) {
@@ -40,9 +41,9 @@ class Evaluator {
      * @return The value of the expression, as a string
      */
     public static function simplifyEquation(expression:String):String {
-        if (expression.contains("\"")) return expression;
-        else if (Memory.hasLoadedVar(expression)) return Memory.getLoadedVar(expression).basicValue;
+        if (expression.contains('"')) return calculateStringMath(expression);
         if (expression.trim() == "false" || expression.trim() == "true") return expression.trim();
+        if (Memory.hasLoadedVar(expression)) return Memory.getLoadedVar(expression).basicValue;
         expression = expression.replace("+", " + ").replace("-", " - ").replace("*", " * ").replace("/", " / ").replace("(", " ( ").replace(")", " ) ");
         //first, replace all variables with their values
         var tempExpression = expression;
@@ -51,7 +52,11 @@ class Evaluator {
         while (variableDetector.match(tempExpression)) {
             var variable = variableDetector.matched(1);
             if (Memory.hasLoadedVar(variable)) {
-                f.bind(Formula.fromString(Memory.getLoadedVar(variable).basicValue), variable);
+                var value = Memory.getLoadedVar(variable).basicValue;
+                if (~/[^0-9\.]+/.match(value)) {
+                    Runtime.safeThrow(new DefinitionTypeMismatch(variable, "Number", "e"));
+                }
+                f.bind(Formula.fromString(value), variable);
                 var pos = variableDetector.matchedPos();
                 tempExpression = tempExpression.substring(pos.pos + pos.len);
             } else {
@@ -63,12 +68,12 @@ class Evaluator {
         return res + "";
     }
 
-    public static function calculateStringAddition(expression:String, ?currentNode:Node):String {
+    public static function calculateStringAddition(expression:String, ?currentNode:Node):Node {
         if (currentNode == null) currentNode = {};
 
         if (expression.contains("+")) {
             var additionSplit = expression.split("+");
-            var leftString = additionSplit[0];
+            var leftString = additionSplit[0].trim();
             currentNode.left = {};
             currentNode.left.value =  leftString;
             currentNode.sign = "+";
@@ -79,10 +84,35 @@ class Evaluator {
             currentNode.left = {}
             currentNode.left.value = expression;
         }
-        trace(currentNode);
-        return expression;
+        return currentNode;
     }
     
+    public static function calculateStringMath(expression:String):String {
+        var result = "";
+        var ast = calculateStringAddition(expression);
+        if (ast.right == null) return expression;
+        while (ast.left != null) {
+            var left = ast.left;
+            var right = ast.right;
+
+            if ((ast.right == null && ast.sign == null) || ast.sign.replace(" ", "") == "+") {
+                var addition = left.value.replacefirst("\"", "").replaceLast("\"", "");
+                if (left.value == addition) {
+                    try {
+                        addition = Std.string(Memory.getLoadedVar(left.value).basicValue).replacefirst("\"", "").replaceLast("\"", "");
+                    } catch (e) {
+                        Runtime.safeThrow(new UnknownDefinition(left.value));
+                        return result;
+                    }
+                    
+                };
+                result += addition;
+            }
+            ast = ast.right;
+            if (ast == null) return '"$result"';
+        }
+        return '"$result"';
+    }
 }
 typedef Node = {
     @:optional public var parent:Node;

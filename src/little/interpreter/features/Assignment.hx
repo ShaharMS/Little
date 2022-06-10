@@ -26,8 +26,6 @@ class Assignment {
         final variable = Memory.getLoadedVar(variableOperand);
 
         if (variable == null) Runtime.safeThrow(new UnknownDefinition(variableOperand));
-
-       
         if ((variable.type == null || variable.type == "Everything") && Interpreter.currentLine == variable.scope.initializationLine) variable.type = Typer.getValueType(valueOperand);
         if (Typer.getValueType(valueOperand) != variable.type) {
             Runtime.safeThrow(new DefinitionTypeMismatch(variableOperand, variable.type, Typer.getValueType(valueOperand)));

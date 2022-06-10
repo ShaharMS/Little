@@ -1520,6 +1520,16 @@ TermNode.prototype = {
 };
 var TextTools = function() { };
 TextTools.__name__ = true;
+TextTools.replaceLast = function(string,replace,by) {
+	var place = string.lastIndexOf(replace);
+	var result = string.substring(0,place) + by + string.substring(place + replace.length);
+	return result;
+};
+TextTools.replacefirst = function(string,replace,by) {
+	var place = string.indexOf(replace);
+	var result = string.substring(0,place) + by + string.substring(place + replace.length);
+	return result;
+};
 TextTools.indexesOf = function(string,sub) {
 	var indexArray = [];
 	var removedLength = 0;
@@ -2066,7 +2076,7 @@ little_interpreter_features_Evaluator.getValueOf = function(value) {
 	var booleanDetector = new EReg("(true|false)","");
 	if(numberDetector.match(value)) {
 		return numberDetector.matched(1);
-	} else if(TextTools.indexesOf(value,"\"").length == 2) {
+	} else if(TextTools.indexesOf(value,"\"").length >= 2) {
 		return value;
 	} else if(booleanDetector.match(value)) {
 		return booleanDetector.matched(1);
@@ -2077,12 +2087,13 @@ little_interpreter_features_Evaluator.getValueOf = function(value) {
 };
 little_interpreter_features_Evaluator.simplifyEquation = function(expression) {
 	if(expression.indexOf("\"") != -1) {
-		return expression;
-	} else if(little_interpreter_Memory.hasLoadedVar(expression)) {
-		return little_interpreter_Memory.getLoadedVar(expression).get_basicValue();
+		return little_interpreter_features_Evaluator.calculateStringMath(expression);
 	}
 	if(StringTools.trim(expression) == "false" || StringTools.trim(expression) == "true") {
 		return StringTools.trim(expression);
+	}
+	if(little_interpreter_Memory.hasLoadedVar(expression)) {
+		return little_interpreter_Memory.getLoadedVar(expression).get_basicValue();
 	}
 	expression = StringTools.replace(StringTools.replace(StringTools.replace(StringTools.replace(StringTools.replace(StringTools.replace(expression,"+"," + "),"-"," - "),"*"," * "),"/"," / "),"("," ( "),")"," ) ");
 	var tempExpression = expression;
@@ -2091,7 +2102,11 @@ little_interpreter_features_Evaluator.simplifyEquation = function(expression) {
 	while(variableDetector.match(tempExpression)) {
 		var variable = variableDetector.matched(1);
 		if(little_interpreter_Memory.hasLoadedVar(variable)) {
-			Formula.bind(f,Formula.fromString(little_interpreter_Memory.getLoadedVar(variable).get_basicValue()),variable);
+			var value = little_interpreter_Memory.getLoadedVar(variable).get_basicValue();
+			if(new EReg("[^0-9\\.]+","").match(value)) {
+				little_Runtime.safeThrow(new little_exceptions_DefinitionTypeMismatch(variable,"Number","e"));
+			}
+			Formula.bind(f,Formula.fromString(value),variable);
 			var pos = variableDetector.matchedPos();
 			tempExpression = tempExpression.substring(pos.pos + pos.len);
 		} else {
@@ -2108,7 +2123,7 @@ little_interpreter_features_Evaluator.calculateStringAddition = function(express
 	}
 	if(expression.indexOf("+") != -1) {
 		var additionSplit = expression.split("+");
-		var leftString = additionSplit[0];
+		var leftString = StringTools.trim(additionSplit[0]);
 		currentNode.left = { };
 		currentNode.left.value = leftString;
 		currentNode.sign = "+";
@@ -2119,8 +2134,35 @@ little_interpreter_features_Evaluator.calculateStringAddition = function(express
 		currentNode.left = { };
 		currentNode.left.value = expression;
 	}
-	haxe_Log.trace(currentNode,{ fileName : "src/little/interpreter/features/Evaluator.hx", lineNumber : 82, className : "little.interpreter.features.Evaluator", methodName : "calculateStringAddition"});
-	return expression;
+	return currentNode;
+};
+little_interpreter_features_Evaluator.calculateStringMath = function(expression) {
+	var result = "";
+	var ast = little_interpreter_features_Evaluator.calculateStringAddition(expression);
+	if(ast.right == null) {
+		return expression;
+	}
+	while(ast.left != null) {
+		var left = ast.left;
+		var right = ast.right;
+		if(ast.right == null && ast.sign == null || StringTools.replace(ast.sign," ","") == "+") {
+			var addition = TextTools.replaceLast(TextTools.replacefirst(left.value,"\"",""),"\"","");
+			if(left.value == addition) {
+				try {
+					addition = TextTools.replaceLast(TextTools.replacefirst(Std.string(little_interpreter_Memory.getLoadedVar(left.value).get_basicValue()),"\"",""),"\"","");
+				} catch( _g ) {
+					little_Runtime.safeThrow(new little_exceptions_UnknownDefinition(left.value));
+					return result;
+				}
+			}
+			result += addition;
+		}
+		ast = ast.right;
+		if(ast == null) {
+			return "\"" + result + "\"";
+		}
+	}
+	return "\"" + result + "\"";
 };
 var little_interpreter_features_LittleVariable = function() {
 	this.scope = { };
@@ -2144,8 +2186,8 @@ little_interpreter_features_Typer.__name__ = true;
 little_interpreter_features_Typer.getValueType = function(value) {
 	var instanceDetector = new EReg("new +([a-zA-z0-9_]+)","");
 	var numberDetector = new EReg("([0-9.])","");
-	var stringDetector = new EReg("\".*\"","");
 	var booleanDetector = new EReg("true|false","");
+	value = little_interpreter_features_Evaluator.getValueOf(value);
 	if(instanceDetector.match(value)) {
 		return instanceDetector.matched(1);
 	} else if(numberDetector.match(value)) {
@@ -2154,7 +2196,7 @@ little_interpreter_features_Typer.getValueType = function(value) {
 		} else {
 			return "Number";
 		}
-	} else if(stringDetector.match(value)) {
+	} else if(value.indexOf("\"") != -1) {
 		return "Characters";
 	} else if(booleanDetector.match(value)) {
 		return "Boolean";

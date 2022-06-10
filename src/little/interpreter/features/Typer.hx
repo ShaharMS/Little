@@ -13,15 +13,15 @@ class Typer {
     public static function getValueType(value:String):String {
         final instanceDetector:EReg = ~/new +([a-zA-z0-9_]+)/;
         final numberDetector:EReg = ~/([0-9.])/;
-        final stringDetector:EReg = ~/".*"/;
         final booleanDetector:EReg = ~/true|false/;
+        value = Evaluator.getValueOf(value);
 
         if (instanceDetector.match(value)) return instanceDetector.matched(1);
         else if (numberDetector.match(value)) {
             if (value.indexOf(".") != -1) return "Decimal";
             else return "Number";
         } 
-        else if (stringDetector.match(value)) return "Characters";
+        else if (value.contains('"')) return "Characters";
         else if (booleanDetector.match(value)) return "Boolean";
         else if (value.contains(".")){
             //if it doesnt match any type, its probably a reference to another object/value
