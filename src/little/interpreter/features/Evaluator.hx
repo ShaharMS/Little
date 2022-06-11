@@ -28,7 +28,7 @@ class Evaluator {
         }
         else {
             if (Memory.hasLoadedVar(value)) {
-                return Memory.getLoadedVar(value).toString();
+                return Memory.getLoadedVar(value).basicValue;
             }
         }
         return "Nothing";
