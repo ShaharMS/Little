@@ -27,6 +27,8 @@ using StringTools;
  */
 @:expose
 @:native("LittleInterpreter")
+@:allow(little.interpreter.Lexer)
+@:allow(little.Runtime)
 class Interpreter {
 
     /**
@@ -110,9 +112,7 @@ class Interpreter {
         code = code.replace("    ", "\t");
         code = ~/\n{2,}/g.replace(code, "\n");
         var codeLines = code.split("\n");
-
-        var currentIndent:Int = 0, lastIndent:Int = 0, blockNumber:Int = 0, currentlyClass:Bool = false;
-
+        
         for (l in codeLines) {
             lastIndent = currentIndent;
             currentIndent = 0;
@@ -138,4 +138,9 @@ class Interpreter {
 
     public static var registeredVariables(default, null):Map<String, Variable> = [];
 
+    static var currentIndent:Int = 0;
+    static var lastIndent:Int = 0;
+    static var blockNumber:Int = 0;
+    static var currentlyClass:Bool = false;
+    static var currentlyFunction:Bool = false;
 }
