@@ -14,6 +14,8 @@ class Memory {
     
     public static var variableMemory:Map<String, Variable> = [];
 
+    public static var functionMemory:Map<String, Actio>
+
     /**
      * Pushes a variable to memory, will throw an exception if a variable is "wrongly redefined".
      * 

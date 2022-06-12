@@ -74,7 +74,7 @@ class Interpreter {
             safeThrow(new VariableRegistrationError(v.name, hType));
             return;
         }
-        v.scope = {scope: GLOBAL, info: "Registered externally", initializationLine: 0};
+        v.scope = {scope: EXTERNAL, info: "Registered externally", initializationLine: currentLine};
         Memory.safePush(v);
         registeredVariables.set(name, v);
     }
@@ -112,8 +112,8 @@ class Interpreter {
         var codeLines = code.split("\n");
 
         var currentIndent:Int = 0, lastIndent:Int = 0, blockNumber:Int = 0, currentlyClass:Bool = false;
-
-        for (l in codeLines) {
+        while (currentLine <= codeLines.length) {
+            var l = codeLines[currentLine - 1];
             lastIndent = currentIndent;
             currentIndent = 0;
             while (l.startsWith("\t")) {
