@@ -69,4 +69,12 @@ class Lexer {
 		var value = Evaluator.getValueOf(line);
 		Runtime.print(value);
 	}
+
+	public static function detectFunction(line:String) {
+		line = ' $line';
+		if (!line.contains(" action ")) return;
+
+		var titleSplit = line.split(" action ");
+		var modifiers = titleSplit[0].split(" ");
+	}
 }
