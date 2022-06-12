@@ -5,7 +5,7 @@ import little.transpiler.syntax.SyntaxFixer;
 import little.transpiler.syntax.Classes;
 import little.transpiler.syntax.WriteStyle;
 import little.transpiler.syntax.Functions;
-import little.transpiler.syntax.Definitions;
+//import little.transpiler.syntax.Definitions;
 
 /**
  * The `Transpiler` class is some sort of a bridge between the transpiler
@@ -26,7 +26,7 @@ class Transpiler {
      */
     public static function transpile(code:String, ?options:TranspilerOptions):String {
         final st = Timer.stamp();
-        code = Definitions.parse(code);
+        //code = Definitions.parse(code);
         code = Classes.parse(code);
         code = SyntaxFixer.removeTrailingNewlines(code);
         code = SyntaxFixer.addSemicolons(code);

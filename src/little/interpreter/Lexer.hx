@@ -28,7 +28,18 @@ class Lexer {
 		// replace the starting "define" with ""
 		var defParts = line.split(" define ");
 		//get the definition's scope and modifiers
-
+		var modifiers = defParts[0];
+		if (modifiers.contains("global")) v.scope.scope = GLOBAL;
+		else {
+			switch Interpreter.currentIndent {
+				case 0 : v.scope.scope = MODULE;
+				case _: {
+					if (Interpreter.currentlyClass) v.scope.scope = CLASS;
+					else v.scope.scope = Block(Interpreter.blockNumber);
+				}
+			}
+		}
+		
 		// gets the Definition name, type and value.
 		var valueParts = defParts[1].split("=");
 		if (valueParts[0].contains(":")) {

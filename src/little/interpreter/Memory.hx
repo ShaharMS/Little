@@ -13,9 +13,9 @@ import little.interpreter.constraints.Definition;
  */
 class Memory {
     
-    public static var DefinitionMemory:Map<String, Definition> = [];
+    public static var definitionMemory:Map<String, Definition> = [];
 
-    public static var functionMemory:Map<String, Action> = [];
+    public static var actionMemory:Map<String, Action> = [];
 
     /**
      * Pushes a Definition to memory, will throw an exception if a Definition is "wrongly redefined".
@@ -23,13 +23,13 @@ class Memory {
      * @param Definition The Definition to push to memory.
      */
     public static function safePush(v:Definition) {
-        if (DefinitionMemory.exists(v.name)) {
-            if (DefinitionMemory[v.name].type != v.type) {
-                Runtime.safeThrow(new DefinitionTypeMismatch(v.name, DefinitionMemory[v.name].type, v.type));
+        if (definitionMemory.exists(v.name)) {
+            if (definitionMemory[v.name].type != v.type) {
+                Runtime.safeThrow(new DefinitionTypeMismatch(v.name, definitionMemory[v.name].type, v.type));
             }
-            DefinitionMemory[v.name] = v;
+            definitionMemory[v.name] = v;
         } else {
-            DefinitionMemory[v.name] = v;
+            definitionMemory[v.name] = v;
         }
     }
 
@@ -38,7 +38,7 @@ class Memory {
      * @param v 
      */
     public static function unsafePush(v:Definition) {
-        DefinitionMemory[v.name] = v;
+        definitionMemory[v.name] = v;
     }
 
     //TODO: #4 garbage collector for the interpreter
@@ -54,7 +54,7 @@ class Memory {
      * @return Whether the Definition exists in the memory.
      */
     public static function hasLoadedVar(DefinitionName:String):Bool {
-        return DefinitionMemory.exists(DefinitionName);
+        return definitionMemory.exists(DefinitionName);
     }
 
     /**
@@ -65,11 +65,12 @@ class Memory {
      * @param DefinitionName the name of the Definition to get
      * @return The Definition instance, or null if it is not loaded.
      */
-    public static function getLoadedVar(DefinitionName:String):Definition {
-        return DefinitionMemory[DefinitionName] != null ? DefinitionMemory[DefinitionName] : null;
+    public static function getLoadedVar(definitionName:String):Definition {
+        return definitionMemory[definitionName] != null ? definitionMemory[definitionName] : null;
     }
 
-    public static function clear() {
-        return DefinitionMemory = [];
+    public static function clearMemory() {
+        definitionMemory = [];
+        actionMemory = [];
     }
 }
