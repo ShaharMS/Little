@@ -1,5 +1,6 @@
 package little. interpreter;
 
+import little.interpreter.constraints.Action;
 import little.exceptions.DefinitionTypeMismatch;
 import little.interpreter.constraints.Variable;
 
@@ -14,7 +15,7 @@ class Memory {
     
     public static var variableMemory:Map<String, Variable> = [];
 
-    public static var functionMemory:Map<String, Actio>
+    public static var functionMemory:Map<String, Action> = [];
 
     /**
      * Pushes a variable to memory, will throw an exception if a variable is "wrongly redefined".
