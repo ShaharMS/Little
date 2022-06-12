@@ -1,10 +1,10 @@
 package little.interpreter.features;
 
-import little.interpreter.constraints.VariableScope;
+import little.interpreter.constraints.DefinitionScope;
 import little.interpreter.constraints.Types;
-import little.interpreter.constraints.Variable;
+import little.interpreter.constraints.Definition;
 
-class LittleVariable implements Variable {
+class LittleDefinition implements Definition {
     
 	@:isVar public var basicValue(get, set):Dynamic;
 
@@ -22,7 +22,7 @@ class LittleVariable implements Variable {
 
 	public var name:String;
 
-	public var scope:{?scope:VariableScope, ?info:String, ?initializationLine:Int} = {};
+	public var scope:{?scope:DefinitionScope, ?info:String, ?initializationLine:Int} = {};
 
 	public function toString():String {
 		return '$basicValue';

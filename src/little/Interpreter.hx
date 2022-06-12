@@ -7,10 +7,10 @@ import little.exceptions.Typo;
 import little.interpreter.features.Evaluator;
 import little.Runtime;
 import little.exceptions.DefinitionTypeMismatch;
-import little.interpreter.constraints.Variable;
+import little.interpreter.constraints.Definition;
 import little.exceptions.VariableRegistrationError;
 import little.interpreter.features.Typer;
-import little.interpreter.features.LittleVariable;
+import little.interpreter.features.LittleDefinition;
 import little.interpreter.Memory;
 import little.Runtime.*;
 using StringTools;
@@ -20,7 +20,7 @@ using StringTools;
  * 
  * From here, you can run pieces of code, and get the results, without the need for compilation.
  * 
- * This class supplies methods for registering certain objects/variables/functions,
+ * This class supplies methods for registering certain objects/Definitions/functions,
  * Running code pieces, and getting the results of course.
  * 
  * For information mid-interpretation, see the `Runtime` class.
@@ -38,7 +38,7 @@ class Interpreter {
     public static var currentLine:Int = 1;
 
     /**
-     * Registers a haxe, basic type variable, to be used in the language.
+     * Registers a haxe, basic type variable, to be used in the language by the user.
      * 
      * This is useful for games that want to give certine constants that the user needs
      * to be able to program things, or for general applications that have a code/macro interface,
@@ -53,14 +53,14 @@ class Interpreter {
      * - `Dynamic`
      * - `Any`
      * 
-     * Also notice that the variable isnt present in `Memory` - this is to prevent the user from completely overwriting the variable.
+     * Also notice that the Definition isnt present in `Memory` - this is to prevent the user from completely overwriting the Definition.
      * 
-     * @param name The variable's name. you might want to save it yourself too if you want to access the variable in memory
-     * @param value The variable's value. should be a haxe, basic type, or Dynamic.
+     * @param name The Definition's name. you might want to save it yourself too if you want to access the Definition in memory
+     * @param value The Definition's value. should be a haxe, basic type, or Dynamic.
      */
     public static function registerVariable<T>(name:String, value:T) {
         final hType:String = Type.typeof(value).getName().substring(1);
-        var v = new LittleVariable();
+        var v = new LittleDefinition();
         v.name = name;
         v.basicValue = value;
         v.valueTree["%basicValue%"] = value;
@@ -77,8 +77,8 @@ class Interpreter {
             return;
         }
         v.scope = {scope: EXTERNAL, info: "Registered externally", initializationLine: currentLine};
-        Memory.safePush(v);
-        registeredVariables.set(name, v);
+        Memory.unsafePush(v);
+        registeredDefinitions.set(name, v);
     }
         
     public static function registerFunction(name:String, func:Dynamic) {
@@ -123,8 +123,8 @@ class Interpreter {
             if (lastIndent != currentIndent) {
                 blockNumber++;
             }
-            //new variables
-            var lv = Lexer.detectVariables(l);
+            //new Definitions
+            var lv = Lexer.detectDefinitions(l);
             if (lv != null) {
                 Memory.safePush(lv);
             }
@@ -136,7 +136,7 @@ class Interpreter {
         }
     }
 
-    public static var registeredVariables(default, null):Map<String, Variable> = [];
+    public static var registeredDefinitions(default, null):Map<String, Definition> = [];
 
     static var currentIndent:Int = 0;
     static var lastIndent:Int = 0;

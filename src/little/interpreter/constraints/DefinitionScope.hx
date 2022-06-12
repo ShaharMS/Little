@@ -1,8 +1,8 @@
 package little.interpreter.constraints;
 
-enum VariableScope {
-    /**Used for externally registered variables**/ EXTERNAL;
-    /**Used for global variables, which wont get cleared out by the gc*/GLOBAL;
+enum DefinitionScope {
+    /**Used for externally registered Definitions**/ EXTERNAL;
+    /**Used for global Definitions, which wont get cleared out by the gc*/GLOBAL;
     /**Initialized at the file level, outside classes**/MODULE;
     /**Initialized at class level**/CLASS;
     /**Initialized Inside a function**/Method(methodNumber:Int);

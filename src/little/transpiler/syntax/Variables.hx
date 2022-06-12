@@ -2,13 +2,13 @@ package little. transpiler.syntax;
 
 using StringTools;
 /**
- * Contains methods for parsing and converting `Little` definitions into `Haxe` variables.
+ * Contains methods for parsing and converting `Little` definitions into `Haxe` Definitions.
  * 
  * It also does some extra things for optimization:
  * 
- *  - strongly types the variables on static platforms to improve performance
+ *  - strongly types the Definitions on static platforms to improve performance
  */
-class Variables {
+class Definitions {
     
     public static final clearVarParse:EReg = ~/((?:external: |hide | |\t|^)+)define +([a-zA-Z0-9_]+)(:[a-zA-Z0-9]+|) += +(.+)/m;
 

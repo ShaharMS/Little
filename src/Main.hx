@@ -4,7 +4,7 @@ import little.interpreter.features.Evaluator;
 import little.Little;
 import little.Runtime;
 import little.interpreter.Memory;
-import little.interpreter.features.LittleVariable;
+import little.interpreter.features.LittleDefinition;
 import little.Interpreter;
 import little.Transpiler;
 using StringTools;

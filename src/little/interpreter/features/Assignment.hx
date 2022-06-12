@@ -14,23 +14,23 @@ class Assignment {
             Runtime.safeThrow(new Typo("When assigning a value to a definition, you need to fill out the value after the = sign."));
             return;
         }
-        var variableOperand = assignmentSplit[0];
+        var DefinitionOperand = assignmentSplit[0];
         var valueOperand = assignmentSplit[1].trim();
-        //now, isolate the variable's name
-        variableOperand = variableOperand.replace("define ", "");
-        if (variableOperand.contains(":")) {
-           variableOperand =  ~/:[a-zA-Z_]+/.replace(variableOperand, "");
+        //now, isolate the Definition's name
+        DefinitionOperand = DefinitionOperand.replace("define ", "");
+        if (DefinitionOperand.contains(":")) {
+           DefinitionOperand =  ~/:[a-zA-Z_]+/.replace(DefinitionOperand, "");
         }
-        variableOperand = variableOperand.replace(" ", "");
+        DefinitionOperand = DefinitionOperand.replace(" ", "");
         valueOperand = Evaluator.getValueOf(valueOperand);
-        final variable = Memory.getLoadedVar(variableOperand);
+        final Definition = Memory.getLoadedVar(DefinitionOperand);
 
-        if (variable == null) Runtime.safeThrow(new UnknownDefinition(variableOperand));
-        if ((variable.type == null || variable.type == "Everything") && Interpreter.currentLine == variable.scope.initializationLine) variable.type = Typer.getValueType(valueOperand);
-        if (Typer.getValueType(valueOperand) != variable.type) {
-            Runtime.safeThrow(new DefinitionTypeMismatch(variableOperand, variable.type, Typer.getValueType(valueOperand)));
+        if (Definition == null) Runtime.safeThrow(new UnknownDefinition(DefinitionOperand));
+        if ((Definition.type == null || Definition.type == "Everything") && Interpreter.currentLine == Definition.scope.initializationLine) Definition.type = Typer.getValueType(valueOperand);
+        if (Typer.getValueType(valueOperand) != Definition.type) {
+            Runtime.safeThrow(new DefinitionTypeMismatch(DefinitionOperand, Definition.type, Typer.getValueType(valueOperand)));
         }
-        variable.basicValue = valueOperand;
+        Definition.basicValue = valueOperand;
     }
 
 }

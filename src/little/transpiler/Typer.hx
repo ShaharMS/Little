@@ -3,7 +3,7 @@ package little. transpiler;
 /**
  * Typer is a helper class for finding out information about types.
  * 
- * Its used for strongly typing variables when only the value is present.
+ * Its used for strongly typing Definitions when only the value is present.
  * 
  * example:
  * 

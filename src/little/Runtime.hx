@@ -4,7 +4,7 @@ import haxe.Log;
 import little.interpreter.Memory;
 import little.interpreter.ExceptionStack;
 import little.interpreter.constraints.Exception;
-import little.interpreter.constraints.Variable;
+import little.interpreter.constraints.Definition;
 
 /**
  * The `Runtime` class is some sort of a bridge, 
@@ -35,13 +35,13 @@ class Runtime {
     public static var preNextLine:(Int, Int) -> Void = (a, b) -> return;
 
     /**
-     * called every time a variable is found and initialized (eg. `define x = 5`)
+     * called every time a Definition is found and initialized (eg. `define x = 5`)
      * 
-     * @param name the name of the variable
-     * @param variable the `Variable` reference associated with the name
-     * @param line the line where the variable was initialized
+     * @param name the name of the Definition
+     * @param Definition the `Definition` reference associated with the name
+     * @param line the line where the Definition was initialized
      */
-    public static var onVariableInitialized:(String, Variable, Int) -> Void = (a, b, c) -> return;
+    public static var onDefinitionInitialized:(String, Definition, Int) -> Void = (a, b, c) -> return;
 
     /**
      * The interpreter reads the code from top to bottom, starting at line 1.  
@@ -54,15 +54,15 @@ class Runtime {
     /**
      * Returns a stringified version of the currently used values in memory.
      * 
-     * @return A map-like string, containing the name of the variable, pointing to its `Variable` value in memory. 
+     * @return A map-like string, containing the name of the Definition, pointing to its `Definition` value in memory. 
      * That value will be stringified according to the provided `toString` function.
      */
     public static function getMemorySnapshot():String {
-        return Memory.variableMemory.toString(); //TODO: #1 Very incomplete, needs string formatting
+        return Memory.DefinitionMemory.toString(); //TODO: #1 Very incomplete, needs string formatting
     }
 
-    public static function getMemoryStructure():Map<String, Variable> {
-        return Memory.variableMemory.copy();
+    public static function getMemoryStructure():Map<String, Definition> {
+        return Memory.DefinitionMemory.copy();
     }
 
     public static function safeThrow(exception:Exception) {

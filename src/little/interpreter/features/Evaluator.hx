@@ -45,22 +45,22 @@ class Evaluator {
         if (expression.trim() == "false" || expression.trim() == "true") return expression.trim();
         if (Memory.hasLoadedVar(expression)) return Memory.getLoadedVar(expression).basicValue;
         expression = expression.replace("+", " + ").replace("-", " - ").replace("*", " * ").replace("/", " / ").replace("(", " ( ").replace(")", " ) ");
-        //first, replace all variables with their values
+        //first, replace all Definitions with their values
         var tempExpression = expression;
-        var variableDetector:EReg = ~/([a-zA-Z_]+)/;
+        var DefinitionDetector:EReg = ~/([a-zA-Z_]+)/;
         var f = Formula.fromString(tempExpression);
-        while (variableDetector.match(tempExpression)) {
-            var variable = variableDetector.matched(1);
-            if (Memory.hasLoadedVar(variable)) {
-                var value = Memory.getLoadedVar(variable).basicValue;
+        while (DefinitionDetector.match(tempExpression)) {
+            var Definition = DefinitionDetector.matched(1);
+            if (Memory.hasLoadedVar(Definition)) {
+                var value = Memory.getLoadedVar(Definition).basicValue;
                 if (~/[^0-9\.]+/.match(value)) {
-                    Runtime.safeThrow(new DefinitionTypeMismatch(variable, "Number", "e"));
+                    Runtime.safeThrow(new DefinitionTypeMismatch(Definition, "Number", "e"));
                 }
-                f.bind(Formula.fromString(value), variable);
-                var pos = variableDetector.matchedPos();
+                f.bind(Formula.fromString(value), Definition);
+                var pos = DefinitionDetector.matchedPos();
                 tempExpression = tempExpression.substring(pos.pos + pos.len);
             } else {
-                Runtime.safeThrow(new UnknownDefinition(variable));
+                Runtime.safeThrow(new UnknownDefinition(Definition));
                 return expression;
             }
         }

@@ -2,43 +2,43 @@ package little. interpreter;
 
 import little.interpreter.constraints.Action;
 import little.exceptions.DefinitionTypeMismatch;
-import little.interpreter.constraints.Variable;
+import little.interpreter.constraints.Definition;
 
 /**
  * This class contains methods used to get information about the application's memory status.
  * 
- * It can also be used to collect garbage and push variables to memory.
+ * It can also be used to collect garbage and push Definitions to memory.
  * 
  * To get the memory status, check out the `Runtime` class.
  */
 class Memory {
     
-    public static var variableMemory:Map<String, Variable> = [];
+    public static var DefinitionMemory:Map<String, Definition> = [];
 
     public static var functionMemory:Map<String, Action> = [];
 
     /**
-     * Pushes a variable to memory, will throw an exception if a variable is "wrongly redefined".
+     * Pushes a Definition to memory, will throw an exception if a Definition is "wrongly redefined".
      * 
-     * @param variable The variable to push to memory.
+     * @param Definition The Definition to push to memory.
      */
-    public static function safePush(v:Variable) {
-        if (variableMemory.exists(v.name)) {
-            if (variableMemory[v.name].type != v.type) {
-                Runtime.safeThrow(new DefinitionTypeMismatch(v.name, variableMemory[v.name].type, v.type));
+    public static function safePush(v:Definition) {
+        if (DefinitionMemory.exists(v.name)) {
+            if (DefinitionMemory[v.name].type != v.type) {
+                Runtime.safeThrow(new DefinitionTypeMismatch(v.name, DefinitionMemory[v.name].type, v.type));
             }
-            variableMemory[v.name] = v;
+            DefinitionMemory[v.name] = v;
         } else {
-            variableMemory[v.name] = v;
+            DefinitionMemory[v.name] = v;
         }
     }
 
     /**
-     * Push a variable to memory, overwriting any existing variable with the same name without checking for type.
+     * Push a Definition to memory, overwriting any existing Definition with the same name without checking for type.
      * @param v 
      */
-    public static function unsafePush(v:Variable) {
-        variableMemory[v.name] = v;
+    public static function unsafePush(v:Definition) {
+        DefinitionMemory[v.name] = v;
     }
 
     //TODO: #4 garbage collector for the interpreter
@@ -47,29 +47,29 @@ class Memory {
     }
 
     /**
-     * Checks if a variable exists in the memory.
-     * useful for checking if a variable is defined, and the accessing its value.
+     * Checks if a Definition exists in the memory.
+     * useful for checking if a Definition is defined, and the accessing its value.
      * 
-     * @param variableName the name of the variable to check
-     * @return Whether the variable exists in the memory.
+     * @param DefinitionName the name of the Definition to check
+     * @return Whether the Definition exists in the memory.
      */
-    public static function hasLoadedVar(variableName:String):Bool {
-        return variableMemory.exists(variableName);
+    public static function hasLoadedVar(DefinitionName:String):Bool {
+        return DefinitionMemory.exists(DefinitionName);
     }
 
     /**
-     * Gets the variable instance of a loaded, non garbage collected variable.
-     * If the variable is not loaded, it will return null, as to allow you to safely throw
+     * Gets the Definition instance of a loaded, non garbage collected Definition.
+     * If the Definition is not loaded, it will return null, as to allow you to safely throw
      * a custom error
      * 
-     * @param variableName the name of the variable to get
-     * @return The variable instance, or null if it is not loaded.
+     * @param DefinitionName the name of the Definition to get
+     * @return The Definition instance, or null if it is not loaded.
      */
-    public static function getLoadedVar(variableName:String):Variable {
-        return variableMemory[variableName] != null ? variableMemory[variableName] : null;
+    public static function getLoadedVar(DefinitionName:String):Definition {
+        return DefinitionMemory[DefinitionName] != null ? DefinitionMemory[DefinitionName] : null;
     }
 
     public static function clear() {
-        return variableMemory = [];
+        return DefinitionMemory = [];
     }
 }

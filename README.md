@@ -25,7 +25,7 @@ Other than teaching, the language has a lot of benefits, some I already mentione
 
 The language is very minimal by design, and only has a couple of reserved words:
 
- - **`define`** - used for defining variables.
+ - **`define`** - used for defining Definitions.
  - **`action`** - used for defining functions.
  - **`new`** - used for instances.
  - **`return`** used for returning action values.

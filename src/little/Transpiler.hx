@@ -5,7 +5,7 @@ import little.transpiler.syntax.SyntaxFixer;
 import little.transpiler.syntax.Classes;
 import little.transpiler.syntax.WriteStyle;
 import little.transpiler.syntax.Functions;
-import little.transpiler.syntax.Variables;
+import little.transpiler.syntax.Definitions;
 
 /**
  * The `Transpiler` class is some sort of a bridge between the transpiler
@@ -26,7 +26,7 @@ class Transpiler {
      */
     public static function transpile(code:String, ?options:TranspilerOptions):String {
         final st = Timer.stamp();
-        code = Variables.parse(code);
+        code = Definitions.parse(code);
         code = Classes.parse(code);
         code = SyntaxFixer.removeTrailingNewlines(code);
         code = SyntaxFixer.addSemicolons(code);
@@ -51,9 +51,9 @@ class TranspilerOptions {
     /**Whether or not to ignore external field definitions**/           public var ignoreExternals:Bool = false;
     /**Whether or not to keep comments in the generated source code**/  public var keepComments:Bool = false;
     /**Useful When `ignoreVisibility` is set to true, this will be set
-     * as the prefix to every variable and function**/                  public var prefixFieldsWith:String = "";
+     * as the prefix to every Definition and function**/                  public var prefixFieldsWith:String = "";
     /**Removes condensable whitespaces**/                               public var condense:Bool = false;
-    /**Removes all condensable characters, shortens variable names**/   public var minify:Bool = false;
+    /**Removes all condensable characters, shortens Definition names**/   public var minify:Bool = false;
     /**When defined, writes the resulting code to the defined path**/   public var codePath:String = "";
     /**Decides in what way a function is written**/                     public var functionWriteStyle:WriteStyle = SAME_LEVEL;
     /**Decides in what way a function is written**/                     public var classWriteStyle:WriteStyle = SAME_LEVEL;
@@ -69,6 +69,6 @@ typedef TranspileTimes = {
     //syntax
     classes:Float,
     functions:Float,
-    variables:Float,
+    Definitions:Float,
     syntax:Float,
 }

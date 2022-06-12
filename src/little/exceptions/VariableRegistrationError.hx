@@ -5,7 +5,7 @@ import little.interpreter.constraints.Exception;
 class VariableRegistrationError implements Exception {
 
     public function new(name:String, registeredType:String) {
-        this.details = 'You tried to register the variable $name as a${grammer(registeredType)} $registeredType, but that type dosn\'t have a non-Haxe counterpart.';
+        this.details = 'You tried to register the Definition $name as a${grammer(registeredType)} $registeredType, but that type dosn\'t have a non-Haxe counterpart.';
     }
 	public var details:String;
 
