@@ -1,6 +1,6 @@
 package little.interpreter.constraints;
 
-enum DefinitionScope {
+enum Scope {
     /**Used for externally registered Definitions**/ EXTERNAL;
     /**Used for global Definitions, which wont get cleared out by the gc*/GLOBAL;
     /**Initialized at the file level, outside classes**/MODULE;

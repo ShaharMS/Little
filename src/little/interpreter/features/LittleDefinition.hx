@@ -1,6 +1,6 @@
 package little.interpreter.features;
 
-import little.interpreter.constraints.DefinitionScope;
+import little.interpreter.constraints.Scope;
 import little.interpreter.constraints.Types;
 import little.interpreter.constraints.Definition;
 
@@ -22,7 +22,7 @@ class LittleDefinition implements Definition {
 
 	public var name:String;
 
-	public var scope:{?scope:DefinitionScope, ?info:String, ?initializationLine:Int} = {};
+	public var scope:{?scope:Scope, ?info:String, ?initializationLine:Int} = {};
 
 	public function toString():String {
 		return '$basicValue';

@@ -26,7 +26,7 @@ interface Definition {
     /**
      * The Definition's scope and place of creation.
      */
-    public var scope:{scope:DefinitionScope, info:String, initializationLine:Int};
+    public var scope:{scope:Scope, info:String, initializationLine:Int};
 
     /**
      * A String representation of the Definition, to be used for printing.

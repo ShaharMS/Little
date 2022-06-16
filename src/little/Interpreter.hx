@@ -106,7 +106,7 @@ class Interpreter {
      */
     public static function run(code:String) {
         currentLine = 1;
-        Memory.clear();
+        Memory.clearMemory();
         code = code.replace("\r", "");
         code = code.replace(";", "\n");
         code = code.replace("    ", "\t");

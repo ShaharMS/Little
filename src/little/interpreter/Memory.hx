@@ -1,5 +1,7 @@
 package little. interpreter;
 
+import haxe.extern.EitherType;
+import haxe.ds.Either;
 import little.interpreter.constraints.Action;
 import little.exceptions.DefinitionTypeMismatch;
 import little.interpreter.constraints.Definition;
@@ -15,21 +17,30 @@ class Memory {
     
     public static var definitionMemory:Map<String, Definition> = [];
 
+    
     public static var actionMemory:Map<String, Action> = [];
 
     /**
-     * Pushes a Definition to memory, will throw an exception if a Definition is "wrongly redefined".
+     * Pushes a Definition/Action to memory:
+     * - For **Definitions**, will throw an exception if its "wrongly redefined".
+     * - **Actions** are simply pushed to memory.
      * 
      * @param Definition The Definition to push to memory.
      */
-    public static function safePush(v:Definition) {
-        if (definitionMemory.exists(v.name)) {
-            if (definitionMemory[v.name].type != v.type) {
-                Runtime.safeThrow(new DefinitionTypeMismatch(v.name, definitionMemory[v.name].type, v.type));
-            }
-            definitionMemory[v.name] = v;
+    public static function safePush(v:EitherType<Action, Definition>) {
+        if (v is Action) {
+            var action:Action = cast v;
+            actionMemory.set(action.name, action);
         } else {
-            definitionMemory[v.name] = v;
+            var def:Definition = cast v;
+            if (definitionMemory.exists(def.name)) {
+                if (definitionMemory[def.name].type != def.type) {
+                    Runtime.safeThrow(new DefinitionTypeMismatch(def.name, definitionMemory[def.name].type, def.type));
+                }
+                definitionMemory[def.name] = v;
+            } else {
+                definitionMemory[def.name] = v;
+            }
         }
     }
 
@@ -37,8 +48,9 @@ class Memory {
      * Push a Definition to memory, overwriting any existing Definition with the same name without checking for type.
      * @param v 
      */
-    public static function unsafePush(v:Definition) {
-        definitionMemory[v.name] = v;
+    public static function unsafePush(v:EitherType<Action, Definition>) {
+        if (v is Action) actionMemory.set(cast(v, Action).name, cast v);
+        else definitionMemory[cast(v, Definition).name] = cast v;
     }
 
     //TODO: #4 garbage collector for the interpreter
@@ -53,8 +65,8 @@ class Memory {
      * @param DefinitionName the name of the Definition to check
      * @return Whether the Definition exists in the memory.
      */
-    public static function hasLoadedVar(DefinitionName:String):Bool {
-        return definitionMemory.exists(DefinitionName);
+    public static function hasLoadedVar(definitionName:String):Bool {
+        return definitionMemory.exists(definitionName);
     }
 
     /**
