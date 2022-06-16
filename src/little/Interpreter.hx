@@ -112,25 +112,29 @@ class Interpreter {
         code = code.replace("    ", "\t");
         code = ~/\n{2,}/g.replace(code, "\n");
         var codeLines = code.split("\n");
-        
-        for (l in codeLines) {
+        while (currentLine <= codeLines.length) {
+            var line = codeLines[currentLine - 1];
+            if (line.length == 0) {
+                currentLine++;
+                continue;
+            }
             lastIndent = currentIndent;
             currentIndent = 0;
-            while (l.startsWith("\t")) {
-                l = l.substring(1);
+            while (line.startsWith("\t")) {
+                line = line.substring(1);
                 currentIndent++;
             }
             if (lastIndent != currentIndent) {
                 blockNumber++;
             }
             //new Definitions
-            var lv = Lexer.detectDefinitions(l);
+            var lv = Lexer.detectDefinitions(line);
             if (lv != null) {
                 Memory.safePush(lv);
             }
-            Assignment.assign(l);
+            Assignment.assign(line);
             //print function
-            Lexer.detectPrint(l);
+            Lexer.detectPrint(line);
 
             currentLine++;
         }

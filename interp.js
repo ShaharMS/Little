@@ -44,9 +44,7 @@ EReg.prototype = {
 var Formula = {};
 Formula.bind = function(this1,formula,paramName) {
 	if(paramName != null) {
-		if(!TermNode.nameRegFull.match(paramName)) {
-			throw haxe_Exception.thrown("Not allowed characters for name " + paramName + "\".");
-		}
+		var tmp = !TermNode.nameRegFull.match(paramName);
 		var _g = new haxe_ds_StringMap();
 		_g.h[paramName] = formula;
 		var params = _g;
@@ -89,7 +87,203 @@ Formula.bind = function(this1,formula,paramName) {
 		return this1;
 	} else {
 		if((Reflect.compareMethods(formula.operation,TermNode.opName) ? formula.symbol : null) == null) {
-			throw haxe_Exception.thrown("Can't bind unnamed formula:\"" + formula.toString(null,null) + "\" as parameter.");
+			var msg = "Can't bind unnamed formula: '" + formula.toString(null,null) + "'. Specify the available parameter: '";
+			var ret = [];
+			if(Reflect.compareMethods(this1.operation,TermNode.opParam)) {
+				ret.push(this1.symbol);
+			} else {
+				if(this1.left != null) {
+					var _g = 0;
+					var _this = this1.left;
+					var ret1 = [];
+					if(Reflect.compareMethods(_this.operation,TermNode.opParam)) {
+						ret1.push(_this.symbol);
+					} else {
+						if(_this.left != null) {
+							var _g1 = 0;
+							var _this1 = _this.left;
+							var ret2 = [];
+							if(Reflect.compareMethods(_this1.operation,TermNode.opParam)) {
+								ret2.push(_this1.symbol);
+							} else {
+								if(_this1.left != null) {
+									var _g2 = 0;
+									var _g3 = _this1.left.params();
+									while(_g2 < _g3.length) {
+										var i = _g3[_g2];
+										++_g2;
+										if(ret2.indexOf(i) < 0) {
+											ret2.push(i);
+										}
+									}
+								}
+								if(_this1.right != null) {
+									var _g2 = 0;
+									var _g3 = _this1.right.params();
+									while(_g2 < _g3.length) {
+										var i = _g3[_g2];
+										++_g2;
+										if(ret2.indexOf(i) < 0) {
+											ret2.push(i);
+										}
+									}
+								}
+							}
+							var _g2 = ret2;
+							while(_g1 < _g2.length) {
+								var i = _g2[_g1];
+								++_g1;
+								if(ret1.indexOf(i) < 0) {
+									ret1.push(i);
+								}
+							}
+						}
+						if(_this.right != null) {
+							var _g1 = 0;
+							var _this1 = _this.right;
+							var ret2 = [];
+							if(Reflect.compareMethods(_this1.operation,TermNode.opParam)) {
+								ret2.push(_this1.symbol);
+							} else {
+								if(_this1.left != null) {
+									var _g2 = 0;
+									var _g3 = _this1.left.params();
+									while(_g2 < _g3.length) {
+										var i = _g3[_g2];
+										++_g2;
+										if(ret2.indexOf(i) < 0) {
+											ret2.push(i);
+										}
+									}
+								}
+								if(_this1.right != null) {
+									var _g2 = 0;
+									var _g3 = _this1.right.params();
+									while(_g2 < _g3.length) {
+										var i = _g3[_g2];
+										++_g2;
+										if(ret2.indexOf(i) < 0) {
+											ret2.push(i);
+										}
+									}
+								}
+							}
+							var _g2 = ret2;
+							while(_g1 < _g2.length) {
+								var i = _g2[_g1];
+								++_g1;
+								if(ret1.indexOf(i) < 0) {
+									ret1.push(i);
+								}
+							}
+						}
+					}
+					var _g1 = ret1;
+					while(_g < _g1.length) {
+						var i = _g1[_g];
+						++_g;
+						if(ret.indexOf(i) < 0) {
+							ret.push(i);
+						}
+					}
+				}
+				if(this1.right != null) {
+					var _g = 0;
+					var _this = this1.right;
+					var ret1 = [];
+					if(Reflect.compareMethods(_this.operation,TermNode.opParam)) {
+						ret1.push(_this.symbol);
+					} else {
+						if(_this.left != null) {
+							var _g1 = 0;
+							var _this1 = _this.left;
+							var ret2 = [];
+							if(Reflect.compareMethods(_this1.operation,TermNode.opParam)) {
+								ret2.push(_this1.symbol);
+							} else {
+								if(_this1.left != null) {
+									var _g2 = 0;
+									var _g3 = _this1.left.params();
+									while(_g2 < _g3.length) {
+										var i = _g3[_g2];
+										++_g2;
+										if(ret2.indexOf(i) < 0) {
+											ret2.push(i);
+										}
+									}
+								}
+								if(_this1.right != null) {
+									var _g2 = 0;
+									var _g3 = _this1.right.params();
+									while(_g2 < _g3.length) {
+										var i = _g3[_g2];
+										++_g2;
+										if(ret2.indexOf(i) < 0) {
+											ret2.push(i);
+										}
+									}
+								}
+							}
+							var _g2 = ret2;
+							while(_g1 < _g2.length) {
+								var i = _g2[_g1];
+								++_g1;
+								if(ret1.indexOf(i) < 0) {
+									ret1.push(i);
+								}
+							}
+						}
+						if(_this.right != null) {
+							var _g1 = 0;
+							var _this1 = _this.right;
+							var ret2 = [];
+							if(Reflect.compareMethods(_this1.operation,TermNode.opParam)) {
+								ret2.push(_this1.symbol);
+							} else {
+								if(_this1.left != null) {
+									var _g2 = 0;
+									var _g3 = _this1.left.params();
+									while(_g2 < _g3.length) {
+										var i = _g3[_g2];
+										++_g2;
+										if(ret2.indexOf(i) < 0) {
+											ret2.push(i);
+										}
+									}
+								}
+								if(_this1.right != null) {
+									var _g2 = 0;
+									var _g3 = _this1.right.params();
+									while(_g2 < _g3.length) {
+										var i = _g3[_g2];
+										++_g2;
+										if(ret2.indexOf(i) < 0) {
+											ret2.push(i);
+										}
+									}
+								}
+							}
+							var _g2 = ret2;
+							while(_g1 < _g2.length) {
+								var i = _g2[_g1];
+								++_g1;
+								if(ret1.indexOf(i) < 0) {
+									ret1.push(i);
+								}
+							}
+						}
+					}
+					var _g1 = ret1;
+					while(_g < _g1.length) {
+						var i = _g1[_g];
+						++_g;
+						if(ret.indexOf(i) < 0) {
+							ret.push(i);
+						}
+					}
+				}
+			}
+			throw new FormulaException(msg + ret.join("' ,'") + "' or name the formula to one.",0);
 		}
 		var _g = new haxe_ds_StringMap();
 		var key = Reflect.compareMethods(formula.operation,TermNode.opName) ? formula.symbol : null;
@@ -145,7 +339,11 @@ Formula.fromString = function(a) {
 		s = HxOverrides.substr(s,name.length + TermNode.nameReg.matched(2).length,null);
 		errPos += name.length + TermNode.nameReg.matched(2).length;
 		if(new EReg("^\\s*$","").match(s)) {
-			throw haxe_Exception.thrown({ "msg" : "Can't parse Term from empty string.", "pos" : errPos});
+			var pos = errPos;
+			if(pos == null) {
+				pos = 0;
+			}
+			throw new FormulaException("Can't parse Term from empty string.",pos);
 		}
 		var term = TermNode.parseString(s,errPos,bindings);
 		var t = new TermNode();
@@ -156,11 +354,54 @@ Formula.fromString = function(a) {
 		return t;
 	} else {
 		if(new EReg("^\\s*$","").match(s)) {
-			throw haxe_Exception.thrown({ "msg" : "Can't parse Term from empty string.", "pos" : errPos});
+			var pos = errPos;
+			if(pos == null) {
+				pos = 0;
+			}
+			throw new FormulaException("Can't parse Term from empty string.",pos);
 		}
 		return TermNode.parseString(s,errPos,bindings);
 	}
 };
+var haxe_Exception = function(message,previous,native) {
+	Error.call(this,message);
+	this.message = message;
+	this.__previousException = previous;
+	this.__nativeException = native != null ? native : this;
+};
+haxe_Exception.__name__ = true;
+haxe_Exception.thrown = function(value) {
+	if(((value) instanceof haxe_Exception)) {
+		return value.get_native();
+	} else if(((value) instanceof Error)) {
+		return value;
+	} else {
+		var e = new haxe_ValueException(value);
+		return e;
+	}
+};
+haxe_Exception.__super__ = Error;
+haxe_Exception.prototype = $extend(Error.prototype,{
+	toString: function() {
+		return this.get_message();
+	}
+	,get_message: function() {
+		return this.message;
+	}
+	,get_native: function() {
+		return this.__nativeException;
+	}
+	,__class__: haxe_Exception
+});
+var FormulaException = function(msg,pos) {
+	haxe_Exception.call(this,msg);
+	this.pos = pos;
+};
+FormulaException.__name__ = true;
+FormulaException.__super__ = haxe_Exception;
+FormulaException.prototype = $extend(haxe_Exception.prototype,{
+	__class__: FormulaException
+});
 var HxOverrides = function() { };
 HxOverrides.__name__ = true;
 HxOverrides.cca = function(s,index) {
@@ -278,7 +519,7 @@ TermNode.opName = function(t) {
 		var _this = t.left;
 		return _this.operation(_this);
 	} else {
-		throw haxe_Exception.thrown("Empty function \"" + t.symbol + "\".");
+		throw new FormulaException("Empty function \"" + t.symbol + "\".",0);
 	}
 };
 TermNode.opParam = function(t) {
@@ -286,7 +527,7 @@ TermNode.opParam = function(t) {
 		var _this = t.left;
 		return _this.operation(_this);
 	} else {
-		throw haxe_Exception.thrown("Missing parameter \"" + t.symbol + "\".");
+		throw new FormulaException("Missing parameter \"" + t.symbol + "\".",0);
 	}
 };
 TermNode.opValue = function(t) {
@@ -323,7 +564,7 @@ TermNode.parseString = function(s,errPos,params) {
 				t2.left = null;
 				t2.right = null;
 			} else {
-				throw haxe_Exception.thrown("\"" + e + "\" is no valid operation.");
+				throw new FormulaException("\"" + e + "\" is no valid operation.",0);
 			}
 			t = t2;
 			e += "()";
@@ -340,7 +581,7 @@ TermNode.parseString = function(s,errPos,params) {
 				t3.left = left;
 				t3.right = null;
 			} else {
-				throw haxe_Exception.thrown("\"" + f + "\" is no valid operation.");
+				throw new FormulaException("\"" + f + "\" is no valid operation.",0);
 			}
 			t = t3;
 		} else if(TermNode.twoParamOpReg.match(s)) {
@@ -351,7 +592,11 @@ TermNode.parseString = function(s,errPos,params) {
 			var p1 = e.substring(1,TermNode.comataPos);
 			var p2 = e.substring(TermNode.comataPos + 1,e.length - 1);
 			if(TermNode.comataPos == -1) {
-				throw haxe_Exception.thrown({ "msg" : f + "() needs two parameter separated by comma.", "pos" : errPos});
+				var pos = errPos;
+				if(pos == null) {
+					pos = 0;
+				}
+				throw new FormulaException("Operation \"" + f + "()\" needs two arguments separated by comma.",pos);
 			}
 			var left1 = TermNode.parseString(p1,errPos + 1,params);
 			var right = TermNode.parseString(p2,errPos + 1 + TermNode.comataPos,params);
@@ -362,7 +607,7 @@ TermNode.parseString = function(s,errPos,params) {
 				t4.left = left1;
 				t4.right = right;
 			} else {
-				throw haxe_Exception.thrown("\"" + f + "\" is no valid operation.");
+				throw new FormulaException("\"" + f + "\" is no valid operation.",0);
 			}
 			t = t4;
 		} else if(TermNode.paramReg.match(s)) {
@@ -407,7 +652,11 @@ TermNode.parseString = function(s,errPos,params) {
 				continue;
 			}
 		} else if(TermNode.twoSideOpReg.match(s)) {
-			throw haxe_Exception.thrown({ "msg" : "Missing left operand.", "pos" : errPos});
+			var pos1 = errPos;
+			if(pos1 == null) {
+				pos1 = 0;
+			}
+			throw new FormulaException("Missing left operand.",pos1);
 		} else {
 			e = TermNode.getBrackets(s,errPos);
 			t = TermNode.parseString(e.substring(1,e.length - 1),errPos + 1,params);
@@ -434,18 +683,34 @@ TermNode.parseString = function(s,errPos,params) {
 			}
 		} else if(s.length > 0) {
 			if(s.indexOf(")") == 0) {
-				throw haxe_Exception.thrown({ "msg" : "No opening bracket.", "pos" : errPos});
+				var pos2 = errPos;
+				if(pos2 == null) {
+					pos2 = 0;
+				}
+				throw new FormulaException("No opening bracket.",pos2);
 			}
 			if(!(s.indexOf("(") == 0 || TermNode.numberReg.match(s) || TermNode.paramReg.match(s) || TermNode.constantOpReg.match(s) || TermNode.oneParamOpReg.match(s) || TermNode.twoParamOpReg.match(s))) {
-				throw haxe_Exception.thrown({ "msg" : "Wrong char.", "pos" : errPos});
+				var pos3 = errPos;
+				if(pos3 == null) {
+					pos3 = 0;
+				}
+				throw new FormulaException("Wrong char.",pos3);
 			} else {
-				throw haxe_Exception.thrown({ "msg" : "Missing operation.", "pos" : errPos});
+				var pos4 = errPos;
+				if(pos4 == null) {
+					pos4 = 0;
+				}
+				throw new FormulaException("Missing operation.",pos4);
 			}
 		}
 	}
 	if(operations.length > 0) {
 		if(operations[operations.length - 1].right == null) {
-			throw haxe_Exception.thrown({ "msg" : "Missing right operand.", "pos" : errPos - spaces});
+			var pos = errPos - spaces;
+			if(pos == null) {
+				pos = 0;
+			}
+			throw new FormulaException("Missing right operand.",pos);
 		} else {
 			operations.sort(function(a,b) {
 				if(a.precedence < b.precedence) {
@@ -470,7 +735,7 @@ TermNode.parseString = function(s,errPos,params) {
 					t1.left = left;
 					t1.right = right;
 				} else {
-					throw haxe_Exception.thrown("\"" + s + "\" is no valid operation.");
+					throw new FormulaException("\"" + s + "\" is no valid operation.",0);
 				}
 				t = t1;
 				if(op.leftOperation != null && op.rightOperation != null) {
@@ -494,7 +759,11 @@ TermNode.getBrackets = function(s,errPos) {
 	var pos = 1;
 	if(s.indexOf("(") == 0) {
 		if(new EReg("^\\(\\s*\\)","").match(s)) {
-			throw haxe_Exception.thrown({ "msg" : "Empty brackets.", "pos" : errPos});
+			var pos1 = errPos;
+			if(pos1 == null) {
+				pos1 = 0;
+			}
+			throw new FormulaException("Empty brackets.",pos1);
 		}
 		var i;
 		var j;
@@ -517,19 +786,61 @@ TermNode.getBrackets = function(s,errPos) {
 				--openBrackets;
 				pos = j + 1;
 			} else {
-				throw haxe_Exception.thrown({ "msg" : "Wrong bracket nesting.", "pos" : errPos});
+				var pos1 = errPos;
+				if(pos1 == null) {
+					pos1 = 0;
+				}
+				throw new FormulaException("Wrong bracket nesting.",pos1);
 			}
 		}
 		return s.substring(0,pos);
 	}
 	if(s.indexOf(")") == 0) {
-		throw haxe_Exception.thrown({ "msg" : "No opening bracket.", "pos" : errPos});
+		var pos = errPos;
+		if(pos == null) {
+			pos = 0;
+		}
+		throw new FormulaException("No opening bracket.",pos);
 	} else {
-		throw haxe_Exception.thrown({ "msg" : "Wrong char.", "pos" : errPos});
+		var pos = errPos;
+		if(pos == null) {
+			pos = 0;
+		}
+		throw new FormulaException("Wrong char.",pos);
 	}
 };
 TermNode.prototype = {
-	bind: function(params) {
+	params: function() {
+		var ret = [];
+		if(Reflect.compareMethods(this.operation,TermNode.opParam)) {
+			ret.push(this.symbol);
+		} else {
+			if(this.left != null) {
+				var _g = 0;
+				var _g1 = this.left.params();
+				while(_g < _g1.length) {
+					var i = _g1[_g];
+					++_g;
+					if(ret.indexOf(i) < 0) {
+						ret.push(i);
+					}
+				}
+			}
+			if(this.right != null) {
+				var _g = 0;
+				var _g1 = this.right.params();
+				while(_g < _g1.length) {
+					var i = _g1[_g];
+					++_g;
+					if(ret.indexOf(i) < 0) {
+						ret.push(i);
+					}
+				}
+			}
+		}
+		return ret;
+	}
+	,bind: function(params) {
 		if(Reflect.compareMethods(this.operation,TermNode.opParam)) {
 			if(Object.prototype.hasOwnProperty.call(params.h,this.symbol)) {
 				this.left = params.h[this.symbol];
@@ -1594,30 +1905,9 @@ Type.typeof = function(v) {
 		return ValueType.TUnknown;
 	}
 };
-var haxe_Exception = function(message,previous,native) {
-	Error.call(this,message);
-	this.message = message;
-	this.__previousException = previous;
-	this.__nativeException = native != null ? native : this;
-};
-haxe_Exception.__name__ = true;
-haxe_Exception.thrown = function(value) {
-	if(((value) instanceof haxe_Exception)) {
-		return value.get_native();
-	} else if(((value) instanceof Error)) {
-		return value;
-	} else {
-		var e = new haxe_ValueException(value);
-		return e;
-	}
-};
-haxe_Exception.__super__ = Error;
-haxe_Exception.prototype = $extend(Error.prototype,{
-	get_native: function() {
-		return this.__nativeException;
-	}
-	,__class__: haxe_Exception
-});
+var haxe_IMap = function() { };
+haxe_IMap.__name__ = true;
+haxe_IMap.__isInterface__ = true;
 var haxe_Log = function() { };
 haxe_Log.__name__ = true;
 haxe_Log.formatOutput = function(v,infos) {
@@ -1656,6 +1946,7 @@ var haxe_ds_StringMap = function() {
 	this.h = Object.create(null);
 };
 haxe_ds_StringMap.__name__ = true;
+haxe_ds_StringMap.__interfaces__ = [haxe_IMap];
 haxe_ds_StringMap.prototype = {
 	__class__: haxe_ds_StringMap
 };
@@ -1784,12 +2075,102 @@ js_Boot.__string_rec = function(o,s) {
 		return String(o);
 	}
 };
+js_Boot.__interfLoop = function(cc,cl) {
+	if(cc == null) {
+		return false;
+	}
+	if(cc == cl) {
+		return true;
+	}
+	var intf = cc.__interfaces__;
+	if(intf != null) {
+		var _g = 0;
+		var _g1 = intf.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var i1 = intf[i];
+			if(i1 == cl || js_Boot.__interfLoop(i1,cl)) {
+				return true;
+			}
+		}
+	}
+	return js_Boot.__interfLoop(cc.__super__,cl);
+};
+js_Boot.__instanceof = function(o,cl) {
+	if(cl == null) {
+		return false;
+	}
+	switch(cl) {
+	case Array:
+		return ((o) instanceof Array);
+	case Bool:
+		return typeof(o) == "boolean";
+	case Dynamic:
+		return o != null;
+	case Float:
+		return typeof(o) == "number";
+	case Int:
+		if(typeof(o) == "number") {
+			return ((o | 0) === o);
+		} else {
+			return false;
+		}
+		break;
+	case String:
+		return typeof(o) == "string";
+	default:
+		if(o != null) {
+			if(typeof(cl) == "function") {
+				if(js_Boot.__downcastCheck(o,cl)) {
+					return true;
+				}
+			} else if(typeof(cl) == "object" && js_Boot.__isNativeObj(cl)) {
+				if(((o) instanceof cl)) {
+					return true;
+				}
+			}
+		} else {
+			return false;
+		}
+		if(cl == Class ? o.__name__ != null : false) {
+			return true;
+		}
+		if(cl == Enum ? o.__ename__ != null : false) {
+			return true;
+		}
+		return o.__enum__ != null ? $hxEnums[o.__enum__] == cl : false;
+	}
+};
+js_Boot.__downcastCheck = function(o,cl) {
+	if(!((o) instanceof cl)) {
+		if(cl.__isInterface__) {
+			return js_Boot.__interfLoop(js_Boot.getClass(o),cl);
+		} else {
+			return false;
+		}
+	} else {
+		return true;
+	}
+};
+js_Boot.__implements = function(o,iface) {
+	return js_Boot.__interfLoop(js_Boot.getClass(o),iface);
+};
+js_Boot.__cast = function(o,t) {
+	if(o == null || js_Boot.__instanceof(o,t)) {
+		return o;
+	} else {
+		throw haxe_Exception.thrown("Cannot cast " + Std.string(o) + " to " + Std.string(t));
+	}
+};
 js_Boot.__nativeClassName = function(o) {
 	var name = js_Boot.__toStr.call(o).slice(8,-1);
 	if(name == "Object" || name == "Function" || name == "Math" || name == "JSON") {
 		return null;
 	}
 	return name;
+};
+js_Boot.__isNativeObj = function(o) {
+	return js_Boot.__nativeClassName(o) != null;
 };
 js_Boot.__resolveNativeClass = function(name) {
 	return $global[name];
@@ -1828,7 +2209,7 @@ LittleInterpreter.registerVariable = function(name,value) {
 		little_Runtime.safeThrow(new little_exceptions_VariableRegistrationError(v.name,hType));
 		return;
 	}
-	v.scope = { scope : little_interpreter_constraints_DefinitionScope.EXTERNAL, info : "Registered externally", initializationLine : LittleInterpreter.currentLine};
+	v.scope = { scope : little_interpreter_constraints_Scope.EXTERNAL, info : "Registered externally", initializationLine : LittleInterpreter.currentLine};
 	little_interpreter_Memory.unsafePush(v);
 	LittleInterpreter.registeredDefinitions.h[name] = v;
 };
@@ -1840,32 +2221,34 @@ LittleInterpreter.registerClass = function(name,cls) {
 };
 LittleInterpreter.run = function(code) {
 	LittleInterpreter.currentLine = 1;
-	little_interpreter_Memory.clear();
+	little_interpreter_Memory.clearMemory();
 	code = StringTools.replace(code,"\r","");
 	code = StringTools.replace(code,";","\n");
 	code = StringTools.replace(code,"    ","\t");
 	var _this_r = new RegExp("\n{2,}","g".split("u").join(""));
 	code = code.replace(_this_r,"\n");
 	var codeLines = code.split("\n");
-	var _g = 0;
-	while(_g < codeLines.length) {
-		var l = codeLines[_g];
-		++_g;
+	while(LittleInterpreter.currentLine <= codeLines.length) {
+		var line = codeLines[LittleInterpreter.currentLine - 1];
+		if(line.length == 0) {
+			LittleInterpreter.currentLine++;
+			continue;
+		}
 		LittleInterpreter.lastIndent = LittleInterpreter.currentIndent;
 		LittleInterpreter.currentIndent = 0;
-		while(StringTools.startsWith(l,"\t")) {
-			l = l.substring(1);
+		while(StringTools.startsWith(line,"\t")) {
+			line = line.substring(1);
 			LittleInterpreter.currentIndent++;
 		}
 		if(LittleInterpreter.lastIndent != LittleInterpreter.currentIndent) {
 			LittleInterpreter.blockNumber++;
 		}
-		var lv = little_interpreter_Lexer.detectDefinitions(l);
+		var lv = little_interpreter_Lexer.detectDefinitions(line);
 		if(lv != null) {
 			little_interpreter_Memory.safePush(lv);
 		}
-		little_interpreter_features_Assignment.assign(l);
-		little_interpreter_Lexer.detectPrint(l);
+		little_interpreter_features_Assignment.assign(line);
+		little_interpreter_Lexer.detectPrint(line);
 		LittleInterpreter.currentLine++;
 	}
 };
@@ -1902,11 +2285,18 @@ var little_Transpiler = function() { };
 little_Transpiler.__name__ = true;
 var Little = $hx_exports["Little"] = function() { };
 Little.__name__ = true;
+var little_interpreter_constraints_Exception = function() { };
+little_interpreter_constraints_Exception.__name__ = true;
+little_interpreter_constraints_Exception.__isInterface__ = true;
+little_interpreter_constraints_Exception.prototype = {
+	__class__: little_interpreter_constraints_Exception
+};
 var little_exceptions_DefinitionTypeMismatch = function(name,originalType,wrongType) {
 	this.type = "Definition Type Mismatch";
 	this.details = "You tried to set the definition: \n\n\t\t" + name + "\n\n\tof type: \n\n\t\t" + originalType + "\n\n\twith a value of type: \n\n\t\t" + wrongType + "\n\n\tOnce a definition is set, it's value can only be set again with the same type.";
 };
 little_exceptions_DefinitionTypeMismatch.__name__ = true;
+little_exceptions_DefinitionTypeMismatch.__interfaces__ = [little_interpreter_constraints_Exception];
 little_exceptions_DefinitionTypeMismatch.prototype = {
 	get_content: function() {
 		return "" + this.type + ": " + this.details;
@@ -1918,6 +2308,7 @@ var little_exceptions_MissingTypeDeclaration = function(varName) {
 	this.details = "When initializing " + varName + ", you left the type after the : empty.\n\tIf you don't want to specify a type, remove the : after the definition's name.";
 };
 little_exceptions_MissingTypeDeclaration.__name__ = true;
+little_exceptions_MissingTypeDeclaration.__interfaces__ = [little_interpreter_constraints_Exception];
 little_exceptions_MissingTypeDeclaration.prototype = {
 	get_content: function() {
 		return "" + this.type + ": " + this.details;
@@ -1929,6 +2320,7 @@ var little_exceptions_Typo = function(details) {
 	this.details = details;
 };
 little_exceptions_Typo.__name__ = true;
+little_exceptions_Typo.__interfaces__ = [little_interpreter_constraints_Exception];
 little_exceptions_Typo.prototype = {
 	get_content: function() {
 		return "" + this.type + ": " + this.details;
@@ -1940,6 +2332,7 @@ var little_exceptions_UnknownDefinition = function(name) {
 	this.details = "There isn't any known definition for\n\t\t" + name + "\n\tDid you forget to declare it?";
 };
 little_exceptions_UnknownDefinition.__name__ = true;
+little_exceptions_UnknownDefinition.__interfaces__ = [little_interpreter_constraints_Exception];
 little_exceptions_UnknownDefinition.prototype = {
 	get_content: function() {
 		return "" + this.type + ": " + this.details;
@@ -1952,6 +2345,7 @@ var little_exceptions_VariableRegistrationError = function(name,registeredType) 
 	this.details = "You tried to register the Definition " + name + " as a" + (registeredType.charAt(0).replace(_this_r,"").length == 0 ? "n" : "") + " " + registeredType + ", but that type dosn't have a non-Haxe counterpart.";
 };
 little_exceptions_VariableRegistrationError.__name__ = true;
+little_exceptions_VariableRegistrationError.__interfaces__ = [little_interpreter_constraints_Exception];
 little_exceptions_VariableRegistrationError.prototype = {
 	get_content: function() {
 		return "" + this.type + ": " + this.details;
@@ -1967,6 +2361,17 @@ little_interpreter_Lexer.detectDefinitions = function(line) {
 		return null;
 	}
 	var defParts = line.split(" define ");
+	var modifiers = defParts[0];
+	if(TextTools.contains(modifiers,"global")) {
+		v.scope.scope = little_interpreter_constraints_Scope.GLOBAL;
+	} else if(LittleInterpreter.currentIndent == 0) {
+		v.scope.scope = little_interpreter_constraints_Scope.MODULE;
+	} else if(LittleInterpreter.currentlyClass) {
+		v.scope.scope = little_interpreter_constraints_Scope.CLASS;
+	} else {
+		v.scope.scope = little_interpreter_constraints_Scope.Block(LittleInterpreter.blockNumber);
+	}
+	v.scope.initializationLine = LittleInterpreter.currentLine;
 	var valueParts = defParts[1].split("=");
 	if(TextTools.contains(valueParts[0],":")) {
 		var type = StringTools.replace(valueParts[0].split(":")[1]," ","");
@@ -2000,41 +2405,63 @@ little_interpreter_Lexer.detectPrint = function(line) {
 var little_interpreter_Memory = function() { };
 little_interpreter_Memory.__name__ = true;
 little_interpreter_Memory.safePush = function(v) {
-	if(Object.prototype.hasOwnProperty.call(little_interpreter_Memory.DefinitionMemory.h,v.name)) {
-		if(little_interpreter_Memory.DefinitionMemory.h[v.name].type != v.type) {
-			little_Runtime.safeThrow(new little_exceptions_DefinitionTypeMismatch(v.name,little_interpreter_Memory.DefinitionMemory.h[v.name].type,v.type));
-		}
-		little_interpreter_Memory.DefinitionMemory.h[v.name] = v;
+	if(js_Boot.__implements(v,little_interpreter_constraints_Action)) {
+		var action = v;
+		little_interpreter_Memory.actionMemory.h[action.name] = action;
 	} else {
-		little_interpreter_Memory.DefinitionMemory.h[v.name] = v;
+		var def = v;
+		if(Object.prototype.hasOwnProperty.call(little_interpreter_Memory.definitionMemory.h,def.name)) {
+			if(little_interpreter_Memory.definitionMemory.h[def.name].type != def.type) {
+				little_Runtime.safeThrow(new little_exceptions_DefinitionTypeMismatch(def.name,little_interpreter_Memory.definitionMemory.h[def.name].type,def.type));
+			}
+			little_interpreter_Memory.definitionMemory.h[def.name] = v;
+		} else {
+			little_interpreter_Memory.definitionMemory.h[def.name] = v;
+		}
 	}
 };
 little_interpreter_Memory.unsafePush = function(v) {
-	little_interpreter_Memory.DefinitionMemory.h[v.name] = v;
+	if(js_Boot.__implements(v,little_interpreter_constraints_Action)) {
+		little_interpreter_Memory.actionMemory.h[(js_Boot.__cast(v , little_interpreter_constraints_Action)).name] = v;
+	} else {
+		var v1 = v;
+		little_interpreter_Memory.definitionMemory.h[(js_Boot.__cast(v , little_interpreter_constraints_Definition)).name] = v1;
+	}
 };
-little_interpreter_Memory.hasLoadedVar = function(DefinitionName) {
-	return Object.prototype.hasOwnProperty.call(little_interpreter_Memory.DefinitionMemory.h,DefinitionName);
+little_interpreter_Memory.hasLoadedVar = function(definitionName) {
+	return Object.prototype.hasOwnProperty.call(little_interpreter_Memory.definitionMemory.h,definitionName);
 };
-little_interpreter_Memory.getLoadedVar = function(DefinitionName) {
-	if(little_interpreter_Memory.DefinitionMemory.h[DefinitionName] != null) {
-		return little_interpreter_Memory.DefinitionMemory.h[DefinitionName];
+little_interpreter_Memory.getLoadedVar = function(definitionName) {
+	if(little_interpreter_Memory.definitionMemory.h[definitionName] != null) {
+		return little_interpreter_Memory.definitionMemory.h[definitionName];
 	} else {
 		return null;
 	}
 };
-little_interpreter_Memory.clear = function() {
-	return little_interpreter_Memory.DefinitionMemory = new haxe_ds_StringMap();
+little_interpreter_Memory.clearMemory = function() {
+	little_interpreter_Memory.definitionMemory = new haxe_ds_StringMap();
+	little_interpreter_Memory.actionMemory = new haxe_ds_StringMap();
 };
-var little_interpreter_constraints_DefinitionScope = $hxEnums["little.interpreter.constraints.DefinitionScope"] = { __ename__:true,__constructs__:null
-	,EXTERNAL: {_hx_name:"EXTERNAL",_hx_index:0,__enum__:"little.interpreter.constraints.DefinitionScope",toString:$estr}
-	,GLOBAL: {_hx_name:"GLOBAL",_hx_index:1,__enum__:"little.interpreter.constraints.DefinitionScope",toString:$estr}
-	,MODULE: {_hx_name:"MODULE",_hx_index:2,__enum__:"little.interpreter.constraints.DefinitionScope",toString:$estr}
-	,CLASS: {_hx_name:"CLASS",_hx_index:3,__enum__:"little.interpreter.constraints.DefinitionScope",toString:$estr}
-	,Method: ($_=function(methodNumber) { return {_hx_index:4,methodNumber:methodNumber,__enum__:"little.interpreter.constraints.DefinitionScope",toString:$estr}; },$_._hx_name="Method",$_.__params__ = ["methodNumber"],$_)
-	,Block: ($_=function(blockNumber) { return {_hx_index:5,blockNumber:blockNumber,__enum__:"little.interpreter.constraints.DefinitionScope",toString:$estr}; },$_._hx_name="Block",$_.__params__ = ["blockNumber"],$_)
-	,Inline: ($_=function(lineNumber) { return {_hx_index:6,lineNumber:lineNumber,__enum__:"little.interpreter.constraints.DefinitionScope",toString:$estr}; },$_._hx_name="Inline",$_.__params__ = ["lineNumber"],$_)
+var little_interpreter_constraints_Action = function() { };
+little_interpreter_constraints_Action.__name__ = true;
+little_interpreter_constraints_Action.__isInterface__ = true;
+little_interpreter_constraints_Action.prototype = {
+	__class__: little_interpreter_constraints_Action
 };
-little_interpreter_constraints_DefinitionScope.__constructs__ = [little_interpreter_constraints_DefinitionScope.EXTERNAL,little_interpreter_constraints_DefinitionScope.GLOBAL,little_interpreter_constraints_DefinitionScope.MODULE,little_interpreter_constraints_DefinitionScope.CLASS,little_interpreter_constraints_DefinitionScope.Method,little_interpreter_constraints_DefinitionScope.Block,little_interpreter_constraints_DefinitionScope.Inline];
+var little_interpreter_constraints_Definition = function() { };
+little_interpreter_constraints_Definition.__name__ = true;
+little_interpreter_constraints_Definition.__isInterface__ = true;
+little_interpreter_constraints_Definition.prototype = {
+	__class__: little_interpreter_constraints_Definition
+};
+var little_interpreter_constraints_Scope = $hxEnums["little.interpreter.constraints.Scope"] = { __ename__:true,__constructs__:null
+	,EXTERNAL: {_hx_name:"EXTERNAL",_hx_index:0,__enum__:"little.interpreter.constraints.Scope",toString:$estr}
+	,GLOBAL: {_hx_name:"GLOBAL",_hx_index:1,__enum__:"little.interpreter.constraints.Scope",toString:$estr}
+	,MODULE: {_hx_name:"MODULE",_hx_index:2,__enum__:"little.interpreter.constraints.Scope",toString:$estr}
+	,CLASS: {_hx_name:"CLASS",_hx_index:3,__enum__:"little.interpreter.constraints.Scope",toString:$estr}
+	,Block: ($_=function(blockNumber) { return {_hx_index:4,blockNumber:blockNumber,__enum__:"little.interpreter.constraints.Scope",toString:$estr}; },$_._hx_name="Block",$_.__params__ = ["blockNumber"],$_)
+};
+little_interpreter_constraints_Scope.__constructs__ = [little_interpreter_constraints_Scope.EXTERNAL,little_interpreter_constraints_Scope.GLOBAL,little_interpreter_constraints_Scope.MODULE,little_interpreter_constraints_Scope.CLASS,little_interpreter_constraints_Scope.Block];
 var little_interpreter_features_Assignment = function() { };
 little_interpreter_features_Assignment.__name__ = true;
 little_interpreter_features_Assignment.assign = function(statement) {
@@ -2168,6 +2595,7 @@ var little_interpreter_features_LittleDefinition = function() {
 	this.valueTree = new haxe_ds_StringMap();
 };
 little_interpreter_features_LittleDefinition.__name__ = true;
+little_interpreter_features_LittleDefinition.__interfaces__ = [little_interpreter_constraints_Definition];
 little_interpreter_features_LittleDefinition.prototype = {
 	get_basicValue: function() {
 		return this.basicValue;
@@ -2213,6 +2641,12 @@ if(typeof(performance) != "undefined" ? typeof(performance.now) == "function" : 
 String.prototype.__class__ = String;
 String.__name__ = true;
 Array.__name__ = true;
+var Int = { };
+var Dynamic = { };
+var Float = Number;
+var Bool = Boolean;
+var Class = { };
+var Enum = { };
 js_Boot.__toStr = ({ }).toString;
 TermNode.MathOp = (function($this) {
 	var $r;
@@ -2369,7 +2803,8 @@ little_Runtime.currentLine = 0;
 Little.interpreter = LittleInterpreter;
 Little.runtime = little_Runtime;
 Little.transpiler = little_Transpiler;
-little_interpreter_Memory.DefinitionMemory = new haxe_ds_StringMap();
+little_interpreter_Memory.definitionMemory = new haxe_ds_StringMap();
+little_interpreter_Memory.actionMemory = new haxe_ds_StringMap();
 Main.main();
 })(typeof exports != "undefined" ? exports : typeof window != "undefined" ? window : typeof self != "undefined" ? self : this, typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);
 

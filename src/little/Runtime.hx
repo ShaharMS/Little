@@ -58,11 +58,11 @@ class Runtime {
      * That value will be stringified according to the provided `toString` function.
      */
     public static function getMemorySnapshot():String {
-        return Memory.DefinitionMemory.toString(); //TODO: #1 Very incomplete, needs string formatting
+        return Memory.definitionMemory.toString(); //TODO: #1 Very incomplete, needs string formatting
     }
 
     public static function getMemoryStructure():Map<String, Definition> {
-        return Memory.DefinitionMemory.copy();
+        return Memory.definitionMemory.copy();
     }
 
     public static function safeThrow(exception:Exception) {

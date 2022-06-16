@@ -39,6 +39,7 @@ class Lexer {
 				}
 			}
 		}
+		v.scope.initializationLine = Interpreter.currentLine;
 		
 		// gets the Definition name, type and value.
 		var valueParts = defParts[1].split("=");
