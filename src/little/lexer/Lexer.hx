@@ -32,8 +32,13 @@ class Lexer {
                 var expectType = false, expectValue = false;
                 for (item in items) {
                     if (item == "of") potentialType = true;
-                    else if (item == "type" && potentialType) {expectType = true; expectValue = false;
-                    else if (item == )
+                    else if (item == "type" && potentialType) {expectType = true; expectValue = false;}
+                    else if (item == "") {expectValue = true; expectType = false;}
+                    else {
+                        if (expectType) {
+
+                        }
+                    }
                 }
             }
             l++;
