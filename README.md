@@ -40,7 +40,7 @@ Examples:
 
 ```
 define x = 5
-define z:Number = 10
+define z of type Number = 10
 define y = new ImprovedNumber(5)
 y.increment(4)
 print(y)
@@ -48,53 +48,30 @@ define fileWriter = File.write("idk.txt")
 fileWriter.writeString("Yay Haxe")
 fileWriter.close();
 
-for name from 0 to 9 {
+for name from 0 to 9 every 2 {
     print(i)
 }
-
-//also supports classes:
-
-className: ImprovedNumber
-
-    define baseNumber:Number
-
-    action new(number:Number)
-        baseNumber = number
-    
-
-    //write comments with a double /!
-    // + types for actions are automatically inferred
-    action increment(x:Number)
-        return baseNumber += x
-
-    hide action dispose()
-        //nothing
-
-className: AnotherClass
-external: className: File
 ```
 
 (When transpiled to Haxe)
 
 ```haxe
-import haxe.io.File;
-
-var x:Int = 5;
-var z:Int = 10;
-var y:ImprovedNumber = new ImprovedNumber(5);
-
 public static function main()
 {
+    var x:Int = 5;
+    var z:Int = 10;
+    var y:ImprovedNumber = new ImprovedNumber(5);
     y.increment(4);
     trace(y);
     var fileWriter = File.write("idk.txt")
     fileWriter.writeString("Yay Haxe")
     fileWriter.close();
 
-    for (i in 0...9) {
-        trace(i);
+    var name:Int = 0;
+    while (name < 9) {
+        trace(name);
+        name += 2;
     }
-    
 }
 
 class ImprovedNumber
