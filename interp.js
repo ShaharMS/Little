@@ -370,6 +370,15 @@ var haxe_Exception = function(message,previous,native) {
 	this.__nativeException = native != null ? native : this;
 };
 haxe_Exception.__name__ = true;
+haxe_Exception.caught = function(value) {
+	if(((value) instanceof haxe_Exception)) {
+		return value;
+	} else if(((value) instanceof Error)) {
+		return new haxe_Exception(value.message,null,value);
+	} else {
+		return new haxe_ValueException(value,null,value);
+	}
+};
 haxe_Exception.thrown = function(value) {
 	if(((value) instanceof haxe_Exception)) {
 		return value.get_native();
@@ -429,7 +438,7 @@ HxOverrides.now = function() {
 var Main = function() { };
 Main.__name__ = true;
 Main.main = function() {
-	little_interpreter_features_Evaluator.calculateStringAddition("\"hey\" + \"heythere\" + \"hello\"");
+	console.log("src/Main.hx:14:",little_lexer_Lexer.lexIntoComplex("define x of type Number = 55").toString());
 };
 Math.__name__ = true;
 var Reflect = function() { };
@@ -1854,7 +1863,16 @@ TextTools.indexesOf = function(string,sub) {
 	return indexArray;
 };
 TextTools.contains = function(string,contains) {
+	if(string == null) {
+		return false;
+	}
 	return string.indexOf(contains) != -1;
+};
+TextTools.replace = function(string,replace,$with) {
+	if(replace == null || $with == null) {
+		return string;
+	}
+	return StringTools.replace(string,replace,$with);
 };
 var ValueType = $hxEnums["ValueType"] = { __ename__:true,__constructs__:null
 	,TNull: {_hx_name:"TNull",_hx_index:0,__enum__:"ValueType",toString:$estr}
@@ -1908,31 +1926,6 @@ Type.typeof = function(v) {
 var haxe_IMap = function() { };
 haxe_IMap.__name__ = true;
 haxe_IMap.__isInterface__ = true;
-var haxe_Log = function() { };
-haxe_Log.__name__ = true;
-haxe_Log.formatOutput = function(v,infos) {
-	var str = Std.string(v);
-	if(infos == null) {
-		return str;
-	}
-	var pstr = infos.fileName + ":" + infos.lineNumber;
-	if(infos.customParams != null) {
-		var _g = 0;
-		var _g1 = infos.customParams;
-		while(_g < _g1.length) {
-			var v = _g1[_g];
-			++_g;
-			str += ", " + Std.string(v);
-		}
-	}
-	return pstr + ": " + str;
-};
-haxe_Log.trace = function(v,infos) {
-	var str = haxe_Log.formatOutput(v,infos);
-	if(typeof(console) != "undefined" && console.log != null) {
-		console.log(str);
-	}
-};
 var haxe_ValueException = function(value,previous,native) {
 	haxe_Exception.call(this,String(value),previous,native);
 	this.value = value;
@@ -2221,6 +2214,7 @@ LittleInterpreter.registerClass = function(name,cls) {
 };
 LittleInterpreter.run = function(code) {
 	LittleInterpreter.currentLine = 1;
+	little_Runtime.output = "";
 	little_interpreter_Memory.clearMemory();
 	code = StringTools.replace(code,"\r","");
 	code = StringTools.replace(code,";","\n");
@@ -2276,7 +2270,7 @@ little_Runtime.safeThrow = function(exception) {
 	little_Runtime.print("Error! (from line " + little_Runtime.get_currentLine() + "):\n\t---\n\t" + exception.get_content() + "\n\t---");
 };
 little_Runtime.print = function(expression) {
-	haxe_Log.trace("Line " + little_Runtime.get_currentLine() + ": " + expression,null);
+	little_Runtime.output += "Line " + little_Runtime.get_currentLine() + ": " + expression + "\n";
 };
 little_Runtime.get_currentLine = function() {
 	return LittleInterpreter.currentLine;
@@ -2374,8 +2368,8 @@ little_interpreter_Lexer.detectDefinitions = function(line) {
 	v.scope.initializationLine = LittleInterpreter.currentLine;
 	var valueParts = defParts[1].split("=");
 	if(TextTools.contains(valueParts[0],":")) {
-		var type = StringTools.replace(valueParts[0].split(":")[1]," ","");
-		var name = StringTools.replace(valueParts[0].split(":")[0]," ","");
+		var type = TextTools.replace(valueParts[0].split(":")[1]," ","");
+		var name = TextTools.replace(valueParts[0].split(":")[0]," ","");
 		if(type == "") {
 			little_Runtime.safeThrow(new little_exceptions_MissingTypeDeclaration(name));
 			return null;
@@ -2384,7 +2378,7 @@ little_interpreter_Lexer.detectDefinitions = function(line) {
 		v.type = type;
 	}
 	if(!TextTools.contains(valueParts[0],":")) {
-		v.name = StringTools.replace(valueParts[0]," ","");
+		v.name = TextTools.replace(valueParts[0]," ","");
 		v.type = "Everything";
 	}
 	return v;
@@ -2522,26 +2516,32 @@ little_interpreter_features_Evaluator.simplifyEquation = function(expression) {
 		return little_interpreter_Memory.getLoadedVar(expression).get_basicValue();
 	}
 	expression = StringTools.replace(StringTools.replace(StringTools.replace(StringTools.replace(StringTools.replace(StringTools.replace(expression,"+"," + "),"-"," - "),"*"," * "),"/"," / "),"("," ( "),")"," ) ");
-	var tempExpression = expression;
-	var DefinitionDetector = new EReg("([a-zA-Z_]+)","");
-	var f = Formula.fromString(tempExpression);
-	while(DefinitionDetector.match(tempExpression)) {
-		var Definition = DefinitionDetector.matched(1);
-		if(little_interpreter_Memory.hasLoadedVar(Definition)) {
-			var value = little_interpreter_Memory.getLoadedVar(Definition).get_basicValue();
-			if(new EReg("[^0-9\\.]+","").match(value)) {
-				little_Runtime.safeThrow(new little_exceptions_DefinitionTypeMismatch(Definition,"Number","e"));
+	try {
+		var tempExpression = expression;
+		var DefinitionDetector = new EReg("([a-zA-Z_]+)","");
+		var f = Formula.fromString(tempExpression);
+		while(DefinitionDetector.match(tempExpression)) {
+			var Definition = DefinitionDetector.matched(1);
+			if(little_interpreter_Memory.hasLoadedVar(Definition)) {
+				var value = little_interpreter_Memory.getLoadedVar(Definition).get_basicValue();
+				if(new EReg("[^0-9\\.]+","").match(value)) {
+					little_Runtime.safeThrow(new little_exceptions_DefinitionTypeMismatch(Definition,"Number","e"));
+				}
+				Formula.bind(f,Formula.fromString(value),Definition);
+				var pos = DefinitionDetector.matchedPos();
+				tempExpression = tempExpression.substring(pos.pos + pos.len);
+			} else {
+				little_Runtime.safeThrow(new little_exceptions_UnknownDefinition(Definition));
+				return expression;
 			}
-			Formula.bind(f,Formula.fromString(value),Definition);
-			var pos = DefinitionDetector.matchedPos();
-			tempExpression = tempExpression.substring(pos.pos + pos.len);
-		} else {
-			little_Runtime.safeThrow(new little_exceptions_UnknownDefinition(Definition));
-			return expression;
 		}
+		var res = f.operation(f);
+		return res + "";
+	} catch( _g ) {
+		var e = haxe_Exception.caught(_g);
+		little_Runtime.safeThrow(new little_exceptions_Typo(e.get_message()));
+		return "";
 	}
-	var res = f.operation(f);
-	return res + "";
 };
 little_interpreter_features_Evaluator.calculateStringAddition = function(expression,currentNode) {
 	if(currentNode == null) {
@@ -2608,9 +2608,13 @@ little_interpreter_features_LittleDefinition.prototype = {
 var little_interpreter_features_Typer = function() { };
 little_interpreter_features_Typer.__name__ = true;
 little_interpreter_features_Typer.getValueType = function(value) {
+	if(value == null) {
+		return "Everything";
+	}
 	var instanceDetector = new EReg("new +([a-zA-z0-9_]+)","");
 	var numberDetector = new EReg("([0-9.])","");
 	var booleanDetector = new EReg("true|false","");
+	var definitionDetector_r = new RegExp("([a-zA-Z0-9]+)","".split("u").join(""));
 	value = little_interpreter_features_Evaluator.getValueOf(value);
 	if(instanceDetector.match(value)) {
 		return instanceDetector.matched(1);
@@ -2630,10 +2634,94 @@ little_interpreter_features_Typer.getValueType = function(value) {
 		if(value == "") {
 			little_Runtime.safeThrow(new little_exceptions_Typo("While trying to access a definition inside " + object + ", you didn't specify a property name (the property name is the part after the dot)."));
 		}
-	} else {
-		return little_interpreter_features_Typer.getValueType(little_interpreter_Memory.getLoadedVar(value).get_basicValue());
+	} else if(value.replace(definitionDetector_r,"").length == 0) {
+		var def = little_interpreter_Memory.getLoadedVar(value);
+		return little_interpreter_features_Typer.getValueType(def == null ? null : def.get_basicValue());
 	}
-	return "";
+	return "Everything";
+};
+var little_lexer_ComplexToken = $hxEnums["little.lexer.ComplexToken"] = { __ename__:true,__constructs__:null
+	,DefinitionDeclaration: ($_=function(line,name,complexValue,type) { return {_hx_index:0,line:line,name:name,complexValue:complexValue,type:type,__enum__:"little.lexer.ComplexToken",toString:$estr}; },$_._hx_name="DefinitionDeclaration",$_.__params__ = ["line","name","complexValue","type"],$_)
+};
+little_lexer_ComplexToken.__constructs__ = [little_lexer_ComplexToken.DefinitionDeclaration];
+var little_lexer_Lexer = function() { };
+little_lexer_Lexer.__name__ = true;
+little_lexer_Lexer.lexIntoComplex = function(code) {
+	var tokens = [];
+	var l = 1;
+	var _g = 0;
+	var _g1 = code.split("\n");
+	while(_g < _g1.length) {
+		var line = _g1[_g];
+		++_g;
+		if(StringTools.startsWith(TextTools.replace(StringTools.trim(line),"\t",""),"define")) {
+			var _g2 = [];
+			var _g3 = 0;
+			var _g4 = line.split(" ");
+			while(_g3 < _g4.length) {
+				var v = _g4[_g3];
+				++_g3;
+				if(v != "" && v != "define") {
+					_g2.push(v);
+				}
+			}
+			var items = _g2;
+			if(items.length == 0) {
+				throw haxe_Exception.thrown("Definition name and value are missing at line " + l + ".");
+			}
+			if(items.length == 1) {
+				var _this_r = new RegExp("[0-9]","g".split("u").join(""));
+				if(items[0].replace(_this_r,"").length == 0) {
+					throw haxe_Exception.thrown("Definition name must contain at least one non-numerical character");
+				} else {
+					tokens.push(little_lexer_ComplexToken.DefinitionDeclaration(l,items[0],"nothing"));
+				}
+				continue;
+			}
+			var _defAndVal = line.split("=");
+			var _g5 = [];
+			var _g6 = 0;
+			var _g7 = _defAndVal[0].split(" ");
+			while(_g6 < _g7.length) {
+				var v1 = _g7[_g6];
+				++_g6;
+				if(v1 != "" && v1 != "define") {
+					_g5.push(v1);
+				}
+			}
+			var defValSplit_0 = _g5;
+			var defName = "";
+			var val = "";
+			var type = "Everything";
+			var nameSet = false;
+			var typeSet = false;
+			var _g8 = 0;
+			var _g9 = defValSplit_0.length;
+			while(_g8 < _g9) {
+				var i = _g8++;
+				if(defValSplit_0[i] == "of" && defValSplit_0[i + 1] == "type" && defValSplit_0[i + 2].replace(little_lexer_Lexer.typeDetector.r,"").length == 0) {
+					if(!typeSet) {
+						type = defValSplit_0[i + 2];
+					}
+					typeSet = true;
+				} else if(defValSplit_0[i].replace(little_lexer_Lexer.definitionDetector.r,"").length == 0) {
+					if(!nameSet) {
+						defName = defValSplit_0[i];
+					}
+					nameSet = true;
+				}
+			}
+			if(_defAndVal.length == 1) {
+				val = "nothing";
+				tokens.push(little_lexer_ComplexToken.DefinitionDeclaration(l,defName,val,type));
+			} else {
+				val = _defAndVal[1];
+				tokens.push(little_lexer_ComplexToken.DefinitionDeclaration(l,defName,val,type));
+			}
+		}
+		++l;
+	}
+	return tokens;
 };
 if(typeof(performance) != "undefined" ? typeof(performance.now) == "function" : false) {
 	HxOverrides.now = performance.now.bind(performance);
@@ -2805,6 +2893,8 @@ Little.runtime = little_Runtime;
 Little.transpiler = little_Transpiler;
 little_interpreter_Memory.definitionMemory = new haxe_ds_StringMap();
 little_interpreter_Memory.actionMemory = new haxe_ds_StringMap();
+little_lexer_Lexer.definitionDetector = new EReg("([a-zA-Z0-9]+)","");
+little_lexer_Lexer.typeDetector = new EReg("([A-Z][a-zA-Z0-9]+)","");
 Main.main();
 })(typeof exports != "undefined" ? exports : typeof window != "undefined" ? window : typeof self != "undefined" ? self : this, typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);
 
