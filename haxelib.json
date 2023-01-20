@@ -6,5 +6,8 @@
     "license": "MIT",
     "contributors": ["ShaharMS"],
     "tags": ["language", "dsl"],
-    "releasenote": "not yet"
+    "releasenote": "not yet",
+    "dependencies": {
+        "formula": ""
+    }
 }

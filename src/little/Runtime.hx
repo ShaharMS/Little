@@ -14,6 +14,12 @@ import little.interpreter.constraints.Definition;
  * to interact/listen to the interpreter's actions.
  */
 class Runtime {
+
+    /**
+     * When little's code generates output (via print statements, error throwing...)
+     * , It'll show up here. 
+     */
+    public static var output:String;
     
     public static var exceptionStack:ExceptionStack = new ExceptionStack();
     /**
@@ -70,7 +76,7 @@ class Runtime {
         print('Error! (from line $currentLine):\n\t---\n\t' + exception.content + "\n\t---");
     }
     public static function print(expression:String) {
-        Log.trace('Line $currentLine: ' + expression, null);
+        output += 'Line $currentLine: ' + expression + "\n";
     }
 
 	static function get_currentLine():Int {

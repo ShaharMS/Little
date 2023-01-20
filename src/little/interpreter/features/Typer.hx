@@ -11,9 +11,11 @@ class Typer {
      * @param value a string representation of the value: `1.23`, `"hello"`, `new Child()`
      */
     public static function getValueType(value:String):String {
+        if (value == null) return "Everything";
         final instanceDetector:EReg = ~/new +([a-zA-z0-9_]+)/;
         final numberDetector:EReg = ~/([0-9.])/;
         final booleanDetector:EReg = ~/true|false/;
+        final definitionDetector:EReg = ~/([a-zA-Z0-9]+)/;
         value = Evaluator.getValueOf(value);
 
         if (instanceDetector.match(value)) return instanceDetector.matched(1);
@@ -32,10 +34,11 @@ class Typer {
             if (value == "") {
                 Runtime.safeThrow(new Typo('While trying to access a definition inside $object, you didn\'t specify a property name (the property name is the part after the dot).'));
             }
-        } else {
-            return getValueType(Memory.getLoadedVar(value).basicValue);
+        } else if (definitionDetector.replace(value, "").length == 0){
+            var def = Memory.getLoadedVar(value);
+            return getValueType(def == null ? null : def.basicValue);
         }
-        return "";
+        return "Everything";
     }
 
     public static final basicTypeToHaxe:Map<String, String> = [

@@ -1,5 +1,6 @@
 package little.interpreter.features;
 
+import little.exceptions.Typo;
 import little.exceptions.DefinitionTypeMismatch;
 import haxe.io.Encoding;
 import little.exceptions.UnknownDefinition;
@@ -45,27 +46,32 @@ class Evaluator {
         if (expression.trim() == "false" || expression.trim() == "true") return expression.trim();
         if (Memory.hasLoadedVar(expression)) return Memory.getLoadedVar(expression).basicValue;
         expression = expression.replace("+", " + ").replace("-", " - ").replace("*", " * ").replace("/", " / ").replace("(", " ( ").replace(")", " ) ");
-        //first, replace all Definitions with their values
-        var tempExpression = expression;
-        var DefinitionDetector:EReg = ~/([a-zA-Z_]+)/;
-        var f = Formula.fromString(tempExpression);
-        while (DefinitionDetector.match(tempExpression)) {
-            var Definition = DefinitionDetector.matched(1);
-            if (Memory.hasLoadedVar(Definition)) {
-                var value = Memory.getLoadedVar(Definition).basicValue;
-                if (~/[^0-9\.]+/.match(value)) {
-                    Runtime.safeThrow(new DefinitionTypeMismatch(Definition, "Number", "e"));
+        // replace all Definitions with their values
+        try {
+            var tempExpression = expression;
+            var DefinitionDetector:EReg = ~/([a-zA-Z_]+)/;
+            var f = Formula.fromString(tempExpression);
+            while (DefinitionDetector.match(tempExpression)) {
+                var Definition = DefinitionDetector.matched(1);
+                if (Memory.hasLoadedVar(Definition)) {
+                    var value = Memory.getLoadedVar(Definition).basicValue;
+                    if (~/[^0-9\.]+/.match(value)) {
+                        Runtime.safeThrow(new DefinitionTypeMismatch(Definition, "Number", "e"));
+                    }
+                    f.bind(Formula.fromString(value), Definition);
+                    var pos = DefinitionDetector.matchedPos();
+                    tempExpression = tempExpression.substring(pos.pos + pos.len);
+                } else {
+                    Runtime.safeThrow(new UnknownDefinition(Definition));
+                    return expression;
                 }
-                f.bind(Formula.fromString(value), Definition);
-                var pos = DefinitionDetector.matchedPos();
-                tempExpression = tempExpression.substring(pos.pos + pos.len);
-            } else {
-                Runtime.safeThrow(new UnknownDefinition(Definition));
-                return expression;
             }
+            var res = f.result;
+            return res + "";
+        } catch (e) {
+            Runtime.safeThrow(new Typo(e.message));
+            return "";
         }
-        var res = f.result;
-        return res + "";
     }
 
     public static function calculateStringAddition(expression:String, ?currentNode:Node):Node {
