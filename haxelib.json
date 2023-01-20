@@ -1,0 +1,10 @@
+{
+    "classPath": "src",
+    "name": "little",
+    "version": "0.0.0-alpha",
+    "url": "https://github.com/ShaharMS/Little",
+    "license": "MIT",
+    "contributors": ["ShaharMS"],
+    "tags": ["language", "dsl"],
+    "releasenote": "not yet"
+}

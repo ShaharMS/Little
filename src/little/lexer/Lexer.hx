@@ -6,7 +6,7 @@ using TextTools;
 class Lexer {
     
     /**
-    	Parses little source code into complex tokens. complex tokens dont handle logic, but they do handle flow.
+    	Parses little source code into complex tokens. complex tokens don't handle logic, but they do handle flow.
     **/
     public static function lexIntoComplex(code:String):Array<ComplexToken> {
         var tokens:Array<ComplexToken> = [];
