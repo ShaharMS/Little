@@ -11,7 +11,7 @@ import little.Transpiler;
 using StringTools;
 class Main {
 
-    static var code = 'define ohYeah of type = 5 + 55';
+    static var code = 'define ohYeah of type = 5 + 55\nx = y = 5';
 
     static function main() {
         trace(Lexer.lexIntoComplex(code).toString());

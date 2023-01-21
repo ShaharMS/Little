@@ -6,10 +6,11 @@ using TextTools;
 class Lexer {
     
     public static final instanceDetector:EReg = ~/new +([a-zA-z0-9_]+)/;
-    public static final numberDetector:EReg = ~/([0-9.])/;
+    public static final numberDetector:EReg = ~/([0-9\.])/;
     public static final booleanDetector:EReg = ~/true|false/;
     public static final definitionDetector:EReg = ~/([a-zA-Z0-9]+)/;
     public static final typeDetector:EReg = ~/([A-Z][a-zA-Z0-9]+)/;
+    public static final assignmentDetector:EReg = ~/[a-zA-Z0-9\.]+ *(?:=[^=]+)+/;
 
     /**
     	Parses little source code into complex tokens. complex tokens don't handle logic, but they do handle flow.
@@ -30,7 +31,7 @@ class Lexer {
                 var items = line.split(" ").filter(s -> s != "" && s != "define");
                 if (items.length == 0) throw "Definition name and value are missing at line " + l + ".";
                 if (items.length == 1) {
-                    if (~/[0-9]/g.replace(items[0], "").length == 0) throw "Definition name must contain at least one non-numerical character"
+                    if (~/[0-9\.]/g.replace(items[0], "").length == 0) throw "Definition name must contain at least one non-numerical character"
                     else tokens.push(DefinitionDeclaration(l, items[0], "nothing", "Everything"));
                     continue;
                 }
@@ -53,18 +54,32 @@ class Lexer {
                     val = "nothing";
                     tokens.push(DefinitionDeclaration(l, defName, val, type));
                 } else {
-                    val = _defAndVal[1];
+                    val = _defAndVal[1].trim();
                     tokens.push(DefinitionDeclaration(l, defName, val, type));
                 }
             }
 
-            /*
-                
+            /* assignments:
+                x = something
+                x = y = something
             */
+            if (assignmentDetector.replace(line, "").length == 0) {
+                var items = line.split("=");
+                var value = items[items.length - 1].trim();
+                var assignees = {items.pop(); items = items.map(item -> item.trim()); items;};
+                tokens.push(Assignment(l, value, assignees));
+            }
             l++;
         }
 
         return tokens;
+    }
+
+    /**
+    	Expects output from `lexIntoComplex()`, and returns a simplified version of that output - function calls are differentiated
+    **/
+    public static function splitBlocks1() {
+        
     }
 
 }
