@@ -1,5 +1,7 @@
 package little.lexer;
 
+import little.lexer.Tokens.TokenLevel1;
+import little.lexer.Tokens.ComplexToken;
 using StringTools;
 using TextTools;
 
@@ -75,11 +77,62 @@ class Lexer {
         return tokens;
     }
 
+    
+
+    public static final staticValueDetector:EReg = ~/[0-9\.]+|"[^"]+"|true|false|nothing/;
+    public static final actionCallDetector:EReg = ~/.+\(.*\)/;
+    public static final definitionAccessDetector:EReg = ~/^[^0-9].*$/;
+    public static final calculationDetection:EReg = ~/^(?:[0-9\.]+|"[^"]+"|true|false|nothing|.+\(.*\))+(?:[\+\-\/\*\^%÷\(\) ]+(?:[0-9\.]+|"[^"]+"|true|false|nothing|.+\(.*\)))*$/;
+
     /**
-    	Expects output from `lexIntoComplex()`, and returns a simplified version of that output - function calls are differentiated
+    	Expects output from `lexIntoComplex()`, and returns a simplified version of that output:
+         - function calls are differentiated
     **/
-    public static function splitBlocks1() {
-        
+    public static function splitBlocks1(complexTokens:Array<ComplexToken>):Array<TokenLevel1> {
+        var tokens:Array<TokenLevel1> = [];
+
+        for (complex in complexTokens) {
+            switch complex {
+                case DefinitionDeclaration(line, name, complexValue, type): {
+                    tokens.push(SetLine(line));
+                    
+                    var defName = name, defType = type, defValue:TokenLevel1;
+
+                    // Now, figure out if defValue should be an ActionCall, StaticValue, DefinitionAccess or Calculation.
+                    if (staticValueDetector.replace(complexValue, "").length == 0) {
+                        defValue = StaticValue(complexValue);
+                    }
+                    else if (definitionAccessDetector.replace(complexValue, "").length == 0) {
+                        defValue = DefinitionAccess(complexValue);
+                    }
+                    else if (actionCallDetector.replace(complexValue, "").length == 0) {
+                        var _actionParamSplit = complexValue.split("(");
+                        final actionName = _actionParamSplit[0];
+
+                        final stringifiedParams = _actionParamSplit[1]; // remove the `actionName(` part
+                        stringifiedParams.substring(0, _actionParamSplit[1].length - 1); // remove the closing )
+
+                        var params = stringifiedParams.split(",");
+                        params = params.map(item -> item.trim()); //removes whitespaces before/after each ,
+
+                        defValue = ActionCall(actionName, [for (p in params) Specifics.extractParam(p)]);
+                    } 
+                    else if (calculationDetection.replace(complexValue, "").length == 0) {
+                        // A bit more complicated, since any item in a calculation may be any of the above, even another calculation!
+                        // We have a helper function to extract expressions, now we just need to separate everything into calculations
+                        
+                        var calcTokens:Array<TokenLevel1> = [];
+                        
+                    }
+                    tokens.push(DefinitionDeclaration(defName, defValue, defType));
+                }
+                case Assignment(line, value, assignees): {
+
+                }
+            }
+        }
+
+        return tokens;
     }
 
 }

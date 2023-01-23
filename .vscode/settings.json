@@ -2,5 +2,8 @@
     "liveServer.settings.port": 5501,
     "Codegeex.DisabledFor": {
         "haxe": true
-    }
+    },
+    "cSpell.words": [
+        "whitespaces"
+    ]
 }

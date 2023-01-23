@@ -7,12 +7,14 @@ enum ComplexToken {
 
 enum TokenLevel1 {
     SetLine(line:Int);
-    NextLine;
 
     DefinitionDeclaration(name:String, value:TokenLevel1, ?type:String);   
     DefinitionAccess(name:String);
-    Assignment(value:TokenLevel1, assignee:TokenLevel1);
+    DefinitionWrite(assignee:String, value:TokenLevel1);
+    Sign(sign:String);
+    StaticValue(value:String);
+    Calculation(parts:Array<TokenLevel1>);
     Parameter(name:String, type:String, value:TokenLevel1);
     ActionCall(name:String, params:Array<TokenLevel1>);
-
+    InvalidSyntax(string:String);
 }
