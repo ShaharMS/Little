@@ -1,5 +1,7 @@
 package little.lexer;
 
+import texter.general.math.MathAttribute;
+import texter.general.math.MathLexer;
 import little.lexer.Tokens.TokenLevel1;
 import little.lexer.Tokens.ComplexToken;
 using StringTools;
@@ -80,9 +82,9 @@ class Lexer {
     
 
     public static final staticValueDetector:EReg = ~/[0-9\.]+|"[^"]+"|true|false|nothing/;
-    public static final actionCallDetector:EReg = ~/.+\(.*\)/;
+    public static final actionCallDetector:EReg = ~/[^ ]+\(.*\)/;
     public static final definitionAccessDetector:EReg = ~/^[^0-9].*$/;
-    public static final calculationDetection:EReg = ~/^(?:[0-9\.]+|"[^"]+"|true|false|nothing|.+\(.*\))+(?:[\+\-\/\*\^%÷\(\) ]+(?:[0-9\.]+|"[^"]+"|true|false|nothing|.+\(.*\)))*$/;
+    public static final calculationDetection:EReg = ~/^(?:[0-9\.]+|"[^"]+"|true|false|nothing|[^ ]+\(.*\))+(?:[\+\-\/\*\^%÷\(\) ]+(?:[0-9\.]+|"[^"]+"|true|false|nothing|[^ ]+\(.*\)))*$/;
 
     /**
     	Expects output from `lexIntoComplex()`, and returns a simplified version of that output:
@@ -90,13 +92,12 @@ class Lexer {
     **/
     public static function splitBlocks1(complexTokens:Array<ComplexToken>):Array<TokenLevel1> {
         var tokens:Array<TokenLevel1> = [];
-
         for (complex in complexTokens) {
             switch complex {
                 case DefinitionDeclaration(line, name, complexValue, type): {
                     tokens.push(SetLine(line));
                     
-                    var defName = name, defType = type, defValue:TokenLevel1;
+                    var defName = name, defType = type, defValue:TokenLevel1 = InvalidSyntax(complexValue);
 
                     // Now, figure out if defValue should be an ActionCall, StaticValue, DefinitionAccess or Calculation.
                     if (staticValueDetector.replace(complexValue, "").length == 0) {
@@ -119,10 +120,9 @@ class Lexer {
                     } 
                     else if (calculationDetection.replace(complexValue, "").length == 0) {
                         // A bit more complicated, since any item in a calculation may be any of the above, even another calculation!
-                        // We have a helper function to extract expressions, now we just need to separate everything into calculations
+                        // Luckily, texter has the MathLexer class, which should help as extract the wanted info.
                         
-                        var calcTokens:Array<TokenLevel1> = [];
-                        
+                        defValue = Specifics.attributesIntoCalculation(MathLexer.resetAttributesOrder(MathLexer.splitBlocks(MathLexer.getMathAttributes(complexValue))));                                    
                     }
                     tokens.push(DefinitionDeclaration(defName, defValue, defType));
                 }

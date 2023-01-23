@@ -1,5 +1,6 @@
 package little.lexer;
 
+import texter.general.math.MathAttribute;
 import little.lexer.Tokens.TokenLevel1;
 using StringTools;
 
@@ -23,17 +24,26 @@ class Specifics {
     }
 
     /**
-     * extracts
-     * 
-     *      Sign(...)
-     *      StaticValue(...)
-     *      DefinitionAccess(...)
-     *      ActionCall(...)
-     * 
-     * from a string
+     * Converts texter math tokens to little ones.
      */
-    public static function extractMathExpr(string:String):TokenLevel1 {
-        if (string.startsWith("(")) return Calculation(null);
-        return null;
+    public static function attributesIntoCalculation(calcTokens:Array<MathAttribute>):TokenLevel1 {
+        var finalTokens:Array<TokenLevel1> = [];
+        for (attribute in calcTokens) {
+            switch attribute {
+                case FunctionDefinition(index, letter):  // Won't appear
+                case Division(index, upperHandSide, lowerHandSide): finalTokens.push(Calculation([attributesIntoCalculation([upperHandSide]), Sign("/"), attributesIntoCalculation([lowerHandSide])]));
+                case Variable(index, letter): finalTokens.push(DefinitionAccess(letter));
+                case Number(index, letter): finalTokens.push(StaticValue(letter));
+                case Sign(index, letter): finalTokens.push(Sign(letter));
+                case StartClosure(index, letter):  // Won't appear
+                case EndClosure(index, letter):  // Won't appear
+                case Closure(index, letter, content): finalTokens.push(Calculation([attributesIntoCalculation(content)]));
+                case Null(index):  // Won't appear
+            }
+        }
+
+        return Calculation(finalTokens);
     }
+
+
 }
