@@ -11,7 +11,7 @@ import little.Transpiler;
 using StringTools;
 class Main {
 
-    static var code = 'define ohYeah of type Decimal = 5 + 55 + sin(60)';
+    static var code = 'define ohYeah of type Decimal = 5 + 55 + atan2(6, 6)';
 
     static function main() {
         trace(Lexer.splitBlocks1(Lexer.lexIntoComplex(code)).toString());
