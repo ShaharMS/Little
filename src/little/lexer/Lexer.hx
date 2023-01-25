@@ -136,7 +136,7 @@ class Lexer {
 
     static function getTree(content:Array<TokenLevel1>, string:String, prefix:String, last:Bool):String {
         var root = Calculation(content);
-        var t = if (last) "└" else "├"
+        var t = if (last) "└" else "├";
         // switch root {
         //     case SetLine(line): return string + '$prefix$t─── SetLine($line)\n'
         //     case DefinitionDeclaration(name, value, type): {
@@ -151,40 +151,39 @@ class Lexer {
         //     case ActionCall(name, params):
         //     case InvalidSyntax(string):
         // }
+        return string;
     }
 
-    private static function tree(content, level:Int, isLastBranch:Bool, skipVerticalLinesOnLevels:Array<Int>):String
-        {
-            var s = "";
+    // private static function tree(content, level:Int, isLastBranch:Bool, skipVerticalLinesOnLevels:Array<Int>):String
+    //     {
+    //         var s = "";
 
-            if (content == null ) return "";
+    //         if (content == null ) return "";
 
-            for (i in 0...level - 1)
-            {
-                if (skipVerticalLinesOnLevels[i] == i) s += "    ";
-                else s += "│   ";
-            }
+    //         for (i in 0...level - 1)
+    //         {
+    //             if (skipVerticalLinesOnLevels[i] == i) s += "    ";
+    //             else s += "│   ";
+    //         }
 
-            if (level > 0)
-            {
-                if (isLastBranch)
-                {
-                    s += "└───";
-                    skipVerticalLinesOnLevels[level - 1] = level - 1;
-                }
-                else s += "├───";
-            }
-            s += content.split("(")[0];
-            s += "\n";
+    //         if (level > 0)
+    //         {
+    //             if (isLastBranch)
+    //             {
+    //                 s += "└───";
+    //                 skipVerticalLinesOnLevels[level - 1] = level - 1;
+    //             }
+    //             else s += "├───";
+    //         }
+    //         s += content.split("(")[0];
+    //         s += "\n";
 
-            if (content.contains(")")) isLastBranch = false;
-            else isLastBranch = true;
+    //         if (content.contains(")")) isLastBranch = false;
+    //         else isLastBranch = true;
 
-            var
-
-            s += tree(root.left, level + 1, isLastBranch, skipVerticalLinesOnLevels.copy());
-            s += tree(root.right, level + 1, true, skipVerticalLinesOnLevels.copy());
-            return s;
-        }
-    }
+    //         s += tree(root.left, level + 1, isLastBranch, skipVerticalLinesOnLevels.copy());
+    //         s += tree(root.right, level + 1, true, skipVerticalLinesOnLevels.copy());
+    //         return s;
+    //     }
+    // }
 }
