@@ -1,5 +1,6 @@
 package little.lexer;
 
+import haxe.extern.EitherType;
 import texter.general.math.MathAttribute;
 import texter.general.math.MathLexer;
 import little.lexer.Tokens.TokenLevel1;
@@ -20,6 +21,10 @@ class Lexer {
     	Parses little source code into complex tokens. complex tokens don't handle logic, but they do handle flow.
     **/
     public static function lexIntoComplex(code:String):Array<ComplexToken> {
+
+        // Replace each == with ⩵ to not confuse the assignment ereg
+        code = code.replace("==", "⩵");
+
         var tokens:Array<ComplexToken> = [];
 
         var l = 1;
@@ -97,33 +102,7 @@ class Lexer {
                 case DefinitionDeclaration(line, name, complexValue, type): {
                     tokens.push(SetLine(line));
                     
-                    var defName = name, defType = type, defValue:TokenLevel1 = InvalidSyntax(complexValue);
-
-                    // Now, figure out if defValue should be an ActionCall, StaticValue, DefinitionAccess or Calculation.
-                    if (staticValueDetector.replace(complexValue, "").length == 0) {
-                        defValue = StaticValue(complexValue);
-                    }
-                    else if (definitionAccessDetector.replace(complexValue, "").length == 0) {
-                        defValue = DefinitionAccess(complexValue);
-                    }
-                    else if (actionCallDetector.replace(complexValue, "").length == 0) {
-                        var _actionParamSplit = complexValue.split("(");
-                        final actionName = _actionParamSplit[0];
-
-                        final stringifiedParams = _actionParamSplit[1]; // remove the `actionName(` part
-                        stringifiedParams.substring(0, _actionParamSplit[1].length - 1); // remove the closing )
-
-                        var params = stringifiedParams.split(",");
-                        params = params.map(item -> item.trim()); //removes whitespaces before/after each ,
-
-                        defValue = ActionCall(actionName, [for (p in params) Specifics.extractParam(p)]);
-                    } 
-                    else if (calculationDetection.replace(complexValue, "").length == 0) {
-                        // A bit more complicated, since any item in a calculation may be any of the above, even another calculation!
-                        // Luckily, texter has the MathLexer class, which should help as extract the wanted info.
-                        
-                        defValue = Specifics.attributesIntoCalculation(MathLexer.resetAttributesOrder(MathLexer.splitBlocks(MathLexer.getMathAttributes(complexValue))));                                    
-                    }
+                    var defName = name, defType = type, defValue:TokenLevel1 = Specifics.complexValueIntoTokenLevel1(complexValue);
                     tokens.push(DefinitionDeclaration(defName, defValue, defType));
                 }
                 case Assignment(line, value, assignees): {
@@ -135,4 +114,77 @@ class Lexer {
         return tokens;
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public static function astToString(tokens:Array<TokenLevel1>) {
+        return getTree(tokens, "", "", tokens.length == 1);
+    }
+
+    static function getTree(content:Array<TokenLevel1>, string:String, prefix:String, last:Bool):String {
+        var root = Calculation(content);
+        var t = if (last) "└" else "├"
+        // switch root {
+        //     case SetLine(line): return string + '$prefix$t─── SetLine($line)\n'
+        //     case DefinitionDeclaration(name, value, type): {
+        //         return string + 
+        //     }
+        //     case DefinitionAccess(name):
+        //     case DefinitionWrite(assignee, value):
+        //     case Sign(sign):
+        //     case StaticValue(value):
+        //     case Calculation(parts):
+        //     case Parameter(name, type, value):
+        //     case ActionCall(name, params):
+        //     case InvalidSyntax(string):
+        // }
+    }
+
+    private static function tree(content, level:Int, isLastBranch:Bool, skipVerticalLinesOnLevels:Array<Int>):String
+        {
+            var s = "";
+
+            if (content == null ) return "";
+
+            for (i in 0...level - 1)
+            {
+                if (skipVerticalLinesOnLevels[i] == i) s += "    ";
+                else s += "│   ";
+            }
+
+            if (level > 0)
+            {
+                if (isLastBranch)
+                {
+                    s += "└───";
+                    skipVerticalLinesOnLevels[level - 1] = level - 1;
+                }
+                else s += "├───";
+            }
+            s += content.split("(")[0];
+            s += "\n";
+
+            if (content.contains(")")) isLastBranch = false;
+            else isLastBranch = true;
+
+            var
+
+            s += tree(root.left, level + 1, isLastBranch, skipVerticalLinesOnLevels.copy());
+            s += tree(root.right, level + 1, true, skipVerticalLinesOnLevels.copy());
+            return s;
+        }
+    }
 }

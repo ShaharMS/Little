@@ -3,6 +3,7 @@ package little.lexer;
 import texter.general.math.MathLexer;
 import texter.general.math.MathAttribute;
 import little.lexer.Tokens.TokenLevel1;
+import little.lexer.Lexer.*;
 using StringTools;
 
 /**
@@ -23,6 +24,42 @@ class Specifics {
     public static function extractParam(string:String):TokenLevel1 {
         return Parameter("", "", Specifics.attributesIntoCalculation(MathLexer.resetAttributesOrder(MathLexer.splitBlocks(MathLexer.getMathAttributes(string)))));
     }
+
+    /**
+     * Converts a `complexValue` into a level 1 token
+     */
+    public static function complexValueIntoTokenLevel1(complexValue:String) {
+        var defValue:TokenLevel1 = InvalidSyntax(complexValue);
+
+        // Now, figure out if defValue should be an ActionCall, StaticValue, DefinitionAccess or Calculation.
+        if (staticValueDetector.replace(complexValue, "").length == 0) {
+            defValue = StaticValue(complexValue);
+        }
+        else if (definitionAccessDetector.replace(complexValue, "").length == 0) {
+            defValue = DefinitionAccess(complexValue);
+        }
+        else if (actionCallDetector.replace(complexValue, "").length == 0) {
+            var _actionParamSplit = complexValue.split("(");
+            final actionName = _actionParamSplit[0];
+
+            final stringifiedParams = _actionParamSplit[1]; // remove the `actionName(` part
+            stringifiedParams.substring(0, _actionParamSplit[1].length - 1); // remove the closing )
+
+            var params = stringifiedParams.split(",");
+            params = params.map(item -> item.trim()); //removes whitespaces before/after each ,
+
+            defValue = ActionCall(actionName, [for (p in params) Specifics.extractParam(p)]);
+        } 
+        else if (calculationDetection.replace(complexValue, "").length == 0) {
+            // A bit more complicated, since any item in a calculation may be any of the above, even another calculation!
+            // Luckily, texter has the MathLexer class, which should help as extract the wanted info.
+            
+            defValue = Specifics.attributesIntoCalculation(MathLexer.resetAttributesOrder(MathLexer.splitBlocks(MathLexer.getMathAttributes(complexValue))));                                    
+        }
+
+        return defValue;
+    }
+
 
     /**
      * Converts texter math tokens to little ones.
@@ -97,7 +134,7 @@ class Specifics {
                 }
                 case Number(index, letter): finalTokens.push(StaticValue(letter));
                 case Sign(index, letter): finalTokens.push(Sign(letter));
-                case Closure(index, letter, content): finalTokens.push(Calculation([attributesIntoCalculation(content)]));
+                case Closure(index, letter, content): finalTokens.push(attributesIntoCalculation(content));
                 case _:
             }
             i++;
