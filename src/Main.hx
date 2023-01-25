@@ -15,7 +15,7 @@ class Main {
     static var code = 'define ohYeah of type Decimal = 5 + (2 / 2).toString()';
 
     static function main() {
-        trace(Lexer.splitBlocks1(Lexer.lexIntoComplex(code)).toString());
+        trace(Lexer.astToString(Lexer.splitBlocks1(Lexer.lexIntoComplex(code))));
         
         trace(MathLexer.resetAttributesOrder(MathLexer.splitBlocks(MathLexer.getMathAttributes("2 ⩵ 2"))));
     }

@@ -131,26 +131,46 @@ class Lexer {
 
 
     public static function astToString(tokens:Array<TokenLevel1>) {
-        return getTree(tokens, "", "", tokens.length == 1);
+        string = "";
+        return getTree(Calculation(tokens), "", tokens.length == 1);
     }
 
-    static function getTree(content:Array<TokenLevel1>, string:String, prefix:String, last:Bool):String {
-        var root = Calculation(content);
+    static var string:String = "";
+    static function getTree(root:TokenLevel1, prefix:String, last:Bool):String {
         var t = if (last) "└" else "├";
-        // switch root {
-        //     case SetLine(line): return string + '$prefix$t─── SetLine($line)\n'
-        //     case DefinitionDeclaration(name, value, type): {
-        //         return string + 
-        //     }
-        //     case DefinitionAccess(name):
-        //     case DefinitionWrite(assignee, value):
-        //     case Sign(sign):
-        //     case StaticValue(value):
-        //     case Calculation(parts):
-        //     case Parameter(name, type, value):
-        //     case ActionCall(name, params):
-        //     case InvalidSyntax(string):
-        // }
+        var d = "───";
+        if (root == null) return "";
+        switch root {
+            case SetLine(line): return string += '$prefix$t$d SetLine($line)\n';
+            case DefinitionDeclaration(name, value, type): {
+                return string += '$prefix$t$d Definition Declaration\n$prefix      $t$d $name\n$prefix      $t$d $type\n${getTree(value, prefix + "      ", true)}';
+            }
+            case DefinitionAccess(name): return string += '$prefix$t$d $name\n';
+            case DefinitionWrite(assignee, value): {
+                return string += '$prefix$t$d Definition Write\n$prefix      $t$d $assignee\n${getTree(value, prefix + "      ", true)}';
+            }
+            case StaticValue(value) | Sign(value): {
+                return string += '$prefix$t$d $value\n';
+            }
+            case Calculation(parts): {
+                if (parts.length == 0) return '$prefix$t$d Empty Calculation\n';
+                string += '$prefix$t$d Calculation\n';
+                var strParts = [for (i in 0...parts.length) getTree(parts[i], prefix + "      ", false)];
+                strParts.push(getTree(parts[parts.length - 1], prefix + "      ", true));
+                return string += strParts.join("");
+            }
+            case Parameter(name, type, value): {
+                return string += '$prefix$t$d Parameter\n$prefix      $t$d $name\n$prefix      $t$d $type\n${getTree(value, prefix + "      ", true)}';
+            }
+            case ActionCall(name, params): {
+                string += '$prefix$t$d Action Call\n$prefix      $t$d $name\n';
+                var strParts = [for (i in 0...params.length) getTree(params[i], prefix + "      ", false)];
+                if (params.length == 0) return string;
+                strParts.push(getTree(params[params.length - 1], prefix + "      ", true));
+                return string += strParts.join("");
+            }
+            case InvalidSyntax(string): return Lexer.string += '$prefix$t$d INVALID SYNTAX: $string\n';
+        }
         return string;
     }
 
