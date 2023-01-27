@@ -41,7 +41,7 @@ class Lexer {
                 if (items.length == 0) throw "Definition name and value are missing at line " + l + ".";
                 if (items.length == 1) {
                     if (~/[0-9\.]/g.replace(items[0], "").length == 0) throw "Definition name must contain at least one non-numerical character"
-                    else tokens.push(DefinitionDeclaration(l, items[0], "nothing", "Everything"));
+                    else tokens.push(DefinitionCreation(l, items[0], "nothing", "Everything"));
                     continue;
                 }
                 var _defAndVal = line.split("=");
@@ -61,10 +61,10 @@ class Lexer {
                 }
                 if (_defAndVal.length == 1) {
                     val = "nothing";
-                    tokens.push(DefinitionDeclaration(l, defName, val, type));
+                    tokens.push(DefinitionCreation(l, defName, val, type));
                 } else {
                     val = _defAndVal[1].trim();
-                    tokens.push(DefinitionDeclaration(l, defName, val, type));
+                    tokens.push(DefinitionCreation(l, defName, val, type));
                 }
             }
 
@@ -99,14 +99,19 @@ class Lexer {
         var tokens:Array<TokenLevel1> = [];
         for (complex in complexTokens) {
             switch complex {
-                case DefinitionDeclaration(line, name, complexValue, type): {
+                case DefinitionCreation(line, name, complexValue, type): {
                     tokens.push(SetLine(line));
                     
                     var defName = name, defType = type, defValue:TokenLevel1 = Specifics.complexValueIntoTokenLevel1(complexValue);
-                    tokens.push(DefinitionDeclaration(defName, defValue, defType));
+                    tokens.push(DefinitionCreation(defName, defValue, defType));
                 }
                 case Assignment(line, value, assignees): {
-
+                    tokens.push(SetLine(line));
+                    final parsedValue = Specifics.complexValueIntoTokenLevel1(value);
+                    assignees.reverse(); // The first assignee needs to be the rightmost one
+                    for (assignee in assignees) {
+                        tokens.push(DefinitionWrite(assignee, parsedValue));
+                    }
                 }
             }
         }
@@ -130,48 +135,49 @@ class Lexer {
 
 
 
-    public static function astToString(tokens:Array<TokenLevel1>) {
-        string = "";
-        return getTree(Calculation(tokens), "", tokens.length == 1);
+    public static function astToString(tokens:Array<TokenLevel1>, ?spacingBetweenNodes:Int = 6) {
+        s = " ".multiply(spacingBetweenNodes);
+        return "\n" + getTree(Calculation(tokens), "", true);
     }
 
-    static var string:String = "";
+    static var s = "";
     static function getTree(root:TokenLevel1, prefix:String, last:Bool):String {
         var t = if (last) "└" else "├";
+        var c = "├";
         var d = "───";
         if (root == null) return "";
         switch root {
-            case SetLine(line): return string += '$prefix$t$d SetLine($line)\n';
-            case DefinitionDeclaration(name, value, type): {
-                return string += '$prefix$t$d Definition Declaration\n$prefix      $t$d $name\n$prefix      $t$d $type\n${getTree(value, prefix + "      ", true)}';
+            case SetLine(line): return '$prefix$t$d SetLine($line)\n';
+            case DefinitionCreation(name, value, type): {
+                return '$prefix$t$d Definition Creation\n$prefix$s$c$d $name\n$prefix$s$c$d $type\n${getTree(value, prefix + s, true)}';
             }
-            case DefinitionAccess(name): return string += '$prefix$t$d $name\n';
+            case DefinitionAccess(name): return '$prefix$t$d $name\n';
             case DefinitionWrite(assignee, value): {
-                return string += '$prefix$t$d Definition Write\n$prefix      $t$d $assignee\n${getTree(value, prefix + "      ", true)}';
+                return '$prefix$t$d Definition Write\n$prefix$s$t$d $assignee\n${getTree(value, prefix + s, true)}';
             }
             case StaticValue(value) | Sign(value): {
-                return string += '$prefix$t$d $value\n';
+                return '$prefix$t$d $value\n';
             }
             case Calculation(parts): {
-                if (parts.length == 0) return '$prefix$t$d Empty Calculation\n';
-                string += '$prefix$t$d Calculation\n';
-                var strParts = [for (i in 0...parts.length) getTree(parts[i], prefix + "      ", false)];
-                strParts.push(getTree(parts[parts.length - 1], prefix + "      ", true));
-                return string += strParts.join("");
+                if (parts.length == 0) return '$prefix$t$d <empty calculation>\n';
+                var strParts = ['$prefix$t$d Calculation\n'].concat([for (i in 0...parts.length - 1) getTree(parts[i], prefix + s, false)]);
+                strParts.push(getTree(parts[parts.length - 1], prefix + s, true));
+                return strParts.join("");
             }
             case Parameter(name, type, value): {
-                return string += '$prefix$t$d Parameter\n$prefix      $t$d $name\n$prefix      $t$d $type\n${getTree(value, prefix + "      ", true)}';
+                if (name == "") name = "<unnamed>";
+                if (type == "") type = "<untyped>";
+                return '$prefix$t$d Parameter\n$prefix$s$c$d $name\n$prefix$s$c$d $type\n${getTree(value, prefix + s, true)}';
             }
             case ActionCall(name, params): {
-                string += '$prefix$t$d Action Call\n$prefix      $t$d $name\n';
-                var strParts = [for (i in 0...params.length) getTree(params[i], prefix + "      ", false)];
-                if (params.length == 0) return string;
-                strParts.push(getTree(params[params.length - 1], prefix + "      ", true));
-                return string += strParts.join("");
+                var strParts = ['$prefix$t$d Action Call\n$prefix$s$c$d $name\n'].concat([for (i in 0...params.length - 1) getTree(params[i], prefix + s, false)]);
+                if (params.length == 0) return strParts.join("");
+                strParts.push(getTree(params[params.length - 1], prefix + s, true));
+                return strParts.join("");
             }
-            case InvalidSyntax(string): return Lexer.string += '$prefix$t$d INVALID SYNTAX: $string\n';
+            case InvalidSyntax(s): return '$prefix$t$d INVALID SYNTAX: $s\n';
         }
-        return string;
+        return "";
     }
 
     // private static function tree(content, level:Int, isLastBranch:Bool, skipVerticalLinesOnLevels:Array<Int>):String

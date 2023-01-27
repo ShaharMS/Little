@@ -50,7 +50,7 @@ class Specifics {
 
             defValue = ActionCall(actionName, [for (p in params) Specifics.extractParam(p)]);
         } 
-        else if (calculationDetection.replace(complexValue, "").length == 0) {
+        else /* if (calculationDetection.replace(complexValue, "").length == 0)*/  { // Todo: is this the solution?
             // A bit more complicated, since any item in a calculation may be any of the above, even another calculation!
             // Luckily, texter has the MathLexer class, which should help as extract the wanted info.
             
@@ -66,6 +66,8 @@ class Specifics {
      */
     public static function attributesIntoCalculation(calcTokens:Array<MathAttribute>):TokenLevel1 {
         var finalTokens:Array<TokenLevel1> = [];
+
+        calcTokens.push(Sign(-1, "+")); // Todo: not a great solution, i have a bug somewhere here.
 
         // Before conversion, merge separate, following vars into a single variable
         var merged:Array<MathAttribute> = [];
@@ -110,6 +112,7 @@ class Specifics {
                     var name = letter;
                     i++;
                     var nextAttribute = calcTokens[i];
+                    var tokenPushed = false;
                     while (i < calcTokens.length) {
                         nextAttribute = calcTokens[i];
                         switch nextAttribute {
@@ -121,6 +124,7 @@ class Specifics {
                                 var actParams = MathLexer.extractTextFromAttributes(content).split(",");
                                 finalTokens.push(ActionCall(name, [for (param in actParams) Specifics.extractParam(param)]));
                                 i++;
+                                tokenPushed = true;
                                 break;
                             }
                             case _: {
@@ -129,6 +133,9 @@ class Specifics {
                             }
                         }
                         i++;
+                    }
+                    if (!tokenPushed) {
+                        finalTokens.push(DefinitionAccess(name));
                     }
                     continue;
                 }
@@ -139,7 +146,7 @@ class Specifics {
             }
             i++;
         }
-
+        finalTokens.pop();
 
         return Calculation(finalTokens);
     }
