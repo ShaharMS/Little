@@ -22,7 +22,7 @@ class Specifics {
      * @return Parameter()
      */
     public static function extractParam(string:String):TokenLevel1 {
-        return Parameter("", "", Specifics.attributesIntoCalculation(MathLexer.resetAttributesOrder(MathLexer.splitBlocks(MathLexer.getMathAttributes(string)))));
+        return Parameter("", "", Specifics.attributesIntoExpression(MathLexer.resetAttributesOrder(MathLexer.splitBlocks(MathLexer.getMathAttributes(string)))));
     }
 
     /**
@@ -54,7 +54,7 @@ class Specifics {
             // A bit more complicated, since any item in a calculation may be any of the above, even another calculation!
             // Luckily, texter has the MathLexer class, which should help as extract the wanted info.
             
-            defValue = Specifics.attributesIntoCalculation(MathLexer.resetAttributesOrder(MathLexer.splitBlocks(MathLexer.getMathAttributes(complexValue))));                                    
+            defValue = Specifics.attributesIntoExpression(MathLexer.resetAttributesOrder(MathLexer.splitBlocks(MathLexer.getMathAttributes(complexValue))));                                    
         }
 
         return defValue;
@@ -64,7 +64,7 @@ class Specifics {
     /**
      * Converts texter math tokens to little ones.
      */
-    public static function attributesIntoCalculation(calcTokens:Array<MathAttribute>):TokenLevel1 {
+    public static function attributesIntoExpression(calcTokens:Array<MathAttribute>):TokenLevel1 {
         var finalTokens:Array<TokenLevel1> = [];
 
         calcTokens.push(Sign(-1, "+")); // Todo: not a great solution, i have a bug somewhere here.
@@ -106,7 +106,7 @@ class Specifics {
         while (i < calcTokens.length) {
             var attribute = calcTokens[i];
             switch attribute {
-                case Division(index, upperHandSide, lowerHandSide): finalTokens.push(Calculation([attributesIntoCalculation([upperHandSide]), Sign("/"), attributesIntoCalculation([lowerHandSide])]));
+                case Division(index, upperHandSide, lowerHandSide): finalTokens.push(Expression([attributesIntoExpression([upperHandSide]), Sign("/"), attributesIntoExpression([lowerHandSide])]));
                 case Variable(index, letter): { // More details, separate actions and definitions & merge numbers into them if needed
                     var iSave = i; //save the i value if needed
                     var name = letter;
@@ -141,14 +141,14 @@ class Specifics {
                 }
                 case Number(index, letter): finalTokens.push(StaticValue(letter));
                 case Sign(index, letter): finalTokens.push(Sign(letter));
-                case Closure(index, letter, content): finalTokens.push(attributesIntoCalculation(content));
+                case Closure(index, letter, content): finalTokens.push(attributesIntoExpression(content));
                 case _:
             }
             i++;
         }
         finalTokens.pop();
 
-        return Calculation(finalTokens);
+        return Expression(finalTokens);
     }
 
 
