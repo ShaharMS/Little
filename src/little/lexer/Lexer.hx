@@ -24,6 +24,8 @@ class Lexer {
 
         // Replace each == with ⩵ to not confuse the assignment ereg
         code = code.replace("==", "⩵");
+        // To allow writing multiple lines of code in the same line:
+        code = code.replace(";", "\n");
 
         var tokens:Array<ComplexToken> = [];
 
@@ -72,7 +74,7 @@ class Lexer {
                 x = something
                 x = y = something
             */
-            if (assignmentDetector.replace(line, "").length == 0) {
+            if (assignmentDetector.replace(line.trim().replace("\t", ""), "").length == 0) {
                 var items = line.split("=");
                 var value = items[items.length - 1].trim();
                 var assignees = {items.pop(); items = items.map(item -> item.trim()); items;};
@@ -135,47 +137,72 @@ class Lexer {
 
 
 
-    public static function astToString(tokens:Array<TokenLevel1>, ?spacingBetweenNodes:Int = 6) {
+    public static function prettyPrintAst(ast:Array<TokenLevel1>, ?spacingBetweenNodes:Int = 6) {
         s = " ".multiply(spacingBetweenNodes);
-        return "\n" + getTree(Calculation(tokens), "", true);
+        var unfilteredResult = getTree(Calculation(ast), [], 0, true);
+        var filtered = "";
+        for (line in unfilteredResult.split("\n")) {
+            if (line == "└─── Calculation") continue;
+            filtered += line.substring(spacingBetweenNodes - 1) + "\n";
+        }
+        return "\nAst\n" + filtered;
+    }
+
+    static function prefixFA(pArray:Array<Int>) {
+        var prefix = "";
+        for (i in 0...l) {
+            if (pArray[i] == 1) {
+                prefix += "│" + s.substring(1);
+            } else {
+                prefix += s;
+            }
+        }
+        return prefix;
+    }
+    static function pushIndex(pArray:Array<Int>, i:Int) {
+        var arr = pArray.copy();
+        arr[i + 1] = 1;
+        return arr;
     }
 
     static var s = "";
-    static function getTree(root:TokenLevel1, prefix:String, last:Bool):String {
+    static var l = 0;
+    static function getTree(root:TokenLevel1, prefix:Array<Int>, level:Int, last:Bool):String {
+        l = level;
         var t = if (last) "└" else "├";
         var c = "├";
         var d = "───";
         if (root == null) return "";
         switch root {
-            case SetLine(line): return '$prefix$t$d SetLine($line)\n';
+            case SetLine(line): return '${prefixFA(prefix)}$t$d SetLine($line)\n';
             case DefinitionCreation(name, value, type): {
-                return '$prefix$t$d Definition Creation\n$prefix$s$c$d $name\n$prefix$s$c$d $type\n${getTree(value, prefix + s, true)}';
+                return '${prefixFA(prefix)}$t$d Definition Creation\n${prefixFA(prefix)}$s$c$d $name\n${prefixFA(prefix)}$s$c$d $type\n${getTree(value, prefix.copy(), level + 1, true)}';
             }
-            case DefinitionAccess(name): return '$prefix$t$d $name\n';
+            case DefinitionAccess(name): return '${prefixFA(prefix)}$t$d $name\n';
             case DefinitionWrite(assignee, value): {
-                return '$prefix$t$d Definition Write\n$prefix$s$t$d $assignee\n${getTree(value, prefix + s, true)}';
+                return '${prefixFA(prefix)}$t$d Definition Write\n${prefixFA(prefix)}$s$c$d $assignee\n${getTree(value, prefix.copy(), level + 1, true)}';
             }
             case StaticValue(value) | Sign(value): {
-                return '$prefix$t$d $value\n';
+                return '${prefixFA(prefix)}$t$d $value\n';
             }
             case Calculation(parts): {
-                if (parts.length == 0) return '$prefix$t$d <empty calculation>\n';
-                var strParts = ['$prefix$t$d Calculation\n'].concat([for (i in 0...parts.length - 1) getTree(parts[i], prefix + s, false)]);
-                strParts.push(getTree(parts[parts.length - 1], prefix + s, true));
+                if (parts.length == 0) return '${prefixFA(prefix)}$t$d <empty calculation>\n';
+                var strParts = ['${prefixFA(prefix)}$t$d Calculation\n'].concat([for (i in 0...parts.length - 1) getTree(parts[i], pushIndex(prefix, level), level + 1, false)]);
+                strParts.push(getTree(parts[parts.length - 1], prefix.copy(), level + 1, true));
                 return strParts.join("");
             }
             case Parameter(name, type, value): {
                 if (name == "") name = "<unnamed>";
                 if (type == "") type = "<untyped>";
-                return '$prefix$t$d Parameter\n$prefix$s$c$d $name\n$prefix$s$c$d $type\n${getTree(value, prefix + s, true)}';
+                return '${prefixFA(prefix)}$t$d Parameter\n${prefixFA(prefix)}$s$c$d $name\n${prefixFA(prefix)}$s$c$d $type\n${getTree(value, prefix.copy(), level + 1, true)}';
             }
             case ActionCall(name, params): {
-                var strParts = ['$prefix$t$d Action Call\n$prefix$s$c$d $name\n'].concat([for (i in 0...params.length - 1) getTree(params[i], prefix + s, false)]);
+                var strParts = ['${prefixFA(prefix)}$t$d Action Call\n${prefixFA(prefix)}$s$c$d $name\n'].concat([for (i in 0...params.length - 1) getTree(params[i], pushIndex(prefix, level), level + 1, false)]);
                 if (params.length == 0) return strParts.join("");
-                strParts.push(getTree(params[params.length - 1], prefix + s, true));
+                strParts.push(getTree(params[params.length - 1], prefix.copy(), level + 1, true));
                 return strParts.join("");
             }
-            case InvalidSyntax(s): return '$prefix$t$d INVALID SYNTAX: $s\n';
+            case InvalidSyntax(s): return '${prefixFA(prefix)}$t$d INVALID SYNTAX: $s\n';
         }
         return "";
     }
