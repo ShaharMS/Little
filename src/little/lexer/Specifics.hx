@@ -5,6 +5,7 @@ import texter.general.math.MathAttribute;
 import little.lexer.Tokens.TokenLevel1;
 import little.lexer.Lexer.*;
 using StringTools;
+using TextTools;
 
 /**
  * Contains unrelated, token-specific  helper methods
@@ -23,6 +24,45 @@ class Specifics {
      */
     public static function extractParam(string:String):TokenLevel1 {
         return Parameter("", "", Specifics.attributesIntoExpression(MathLexer.resetAttributesOrder(MathLexer.splitBlocks(MathLexer.getMathAttributes(string)))));
+    }
+
+    public static function extractActionBody(code:String) {
+        var lines = code.split("\n"); // split the code into lines
+        var stack = new Array<Int>(); // stack to keep track of curly brackets
+        var functionBody = ""; // variable to store the function body
+        var inFunction = false; // flag to indicate if we are currently inside the function
+        
+        for (line in lines) {
+            var lineTrimmed = line.trim(); // remove leading and trailing whitespaces
+            
+            // check for open curly bracket
+            if (lineTrimmed.countOccurrencesOf("{") != 0) {
+                for (_ in 0...lineTrimmed.countOccurrencesOf("{")) stack.push(1); // add 1 to the stack
+                if (!inFunction) {
+                    inFunction = true; // set flag to indicate we are now inside the function
+                }
+            }
+            
+            // check for closed curly bracket
+            if (lineTrimmed.countOccurrencesOf("}") != 0) {
+                for (_ in 0...lineTrimmed.countOccurrencesOf("}")) {
+                    if (stack.length > 0) {
+                        stack.pop(); // remove 1 from the stack
+                    }
+                } 
+                                
+                if (stack.length == 0 && inFunction) {
+                    inFunction = false; // set flag to indicate we are now outside the function
+                    break; // exit the loop
+                }
+            }
+            
+            if (inFunction) {
+                functionBody += line + "\n"; // add the line to the function body
+            }
+        }
+        
+        return functionBody;
     }
 
     /**
