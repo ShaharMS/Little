@@ -10,12 +10,11 @@ using TextTools;
 
 class Lexer {
     
-    public static final instanceDetector:EReg = ~/new +([a-zA-z0-9_]+)/;
     public static final numberDetector:EReg = ~/([0-9\.])/;
     public static final booleanDetector:EReg = ~/true|false/;
-    public static final definitionDetector:EReg = ~/([a-zA-Z0-9]+)/;
-    public static final typeDetector:EReg = ~/([A-Z][a-zA-Z0-9]+)/;
-    public static final assignmentDetector:EReg = ~/[a-zA-Z0-9\.]+ *(?:=[^=]+)+/;
+    public static final nameDetector:EReg = ~/(\w+)/;
+    public static final typeDetector:EReg = ~/(\w+)/;
+    public static final assignmentDetector:EReg = ~/(?:\w|\.)+ *(?:=[^=]+)+/;
 
     /**
     	Parses little source code into complex tokens. complex tokens don't handle logic, but they do handle flow.
@@ -31,14 +30,27 @@ class Lexer {
 
         var l = 1;
         for (line in code.split("\n")) {
+
+            // If an action has been declared recently, skip this line:
+            if (Specifics.lastFunctionLineCount != 0) {
+                l++;
+                Specifics.lastFunctionLineCount--;
+                continue;
+            }
+            // Empty lines
+            if (line.replace("\t", " ").trim() == "") {
+                l++;
+                continue;
+            }
+
             /* definitions:
                 define x
                 define x = 5
-                define x of type Number
-                define x of type Number = 5 + welcome
-                define x of type Number = nothing
+                define x as Number
+                define x as Number = 5 + welcome
+                define x as Number = nothing
             */
-            if (line.trim().replace("\t", "").startsWith("define")) {
+            if (line.replace("\t", " ").trim().startsWith("define")) {
                 var items = line.split(" ").filter(s -> s != "" && s != "define");
                 if (items.length == 0) throw "Definition name and value are missing at line " + l + ".";
                 if (items.length == 1) {
@@ -52,11 +64,11 @@ class Lexer {
                 var nameSet = false,  typeSet = false;
                 for (i in 0...defValSplit[0].length) {
                     //name, type?
-                    if (defValSplit[0][i] == "of" && defValSplit[0][i + 1] == "type" && defValSplit[0][i + 2] != null && typeDetector.replace(defValSplit[0][i + 2], "").length == 0) {
-                        if (!typeSet) type = defValSplit[0][i + 2];
+                    if (defValSplit[0][i] == "as" && defValSplit[0][i + 1] != null && typeDetector.replace(defValSplit[0][i + 1], "").length == 0) {
+                        if (!typeSet) type = defValSplit[0][i + 1];
                         typeSet = true;
                     }
-                    else if (definitionDetector.replace(defValSplit[0][i], "").length == 0) {
+                    else if (nameDetector.replace(defValSplit[0][i], "").length == 0) {
                         if (!nameSet) defName = defValSplit[0][i];
                         nameSet = true;
                     }
@@ -74,11 +86,50 @@ class Lexer {
                 x = something
                 x = y = something
             */
-            if (assignmentDetector.replace(line.trim().replace("\t", ""), "").length == 0) {
+            else if (assignmentDetector.replace(line.trim().replace("\t", ""), "").length == 0) {
                 var items = line.split("=");
                 var value = items[items.length - 1].trim();
                 var assignees = {items.pop(); items = items.map(item -> item.trim()); items;};
                 tokens.push(Assignment(l, value, assignees));
+            }
+
+            /* actions
+                action x() {}
+                action x() as Decimal {}
+                action x(p, a as String) {
+                    // Action body
+                }
+            */
+            else if (line.replace("\t", " ").trim().startsWith("action")) {
+                var trimmed = line.replace("\t", " ").trim();
+                var name = {var nameExtractor = ~/action +(\w+)/; nameExtractor.match(trimmed); nameExtractor.matched(1);};
+                var paramsBody = trimmed.substring(trimmed.indexOf("(") + 1, trimmed.lastIndexOf(")"));
+
+                // Extract optional type declaration by:
+                // - removing the name & params body from the string
+                // - removing the curly brackets, if found
+                // - extracting the word after `as`
+                var containsOptionalType = trimmed.substring(trimmed.lastIndexOf(")") + 1);
+                if (containsOptionalType.contains("{")) {
+                    containsOptionalType = containsOptionalType.substring(0, containsOptionalType.lastIndexOf("{"));
+                }
+                containsOptionalType = containsOptionalType.trim();
+
+                var type = if (containsOptionalType.contains("as")) {
+                    var typeExtractor = ~/as (\w+)/;
+                    typeExtractor.match(containsOptionalType);
+                    try {
+                        typeExtractor.matched(1);
+                    } catch (e) {
+                        null;
+                    }
+                } else null;
+
+                var body = Lexer.lexIntoComplex("\n".multiply(l) + Specifics.extractActionBody(Specifics.cropCode(code, l)));
+                trace(Specifics.extractActionBody(Specifics.cropCode(code, l)));
+                tokens.push(ActionCreationDetails(l, name, paramsBody, body, type));
+            } else {
+                tokens.push(GenericExpression(l, line.replace("\t", " ").trim()));
             }
             l++;
         }
@@ -90,7 +141,7 @@ class Lexer {
 
     public static final staticValueDetector:EReg = ~/[0-9\.]+|"[^"]+"|true|false|nothing/;
     public static final actionCallDetector:EReg = ~/[^ ]+\(.*\)/;
-    public static final definitionAccessDetector:EReg = ~/^[^0-9].*$/;
+    public static final definitionAccessDetector:EReg = ~/^[^0-9]\w*$/;
     public static final calculationDetection:EReg = ~/^(?:[0-9\.]+|"[^"]+"|true|false|nothing|[^ ]+\(.*\))+(?:[\+\-\/\*\^%÷\(\) ]+(?:[0-9\.]+|"[^"]+"|true|false|nothing|[^ ]+\(.*\)))*$/;
 
     /**
@@ -115,6 +166,18 @@ class Lexer {
                     for (assignee in assignees) {
                         tokens.push(DefinitionWrite(assignee, parsedValue));
                     }
+                }
+                case ActionCreationDetails(line, name, parameterBody, actionBody, type): {
+                    tokens.push(SetLine(line));
+                    var params = [for (p in parameterBody.split(",")) Specifics.extractParam(p)];
+                    var body = splitBlocks1(actionBody);
+                    tokens.push(ActionCreation(name, params, body, type));
+                }
+                case GenericExpression(line, exp): {
+                    tokens.push(SetLine(line));
+                    tokens.push(Specifics.complexValueIntoTokenLevel1(exp));
+                    trace(exp);
+                    trace(Specifics.complexValueIntoTokenLevel1(exp));
                 }
             }
         }
@@ -179,6 +242,14 @@ class Lexer {
             case DefinitionCreation(name, value, type): {
                 return '${prefixFA(prefix)}$t$d Definition Creation\n${getTree(StaticValue(name), prefix.copy(), level + 1, false)}${getTree(StaticValue(type), prefix.copy(), level + 1, false)}${getTree(value, prefix.copy(), level + 1, true)}';
             }
+            case ActionCreation(name, params, body, type): {
+                var title = '${prefixFA(prefix)}$t$d Action Creation\n';
+                title += getTree(StaticValue(name), prefix.copy(), level + 1, false);
+                title += getTree(StaticValue(type), prefix.copy(), level + 1, false);
+                title += getTree(Expression(params), pushIndex(prefix, level), level + 1, false);
+                title += getTree(Expression(body), prefix.copy(), level + 1, true);
+                return title;
+            }
             case DefinitionAccess(name): return '${prefixFA(prefix)}$t$d $name\n';
             case DefinitionWrite(assignee, value): {
                 return '${prefixFA(prefix)}$t$d Definition Write\n${getTree(StaticValue(assignee), prefix.copy(), level + 1, false)}${getTree(value, prefix.copy(), level + 1, true)}';
@@ -187,8 +258,8 @@ class Lexer {
                 return '${prefixFA(prefix)}$t$d $value\n';
             }
             case Expression(parts): {
-                if (parts.length == 0) return '${prefixFA(prefix)}$t$d <empty calculation>\n';
-                var strParts = ['${prefixFA(prefix)}$t$d Calculation\n'].concat([for (i in 0...parts.length - 1) getTree(parts[i], pushIndex(prefix, level), level + 1, false)]);
+                if (parts.length == 0) return '${prefixFA(prefix)}$t$d <empty expression>\n';
+                var strParts = ['${prefixFA(prefix)}$t$d Expression\n'].concat([for (i in 0...parts.length - 1) getTree(parts[i], pushIndex(prefix, level), level + 1, false)]);
                 strParts.push(getTree(parts[parts.length - 1], prefix.copy(), level + 1, true));
                 return strParts.join("");
             }

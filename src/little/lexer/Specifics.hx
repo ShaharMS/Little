@@ -12,6 +12,15 @@ using TextTools;
  */
 class Specifics {
     
+
+    public static function cropCode(code:String, line:Int):String {
+        for (_ in 0...line) {
+
+            code = code.substring(code.indexOf("\n") + 1);
+        }        
+        return code;
+    }
+
     /**
      * extracts
      * 
@@ -26,11 +35,12 @@ class Specifics {
         return Parameter("", "", Specifics.attributesIntoExpression(MathLexer.resetAttributesOrder(MathLexer.splitBlocks(MathLexer.getMathAttributes(string)))));
     }
 
+    public static var lastFunctionLineCount = 0;
     public static function extractActionBody(code:String) {
         var lines = code.split("\n"); // split the code into lines
         var stack = new Array<Int>(); // stack to keep track of curly brackets
         var functionBody = ""; // variable to store the function body
-        var inFunction = false; // flag to indicate if we are currently inside the function
+        var inFunction = true; // flag to indicate if we are currently inside the function
         
         for (line in lines) {
             var lineTrimmed = line.trim(); // remove leading and trailing whitespaces
@@ -53,16 +63,17 @@ class Specifics {
                                 
                 if (stack.length == 0 && inFunction) {
                     inFunction = false; // set flag to indicate we are now outside the function
-                    break; // exit the loop
+                    break;
                 }
             }
             
             if (inFunction) {
                 functionBody += line + "\n"; // add the line to the function body
             }
+            lastFunctionLineCount++;
         }
-        
-        return functionBody;
+        lastFunctionLineCount++;
+        return functionBody.substring(functionBody.indexOf("{") + 1);
     }
 
     /**

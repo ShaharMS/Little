@@ -2,14 +2,16 @@ package little.lexer;
 
 enum ComplexToken {
     DefinitionCreationDetails(line:Int, name:String, complexValue:String, ?type:String);
-    ActionCreationDetails(line:Int, name:String, parameterBody:String, actionBody:String, ?type:String);
+    ActionCreationDetails(line:Int, name:String, parameters:String, actionBody:Array<ComplexToken>, ?type:String);
     Assignment(line:Int, value:String, assignees:Array<String>);
+    GenericExpression(line:Int, exp:String);
 }
 
 enum TokenLevel1 {
     SetLine(line:Int);
 
     DefinitionCreation(name:String, value:TokenLevel1, ?type:String);   
+    ActionCreation(name:String, params:Array<TokenLevel1>, body:Array<TokenLevel1>, ?type:String);
     DefinitionAccess(name:String);
     DefinitionWrite(assignee:String, value:TokenLevel1);
     Sign(sign:String);
