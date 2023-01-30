@@ -2,7 +2,7 @@ package little.lexer;
 
 enum ComplexToken {
     DefinitionCreationDetails(line:Int, name:String, complexValue:String, ?type:String);
-    ActionCreationDetails(line:Int, name:String, parameterBody:String, actionBody:String, ?type:String)
+    ActionCreationDetails(line:Int, name:String, parameterBody:String, actionBody:String, ?type:String);
     Assignment(line:Int, value:String, assignees:Array<String>);
 }
 
