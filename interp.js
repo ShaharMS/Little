@@ -1845,7 +1845,7 @@ TextTools.replaceLast = function(string,replace,by) {
 	var result = string.substring(0,place) + by + string.substring(place + replace.length);
 	return result;
 };
-TextTools.replacefirst = function(string,replace,by) {
+TextTools.replaceFirst = function(string,replace,by) {
 	var place = string.indexOf(replace);
 	var result = string.substring(0,place) + by + string.substring(place + replace.length);
 	return result;
@@ -2572,10 +2572,10 @@ little_interpreter_features_Evaluator.calculateStringMath = function(expression)
 		var left = ast.left;
 		var right = ast.right;
 		if(ast.right == null && ast.sign == null || StringTools.replace(ast.sign," ","") == "+") {
-			var addition = TextTools.replaceLast(TextTools.replacefirst(left.value,"\"",""),"\"","");
+			var addition = TextTools.replaceLast(TextTools.replaceFirst(left.value,"\"",""),"\"","");
 			if(left.value == addition) {
 				try {
-					addition = TextTools.replaceLast(TextTools.replacefirst(Std.string(little_interpreter_Memory.getLoadedVar(left.value).get_basicValue()),"\"",""),"\"","");
+					addition = TextTools.replaceLast(TextTools.replaceFirst(Std.string(little_interpreter_Memory.getLoadedVar(left.value).get_basicValue()),"\"",""),"\"","");
 				} catch( _g ) {
 					little_Runtime.safeThrow(new little_exceptions_UnknownDefinition(left.value));
 					return result;

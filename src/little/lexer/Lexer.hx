@@ -175,9 +175,12 @@ class Lexer {
                 }
                 case GenericExpression(line, exp): {
                     tokens.push(SetLine(line));
-                    tokens.push(Specifics.complexValueIntoTokenLevel1(exp));
-                    trace(exp);
-                    trace(Specifics.complexValueIntoTokenLevel1(exp));
+                    // First case: return statements
+                    if (exp.startsWith("return")) {
+                        tokens.push(Return(Specifics.complexValueIntoTokenLevel1(exp.replaceFirst("return", "").trim())));
+                    } else { //Generic cases: action calls, lone values...
+                        tokens.push(Specifics.complexValueIntoTokenLevel1(exp));
+                    }
                 }
             }
         }
@@ -277,6 +280,7 @@ class Lexer {
                 strParts.push(getTree(params[params.length - 1], prefix.copy(), level + 1, true));
                 return strParts.join("");
             }
+            case Return(value): return return '${prefixFA(prefix)}$t$d Return\n${getTree(value, prefix.copy(), level + 1, true)}';
             case InvalidSyntax(s): return '${prefixFA(prefix)}$t$d INVALID SYNTAX: $s\n';
         }
         return "";

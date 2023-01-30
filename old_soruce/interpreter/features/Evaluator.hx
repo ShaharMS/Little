@@ -102,10 +102,10 @@ class Evaluator {
             var right = ast.right;
 
             if ((ast.right == null && ast.sign == null) || ast.sign.replace(" ", "") == "+") {
-                var addition = left.value.replacefirst("\"", "").replaceLast("\"", "");
+                var addition = left.value.replaceFirst("\"", "").replaceLast("\"", "");
                 if (left.value == addition) {
                     try {
-                        addition = Std.string(Memory.getLoadedVar(left.value).basicValue).replacefirst("\"", "").replaceLast("\"", "");
+                        addition = Std.string(Memory.getLoadedVar(left.value).basicValue).replaceFirst("\"", "").replaceLast("\"", "");
                     } catch (e) {
                         Runtime.safeThrow(new UnknownDefinition(left.value));
                         return result;
