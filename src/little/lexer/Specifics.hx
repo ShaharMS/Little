@@ -32,7 +32,7 @@ class Specifics {
      * @return Parameter()
      */
     public static function extractParam(string:String):TokenLevel1 {
-        return Parameter("", "", Specifics.attributesIntoExpression(MathLexer.resetAttributesOrder(MathLexer.splitBlocks(MathLexer.getMathAttributes(string)))));
+        return ActionCallParameter(Specifics.attributesIntoExpression(MathLexer.resetAttributesOrder(MathLexer.splitBlocks(MathLexer.getMathAttributes(string)))));
     }
 
     public static function extractParamForActionCreation(string:String) {
@@ -40,11 +40,28 @@ class Specifics {
 
         } else {
             if (string.contains("as")) {
-
+                var extractor = ~/(\w+) +as +(\w+)/;
+                extractor.match(string.replace("\t", " ").trim());
+                return Parameter(extractor.matched(1), extractor.matched(2), StaticValue("nothing"));
             } else {
-                return Parameter(string.replace("\t", " ").trim)
+                return Parameter(string.replace("\t", " ").trim(), "Everything", StaticValue("nothing"));
             }
         }
+
+        var valueNameSplit = string.split("="), name:String, type:String = "Everything", value:TokenLevel1 = StaticValue("nothing");
+        if (valueNameSplit[0].contains("as")) {
+            var extractor = ~/(\w+) +as +(\w+)/;
+            extractor.match(valueNameSplit[0].replace("\t", " ").trim());
+            name = extractor.matched(1);
+            type = extractor.matched(2);
+        } else {
+            name = valueNameSplit[0].replace("\t", " ").trim();
+        }
+        if (valueNameSplit.length == 1) 
+            return Parameter(name, type, value);
+        else
+            value = complexValueIntoTokenLevel1(valueNameSplit[1].replace("\t", " ").trim());
+        return Parameter(name, type, value);
     }
 
     public static var lastFunctionLineCount = 0;

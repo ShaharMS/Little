@@ -169,7 +169,7 @@ class Lexer {
                 }
                 case ActionCreationDetails(line, name, parameterBody, actionBody, type): {
                     tokens.push(SetLine(line));
-                    var params = [for (p in parameterBody.split(",")) Specifics.extractParam(p)];
+                    var params = [for (p in parameterBody.split(",")) Specifics.extractParamForActionCreation(p)];
                     var body = splitBlocks1(actionBody);
                     tokens.push(ActionCreation(name, params, body, type));
                 }
@@ -206,7 +206,7 @@ class Lexer {
         var unfilteredResult = getTree(Expression(ast), [], 0, true);
         var filtered = "";
         for (line in unfilteredResult.split("\n")) {
-            if (line == "└─── Calculation") continue;
+            if (line == "└─── Expression") continue;
             filtered += line.substring(spacingBetweenNodes - 1) + "\n";
         }
         return "\nAst\n" + filtered;
@@ -267,6 +267,9 @@ class Lexer {
                 if (name == "") name = "<unnamed>";
                 if (type == "") type = "<untyped>";
                 return '${prefixFA(prefix)}$t$d Parameter\n${getTree(StaticValue(name), prefix.copy(), level + 1, false)}${getTree(StaticValue(type), prefix.copy(), level + 1, false)}${getTree(value, prefix.copy(), level + 1, true)}';
+            }
+            case ActionCallParameter(value): {
+                return '${prefixFA(prefix)}$t$d Parameter\n${getTree(value, prefix.copy(), level + 1, true)}';
             }
             case ActionCall(name, params): {
                 var strParts = ['${prefixFA(prefix)}$t$d Action Call\n${getTree(StaticValue(name), prefix.copy(), level + 1, false)}'].concat([for (i in 0...params.length - 1) getTree(params[i], pushIndex(prefix, level), level + 1, false)]);

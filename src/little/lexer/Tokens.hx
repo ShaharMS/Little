@@ -18,6 +18,7 @@ enum TokenLevel1 {
     StaticValue(value:String);
     Expression(parts:Array<TokenLevel1>);
     Parameter(name:String, type:String, value:TokenLevel1);
+    ActionCallParameter(value:TokenLevel1);
     ActionCall(name:String, params:Array<TokenLevel1>);
     InvalidSyntax(string:String);
 
