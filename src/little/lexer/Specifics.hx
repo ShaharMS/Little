@@ -35,6 +35,18 @@ class Specifics {
         return Parameter("", "", Specifics.attributesIntoExpression(MathLexer.resetAttributesOrder(MathLexer.splitBlocks(MathLexer.getMathAttributes(string)))));
     }
 
+    public static function extractParamForActionCreation(string:String) {
+        if (string.contains("=")) {
+
+        } else {
+            if (string.contains("as")) {
+
+            } else {
+                return Parameter(string.replace("\t", " ").trim)
+            }
+        }
+    }
+
     public static var lastFunctionLineCount = 0;
     public static function extractActionBody(code:String) {
         var lines = code.split("\n"); // split the code into lines
