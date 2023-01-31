@@ -119,15 +119,16 @@ class Specifics {
             defValue = DefinitionAccess(complexValue);
         }
         else if (actionCallDetector.replace(complexValue, "").length == 0) {
-            var _actionParamSplit = complexValue.split("(");
+            var _actionParamSplit = complexValue.splitOnFirst("(");
             final actionName = _actionParamSplit[0];
 
             final stringifiedParams = _actionParamSplit[1]; // remove the `actionName(` part
-            stringifiedParams.substring(0, _actionParamSplit[1].length - 1); // remove the closing )
+            stringifiedParams.substring(0, _actionParamSplit[1].lastIndexOf(")")); // remove the closing )
 
             var params = stringifiedParams.split(",");
+            trace(params);
             params = params.map(item -> item.trim()); //removes whitespaces before/after each ,
-
+            trace(params);
             defValue = ActionCall(actionName, [for (p in params) Specifics.extractParam(p)]);
         } 
         else /* if (calculationDetection.replace(complexValue, "").length == 0)*/  { // Todo: is this the solution?

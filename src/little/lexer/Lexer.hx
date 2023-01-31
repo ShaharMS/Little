@@ -15,6 +15,7 @@ class Lexer {
     public static final nameDetector:EReg = ~/(\w+)/;
     public static final typeDetector:EReg = ~/(\w+)/;
     public static final assignmentDetector:EReg = ~/(?:\w|\.)+ *(?:=[^=]+)+/;
+    public static final conditionDetector:EReg = ~/  /;
 
     /**
     	Parses little source code into complex tokens. complex tokens don't handle logic, but they do handle flow.
@@ -140,7 +141,7 @@ class Lexer {
     
 
     public static final staticValueDetector:EReg = ~/[0-9\.]+|"[^"]+"|true|false|nothing/;
-    public static final actionCallDetector:EReg = ~/[^ ]+\(.*\)/;
+    public static final actionCallDetector:EReg = ~/\w+ *\(.*\)$/;
     public static final definitionAccessDetector:EReg = ~/^[^0-9]\w*$/;
     public static final calculationDetection:EReg = ~/^(?:[0-9\.]+|"[^"]+"|true|false|nothing|[^ ]+\(.*\))+(?:[\+\-\/\*\^%÷\(\) ]+(?:[0-9\.]+|"[^"]+"|true|false|nothing|[^ ]+\(.*\)))*$/;
 
