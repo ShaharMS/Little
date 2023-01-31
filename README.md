@@ -29,8 +29,8 @@ The language is very minimal by design, and only has a couple of reserved words:
 
  - **`define`** - used for defining variables.
  - **`action`** - used for defining functions.
- - **`create`** - used for instances.
+ - **`as`** - used for expression typing, for example: `define x as Number`
  - **`return`** used for returning action values.
  - **`nothing`** - the language's `null` value.
 
-The resereved word's translation might change a bit between different languages to make programming more intuitive, and to keep the same code structure.
+The resereved words' translations may change a bit across different languages to make programming more intuitive, and to keep the same code structure.
