@@ -4,6 +4,7 @@ import texter.general.math.MathLexer;
 import texter.general.math.MathAttribute;
 import little.lexer.Tokens.TokenLevel1;
 import little.lexer.Lexer.*;
+import little.Keywords.*;
 using StringTools;
 using TextTools;
 
@@ -40,17 +41,17 @@ class Specifics {
 
         } else {
             if (string.contains("as")) {
-                var extractor = ~/(\w+) +as +(\w+)/;
+                var extractor = new EReg('(\\w+) +$TYPE_CHECK_OR_CAST +(\\w+)', "");
                 extractor.match(string.replace("\t", " ").trim());
-                return Parameter(extractor.matched(1), extractor.matched(2), StaticValue("nothing"));
+                return Parameter(extractor.matched(1), extractor.matched(2), StaticValue(NULL_VALUE));
             } else {
-                return Parameter(string.replace("\t", " ").trim(), "Everything", StaticValue("nothing"));
+                return Parameter(string.replace("\t", " ").trim(), TYPE_DYNAMIC, StaticValue(NULL_VALUE));
             }
         }
 
-        var valueNameSplit = string.split("="), name:String, type:String = "Everything", value:TokenLevel1 = StaticValue("nothing");
-        if (valueNameSplit[0].contains("as")) {
-            var extractor = ~/(\w+) +as +(\w+)/;
+        var valueNameSplit = string.split("="), name:String, type:String = TYPE_DYNAMIC, value:TokenLevel1 = StaticValue(NULL_VALUE);
+        if (valueNameSplit[0].contains(TYPE_CHECK_OR_CAST)) {
+            var extractor = new EReg('(\\w+) +$TYPE_CHECK_OR_CAST +(\\w+)', "");
             extractor.match(valueNameSplit[0].replace("\t", " ").trim());
             name = extractor.matched(1);
             type = extractor.matched(2);
