@@ -7,7 +7,7 @@ using StringTools;
 class Main {
 
     static var code = '
-    define ohYeah as Decimal = 5 + (2 / 22).toString(2, 2) + someNumber
+    define ohYeah as Decimal = 5 + (2 / 22).toString(2, 2) + someNumber + (true || false)
     a = b = 5
     var.property = 5
     action x(a as Number = 5, b = 6, c as Decimal) as Decimal {
