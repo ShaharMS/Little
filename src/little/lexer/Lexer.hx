@@ -5,6 +5,7 @@ import texter.general.math.MathAttribute;
 import texter.general.math.MathLexer;
 import little.lexer.Tokens.TokenLevel1;
 import little.lexer.Tokens.ComplexToken;
+import little.Keywords.*;
 using StringTools;
 using TextTools;
 
@@ -51,21 +52,21 @@ class Lexer {
                 define x as Number = 5 + welcome
                 define x as Number = nothing
             */
-            if (line.replace("\t", " ").trim().startsWith("define")) {
+            if (line.replace("\t", " ").trim().startsWith(VARIABLE_DECLARATION)) {
                 var items = line.split(" ").filter(s -> s != "" && s != "define");
                 if (items.length == 0) throw "Definition name and value are missing at line " + l + ".";
                 if (items.length == 1) {
                     if (~/[0-9\.]/g.replace(items[0], "").length == 0) throw "Definition name must contain at least one non-numerical character"
-                    else tokens.push(DefinitionCreationDetails(l, items[0], "nothing", "Everything"));
+                    else tokens.push(DefinitionCreationDetails(l, items[0], NULL_VALUE, TYPE_DYNAMIC));
                     continue;
                 }
                 var _defAndVal = line.split("=");
-                var defValSplit = [_defAndVal[0].split(" ").filter(s -> s != "" && s != "define")];
-                var defName = "", val = "", type = "Everything";
+                var defValSplit = [_defAndVal[0].split(" ").filter(s -> s != "" && s != VARIABLE_DECLARATION)];
+                var defName = "", val = "", type = TYPE_DYNAMIC;
                 var nameSet = false,  typeSet = false;
                 for (i in 0...defValSplit[0].length) {
                     //name, type?
-                    if (defValSplit[0][i] == "as" && defValSplit[0][i + 1] != null && typeDetector.replace(defValSplit[0][i + 1], "").length == 0) {
+                    if (defValSplit[0][i] == TYPE_CHECK_OR_CAST && defValSplit[0][i + 1] != null && typeDetector.replace(defValSplit[0][i + 1], "").length == 0) {
                         if (!typeSet) type = defValSplit[0][i + 1];
                         typeSet = true;
                     }
@@ -75,7 +76,7 @@ class Lexer {
                     }
                 }
                 if (_defAndVal.length == 1) {
-                    val = "nothing";
+                    val = NULL_VALUE;
                     tokens.push(DefinitionCreationDetails(l, defName, val, type));
                 } else {
                     val = _defAndVal[1].trim();
@@ -101,9 +102,9 @@ class Lexer {
                     // Action body
                 }
             */
-            else if (line.replace("\t", " ").trim().startsWith("action")) {
+            else if (line.replace("\t", " ").trim().startsWith(FUNCTION_DECLARATION)) {
                 var trimmed = line.replace("\t", " ").trim();
-                var name = {var nameExtractor = ~/action +(\w+)/; nameExtractor.match(trimmed); nameExtractor.matched(1);};
+                var name = {var nameExtractor = new EReg(FUNCTION_DECLARATION + " +(\\w+)", ""); nameExtractor.match(trimmed); nameExtractor.matched(1);};
                 var paramsBody = trimmed.substring(trimmed.indexOf("(") + 1, trimmed.lastIndexOf(")"));
 
                 // Extract optional type declaration by:
@@ -116,8 +117,8 @@ class Lexer {
                 }
                 containsOptionalType = containsOptionalType.trim();
 
-                var type = if (containsOptionalType.contains("as")) {
-                    var typeExtractor = ~/as (\w+)/;
+                var type = if (containsOptionalType.contains(TYPE_CHECK_OR_CAST)) {
+                    var typeExtractor = new EReg(TYPE_CHECK_OR_CAST + " +(\\w+)", "");
                     typeExtractor.match(containsOptionalType);
                     try {
                         typeExtractor.matched(1);
@@ -139,12 +140,11 @@ class Lexer {
     }
 
     
-
-    public static final staticValueDetector:EReg = ~/[0-9\.]+|"[^"]+"|true|false|nothing/;
+    static var staticValueString = '[0-9\\.]+|"[^"]+"|$TRUE_VALUE|$FALSE_VALUE|$NULL_VALUE';
+    public static final staticValueDetector:EReg = new EReg(staticValueString, "");
     public static final actionCallDetector:EReg = ~/\w+ *\(.*\)$/;
     public static final definitionAccessDetector:EReg = ~/^[^0-9]\w*$/;
-    public static final calculationDetection:EReg = ~/^(?:[0-9\.]+|"[^"]+"|true|false|nothing|[^ ]+\(.*\))+(?:[\+\-\/\*\^%÷\(\) ]+(?:[0-9\.]+|"[^"]+"|true|false|nothing|[^ ]+\(.*\)))*$/;
-
+    public static final calculationDetection:EReg = new EReg('^(?:$staticValueString|[^ ]+\\(.*\\))+(?:[\\+\\-\\/\\*\\^%÷\\(\\) ]+(?:$staticValueString|[^ ]+\\(.*\\)))*$', "");
     /**
     	Expects output from `lexIntoComplex()`, and returns a "simplified" version of that output.
 
@@ -177,7 +177,7 @@ class Lexer {
                 case GenericExpression(line, exp): {
                     tokens.push(SetLine(line));
                     // First case: return statements
-                    if (exp.startsWith("return")) {
+                    if (exp.startsWith(FUNCTION_RETURN)) {
                         tokens.push(Return(Specifics.complexValueIntoTokenLevel1(exp.replaceFirst("return", "").trim())));
                     } else { //Generic cases: action calls, lone values...
                         tokens.push(Specifics.complexValueIntoTokenLevel1(exp));
