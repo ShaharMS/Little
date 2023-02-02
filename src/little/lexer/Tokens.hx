@@ -4,6 +4,7 @@ enum ComplexToken {
     DefinitionCreationDetails(line:Int, name:String, complexValue:String, ?type:String);
     ActionCreationDetails(line:Int, name:String, parameters:String, actionBody:Array<ComplexToken>, ?type:String);
     Assignment(line:Int, value:String, assignees:Array<String>);
+    ConditionStatement(line:Int, type:String, conditionExpression:String, conditionBody:Array<ComplexToken>);
     GenericExpression(line:Int, exp:String);
 }
 
@@ -22,5 +23,5 @@ enum TokenLevel1 {
     ActionCall(name:String, params:Array<TokenLevel1>);
     Return(value:TokenLevel1);
     InvalidSyntax(string:String);
-
+    Condition(type:String, condition:TokenLevel1, body:Array<TokenLevel1>);
 }
