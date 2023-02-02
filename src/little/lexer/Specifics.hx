@@ -36,11 +36,17 @@ class Specifics {
         return ActionCallParameter(Specifics.attributesIntoExpression(MathLexer.resetAttributesOrder(MathLexer.splitBlocks(MathLexer.getMathAttributes(string)))));
     }
 
-    public static function extractParamForActionCreation(string:String) {
+    public static function extractParamForActionCreation(string:String):TokenLevel1 {
         if (string.contains("=")) {
-
+            var __nameValSplit = string.splitOnFirst("=");
+            var param = extractParamForActionCreation(__nameValSplit[0]);
+            var value = complexValueIntoTokenLevel1(__nameValSplit[1]);
+            switch param {
+                case Parameter(name, type, _): return Parameter(name, type, value);
+                case _: throw "That Shouldn't Happen...";
+            }
         } else {
-            if (string.contains("as")) {
+            if (string.contains(TYPE_CHECK_OR_CAST)) {
                 var extractor = new EReg('(\\w+) +$TYPE_CHECK_OR_CAST +(\\w+)', "");
                 extractor.match(string.replace("\t", " ").trim());
                 return Parameter(extractor.matched(1), extractor.matched(2), StaticValue(NULL_VALUE));
