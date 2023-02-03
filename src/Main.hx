@@ -13,10 +13,11 @@ class Main {
     action x(a as Number = 5, b = 6, c as Decimal) as Decimal {
         c = 5
         define d = 3
-        if (d < 3) {
-            return x(c, d, e)
-        }
+        return x(c, d, e)
         return 0
+    }
+    if (a == b) {
+        a = b = a - 1
     }
     a.c = 55 * 3';
 

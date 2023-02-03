@@ -16,7 +16,7 @@ class Lexer {
 	public static final nameDetector:EReg = ~/(\w+)/;
 	public static final typeDetector:EReg = ~/(\w+)/;
 	public static final assignmentDetector:EReg = ~/(?:\w|\.)+ *(?:=[^=]+)+/;
-	public static final conditionDetector:EReg = ~/^(\w+) *\(([^\n]+)\) *(?:\{{0,})$/;
+	public static final conditionDetector:EReg = ~/^(\w+) *\(([^\n]+)\) *(?:\{{0,})/;
 
 	/**
 		Parses little source code into complex tokens. complex tokens don't handle logic, but they do handle flow.
@@ -30,16 +30,8 @@ class Lexer {
 		var tokens:Array<ComplexToken> = [];
 
 		var l = 1;
-		for (line in code.split("\n")) {
-			if (!disableSkips) {
-				// If an action has been declared recently, skip this line:
-				if (Specifics.lastFunctionLineCount != 0) {
-					l++;
-					Specifics.lastFunctionLineCount--;
-					continue;
-				}
-			}
-
+		while (l < code.split("\n").length + 1) {
+			var line = code.split("\n")[l - 1];
 			// Empty lines
 			if (line.replace("\t", " ").trim() == "") {
 				l++;
@@ -98,19 +90,18 @@ class Lexer {
 			else if (assignmentDetector.replace(line.trim().replace("\t", " "), "").length == 0) {
 				var items = line.split("=");
 				var value = items[items.length - 1].trim();
-				var assignees = {
-					items.pop();
-					items = items.map(item -> item.trim());
-					items;
-				};
+				var assignees = {	items.pop();	items = items.map(item -> item.trim());	items;};
 				tokens.push(Assignment(l, value, assignees));
+
 			} else if (conditionDetector.replace(line.replace("\t", " ").trim(), "").length == 0) {
 				conditionDetector.match(line.replace("\t", " ").trim());
 				var cWord = conditionDetector.matched(1),
 					condition = conditionDetector.matched(2);
 				var rawBody = Specifics.extractActionBody(Specifics.cropCode(code, l));
-				var body = Lexer.lexIntoComplex("\n".multiply(l) + rawBody, true);
+				var body = Lexer.lexIntoComplex("\n".multiply(l) + rawBody.body, true);
 				tokens.push(ConditionStatement(l, cWord, condition, body));
+				l += rawBody.lineCount;
+
 			}
 
 			/* actions
@@ -150,9 +141,9 @@ class Lexer {
 				} else null;
 
 				var rawBody = Specifics.extractActionBody(Specifics.cropCode(code, l));
-				var linesToSkip = Specifics.lastFunctionLineCount;
-				var body = Lexer.lexIntoComplex("\n".multiply(l) + rawBody, true);
+				var body = Lexer.lexIntoComplex("\n".multiply(l) + rawBody.body, true);
 				tokens.push(ActionCreationDetails(l, name, paramsBody, body, type));
+				l += rawBody.lineCount;
 			} else {
 				tokens.push(GenericExpression(l, line.replace("\t", " ").trim()));
 			}

@@ -71,8 +71,8 @@ class Specifics {
         return Parameter(name, type, value);
     }
 
-    public static var lastFunctionLineCount = 0;
-    public static function extractActionBody(code:String) {
+    public static function extractActionBody(code:String):{body:String, lineCount:Int} {
+        var lastFunctionLineCount = 0;
         var lines = code.split("\n"); // split the code into lines
         var stack = new Array<Int>(); // stack to keep track of curly brackets
         var functionBody = ""; // variable to store the function body
@@ -109,7 +109,7 @@ class Specifics {
             lastFunctionLineCount++;
         }
         lastFunctionLineCount++;
-        return functionBody.substring(functionBody.indexOf("{") + 1);
+        return {body: functionBody.substring(functionBody.indexOf("{") + 1),lineCount: lastFunctionLineCount};
     }
 
     /**
