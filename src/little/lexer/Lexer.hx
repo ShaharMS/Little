@@ -93,10 +93,13 @@ class Lexer {
 				var assignees = {	items.pop();	items = items.map(item -> item.trim());	items;};
 				tokens.push(Assignment(l, value, assignees));
 
-			} else if (conditionDetector.replace(line.replace("\t", " ").trim(), "").length == 0) {
+			} else if (conditionDetector.replace(line.replace("\t", " ").trim(), "").length == 0 && 
+				[for (condition in CONDITION_TYPES) line.replace("\t", " ").trim().startsWith(condition)].contains(true)) {
+					
 				conditionDetector.match(line.replace("\t", " ").trim());
 				var cWord = conditionDetector.matched(1),
 					condition = conditionDetector.matched(2);
+
 				var rawBody = Specifics.extractActionBody(Specifics.cropCode(code, l));
 				var body = Lexer.lexIntoComplex("\n".multiply(l) + rawBody.body, true);
 				tokens.push(ConditionStatement(l, cWord, condition, body));
@@ -276,11 +279,11 @@ class Lexer {
 					title += getTree(Expression(body), prefix.copy(), level + 1, true);
 					return title;
 				}
-			case Condition(type, condition, body):
+			case Condition(type, exp, body):
 				{
-					var title = '${prefixFA(prefix)}$t$d Action Creation\n';
+					var title = '${prefixFA(prefix)}$t$d Condition\n';
 					title += getTree(StaticValue(type), prefix.copy(), level + 1, false);
-					title += getTree(condition, pushIndex(prefix, level), level + 1, false);
+					title += getTree(exp, pushIndex(prefix, level), level + 1, false);
 					title += getTree(Expression(body), prefix.copy(), level + 1, true);
 					return title;
 				}

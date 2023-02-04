@@ -14,6 +14,7 @@ class Keywords {
     public static var TYPE_BOOLEAN:String = "Boolean";
     public static var TYPE_STRING:String = "Characters";
 
+    public static var CONDITION_TYPES:Array<String> = ["if", "while", "whenever", "for"];
 
     
 }

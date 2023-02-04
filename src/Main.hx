@@ -17,7 +17,10 @@ class Main {
         return 0
     }
     if (a == b) {
-        a = b = a - 1
+        if (b * 2 == a * 2) {
+            a = b = a - 1
+            x(a, b, 0)
+        }
     }
     a.c = 55 * 3';
 
