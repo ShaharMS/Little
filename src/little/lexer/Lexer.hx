@@ -1,5 +1,7 @@
 package little.lexer;
 
+import haxe.iterators.MapKeyValueIterator;
+import haxe.ds.StringMap;
 import haxe.extern.EitherType;
 import texter.general.math.MathAttribute;
 import texter.general.math.MathLexer;
@@ -17,6 +19,58 @@ class Lexer {
 	public static final typeDetector:EReg = ~/(\w+)/;
 	public static final assignmentDetector:EReg = ~/(?:\w|\.)+ *(?:=[^=]+)+/;
 	public static final conditionDetector:EReg = ~/^(\w+) *\(([^\n]+)\) *(?:\{{0,})/;
+
+
+	public static var blockMap:Map<String, String> = new Map();
+	static var id = 0;
+	/**
+		Replace code blocks with unique signs, to more easily parse code blocks
+	**/
+	public static function signCodeBlocks(code:String):String {
+        var lines = code.split("\n"); // split the code into lines
+        var stack = new Array<Int>(); // stack to keep track of curly brackets
+        var functionBody = ""; // variable to store the function body
+        var inFunction = true; // flag to indicate if we are currently inside the function
+        
+		if (!code.contains("{")) return code;
+
+        for (line in lines) {
+            var lineTrimmed = line.trim(); // remove leading and trailing whitespaces
+            
+            // check for open curly bracket
+            if (lineTrimmed.countOccurrencesOf("{") != 0) {
+                for (_ in 0...lineTrimmed.countOccurrencesOf("{")) {
+					stack.push(1);
+				} // add 1 to the stack
+                if (!inFunction) {
+                    inFunction = true; // set flag to indicate we are now inside the function
+                }
+            }
+            
+            // check for closed curly bracket
+            if (lineTrimmed.countOccurrencesOf("}") != 0) {
+                for (_ in 0...lineTrimmed.countOccurrencesOf("}")) {
+                    if (stack.length > 0) {
+                        stack.pop(); // remove 1 from the stack
+                    }
+                } 
+                                
+                if (stack.length == 0 && inFunction) {
+                    inFunction = false; // set flag to indicate we are now outside the function
+                    break;
+                }
+            }
+            
+            if (inFunction) {
+                functionBody += line + "\n"; // add the line to the function body
+            }
+        }
+		if (Math.random() > 0.9)trace(functionBody);
+		id++;
+        blockMap['~$id~'] = signCodeBlocks(functionBody);
+        return signCodeBlocks(code.replaceFirst(functionBody, '~$id~'));
+	}
+
 
 	/**
 		Parses little source code into complex tokens. complex tokens don't handle logic, but they do handle flow.
@@ -95,7 +149,7 @@ class Lexer {
 
 			} else if (conditionDetector.replace(line.replace("\t", " ").trim(), "").length == 0 && 
 				[for (condition in CONDITION_TYPES) line.replace("\t", " ").trim().startsWith(condition)].contains(true)) {
-					
+
 				conditionDetector.match(line.replace("\t", " ").trim());
 				var cWord = conditionDetector.matched(1),
 					condition = conditionDetector.matched(2);
@@ -116,11 +170,7 @@ class Lexer {
 			 */
 			else if (line.replace("\t", " ").trim().startsWith(FUNCTION_DECLARATION)) {
 				var trimmed = line.replace("\t", " ").trim();
-				var name = {
-					var nameExtractor = new EReg(FUNCTION_DECLARATION + " +(\\w+)", "");
-					nameExtractor.match(trimmed);
-					nameExtractor.matched(1);
-				};
+				var name = {var nameExtractor = new EReg(FUNCTION_DECLARATION + " +(\\w+)", ""); nameExtractor.match(trimmed); nameExtractor.matched(1);}
 				var paramsBody = trimmed.substring(trimmed.indexOf("(") + 1, trimmed.lastIndexOf(")"));
 
 				// Extract optional type declaration by:

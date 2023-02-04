@@ -6,7 +6,7 @@ import little.lexer.Lexer;
 using StringTools;
 class Main {
 
-    static var code = '
+    static var code = /*'
     define ohYeah as Decimal = 5 + (2 / 22).toString(2, 2) + someNumber + (true || false)
     a = b = 5
     var.property = 5
@@ -22,11 +22,21 @@ class Main {
             x(a, b, 0)
         }
     }
-    a.c = 55 * 3';
+    a.c = 55 * 3'*/
+    'if (x) {
+        a = b
+        if (y) {
+            d = 7
+        }
+        e = 2
+    }'
+    ;
 
     static function main() {
         trace(Lexer.prettyPrintAst(Lexer.splitBlocks1(Lexer.lexIntoComplex(code)), 5));
         // trace(Specifics.extractActionBody(Specifics.cropCode("a = b = 5\nvar.property = 5\naction x(a, b) as Decimal {\n\n\n\nc = 5\ndefine d = 3\nx(c, d)\n}\na = 5\na = 5", 2)));
         // trace(Lexer.prettyPrintAst(Lexer.splitBlocks1(Lexer.lexIntoComplex("if (x == 5) {\na = 5\n}\nfor (i from 0 to 5 every 3)\nwhile(a <= 5)"))));
+        trace(Lexer.signCodeBlocks(code));
+        trace(Lexer.blockMap);
     }
 }
