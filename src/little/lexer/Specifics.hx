@@ -51,7 +51,7 @@ class Specifics {
                 extractor.match(string.replace("\t", " ").trim());
                 return Parameter(extractor.matched(1), extractor.matched(2), StaticValue(NULL_VALUE));
             } else {
-                return Parameter(string.replace("\t", " ").trim(), TYPE_DYNAMIC, StaticValue(NULL_VALUE));
+                return Parameter(string.replace("\t", " ").trim(), null, StaticValue(NULL_VALUE));
             }
         }
 
@@ -123,6 +123,7 @@ class Specifics {
             defValue = StaticValue(complexValue);
         }
         else if (definitionAccessDetector.replace(complexValue, "").length == 0) {
+            trace('"$complexValue"');
             defValue = DefinitionAccess(complexValue);
         }
         else if (actionCallDetector.replace(complexValue, "").length == 0) {
@@ -223,7 +224,9 @@ class Specifics {
                         i++;
                     }
                     if (!tokenPushed) {
-                        finalTokens.push(DefinitionAccess(name));
+                        // We have to fish for boolean values, since they get caught with variables using texter.
+                        if (["true", "false", "nothing"].contains(name)) finalTokens.push(StaticValue(name));
+                        else finalTokens.push(DefinitionAccess(name));
                     }
                     continue;
                 }

@@ -1,10 +1,5 @@
 package little.lexer;
 
-import haxe.iterators.MapKeyValueIterator;
-import haxe.ds.StringMap;
-import haxe.extern.EitherType;
-import texter.general.math.MathAttribute;
-import texter.general.math.MathLexer;
 import little.lexer.Tokens.TokenLevel1;
 import little.lexer.Tokens.ComplexToken;
 import little.Keywords.*;
@@ -156,7 +151,7 @@ class Lexer {
 		return tokens;
 	}
 
-	static var staticValueString = '[0-9\\.]+|"[^"]+"|$TRUE_VALUE|$FALSE_VALUE|$NULL_VALUE';
+	static var staticValueString = '[0-9\\.]+|"[^"]*"|$TRUE_VALUE|$FALSE_VALUE|$NULL_VALUE';
 	public static final staticValueDetector:EReg = new EReg(staticValueString, "");
 	public static final actionCallDetector:EReg = ~/\w+ *\(.*\)$/;
 	public static final definitionAccessDetector:EReg = ~/^[^0-9]\w*$/;
