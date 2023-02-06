@@ -20,58 +20,6 @@ class Lexer {
 	public static final assignmentDetector:EReg = ~/(?:\w|\.)+ *(?:=[^=]+)+/;
 	public static final conditionDetector:EReg = ~/^(\w+) *\(([^\n]+)\) *(?:\{{0,})/;
 
-
-	public static var blockMap:Map<String, String> = new Map();
-	static var id = 0;
-	/**
-		Replace code blocks with unique signs, to more easily parse code blocks
-	**/
-	public static function signCodeBlocks(code:String):String {
-        var lines = code.split("\n"); // split the code into lines
-        var stack = new Array<Int>(); // stack to keep track of curly brackets
-        var functionBody = ""; // variable to store the function body
-        var inFunction = true; // flag to indicate if we are currently inside the function
-        
-		if (!code.contains("{")) return code;
-
-        for (line in lines) {
-            var lineTrimmed = line.trim(); // remove leading and trailing whitespaces
-            
-            // check for open curly bracket
-            if (lineTrimmed.countOccurrencesOf("{") != 0) {
-                for (_ in 0...lineTrimmed.countOccurrencesOf("{")) {
-					stack.push(1);
-				} // add 1 to the stack
-                if (!inFunction) {
-                    inFunction = true; // set flag to indicate we are now inside the function
-                }
-            }
-            
-            // check for closed curly bracket
-            if (lineTrimmed.countOccurrencesOf("}") != 0) {
-                for (_ in 0...lineTrimmed.countOccurrencesOf("}")) {
-                    if (stack.length > 0) {
-                        stack.pop(); // remove 1 from the stack
-                    }
-                } 
-                                
-                if (stack.length == 0 && inFunction) {
-                    inFunction = false; // set flag to indicate we are now outside the function
-                    break;
-                }
-            }
-            
-            if (inFunction) {
-                functionBody += line + "\n"; // add the line to the function body
-            }
-        }
-		if (Math.random() > 0.9)trace(functionBody);
-		id++;
-        blockMap['~$id~'] = signCodeBlocks(functionBody);
-        return signCodeBlocks(code.replaceFirst(functionBody, '~$id~'));
-	}
-
-
 	/**
 		Parses little source code into complex tokens. complex tokens don't handle logic, but they do handle flow.
 	**/
@@ -112,7 +60,7 @@ class Lexer {
 				}
 				var _defAndVal = line.split("=");
 				var defValSplit = [_defAndVal[0].split(" ").filter(s -> s != "" && s != VARIABLE_DECLARATION)];
-				var defName = "", val = "", type = TYPE_DYNAMIC;
+				var defName = "", val = "", type = null;
 				var nameSet = false, typeSet = false;
 				for (i in 0...defValSplit[0].length) {
 					// name, type?
@@ -193,8 +141,10 @@ class Lexer {
 					}
 				} else null;
 
-				var rawBody = Specifics.extractActionBody(Specifics.cropCode(code, l));
+				var rawBody = Specifics.extractActionBody(Specifics.cropCode(code, l - 1));
 				var body = Lexer.lexIntoComplex("\n".multiply(l) + rawBody.body, true);
+				trace(rawBody.body);
+				trace(Specifics.cropCode(code, l));
 				tokens.push(ActionCreationDetails(l, name, paramsBody, body, type));
 				l += rawBody.lineCount;
 			} else {
