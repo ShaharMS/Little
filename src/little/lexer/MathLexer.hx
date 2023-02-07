@@ -4,8 +4,6 @@ using TextTools;
 using StringTools;
 using texter.general.CharTools;
 
-import texter.general.math.MathAttribute;
-
 class MathLexer
 {
 	public static var numbers:String = '0123456789';
@@ -39,9 +37,11 @@ class MathLexer
                     var nextChar = text.charAt(i);
                     if (nextChar == "\"") break;
                     string += nextChar;
+					trace(string);
                     i++;
                 }
-                attributes.push(Number(orgI, string));
+                attributes.push(Characters(orgI, string));
+				if (i == text.length) break;
             } 
 			else if (numbers.contains(char))
 			{
@@ -66,7 +66,7 @@ class MathLexer
 
             i++;
 		}
-
+		trace(attributes);
 		return attributes;
 	}
 
@@ -123,6 +123,8 @@ class MathLexer
 					copy[i] = Variable(i, letter);
 				case Number(index, letter):
 					copy[i] = Number(i, letter);
+				case Characters(index, letter):
+					copy[i] = Characters(i, letter);
 				case Sign(index, letter):
 					copy[i] = Sign(i, letter);
 				case StartClosure(index, letter):
@@ -201,7 +203,7 @@ class MathLexer
 		{
 			switch item
 			{
-				case FunctionDefinition(index, letter) | Variable(index, letter) | Number(index, letter) | Sign(index, letter) | StartClosure(index, letter) | EndClosure(index, letter):
+				case FunctionDefinition(index, letter) | Variable(index, letter) | Number(index, letter) | Characters(index, letter) | Sign(index, letter) | StartClosure(index, letter) | EndClosure(index, letter):
 					a[index] = letter;
 				case Division(index, upperHandSide, lowerHandSide):
 					a[index] = '${extractTextFromAttributes([upperHandSide])}/${extractTextFromAttributes([lowerHandSide])}';
@@ -232,6 +234,7 @@ class MathLexer
 	{
 		// first, merge numbers
 		var numbersMerged = attributes.copy();
+		trace(numbersMerged);
 		attributes.push(Null(-1));
 		var currentNum = "";
 		var startIndex = -1;
@@ -324,4 +327,18 @@ class MathLexer
 
 		return divisionsCondensed.filter(a -> !Type.enumEq(a, Null(-1)));
 	}
+}
+
+enum MathAttribute
+{
+	FunctionDefinition(index:Int, letter:String);
+	Division(index:Int, upperHandSide:MathAttribute, lowerHandSide:MathAttribute);
+	Variable(index:Int, letter:String);
+	Number(index:Int, letter:String);
+	Characters(index:Int, letter:String);
+	Sign(index:Int, letter:String);
+	StartClosure(index:Int, letter:String);
+	EndClosure(index:Int, letter:String);
+	Closure(index:Int, letter:String, content:Array<MathAttribute>);
+	Null(index:Int); // fill in removed characters with this
 }

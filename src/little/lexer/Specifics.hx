@@ -1,6 +1,6 @@
 package little.lexer;
 
-import texter.general.math.MathAttribute;
+import little.lexer.MathLexer.MathAttribute;
 import little.lexer.Tokens.TokenLevel1;
 import little.lexer.Lexer.*;
 import little.Keywords.*;
@@ -230,6 +230,7 @@ class Specifics {
                     continue;
                 }
                 case Number(index, letter): finalTokens.push(StaticValue(letter));
+                case Characters(index, letter): finalTokens.push(StaticValue('"$letter"'));
                 case Sign(index, letter): finalTokens.push(Sign(letter));
                 case Closure(index, letter, content): finalTokens.push(attributesIntoExpression(content));
                 case _:
