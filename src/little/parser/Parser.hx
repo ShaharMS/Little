@@ -15,7 +15,7 @@ class Parser {
     public static final numberDetector:EReg = ~/([0-9])/;
     public static final decimalDetector:EReg = ~/([0-9\.])/;
 	public static final booleanDetector:EReg = ~/true|false/;
-    public static final stringDetector:EReg = ~/"(.*)"/;
+    public static final stringDetector:EReg = ~/"[^"]*"/;
 
     /**
     	evauate expressions' types, and assign them.
