@@ -1,6 +1,5 @@
 package little.lexer;
 
-import texter.general.math.MathLexer;
 import texter.general.math.MathAttribute;
 import little.lexer.Tokens.TokenLevel1;
 import little.lexer.Lexer.*;
@@ -139,10 +138,10 @@ class Specifics {
             trace(params);
             defValue = ActionCall(actionName, [for (p in params) Specifics.extractParam(p)]);
         } 
-        else /* if (calculationDetection.replace(complexValue, "").length == 0)*/  { // Todo: is this the solution?
+        else {
             // A bit more complicated, since any item in a calculation may be any of the above, even another calculation!
             // Luckily, texter has the MathLexer class, which should help as extract the wanted info.
-            
+            // todo: #7 strings within expressions are parsed incorrectly
             defValue = Specifics.attributesIntoExpression(MathLexer.resetAttributesOrder(MathLexer.splitBlocks(MathLexer.getMathAttributes(complexValue))));                                    
         }
 
