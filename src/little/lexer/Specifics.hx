@@ -142,7 +142,7 @@ class Specifics {
             // A bit more complicated, since any item in a calculation may be any of the above, even another calculation!
             // Luckily, texter has the MathLexer class, which should help as extract the wanted info.
             // todo: #7 strings within expressions are parsed incorrectly
-            defValue = Specifics.attributesIntoExpression(MathLexer.resetAttributesOrder(MathLexer.splitBlocks(MathLexer.getMathAttributes(complexValue))));                                    
+            defValue = Specifics.attributesIntoExpression(MathLexer.lexCompletely(complexValue));                                    
         }
 
         return defValue;
@@ -188,7 +188,7 @@ class Specifics {
             }
         }
 
-        calcTokens = merged;
+        calcTokens = MathLexer.resetAttributesOrder(merged);
 
         var i = 0;
         while (i < calcTokens.length) {
@@ -205,7 +205,10 @@ class Specifics {
                         nextAttribute = calcTokens[i];
                         switch nextAttribute {
                             case Variable(index, letter) | Number(index, letter): name += letter;
-                            case Sign(index, letter): break;
+                            case Sign(index, letter) | Characters(index, letter): {
+                                i++;
+                                break;
+                            }
                             case Closure(index, letter, content): {
                                 // its a function
 

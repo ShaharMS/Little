@@ -12,10 +12,14 @@ class MathLexer
 
 	public static var endClosures:String = '}])';
 
+	public static function lexCompletely(exp:String):Array<MathAttribute> {
+		return MathLexer.resetAttributesOrder(MathLexer.splitBlocks(MathLexer.getMathAttributes(exp)));
+	}
+
 	/**
 	 * Returns a simplified array of mathematical attributes. to further
 	 * process this array, you can use the rest of the functions in this class.
-	 * @param text the text to be lexed and "trransformed" into an attribute array
+	 * @param text the text to be lexed and "transformed" into an attribute array
 	 * @return Array<MathAttribute>
 	 */
 	public static function getMathAttributes(text:String):Array<MathAttribute>
@@ -32,15 +36,12 @@ class MathLexer
             if (char == "\"") {
                 var orgI = i;
                 i++;
-                var string = "";
                 while (i < text.length) {
                     var nextChar = text.charAt(i);
                     if (nextChar == "\"") break;
-                    string += nextChar;
-					trace(string);
+					attributes.push(Characters(i, nextChar));
                     i++;
                 }
-                attributes.push(Characters(orgI, string));
 				if (i == text.length) break;
             } 
 			else if (numbers.contains(char))
@@ -152,7 +153,7 @@ class MathLexer
 	/**
 	 * Removes completely duplicate elements (elements with the same arguments & type). The first element of the similar
 	 * ones will be the only one "saved"
-	 * @param attributes the array that mioght contain duplicates
+	 * @param attributes the array that might contain duplicates
 	 * @return Array<MathAttribute>
 	 */
 	public static function removeDuplicates(attributes:Array<MathAttribute>):Array<MathAttribute>
@@ -166,7 +167,7 @@ class MathLexer
 	}
 
 	/**
-	 * Removes whitespaces from a geven array of mathematical attributes. Whitespaces shouldnt appear in the first place.
+	 * Removes whitespaces from a given array of mathematical attributes. Whitespaces shouldnt appear in the first place.
 	 * if you need to call this, you might have done something wrong, but this function can still save you from yourself :)
 	 * @param attributes the attributes that may ot may not contain whitespace ones
 	 * @return an array empties of whitespace elements
@@ -235,9 +236,9 @@ class MathLexer
 		// first, merge numbers
 		var numbersMerged = attributes.copy();
 		trace(numbersMerged);
-		attributes.push(Null(-1));
 		var currentNum = "";
 		var startIndex = -1;
+		var offset = 0;
 		for (a in attributes)
 		{
 			switch a
@@ -253,18 +254,65 @@ class MathLexer
 						if (currentNum.length != 0)
 						{
 							// set the other items to `Null(-1)` to be removed later.
-							for (i in startIndex...startIndex + currentNum.length)
+							for (i in startIndex - offset...startIndex + currentNum.length - offset)
 							{
 								numbersMerged[i] = Null(-1);
 							}
 							numbersMerged[startIndex] = Number(startIndex, currentNum);
+							offset += currentNum.length;
 							currentNum = "";
 							startIndex = -1;
 						}
 					}
 			}
 		}
-		numbersMerged = numbersMerged.filter(a -> !Type.enumEq(a, Null(-1)));
+		// If the expression ended wit the number
+		if (currentNum.length != 0)
+		{
+			// set the other items to `Null(-1)` to be removed later.
+			for (i in startIndex - offset...startIndex + currentNum.length - offset)
+			{
+				numbersMerged[i] = Null(-1);
+			}
+			numbersMerged[startIndex] = Number(startIndex, currentNum);
+			offset += currentNum.length;
+			currentNum = "";
+			startIndex = -1;
+		}
+		trace(numbersMerged);
+		numbersMerged = numbersMerged.filter(a -> a != null && !Type.enumEq(a, Null(-1)));
+
+		var charactersMerged = numbersMerged.copy();
+		trace(charactersMerged);
+		var currentChars = "";
+		var startIndex = -1;
+		for (a in numbersMerged)
+		{
+			switch a
+			{
+				case Characters(index, letter):
+					{
+						if (startIndex == -1)
+							startIndex = index;
+						currentChars += letter;
+					}
+				default:
+					{
+						if (currentChars.length != 0)
+						{
+							// set the other items to `Null(-1)` to be removed later.
+							for (i in startIndex...startIndex + currentChars.length)
+							{
+								charactersMerged[i] = Null(-1);
+							}
+							charactersMerged[startIndex] = Characters(startIndex, currentChars);
+							currentChars = "";
+							startIndex = -1;
+						}
+					}
+			}
+		}
+		charactersMerged = charactersMerged.filter(a -> !Type.enumEq(a, Null(-1)));
 
 		// TODO: #8 More efficient implementation of parenthesis grouping in SplitBlocks
 		// Closure grouping - iterative scan from the begining of the array for Start & End Closure elements
