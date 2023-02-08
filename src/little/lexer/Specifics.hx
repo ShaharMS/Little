@@ -2,7 +2,6 @@ package little.lexer;
 
 import little.expressions.ExpTokens;
 import little.expressions.Expressions;
-import little.lexer.MathLexer.MathAttribute;
 import little.lexer.Tokens.TokenLevel1;
 import little.lexer.Lexer.*;
 import little.Keywords.*;
