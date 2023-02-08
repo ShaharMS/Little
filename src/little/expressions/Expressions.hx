@@ -78,6 +78,12 @@ class Expressions {
             }
             i++;
         }
+        mergedVariables = mergedVariables.map(e -> {
+            if (Type.enumEq(e, Variable("true"))) return ExpTokens.Value("true");
+            else if (Type.enumEq(e, Variable("false"))) return ExpTokens.Value("false");
+            else if (Type.enumEq(e, Variable("nothing"))) return ExpTokens.Value("nothing");
+            else return e;
+        });
 
         var mergedChars:Array<ExpTokens> = [];
         i = 0;
