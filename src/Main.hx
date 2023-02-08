@@ -1,5 +1,6 @@
 package;
 
+import little.expressions.Expressions;
 import little.lexer.Specifics;
 import texter.general.math.MathLexer;
 import little.lexer.Lexer;
@@ -28,7 +29,7 @@ class Main {
         a = b
         if (y) {
             d = 7
-            define x as Decimal = 3
+            define x as Decimal = 343.5 + 5 * 3
 
         }
         e = 2
@@ -42,12 +43,13 @@ class Main {
     ;
 
     static function main() {
-        // trace(Lexer.prettyPrintAst(Lexer.splitBlocks1(Lexer.lexIntoComplex(code)), 5));
+        trace(Lexer.prettyPrintAst(Lexer.splitBlocks1(Lexer.lexIntoComplex(code)), 5));
         // trace(Specifics.extractActionBody(Specifics.cropCode("a = b = 5\nvar.property = 5\naction x(a, b) as Decimal {\n\n\n\nc = 5\ndefine d = 3\nx(c, d)\n}\na = 5\na = 5", 2)));
         // trace(Lexer.prettyPrintAst(Lexer.splitBlocks1(Lexer.lexIntoComplex("if (x == 5) {\na = 5\n}\nfor (i from 0 to 5 every 3)\nwhile(a <= 5)"))));
-        var exp = Lexer.splitBlocks1(Lexer.lexIntoComplex("3 - 5 + 5 -false - false * \"ggg\""));
-        exp.shift();
-        trace(exp);
-        trace(little.parser.Specifics.evaluateExpressionType(Expression(exp)));
+        // var exp = Lexer.splitBlocks1(Lexer.lexIntoComplex("3 - 5 + 5 -false - false * \"ggg\""));
+        // exp.shift();
+        // trace(exp);
+        // trace(little.parser.Specifics.evaluateExpressionType(Expression(exp)));
+        // Expressions.lex('555 + 3.toString(16) + (hey + "hey there!")');
     }
 }

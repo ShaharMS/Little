@@ -1,5 +1,7 @@
 package little.lexer;
 
+import little.expressions.ExpTokens;
+import little.expressions.Expressions;
 import little.lexer.MathLexer.MathAttribute;
 import little.lexer.Tokens.TokenLevel1;
 import little.lexer.Lexer.*;
@@ -32,7 +34,7 @@ class Specifics {
      * @return Parameter()
      */
     public static function extractParam(string:String):TokenLevel1 {
-        return ActionCallParameter(Specifics.attributesIntoExpression(MathLexer.resetAttributesOrder(MathLexer.splitBlocks(MathLexer.getMathAttributes(string)))));
+        return ActionCallParameter(Specifics.attributesIntoExpression(Expressions.lex(string)));
     }
 
     public static function extractParamForActionCreation(string:String):TokenLevel1 {
@@ -142,7 +144,7 @@ class Specifics {
             // A bit more complicated, since any item in a calculation may be any of the above, even another calculation!
             // Luckily, texter has the MathLexer class, which should help as extract the wanted info.
             // todo: #7 strings within expressions are parsed incorrectly
-            defValue = Specifics.attributesIntoExpression(MathLexer.resetAttributesOrder(MathLexer.splitBlocks(MathLexer.getMathAttributes(complexValue))));                                    
+            defValue = Specifics.attributesIntoExpression(Expressions.lex(complexValue));                                    
         }
 
         return defValue;
@@ -152,92 +154,19 @@ class Specifics {
     /**
      * Converts texter math tokens to little ones.
      */
-    public static function attributesIntoExpression(calcTokens:Array<MathAttribute>):TokenLevel1 {
+    public static function attributesIntoExpression(calcTokens:Array<ExpTokens>):TokenLevel1 {
         var finalTokens:Array<TokenLevel1> = [];
 
-        calcTokens.push(Sign(-1, "+")); // Todo: not a great solution, i have a bug somewhere here.
-
-        // Before conversion, merge separate, following vars into a single variable
-        var merged:Array<MathAttribute> = [];
-        var i = 0;
-        while (i < calcTokens.length) {
-            var attribute = calcTokens[i];
-            switch attribute {
-                
-                case Variable(index, letter): {
-                    var finalName = letter;
-                    i++;
-                    while (i < calcTokens.length) {
-                        var nextAttribute = calcTokens[i];
-                        switch nextAttribute {
-                            default: {
-                                merged.push(Variable(index, finalName));
-                                break;
-                            }
-                            case Variable(_, letter): {
-                                finalName += letter;
-                                i++;
-                            }
-                        }
-                    }
-                }
-                case _: {
-                    merged.push(attribute);
-                    i++;
-                }
+        for (token in calcTokens) {
+            switch token {
+                case Variable(value): finalTokens.push(DefinitionAccess(value));
+                case Value(value): finalTokens.push(StaticValue(value));
+                case Characters(value): finalTokens.push(StaticValue('"$value"'));
+                case Sign(value): finalTokens.push(Sign(value));
+                case Call(value, content): finalTokens.push(ActionCall(value, [attributesIntoExpression(content)]));
+                case Closure(content): finalTokens.push(attributesIntoExpression(content));
             }
         }
-
-        calcTokens = merged;
-
-        var i = 0;
-        while (i < calcTokens.length) {
-            var attribute = calcTokens[i];
-            switch attribute {
-                case Division(index, upperHandSide, lowerHandSide): finalTokens.push(Expression([attributesIntoExpression([upperHandSide]), Sign("/"), attributesIntoExpression([lowerHandSide])]));
-                case Variable(index, letter): { // More details, separate actions and definitions & merge numbers into them if needed
-                    var iSave = i; //save the i value if needed
-                    var name = letter;
-                    i++;
-                    var nextAttribute = calcTokens[i];
-                    var tokenPushed = false;
-                    while (i < calcTokens.length) {
-                        nextAttribute = calcTokens[i];
-                        switch nextAttribute {
-                            case Variable(index, letter) | Number(index, letter): name += letter;
-                            case Sign(index, letter): break;
-                            case Closure(index, letter, content): {
-                                // its a function
-
-                                var actParams = MathLexer.extractTextFromAttributes(content).split(",");
-                                finalTokens.push(ActionCall(name, [for (param in actParams) Specifics.extractParam(param)]));
-                                i++;
-                                tokenPushed = true;
-                                break;
-                            }
-                            case _: {
-                                i++;
-                                break;
-                            }
-                        }
-                        i++;
-                    }
-                    if (!tokenPushed) {
-                        // We have to fish for boolean values, since they get caught with variables using texter.
-                        if (["true", "false", "nothing"].contains(name)) finalTokens.push(StaticValue(name));
-                        else finalTokens.push(DefinitionAccess(name));
-                    }
-                    continue;
-                }
-                case Number(index, letter): finalTokens.push(StaticValue(letter));
-                case Characters(index, letter): finalTokens.push(StaticValue('"$letter"'));
-                case Sign(index, letter): finalTokens.push(Sign(letter));
-                case Closure(index, letter, content): finalTokens.push(attributesIntoExpression(content));
-                case _:
-            }
-            i++;
-        }
-        finalTokens.pop();
 
         return Expression(finalTokens);
     }
