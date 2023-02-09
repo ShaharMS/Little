@@ -1,7 +1,7 @@
 package little.parser;
 
 import sys.net.Address;
-import little.lexer.Tokens.TokenLevel1;
+import little.lexer.Tokens.LexerTokens;
 import little.parser.Tokens.ParserTokens;
 import little.parser.Specifics.*;
 import little.Keywords.*;
@@ -22,7 +22,7 @@ class Parser {
     /**
     	evauate expressions' types, and assign them.
     **/
-    public static function typeTokens(tokens:Array<TokenLevel1>):Array<ParserTokens> {
+    public static function typeTokens(tokens:Array<LexerTokens>):Array<ParserTokens> {
         var parserTokens = [];
 
         for (token in tokens) {
@@ -169,6 +169,9 @@ class Parser {
 			case Return(value, type): {
                 var addon = type != "" ? ' ($type)' : "";
                 return '${prefixFA(prefix)}$t$d Return$addon\n${getTree(value, prefix.copy(), level + 1, true)}';
+            }
+            case Error(title, reason): {
+                return '${prefixFA(prefix)}$t$d Error - $title:\n${getTree(StaticValue(reason, ""), prefix.copy(), level + 1, true)}';
             }
 			case InvalidSyntax(s):
 				return '${prefixFA(prefix)}$t$d INVALID SYNTAX: $s\n';

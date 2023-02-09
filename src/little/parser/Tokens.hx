@@ -16,6 +16,7 @@ enum ParserTokens {
     ActionCallParameter(value:ParserTokens, type:String);
     ActionCall(name:String, params:Array<ParserTokens>, returnType:String);
     Return(value:ParserTokens, type:String);
+    Error(title:String, reason:String);
     InvalidSyntax(string:String);
     Condition(type:String, condition:ParserTokens, body:Array<ParserTokens>);
 }

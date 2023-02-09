@@ -2,7 +2,7 @@ package little.lexer;
 
 import little.expressions.ExpTokens;
 import little.expressions.Expressions;
-import little.lexer.Tokens.TokenLevel1;
+import little.lexer.Tokens.LexerTokens;
 import little.lexer.Lexer.*;
 import little.Keywords.*;
 using StringTools;
@@ -32,15 +32,15 @@ class Specifics {
      * @param string param string
      * @return Parameter()
      */
-    public static function extractParam(string:String):TokenLevel1 {
+    public static function extractParam(string:String):LexerTokens {
         return ActionCallParameter(Specifics.attributesIntoExpression(Expressions.lex(string)));
     }
 
-    public static function extractParamForActionCreation(string:String):TokenLevel1 {
+    public static function extractParamForActionCreation(string:String):LexerTokens {
         if (string.contains("=")) {
             var __nameValSplit = string.splitOnFirst("=");
             var param = extractParamForActionCreation(__nameValSplit[0]);
-            var value = complexValueIntoTokenLevel1(__nameValSplit[1]);
+            var value = complexValueIntoLexerTokens(__nameValSplit[1]);
             switch param {
                 case Parameter(name, type, _): return Parameter(name, type, value);
                 case _: throw "That Shouldn't Happen...";
@@ -55,7 +55,7 @@ class Specifics {
             }
         }
 
-        var valueNameSplit = string.split("="), name:String, type:String = TYPE_DYNAMIC, value:TokenLevel1 = StaticValue(NULL_VALUE);
+        var valueNameSplit = string.split("="), name:String, type:String = TYPE_DYNAMIC, value:LexerTokens = StaticValue(NULL_VALUE);
         if (valueNameSplit[0].contains(TYPE_CHECK_OR_CAST)) {
             var extractor = new EReg('(\\w+) +$TYPE_CHECK_OR_CAST +(\\w+)', "");
             extractor.match(valueNameSplit[0].replace("\t", " ").trim());
@@ -67,7 +67,7 @@ class Specifics {
         if (valueNameSplit.length == 1) 
             return Parameter(name, type, value);
         else
-            value = complexValueIntoTokenLevel1(valueNameSplit[1].replace("\t", " ").trim());
+            value = complexValueIntoLexerTokens(valueNameSplit[1].replace("\t", " ").trim());
         return Parameter(name, type, value);
     }
 
@@ -115,8 +115,8 @@ class Specifics {
     /**
      * Converts a `complexValue` into a level 1 token
      */
-    public static function complexValueIntoTokenLevel1(complexValue:String) {
-        var defValue:TokenLevel1 = InvalidSyntax(complexValue);
+    public static function complexValueIntoLexerTokens(complexValue:String) {
+        var defValue:LexerTokens = InvalidSyntax(complexValue);
 
         // Now, figure out if defValue should be an ActionCall, StaticValue, DefinitionAccess or Calculation.
         if (staticValueDetector.replace(complexValue, "").length == 0) {
@@ -153,8 +153,8 @@ class Specifics {
     /**
      * Converts texter math tokens to little ones.
      */
-    public static function attributesIntoExpression(calcTokens:Array<ExpTokens>):TokenLevel1 {
-        var finalTokens:Array<TokenLevel1> = [];
+    public static function attributesIntoExpression(calcTokens:Array<ExpTokens>):LexerTokens {
+        var finalTokens:Array<LexerTokens> = [];
 
         for (token in calcTokens) {
             switch token {

@@ -10,20 +10,20 @@ enum ComplexToken {
     GenericExpression(line:Int, exp:String);
 }
 
-enum TokenLevel1 {
+enum LexerTokens {
     SetLine(line:Int);
 
-    DefinitionCreation(name:String, value:TokenLevel1, ?type:String);   
-    ActionCreation(name:String, params:Array<TokenLevel1>, body:Array<TokenLevel1>, ?type:String);
+    DefinitionCreation(name:String, value:LexerTokens, ?type:String);   
+    ActionCreation(name:String, params:Array<LexerTokens>, body:Array<LexerTokens>, ?type:String);
     DefinitionAccess(name:String);
-    DefinitionWrite(assignee:String, value:TokenLevel1);
+    DefinitionWrite(assignee:String, value:LexerTokens);
     Sign(sign:String);
     StaticValue(value:String);
-    Expression(parts:Array<TokenLevel1>);
-    Parameter(name:String, ?type:String, value:TokenLevel1);
-    ActionCallParameter(value:TokenLevel1);
-    ActionCall(name:String, params:Array<TokenLevel1>);
-    Return(value:TokenLevel1);
+    Expression(parts:Array<LexerTokens>);
+    Parameter(name:String, ?type:String, value:LexerTokens);
+    ActionCallParameter(value:LexerTokens);
+    ActionCall(name:String, params:Array<LexerTokens>);
+    Return(value:LexerTokens);
     InvalidSyntax(string:String);
-    Condition(type:String, condition:TokenLevel1, body:Array<TokenLevel1>);
+    Condition(type:String, condition:LexerTokens, body:Array<LexerTokens>);
 }

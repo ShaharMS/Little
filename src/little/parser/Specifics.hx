@@ -2,7 +2,7 @@ package little.parser;
 
 import little.parser.Parser.*;
 import little.parser.Tokens.ParserTokens;
-import little.lexer.Tokens.TokenLevel1;
+import little.lexer.Tokens.LexerTokens;
 import little.Keywords.*;
 
 using StringTools;
@@ -14,7 +14,7 @@ class Specifics {
     	Notice: The difference between TYPE_VOID and TYPE_UNKNOWN is that VOID is not a typeable expression, and thus an invalid value, 
         while UNKNOWN is a typeable expresion, of which the type is not yet known, and will be "discovered" at runtime.
     **/
-    public static function evaluateExpressionType(exp:TokenLevel1):String {
+    public static function evaluateExpressionType(exp:LexerTokens):String {
         switch exp {
             case Sign(sign): return TYPE_VOID;
             case StaticValue(value): {
