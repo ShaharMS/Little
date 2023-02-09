@@ -4,6 +4,7 @@ class Keywords {
     public static var VARIABLE_DECLARATION:String = "define";
     public static var FUNCTION_DECLARATION:String = "action";
     public static var TYPE_CHECK_OR_CAST:String = "as";
+    public static var RAISE_ERROR:String = "stop";
     public static var FUNCTION_RETURN:String = "return";
     public static var NULL_VALUE:String = "nothing";
     public static var TRUE_VALUE:String = "true";

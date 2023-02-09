@@ -1,5 +1,6 @@
 package little.interpreter;
 
+import haxe.extern.EitherType;
 import little.parser.Tokens.ParserTokens;
 
 /**
@@ -34,4 +35,9 @@ class Runtime {
     **/
     public static var onTokenInterpreted:ParserTokens -> Void = (t) -> return;
 
+    public static var stdout:String;
+
+    public static function throwError(error:EitherType<ParserTokens, String>) {
+        var token = if (error is String) StaticValue(error, "") else error;
+    }
 }
