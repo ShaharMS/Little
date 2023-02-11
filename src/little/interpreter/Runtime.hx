@@ -2,7 +2,7 @@ package little.interpreter;
 
 import little.parser.Parser;
 import haxe.extern.EitherType;
-import little.parser.Tokens.ParserTokens;
+import little.parser.Tokens.UnInfoedParserTokens;
 
 using StringTools;
 using TextTools;
@@ -38,7 +38,7 @@ class Runtime {
 
         After each iteration, this method gets called, passing the token we've just parsed as an argument.
     **/
-    public static var onTokenInterpreted:ParserTokens -> Void;
+    public static var onTokenInterpreted:UnInfoedParserTokens -> Void;
 
     /**
     	Dispatches right after an error is thrown, and printed to the console.
@@ -56,13 +56,13 @@ class Runtime {
     /**
     	Contains every function call interpreted during the program's runtime.
     **/
-    public static var callStack:Array<ParserTokens> = [];
+    public static var callStack:Array<UnInfoedParserTokens> = [];
 
     /**
     	Stops the execution of the program, and prints an error message to the console. Dispatches `onErrorThrown`.
     	@param error 
     **/
-    public static function throwError(error:EitherType<ParserTokens, String>) {
+    public static function throwError(error:EitherType<UnInfoedParserTokens, String>) {
         var token = if (error is String) StaticValue(error, "") else error;
 
         callStack.push(token);

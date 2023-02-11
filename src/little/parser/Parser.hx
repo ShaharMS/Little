@@ -1,8 +1,9 @@
 package little.parser;
 
+import little.parser.Tokens.ParserTokens;
 import sys.net.Address;
 import little.lexer.Tokens.LexerTokens;
-import little.parser.Tokens.ParserTokens;
+import little.parser.Tokens.UnInfoedParserTokens;
 import little.parser.Specifics.*;
 import little.Keywords.*;
 
@@ -22,11 +23,11 @@ class Parser {
     /**
     	evauate expressions' types, and assign them.
     **/
-    public static function typeTokens(tokens:Array<LexerTokens>):Array<ParserTokens> {
-        var parserTokens = [];
+    public static function typeTokens(tokens:Array<LexerTokens>):Array<UnInfoedParserTokens> {
+        var unInfoedParserTokens = [];
 
         for (token in tokens) {
-            parserTokens.push(switch token {
+            unInfoedParserTokens.push(switch token {
                 case DefinitionCreation(name, value, type): DefinitionCreation(name, typeTokens([value])[0], type);
                 case ActionCreation(name, params, body, type): ActionCreation(name, typeTokens(params), typeTokens(body), type);
                 case DefinitionAccess(name): DefinitionAccess(name);
@@ -44,10 +45,35 @@ class Parser {
             });
         }
 
-        return parserTokens;
+        return unInfoedParserTokens;
     }
 
-    public static function prettyPrintAst(ast:Array<ParserTokens>, ?spacingBetweenNodes:Int = 6) {
+	public static function assignNesting(tokens:Array<UnInfoedParserTokens>, ?currentNestingLevel:Int = 0):Array<ParserTokens> {
+		return tokens.map(token -> convertSingleToken(token, 0));
+	}
+
+	public static function convertSingleToken(t:UnInfoedParserTokens, nesting:Int):ParserTokens {
+		return switch t {
+			case SetLine(line): SetLine(line, nesting);
+			case DefinitionCreation(name, value, type): DefinitionCreation(name, convertSingleToken(value, nesting), type, nesting);
+			case ActionCreation(name, params, body, type): ActionCreation(name, [for (param in params) convertSingleToken(param, nesting + 1)], [for (value in body) convertSingleToken(value, nesting + 1)], type, nesting);
+			case DefinitionAccess(name): DefinitionAccess(name, nesting);
+			case DefinitionWrite(assignee, value, valueType): DefinitionWrite(assignee, convertSingleToken(value, nesting), valueType, nesting);
+			case Sign(sign): Sign(sign, nesting);
+			case StaticValue(value, type): StaticValue(value, type, nesting);
+			case Expression(parts, type): Expression([for (value in parts) convertSingleToken(value, nesting + 1)], type, nesting);
+			case Parameter(name, type, value): Parameter(name, type, convertSingleToken(value, nesting), nesting);
+			case ActionCallParameter(value, type): ActionCallParameter(convertSingleToken(value, nesting), type, nesting);
+			case ActionCall(name, params, returnType): ActionCall(name, [for (param in params) convertSingleToken(param, nesting + 1)], returnType, nesting);
+			case Return(value, type): Return(convertSingleToken(value, nesting), type, nesting);
+			case Error(title, reason): Error(title, reason, nesting);
+			case InvalidSyntax(string): InvalidSyntax(string, nesting);
+			case Condition(type, c, body): Condition(type, convertSingleToken(c, nesting + 1), [for (value in body) convertSingleToken(value, nesting + 1)], nesting);
+		} 
+	}
+
+
+    public static function prettyPrintAst(ast:Array<UnInfoedParserTokens>, ?spacingBetweenNodes:Int = 6) {
 		s = " ".multiply(spacingBetweenNodes);
 		var unfilteredResult = getTree(Expression(ast, ""), [], 0, true);
 		var filtered = "";
@@ -80,7 +106,7 @@ class Parser {
 	static var s = "";
 	static var l = 0;
 
-	static function getTree(root:ParserTokens, prefix:Array<Int>, level:Int, last:Bool):String {
+	static function getTree(root:UnInfoedParserTokens, prefix:Array<Int>, level:Int, last:Bool):String {
 		l = level;
 		var t = if (last) "└" else "├";
 		var c = "├";

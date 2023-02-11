@@ -1,7 +1,7 @@
 package little.parser;
 
 import little.parser.Parser.*;
-import little.parser.Tokens.ParserTokens;
+import little.parser.Tokens.UnInfoedParserTokens;
 import little.lexer.Tokens.LexerTokens;
 import little.Keywords.*;
 
