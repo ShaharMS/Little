@@ -22,19 +22,19 @@ enum UnInfoedParserTokens {
 }
 
 enum ParserTokens {
-    SetLine(line:Int, nestingLevel:Int);
-    DefinitionCreation(name:String, value:ParserTokens, type:String, nestingLevel:Int);
-    ActionCreation(name:String, params:Array<ParserTokens>, body:Array<ParserTokens>, type:String, nestingLevel:Int);
-    DefinitionAccess(name:String, nestingLevel:Int);
-    DefinitionWrite(assignee:String, value:ParserTokens, valueType:String, nestingLevel:Int);
-    Sign(sign:String, nestingLevel:Int);
-    StaticValue(value:String, type:String, nestingLevel:Int);
-    Expression(parts:Array<ParserTokens>, type:String, nestingLevel:Int);
-    Parameter(name:String, type:String, value:ParserTokens, nestingLevel:Int);
-    ActionCallParameter(value:ParserTokens, type:String, nestingLevel:Int);
-    ActionCall(name:String, params:Array<ParserTokens>, returnType:String, nestingLevel:Int);
-    Return(value:ParserTokens, type:String, nestingLevel:Int);
-    Error(title:String, reason:String, nestingLevel:Int);
-    InvalidSyntax(string:String, nestingLevel:Int);
-    Condition(type:String, condition:ParserTokens, body:Array<ParserTokens>, nestingLevel:Int);
+    SetLine(line:Int, nestingLevel:Int, ?module:String);
+    DefinitionCreation(name:String, value:ParserTokens, type:String, nestingLevel:Int, ?module:String);
+    ActionCreation(name:String, params:Array<ParserTokens>, body:Array<ParserTokens>, type:String, nestingLevel:Int, ?module:String);
+    DefinitionAccess(name:String, nestingLevel:Int, ?module:String);
+    DefinitionWrite(assignee:String, value:ParserTokens, valueType:String, nestingLevel:Int, ?module:String);
+    Sign(sign:String, nestingLevel:Int, ?module:String);
+    StaticValue(value:String, type:String, nestingLevel:Int, ?module:String);
+    Expression(parts:Array<ParserTokens>, type:String, nestingLevel:Int, ?module:String);
+    Parameter(name:String, type:String, value:ParserTokens, nestingLevel:Int, ?module:String);
+    ActionCallParameter(value:ParserTokens, type:String, nestingLevel:Int, ?module:String);
+    ActionCall(name:String, params:Array<ParserTokens>, returnType:String, nestingLevel:Int, ?module:String);
+    Return(value:ParserTokens, type:String, nestingLevel:Int, ?module:String);
+    Error(title:String, reason:String, nestingLevel:Int, ?module:String);
+    InvalidSyntax(string:String, nestingLevel:Int, ?module:String);
+    Condition(type:String, condition:ParserTokens, body:Array<ParserTokens>, nestingLevel:Int, ?module:String);
 }

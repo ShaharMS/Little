@@ -2,6 +2,7 @@ package little.expressions;
 
 import texter.general.CharTools;
 import texter.general.CharTools.*;
+import little.Keywords.*;
 
 class Expressions {
     
@@ -79,9 +80,9 @@ class Expressions {
             i++;
         }
         mergedVariables = mergedVariables.map(e -> {
-            if (Type.enumEq(e, Variable("true"))) return ExpTokens.Value("true");
-            else if (Type.enumEq(e, Variable("false"))) return ExpTokens.Value("false");
-            else if (Type.enumEq(e, Variable("nothing"))) return ExpTokens.Value("nothing");
+            if (Type.enumEq(e, Variable(TRUE_VALUE))) return ExpTokens.Value(TRUE_VALUE);
+            else if (Type.enumEq(e, Variable(FALSE_VALUE))) return ExpTokens.Value(FALSE_VALUE);
+            else if (Type.enumEq(e, Variable(NULL_VALUE))) return ExpTokens.Value(NULL_VALUE);
             else return e;
         });
 

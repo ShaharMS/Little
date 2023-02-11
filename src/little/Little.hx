@@ -1,8 +1,10 @@
 package little;
 
-import eval.luv.Loop.RunMode;
+import little.lexer.Lexer;
+import little.parser.Parser;
 import little.interpreter.Interpreter;
 import little.interpreter.Runtime;
+import little.Keywords.*;
 
 @:access(little.interpreter.Interpreter)
 @:access(little.interpreter.Runtime)
@@ -14,11 +16,13 @@ class Little {
         Loads little code, without clearing memory. useful if you want to 
         use multiple files/want to preload code for the end user to use.
 
+        Notice - after calling this method, event listeners will dispatch (i.e. they're not exclusive to the `run()` method).
+
         @param code a string containing code written in Little.
         @param name a name to call the module, so it would be easily identifiable
     **/
     public static function loadModule(code:String, name:String) {
-        
+        Interpreter.interpret(Parser.signWithModule(Parser.assignNesting(Parser.typeTokens(Lexer.splitBlocks1(Lexer.lexIntoComplex(code)))), name));
     }
 
     /**
@@ -41,7 +45,8 @@ class Little {
         Runtime.line = 0;
         Runtime.callStack = [];
         Runtime.stdout = "";
-        
+        Interpreter.interpret(Parser.signWithModule(Parser.assignNesting(Parser.typeTokens(Lexer.splitBlocks1(Lexer.lexIntoComplex(code)))), MAIN_MODULE_NAME));
+
     }
 
 }
