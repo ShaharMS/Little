@@ -21,7 +21,7 @@ class Parser {
 	public static final stringDetector:EReg = ~/"[^"]*"/;
 
 	/**
-		evauate expressions' types, and assign them.
+		evaluate expressions' types, and assign them.
 	**/
 	public static function typeTokens(tokens:Array<LexerTokens>):Array<UnInfoedParserTokens> {
 		var unInfoedParserTokens = [];

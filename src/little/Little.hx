@@ -13,7 +13,7 @@ class Little {
     public static var runtime(default, null) = Runtime;
 
     /**
-        Loads little code, without clearing memory. useful if you want to 
+        Loads little code, without clearing memory, stdout & the callstack. useful if you want to 
         use multiple files/want to preload code for the end user to use.
 
         Notice - after calling this method, event listeners will dispatch (i.e. they're not exclusive to the `run()` method).
@@ -22,6 +22,8 @@ class Little {
         @param name a name to call the module, so it would be easily identifiable
     **/
     public static function loadModule(code:String, name:String) {
+        Interpreter.errorThrown = false;
+        Runtime.line = 0;
         Interpreter.interpret(Parser.signWithModule(Parser.assignNesting(Parser.typeTokens(Lexer.splitBlocks1(Lexer.lexIntoComplex(code)))), name));
     }
 
@@ -36,7 +38,9 @@ class Little {
         make sure to set `currentKeywordSet` before calling this. If you want to use the default keywords with some changes,
         you can make some changes to the properties in `little.Keywords` instead.
 
-        To register different types of "elements", such as definitions (variables), actions (functions), or even entire classes, you can use the various methods inside `Little.runtime`
+        To register different types of "elements", such as definitions (variables), actions (functions), or even entire classes, you can use the various registration methods inside this class.
+        
+        If you want to add event listeners, to certain code interpretation events, check out the stats and listeners inside `Little.runtime`.
         
         @param code 
     **/
@@ -46,7 +50,17 @@ class Little {
         Runtime.callStack = [];
         Runtime.stdout = "";
         Interpreter.interpret(Parser.signWithModule(Parser.assignNesting(Parser.typeTokens(Lexer.splitBlocks1(Lexer.lexIntoComplex(code)))), MAIN_MODULE_NAME));
-
     }
 
+    public static function registerVariable() {
+        
+    }
+
+    public static function registerFunction() {
+        
+    }
+
+    public static function registerClass() {
+        
+    }
 }
