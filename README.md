@@ -4,11 +4,11 @@
 
 **Little** is a simple programming language that can be used to teach children how to program.
 
-Because of the minimal and simple nature of this language, you don't have to write it's source code specifically in English.
+The language is designed to be as international as possible - names of variables & actions allow non-english characters, and keywords can be changed to anything, including phrases in other languages (as long as they don't contain any spaces)
 
-The language itself is cross-platform, as it can compile to haxe. it also bundles its own interpreter.
+The language itself is cross-platform, as it's programmed in haxe.
 
-### Why does that exist?
+### Why does this programming language exist?
 
 Other than teaching, the language has a lot of benefits, some I already mentioned before:
 
