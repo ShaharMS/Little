@@ -44,11 +44,12 @@ class Lexer {
 			 */
 			if (line.replace("\t", " ").trim().startsWith(VARIABLE_DECLARATION)) {
 				var items = line.split(" ").filter(s -> s != "" && s != "define");
-				if (items.length == 0)
-					throw "Definition name and value are missing at line " + l + ".";
+				if (items.length == 0) {
+					l++;
+				}
 				if (items.length == 1) {
 					if (~/[0-9\.]/g.replace(items[0], "").length == 0)
-						throw "Definition name must contain at least one non-numerical character"
+						l++;
 					else
 						tokens.push(DefinitionCreationDetails(l, items[0], NULL_VALUE, TYPE_DYNAMIC));
 					continue;
@@ -138,8 +139,6 @@ class Lexer {
 
 				var rawBody = Specifics.extractActionBody(Specifics.cropCode(code, l - 1));
 				var body = Lexer.lexIntoComplex("\n".multiply(l) + rawBody.body, true);
-				trace(rawBody.body);
-				trace(Specifics.cropCode(code, l));
 				tokens.push(ActionCreationDetails(l, name, paramsBody, body, type));
 				l += rawBody.lineCount;
 			} else {

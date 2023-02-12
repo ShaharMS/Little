@@ -58,10 +58,10 @@ class Little {
         
     }
 
-    public static function registerFunction(actionName:String, ?actionModuleName:String, expectedParameters:Array<RegisteredParameter>, callback:Array<RegisteredParameter> -> Void) {
-        var moduleName = actionModuleName == null ? REGISTERED_MODULE_NAME : actionModuleName;
-        var parameters = [for (param in expectedParameters) Parameter(param.name, param.type, StaticValue(param.defaultValue), 1, moduleName)];
-    }
+    // public static function registerFunction(actionName:String, ?actionModuleName:String, expectedParameters:Array<RegisteredParameter>, callback:Array<RegisteredParameter> -> Void) {
+    //     var moduleName = actionModuleName == null ? REGISTERED_MODULE_NAME : actionModuleName;
+    //     var parameters = [for (param in expectedParameters) Parameter(param.name, param.type, StaticValue(param.defaultValue), 1, moduleName)];
+    // }
 
     public static function registerClass() {
         

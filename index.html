@@ -4,36 +4,22 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="./interp.js"></script>
     <title>Document</title>
 </head>
 <body>
-    <div>
-        <h3>input:</h3>
-    </div>
-    <textarea id="text" style="height: 80vw; width: 45vw;">
+    <h3>hey!</h3>
+    <textarea id="input" style="height: 80vw; width: 45vw;">
+        define x as Decimal = 3
 
+        action addNumber(number as Number = 1) {
+            x = x + number
+        }
     </textarea>
-    <textarea id="result" style="height: 80vw; width: 45vw;">
+    <textarea id="output" style="height: 80vw; width: 45vw;" contenteditable="false">
     </textarea>
+    <script src="./interp.js"></script>
     <script>
-        var interpNum = 0;
-        var logBackup = console.log;
-        var logMessages = [];
-
-        console.log = function() {
-            logMessages.push.apply(logMessages, arguments);
-            logBackup.apply(console, arguments);
-        };
-        var text = document.getElementById('text');
-        text.addEventListener("keyup", function() {
-            interpNum++;
-            var text = document.getElementById('text').value;
-            LittleInterpreter.run(text);
-            var resEl = document.getElementById('result');
-            resEl.value = `Interpreter started, Launch Number ${interpNum}\n——————————\n` +logMessages.join("\n");
-            logMessages = [];
-        });
+        document.getElementById("input");
     </script>
 </body>
 </html>

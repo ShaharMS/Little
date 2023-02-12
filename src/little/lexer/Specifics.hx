@@ -116,6 +116,7 @@ class Specifics {
      * Converts a `complexValue` into a level 1 token
      */
     public static function complexValueIntoLexerTokens(complexValue:String) {
+        complexValue = complexValue.trim();
         var defValue:LexerTokens = InvalidSyntax(complexValue);
 
         // Now, figure out if defValue should be an ActionCall, StaticValue, DefinitionAccess or Calculation.
