@@ -16,6 +16,7 @@ class Keywords {
     public static var TYPE_STRING:String = "Characters";
 
     public static var MAIN_MODULE_NAME:String = "Main";
+    public static var REGISTERED_MODULE_NAME:String = "Registered";
     public static var PRINT_FUNCTION_NAME:String = "print";
     public static var RAISE_ERROR_FUNCTION_NAME:String = "stop";
 

@@ -1,5 +1,6 @@
 package little;
 
+import little.parser.Tokens.ParserTokens;
 import little.lexer.Lexer;
 import little.parser.Parser;
 import little.interpreter.Interpreter;
@@ -32,7 +33,7 @@ class Little {
         If you want to preload some more code, use the `Little.loadModule()` method before calling this.  
         to unload a loaded module , use `Little.unloadModule()` with the name of the module you wish to remove.  
         
-         - **pay attention - all modules are unloaded after each run.**
+         - **pay attention - all modules & registered elements are unloaded after each run.**
 
         If you want to use another keyword set (for example, to allow programming everything in spanish),
         make sure to set `currentKeywordSet` before calling this. If you want to use the default keywords with some changes,
@@ -50,17 +51,21 @@ class Little {
         Runtime.callStack = [];
         Runtime.stdout = "";
         Interpreter.interpret(Parser.signWithModule(Parser.assignNesting(Parser.typeTokens(Lexer.splitBlocks1(Lexer.lexIntoComplex(code)))), MAIN_MODULE_NAME));
+        Interpreter.memory = [];
     }
 
     public static function registerVariable() {
         
     }
 
-    public static function registerFunction() {
-        
+    public static function registerFunction(actionName:String, ?actionModuleName:String, expectedParameters:Array<RegisteredParameter>, callback:Array<RegisteredParameter> -> Void) {
+        var moduleName = actionModuleName == null ? REGISTERED_MODULE_NAME : actionModuleName;
+        var parameters = [for (param in expectedParameters) Parameter(param.name, param.type, StaticValue(param.defaultValue), 1, moduleName)];
     }
 
     public static function registerClass() {
         
     }
 }
+
+typedef RegisteredParameter = {name:String, type:String, defaultValue:Dynamic}
