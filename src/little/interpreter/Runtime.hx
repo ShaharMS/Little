@@ -1,5 +1,6 @@
 package little.interpreter;
 
+import haxe.EnumTools;
 import little.parser.Tokens.ParserTokens;
 import little.parser.Parser;
 import haxe.extern.EitherType;
@@ -28,6 +29,8 @@ class Runtime {
         The token that has just been interpreted
     **/
     public static var previousToken(default, null):ParserTokens;
+
+    public static var exitCode(default, null):Int = 0;
     
 
     /**
@@ -76,7 +79,7 @@ class Runtime {
     	Stops the execution of the program, and prints an error message to the console. Dispatches `onErrorThrown`.
     	@param error 
     **/
-    public static function throwError(token:ParserTokens) {
+    public static function throwError(token:ParserTokens, ?layer:Layer = INTERPRETER) {
 
         callStack.push(token);
         
@@ -86,22 +89,22 @@ class Runtime {
             case StaticValue(value, "", _, moduleName): {
                 module = moduleName;
                 reason = value;
-                'Module $moduleName, Line $line: ' +  value;
+                '${if (Little.debug) (layer : String).toUpperCase() + " " else ""}Module $moduleName, Line $line: ' +  value;
             }
             case Error(t, value, _, moduleName): {
                 module = moduleName;
                 title = t;
                 reason = value;
-                'Module $moduleName, Line $line: $t:\n\t$value';
+                '${if (Little.debug) (layer : String).toUpperCase() + " " else ""}Module $moduleName, Line $line: $t:\n\t$value';
             }
             case _: {
                 module = token.getParameters()[token.getParameters().length - 1];
                 reason = Std.string(token);
-                'Module ${token.getParameters()[token.getParameters().length - 1]}, Line $line:  ${token}';
+                '${if (Little.debug) (layer : String).toUpperCase() + " " else ""}Module ${token.getParameters()[token.getParameters().length - 1]}, Line $line:  ${token}';
             }
         }
         stdout += '\nLine $line: ' + content;
-        Interpreter.errorThrown = true;
+        exitCode = EnumValueTools.getIndex(cast layer);
         onErrorThrown(module, line, title, reason);
     }
 }

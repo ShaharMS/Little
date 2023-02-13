@@ -13,6 +13,8 @@ class Little {
     
     public static var runtime(default, null) = Runtime;
 
+    public static var debug:Bool = false;
+
     /**
         Loads little code, without clearing memory, stdout & the callstack. useful if you want to 
         use multiple files/want to preload code for the end user to use.
@@ -44,14 +46,18 @@ class Little {
         If you want to add event listeners, to certain code interpretation events, check out the stats and listeners inside `Little.runtime`.
         
         @param code 
+        @param debug specifically specify whether or not to print more debugging information. Overrides default `Little.debug`.
     **/
-    public static function run(code:String) {
+    public static function run(code:String, ?debug:Bool) {
         Interpreter.errorThrown = false;
         Runtime.line = 0;
         Runtime.callStack = [];
         Runtime.stdout = "";
+        final previous = Little.debug;
+        if (debug != null) Little.debug = debug;
         Interpreter.interpret(Parser.signWithModule(Parser.assignNesting(Parser.typeTokens(Lexer.splitBlocks1(Lexer.lexIntoComplex(code)))), MAIN_MODULE_NAME));
         Interpreter.memory = [];
+        if (debug != null) Little.debug = previous;
     }
 
     public static function registerVariable() {

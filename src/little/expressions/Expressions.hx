@@ -1,5 +1,6 @@
 package little.expressions;
 
+import little.interpreter.Tokens.Token;
 import texter.general.CharTools;
 import texter.general.CharTools.*;
 import little.Keywords.*;
@@ -171,5 +172,4 @@ class Expressions {
 
         return mergedCalls;
     }
-
 }

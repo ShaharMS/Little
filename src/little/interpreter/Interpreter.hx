@@ -12,7 +12,7 @@ class Interpreter {
     static function set_currentNesting(indent:Int) {
         var n = currentNesting;
         currentNesting = indent;
-        if (n != indent)
+        if (n > indent)
             collectGarbage();
         return indent;
     }
