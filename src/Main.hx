@@ -31,18 +31,24 @@ class Main {
     ;
 
     static function main() {
-        #if js
-        var text = Browser.document.getElementById("input");
-        var output = Browser.document.getElementById("output");
-        trace(text, output);
-        text.addEventListener("keyup", (e) -> {
-            try {
-                output.innerHTML = Parser.prettyPrintAst(Parser.typeTokens(Lexer.splitBlocks1(Lexer.lexIntoComplex(untyped text.value))), 5);
-            } catch (e) {}
-        });
-        #else
-        trace(Parser.prettyPrintAst(Parser.typeTokens(Lexer.splitBlocks1(Lexer.lexIntoComplex(code))), 5));
+        // #if js
+        // var text = Browser.document.getElementById("input");
+        // var output = Browser.document.getElementById("output");
+        // trace(text, output);
+        // text.addEventListener("keyup", (e) -> {
+        //     try {
+        //         output.innerHTML = Parser.prettyPrintAst(Parser.typeTokens(Lexer.splitBlocks1(Lexer.lexIntoComplex(untyped text.value))), 5);
+        //     } catch (e) {}
+        // });
+        // #else
+        // trace(Parser.prettyPrintAst(Parser.typeTokens(Lexer.splitBlocks1(Lexer.lexIntoComplex(code))), 5));
         
-        #end
+        // #end
+
+        trace(
+            refactored_little.lexer.Lexer.separateBooleanIdentifiers(
+                refactored_little.lexer.Lexer.lex(code)
+            )
+        );
     }
 }
