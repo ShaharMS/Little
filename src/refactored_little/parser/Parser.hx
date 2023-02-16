@@ -1,18 +1,46 @@
 package refactored_little.parser;
 
+import little.interpreter.Tokens.Token;
 import refactored_little.parser.Tokens.ParserTokens;
 import refactored_little.lexer.Tokens.LexerTokens;
+import refactored_little.Keywords.*;
+
+using StringTools;
+using TextTools;
 
 class Parser {
     public static function parse(lexerTokens:Array<LexerTokens>):Array<ParserTokens> {
         var tokens:Array<ParserTokens> = [];
 
+        var line = 1;
+
         var i = 0;
         while (i < lexerTokens.length) {
-            
+            var token = lexerTokens[i];
+
+            switch token {
+                case Identifier(name): tokens.push(Identifier(name));
+                case Sign(char): tokens.push(Sign(char));
+                case Number(num): {
+                    if (num.countOccurrencesOf(".") == 0) tokens.push(Number(num));
+                    else if (num.countOccurrencesOf(".") == 1) tokens.push(Decimal(num));
+                }
+                case Boolean(value): {
+                    if (value == FALSE_VALUE) tokens.push(FalseValue);
+                    else if (value == TRUE_VALUE) tokens.push(TrueValue);
+                }
+                case Characters(string): tokens.push(Characters(string));
+                case NullValue: tokens.push(NullValue);
+                case Newline: {
+                    tokens.push(SetLine(line));
+                    line++;
+                }
+            }
+
             i++;
         }
 
+        tokens = mergeBlocks(tokens);
 
         return tokens;
     }

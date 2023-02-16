@@ -46,8 +46,10 @@ class Main {
         // #end
 
         trace(
-            refactored_little.lexer.Lexer.separateBooleanIdentifiers(
-                refactored_little.lexer.Lexer.lex(code)
+            refactored_little.parser.Parser.parse(
+                refactored_little.lexer.Lexer.separateBooleanIdentifiers(
+                    refactored_little.lexer.Lexer.lex(code)
+                )
             )
         );
     }

@@ -10,6 +10,10 @@ enum ParserTokens {
 
     Read(name:String);
     Write(assignees:Array<String>, value:ParserTokens);
+    /**
+    	Useful during the initial conversion between lexer tokens and parser tokens
+    **/
+    Identifier(word:String);
 
     Expression(parts:Array<ParserTokens>, type:String);
     Block(body:Array<ParserTokens>, type:String);
