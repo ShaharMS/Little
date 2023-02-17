@@ -12,19 +12,9 @@ using StringTools;
 class Main {
 
     static var code = 
-    'if (x) 
-    {
-        a = b
-        if (y) {
-            d = 7
-            define x as Decimal = 343.5 + 5 * 3 - true
-
-        }
-        e = 2
-    }
-    
+    '
     action a() {
-        if (x) {
+        if (x as Boolean) {
             a = 3
         }
     }'
