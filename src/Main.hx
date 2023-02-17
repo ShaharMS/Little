@@ -13,11 +13,9 @@ class Main {
 
     static var code = 
     '
-    action a() {
-        if (x as Boolean) {
-            a = 3
-        }
-    }'
+    
+
+    a = b == 3'
     ;
 
     static function main() {

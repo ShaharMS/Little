@@ -39,6 +39,7 @@ class Parser {
             i++;
         }
 
+        tokens = mergeWrites(tokens);
         tokens = mergeTypeDecls(tokens);
         tokens = mergeExpressions(tokens);
         tokens = mergeBlocks(tokens);
@@ -46,20 +47,52 @@ class Parser {
         return tokens;
     }
 
-    public static function mergeComplexStructures(pre:Array<ParserTokens>):Array<ParserTokens> {
+    public static function mergeWrites(pre:Array<ParserTokens>):Array<ParserTokens> {
         var post:Array<ParserTokens> = [];
+
+        // First, merge two consecutive "=" into a single "=="
 
         var i = 0;
         while (i < pre.length) {
             var token = pre[i];
-
+            
             switch token {
-                case Identifier("define"): {
-                    
+                case Sign("="): {
+                    if (i + 1 >= pre.length) {
+                        post.push(Sign("="));
+                        break;
+                    }
+                    var lookahead = pre[i + 1];
+                    if (Type.enumEq(lookahead, Sign("="))) {
+                        post.push(Sign("=="));
+                        i++;
+                    } else {
+                        post.push(Sign("="));
+                    }
                 }
 
                 case _: post.push(token);
             }
+
+            i++;
+        }
+
+        // Now, deal with writes
+
+        var i = 0;
+        while (i < pre.length) {
+            var token = pre[i];
+            
+            switch token {
+                case Sign("="): {
+                    if (i + 1 >= pre.length) break;
+                    var lookahead = pre[i + 1];
+
+                }
+
+                case _: post.push(token);
+            }
+
             i++;
         }
 
@@ -84,7 +117,8 @@ class Parser {
                         post.push(token);
                     }
                 }
-
+                case Expression(parts, type): post.push(Expression(mergeTypeDecls(parts), null));
+                case Block(body, type): post.push(Block(mergeTypeDecls(body), null));
                 case _: post.push(token);
             }
             i++;
@@ -119,6 +153,7 @@ class Parser {
                     i++;
                 }
                 case Expression(parts, type): post.push(Expression(mergeBlocks(parts), null));
+                case Block(body, type): post.push(Block(mergeBlocks(body), null));
                 case _: post.push(token);
             }
             i++;
@@ -152,6 +187,35 @@ class Parser {
                     post.push(Expression(mergeExpressions(expressionBody), null)); // The check performed above includes unmerged blocks inside the outer block. These unmerged blocks should be merged
                     i++;
                 }
+
+                case Expression(parts, type): post.push(Expression(mergeExpressions(parts), null));
+                case Block(body, type): post.push(Block(mergeExpressions(body), null));
+                case _: post.push(token);
+            }
+            i++;
+        }
+
+        return post;
+    }
+
+    
+    public static function mergeComplexStructures(pre:Array<ParserTokens>):Array<ParserTokens> {
+        var post:Array<ParserTokens> = [];
+
+        var i = 0;
+        while (i < pre.length) {
+            var token = pre[i];
+
+            switch token {
+                case Identifier(_ == VARIABLE_DECLARATION => true): {
+                    i++;
+                    var lookahead = pre[i];
+
+                    while (i < pre.length) {
+
+                    }
+                }
+
                 case _: post.push(token);
             }
             i++;
