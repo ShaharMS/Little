@@ -39,10 +39,11 @@ class Parser {
             i++;
         }
 
-        tokens = mergeWrites(tokens);
-        tokens = mergeTypeDecls(tokens);
         tokens = mergeExpressions(tokens);
         tokens = mergeBlocks(tokens);
+        tokens = mergeWrites(tokens);
+        tokens = mergeTypeDecls(tokens);
+
 
         return tokens;
     }
@@ -79,6 +80,7 @@ class Parser {
 
         // Now, deal with writes
 
+        var potentialAssignee:ParserTokens = NullValue;
         var i = 0;
         while (i < pre.length) {
             var token = pre[i];
@@ -86,16 +88,42 @@ class Parser {
             switch token {
                 case Sign("="): {
                     if (i + 1 >= pre.length) break;
+                    var assignees = [potentialAssignee];
                     var lookahead = pre[i + 1];
+                    var currentAssignee = [];
+                    var value:ParserTokens;
+                    while (i < pre.length) {
+                        switch lookahead {
 
+                            case Sign("="):
+                            case SplitLine | SetLine(_): break;
+                            case _: currentAssignee.push(lookahead);
+                        }
+                        i++;
+                    }
+
+                    // The last currentAssignee is the value;
+                    value = Expression(currentAssignee, null);
+                    post.push(Write(assignees, value, null));
                 }
-
-                case _: post.push(token);
+                case Expression(parts, type): {
+                    post.push(potentialAssignee);
+                    potentialAssignee = Expression(mergeWrites(parts), null);
+                }
+                case Block(body, type): {
+                    post.push(potentialAssignee);
+                    potentialAssignee = Block(mergeWrites(body), null);
+                }
+                case _: {
+                    post.push(potentialAssignee);
+                    potentialAssignee = token;
+                }
             }
 
             i++;
         }
-
+        if (potentialAssignee != null) post.push(potentialAssignee);
+        post.shift();
         return post;
     }
 
