@@ -41,8 +41,9 @@ class Parser {
 
         tokens = mergeExpressions(tokens);
         tokens = mergeBlocks(tokens);
-        tokens = mergeWrites(tokens);
         tokens = mergeTypeDecls(tokens);
+        tokens = mergeComplexStructures(tokens);
+        tokens = mergeWrites(tokens);
 
 
         return tokens;
@@ -78,6 +79,9 @@ class Parser {
             i++;
         }
 
+        pre = post.copy();
+        post = [];
+
         // Now, deal with writes
 
         var potentialAssignee:ParserTokens = NullValue;
@@ -89,13 +93,17 @@ class Parser {
                 case Sign("="): {
                     if (i + 1 >= pre.length) break;
                     var assignees = [potentialAssignee];
-                    var lookahead = pre[i + 1];
-                    var currentAssignee = [];
+                    var currentAssignee:Array<ParserTokens> = [];
                     var value:ParserTokens;
-                    while (i < pre.length) {
+                    while (i + 1 < pre.length) {
+                        var lookahead = pre[i + 1];
                         switch lookahead {
 
-                            case Sign("="):
+                            case Sign("="): {
+                                var assignee = currentAssignee.length == 1 ? currentAssignee[0] : Expression(currentAssignee.copy(), null);
+                                assignees.push(assignee);
+                                currentAssignee = [];
+                            }
                             case SplitLine | SetLine(_): break;
                             case _: currentAssignee.push(lookahead);
                         }
@@ -105,6 +113,7 @@ class Parser {
                     // The last currentAssignee is the value;
                     value = Expression(currentAssignee, null);
                     post.push(Write(assignees, value, null));
+                    potentialAssignee = null;
                 }
                 case Expression(parts, type): {
                     post.push(potentialAssignee);
@@ -137,10 +146,8 @@ class Parser {
                 case Identifier(word): {
                     if (word == TYPE_DECL_OR_CAST && i + 1 < pre.length) {
                         var lookahead = pre[i + 1];
-                        switch lookahead {
-                            case Identifier(type): post.push(TypeDeclaration(type)); i++;
-                            case _:
-                        }
+                        post.push(TypeDeclaration(lookahead));
+                        i++;
                     } else {
                         post.push(token);
                     }
@@ -237,11 +244,25 @@ class Parser {
             switch token {
                 case Identifier(_ == VARIABLE_DECLARATION => true): {
                     i++;
-                    var lookahead = pre[i];
-
+                    var name:ParserTokens = null;
+                    var type:ParserTokens = null;
                     while (i < pre.length) {
-
+                        var lookahead = pre[i];
+                        switch lookahead {
+                            case TypeDeclaration(typeToken): {
+                                if (name == null) return null;
+                                type = typeToken;
+                                break;
+                            }
+                            case _: {
+                                if (name == null) name = lookahead;
+                                else if (type == null) type = lookahead;
+                                else break;
+                            }
+                        }
+                        i++;
                     }
+                    post.push(Define(name, type));
                 }
 
                 case _: post.push(token);

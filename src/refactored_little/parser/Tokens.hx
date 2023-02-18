@@ -5,22 +5,21 @@ enum ParserTokens {
     SetLine(line:Int);
     SplitLine;
 
-    Define(name:String, value:ParserTokens, type:String);
-    Action(name:String, params:Array<ParserTokens>, body:ParserTokens, type:String);
-    Condition(name:String, exp:ParserTokens, body:ParserTokens, type:String);
+    Define(name:ParserTokens, type:ParserTokens);
+    Action(name:ParserTokens, params:Array<ParserTokens>, body:ParserTokens, type:ParserTokens);
+    Condition(name:ParserTokens, exp:ParserTokens, body:ParserTokens, type:ParserTokens);
 
-    Read(name:String);
-    Write(assignees:Array<ParserTokens>, value:ParserTokens, type:String);
+    Read(name:ParserTokens);
+    Write(assignees:Array<ParserTokens>, value:ParserTokens, type:ParserTokens);
 
     Identifier(word:String);
-    TypeDeclaration(type:String);
-    Cast(value:ParserTokens, type:String);
+    TypeDeclaration(type:ParserTokens);
     Return(value:ParserTokens);
 
-    Expression(parts:Array<ParserTokens>, type:String);
-    Block(body:Array<ParserTokens>, type:String);
+    Expression(parts:Array<ParserTokens>, type:ParserTokens);
+    Block(body:Array<ParserTokens>, type:ParserTokens);
 
-    Parameter(name:String, value:ParserTokens, type:String);
+    Parameter(name:ParserTokens, value:ParserTokens, type:ParserTokens);
 
     Sign(sign:String);
     Number(num:String);

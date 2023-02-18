@@ -13,9 +13,9 @@ class Main {
 
     static var code = 
     '
-    
+    a = define x as Decimal = 3.3
 
-    a = b == 3'
+    a = b = c == 3'
     ;
 
     static function main() {
