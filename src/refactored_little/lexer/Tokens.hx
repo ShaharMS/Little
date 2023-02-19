@@ -8,4 +8,5 @@ enum LexerTokens {
     Characters(string:String);
     NullValue;
     Newline;
+    SplitLine;
 }

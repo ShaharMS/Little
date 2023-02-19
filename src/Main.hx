@@ -13,9 +13,7 @@ class Main {
 
     static var code = 
     '
-    a = define x as Decimal = 3.3
-
-    a = b = c == 3'
+    a = define {define i = 5; i = i + 1; "num" + i} = 6'
     ;
 
     static function main() {
@@ -34,9 +32,11 @@ class Main {
         // #end
 
         trace(
-            refactored_little.parser.Parser.parse(
-                refactored_little.lexer.Lexer.separateBooleanIdentifiers(
-                    refactored_little.lexer.Lexer.lex(code)
+            refactored_little.tools.PrettyPrinter.printParserAst(
+                refactored_little.parser.Parser.parse(
+                    refactored_little.lexer.Lexer.separateBooleanIdentifiers(
+                        refactored_little.lexer.Lexer.lex(code)
+                    )
                 )
             )
         );

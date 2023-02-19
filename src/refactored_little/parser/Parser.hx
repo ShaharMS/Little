@@ -34,13 +34,14 @@ class Parser {
                     tokens.push(SetLine(line));
                     line++;
                 }
+                case SplitLine: tokens.push(SplitLine);
             }
 
             i++;
         }
 
-        tokens = mergeExpressions(tokens);
         tokens = mergeBlocks(tokens);
+        tokens = mergeExpressions(tokens);
         tokens = mergeTypeDecls(tokens);
         tokens = mergeComplexStructures(tokens);
         tokens = mergeWrites(tokens);
@@ -254,6 +255,7 @@ class Parser {
                                 type = typeToken;
                                 break;
                             }
+                            case SetLine(_) | SplitLine: break;
                             case _: {
                                 if (name == null) name = lookahead;
                                 else if (type == null) type = lookahead;
@@ -264,7 +266,8 @@ class Parser {
                     }
                     post.push(Define(name, type));
                 }
-
+                case Expression(parts, type): post.push(Expression(mergeComplexStructures(parts), null));
+                case Block(body, type): post.push(Block(mergeComplexStructures(body), null));
                 case _: post.push(token);
             }
             i++;

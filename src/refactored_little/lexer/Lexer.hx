@@ -34,10 +34,13 @@ class Lexer {
                 }
                 i--;
                 tokens.push(Number(num));
-            } else if (signs.contains(char)) {
-                tokens.push(Sign(char));
+                
             } else if (char == "\n") {
                 tokens.push(Newline);
+            } else if (char == ";") {
+                tokens.push(SplitLine);
+            } else if (signs.contains(char)) {
+                tokens.push(Sign(char));
             } else if (~/\w/.match(char)) {
                 var name = char;
                 i++;
