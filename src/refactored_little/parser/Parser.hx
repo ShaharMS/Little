@@ -47,6 +47,7 @@ class Parser {
         tokens = mergeWrites(tokens);
 
 
+
         return tokens;
     }
 
@@ -73,7 +74,8 @@ class Parser {
                         post.push(Sign("="));
                     }
                 }
-
+                case Block(body, type): post.push(Block(mergeWrites(body), type));
+                case Expression(body, type): post.push(Block(mergeWrites(body), type));
                 case _: post.push(token);
             }
 
@@ -255,7 +257,17 @@ class Parser {
                                 type = typeToken;
                                 break;
                             }
-                            case SetLine(_) | SplitLine: break;
+                            case SetLine(_) | SplitLine | Sign("="): i--; break;
+                            case Block(body, type): {
+                                if (name == null) name = Block(mergeComplexStructures(body), type);
+                                else if (type == null) type = Block(mergeComplexStructures(body), type);
+                                else break;
+                            }
+                            case Expression(body, type): {
+                                if (name == null) name = Expression(mergeComplexStructures(body), type);
+                                else if (type == null) type = Expression(mergeComplexStructures(body), type);
+                                else break;
+                            }
                             case _: {
                                 if (name == null) name = lookahead;
                                 else if (type == null) type = lookahead;

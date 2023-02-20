@@ -13,7 +13,7 @@ class Main {
 
     static var code = 
     '
-    a = define {define i = 5; i = i + 1; "num" + i} = 6'
+    a = define {define i = 5; i = i + 1; ("num" + i)} = 6'
     ;
 
     static function main() {
