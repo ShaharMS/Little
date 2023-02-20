@@ -58,7 +58,7 @@ class PrettyPrinter {
             case NullValue: return '${prefixFA(prefix)}$t$d ${Keywords.NULL_VALUE}\n';
 			case Define(name, type):
 				{
-					return '${prefixFA(prefix)}$t$d Definition Creation\n${getTree(name, prefix.copy(), level + 1, false)}${getTree(type, prefix.copy(), level + 1, false)}';
+					return '${prefixFA(prefix)}$t$d Definition Creation\n${getTree(name, pushIndex(prefix, level), level + 1, false)}${getTree(type, pushIndex(prefix, level), level + 1, false)}';
 				}
 			case Action(name, params, body, type):
 				{
@@ -82,7 +82,7 @@ class PrettyPrinter {
 				return '${prefixFA(prefix)}$t$d $name\n';
 			case Write(assignees, value, type):
 				{
-					return'${prefixFA(prefix)}$t$d Definition Write\n${getTree(Expression(assignees, null), prefix.copy(), level + 1, false)}${getTree(value, prefix.copy(), level + 1, false)}${getTree(type, prefix.copy(), level + 1, true)}';
+					return'${prefixFA(prefix)}$t$d Definition Write\n${getTree(Expression(assignees, null), pushIndex(prefix, level), level + 1, false)}${getTree(value, pushIndex(prefix, level), level + 1, false)}${getTree(type, prefix.copy(), level + 1, true)}';
 				}
 			case Sign(value):
 				{
