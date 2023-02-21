@@ -59,7 +59,10 @@ class Parser {
         var i = 0;
         while (i < pre.length) {
             var token = pre[i];
-            
+            if (token == null) {
+                i++;
+                continue;
+            }
             switch token {
                 case Sign("="): {
                     if (i + 1 >= pre.length) {
@@ -76,6 +79,7 @@ class Parser {
                 }
                 case Block(body, type): post.push(Block(mergeWrites(body), type));
                 case Expression(body, type): post.push(Block(mergeWrites(body), type));
+                case Define(name, type): post.push(Define(mergeWrites([name])[0], type));
                 case _: post.push(token);
             }
 
@@ -125,6 +129,10 @@ class Parser {
                 case Block(body, type): {
                     post.push(potentialAssignee);
                     potentialAssignee = Block(mergeWrites(body), null);
+                }
+                case Define(name, type): {
+                    post.push(potentialAssignee);
+                    potentialAssignee = Define(mergeWrites([name])[0], type);
                 }
                 case _: {
                     post.push(potentialAssignee);

@@ -46,7 +46,7 @@ class PrettyPrinter {
 		var c = "├";
 		var d = "───";
 		if (root == null)
-			return "";
+			return ''; //'${prefixFA(prefix)}$t$d SetLine($line)\n'
 		switch root {
 			case SetLine(line): return '${prefixFA(prefix)}$t$d SetLine($line)\n';
             case SplitLine: return '${prefixFA(prefix)}$t$d SplitLine\n';
@@ -82,7 +82,7 @@ class PrettyPrinter {
 				return '${prefixFA(prefix)}$t$d $name\n';
 			case Write(assignees, value, type):
 				{
-					return'${prefixFA(prefix)}$t$d Definition Write\n${getTree(Expression(assignees, null), pushIndex(prefix, level), level + 1, false)}${getTree(value, pushIndex(prefix, level), level + 1, false)}${getTree(type, prefix.copy(), level + 1, true)}';
+					return'${prefixFA(prefix)}$t$d Definition Write\n${getTree(Expression(assignees, null), pushIndex(prefix, level), level + 1, false)}${getTree(value, prefix.copy(), level + 1, false)}${getTree(type, prefix.copy(), level + 1, true)}';
 				}
 			case Sign(value):
 				{
