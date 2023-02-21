@@ -8,7 +8,7 @@ enum ParserTokens {
     SplitLine;
 
     Define(name:ParserTokens, type:ParserTokens);
-    Action(name:ParserTokens, params:ParserTokens, body:ParserTokens, type:ParserTokens);
+    Action(name:ParserTokens, params:ParserTokens, type:ParserTokens);
     Condition(name:ParserTokens, exp:ParserTokens, body:ParserTokens, type:ParserTokens);
 
     Read(name:ParserTokens);
@@ -21,6 +21,7 @@ enum ParserTokens {
 
     Expression(parts:Array<ParserTokens>, type:ParserTokens);
     Block(body:Array<ParserTokens>, type:ParserTokens);
+    PartArray(parts:Array<ParserTokens>);
 
     Parameter(name:ParserTokens, type:ParserTokens);
 

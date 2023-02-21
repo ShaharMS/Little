@@ -51,102 +51,6 @@ class Parser {
         return tokens;
     }
 
-    public static function mergeWrites(pre:Array<ParserTokens>):Array<ParserTokens> {
-        var post:Array<ParserTokens> = [];
-
-        // First, merge two consecutive "=" into a single "=="
-
-        var i = 0;
-        while (i < pre.length) {
-            var token = pre[i];
-            if (token == null) {
-                i++;
-                continue;
-            }
-            switch token {
-                case Sign("="): {
-                    if (i + 1 >= pre.length) {
-                        post.push(Sign("="));
-                        break;
-                    }
-                    var lookahead = pre[i + 1];
-                    if (Type.enumEq(lookahead, Sign("="))) {
-                        post.push(Sign("=="));
-                        i++;
-                    } else {
-                        post.push(Sign("="));
-                    }
-                }
-                case Block(body, type): post.push(Block(mergeWrites(body), type));
-                case Expression(body, type): post.push(Block(mergeWrites(body), type));
-                case Define(name, type): post.push(Define(mergeWrites([name])[0], type));
-                case _: post.push(token);
-            }
-
-            i++;
-        }
-
-        pre = post.copy();
-        post = [];
-
-        // Now, deal with writes
-
-        var potentialAssignee:ParserTokens = NullValue;
-        var i = 0;
-        while (i < pre.length) {
-            var token = pre[i];
-            
-            switch token {
-                case Sign("="): {
-                    if (i + 1 >= pre.length) break;
-                    var assignees = [potentialAssignee];
-                    var currentAssignee:Array<ParserTokens> = [];
-                    var value:ParserTokens;
-                    while (i + 1 < pre.length) {
-                        var lookahead = pre[i + 1];
-                        switch lookahead {
-
-                            case Sign("="): {
-                                var assignee = currentAssignee.length == 1 ? currentAssignee[0] : Expression(currentAssignee.copy(), null);
-                                assignees.push(assignee);
-                                currentAssignee = [];
-                            }
-                            case SplitLine | SetLine(_): break;
-                            case _: currentAssignee.push(lookahead);
-                        }
-                        i++;
-                    }
-
-                    // The last currentAssignee is the value;
-                    value = Expression(currentAssignee, null);
-                    post.push(Write(assignees, value, null));
-                    potentialAssignee = null;
-                }
-                case Expression(parts, type): {
-                    post.push(potentialAssignee);
-                    potentialAssignee = Expression(mergeWrites(parts), null);
-                }
-                case Block(body, type): {
-                    post.push(potentialAssignee);
-                    potentialAssignee = Block(mergeWrites(body), null);
-                }
-                case Define(name, type): {
-                    post.push(potentialAssignee);
-                    potentialAssignee = Define(mergeWrites([name])[0], type);
-                }
-                case _: {
-                    post.push(potentialAssignee);
-                    potentialAssignee = token;
-                }
-            }
-
-            i++;
-        }
-        if (potentialAssignee != null) post.push(potentialAssignee);
-        post.shift();
-        return post;
-    }
-
     public static function mergeTypeDecls(pre:Array<ParserTokens>):Array<ParserTokens> {
         var post:Array<ParserTokens> = [];
 
@@ -269,22 +173,78 @@ class Parser {
                             case Block(body, type): {
                                 if (name == null) name = Block(mergeComplexStructures(body), type);
                                 else if (type == null) type = Block(mergeComplexStructures(body), type);
-                                else break;
+                                else {
+                                    i--;
+                                    break;
+                                }
                             }
                             case Expression(body, type): {
                                 if (name == null) name = Expression(mergeComplexStructures(body), type);
                                 else if (type == null) type = Expression(mergeComplexStructures(body), type);
-                                else break;
+                                else {
+                                    i--;
+                                    break;
+                                }
                             }
                             case _: {
                                 if (name == null) name = lookahead;
                                 else if (type == null) type = lookahead;
-                                else break;
+                                else {
+                                    i--;
+                                    break;
+                                }
                             }
                         }
                         i++;
                     }
                     post.push(Define(name, type));
+                }
+                case Identifier(_ == FUNCTION_DECLARATION => true): {
+                    i++;
+                    var name:ParserTokens = null;
+                    var params:ParserTokens = null;
+                    var type:ParserTokens = null;
+                    while (i < pre.length) {
+                        var lookahead = pre[i];
+                        switch lookahead {
+                            case TypeDeclaration(typeToken): {
+                                if (name == null) return null;
+                                else if (type == null) return null;
+                                type = typeToken;
+                                break;
+                            }
+                            case SetLine(_) | SplitLine | Sign("="): i--; break;
+                            case Block(body, type): {
+                                if (name == null) name = Block(mergeComplexStructures(body), type);
+                                else if (params == null) params = Block(mergeComplexStructures(body), type);
+                                else if (type == null) type = Block(mergeComplexStructures(body), type);
+                                else {
+                                    i--;
+                                    break;
+                                }
+                            }
+                            case Expression(body, type): {
+                                if (name == null) name = Expression(mergeComplexStructures(body), type);
+                                else if (params == null) params = Expression(mergeComplexStructures(body), type);
+                                else if (type == null) type = Expression(mergeComplexStructures(body), type);
+                                else {
+                                    i--;
+                                    break;
+                                }
+                            }
+                            case _: {
+                                if (name == null) name = lookahead;
+                                else if (params == null) params = lookahead;
+                                else if (type == null) type = lookahead;
+                                else {
+                                    i--;
+                                    break;
+                                }
+                            }
+                        }
+                        i++;
+                    }
+                    post.push(Action(name, params, type));
                 }
                 case Expression(parts, type): post.push(Expression(mergeComplexStructures(parts), null));
                 case Block(body, type): post.push(Block(mergeComplexStructures(body), null));
@@ -293,6 +253,106 @@ class Parser {
             i++;
         }
 
+        return post;
+    }
+
+    public static function mergeWrites(pre:Array<ParserTokens>):Array<ParserTokens> {
+        var post:Array<ParserTokens> = [];
+
+        // First, merge two consecutive "=" into a single "=="
+
+        var i = 0;
+        while (i < pre.length) {
+            var token = pre[i];
+            if (token == null) {
+                i++;
+                continue;
+            }
+            switch token {
+                case Sign("="): {
+                    if (i + 1 >= pre.length) {
+                        post.push(Sign("="));
+                        break;
+                    }
+                    var lookahead = pre[i + 1];
+                    if (Type.enumEq(lookahead, Sign("="))) {
+                        post.push(Sign("=="));
+                        i++;
+                    } else {
+                        post.push(Sign("="));
+                    }
+                }
+                case Block(body, type): post.push(Block(mergeWrites(body), type));
+                case Expression(body, type): post.push(Expression(mergeWrites(body), type));
+                case Define(name, type): post.push(Define(mergeWrites([name])[0], type));
+                case Action(name, params, type): post.push(Action(mergeWrites([name])[0], mergeWrites([params])[0], type));
+                case _: post.push(token);
+            }
+
+            i++;
+        }
+
+        pre = post.copy();
+        post = [];
+
+        // Now, deal with writes
+
+        var potentialAssignee:ParserTokens = NullValue;
+        var i = 0;
+        while (i < pre.length) {
+            var token = pre[i];
+            switch token {
+                case Sign("="): {
+                    if (i + 1 >= pre.length) break;
+                    var assignees = [potentialAssignee];
+                    var currentAssignee:Array<ParserTokens> = [];
+                    var value:ParserTokens;
+                    while (i + 1 < pre.length) {
+                        var lookahead = pre[i + 1];
+                        switch lookahead {
+
+                            case Sign("="): {
+                                var assignee = currentAssignee.length == 1 ? currentAssignee[0] : Expression(currentAssignee.copy(), null);
+                                assignees.push(assignee);
+                                currentAssignee = [];
+                            }
+                            case SplitLine | SetLine(_): break;
+                            case _: currentAssignee.push(lookahead);
+                        }
+                        i++;
+                    }
+
+                    // The last currentAssignee is the value;
+                    value = Expression(currentAssignee, null);
+                    post.push(Write(assignees, value, null));
+                    potentialAssignee = null;
+                }
+                case Expression(parts, type): {
+                    post.push(potentialAssignee);
+                    potentialAssignee = Expression(mergeWrites(parts), type);
+                }
+                case Block(body, type): {
+                    post.push(potentialAssignee);
+                    potentialAssignee = Block(mergeWrites(body), type);
+                }
+                case Define(name, type): {
+                    post.push(potentialAssignee);
+                    potentialAssignee = Define(mergeWrites([name])[0], type);
+                }
+                case Action(name, params, type): {
+                    post.push(potentialAssignee);
+                    potentialAssignee = Action(mergeWrites([name])[0], mergeWrites([params])[0], type);
+                }
+                case _: {
+                    post.push(potentialAssignee);
+                    potentialAssignee = token;
+                }
+            }
+
+            i++;
+        }
+        if (potentialAssignee != null) post.push(potentialAssignee);
+        post.shift();
         return post;
     }
 }

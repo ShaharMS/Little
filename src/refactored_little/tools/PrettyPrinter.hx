@@ -58,31 +58,30 @@ class PrettyPrinter {
             case NullValue: return '${prefixFA(prefix)}$t$d ${Keywords.NULL_VALUE}\n';
 			case Define(name, type):
 				{
-					return '${prefixFA(prefix)}$t$d Definition Creation\n${getTree(name, pushIndex(prefix, level), level + 1, false)}${getTree(type, pushIndex(prefix, level), level + 1, false)}';
+					return '${prefixFA(prefix)}$t$d Definition Creation\n${getTree(name, prefix.copy(), level + 1, type == null)}${getTree(type, prefix.copy(), level + 1, true)}';
 				}
-			case Action(name, params, body, type):
+			case Action(name, params, type):
 				{
 					var title = '${prefixFA(prefix)}$t$d Action Creation\n';
 					title += getTree(name, prefix.copy(), level + 1, false);
-					title += getTree(type, prefix.copy(), level + 1, false);
-					title += getTree(params, pushIndex(prefix, level), level + 1, false);
-					title += getTree(body, prefix.copy(), level + 1, true);
+					title += getTree(params, prefix.copy(), level + 1, type == null);
+					title += getTree(type, prefix.copy(), level + 1, true);
 					return title;
 				}
 			case Condition(name, exp, body, type):
 				{
 					var title = '${prefixFA(prefix)}$t$d Condition\n';
 					title += getTree(name, prefix.copy(), level + 1, false);
-                    title += getTree(type, prefix.copy(), level + 1, false);
 					title += getTree(exp, pushIndex(prefix, level), level + 1, false);
-					title += getTree(body, prefix.copy(), level + 1, true);
+					title += getTree(body, prefix.copy(), level + 1, type == null);
+					title += getTree(type, prefix.copy(), level + 1, true);
 					return title;
 				}
 			case Read(name):
 				return '${prefixFA(prefix)}$t$d $name\n';
 			case Write(assignees, value, type):
 				{
-					return'${prefixFA(prefix)}$t$d Definition Write\n${getTree(Expression(assignees, null), pushIndex(prefix, level), level + 1, false)}${getTree(value, prefix.copy(), level + 1, false)}${getTree(type, prefix.copy(), level + 1, true)}';
+					return'${prefixFA(prefix)}$t$d Definition Write\n${getTree(PartArray(assignees), pushIndex(prefix, level), level + 1, false)}${getTree(value, prefix.copy(), level + 1, type == null)}${getTree(type, prefix.copy(), level + 1, true)}';
 				}
 			case Sign(value):
 				{
@@ -108,6 +107,15 @@ class PrettyPrinter {
                 if (body.length == 0)
                     return '${prefixFA(prefix)}$t$d <empty block>\n';
                 var strParts = ['${prefixFA(prefix)}$t$d Block\n${getTree(type, prefix.copy(), level + 1, false)}'].concat([
+                    for (i in 0...body.length - 1) getTree(body[i], pushIndex(prefix, level), level + 1, false)
+                ]);
+                strParts.push(getTree(body[body.length - 1], prefix.copy(), level + 1, true));
+                return strParts.join("");
+            }
+			case PartArray(body): {
+                if (body.length == 0)
+                    return '${prefixFA(prefix)}$t$d <empty array>\n';
+                var strParts = ['${prefixFA(prefix)}$t$d Part Array\n'].concat([
                     for (i in 0...body.length - 1) getTree(body[i], pushIndex(prefix, level), level + 1, false)
                 ]);
                 strParts.push(getTree(body[body.length - 1], prefix.copy(), level + 1, true));
