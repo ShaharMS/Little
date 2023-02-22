@@ -304,8 +304,29 @@ class Parser {
             switch token {
                 case Sign("="): {
                     if (i + 1 >= pre.length) break;
-                    var assignees = [potentialAssignee];
-                    var currentAssignee:Array<ParserTokens> = [];
+
+                    var currentAssignee:Array<ParserTokens> = [potentialAssignee];
+                    // potentialAssignee might be a function call
+                    // In that case, we should lookbehind for expressions, and stop when we find anything that isn't an expression
+                    switch potentialAssignee {
+                        case Expression(_, _): {
+                            while (true) {
+                                switch post[post.length - 1] {
+                                    case Sign(_) | SetLine(_) | SplitLine: break;
+                                    case Expression(_, _): {
+                                        currentAssignee.unshift(post.pop());
+                                    }
+                                    case _: {
+                                        currentAssignee.unshift(post.pop());
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        case _:
+                    }
+
+                    var assignees = [currentAssignee.length == 1 ? currentAssignee[0] : Expression(currentAssignee.copy(), null)];
                     var value:ParserTokens;
                     while (i + 1 < pre.length) {
                         var lookahead = pre[i + 1];
