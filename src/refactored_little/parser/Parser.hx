@@ -52,6 +52,9 @@ class Parser {
     }
 
     public static function mergeTypeDecls(pre:Array<ParserTokens>):Array<ParserTokens> {
+        
+        if (pre == null) return null;
+
         var post:Array<ParserTokens> = [];
 
         var i = 0;
@@ -78,6 +81,9 @@ class Parser {
     }
 
     public static function mergeBlocks(pre:Array<ParserTokens>):Array<ParserTokens> {
+
+        if (pre == null) return null;
+
         var post:Array<ParserTokens> = [];
 
         var i = 0;
@@ -113,6 +119,9 @@ class Parser {
     }
 
     public static function mergeExpressions(pre:Array<ParserTokens>):Array<ParserTokens> {
+
+        if (pre == null) return null;
+
         var post:Array<ParserTokens> = [];
 
         var i = 0;
@@ -148,8 +157,10 @@ class Parser {
         return post;
     }
 
-    
     public static function mergeComplexStructures(pre:Array<ParserTokens>):Array<ParserTokens> {
+
+        if (pre == null) return null;
+
         var post:Array<ParserTokens> = [];
 
         var i = 0;
@@ -159,6 +170,8 @@ class Parser {
             switch token {
                 case Identifier(_ == VARIABLE_DECLARATION => true): {
                     i++;
+                    if (i >= pre.length) return null;
+
                     var name:ParserTokens = null;
                     var type:ParserTokens = null;
                     while (i < pre.length) {
@@ -201,6 +214,8 @@ class Parser {
                 }
                 case Identifier(_ == FUNCTION_DECLARATION => true): {
                     i++;
+                    if (i >= pre.length) return null;
+                    
                     var name:ParserTokens = null;
                     var params:ParserTokens = null;
                     var type:ParserTokens = null;
@@ -319,6 +334,9 @@ class Parser {
     }
 
     public static function mergeWrites(pre:Array<ParserTokens>):Array<ParserTokens> {
+
+        if (pre == null) return null;
+
         var post:Array<ParserTokens> = [];
 
         // First, merge two consecutive "=" into a single "=="

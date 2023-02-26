@@ -8,6 +8,7 @@ import refactored_little.parser.Tokens;
 class PrettyPrinter {
     
     public static function printParserAst(ast:Array<ParserTokens>, ?spacingBetweenNodes:Int = 6) {
+		if (ast == null) return "null (look for errors in input)";
 		s = " ".multiply(spacingBetweenNodes);
 		var unfilteredResult = getTree(Expression(ast, null), [], 0, true);
 		var filtered = "";

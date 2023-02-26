@@ -1,11 +1,5 @@
 (function ($global) { "use strict";
 var $estr = function() { return js_Boot.__string_rec(this,''); },$hxEnums = $hxEnums || {},$_;
-function $extend(from, fields) {
-	var proto = Object.create(from);
-	for (var name in fields) proto[name] = fields[name];
-	if( fields.toString !== Object.prototype.toString ) proto.toString = fields.toString;
-	return proto;
-}
 var EReg = function(r,opt) {
 	this.r = new RegExp(r,opt.split("u").join(""));
 };
@@ -19,48 +13,17 @@ EReg.prototype = {
 		this.r.s = s;
 		return this.r.m != null;
 	}
-	,matched: function(n) {
-		if(this.r.m != null && n >= 0 && n < this.r.m.length) {
-			return this.r.m[n];
-		} else {
-			throw haxe_Exception.thrown("EReg::matched");
-		}
-	}
-};
-var HxOverrides = function() { };
-HxOverrides.__name__ = true;
-HxOverrides.cca = function(s,index) {
-	var x = s.charCodeAt(index);
-	if(x != x) {
-		return undefined;
-	}
-	return x;
-};
-HxOverrides.substr = function(s,pos,len) {
-	if(len == null) {
-		len = s.length;
-	} else if(len < 0) {
-		if(pos == 0) {
-			len = s.length + len;
-		} else {
-			return "";
-		}
-	}
-	return s.substr(pos,len);
-};
-HxOverrides.now = function() {
-	return Date.now();
 };
 var Main = function() { };
 Main.__name__ = true;
 Main.main = function() {
 	var text = window.document.getElementById("input");
 	var output = window.document.getElementById("output");
-	haxe_Log.trace(text,{ fileName : "src/Main.hx", lineNumber : 51, className : "Main", methodName : "main", customParams : [output]});
-	text.addEventListener("keyup",function(e) {
+	haxe_Log.trace(text,{ fileName : "src/Main.hx", lineNumber : 29, className : "Main", methodName : "main", customParams : [output]});
+	text.addEventListener("keyup",function(_) {
 		try {
-			var tmp = little_parser_Parser.typeTokens(little_lexer_Lexer.splitBlocks1(little_lexer_Lexer.lexIntoComplex(text.value)));
-			output.innerHTML = little_parser_Parser.prettyPrintAst(tmp,5);
+			var tmp = refactored_$little_parser_Parser.parse(refactored_$little_lexer_Lexer.separateBooleanIdentifiers(refactored_$little_lexer_Lexer.lex(text.value)));
+			output.innerHTML = refactored_$little_tools_PrettyPrinter.printParserAst(tmp);
 		} catch( _g ) {
 		}
 	});
@@ -71,61 +34,11 @@ Std.__name__ = true;
 Std.string = function(s) {
 	return js_Boot.__string_rec(s,"");
 };
-var StringTools = function() { };
-StringTools.__name__ = true;
-StringTools.startsWith = function(s,start) {
-	if(s.length >= start.length) {
-		return s.lastIndexOf(start,0) == 0;
-	} else {
-		return false;
-	}
-};
-StringTools.isSpace = function(s,pos) {
-	var c = HxOverrides.cca(s,pos);
-	if(!(c > 8 && c < 14)) {
-		return c == 32;
-	} else {
-		return true;
-	}
-};
-StringTools.ltrim = function(s) {
-	var l = s.length;
-	var r = 0;
-	while(r < l && StringTools.isSpace(s,r)) ++r;
-	if(r > 0) {
-		return HxOverrides.substr(s,r,l - r);
-	} else {
-		return s;
-	}
-};
-StringTools.rtrim = function(s) {
-	var l = s.length;
-	var r = 0;
-	while(r < l && StringTools.isSpace(s,l - r - 1)) ++r;
-	if(r > 0) {
-		return HxOverrides.substr(s,0,l - r);
-	} else {
-		return s;
-	}
-};
-StringTools.trim = function(s) {
-	return StringTools.ltrim(StringTools.rtrim(s));
-};
-StringTools.replace = function(s,sub,by) {
-	return s.split(sub).join(by);
-};
 var TextTools = function() { };
 TextTools.__name__ = true;
 TextTools.replaceFirst = function(string,replace,by) {
 	var place = string.indexOf(replace);
 	var result = string.substring(0,place) + by + string.substring(place + replace.length);
-	return result;
-};
-TextTools.splitOnFirst = function(string,delimiter) {
-	var place = string.indexOf(delimiter);
-	var result = [];
-	result.push(string.substring(0,place));
-	result.push(string.substring(place + delimiter.length));
 	return result;
 };
 TextTools.multiply = function(string,times) {
@@ -149,12 +62,6 @@ TextTools.contains = function(string,contains) {
 		return false;
 	}
 	return string.indexOf(contains) != -1;
-};
-TextTools.replace = function(string,replace,$with) {
-	if(replace == null || $with == null) {
-		return string;
-	}
-	return StringTools.replace(string,replace,$with);
 };
 var Type = function() { };
 Type.__name__ = true;
@@ -185,29 +92,22 @@ Type.enumEq = function(a,b) {
 	}
 	return true;
 };
-var haxe_Exception = function(message,previous,native) {
-	Error.call(this,message);
-	this.message = message;
-	this.__previousException = previous;
-	this.__nativeException = native != null ? native : this;
-};
-haxe_Exception.__name__ = true;
-haxe_Exception.thrown = function(value) {
-	if(((value) instanceof haxe_Exception)) {
-		return value.get_native();
-	} else if(((value) instanceof Error)) {
-		return value;
+Type.enumParameters = function(e) {
+	var enm = $hxEnums[e.__enum__];
+	var params = enm.__constructs__[e._hx_index].__params__;
+	if(params != null) {
+		var _g = [];
+		var _g1 = 0;
+		while(_g1 < params.length) {
+			var p = params[_g1];
+			++_g1;
+			_g.push(e[p]);
+		}
+		return _g;
 	} else {
-		var e = new haxe_ValueException(value);
-		return e;
+		return [];
 	}
 };
-haxe_Exception.__super__ = Error;
-haxe_Exception.prototype = $extend(Error.prototype,{
-	get_native: function() {
-		return this.__nativeException;
-	}
-});
 var haxe_Log = function() { };
 haxe_Log.__name__ = true;
 haxe_Log.formatOutput = function(v,infos) {
@@ -233,14 +133,6 @@ haxe_Log.trace = function(v,infos) {
 		console.log(str);
 	}
 };
-var haxe_ValueException = function(value,previous,native) {
-	haxe_Exception.call(this,String(value),previous,native);
-	this.value = value;
-};
-haxe_ValueException.__name__ = true;
-haxe_ValueException.__super__ = haxe_Exception;
-haxe_ValueException.prototype = $extend(haxe_Exception.prototype,{
-});
 var haxe_iterators_ArrayIterator = function(array) {
 	this.current = 0;
 	this.array = array;
@@ -348,823 +240,798 @@ js_Boot.__string_rec = function(o,s) {
 		return String(o);
 	}
 };
-var little_Keywords = function() { };
-little_Keywords.__name__ = true;
-var little_expressions_ExpTokens = $hxEnums["little.expressions.ExpTokens"] = { __ename__:true,__constructs__:null
-	,Variable: ($_=function(value) { return {_hx_index:0,value:value,__enum__:"little.expressions.ExpTokens",toString:$estr}; },$_._hx_name="Variable",$_.__params__ = ["value"],$_)
-	,Value: ($_=function(value) { return {_hx_index:1,value:value,__enum__:"little.expressions.ExpTokens",toString:$estr}; },$_._hx_name="Value",$_.__params__ = ["value"],$_)
-	,Characters: ($_=function(value) { return {_hx_index:2,value:value,__enum__:"little.expressions.ExpTokens",toString:$estr}; },$_._hx_name="Characters",$_.__params__ = ["value"],$_)
-	,Sign: ($_=function(value) { return {_hx_index:3,value:value,__enum__:"little.expressions.ExpTokens",toString:$estr}; },$_._hx_name="Sign",$_.__params__ = ["value"],$_)
-	,Call: ($_=function(value,content) { return {_hx_index:4,value:value,content:content,__enum__:"little.expressions.ExpTokens",toString:$estr}; },$_._hx_name="Call",$_.__params__ = ["value","content"],$_)
-	,Closure: ($_=function(content) { return {_hx_index:5,content:content,__enum__:"little.expressions.ExpTokens",toString:$estr}; },$_._hx_name="Closure",$_.__params__ = ["content"],$_)
-};
-little_expressions_ExpTokens.__constructs__ = [little_expressions_ExpTokens.Variable,little_expressions_ExpTokens.Value,little_expressions_ExpTokens.Characters,little_expressions_ExpTokens.Sign,little_expressions_ExpTokens.Call,little_expressions_ExpTokens.Closure];
-var little_expressions_Expressions = function() { };
-little_expressions_Expressions.__name__ = true;
-little_expressions_Expressions.lex = function(exp) {
-	var split = exp.split("");
+var refactored_$little_Keywords = function() { };
+refactored_$little_Keywords.__name__ = true;
+var refactored_$little_lexer_Lexer = function() { };
+refactored_$little_lexer_Lexer.__name__ = true;
+refactored_$little_lexer_Lexer.lex = function(code) {
 	var tokens = [];
 	var i = 0;
-	while(i < split.length) {
-		var l = split[i];
-		if(texter_general_CharTools.numericChars.match(l)) {
-			tokens.push(little_expressions_ExpTokens.Value(l));
-		} else if(texter_general_CharTools.softChars.indexOf(l) != -1) {
-			tokens.push(little_expressions_ExpTokens.Sign(l));
-		} else {
-			tokens.push(little_expressions_ExpTokens.Variable(l));
+	while(i < code.length) {
+		var char = code.charAt(i);
+		if(char == "\"") {
+			var string = "";
+			++i;
+			while(i < code.length && code.charAt(i) != "\"") {
+				string += code.charAt(i);
+				++i;
+			}
+			tokens.push(refactored_$little_lexer_LexerTokens.Characters(string));
+		} else if(TextTools.contains("1234567890.",char)) {
+			var num = char;
+			++i;
+			while(i < code.length && TextTools.contains("1234567890.",code.charAt(i))) {
+				num += code.charAt(i);
+				++i;
+			}
+			--i;
+			tokens.push(refactored_$little_lexer_LexerTokens.Number(num));
+		} else if(char == "\n") {
+			tokens.push(refactored_$little_lexer_LexerTokens.Newline);
+		} else if(char == ";") {
+			tokens.push(refactored_$little_lexer_LexerTokens.SplitLine);
+		} else if(refactored_$little_lexer_Lexer.signs.indexOf(char) != -1) {
+			tokens.push(refactored_$little_lexer_LexerTokens.Sign(char));
+		} else if(new EReg("\\w","").match(char)) {
+			var name = char;
+			++i;
+			while(i < code.length && new EReg("\\w","").match(code.charAt(i))) {
+				name += code.charAt(i);
+				++i;
+			}
+			--i;
+			tokens.push(refactored_$little_lexer_LexerTokens.Identifier(name));
 		}
 		++i;
 	}
-	var mergedValues = [];
-	i = 0;
-	while(i < tokens.length) {
+	return tokens;
+};
+refactored_$little_lexer_Lexer.separateBooleanIdentifiers = function(tokens) {
+	var result = new Array(tokens.length);
+	var _g = 0;
+	var _g1 = tokens.length;
+	while(_g < _g1) {
+		var i = _g++;
 		var token = tokens[i];
-		switch(token._hx_index) {
-		case 0:
-			var value = token.value;
-			mergedValues.push(little_expressions_ExpTokens.Variable(value));
-			break;
-		case 1:
-			var v = token.value;
-			var val = v;
-			_hx_loop3: while(i < tokens.length) {
-				if(i + 1 >= tokens.length) {
-					break;
-				}
-				var nextToken = tokens[i + 1];
-				switch(nextToken._hx_index) {
-				case 1:
-					var value1 = nextToken.value;
-					val += value1;
-					break;
-				case 3:
-					if(nextToken.value == ".") {
-						val += ".";
-					} else {
-						break _hx_loop3;
-					}
-					break;
-				default:
-					break _hx_loop3;
-				}
-				++i;
-			}
-			mergedValues.push(little_expressions_ExpTokens.Value(val));
-			break;
-		case 2:
-			var value2 = token.value;
-			mergedValues.push(little_expressions_ExpTokens.Characters(value2));
-			break;
-		case 3:
-			var value3 = token.value;
-			mergedValues.push(little_expressions_ExpTokens.Sign(value3));
-			break;
-		case 4:
-			var value4 = token.value;
-			var content = token.content;
-			mergedValues.push(little_expressions_ExpTokens.Call(value4,content));
-			break;
-		case 5:
-			var content1 = token.content;
-			mergedValues.push(little_expressions_ExpTokens.Closure(content1));
-			break;
-		}
-		++i;
+		result[i] = Type.enumEq(token,refactored_$little_lexer_LexerTokens.Identifier(refactored_$little_Keywords.TRUE_VALUE)) || Type.enumEq(token,refactored_$little_lexer_LexerTokens.Identifier(refactored_$little_Keywords.FALSE_VALUE)) ? refactored_$little_lexer_LexerTokens.Boolean(Type.enumParameters(token)[0]) : Type.enumEq(token,refactored_$little_lexer_LexerTokens.Identifier(refactored_$little_Keywords.NULL_VALUE)) ? refactored_$little_lexer_LexerTokens.NullValue : token;
 	}
-	var mergedVariables = [];
-	i = 0;
-	while(i < mergedValues.length) {
-		var token = mergedValues[i];
-		switch(token._hx_index) {
-		case 0:
-			var v = token.value;
-			var val = v;
-			while(i < mergedValues.length) {
-				if(i + 1 >= mergedValues.length) {
-					break;
-				}
-				var nextToken = mergedValues[i + 1];
-				if(nextToken._hx_index == 0) {
-					var value = nextToken.value;
-					val += value;
-				} else {
-					break;
-				}
-				++i;
-			}
-			mergedVariables.push(little_expressions_ExpTokens.Variable(val));
-			break;
-		case 1:
-			var value1 = token.value;
-			mergedVariables.push(little_expressions_ExpTokens.Value(value1));
-			break;
-		case 2:
-			var value2 = token.value;
-			mergedVariables.push(little_expressions_ExpTokens.Characters(value2));
-			break;
-		case 3:
-			var value3 = token.value;
-			mergedVariables.push(little_expressions_ExpTokens.Sign(value3));
-			break;
-		case 4:
-			var value4 = token.value;
-			var content = token.content;
-			mergedVariables.push(little_expressions_ExpTokens.Call(value4,content));
-			break;
-		case 5:
-			var content1 = token.content;
-			mergedVariables.push(little_expressions_ExpTokens.Closure(content1));
-			break;
-		}
-		++i;
-	}
-	var result = new Array(mergedVariables.length);
-	var _g = 0;
-	var _g1 = mergedVariables.length;
-	while(_g < _g1) {
-		var i1 = _g++;
-		var e = mergedVariables[i1];
-		result[i1] = Type.enumEq(e,little_expressions_ExpTokens.Variable(little_Keywords.TRUE_VALUE)) ? little_expressions_ExpTokens.Value(little_Keywords.TRUE_VALUE) : Type.enumEq(e,little_expressions_ExpTokens.Variable(little_Keywords.FALSE_VALUE)) ? little_expressions_ExpTokens.Value(little_Keywords.FALSE_VALUE) : Type.enumEq(e,little_expressions_ExpTokens.Variable(little_Keywords.NULL_VALUE)) ? little_expressions_ExpTokens.Value(little_Keywords.NULL_VALUE) : e;
-	}
-	mergedVariables = result;
-	var mergedChars = [];
-	i = 0;
-	while(i < mergedVariables.length) {
-		var token = mergedVariables[i];
-		switch(token._hx_index) {
-		case 0:
-			var value = token.value;
-			mergedChars.push(little_expressions_ExpTokens.Variable(value));
-			break;
-		case 1:
-			var value1 = token.value;
-			mergedChars.push(little_expressions_ExpTokens.Value(value1));
-			break;
-		case 2:
-			var value2 = token.value;
-			mergedChars.push(little_expressions_ExpTokens.Characters(value2));
-			break;
-		case 3:
-			var _g = token.value;
-			if(_g == "\"") {
-				var val = "";
-				_hx_loop8: while(i < mergedVariables.length) {
-					if(i + 1 >= mergedVariables.length) {
-						break;
-					}
-					var nextToken = mergedVariables[i + 1];
-					switch(nextToken._hx_index) {
-					case 0:
-						var value3 = nextToken.value;
-						val += value3;
-						break;
-					case 1:
-						var value4 = nextToken.value;
-						val += value4;
-						break;
-					case 3:
-						var _g1 = nextToken.value;
-						if(_g1 == "\"") {
-							++i;
-							break _hx_loop8;
-						} else {
-							var value5 = _g1;
-							val += value5;
-						}
-						break;
-					default:
-						break _hx_loop8;
-					}
-					++i;
-				}
-				mergedChars.push(little_expressions_ExpTokens.Characters(val));
-			} else {
-				var value6 = _g;
-				mergedChars.push(little_expressions_ExpTokens.Sign(value6));
-			}
-			break;
-		case 4:
-			var value7 = token.value;
-			var content = token.content;
-			mergedChars.push(little_expressions_ExpTokens.Call(value7,content));
-			break;
-		case 5:
-			var content1 = token.content;
-			mergedChars.push(little_expressions_ExpTokens.Closure(content1));
-			break;
-		}
-		++i;
-	}
-	var _g = [];
-	var _g1 = 0;
-	var _g2 = mergedChars;
-	while(_g1 < _g2.length) {
-		var v = _g2[_g1];
-		++_g1;
-		if(!Type.enumEq(v,little_expressions_ExpTokens.Sign(" "))) {
-			_g.push(v);
-		}
-	}
-	mergedChars = _g;
-	var mergedClosures = [];
-	i = 0;
-	while(i < mergedChars.length) {
-		var token = mergedChars[i];
-		switch(token._hx_index) {
-		case 0:
-			var value = token.value;
-			mergedClosures.push(little_expressions_ExpTokens.Variable(value));
-			break;
-		case 1:
-			var value1 = token.value;
-			mergedClosures.push(little_expressions_ExpTokens.Value(value1));
-			break;
-		case 2:
-			var value2 = token.value;
-			mergedClosures.push(little_expressions_ExpTokens.Characters(value2));
-			break;
-		case 3:
-			var _g = token.value;
-			if(_g == "(") {
-				var val = [];
-				_hx_loop11: while(i < mergedChars.length) {
-					if(i + 1 >= mergedChars.length) {
-						break;
-					}
-					var nextToken = mergedChars[i + 1];
-					switch(nextToken._hx_index) {
-					case 0:
-						var _g1 = nextToken.value;
-						val.push(nextToken);
-						break;
-					case 1:
-						var _g2 = nextToken.value;
-						val.push(nextToken);
-						break;
-					case 2:
-						var _g3 = nextToken.value;
-						val.push(nextToken);
-						break;
-					case 3:
-						if(nextToken.value == ")") {
-							++i;
-							break _hx_loop11;
-						} else {
-							val.push(nextToken);
-						}
-						break;
-					default:
-						break _hx_loop11;
-					}
-					++i;
-				}
-				mergedClosures.push(little_expressions_ExpTokens.Closure(val));
-			} else {
-				var value3 = _g;
-				mergedClosures.push(little_expressions_ExpTokens.Sign(value3));
-			}
-			break;
-		case 4:
-			var value4 = token.value;
-			var content = token.content;
-			mergedClosures.push(little_expressions_ExpTokens.Call(value4,content));
-			break;
-		case 5:
-			var content1 = token.content;
-			mergedClosures.push(little_expressions_ExpTokens.Closure(content1));
-			break;
-		}
-		++i;
-	}
-	var mergedCalls = [];
-	i = 0;
-	while(i < mergedClosures.length) {
-		var token = mergedClosures[i];
-		if(token._hx_index == 0) {
-			var value = token.value;
-			_hx_loop13: while(i < mergedClosures.length) {
-				if(i + 1 >= mergedClosures.length) {
-					break;
-				}
-				var nextToken = mergedClosures[i + 1];
-				switch(nextToken._hx_index) {
-				case 3:
-					if(nextToken.value == " ") {
-						++i;
-						continue;
-					} else {
-						break _hx_loop13;
-					}
-					break;
-				case 5:
-					var content = nextToken.content;
-					mergedCalls.push(little_expressions_ExpTokens.Call(value,content));
-					++i;
-					break _hx_loop13;
-				default:
-					break _hx_loop13;
-				}
-			}
-		} else {
-			mergedCalls.push(token);
-		}
-		++i;
-	}
-	return mergedCalls;
+	return result;
 };
-var little_lexer_Lexer = function() { };
-little_lexer_Lexer.__name__ = true;
-little_lexer_Lexer.lexIntoComplex = function(code,disableSkips) {
-	if(disableSkips == null) {
-		disableSkips = false;
-	}
-	code = TextTools.replace(code,"==","⩵");
-	code = TextTools.replace(code,";","\n");
+var refactored_$little_lexer_LexerTokens = $hxEnums["refactored_little.lexer.LexerTokens"] = { __ename__:true,__constructs__:null
+	,Identifier: ($_=function(name) { return {_hx_index:0,name:name,__enum__:"refactored_little.lexer.LexerTokens",toString:$estr}; },$_._hx_name="Identifier",$_.__params__ = ["name"],$_)
+	,Sign: ($_=function(char) { return {_hx_index:1,char:char,__enum__:"refactored_little.lexer.LexerTokens",toString:$estr}; },$_._hx_name="Sign",$_.__params__ = ["char"],$_)
+	,Number: ($_=function(num) { return {_hx_index:2,num:num,__enum__:"refactored_little.lexer.LexerTokens",toString:$estr}; },$_._hx_name="Number",$_.__params__ = ["num"],$_)
+	,Boolean: ($_=function(value) { return {_hx_index:3,value:value,__enum__:"refactored_little.lexer.LexerTokens",toString:$estr}; },$_._hx_name="Boolean",$_.__params__ = ["value"],$_)
+	,Characters: ($_=function(string) { return {_hx_index:4,string:string,__enum__:"refactored_little.lexer.LexerTokens",toString:$estr}; },$_._hx_name="Characters",$_.__params__ = ["string"],$_)
+	,NullValue: {_hx_name:"NullValue",_hx_index:5,__enum__:"refactored_little.lexer.LexerTokens",toString:$estr}
+	,Newline: {_hx_name:"Newline",_hx_index:6,__enum__:"refactored_little.lexer.LexerTokens",toString:$estr}
+	,SplitLine: {_hx_name:"SplitLine",_hx_index:7,__enum__:"refactored_little.lexer.LexerTokens",toString:$estr}
+};
+refactored_$little_lexer_LexerTokens.__constructs__ = [refactored_$little_lexer_LexerTokens.Identifier,refactored_$little_lexer_LexerTokens.Sign,refactored_$little_lexer_LexerTokens.Number,refactored_$little_lexer_LexerTokens.Boolean,refactored_$little_lexer_LexerTokens.Characters,refactored_$little_lexer_LexerTokens.NullValue,refactored_$little_lexer_LexerTokens.Newline,refactored_$little_lexer_LexerTokens.SplitLine];
+var refactored_$little_parser_Parser = function() { };
+refactored_$little_parser_Parser.__name__ = true;
+refactored_$little_parser_Parser.parse = function(lexerTokens) {
 	var tokens = [];
-	var l = 1;
-	while(l < code.split("\n").length + 1) {
-		var line = code.split("\n")[l - 1];
-		if(StringTools.trim(TextTools.replace(line,"\t"," ")) == "") {
-			++l;
-			continue;
-		}
-		if(StringTools.startsWith(StringTools.trim(TextTools.replace(line,"\t"," ")),little_Keywords.VARIABLE_DECLARATION)) {
-			var _g = [];
-			var _g1 = 0;
-			var _g2 = line.split(" ");
-			while(_g1 < _g2.length) {
-				var v = _g2[_g1];
-				++_g1;
-				if(v != "" && v != "define") {
-					_g.push(v);
-				}
-			}
-			var items = _g;
-			if(items.length == 0) {
-				++l;
-			}
-			if(items.length == 1) {
-				var _this_r = new RegExp("[0-9\\.]","g".split("u").join(""));
-				if(items[0].replace(_this_r,"").length == 0) {
-					++l;
-				} else {
-					tokens.push(little_lexer_ComplexToken.DefinitionCreationDetails(l,items[0],little_Keywords.NULL_VALUE,little_Keywords.TYPE_DYNAMIC));
-				}
-				continue;
-			}
-			var _defAndVal = line.split("=");
-			var _g3 = [];
-			var _g4 = 0;
-			var _g5 = _defAndVal[0].split(" ");
-			while(_g4 < _g5.length) {
-				var v1 = _g5[_g4];
-				++_g4;
-				if(v1 != "" && v1 != little_Keywords.VARIABLE_DECLARATION) {
-					_g3.push(v1);
-				}
-			}
-			var defValSplit_0 = _g3;
-			var defName = "";
-			var val = "";
-			var type = null;
-			var nameSet = false;
-			var typeSet = false;
-			var _g6 = 0;
-			var _g7 = defValSplit_0.length;
-			while(_g6 < _g7) {
-				var i = _g6++;
-				if(defValSplit_0[i] == little_Keywords.TYPE_CHECK_OR_CAST && defValSplit_0[i + 1] != null && defValSplit_0[i + 1].replace(little_lexer_Lexer.typeDetector.r,"").length == 0) {
-					if(!typeSet) {
-						type = defValSplit_0[i + 1];
-					}
-					typeSet = true;
-				} else if(defValSplit_0[i].replace(little_lexer_Lexer.nameDetector.r,"").length == 0) {
-					if(!nameSet) {
-						defName = defValSplit_0[i];
-					}
-					nameSet = true;
-				}
-			}
-			if(_defAndVal.length == 1) {
-				val = little_Keywords.NULL_VALUE;
-				tokens.push(little_lexer_ComplexToken.DefinitionCreationDetails(l,defName,val,type));
-			} else {
-				val = StringTools.trim(_defAndVal[1]);
-				tokens.push(little_lexer_ComplexToken.DefinitionCreationDetails(l,defName,val,type));
-			}
-		} else if(TextTools.replace(StringTools.trim(line),"\t"," ").replace(little_lexer_Lexer.assignmentDetector.r,"").length == 0) {
-			var items1 = line.split("=");
-			var value = StringTools.trim(items1[items1.length - 1]);
-			items1.pop();
-			var result = new Array(items1.length);
-			var _g8 = 0;
-			var _g9 = items1.length;
-			while(_g8 < _g9) {
-				var i1 = _g8++;
-				result[i1] = StringTools.trim(items1[i1]);
-			}
-			items1 = result;
-			var assignees = items1;
-			tokens.push(little_lexer_ComplexToken.Assignment(l,value,assignees));
-		} else {
-			var tmp;
-			if(StringTools.trim(TextTools.replace(line,"\t"," ")).replace(little_lexer_Lexer.conditionDetector.r,"").length == 0) {
-				var _g10 = [];
-				var _g11 = 0;
-				var _g12 = little_Keywords.CONDITION_TYPES;
-				while(_g11 < _g12.length) {
-					var condition = _g12[_g11];
-					++_g11;
-					_g10.push(StringTools.startsWith(StringTools.trim(TextTools.replace(line,"\t"," ")),condition));
-				}
-				tmp = _g10.indexOf(true) != -1;
-			} else {
-				tmp = false;
-			}
-			if(tmp) {
-				little_lexer_Lexer.conditionDetector.match(StringTools.trim(TextTools.replace(line,"\t"," ")));
-				var cWord = little_lexer_Lexer.conditionDetector.matched(1);
-				var condition1 = little_lexer_Lexer.conditionDetector.matched(2);
-				var rawBody = little_lexer_Specifics.extractActionBody(little_lexer_Specifics.cropCode(code,l));
-				var body = little_lexer_Lexer.lexIntoComplex(TextTools.multiply("\n",l) + rawBody.body,true);
-				tokens.push(little_lexer_ComplexToken.ConditionStatement(l,cWord,condition1,body));
-				l += rawBody.lineCount;
-			} else if(StringTools.startsWith(StringTools.trim(TextTools.replace(line,"\t"," ")),little_Keywords.FUNCTION_DECLARATION)) {
-				var trimmed = StringTools.trim(TextTools.replace(line,"\t"," "));
-				var nameExtractor = new EReg(little_Keywords.FUNCTION_DECLARATION + " +(\\w+)","");
-				nameExtractor.match(trimmed);
-				var name = nameExtractor.matched(1);
-				var paramsBody = trimmed.substring(trimmed.indexOf("(") + 1,trimmed.lastIndexOf(")"));
-				var containsOptionalType = trimmed.substring(trimmed.lastIndexOf(")") + 1);
-				if(TextTools.contains(containsOptionalType,"{")) {
-					containsOptionalType = containsOptionalType.substring(0,containsOptionalType.lastIndexOf("{"));
-				}
-				containsOptionalType = StringTools.trim(containsOptionalType);
-				var type1;
-				if(TextTools.contains(containsOptionalType,little_Keywords.TYPE_CHECK_OR_CAST)) {
-					var typeExtractor = new EReg(little_Keywords.TYPE_CHECK_OR_CAST + " +(\\w+)","");
-					typeExtractor.match(containsOptionalType);
-					try {
-						type1 = typeExtractor.matched(1);
-					} catch( _g13 ) {
-						type1 = null;
-					}
-				} else {
-					type1 = null;
-				}
-				var rawBody1 = little_lexer_Specifics.extractActionBody(little_lexer_Specifics.cropCode(code,l - 1));
-				var body1 = little_lexer_Lexer.lexIntoComplex(TextTools.multiply("\n",l) + rawBody1.body,true);
-				tokens.push(little_lexer_ComplexToken.ActionCreationDetails(l,name,paramsBody,body1,type1));
-				l += rawBody1.lineCount;
-			} else {
-				tokens.push(little_lexer_ComplexToken.GenericExpression(l,StringTools.trim(TextTools.replace(line,"\t"," "))));
-			}
-		}
-		++l;
-	}
-	return tokens;
-};
-little_lexer_Lexer.splitBlocks1 = function(complexTokens) {
-	var tokens = [];
-	var _g = 0;
-	while(_g < complexTokens.length) {
-		var complex = complexTokens[_g];
-		++_g;
-		switch(complex._hx_index) {
-		case 0:
-			var line = complex.line;
-			var name = complex.name;
-			var complexValue = complex.complexValue;
-			var type = complex.type;
-			tokens.push(little_lexer_LexerTokens.SetLine(line));
-			var defName = name;
-			var defType = type;
-			var defValue = little_lexer_Specifics.complexValueIntoLexerTokens(complexValue);
-			tokens.push(little_lexer_LexerTokens.DefinitionCreation(defName,defValue,defType));
-			break;
-		case 1:
-			var line1 = complex.line;
-			var name1 = complex.name;
-			var parameterBody = complex.parameters;
-			var actionBody = complex.actionBody;
-			var type1 = complex.type;
-			tokens.push(little_lexer_LexerTokens.SetLine(line1));
-			var _g1 = [];
-			var _g2 = 0;
-			var _g3 = parameterBody.split(",");
-			while(_g2 < _g3.length) {
-				var p = _g3[_g2];
-				++_g2;
-				_g1.push(little_lexer_Specifics.extractParamForActionCreation(p));
-			}
-			var params = _g1;
-			var body = little_lexer_Lexer.splitBlocks1(actionBody);
-			tokens.push(little_lexer_LexerTokens.ActionCreation(name1,params,body,type1));
-			break;
-		case 2:
-			var line2 = complex.line;
-			var value = complex.value;
-			var assignees = complex.assignees;
-			tokens.push(little_lexer_LexerTokens.SetLine(line2));
-			var parsedValue = little_lexer_Specifics.complexValueIntoLexerTokens(value);
-			assignees.reverse();
-			var _g4 = 0;
-			while(_g4 < assignees.length) {
-				var assignee = assignees[_g4];
-				++_g4;
-				tokens.push(little_lexer_LexerTokens.DefinitionWrite(assignee,parsedValue));
-			}
-			break;
-		case 3:
-			var line3 = complex.line;
-			var type2 = complex.type;
-			var conditionExpression = complex.conditionExpression;
-			var conditionBody = complex.conditionBody;
-			tokens.push(little_lexer_LexerTokens.SetLine(line3));
-			var condition = little_lexer_Specifics.complexValueIntoLexerTokens(conditionExpression);
-			var body1 = little_lexer_Lexer.splitBlocks1(conditionBody);
-			tokens.push(little_lexer_LexerTokens.Condition(type2,condition,body1));
-			break;
-		case 4:
-			var line4 = complex.line;
-			var exp = complex.exp;
-			tokens.push(little_lexer_LexerTokens.SetLine(line4));
-			if(StringTools.startsWith(exp,little_Keywords.FUNCTION_RETURN)) {
-				tokens.push(little_lexer_LexerTokens.Return(little_lexer_Specifics.complexValueIntoLexerTokens(StringTools.trim(TextTools.replaceFirst(exp,"return","")))));
-			} else {
-				tokens.push(little_lexer_Specifics.complexValueIntoLexerTokens(exp));
-			}
-			break;
-		}
-	}
-	return tokens;
-};
-var little_lexer_Specifics = function() { };
-little_lexer_Specifics.__name__ = true;
-little_lexer_Specifics.cropCode = function(code,line) {
-	var _g = 0;
-	var _g1 = line;
-	while(_g < _g1) {
-		var _ = _g++;
-		code = code.substring(code.indexOf("\n") + 1);
-	}
-	return code;
-};
-little_lexer_Specifics.extractParam = function(string) {
-	return little_lexer_LexerTokens.ActionCallParameter(little_lexer_Specifics.attributesIntoExpression(little_expressions_Expressions.lex(string)));
-};
-little_lexer_Specifics.extractParamForActionCreation = function(string) {
-	if(TextTools.contains(string,"=")) {
-		var __nameValSplit = TextTools.splitOnFirst(string,"=");
-		var param = little_lexer_Specifics.extractParamForActionCreation(__nameValSplit[0]);
-		var value = little_lexer_Specifics.complexValueIntoLexerTokens(__nameValSplit[1]);
-		if(param._hx_index == 8) {
-			var _g = param.value;
-			var name = param.name;
-			var type = param.type;
-			return little_lexer_LexerTokens.Parameter(name,type,value);
-		} else {
-			throw haxe_Exception.thrown("That Shouldn't Happen...");
-		}
-	} else if(TextTools.contains(string,little_Keywords.TYPE_CHECK_OR_CAST)) {
-		var extractor = new EReg("(\\w+) +" + little_Keywords.TYPE_CHECK_OR_CAST + " +(\\w+)","");
-		extractor.match(StringTools.trim(TextTools.replace(string,"\t"," ")));
-		return little_lexer_LexerTokens.Parameter(extractor.matched(1),extractor.matched(2),little_lexer_LexerTokens.StaticValue(little_Keywords.NULL_VALUE));
-	} else {
-		return little_lexer_LexerTokens.Parameter(StringTools.trim(TextTools.replace(string,"\t"," ")),null,little_lexer_LexerTokens.StaticValue(little_Keywords.NULL_VALUE));
-	}
-};
-little_lexer_Specifics.extractActionBody = function(code) {
-	var lastFunctionLineCount = 0;
-	var lines = code.split("\n");
-	var stack = [];
-	var functionBody = "";
-	var inFunction = true;
-	var _g = 0;
-	while(_g < lines.length) {
-		var line = lines[_g];
-		++_g;
-		var lineTrimmed = StringTools.trim(line);
-		if(TextTools.countOccurrencesOf(lineTrimmed,"{") != 0) {
-			var _g1 = 0;
-			var _g2 = TextTools.countOccurrencesOf(lineTrimmed,"{");
-			while(_g1 < _g2) {
-				var _ = _g1++;
-				stack.push(1);
-			}
-			if(!inFunction) {
-				inFunction = true;
-			}
-		}
-		if(TextTools.countOccurrencesOf(lineTrimmed,"}") != 0) {
-			var _g3 = 0;
-			var _g4 = TextTools.countOccurrencesOf(lineTrimmed,"}");
-			while(_g3 < _g4) {
-				var _1 = _g3++;
-				if(stack.length > 0) {
-					stack.pop();
-				}
-			}
-			if(stack.length == 0 && inFunction) {
-				inFunction = false;
-				break;
-			}
-		}
-		if(inFunction) {
-			functionBody += line + "\n";
-		}
-		++lastFunctionLineCount;
-	}
-	++lastFunctionLineCount;
-	return { body : functionBody.substring(functionBody.indexOf("{") + 1), lineCount : lastFunctionLineCount};
-};
-little_lexer_Specifics.complexValueIntoLexerTokens = function(complexValue) {
-	complexValue = StringTools.trim(complexValue);
-	var defValue = little_lexer_LexerTokens.InvalidSyntax(complexValue);
-	if(complexValue.replace(little_lexer_Lexer.staticValueDetector.r,"").length == 0) {
-		defValue = little_lexer_LexerTokens.StaticValue(complexValue);
-	} else if(complexValue.replace(little_lexer_Lexer.definitionAccessDetector.r,"").length == 0) {
-		haxe_Log.trace("\"" + complexValue + "\"",{ fileName : "src/little/lexer/Specifics.hx", lineNumber : 127, className : "little.lexer.Specifics", methodName : "complexValueIntoLexerTokens"});
-		defValue = little_lexer_LexerTokens.DefinitionAccess(complexValue);
-	} else if(complexValue.replace(little_lexer_Lexer.actionCallDetector.r,"").length == 0) {
-		var _actionParamSplit = TextTools.splitOnFirst(complexValue,"(");
-		var actionName = _actionParamSplit[0];
-		var stringifiedParams = _actionParamSplit[1];
-		var tmp = _actionParamSplit[1].lastIndexOf(")");
-		var params = stringifiedParams.split(",");
-		haxe_Log.trace(params,{ fileName : "src/little/lexer/Specifics.hx", lineNumber : 138, className : "little.lexer.Specifics", methodName : "complexValueIntoLexerTokens"});
-		var result = new Array(params.length);
-		var _g = 0;
-		var _g1 = params.length;
-		while(_g < _g1) {
-			var i = _g++;
-			result[i] = StringTools.trim(params[i]);
-		}
-		params = result;
-		haxe_Log.trace(params,{ fileName : "src/little/lexer/Specifics.hx", lineNumber : 140, className : "little.lexer.Specifics", methodName : "complexValueIntoLexerTokens"});
-		var _g = [];
-		var _g1 = 0;
-		while(_g1 < params.length) {
-			var p = params[_g1];
-			++_g1;
-			_g.push(little_lexer_Specifics.extractParam(p));
-		}
-		defValue = little_lexer_LexerTokens.ActionCall(actionName,_g);
-	} else {
-		defValue = little_lexer_Specifics.attributesIntoExpression(little_expressions_Expressions.lex(complexValue));
-	}
-	return defValue;
-};
-little_lexer_Specifics.attributesIntoExpression = function(calcTokens) {
-	var finalTokens = [];
-	var _g = 0;
-	while(_g < calcTokens.length) {
-		var token = calcTokens[_g];
-		++_g;
+	var line = 1;
+	var i = 0;
+	while(i < lexerTokens.length) {
+		var token = lexerTokens[i];
 		switch(token._hx_index) {
 		case 0:
-			var value = token.value;
-			finalTokens.push(little_lexer_LexerTokens.DefinitionAccess(value));
-			break;
-		case 1:
-			var value1 = token.value;
-			finalTokens.push(little_lexer_LexerTokens.StaticValue(value1));
-			break;
-		case 2:
-			var value2 = token.value;
-			finalTokens.push(little_lexer_LexerTokens.StaticValue("\"" + value2 + "\""));
-			break;
-		case 3:
-			var value3 = token.value;
-			finalTokens.push(little_lexer_LexerTokens.Sign(value3));
-			break;
-		case 4:
-			var value4 = token.value;
-			var content = token.content;
-			finalTokens.push(little_lexer_LexerTokens.ActionCall(value4,[little_lexer_Specifics.attributesIntoExpression(content)]));
-			break;
-		case 5:
-			var content1 = token.content;
-			finalTokens.push(little_lexer_Specifics.attributesIntoExpression(content1));
-			break;
-		}
-	}
-	return little_lexer_LexerTokens.Expression(finalTokens);
-};
-var little_lexer_ComplexToken = $hxEnums["little.lexer.ComplexToken"] = { __ename__:true,__constructs__:null
-	,DefinitionCreationDetails: ($_=function(line,name,complexValue,type) { return {_hx_index:0,line:line,name:name,complexValue:complexValue,type:type,__enum__:"little.lexer.ComplexToken",toString:$estr}; },$_._hx_name="DefinitionCreationDetails",$_.__params__ = ["line","name","complexValue","type"],$_)
-	,ActionCreationDetails: ($_=function(line,name,parameters,actionBody,type) { return {_hx_index:1,line:line,name:name,parameters:parameters,actionBody:actionBody,type:type,__enum__:"little.lexer.ComplexToken",toString:$estr}; },$_._hx_name="ActionCreationDetails",$_.__params__ = ["line","name","parameters","actionBody","type"],$_)
-	,Assignment: ($_=function(line,value,assignees) { return {_hx_index:2,line:line,value:value,assignees:assignees,__enum__:"little.lexer.ComplexToken",toString:$estr}; },$_._hx_name="Assignment",$_.__params__ = ["line","value","assignees"],$_)
-	,ConditionStatement: ($_=function(line,type,conditionExpression,conditionBody) { return {_hx_index:3,line:line,type:type,conditionExpression:conditionExpression,conditionBody:conditionBody,__enum__:"little.lexer.ComplexToken",toString:$estr}; },$_._hx_name="ConditionStatement",$_.__params__ = ["line","type","conditionExpression","conditionBody"],$_)
-	,GenericExpression: ($_=function(line,exp) { return {_hx_index:4,line:line,exp:exp,__enum__:"little.lexer.ComplexToken",toString:$estr}; },$_._hx_name="GenericExpression",$_.__params__ = ["line","exp"],$_)
-};
-little_lexer_ComplexToken.__constructs__ = [little_lexer_ComplexToken.DefinitionCreationDetails,little_lexer_ComplexToken.ActionCreationDetails,little_lexer_ComplexToken.Assignment,little_lexer_ComplexToken.ConditionStatement,little_lexer_ComplexToken.GenericExpression];
-var little_lexer_LexerTokens = $hxEnums["little.lexer.LexerTokens"] = { __ename__:true,__constructs__:null
-	,SetLine: ($_=function(line) { return {_hx_index:0,line:line,__enum__:"little.lexer.LexerTokens",toString:$estr}; },$_._hx_name="SetLine",$_.__params__ = ["line"],$_)
-	,DefinitionCreation: ($_=function(name,value,type) { return {_hx_index:1,name:name,value:value,type:type,__enum__:"little.lexer.LexerTokens",toString:$estr}; },$_._hx_name="DefinitionCreation",$_.__params__ = ["name","value","type"],$_)
-	,ActionCreation: ($_=function(name,params,body,type) { return {_hx_index:2,name:name,params:params,body:body,type:type,__enum__:"little.lexer.LexerTokens",toString:$estr}; },$_._hx_name="ActionCreation",$_.__params__ = ["name","params","body","type"],$_)
-	,DefinitionAccess: ($_=function(name) { return {_hx_index:3,name:name,__enum__:"little.lexer.LexerTokens",toString:$estr}; },$_._hx_name="DefinitionAccess",$_.__params__ = ["name"],$_)
-	,DefinitionWrite: ($_=function(assignee,value) { return {_hx_index:4,assignee:assignee,value:value,__enum__:"little.lexer.LexerTokens",toString:$estr}; },$_._hx_name="DefinitionWrite",$_.__params__ = ["assignee","value"],$_)
-	,Sign: ($_=function(sign) { return {_hx_index:5,sign:sign,__enum__:"little.lexer.LexerTokens",toString:$estr}; },$_._hx_name="Sign",$_.__params__ = ["sign"],$_)
-	,StaticValue: ($_=function(value) { return {_hx_index:6,value:value,__enum__:"little.lexer.LexerTokens",toString:$estr}; },$_._hx_name="StaticValue",$_.__params__ = ["value"],$_)
-	,Expression: ($_=function(parts) { return {_hx_index:7,parts:parts,__enum__:"little.lexer.LexerTokens",toString:$estr}; },$_._hx_name="Expression",$_.__params__ = ["parts"],$_)
-	,Parameter: ($_=function(name,type,value) { return {_hx_index:8,name:name,type:type,value:value,__enum__:"little.lexer.LexerTokens",toString:$estr}; },$_._hx_name="Parameter",$_.__params__ = ["name","type","value"],$_)
-	,ActionCallParameter: ($_=function(value) { return {_hx_index:9,value:value,__enum__:"little.lexer.LexerTokens",toString:$estr}; },$_._hx_name="ActionCallParameter",$_.__params__ = ["value"],$_)
-	,ActionCall: ($_=function(name,params) { return {_hx_index:10,name:name,params:params,__enum__:"little.lexer.LexerTokens",toString:$estr}; },$_._hx_name="ActionCall",$_.__params__ = ["name","params"],$_)
-	,Return: ($_=function(value) { return {_hx_index:11,value:value,__enum__:"little.lexer.LexerTokens",toString:$estr}; },$_._hx_name="Return",$_.__params__ = ["value"],$_)
-	,InvalidSyntax: ($_=function(string) { return {_hx_index:12,string:string,__enum__:"little.lexer.LexerTokens",toString:$estr}; },$_._hx_name="InvalidSyntax",$_.__params__ = ["string"],$_)
-	,Condition: ($_=function(type,condition,body) { return {_hx_index:13,type:type,condition:condition,body:body,__enum__:"little.lexer.LexerTokens",toString:$estr}; },$_._hx_name="Condition",$_.__params__ = ["type","condition","body"],$_)
-};
-little_lexer_LexerTokens.__constructs__ = [little_lexer_LexerTokens.SetLine,little_lexer_LexerTokens.DefinitionCreation,little_lexer_LexerTokens.ActionCreation,little_lexer_LexerTokens.DefinitionAccess,little_lexer_LexerTokens.DefinitionWrite,little_lexer_LexerTokens.Sign,little_lexer_LexerTokens.StaticValue,little_lexer_LexerTokens.Expression,little_lexer_LexerTokens.Parameter,little_lexer_LexerTokens.ActionCallParameter,little_lexer_LexerTokens.ActionCall,little_lexer_LexerTokens.Return,little_lexer_LexerTokens.InvalidSyntax,little_lexer_LexerTokens.Condition];
-var little_parser_Parser = function() { };
-little_parser_Parser.__name__ = true;
-little_parser_Parser.typeTokens = function(tokens) {
-	var unInfoedParserTokens = [];
-	var _g = 0;
-	while(_g < tokens.length) {
-		var token = tokens[_g];
-		++_g;
-		var tmp;
-		switch(token._hx_index) {
-		case 0:
-			var line = token.line;
-			tmp = little_parser_UnInfoedParserTokens.SetLine(line);
-			break;
-		case 1:
 			var name = token.name;
-			var value = token.value;
-			var type = token.type;
-			tmp = little_parser_UnInfoedParserTokens.DefinitionCreation(name,little_parser_Parser.typeTokens([value])[0],type);
+			tokens.push(refactored_$little_parser_ParserTokens.Identifier(name));
+			break;
+		case 1:
+			var char = token.char;
+			tokens.push(refactored_$little_parser_ParserTokens.Sign(char));
 			break;
 		case 2:
-			var name1 = token.name;
-			var params = token.params;
-			var body = token.body;
-			var type1 = token.type;
-			tmp = little_parser_UnInfoedParserTokens.ActionCreation(name1,little_parser_Parser.typeTokens(params),little_parser_Parser.typeTokens(body),type1);
+			var num = token.num;
+			if(TextTools.countOccurrencesOf(num,".") == 0) {
+				tokens.push(refactored_$little_parser_ParserTokens.Number(num));
+			} else if(TextTools.countOccurrencesOf(num,".") == 1) {
+				tokens.push(refactored_$little_parser_ParserTokens.Decimal(num));
+			}
 			break;
 		case 3:
-			var name2 = token.name;
-			tmp = little_parser_UnInfoedParserTokens.DefinitionAccess(name2);
+			var value = token.value;
+			if(value == refactored_$little_Keywords.FALSE_VALUE) {
+				tokens.push(refactored_$little_parser_ParserTokens.FalseValue);
+			} else if(value == refactored_$little_Keywords.TRUE_VALUE) {
+				tokens.push(refactored_$little_parser_ParserTokens.TrueValue);
+			}
 			break;
 		case 4:
-			var assignee = token.assignee;
-			var value1 = token.value;
-			tmp = little_parser_UnInfoedParserTokens.DefinitionWrite(assignee,little_parser_Parser.typeTokens([value1])[0],little_parser_Specifics.evaluateExpressionType(value1));
+			var string = token.string;
+			tokens.push(refactored_$little_parser_ParserTokens.Characters(string));
 			break;
 		case 5:
-			var sign = token.sign;
-			tmp = little_parser_UnInfoedParserTokens.Sign(sign);
+			tokens.push(refactored_$little_parser_ParserTokens.NullValue);
 			break;
 		case 6:
-			var value2 = token.value;
-			tmp = little_parser_UnInfoedParserTokens.StaticValue(value2,little_parser_Specifics.evaluateExpressionType(little_lexer_LexerTokens.StaticValue(value2)));
+			tokens.push(refactored_$little_parser_ParserTokens.SetLine(line));
+			++line;
 			break;
 		case 7:
-			var parts = token.parts;
-			tmp = little_parser_UnInfoedParserTokens.Expression(little_parser_Parser.typeTokens(parts),little_parser_Specifics.evaluateExpressionType(little_lexer_LexerTokens.Expression(parts)));
-			break;
-		case 8:
-			var name3 = token.name;
-			var type2 = token.type;
-			var value3 = token.value;
-			tmp = little_parser_UnInfoedParserTokens.Parameter(name3,type2 == null ? little_parser_Specifics.evaluateExpressionType(value3) : type2,little_parser_Parser.typeTokens([value3])[0]);
-			break;
-		case 9:
-			var value4 = token.value;
-			tmp = little_parser_UnInfoedParserTokens.ActionCallParameter(little_parser_Parser.typeTokens([value4])[0],little_parser_Specifics.evaluateExpressionType(value4));
-			break;
-		case 10:
-			var name4 = token.name;
-			var params1 = token.params;
-			tmp = little_parser_UnInfoedParserTokens.ActionCall(name4,little_parser_Parser.typeTokens(params1),little_parser_Specifics.evaluateExpressionType(params1[params1.length - 1]));
-			break;
-		case 11:
-			var value5 = token.value;
-			tmp = little_parser_UnInfoedParserTokens.Return(little_parser_Parser.typeTokens([value5])[0],little_parser_Specifics.evaluateExpressionType(value5));
-			break;
-		case 12:
-			var string = token.string;
-			tmp = little_parser_UnInfoedParserTokens.InvalidSyntax(string);
-			break;
-		case 13:
-			var type3 = token.type;
-			var c = token.condition;
-			var body1 = token.body;
-			tmp = little_parser_UnInfoedParserTokens.Condition(type3,little_parser_Parser.typeTokens([c])[0],little_parser_Parser.typeTokens(body1));
+			tokens.push(refactored_$little_parser_ParserTokens.SplitLine);
 			break;
 		}
-		unInfoedParserTokens.push(tmp);
+		++i;
 	}
-	return unInfoedParserTokens;
+	tokens = refactored_$little_parser_Parser.mergeBlocks(tokens);
+	tokens = refactored_$little_parser_Parser.mergeExpressions(tokens);
+	tokens = refactored_$little_parser_Parser.mergeTypeDecls(tokens);
+	tokens = refactored_$little_parser_Parser.mergeComplexStructures(tokens);
+	tokens = refactored_$little_parser_Parser.mergeWrites(tokens);
+	return tokens;
 };
-little_parser_Parser.prettyPrintAst = function(ast,spacingBetweenNodes) {
+refactored_$little_parser_Parser.mergeTypeDecls = function(pre) {
+	if(pre == null) {
+		return null;
+	}
+	var post = [];
+	var i = 0;
+	while(i < pre.length) {
+		var token = pre[i];
+		switch(token._hx_index) {
+		case 7:
+			var word = token.word;
+			if(word == refactored_$little_Keywords.TYPE_DECL_OR_CAST && i + 1 < pre.length) {
+				var lookahead = pre[i + 1];
+				post.push(refactored_$little_parser_ParserTokens.TypeDeclaration(lookahead));
+				++i;
+			} else {
+				post.push(token);
+			}
+			break;
+		case 11:
+			var parts = token.parts;
+			var type = token.type;
+			post.push(refactored_$little_parser_ParserTokens.Expression(refactored_$little_parser_Parser.mergeTypeDecls(parts),null));
+			break;
+		case 12:
+			var body = token.body;
+			var type1 = token.type;
+			post.push(refactored_$little_parser_ParserTokens.Block(refactored_$little_parser_Parser.mergeTypeDecls(body),null));
+			break;
+		default:
+			post.push(token);
+		}
+		++i;
+	}
+	return post;
+};
+refactored_$little_parser_Parser.mergeBlocks = function(pre) {
+	if(pre == null) {
+		return null;
+	}
+	var post = [];
+	var i = 0;
+	while(i < pre.length) {
+		var token = pre[i];
+		switch(token._hx_index) {
+		case 11:
+			var parts = token.parts;
+			var type = token.type;
+			post.push(refactored_$little_parser_ParserTokens.Expression(refactored_$little_parser_Parser.mergeBlocks(parts),null));
+			break;
+		case 12:
+			var body = token.body;
+			var type1 = token.type;
+			post.push(refactored_$little_parser_ParserTokens.Block(refactored_$little_parser_Parser.mergeBlocks(body),null));
+			break;
+		case 15:
+			if(token.sign == "{") {
+				var blockBody = [];
+				var blockStack = 1;
+				while(i + 1 < pre.length) {
+					var lookahead = pre[i + 1];
+					if(Type.enumEq(lookahead,refactored_$little_parser_ParserTokens.Sign("{"))) {
+						++blockStack;
+						blockBody.push(lookahead);
+					} else if(Type.enumEq(lookahead,refactored_$little_parser_ParserTokens.Sign("}"))) {
+						--blockStack;
+						if(blockStack == 0) {
+							break;
+						}
+						blockBody.push(lookahead);
+					} else {
+						blockBody.push(lookahead);
+					}
+					++i;
+				}
+				post.push(refactored_$little_parser_ParserTokens.Block(refactored_$little_parser_Parser.mergeBlocks(blockBody),null));
+				++i;
+			} else {
+				post.push(token);
+			}
+			break;
+		default:
+			post.push(token);
+		}
+		++i;
+	}
+	return post;
+};
+refactored_$little_parser_Parser.mergeExpressions = function(pre) {
+	if(pre == null) {
+		return null;
+	}
+	var post = [];
+	var i = 0;
+	while(i < pre.length) {
+		var token = pre[i];
+		switch(token._hx_index) {
+		case 11:
+			var parts = token.parts;
+			var type = token.type;
+			post.push(refactored_$little_parser_ParserTokens.Expression(refactored_$little_parser_Parser.mergeExpressions(parts),null));
+			break;
+		case 12:
+			var body = token.body;
+			var type1 = token.type;
+			post.push(refactored_$little_parser_ParserTokens.Block(refactored_$little_parser_Parser.mergeExpressions(body),null));
+			break;
+		case 15:
+			if(token.sign == "(") {
+				var expressionBody = [];
+				var expressionStack = 1;
+				while(i + 1 < pre.length) {
+					var lookahead = pre[i + 1];
+					if(Type.enumEq(lookahead,refactored_$little_parser_ParserTokens.Sign("("))) {
+						++expressionStack;
+						expressionBody.push(lookahead);
+					} else if(Type.enumEq(lookahead,refactored_$little_parser_ParserTokens.Sign(")"))) {
+						--expressionStack;
+						if(expressionStack == 0) {
+							break;
+						}
+						expressionBody.push(lookahead);
+					} else {
+						expressionBody.push(lookahead);
+					}
+					++i;
+				}
+				post.push(refactored_$little_parser_ParserTokens.Expression(refactored_$little_parser_Parser.mergeExpressions(expressionBody),null));
+				++i;
+			} else {
+				post.push(token);
+			}
+			break;
+		default:
+			post.push(token);
+		}
+		++i;
+	}
+	return post;
+};
+refactored_$little_parser_Parser.mergeComplexStructures = function(pre) {
+	if(pre == null) {
+		return null;
+	}
+	var post = [];
+	var i = 0;
+	while(i < pre.length) {
+		var token = pre[i];
+		switch(token._hx_index) {
+		case 7:
+			var _g = token.word;
+			var _hx_tmp;
+			var _hx_tmp1;
+			var _hx_tmp2;
+			if(_g == refactored_$little_Keywords.VARIABLE_DECLARATION == true) {
+				++i;
+				if(i >= pre.length) {
+					return null;
+				}
+				var name = null;
+				var type = null;
+				_hx_loop2: while(i < pre.length) {
+					var lookahead = pre[i];
+					switch(lookahead._hx_index) {
+					case 0:
+						var _g1 = lookahead.line;
+						--i;
+						break _hx_loop2;
+					case 1:
+						--i;
+						break _hx_loop2;
+					case 8:
+						var typeToken = lookahead.type;
+						if(name == null) {
+							return null;
+						}
+						type = typeToken;
+						break _hx_loop2;
+					case 11:
+						var body = lookahead.parts;
+						var type1 = lookahead.type;
+						if(name == null) {
+							name = refactored_$little_parser_ParserTokens.Expression(refactored_$little_parser_Parser.mergeComplexStructures(body),type1);
+						} else if(type1 == null) {
+							type1 = refactored_$little_parser_ParserTokens.Expression(refactored_$little_parser_Parser.mergeComplexStructures(body),type1);
+						} else {
+							--i;
+							break _hx_loop2;
+						}
+						break;
+					case 12:
+						var body1 = lookahead.body;
+						var type2 = lookahead.type;
+						if(name == null) {
+							name = refactored_$little_parser_ParserTokens.Block(refactored_$little_parser_Parser.mergeComplexStructures(body1),type2);
+						} else if(type2 == null) {
+							type2 = refactored_$little_parser_ParserTokens.Block(refactored_$little_parser_Parser.mergeComplexStructures(body1),type2);
+						} else {
+							--i;
+							break _hx_loop2;
+						}
+						break;
+					case 15:
+						if(lookahead.sign == "=") {
+							--i;
+							break _hx_loop2;
+						} else if(name == null) {
+							name = lookahead;
+						} else if(type == null) {
+							type = lookahead;
+						} else {
+							--i;
+							break _hx_loop2;
+						}
+						break;
+					default:
+						if(name == null) {
+							name = lookahead;
+						} else if(type == null) {
+							type = lookahead;
+						} else {
+							--i;
+							break _hx_loop2;
+						}
+					}
+					++i;
+				}
+				post.push(refactored_$little_parser_ParserTokens.Define(name,type));
+			} else {
+				_hx_tmp2 = _g == refactored_$little_Keywords.FUNCTION_DECLARATION;
+				if(_hx_tmp2 == true) {
+					++i;
+					if(i >= pre.length) {
+						return null;
+					}
+					var name1 = null;
+					var params = null;
+					var type3 = null;
+					_hx_loop3: while(i < pre.length) {
+						var lookahead1 = pre[i];
+						switch(lookahead1._hx_index) {
+						case 0:
+							var _g2 = lookahead1.line;
+							--i;
+							break _hx_loop3;
+						case 1:
+							--i;
+							break _hx_loop3;
+						case 8:
+							var typeToken1 = lookahead1.type;
+							if(name1 == null) {
+								return null;
+							} else if(type3 == null) {
+								return null;
+							}
+							type3 = typeToken1;
+							break _hx_loop3;
+						case 11:
+							var body2 = lookahead1.parts;
+							var type4 = lookahead1.type;
+							if(name1 == null) {
+								name1 = refactored_$little_parser_ParserTokens.Expression(refactored_$little_parser_Parser.mergeComplexStructures(body2),type4);
+							} else if(params == null) {
+								params = refactored_$little_parser_ParserTokens.Expression(refactored_$little_parser_Parser.mergeComplexStructures(body2),type4);
+							} else if(type4 == null) {
+								type4 = refactored_$little_parser_ParserTokens.Expression(refactored_$little_parser_Parser.mergeComplexStructures(body2),type4);
+							} else {
+								--i;
+								break _hx_loop3;
+							}
+							break;
+						case 12:
+							var body3 = lookahead1.body;
+							var type5 = lookahead1.type;
+							if(name1 == null) {
+								name1 = refactored_$little_parser_ParserTokens.Block(refactored_$little_parser_Parser.mergeComplexStructures(body3),type5);
+							} else if(params == null) {
+								params = refactored_$little_parser_ParserTokens.Block(refactored_$little_parser_Parser.mergeComplexStructures(body3),type5);
+							} else if(type5 == null) {
+								type5 = refactored_$little_parser_ParserTokens.Block(refactored_$little_parser_Parser.mergeComplexStructures(body3),type5);
+							} else {
+								--i;
+								break _hx_loop3;
+							}
+							break;
+						case 15:
+							if(lookahead1.sign == "=") {
+								--i;
+								break _hx_loop3;
+							} else if(name1 == null) {
+								name1 = lookahead1;
+							} else if(params == null) {
+								params = lookahead1;
+							} else if(type3 == null) {
+								type3 = lookahead1;
+							} else {
+								--i;
+								break _hx_loop3;
+							}
+							break;
+						default:
+							if(name1 == null) {
+								name1 = lookahead1;
+							} else if(params == null) {
+								params = lookahead1;
+							} else if(type3 == null) {
+								type3 = lookahead1;
+							} else {
+								--i;
+								break _hx_loop3;
+							}
+						}
+						++i;
+					}
+					--i;
+					post.push(refactored_$little_parser_ParserTokens.Action(name1,params,type3));
+				} else {
+					_hx_tmp1 = refactored_$little_Keywords.CONDITION_TYPES.indexOf(_g) != -1;
+					if(_hx_tmp1 == true) {
+						++i;
+						if(i >= pre.length) {
+							return null;
+						}
+						var name2 = refactored_$little_parser_ParserTokens.Identifier(Type.enumParameters(token)[0]);
+						var exp = null;
+						var body4 = null;
+						var type6 = null;
+						_hx_loop4: while(i < pre.length) {
+							var lookahead2 = pre[i];
+							switch(lookahead2._hx_index) {
+							case 0:
+								var _g3 = lookahead2.line;
+								break;
+							case 1:
+								break;
+							case 11:
+								var parts = lookahead2.parts;
+								var type7 = lookahead2.type;
+								if(exp == null) {
+									exp = refactored_$little_parser_ParserTokens.Expression(refactored_$little_parser_Parser.mergeComplexStructures(parts),type7);
+								} else if(body4 == null) {
+									body4 = refactored_$little_parser_ParserTokens.Expression(refactored_$little_parser_Parser.mergeComplexStructures(parts),type7);
+								} else {
+									break _hx_loop4;
+								}
+								break;
+							case 12:
+								var b = lookahead2.body;
+								var type8 = lookahead2.type;
+								if(exp == null) {
+									exp = refactored_$little_parser_ParserTokens.Block(refactored_$little_parser_Parser.mergeComplexStructures(b),type8);
+								} else if(body4 == null) {
+									body4 = refactored_$little_parser_ParserTokens.Block(refactored_$little_parser_Parser.mergeComplexStructures(b),type8);
+								} else {
+									break _hx_loop4;
+								}
+								break;
+							default:
+								if(exp == null) {
+									exp = lookahead2;
+								} else if(body4 == null) {
+									body4 = lookahead2;
+								} else {
+									break _hx_loop4;
+								}
+							}
+							++i;
+						}
+						if(i-- < pre.length) {
+							var _g4 = pre[i + 1];
+							switch(_g4._hx_index) {
+							case 8:
+								var _g5 = _g4.type;
+								type6 = pre[i + 1];
+								break;
+							case 12:
+								var _g6 = _g4.body;
+								var _g7 = _g4.type;
+								type6 = pre[i + 1];
+								break;
+							default:
+							}
+						}
+						post.push(refactored_$little_parser_ParserTokens.Condition(name2,exp,body4,type6));
+					} else {
+						_hx_tmp = _g == refactored_$little_Keywords.FUNCTION_RETURN;
+						if(_hx_tmp == true) {
+							++i;
+							if(i >= pre.length) {
+								return null;
+							}
+							var valueToReturn = [];
+							_hx_loop5: while(i < pre.length) {
+								var lookahead3 = pre[i];
+								switch(lookahead3._hx_index) {
+								case 0:
+									var _g8 = lookahead3.line;
+									--i;
+									break _hx_loop5;
+								case 1:
+									--i;
+									break _hx_loop5;
+								case 11:
+									var body5 = lookahead3.parts;
+									var type9 = lookahead3.type;
+									valueToReturn.push(refactored_$little_parser_ParserTokens.Expression(refactored_$little_parser_Parser.mergeComplexStructures(body5),type9));
+									break;
+								case 12:
+									var body6 = lookahead3.body;
+									var type10 = lookahead3.type;
+									valueToReturn.push(refactored_$little_parser_ParserTokens.Block(refactored_$little_parser_Parser.mergeComplexStructures(body6),type10));
+									break;
+								default:
+									valueToReturn.push(lookahead3);
+								}
+								++i;
+							}
+							post.push(refactored_$little_parser_ParserTokens.Return(valueToReturn.length == 1 ? valueToReturn[0] : refactored_$little_parser_ParserTokens.Expression(valueToReturn.slice(),null),null));
+						} else {
+							post.push(token);
+						}
+					}
+				}
+			}
+			break;
+		case 11:
+			var parts1 = token.parts;
+			var type11 = token.type;
+			post.push(refactored_$little_parser_ParserTokens.Expression(refactored_$little_parser_Parser.mergeComplexStructures(parts1),null));
+			break;
+		case 12:
+			var body7 = token.body;
+			var type12 = token.type;
+			post.push(refactored_$little_parser_ParserTokens.Block(refactored_$little_parser_Parser.mergeComplexStructures(body7),null));
+			break;
+		default:
+			post.push(token);
+		}
+		++i;
+	}
+	return post;
+};
+refactored_$little_parser_Parser.mergeWrites = function(pre) {
+	if(pre == null) {
+		return null;
+	}
+	var post = [];
+	var i = 0;
+	_hx_loop1: while(i < pre.length) {
+		var token = pre[i];
+		if(token == null) {
+			++i;
+			continue;
+		}
+		switch(token._hx_index) {
+		case 2:
+			var name = token.name;
+			var type = token.type;
+			post.push(refactored_$little_parser_ParserTokens.Define(refactored_$little_parser_Parser.mergeWrites([name])[0],type));
+			break;
+		case 3:
+			var name1 = token.name;
+			var params = token.params;
+			var type1 = token.type;
+			post.push(refactored_$little_parser_ParserTokens.Action(refactored_$little_parser_Parser.mergeWrites([name1])[0],refactored_$little_parser_Parser.mergeWrites([params])[0],type1));
+			break;
+		case 4:
+			var name2 = token.name;
+			var exp = token.exp;
+			var body = token.body;
+			var type2 = token.type;
+			post.push(refactored_$little_parser_ParserTokens.Condition(refactored_$little_parser_Parser.mergeWrites([name2])[0],refactored_$little_parser_Parser.mergeWrites([exp])[0],refactored_$little_parser_Parser.mergeWrites([body])[0],type2));
+			break;
+		case 10:
+			var value = token.value;
+			var type3 = token.type;
+			post.push(refactored_$little_parser_ParserTokens.Return(refactored_$little_parser_Parser.mergeWrites([value])[0],type3));
+			break;
+		case 11:
+			var body1 = token.parts;
+			var type4 = token.type;
+			post.push(refactored_$little_parser_ParserTokens.Expression(refactored_$little_parser_Parser.mergeWrites(body1),type4));
+			break;
+		case 12:
+			var body2 = token.body;
+			var type5 = token.type;
+			post.push(refactored_$little_parser_ParserTokens.Block(refactored_$little_parser_Parser.mergeWrites(body2),type5));
+			break;
+		case 15:
+			if(token.sign == "=") {
+				if(i + 1 >= pre.length) {
+					post.push(refactored_$little_parser_ParserTokens.Sign("="));
+					break _hx_loop1;
+				}
+				var lookahead = pre[i + 1];
+				if(Type.enumEq(lookahead,refactored_$little_parser_ParserTokens.Sign("="))) {
+					post.push(refactored_$little_parser_ParserTokens.Sign("=="));
+					++i;
+				} else {
+					post.push(refactored_$little_parser_ParserTokens.Sign("="));
+				}
+			} else {
+				post.push(token);
+			}
+			break;
+		default:
+			post.push(token);
+		}
+		++i;
+	}
+	pre = post.slice();
+	post = [];
+	var potentialAssignee = refactored_$little_parser_ParserTokens.NullValue;
+	var i = 0;
+	_hx_loop2: while(i < pre.length) {
+		var token = pre[i];
+		switch(token._hx_index) {
+		case 2:
+			var name = token.name;
+			var type = token.type;
+			post.push(potentialAssignee);
+			potentialAssignee = refactored_$little_parser_ParserTokens.Define(refactored_$little_parser_Parser.mergeWrites([name])[0],type);
+			break;
+		case 3:
+			var name1 = token.name;
+			var params = token.params;
+			var type1 = token.type;
+			post.push(potentialAssignee);
+			potentialAssignee = refactored_$little_parser_ParserTokens.Action(refactored_$little_parser_Parser.mergeWrites([name1])[0],refactored_$little_parser_Parser.mergeWrites([params])[0],type1);
+			break;
+		case 4:
+			var name2 = token.name;
+			var exp = token.exp;
+			var body = token.body;
+			var type2 = token.type;
+			post.push(potentialAssignee);
+			potentialAssignee = refactored_$little_parser_ParserTokens.Condition(refactored_$little_parser_Parser.mergeWrites([name2])[0],refactored_$little_parser_Parser.mergeWrites([exp])[0],refactored_$little_parser_Parser.mergeWrites([body])[0],type2);
+			break;
+		case 10:
+			var value = token.value;
+			var type3 = token.type;
+			post.push(potentialAssignee);
+			potentialAssignee = refactored_$little_parser_ParserTokens.Return(refactored_$little_parser_Parser.mergeWrites([value])[0],type3);
+			break;
+		case 11:
+			var parts = token.parts;
+			var type4 = token.type;
+			post.push(potentialAssignee);
+			potentialAssignee = refactored_$little_parser_ParserTokens.Expression(refactored_$little_parser_Parser.mergeWrites(parts),type4);
+			break;
+		case 12:
+			var body1 = token.body;
+			var type5 = token.type;
+			post.push(potentialAssignee);
+			potentialAssignee = refactored_$little_parser_ParserTokens.Block(refactored_$little_parser_Parser.mergeWrites(body1),type5);
+			break;
+		case 15:
+			if(token.sign == "=") {
+				if(i + 1 >= pre.length) {
+					break _hx_loop2;
+				}
+				var currentAssignee = [potentialAssignee];
+				if(potentialAssignee._hx_index == 11) {
+					var _g = potentialAssignee.parts;
+					var _g1 = potentialAssignee.type;
+					_hx_loop3: while(true) {
+						var _g2 = post[post.length - 1];
+						switch(_g2._hx_index) {
+						case 0:
+							var _g3 = _g2.line;
+							break _hx_loop3;
+						case 1:
+							break _hx_loop3;
+						case 11:
+							var _g4 = _g2.parts;
+							var _g5 = _g2.type;
+							currentAssignee.unshift(post.pop());
+							break;
+						case 15:
+							var _g6 = _g2.sign;
+							break _hx_loop3;
+						default:
+							currentAssignee.unshift(post.pop());
+							break _hx_loop3;
+						}
+					}
+				}
+				var assignees = [currentAssignee.length == 1 ? currentAssignee[0] : refactored_$little_parser_ParserTokens.Expression(currentAssignee.slice(),null)];
+				currentAssignee = [];
+				_hx_loop4: while(i + 1 < pre.length) {
+					var lookahead = pre[i + 1];
+					switch(lookahead._hx_index) {
+					case 0:
+						var _g7 = lookahead.line;
+						break _hx_loop4;
+					case 1:
+						break _hx_loop4;
+					case 15:
+						if(lookahead.sign == "=") {
+							var assignee = currentAssignee.length == 1 ? currentAssignee[0] : refactored_$little_parser_ParserTokens.Expression(currentAssignee.slice(),null);
+							assignees.push(assignee);
+							currentAssignee = [];
+						} else {
+							currentAssignee.push(lookahead);
+						}
+						break;
+					default:
+						currentAssignee.push(lookahead);
+					}
+					++i;
+				}
+				var value1 = refactored_$little_parser_ParserTokens.Expression(currentAssignee,null);
+				post.push(refactored_$little_parser_ParserTokens.Write(assignees,value1,null));
+				potentialAssignee = null;
+			} else {
+				post.push(potentialAssignee);
+				potentialAssignee = token;
+			}
+			break;
+		default:
+			post.push(potentialAssignee);
+			potentialAssignee = token;
+		}
+		++i;
+	}
+	if(potentialAssignee != null) {
+		post.push(potentialAssignee);
+	}
+	post.shift();
+	return post;
+};
+var refactored_$little_parser_ParserTokens = $hxEnums["refactored_little.parser.ParserTokens"] = { __ename__:true,__constructs__:null
+	,SetLine: ($_=function(line) { return {_hx_index:0,line:line,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}; },$_._hx_name="SetLine",$_.__params__ = ["line"],$_)
+	,SplitLine: {_hx_name:"SplitLine",_hx_index:1,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}
+	,Define: ($_=function(name,type) { return {_hx_index:2,name:name,type:type,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Define",$_.__params__ = ["name","type"],$_)
+	,Action: ($_=function(name,params,type) { return {_hx_index:3,name:name,params:params,type:type,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Action",$_.__params__ = ["name","params","type"],$_)
+	,Condition: ($_=function(name,exp,body,type) { return {_hx_index:4,name:name,exp:exp,body:body,type:type,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Condition",$_.__params__ = ["name","exp","body","type"],$_)
+	,Read: ($_=function(name) { return {_hx_index:5,name:name,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Read",$_.__params__ = ["name"],$_)
+	,Write: ($_=function(assignees,value,type) { return {_hx_index:6,assignees:assignees,value:value,type:type,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Write",$_.__params__ = ["assignees","value","type"],$_)
+	,Identifier: ($_=function(word) { return {_hx_index:7,word:word,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Identifier",$_.__params__ = ["word"],$_)
+	,TypeDeclaration: ($_=function(type) { return {_hx_index:8,type:type,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}; },$_._hx_name="TypeDeclaration",$_.__params__ = ["type"],$_)
+	,ActionCall: ($_=function(name,params) { return {_hx_index:9,name:name,params:params,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}; },$_._hx_name="ActionCall",$_.__params__ = ["name","params"],$_)
+	,Return: ($_=function(value,type) { return {_hx_index:10,value:value,type:type,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Return",$_.__params__ = ["value","type"],$_)
+	,Expression: ($_=function(parts,type) { return {_hx_index:11,parts:parts,type:type,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Expression",$_.__params__ = ["parts","type"],$_)
+	,Block: ($_=function(body,type) { return {_hx_index:12,body:body,type:type,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Block",$_.__params__ = ["body","type"],$_)
+	,PartArray: ($_=function(parts) { return {_hx_index:13,parts:parts,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}; },$_._hx_name="PartArray",$_.__params__ = ["parts"],$_)
+	,Parameter: ($_=function(name,type) { return {_hx_index:14,name:name,type:type,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Parameter",$_.__params__ = ["name","type"],$_)
+	,Sign: ($_=function(sign) { return {_hx_index:15,sign:sign,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Sign",$_.__params__ = ["sign"],$_)
+	,Number: ($_=function(num) { return {_hx_index:16,num:num,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Number",$_.__params__ = ["num"],$_)
+	,Decimal: ($_=function(num) { return {_hx_index:17,num:num,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Decimal",$_.__params__ = ["num"],$_)
+	,Characters: ($_=function(string) { return {_hx_index:18,string:string,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Characters",$_.__params__ = ["string"],$_)
+	,NullValue: {_hx_name:"NullValue",_hx_index:19,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}
+	,TrueValue: {_hx_name:"TrueValue",_hx_index:20,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}
+	,FalseValue: {_hx_name:"FalseValue",_hx_index:21,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}
+};
+refactored_$little_parser_ParserTokens.__constructs__ = [refactored_$little_parser_ParserTokens.SetLine,refactored_$little_parser_ParserTokens.SplitLine,refactored_$little_parser_ParserTokens.Define,refactored_$little_parser_ParserTokens.Action,refactored_$little_parser_ParserTokens.Condition,refactored_$little_parser_ParserTokens.Read,refactored_$little_parser_ParserTokens.Write,refactored_$little_parser_ParserTokens.Identifier,refactored_$little_parser_ParserTokens.TypeDeclaration,refactored_$little_parser_ParserTokens.ActionCall,refactored_$little_parser_ParserTokens.Return,refactored_$little_parser_ParserTokens.Expression,refactored_$little_parser_ParserTokens.Block,refactored_$little_parser_ParserTokens.PartArray,refactored_$little_parser_ParserTokens.Parameter,refactored_$little_parser_ParserTokens.Sign,refactored_$little_parser_ParserTokens.Number,refactored_$little_parser_ParserTokens.Decimal,refactored_$little_parser_ParserTokens.Characters,refactored_$little_parser_ParserTokens.NullValue,refactored_$little_parser_ParserTokens.TrueValue,refactored_$little_parser_ParserTokens.FalseValue];
+var refactored_$little_tools_PrettyPrinter = function() { };
+refactored_$little_tools_PrettyPrinter.__name__ = true;
+refactored_$little_tools_PrettyPrinter.printParserAst = function(ast,spacingBetweenNodes) {
 	if(spacingBetweenNodes == null) {
 		spacingBetweenNodes = 6;
 	}
-	little_parser_Parser.s = TextTools.multiply(" ",spacingBetweenNodes);
-	var unfilteredResult = little_parser_Parser.getTree(little_parser_UnInfoedParserTokens.Expression(ast,""),[],0,true);
+	if(ast == null) {
+		return "null (look for errors in input)";
+	}
+	refactored_$little_tools_PrettyPrinter.s = TextTools.multiply(" ",spacingBetweenNodes);
+	var unfilteredResult = refactored_$little_tools_PrettyPrinter.getTree(refactored_$little_parser_ParserTokens.Expression(ast,null),[],0,true);
 	var filtered = "";
 	var _g = 0;
 	var _g1 = unfilteredResult.split("\n");
@@ -1178,27 +1045,27 @@ little_parser_Parser.prettyPrintAst = function(ast,spacingBetweenNodes) {
 	}
 	return "\nAst\n" + filtered;
 };
-little_parser_Parser.prefixFA = function(pArray) {
+refactored_$little_tools_PrettyPrinter.prefixFA = function(pArray) {
 	var prefix = "";
 	var _g = 0;
-	var _g1 = little_parser_Parser.l;
+	var _g1 = refactored_$little_tools_PrettyPrinter.l;
 	while(_g < _g1) {
 		var i = _g++;
 		if(pArray[i] == 1) {
-			prefix += "│" + little_parser_Parser.s.substring(1);
+			prefix += "│" + refactored_$little_tools_PrettyPrinter.s.substring(1);
 		} else {
-			prefix += little_parser_Parser.s;
+			prefix += refactored_$little_tools_PrettyPrinter.s;
 		}
 	}
 	return prefix;
 };
-little_parser_Parser.pushIndex = function(pArray,i) {
+refactored_$little_tools_PrettyPrinter.pushIndex = function(pArray,i) {
 	var arr = pArray.slice();
 	arr[i + 1] = 1;
 	return arr;
 };
-little_parser_Parser.getTree = function(root,prefix,level,last) {
-	little_parser_Parser.l = level;
+refactored_$little_tools_PrettyPrinter.getTree = function(root,prefix,level,last) {
+	refactored_$little_tools_PrettyPrinter.l = level;
 	var t = last ? "└" : "├";
 	var c = "├";
 	var d = "───";
@@ -1208,296 +1075,146 @@ little_parser_Parser.getTree = function(root,prefix,level,last) {
 	switch(root._hx_index) {
 	case 0:
 		var line = root.line;
-		return "" + little_parser_Parser.prefixFA(prefix) + t + d + " SetLine(" + line + ")\n";
+		return "" + refactored_$little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " SetLine(" + line + ")\n";
 	case 1:
-		var name = root.name;
-		var value = root.value;
-		var type = root.type;
-		return "" + little_parser_Parser.prefixFA(prefix) + t + d + " Definition Creation\n" + little_parser_Parser.getTree(little_parser_UnInfoedParserTokens.StaticValue(name,""),prefix.slice(),level + 1,false) + little_parser_Parser.getTree(little_parser_UnInfoedParserTokens.StaticValue(type,""),prefix.slice(),level + 1,false) + little_parser_Parser.getTree(value,prefix.slice(),level + 1,true);
+		return "" + refactored_$little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " SplitLine\n";
 	case 2:
 		var name = root.name;
-		var params = root.params;
-		var body = root.body;
 		var type = root.type;
-		var title = "" + little_parser_Parser.prefixFA(prefix) + t + d + " Action Creation\n";
-		title += little_parser_Parser.getTree(little_parser_UnInfoedParserTokens.StaticValue(name,""),prefix.slice(),level + 1,false);
-		title += little_parser_Parser.getTree(little_parser_UnInfoedParserTokens.StaticValue(type,""),prefix.slice(),level + 1,false);
-		title += little_parser_Parser.getTree(little_parser_UnInfoedParserTokens.Expression(params,""),little_parser_Parser.pushIndex(prefix,level),level + 1,false);
-		title += little_parser_Parser.getTree(little_parser_UnInfoedParserTokens.Expression(body,""),prefix.slice(),level + 1,true);
-		return title;
+		return "" + refactored_$little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " Definition Creation\n" + refactored_$little_tools_PrettyPrinter.getTree(name,prefix.slice(),level + 1,type == null) + refactored_$little_tools_PrettyPrinter.getTree(type,prefix.slice(),level + 1,true);
 	case 3:
 		var name = root.name;
-		return "" + little_parser_Parser.prefixFA(prefix) + t + d + " " + name + "\n";
+		var params = root.params;
+		var type = root.type;
+		var title = "" + refactored_$little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " Action Creation\n";
+		title += refactored_$little_tools_PrettyPrinter.getTree(name,prefix.slice(),level + 1,false);
+		title += refactored_$little_tools_PrettyPrinter.getTree(params,prefix.slice(),level + 1,type == null);
+		title += refactored_$little_tools_PrettyPrinter.getTree(type,prefix.slice(),level + 1,true);
+		return title;
 	case 4:
-		var assignee = root.assignee;
-		var value = root.value;
-		var type = root.valueType;
-		var addon = type != "" ? " (" + type + ")" : "";
-		return "" + little_parser_Parser.prefixFA(prefix) + t + d + " Definition Write" + addon + "\n" + little_parser_Parser.getTree(little_parser_UnInfoedParserTokens.StaticValue(assignee,""),prefix.slice(),level + 1,false) + little_parser_Parser.getTree(value,prefix.slice(),level + 1,true);
+		var name = root.name;
+		var exp = root.exp;
+		var body = root.body;
+		var type = root.type;
+		var title = "" + refactored_$little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " Condition\n";
+		title += refactored_$little_tools_PrettyPrinter.getTree(name,prefix.slice(),level + 1,false);
+		title += refactored_$little_tools_PrettyPrinter.getTree(exp,refactored_$little_tools_PrettyPrinter.pushIndex(prefix,level),level + 1,false);
+		title += refactored_$little_tools_PrettyPrinter.getTree(body,prefix.slice(),level + 1,type == null);
+		title += refactored_$little_tools_PrettyPrinter.getTree(type,prefix.slice(),level + 1,true);
+		return title;
 	case 5:
-		var value = root.sign;
-		return "" + little_parser_Parser.prefixFA(prefix) + t + d + " " + value + "\n";
+		var name = root.name;
+		return "" + refactored_$little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " " + Std.string(name) + "\n";
 	case 6:
+		var assignees = root.assignees;
 		var value = root.value;
 		var type = root.type;
-		var addon = type != "" ? " (" + type + ")" : "";
-		return "" + little_parser_Parser.prefixFA(prefix) + t + d + " " + value + addon + "\n";
+		return "" + refactored_$little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " Definition Write\n" + refactored_$little_tools_PrettyPrinter.getTree(refactored_$little_parser_ParserTokens.PartArray(assignees),refactored_$little_tools_PrettyPrinter.pushIndex(prefix,level),level + 1,false) + refactored_$little_tools_PrettyPrinter.getTree(value,prefix.slice(),level + 1,type == null) + refactored_$little_tools_PrettyPrinter.getTree(type,prefix.slice(),level + 1,true);
 	case 7:
+		var value = root.word;
+		return "" + refactored_$little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " " + value + "\n";
+	case 8:
+		var type = root.type;
+		return "" + refactored_$little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " Type Declaration\n" + refactored_$little_tools_PrettyPrinter.getTree(type,prefix.slice(),level + 1,true);
+	case 9:
+		var name = root.name;
+		var params = root.params;
+		var title = "" + refactored_$little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " Action Creation\n";
+		title += refactored_$little_tools_PrettyPrinter.getTree(name,prefix.slice(),level + 1,false);
+		title += refactored_$little_tools_PrettyPrinter.getTree(params,refactored_$little_tools_PrettyPrinter.pushIndex(prefix,level),level + 1,true);
+		return title;
+	case 10:
+		var value = root.value;
+		var type = root.type;
+		return "" + refactored_$little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " Return\n" + refactored_$little_tools_PrettyPrinter.getTree(value,prefix.slice(),level + 1,type == null) + refactored_$little_tools_PrettyPrinter.getTree(type,prefix.slice(),level + 1,true);
+	case 11:
 		var parts = root.parts;
 		var type = root.type;
 		if(parts.length == 0) {
-			return "" + little_parser_Parser.prefixFA(prefix) + t + d + " <empty expression>\n";
+			return "" + refactored_$little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " <empty expression>\n";
 		}
-		var addon = type != "" ? " (" + type + ")" : "";
-		var strParts = ["" + little_parser_Parser.prefixFA(prefix) + t + d + " Expression" + addon + "\n"];
+		var strParts = ["" + refactored_$little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " Expression\n" + refactored_$little_tools_PrettyPrinter.getTree(type,prefix.slice(),level + 1,false)];
 		var _g = [];
 		var _g1 = 0;
 		var _g2 = parts.length - 1;
 		while(_g1 < _g2) {
 			var i = _g1++;
-			_g.push(little_parser_Parser.getTree(parts[i],little_parser_Parser.pushIndex(prefix,level),level + 1,false));
+			_g.push(refactored_$little_tools_PrettyPrinter.getTree(parts[i],refactored_$little_tools_PrettyPrinter.pushIndex(prefix,level),level + 1,false));
 		}
 		var strParts1 = strParts.concat(_g);
-		strParts1.push(little_parser_Parser.getTree(parts[parts.length - 1],prefix.slice(),level + 1,true));
+		strParts1.push(refactored_$little_tools_PrettyPrinter.getTree(parts[parts.length - 1],prefix.slice(),level + 1,true));
 		return strParts1.join("");
-	case 8:
-		var name = root.name;
+	case 12:
+		var body = root.body;
 		var type = root.type;
-		var value = root.value;
-		if(name == "") {
-			name = "<unnamed>";
+		if(body.length == 0) {
+			return "" + refactored_$little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " <empty block>\n";
 		}
-		if(type == "") {
-			type = "<untyped>";
-		}
-		var addon = type != "" ? " (" + type + ")" : "";
-		return "" + little_parser_Parser.prefixFA(prefix) + t + d + " Parameter" + addon + "\n" + little_parser_Parser.getTree(little_parser_UnInfoedParserTokens.StaticValue(name,""),prefix.slice(),level + 1,false) + little_parser_Parser.getTree(value,prefix.slice(),level + 1,true);
-	case 9:
-		var value = root.value;
-		var type = root.type;
-		var addon = type != "" ? " (" + type + ")" : "";
-		return "" + little_parser_Parser.prefixFA(prefix) + t + d + " Parameter" + addon + "\n" + little_parser_Parser.getTree(value,prefix.slice(),level + 1,true);
-	case 10:
-		var name = root.name;
-		var params = root.params;
-		var type = root.returnType;
-		var addon = type != "" ? " (" + type + ")" : "";
-		var strParts = ["" + little_parser_Parser.prefixFA(prefix) + t + d + " Action Call" + addon + "\n" + little_parser_Parser.getTree(little_parser_UnInfoedParserTokens.StaticValue(name,""),prefix.slice(),level + 1,false)];
+		var strParts = ["" + refactored_$little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " Block\n" + refactored_$little_tools_PrettyPrinter.getTree(type,prefix.slice(),level + 1,false)];
 		var _g = [];
 		var _g1 = 0;
-		var _g2 = params.length - 1;
+		var _g2 = body.length - 1;
 		while(_g1 < _g2) {
 			var i = _g1++;
-			_g.push(little_parser_Parser.getTree(params[i],little_parser_Parser.pushIndex(prefix,level),level + 1,false));
+			_g.push(refactored_$little_tools_PrettyPrinter.getTree(body[i],refactored_$little_tools_PrettyPrinter.pushIndex(prefix,level),level + 1,false));
 		}
 		var strParts1 = strParts.concat(_g);
-		if(params.length == 0) {
-			return strParts1.join("");
-		}
-		strParts1.push(little_parser_Parser.getTree(params[params.length - 1],prefix.slice(),level + 1,true));
+		strParts1.push(refactored_$little_tools_PrettyPrinter.getTree(body[body.length - 1],prefix.slice(),level + 1,true));
 		return strParts1.join("");
-	case 11:
-		var value = root.value;
-		var type = root.type;
-		var addon = type != "" ? " (" + type + ")" : "";
-		return "" + little_parser_Parser.prefixFA(prefix) + t + d + " Return" + addon + "\n" + little_parser_Parser.getTree(value,prefix.slice(),level + 1,true);
-	case 12:
-		var title = root.title;
-		var reason = root.reason;
-		return "" + little_parser_Parser.prefixFA(prefix) + t + d + " Error - " + title + ":\n" + little_parser_Parser.getTree(little_parser_UnInfoedParserTokens.StaticValue(reason,""),prefix.slice(),level + 1,true);
 	case 13:
-		var s = root.string;
-		return "" + little_parser_Parser.prefixFA(prefix) + t + d + " INVALID SYNTAX: " + s + "\n";
+		var body = root.parts;
+		if(body.length == 0) {
+			return "" + refactored_$little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " <empty array>\n";
+		}
+		var strParts = ["" + refactored_$little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " Part Array\n"];
+		var _g = [];
+		var _g1 = 0;
+		var _g2 = body.length - 1;
+		while(_g1 < _g2) {
+			var i = _g1++;
+			_g.push(refactored_$little_tools_PrettyPrinter.getTree(body[i],refactored_$little_tools_PrettyPrinter.pushIndex(prefix,level),level + 1,false));
+		}
+		var strParts1 = strParts.concat(_g);
+		strParts1.push(refactored_$little_tools_PrettyPrinter.getTree(body[body.length - 1],prefix.slice(),level + 1,true));
+		return strParts1.join("");
 	case 14:
+		var name = root.name;
 		var type = root.type;
-		var exp = root.condition;
-		var body = root.body;
-		var title = "" + little_parser_Parser.prefixFA(prefix) + t + d + " Condition\n";
-		title += little_parser_Parser.getTree(little_parser_UnInfoedParserTokens.StaticValue(type,""),prefix.slice(),level + 1,false);
-		title += little_parser_Parser.getTree(exp,little_parser_Parser.pushIndex(prefix,level),level + 1,false);
-		title += little_parser_Parser.getTree(little_parser_UnInfoedParserTokens.Expression(body,""),prefix.slice(),level + 1,true);
-		return title;
+		return "" + refactored_$little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " Parameter\n" + refactored_$little_tools_PrettyPrinter.getTree(name,prefix.slice(),level + 1,false) + refactored_$little_tools_PrettyPrinter.getTree(type,prefix.slice(),level + 1,true);
+	case 15:
+		var value = root.sign;
+		return "" + refactored_$little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " " + value + "\n";
+	case 16:
+		var num = root.num;
+		return "" + refactored_$little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " " + num + "\n";
+	case 17:
+		var num = root.num;
+		return "" + refactored_$little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " " + num + "\n";
+	case 18:
+		var string = root.string;
+		return "" + refactored_$little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " \"" + string + "\"\n";
+	case 19:
+		return "" + refactored_$little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " " + refactored_$little_Keywords.NULL_VALUE + "\n";
+	case 20:
+		return "" + refactored_$little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " " + refactored_$little_Keywords.TRUE_VALUE + "\n";
+	case 21:
+		return "" + refactored_$little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " " + refactored_$little_Keywords.FALSE_VALUE + "\n";
 	}
 };
-var little_parser_Specifics = function() { };
-little_parser_Specifics.__name__ = true;
-little_parser_Specifics.evaluateExpressionType = function(exp) {
-	switch(exp._hx_index) {
-	case 0:
-		var line = exp.line;
-		return little_Keywords.TYPE_VOID;
-	case 1:
-		var name = exp.name;
-		var value = exp.value;
-		var type = exp.type;
-		return little_Keywords.TYPE_VOID;
-	case 2:
-		var name = exp.name;
-		var params = exp.params;
-		var body = exp.body;
-		var type = exp.type;
-		return little_Keywords.TYPE_VOID;
-	case 3:
-		var name = exp.name;
-		return little_Keywords.TYPE_UNKNOWN;
-	case 4:
-		var assignee = exp.assignee;
-		var value = exp.value;
-		return little_Keywords.TYPE_UNKNOWN;
-	case 5:
-		var sign = exp.sign;
-		return little_Keywords.TYPE_VOID;
-	case 6:
-		var value = exp.value;
-		if(value.replace(little_parser_Parser.stringDetector.r,"").length == 0) {
-			return little_Keywords.TYPE_STRING;
-		} else if(value.replace(little_parser_Parser.booleanDetector.r,"").length == 0) {
-			return little_Keywords.TYPE_BOOLEAN;
-		} else if(value.replace(little_parser_Parser.numberDetector.r,"").length == 0) {
-			return little_Keywords.TYPE_INT;
-		} else if(value.replace(little_parser_Parser.decimalDetector.r,"").length == 0) {
-			return little_Keywords.TYPE_FLOAT;
-		}
-		return little_Keywords.TYPE_UNKNOWN;
-	case 7:
-		var parts = exp.parts;
-		var resultType = "";
-		var currentType = "";
-		var hierarchy = [little_Keywords.TYPE_BOOLEAN,little_Keywords.TYPE_INT,little_Keywords.TYPE_FLOAT,little_Keywords.TYPE_STRING,little_Keywords.TYPE_UNKNOWN];
-		var promoteOnNextFromInt = false;
-		var _g = 0;
-		while(_g < parts.length) {
-			var part = parts[_g];
-			++_g;
-			switch(part._hx_index) {
-			case 3:
-				var name = part.name;
-				resultType = little_Keywords.TYPE_UNKNOWN;
-				break;
-			case 5:
-				var sign = part.sign;
-				if(!TextTools.contains(".+-*",sign) && currentType == little_Keywords.TYPE_INT) {
-					promoteOnNextFromInt = true;
-				} else if(!TextTools.contains(".+-*",sign) && currentType == little_Keywords.TYPE_STRING) {
-					throw haxe_Exception.thrown("Type Mismatch");
-				}
-				break;
-			case 6:
-				var value = part.value;
-				var valType = little_parser_Specifics.evaluateExpressionType(little_lexer_LexerTokens.StaticValue(value));
-				if(hierarchy.indexOf(valType) > hierarchy.indexOf(currentType)) {
-					currentType = valType;
-				}
-				if(hierarchy.indexOf(valType) > hierarchy.indexOf(resultType)) {
-					resultType = valType;
-				}
-				break;
-			case 7:
-				var parts1 = part.parts;
-				var valType1 = little_parser_Specifics.evaluateExpressionType(little_lexer_LexerTokens.Expression(parts1));
-				if(hierarchy.indexOf(valType1) > hierarchy.indexOf(currentType)) {
-					currentType = valType1;
-				}
-				if(hierarchy.indexOf(valType1) > hierarchy.indexOf(resultType)) {
-					resultType = valType1;
-				}
-				break;
-			default:
-				var a = part;
-				throw haxe_Exception.thrown("Type Mismatch" + (", " + Std.string(a)));
-			}
-		}
-		return resultType;
-	case 8:
-		var name = exp.name;
-		var type = exp.type;
-		var value = exp.value;
-		if(type != null && type != little_parser_Specifics.evaluateExpressionType(value)) {
-			throw haxe_Exception.thrown("Type Mismatch");
-		}
-		if(type != null) {
-			return type;
-		} else {
-			return little_parser_Specifics.evaluateExpressionType(value);
-		}
-		break;
-	case 9:
-		var value = exp.value;
-		return little_parser_Specifics.evaluateExpressionType(value);
-	case 10:
-		var name = exp.name;
-		var params = exp.params;
-		return little_Keywords.TYPE_UNKNOWN;
-	case 11:
-		var value = exp.value;
-		return little_parser_Specifics.evaluateExpressionType(value);
-	case 12:
-		var string = exp.string;
-		return little_Keywords.TYPE_VOID;
-	case 13:
-		var _g = exp.condition;
-		var type = exp.type;
-		var body = exp.body;
-		return little_parser_Specifics.evaluateExpressionType(body[body.length - 1]);
-	}
-};
-var little_parser_UnInfoedParserTokens = $hxEnums["little.parser.UnInfoedParserTokens"] = { __ename__:true,__constructs__:null
-	,SetLine: ($_=function(line) { return {_hx_index:0,line:line,__enum__:"little.parser.UnInfoedParserTokens",toString:$estr}; },$_._hx_name="SetLine",$_.__params__ = ["line"],$_)
-	,DefinitionCreation: ($_=function(name,value,type) { return {_hx_index:1,name:name,value:value,type:type,__enum__:"little.parser.UnInfoedParserTokens",toString:$estr}; },$_._hx_name="DefinitionCreation",$_.__params__ = ["name","value","type"],$_)
-	,ActionCreation: ($_=function(name,params,body,type) { return {_hx_index:2,name:name,params:params,body:body,type:type,__enum__:"little.parser.UnInfoedParserTokens",toString:$estr}; },$_._hx_name="ActionCreation",$_.__params__ = ["name","params","body","type"],$_)
-	,DefinitionAccess: ($_=function(name) { return {_hx_index:3,name:name,__enum__:"little.parser.UnInfoedParserTokens",toString:$estr}; },$_._hx_name="DefinitionAccess",$_.__params__ = ["name"],$_)
-	,DefinitionWrite: ($_=function(assignee,value,valueType) { return {_hx_index:4,assignee:assignee,value:value,valueType:valueType,__enum__:"little.parser.UnInfoedParserTokens",toString:$estr}; },$_._hx_name="DefinitionWrite",$_.__params__ = ["assignee","value","valueType"],$_)
-	,Sign: ($_=function(sign) { return {_hx_index:5,sign:sign,__enum__:"little.parser.UnInfoedParserTokens",toString:$estr}; },$_._hx_name="Sign",$_.__params__ = ["sign"],$_)
-	,StaticValue: ($_=function(value,type) { return {_hx_index:6,value:value,type:type,__enum__:"little.parser.UnInfoedParserTokens",toString:$estr}; },$_._hx_name="StaticValue",$_.__params__ = ["value","type"],$_)
-	,Expression: ($_=function(parts,type) { return {_hx_index:7,parts:parts,type:type,__enum__:"little.parser.UnInfoedParserTokens",toString:$estr}; },$_._hx_name="Expression",$_.__params__ = ["parts","type"],$_)
-	,Parameter: ($_=function(name,type,value) { return {_hx_index:8,name:name,type:type,value:value,__enum__:"little.parser.UnInfoedParserTokens",toString:$estr}; },$_._hx_name="Parameter",$_.__params__ = ["name","type","value"],$_)
-	,ActionCallParameter: ($_=function(value,type) { return {_hx_index:9,value:value,type:type,__enum__:"little.parser.UnInfoedParserTokens",toString:$estr}; },$_._hx_name="ActionCallParameter",$_.__params__ = ["value","type"],$_)
-	,ActionCall: ($_=function(name,params,returnType) { return {_hx_index:10,name:name,params:params,returnType:returnType,__enum__:"little.parser.UnInfoedParserTokens",toString:$estr}; },$_._hx_name="ActionCall",$_.__params__ = ["name","params","returnType"],$_)
-	,Return: ($_=function(value,type) { return {_hx_index:11,value:value,type:type,__enum__:"little.parser.UnInfoedParserTokens",toString:$estr}; },$_._hx_name="Return",$_.__params__ = ["value","type"],$_)
-	,Error: ($_=function(title,reason) { return {_hx_index:12,title:title,reason:reason,__enum__:"little.parser.UnInfoedParserTokens",toString:$estr}; },$_._hx_name="Error",$_.__params__ = ["title","reason"],$_)
-	,InvalidSyntax: ($_=function(string) { return {_hx_index:13,string:string,__enum__:"little.parser.UnInfoedParserTokens",toString:$estr}; },$_._hx_name="InvalidSyntax",$_.__params__ = ["string"],$_)
-	,Condition: ($_=function(type,condition,body) { return {_hx_index:14,type:type,condition:condition,body:body,__enum__:"little.parser.UnInfoedParserTokens",toString:$estr}; },$_._hx_name="Condition",$_.__params__ = ["type","condition","body"],$_)
-};
-little_parser_UnInfoedParserTokens.__constructs__ = [little_parser_UnInfoedParserTokens.SetLine,little_parser_UnInfoedParserTokens.DefinitionCreation,little_parser_UnInfoedParserTokens.ActionCreation,little_parser_UnInfoedParserTokens.DefinitionAccess,little_parser_UnInfoedParserTokens.DefinitionWrite,little_parser_UnInfoedParserTokens.Sign,little_parser_UnInfoedParserTokens.StaticValue,little_parser_UnInfoedParserTokens.Expression,little_parser_UnInfoedParserTokens.Parameter,little_parser_UnInfoedParserTokens.ActionCallParameter,little_parser_UnInfoedParserTokens.ActionCall,little_parser_UnInfoedParserTokens.Return,little_parser_UnInfoedParserTokens.Error,little_parser_UnInfoedParserTokens.InvalidSyntax,little_parser_UnInfoedParserTokens.Condition];
-var texter_general_CharTools = function() { };
-texter_general_CharTools.__name__ = true;
-if(typeof(performance) != "undefined" ? typeof(performance.now) == "function" : false) {
-	HxOverrides.now = performance.now.bind(performance);
-}
 String.__name__ = true;
 Array.__name__ = true;
 js_Boot.__toStr = ({ }).toString;
-little_Keywords.VARIABLE_DECLARATION = "define";
-little_Keywords.FUNCTION_DECLARATION = "action";
-little_Keywords.TYPE_CHECK_OR_CAST = "as";
-little_Keywords.FUNCTION_RETURN = "return";
-little_Keywords.NULL_VALUE = "nothing";
-little_Keywords.TRUE_VALUE = "true";
-little_Keywords.FALSE_VALUE = "false";
-little_Keywords.TYPE_DYNAMIC = "Anything";
-little_Keywords.TYPE_VOID = "Void";
-little_Keywords.TYPE_INT = "Number";
-little_Keywords.TYPE_FLOAT = "Decimal";
-little_Keywords.TYPE_BOOLEAN = "Boolean";
-little_Keywords.TYPE_STRING = "Characters";
-little_Keywords.TYPE_UNKNOWN = "Unknown";
-little_Keywords.CONDITION_TYPES = ["if","while","whenever","for"];
-little_lexer_Lexer.nameDetector = new EReg("(\\w+)","");
-little_lexer_Lexer.typeDetector = new EReg("(\\w+)","");
-little_lexer_Lexer.assignmentDetector = new EReg("(?:\\w|\\.)+ *(?:=[^=]+)+","");
-little_lexer_Lexer.conditionDetector = new EReg("^(\\w+) *\\(([^\n]+)\\) *(?:\\{{0,})","");
-little_lexer_Lexer.staticValueString = "[0-9\\.]+|\"[^\"]*\"|" + little_Keywords.TRUE_VALUE + "|" + little_Keywords.FALSE_VALUE + "|" + little_Keywords.NULL_VALUE;
-little_lexer_Lexer.staticValueDetector = new EReg(little_lexer_Lexer.staticValueString,"");
-little_lexer_Lexer.actionCallDetector = new EReg("\\w+ *\\(.*\\)$","");
-little_lexer_Lexer.definitionAccessDetector = new EReg("^[^0-9]\\w*$","");
-little_parser_Parser.numberDetector = new EReg("([0-9]+)","");
-little_parser_Parser.decimalDetector = new EReg("([0-9\\.]+)","");
-little_parser_Parser.booleanDetector = new EReg("true|false","");
-little_parser_Parser.stringDetector = new EReg("\"[^\"]*\"","");
-little_parser_Parser.s = "";
-little_parser_Parser.l = 0;
-texter_general_CharTools.numericChars = new EReg("[0-9]","g");
-texter_general_CharTools.softChars = ["!","\"","#","$","%","&","'","(",")","*","+",",","-",".","/",":",";","<","=",">","?","@","[","\\","]","^","_","`","{","|","}","~","^"," ","\t"];
+refactored_$little_Keywords.VARIABLE_DECLARATION = "define";
+refactored_$little_Keywords.FUNCTION_DECLARATION = "action";
+refactored_$little_Keywords.TYPE_DECL_OR_CAST = "as";
+refactored_$little_Keywords.FUNCTION_RETURN = "return";
+refactored_$little_Keywords.NULL_VALUE = "nothing";
+refactored_$little_Keywords.TRUE_VALUE = "true";
+refactored_$little_Keywords.FALSE_VALUE = "false";
+refactored_$little_Keywords.CONDITION_TYPES = ["if","while","whenever","for"];
+refactored_$little_lexer_Lexer.signs = ["!","\"","#","$","%","&","'","(",")","*","+",",","-",".","/",":",";","<","=",">","?","@","[","\\","]","^","_","`","{","|","}","~","^"];
+refactored_$little_tools_PrettyPrinter.s = "";
+refactored_$little_tools_PrettyPrinter.l = 0;
 Main.main();
 })({});
 

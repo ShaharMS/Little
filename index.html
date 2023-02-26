@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
     <h3>hey!</h3>
-    <textarea id="input" style="height: 80vw; width: 45vw;">
+    <textarea id="input" style="height: 80vw; width: 45vw; display:inline-block; white-space:pre-wrap;">
         define x as Decimal = 3
 
-        action addNumber(number as Number = 1) {
+        action addNumber(number as Number = 1) = {
             x = x + number
         }
     </textarea>
@@ -19,7 +21,23 @@
     </textarea>
     <script src="./interp.js"></script>
     <script>
-        document.getElementById("input");
+        document.getElementById('input').addEventListener('keydown', function (e) {
+            if (e.key == 'Tab') {
+                e.preventDefault();
+                var start = this.selectionStart;
+                var end = this.selectionEnd;
+
+                // set textarea value to: text before caret + tab + text after caret
+                this.value = this.value.substring(0, start) +
+                    "\t" + this.value.substring(end);
+
+                // put caret at right position again
+                this.selectionStart =
+                    this.selectionEnd = start + 1;
+            }
+        });
+        document.getElementById("input").dispatchEvent(new Event('keyup'));
     </script>
 </body>
+
 </html>
