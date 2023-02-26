@@ -14,9 +14,7 @@ class Main {
     static var code = 
     '
     a() = define {define i = 5; i = i + 1; ("num" + i)} = hello() = 6
-    action hello(define normalParam as String = "0") = {
-        nothing; hello()
-    }'
+    '
     ;
 
     static function main() {

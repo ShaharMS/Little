@@ -315,6 +315,7 @@ class Parser {
                                     case Sign(_) | SetLine(_) | SplitLine: break;
                                     case Expression(_, _): {
                                         currentAssignee.unshift(post.pop());
+
                                     }
                                     case _: {
                                         currentAssignee.unshift(post.pop());
@@ -327,6 +328,7 @@ class Parser {
                     }
 
                     var assignees = [currentAssignee.length == 1 ? currentAssignee[0] : Expression(currentAssignee.copy(), null)];
+                    currentAssignee = [];
                     var value:ParserTokens;
                     while (i + 1 < pre.length) {
                         var lookahead = pre[i + 1];
