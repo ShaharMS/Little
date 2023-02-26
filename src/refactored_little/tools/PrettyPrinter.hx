@@ -133,7 +133,7 @@ class PrettyPrinter {
 					return title;
 				}
 			case Return(value, type): {
-				return '${prefixFA(prefix)}$t$d Return\n${getTree(value, prefix.copy(), level + 1, false)}${getTree(type, prefix.copy(), level + 1, true)}';
+				return '${prefixFA(prefix)}$t$d Return\n${getTree(value, prefix.copy(), level + 1, type == null)}${getTree(type, prefix.copy(), level + 1, true)}';
 			}
 		}
 		return "";

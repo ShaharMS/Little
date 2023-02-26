@@ -7,6 +7,7 @@
         "callstack",
         "concat",
         "keyup",
+        "MULTICHAR",
         "texter",
         "unreferenceable",
         "whitespaces"

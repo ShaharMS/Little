@@ -14,6 +14,12 @@ class Main {
     static var code = 
     '
     a() = define {define i = 5; i = i + 1; ("num" + i)} = hello() = 6
+    action a(define h as String = 8; define a = 3; define xe) {
+        if (h == a) {
+            return a + 1
+        }
+        nothing; return h + a + xe + {define a = 1; (a + 1)}
+    }
     '
     ;
 

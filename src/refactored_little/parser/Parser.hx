@@ -244,7 +244,69 @@ class Parser {
                         }
                         i++;
                     }
+                    i--;
                     post.push(Action(name, params, type));
+                }
+                case Identifier(CONDITION_TYPES.contains(_) => true): {
+                    i++;
+                    if (i >= pre.length) return null;
+
+                    var name:ParserTokens = Identifier(token.getParameters()[0]);
+                    var exp:ParserTokens = null;
+                    var body:ParserTokens = null;
+                    var type:ParserTokens = null;
+
+                    while (i < pre.length) {
+                        var lookahead = pre[i];
+                        switch lookahead {
+                            case SetLine(_) | SplitLine:
+                            case Block(b, type): {
+                                if (exp == null) exp = Block(mergeComplexStructures(b), type);
+                                else if (body == null) body = Block(mergeComplexStructures(b), type)
+                                else break;
+                            }
+                            case Expression(parts, type): {
+                                if (exp == null) exp = Expression(mergeComplexStructures(parts), type);
+                                else if (body == null) body = Expression(mergeComplexStructures(parts), type)
+                                else break;
+                            }
+                            case _: {
+                                if (exp == null) exp = lookahead;
+                                else if (body == null) body = lookahead;
+                                else break;
+                            }
+                        }
+                        i++;
+                    }
+                    i--;
+                    if (i + 1 < pre.length) {
+                        switch pre[i + 1] {
+                            case Block(_, _) | TypeDeclaration(_): type = pre[i + 1];
+                            case _:
+                        }
+                    }
+                    post.push(Condition(name, exp, body, type));
+                }
+                case Identifier(_ == FUNCTION_RETURN => true): {
+                    i++;
+                    if (i >= pre.length) return null;
+
+                    var valueToReturn:Array<ParserTokens> = [];
+                    while (i < pre.length) {
+                        var lookahead = pre[i];
+                        switch lookahead {
+                            case SetLine(_) | SplitLine: i--; break;
+                            case Block(body, type): {
+                                valueToReturn.push(Block(mergeComplexStructures(body), type));
+                            }
+                            case Expression(body, type): {
+                                valueToReturn.push(Expression(mergeComplexStructures(body), type));
+                            }
+                            case _: valueToReturn.push(lookahead);
+                        }
+                        i++;
+                    }
+                    post.push(Return(if (valueToReturn.length == 1) valueToReturn[0] else Expression(valueToReturn.copy(), null), null));
                 }
                 case Expression(parts, type): post.push(Expression(mergeComplexStructures(parts), null));
                 case Block(body, type): post.push(Block(mergeComplexStructures(body), null));
@@ -286,6 +348,8 @@ class Parser {
                 case Expression(body, type): post.push(Expression(mergeWrites(body), type));
                 case Define(name, type): post.push(Define(mergeWrites([name])[0], type));
                 case Action(name, params, type): post.push(Action(mergeWrites([name])[0], mergeWrites([params])[0], type));
+                case Condition(name, exp, body, type): post.push(Condition(mergeWrites([name])[0], mergeWrites([exp])[0], mergeWrites([body])[0], type));
+                case Return(value, type): post.push(Return(mergeWrites([value])[0], type));
                 case _: post.push(token);
             }
 
@@ -365,6 +429,14 @@ class Parser {
                 case Action(name, params, type): {
                     post.push(potentialAssignee);
                     potentialAssignee = Action(mergeWrites([name])[0], mergeWrites([params])[0], type);
+                }
+                case Condition(name, exp, body, type): {
+                    post.push(potentialAssignee);
+                    potentialAssignee = Condition(mergeWrites([name])[0], mergeWrites([exp])[0], mergeWrites([body])[0], type);
+                }
+                case Return(value, type): {
+                    post.push(potentialAssignee);
+                    potentialAssignee = Return(mergeWrites([value])[0], type);
                 }
                 case _: {
                     post.push(potentialAssignee);
