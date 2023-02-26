@@ -1081,7 +1081,7 @@ refactored_$little_tools_PrettyPrinter.getTree = function(root,prefix,level,last
 	case 2:
 		var name = root.name;
 		var type = root.type;
-		return "" + refactored_$little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " Definition Creation\n" + refactored_$little_tools_PrettyPrinter.getTree(name,prefix.slice(),level + 1,type == null) + refactored_$little_tools_PrettyPrinter.getTree(type,prefix.slice(),level + 1,true);
+		return "" + refactored_$little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " Definition Creation\n" + refactored_$little_tools_PrettyPrinter.getTree(name,type == null ? prefix.slice() : refactored_$little_tools_PrettyPrinter.pushIndex(prefix,level),level + 1,type == null) + refactored_$little_tools_PrettyPrinter.getTree(type,prefix.slice(),level + 1,true);
 	case 3:
 		var name = root.name;
 		var params = root.params;

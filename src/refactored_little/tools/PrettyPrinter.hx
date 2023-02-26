@@ -59,7 +59,7 @@ class PrettyPrinter {
             case NullValue: return '${prefixFA(prefix)}$t$d ${Keywords.NULL_VALUE}\n';
 			case Define(name, type):
 				{
-					return '${prefixFA(prefix)}$t$d Definition Creation\n${getTree(name, prefix.copy(), level + 1, type == null)}${getTree(type, prefix.copy(), level + 1, true)}';
+					return '${prefixFA(prefix)}$t$d Definition Creation\n${getTree(name, if (type == null) prefix.copy() else pushIndex(prefix, level), level + 1, type == null)}${getTree(type, prefix.copy(), level + 1, true)}';
 				}
 			case Action(name, params, type):
 				{
