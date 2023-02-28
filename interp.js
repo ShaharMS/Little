@@ -22,12 +22,12 @@ Main.main = function() {
 	haxe_Log.trace(text,{ fileName : "src/Main.hx", lineNumber : 30, className : "Main", methodName : "main", customParams : [output]});
 	text.addEventListener("keyup",function(_) {
 		try {
-			var tmp = refactored_$little_parser_Parser.parse(refactored_$little_lexer_Lexer.separateBooleanIdentifiers(refactored_$little_lexer_Lexer.lex(text.value)));
+			var tmp = refactored_$little_parser_Parser.parse(refactored_$little_lexer_Lexer.lex(text.value));
 			output.innerHTML = refactored_$little_tools_PrettyPrinter.printParserAst(tmp);
 		} catch( _g ) {
 		}
 	});
-	var tmp = refactored_$little_parser_Parser.parse(refactored_$little_lexer_Lexer.separateBooleanIdentifiers(refactored_$little_lexer_Lexer.lex(Main.code)));
+	var tmp = refactored_$little_parser_Parser.parse(refactored_$little_lexer_Lexer.lex(text.value));
 	output.innerHTML = refactored_$little_tools_PrettyPrinter.printParserAst(tmp);
 	text.innerHTML = Main.code;
 };
@@ -287,6 +287,7 @@ refactored_$little_lexer_Lexer.lex = function(code) {
 		}
 		++i;
 	}
+	tokens = refactored_$little_lexer_Lexer.separateBooleanIdentifiers(tokens);
 	return tokens;
 };
 refactored_$little_lexer_Lexer.separateBooleanIdentifiers = function(tokens) {
@@ -365,8 +366,8 @@ refactored_$little_parser_Parser.parse = function(lexerTokens) {
 	tokens = refactored_$little_parser_Parser.mergeExpressions(tokens);
 	tokens = refactored_$little_parser_Parser.mergeTypeDecls(tokens);
 	tokens = refactored_$little_parser_Parser.mergeComplexStructures(tokens);
-	tokens = refactored_$little_parser_Parser.mergeWrites(tokens);
 	tokens = refactored_$little_parser_Parser.mergeCalls(tokens);
+	tokens = refactored_$little_parser_Parser.mergeWrites(tokens);
 	return tokens;
 };
 refactored_$little_parser_Parser.mergeTypeDecls = function(pre) {
@@ -842,6 +843,11 @@ refactored_$little_parser_Parser.mergeWrites = function(pre) {
 			var type2 = token.type;
 			post.push(refactored_$little_parser_ParserTokens.Condition(refactored_$little_parser_Parser.mergeWrites([name2])[0],refactored_$little_parser_Parser.mergeWrites([exp])[0],refactored_$little_parser_Parser.mergeWrites([body])[0],type2));
 			break;
+		case 9:
+			var name3 = token.name;
+			var params1 = token.params;
+			post.push(refactored_$little_parser_ParserTokens.ActionCall(refactored_$little_parser_Parser.mergeWrites([name3])[0],refactored_$little_parser_Parser.mergeWrites([params1])[0]));
+			break;
 		case 10:
 			var value = token.value;
 			var type3 = token.type;
@@ -906,6 +912,12 @@ refactored_$little_parser_Parser.mergeWrites = function(pre) {
 			var type2 = token.type;
 			post.push(potentialAssignee);
 			potentialAssignee = refactored_$little_parser_ParserTokens.Condition(refactored_$little_parser_Parser.mergeWrites([name2])[0],refactored_$little_parser_Parser.mergeWrites([exp])[0],refactored_$little_parser_Parser.mergeWrites([body])[0],type2);
+			break;
+		case 9:
+			var name3 = token.name;
+			var params1 = token.params;
+			post.push(potentialAssignee);
+			potentialAssignee = refactored_$little_parser_ParserTokens.ActionCall(refactored_$little_parser_Parser.mergeWrites([name3])[0],refactored_$little_parser_Parser.mergeWrites([params1])[0]);
 			break;
 		case 10:
 			var value = token.value;
@@ -1005,8 +1017,12 @@ refactored_$little_parser_Parser.mergeCalls = function(pre) {
 		return null;
 	}
 	var post = [];
-	var i = 1;
+	var i = 0;
 	while(i < pre.length) {
+		if(pre[i] == null) {
+			++i;
+			continue;
+		}
 		var token = pre[i];
 		switch(token._hx_index) {
 		case 2:
@@ -1027,42 +1043,46 @@ refactored_$little_parser_Parser.mergeCalls = function(pre) {
 			var type2 = token.type;
 			post.push(refactored_$little_parser_ParserTokens.Condition(refactored_$little_parser_Parser.mergeCalls([name2])[0],refactored_$little_parser_Parser.mergeCalls([exp])[0],refactored_$little_parser_Parser.mergeCalls([body])[0],type2));
 			break;
-		case 6:
-			var assignees = token.assignees;
+		case 10:
 			var value = token.value;
 			var type3 = token.type;
-			post.push(refactored_$little_parser_ParserTokens.Write(refactored_$little_parser_Parser.mergeCalls(assignees),refactored_$little_parser_Parser.mergeCalls([value])[0],type3));
-			break;
-		case 10:
-			var value1 = token.value;
-			var type4 = token.type;
-			post.push(refactored_$little_parser_ParserTokens.Return(refactored_$little_parser_Parser.mergeCalls([value1])[0],type4));
+			post.push(refactored_$little_parser_ParserTokens.Return(refactored_$little_parser_Parser.mergeCalls([value])[0],type3));
 			break;
 		case 11:
 			var parts = token.parts;
-			var type5 = token.type;
-			var lookbehind = pre[i - 1];
-			switch(lookbehind._hx_index) {
-			case 0:
-				var _g = lookbehind.line;
-				post.push(refactored_$little_parser_ParserTokens.Expression(refactored_$little_parser_Parser.mergeCalls(parts),type5));
-				break;
-			case 1:
-				post.push(refactored_$little_parser_ParserTokens.Expression(refactored_$little_parser_Parser.mergeCalls(parts),type5));
-				break;
-			case 15:
-				var _g1 = lookbehind.sign;
-				post.push(refactored_$little_parser_ParserTokens.Expression(refactored_$little_parser_Parser.mergeCalls(parts),type5));
-				break;
-			default:
-				var previous = post.pop();
-				post.push(refactored_$little_parser_ParserTokens.ActionCall(previous,token));
+			var type4 = token.type;
+			parts = refactored_$little_parser_Parser.mergeCalls(parts);
+			if(i == 0) {
+				post.push(refactored_$little_parser_ParserTokens.Expression(parts,type4));
+			} else {
+				var lookbehind = pre[i - 1];
+				switch(lookbehind._hx_index) {
+				case 0:
+					var _g = lookbehind.line;
+					post.push(refactored_$little_parser_ParserTokens.Expression(parts,type4));
+					break;
+				case 1:
+					post.push(refactored_$little_parser_ParserTokens.Expression(parts,type4));
+					break;
+				case 15:
+					var _g1 = lookbehind.sign;
+					post.push(refactored_$little_parser_ParserTokens.Expression(parts,type4));
+					break;
+				default:
+					var previous = post.pop();
+					token = refactored_$little_parser_ParserTokens.PartArray(parts);
+					post.push(refactored_$little_parser_ParserTokens.ActionCall(previous,token));
+				}
 			}
 			break;
 		case 12:
 			var body1 = token.body;
-			var type6 = token.type;
-			post.push(refactored_$little_parser_ParserTokens.Block(refactored_$little_parser_Parser.mergeCalls(body1),type6));
+			var type5 = token.type;
+			post.push(refactored_$little_parser_ParserTokens.Block(refactored_$little_parser_Parser.mergeCalls(body1),type5));
+			break;
+		case 13:
+			var parts1 = token.parts;
+			post.push(refactored_$little_parser_ParserTokens.PartArray(refactored_$little_parser_Parser.mergeCalls(parts1)));
 			break;
 		default:
 			post.push(token);
@@ -1194,9 +1214,9 @@ refactored_$little_tools_PrettyPrinter.getTree = function(root,prefix,level,last
 	case 9:
 		var name = root.name;
 		var params = root.params;
-		var title = "" + refactored_$little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " Action Creation\n";
-		title += refactored_$little_tools_PrettyPrinter.getTree(name,prefix.slice(),level + 1,false);
-		title += refactored_$little_tools_PrettyPrinter.getTree(params,refactored_$little_tools_PrettyPrinter.pushIndex(prefix,level),level + 1,true);
+		var title = "" + refactored_$little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " Action Call\n";
+		title += refactored_$little_tools_PrettyPrinter.getTree(name,refactored_$little_tools_PrettyPrinter.pushIndex(prefix,level),level + 1,false);
+		title += refactored_$little_tools_PrettyPrinter.getTree(params,prefix.slice(),level + 1,true);
 		return title;
 	case 10:
 		var value = root.value;

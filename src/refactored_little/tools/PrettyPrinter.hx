@@ -128,9 +128,9 @@ class PrettyPrinter {
 				}
 			case ActionCall(name, params):
 				{
-					var title = '${prefixFA(prefix)}$t$d Action Creation\n';
-					title += getTree(name, prefix.copy(), level + 1, false);
-					title += getTree(params, pushIndex(prefix, level), level + 1, true);
+					var title = '${prefixFA(prefix)}$t$d Action Call\n';
+					title += getTree(name, pushIndex(prefix, level), level + 1, false);
+					title += getTree(params, prefix.copy(), level + 1, true);
 					return title;
 				}
 			case Return(value, type): {

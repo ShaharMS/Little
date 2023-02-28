@@ -54,6 +54,9 @@ class Lexer {
             i++;        
         }
 
+        tokens = separateBooleanIdentifiers(tokens);
+
+
         return tokens;
     }
 
@@ -65,5 +68,12 @@ class Lexer {
                 NullValue;
             } else token;
         });
+    }
+
+    public static function mergeKnownSigns(tokens:Array<LexerTokens>):Array<LexerTokens> {
+    
+        var post = [];
+    
+        return post;
     }
 }

@@ -45,8 +45,8 @@ class Parser {
         tokens = mergeExpressions(tokens);
         tokens = mergeTypeDecls(tokens);
         tokens = mergeComplexStructures(tokens);
-        tokens = mergeWrites(tokens);
         tokens = mergeCalls(tokens);
+        tokens = mergeWrites(tokens);
 
 
         return tokens;
@@ -369,6 +369,7 @@ class Parser {
                 case Action(name, params, type): post.push(Action(mergeWrites([name])[0], mergeWrites([params])[0], type));
                 case Condition(name, exp, body, type): post.push(Condition(mergeWrites([name])[0], mergeWrites([exp])[0], mergeWrites([body])[0], type));
                 case Return(value, type): post.push(Return(mergeWrites([value])[0], type));
+                case ActionCall(name, params): post.push(ActionCall(mergeWrites([name])[0], mergeWrites([params])[0]));
                 case _: post.push(token);
             }
 
@@ -457,6 +458,10 @@ class Parser {
                     post.push(potentialAssignee);
                     potentialAssignee = Return(mergeWrites([value])[0], type);
                 }
+                case ActionCall(name, params): {
+                    post.push(potentialAssignee);
+                    potentialAssignee = ActionCall(mergeWrites([name])[0], mergeWrites([params])[0]);
+                }
                 case _: {
                     post.push(potentialAssignee);
                     potentialAssignee = token;
@@ -483,12 +488,18 @@ class Parser {
             var token = pre[i];
             switch token {
                 case Expression(parts, type): {
-                    var lookbehind = if (i - 1 > 0) pre[i - 1] else ParserTokens.SplitLine;
-                    switch lookbehind {
-                        case Sign(_) | SplitLine | SetLine(_): post.push(Expression(mergeCalls(parts), type));
-                        case _: {
-                            var previous = post.pop(); // When parsing a function that returns a function, this handles the "nested call" correctly
-                            post.push(ActionCall(previous, token));
+                    parts = mergeCalls(parts);
+                    if (i == 0) {
+                        post.push(Expression(parts, type));
+                    } else {
+                        var lookbehind = pre[i - 1];
+                        switch lookbehind {
+                            case Sign(_) | SplitLine | SetLine(_): post.push(Expression(parts, type));
+                            case _: {
+                                var previous = post.pop(); // When parsing a function that returns a function, this handles the "nested call" correctly
+                                token = PartArray(parts);
+                                post.push(ActionCall(previous, token));
+                            }
                         }
                     }
                 }
@@ -497,7 +508,6 @@ class Parser {
                 case Action(name, params, type): post.push(Action(mergeCalls([name])[0], mergeCalls([params])[0], type));
                 case Condition(name, exp, body, type): post.push(Condition(mergeCalls([name])[0], mergeCalls([exp])[0], mergeCalls([body])[0], type));
                 case Return(value, type): post.push(Return(mergeCalls([value])[0], type));
-                case Write(assignees, value, type): post.push(Write(mergeCalls(assignees), mergeCalls([value])[0], type));
                 case PartArray(parts): post.push(PartArray(mergeCalls(parts)));
                 case _: post.push(token);
             }
