@@ -10,13 +10,7 @@
 
 <body>
     <h3>hey!</h3>
-    <textarea id="input" style="height: 80vw; width: 45vw; display:inline-block; white-space:pre-wrap;">
-        define x as Decimal = 3
-
-        action addNumber(number as Number = 1) = {
-            x = x + number
-        }
-    </textarea>
+    <textarea id="input" style="height: 80vw; width: 45vw; display:inline-block; white-space:pre-wrap;"></textarea>
     <textarea id="output" style="height: 80vw; width: 45vw;" contenteditable="false">
     </textarea>
     <script src="./interp.js"></script>
@@ -36,7 +30,6 @@
                     this.selectionEnd = start + 1;
             }
         });
-        document.getElementById("input").dispatchEvent(new Event('keyup'));
     </script>
 </body>
 
