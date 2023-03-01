@@ -37,6 +37,15 @@ Std.__name__ = true;
 Std.string = function(s) {
 	return js_Boot.__string_rec(s,"");
 };
+var StringTools = function() { };
+StringTools.__name__ = true;
+StringTools.startsWith = function(s,start) {
+	if(s.length >= start.length) {
+		return s.lastIndexOf(start,0) == 0;
+	} else {
+		return false;
+	}
+};
 var TextTools = function() { };
 TextTools.__name__ = true;
 TextTools.replaceFirst = function(string,replace,by) {
@@ -51,6 +60,12 @@ TextTools.multiply = function(string,times) {
 	}
 	while(--times > 0) string += stringcopy;
 	return string;
+};
+TextTools.sortByLength = function(array) {
+	array.sort(function(a,b) {
+		return a.length - b.length;
+	});
+	return array;
 };
 TextTools.countOccurrencesOf = function(string,sub) {
 	var count = 0;
@@ -274,7 +289,14 @@ refactored_$little_lexer_Lexer.lex = function(code) {
 		} else if(char == ";") {
 			tokens.push(refactored_$little_lexer_LexerTokens.SplitLine);
 		} else if(refactored_$little_lexer_Lexer.signs.indexOf(char) != -1) {
-			tokens.push(refactored_$little_lexer_LexerTokens.Sign(char));
+			var sign = char;
+			++i;
+			while(i < code.length && refactored_$little_lexer_Lexer.signs.indexOf(code.charAt(i)) != -1) {
+				sign += code.charAt(i);
+				++i;
+			}
+			--i;
+			tokens.push(refactored_$little_lexer_LexerTokens.Sign(sign));
 		} else if(new EReg("\\w","").match(char)) {
 			var name = char;
 			++i;
@@ -288,6 +310,7 @@ refactored_$little_lexer_Lexer.lex = function(code) {
 		++i;
 	}
 	tokens = refactored_$little_lexer_Lexer.separateBooleanIdentifiers(tokens);
+	tokens = refactored_$little_lexer_Lexer.mergeOrSplitKnownSigns(tokens);
 	return tokens;
 };
 refactored_$little_lexer_Lexer.separateBooleanIdentifiers = function(tokens) {
@@ -300,6 +323,43 @@ refactored_$little_lexer_Lexer.separateBooleanIdentifiers = function(tokens) {
 		result[i] = Type.enumEq(token,refactored_$little_lexer_LexerTokens.Identifier(refactored_$little_Keywords.TRUE_VALUE)) || Type.enumEq(token,refactored_$little_lexer_LexerTokens.Identifier(refactored_$little_Keywords.FALSE_VALUE)) ? refactored_$little_lexer_LexerTokens.Boolean(Type.enumParameters(token)[0]) : Type.enumEq(token,refactored_$little_lexer_LexerTokens.Identifier(refactored_$little_Keywords.NULL_VALUE)) ? refactored_$little_lexer_LexerTokens.NullValue : token;
 	}
 	return result;
+};
+refactored_$little_lexer_Lexer.mergeOrSplitKnownSigns = function(tokens) {
+	var post = [];
+	var i = 0;
+	while(i < tokens.length) {
+		var token = tokens[i];
+		if(token._hx_index == 1) {
+			var char = token.char;
+			refactored_$little_Keywords.SPECIAL_OR_MULTICHAR_SIGNS = TextTools.sortByLength(refactored_$little_Keywords.SPECIAL_OR_MULTICHAR_SIGNS);
+			refactored_$little_Keywords.SPECIAL_OR_MULTICHAR_SIGNS.reverse();
+			var shouldContinue = false;
+			while(char.length > 0) {
+				shouldContinue = false;
+				var _g = 0;
+				var _g1 = refactored_$little_Keywords.SPECIAL_OR_MULTICHAR_SIGNS;
+				while(_g < _g1.length) {
+					var sign = _g1[_g];
+					++_g;
+					if(StringTools.startsWith(char,sign)) {
+						char = char.substring(sign.length);
+						post.push(refactored_$little_lexer_LexerTokens.Sign(sign));
+						shouldContinue = true;
+						break;
+					}
+				}
+				if(shouldContinue) {
+					continue;
+				}
+				post.push(refactored_$little_lexer_LexerTokens.Sign(char.charAt(0)));
+				char = char.substring(1);
+			}
+		} else {
+			post.push(token);
+		}
+		++i;
+	}
+	return post;
 };
 var refactored_$little_lexer_LexerTokens = $hxEnums["refactored_little.lexer.LexerTokens"] = { __ename__:true,__constructs__:null
 	,Identifier: ($_=function(name) { return {_hx_index:0,name:name,__enum__:"refactored_little.lexer.LexerTokens",toString:$estr}; },$_._hx_name="Identifier",$_.__params__ = ["name"],$_)
@@ -1308,6 +1368,7 @@ refactored_$little_Keywords.NULL_VALUE = "nothing";
 refactored_$little_Keywords.TRUE_VALUE = "true";
 refactored_$little_Keywords.FALSE_VALUE = "false";
 refactored_$little_Keywords.CONDITION_TYPES = ["if","while","whenever","for"];
+refactored_$little_Keywords.SPECIAL_OR_MULTICHAR_SIGNS = ["++","--","**","+=","-=",">=","<=","=="];
 refactored_$little_lexer_Lexer.signs = ["!","\"","#","$","%","&","'","(",")","*","+",",","-",".","/",":",";","<","=",">","?","@","[","\\","]","^","_","`","{","|","}","~","^"];
 refactored_$little_tools_PrettyPrinter.s = "";
 refactored_$little_tools_PrettyPrinter.l = 0;

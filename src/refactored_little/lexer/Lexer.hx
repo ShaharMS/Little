@@ -40,7 +40,14 @@ class Lexer {
             } else if (char == ";") {
                 tokens.push(SplitLine);
             } else if (signs.contains(char)) {
-                tokens.push(Sign(char));
+                var sign = char;
+                i++;
+                while (i < code.length && signs.contains(code.charAt(i))) {
+                    sign += code.charAt(i);
+                    i++;
+                }
+                i--;
+                tokens.push(Sign(sign));
             } else if (~/\w/.match(char)) {
                 var name = char;
                 i++;
@@ -55,7 +62,7 @@ class Lexer {
         }
 
         tokens = separateBooleanIdentifiers(tokens);
-
+        tokens = mergeOrSplitKnownSigns(tokens);
 
         return tokens;
     }
@@ -70,10 +77,40 @@ class Lexer {
         });
     }
 
-    public static function mergeKnownSigns(tokens:Array<LexerTokens>):Array<LexerTokens> {
-    
+    public static function mergeOrSplitKnownSigns(tokens:Array<LexerTokens>):Array<LexerTokens> {
         var post = [];
-    
+
+        var i = 0;
+        while (i < tokens.length) {
+            var token = tokens[i];
+
+            switch token {
+                case Sign(char): {
+                    // First: reorder the keyword array by length
+                    SPECIAL_OR_MULTICHAR_SIGNS = TextTools.sortByLength(SPECIAL_OR_MULTICHAR_SIGNS);
+                    SPECIAL_OR_MULTICHAR_SIGNS.reverse();
+
+                    var shouldContinue = false;
+                    while (char.length > 0) {
+                        shouldContinue = false;
+                        for (sign in SPECIAL_OR_MULTICHAR_SIGNS) {
+                            if (char.startsWith(sign)) {
+                                char = char.substring(sign.length);
+                                post.push(Sign(sign));
+                                shouldContinue = true;
+                                break;
+                            }
+                        }
+                        if (shouldContinue) continue;
+                        post.push(Sign(char.charAt(0)));
+                        char = char.substring(1);
+                    }
+                }
+                case _: post.push(token);
+            }
+            i++;
+        }
+
         return post;
     }
 }
