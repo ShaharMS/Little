@@ -30,6 +30,17 @@ enum ParserTokens {
     Decimal(num:String);
     Characters(string:String);
 
+    
+    /**
+    	Used for multi-module coding & better error reporting.
+    **/
+    Module(name:String);
+
+    /**
+    	Used for denoting an external var/func in the interpreter.
+    **/
+    External(haxeValue:Dynamic);
+
     NullValue;
     TrueValue;
     FalseValue;

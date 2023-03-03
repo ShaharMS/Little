@@ -340,47 +340,6 @@ class Parser {
 
         var post:Array<ParserTokens> = [];
 
-        // First, merge two consecutive "=" into a single "=="
-
-        var i = 0;
-        while (i < pre.length) {
-            var token = pre[i];
-            if (token == null) {
-                i++;
-                continue;
-            }
-            switch token {
-                case Sign("="): {
-                    if (i + 1 >= pre.length) {
-                        post.push(Sign("="));
-                        break;
-                    }
-                    var lookahead = pre[i + 1];
-                    if (Type.enumEq(lookahead, Sign("="))) {
-                        post.push(Sign("=="));
-                        i++;
-                    } else {
-                        post.push(Sign("="));
-                    }
-                }
-                case Block(body, type): post.push(Block(mergeWrites(body), type));
-                case Expression(body, type): post.push(Expression(mergeWrites(body), type));
-                case Define(name, type): post.push(Define(mergeWrites([name])[0], type));
-                case Action(name, params, type): post.push(Action(mergeWrites([name])[0], mergeWrites([params])[0], type));
-                case Condition(name, exp, body, type): post.push(Condition(mergeWrites([name])[0], mergeWrites([exp])[0], mergeWrites([body])[0], type));
-                case Return(value, type): post.push(Return(mergeWrites([value])[0], type));
-                case ActionCall(name, params): post.push(ActionCall(mergeWrites([name])[0], mergeWrites([params])[0]));
-                case _: post.push(token);
-            }
-
-            i++;
-        }
-
-        pre = post.copy();
-        post = [];
-
-        // Now, deal with writes
-
         var potentialAssignee:ParserTokens = NullValue;
         var i = 0;
         while (i < pre.length) {

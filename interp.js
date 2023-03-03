@@ -877,79 +877,9 @@ refactored_$little_parser_Parser.mergeWrites = function(pre) {
 		return null;
 	}
 	var post = [];
-	var i = 0;
-	_hx_loop1: while(i < pre.length) {
-		var token = pre[i];
-		if(token == null) {
-			++i;
-			continue;
-		}
-		switch(token._hx_index) {
-		case 2:
-			var name = token.name;
-			var type = token.type;
-			post.push(refactored_$little_parser_ParserTokens.Define(refactored_$little_parser_Parser.mergeWrites([name])[0],type));
-			break;
-		case 3:
-			var name1 = token.name;
-			var params = token.params;
-			var type1 = token.type;
-			post.push(refactored_$little_parser_ParserTokens.Action(refactored_$little_parser_Parser.mergeWrites([name1])[0],refactored_$little_parser_Parser.mergeWrites([params])[0],type1));
-			break;
-		case 4:
-			var name2 = token.name;
-			var exp = token.exp;
-			var body = token.body;
-			var type2 = token.type;
-			post.push(refactored_$little_parser_ParserTokens.Condition(refactored_$little_parser_Parser.mergeWrites([name2])[0],refactored_$little_parser_Parser.mergeWrites([exp])[0],refactored_$little_parser_Parser.mergeWrites([body])[0],type2));
-			break;
-		case 9:
-			var name3 = token.name;
-			var params1 = token.params;
-			post.push(refactored_$little_parser_ParserTokens.ActionCall(refactored_$little_parser_Parser.mergeWrites([name3])[0],refactored_$little_parser_Parser.mergeWrites([params1])[0]));
-			break;
-		case 10:
-			var value = token.value;
-			var type3 = token.type;
-			post.push(refactored_$little_parser_ParserTokens.Return(refactored_$little_parser_Parser.mergeWrites([value])[0],type3));
-			break;
-		case 11:
-			var body1 = token.parts;
-			var type4 = token.type;
-			post.push(refactored_$little_parser_ParserTokens.Expression(refactored_$little_parser_Parser.mergeWrites(body1),type4));
-			break;
-		case 12:
-			var body2 = token.body;
-			var type5 = token.type;
-			post.push(refactored_$little_parser_ParserTokens.Block(refactored_$little_parser_Parser.mergeWrites(body2),type5));
-			break;
-		case 15:
-			if(token.sign == "=") {
-				if(i + 1 >= pre.length) {
-					post.push(refactored_$little_parser_ParserTokens.Sign("="));
-					break _hx_loop1;
-				}
-				var lookahead = pre[i + 1];
-				if(Type.enumEq(lookahead,refactored_$little_parser_ParserTokens.Sign("="))) {
-					post.push(refactored_$little_parser_ParserTokens.Sign("=="));
-					++i;
-				} else {
-					post.push(refactored_$little_parser_ParserTokens.Sign("="));
-				}
-			} else {
-				post.push(token);
-			}
-			break;
-		default:
-			post.push(token);
-		}
-		++i;
-	}
-	pre = post.slice();
-	post = [];
 	var potentialAssignee = refactored_$little_parser_ParserTokens.NullValue;
 	var i = 0;
-	_hx_loop2: while(i < pre.length) {
+	_hx_loop1: while(i < pre.length) {
 		var token = pre[i];
 		switch(token._hx_index) {
 		case 2:
@@ -1000,20 +930,20 @@ refactored_$little_parser_Parser.mergeWrites = function(pre) {
 		case 15:
 			if(token.sign == "=") {
 				if(i + 1 >= pre.length) {
-					break _hx_loop2;
+					break _hx_loop1;
 				}
 				var currentAssignee = [potentialAssignee];
 				if(potentialAssignee._hx_index == 11) {
 					var _g = potentialAssignee.parts;
 					var _g1 = potentialAssignee.type;
-					_hx_loop3: while(true) {
+					_hx_loop2: while(true) {
 						var _g2 = post[post.length - 1];
 						switch(_g2._hx_index) {
 						case 0:
 							var _g3 = _g2.line;
-							break _hx_loop3;
+							break _hx_loop2;
 						case 1:
-							break _hx_loop3;
+							break _hx_loop2;
 						case 11:
 							var _g4 = _g2.parts;
 							var _g5 = _g2.type;
@@ -1021,23 +951,23 @@ refactored_$little_parser_Parser.mergeWrites = function(pre) {
 							break;
 						case 15:
 							var _g6 = _g2.sign;
-							break _hx_loop3;
+							break _hx_loop2;
 						default:
 							currentAssignee.unshift(post.pop());
-							break _hx_loop3;
+							break _hx_loop2;
 						}
 					}
 				}
 				var assignees = [currentAssignee.length == 1 ? currentAssignee[0] : refactored_$little_parser_ParserTokens.Expression(currentAssignee.slice(),null)];
 				currentAssignee = [];
-				_hx_loop4: while(i + 1 < pre.length) {
+				_hx_loop3: while(i + 1 < pre.length) {
 					var lookahead = pre[i + 1];
 					switch(lookahead._hx_index) {
 					case 0:
 						var _g7 = lookahead.line;
-						break _hx_loop4;
+						break _hx_loop3;
 					case 1:
-						break _hx_loop4;
+						break _hx_loop3;
 					case 15:
 						if(lookahead.sign == "=") {
 							var assignee = currentAssignee.length == 1 ? currentAssignee[0] : refactored_$little_parser_ParserTokens.Expression(currentAssignee.slice(),null);

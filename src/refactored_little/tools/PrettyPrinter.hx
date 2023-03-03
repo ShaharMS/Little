@@ -52,6 +52,7 @@ class PrettyPrinter {
 			case SetLine(line): return '${prefixFA(prefix)}$t$d SetLine($line)\n';
             case SplitLine: return '${prefixFA(prefix)}$t$d SplitLine\n';
             case Characters(string): return '${prefixFA(prefix)}$t$d "$string"\n';
+			case Module(name): return '${prefixFA(prefix)}$t$d Module: $name\n';
             case Decimal(num): return '${prefixFA(prefix)}$t$d $num\n';
             case Number(num): return '${prefixFA(prefix)}$t$d $num\n';
             case FalseValue: return '${prefixFA(prefix)}$t$d ${Keywords.FALSE_VALUE}\n';
