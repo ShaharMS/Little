@@ -1,4 +1,4 @@
-package refactored_little.interpreter;
+package little.interpreter;
 
 @:structInit
 class RunConfig {

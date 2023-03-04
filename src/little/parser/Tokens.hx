@@ -1,40 +1,47 @@
 package little.parser;
 
-import haxe.xml.Parser;
-
-enum UnInfoedParserTokens {
-    SetLine(line:Int);
-
-    DefinitionCreation(name:String, value:UnInfoedParserTokens, type:String);   
-    ActionCreation(name:String, params:Array<UnInfoedParserTokens>, body:Array<UnInfoedParserTokens>, type:String);
-    DefinitionAccess(name:String);
-    DefinitionWrite(assignee:String, value:UnInfoedParserTokens, valueType:String);
-    Sign(sign:String);
-    StaticValue(value:String, type:String);
-    Expression(parts:Array<UnInfoedParserTokens>, type:String);
-    Parameter(name:String, type:String, value:UnInfoedParserTokens);
-    ActionCallParameter(value:UnInfoedParserTokens, type:String);
-    ActionCall(name:String, params:Array<UnInfoedParserTokens>, returnType:String);
-    Return(value:UnInfoedParserTokens, type:String);
-    Error(title:String, reason:String);
-    InvalidSyntax(string:String);
-    Condition(type:String, condition:UnInfoedParserTokens, body:Array<UnInfoedParserTokens>);
-}
+import little.parser.Parser;
 
 enum ParserTokens {
-    SetLine(line:Int, nestingLevel:Int, ?module:String);
-    DefinitionCreation(name:String, value:ParserTokens, type:String, nestingLevel:Int, ?module:String);
-    ActionCreation(name:String, params:Array<ParserTokens>, body:Array<ParserTokens>, type:String, nestingLevel:Int, ?module:String);
-    DefinitionAccess(name:String, nestingLevel:Int, ?module:String);
-    DefinitionWrite(assignee:String, value:ParserTokens, valueType:String, nestingLevel:Int, ?module:String);
-    Sign(sign:String, nestingLevel:Int, ?module:String);
-    StaticValue(value:String, type:String, nestingLevel:Int, ?module:String);
-    Expression(parts:Array<ParserTokens>, type:String, nestingLevel:Int, ?module:String);
-    Parameter(name:String, type:String, value:ParserTokens, nestingLevel:Int, ?module:String);
-    ActionCallParameter(value:ParserTokens, type:String, nestingLevel:Int, ?module:String);
-    ActionCall(name:String, params:Array<ParserTokens>, returnType:String, nestingLevel:Int, ?module:String);
-    Return(value:ParserTokens, type:String, nestingLevel:Int, ?module:String);
-    Error(title:String, reason:String, nestingLevel:Int, ?module:String);
-    InvalidSyntax(string:String, nestingLevel:Int, ?module:String);
-    Condition(type:String, condition:ParserTokens, body:Array<ParserTokens>, nestingLevel:Int, ?module:String);
+
+    SetLine(line:Int);
+    SplitLine;
+
+    Define(name:ParserTokens, type:ParserTokens);
+    Action(name:ParserTokens, params:ParserTokens, type:ParserTokens);
+    Condition(name:ParserTokens, exp:ParserTokens, body:ParserTokens, type:ParserTokens);
+
+    Read(name:ParserTokens);
+    Write(assignees:Array<ParserTokens>, value:ParserTokens, type:ParserTokens);
+
+    Identifier(word:String);
+    TypeDeclaration(type:ParserTokens);
+    ActionCall(name:ParserTokens, params:ParserTokens);
+    Return(value:ParserTokens, type:ParserTokens);
+
+    Expression(parts:Array<ParserTokens>, type:ParserTokens);
+    Block(body:Array<ParserTokens>, type:ParserTokens);
+    PartArray(parts:Array<ParserTokens>);
+
+    Parameter(name:ParserTokens, type:ParserTokens);
+
+    Sign(sign:String);
+    Number(num:String);
+    Decimal(num:String);
+    Characters(string:String);
+
+    
+    /**
+    	Used for multi-module coding & better error reporting.
+    **/
+    Module(name:String);
+
+    /**
+    	Used for denoting an external var/func in the interpreter.
+    **/
+    External(haxeValue:Dynamic);
+
+    NullValue;
+    TrueValue;
+    FalseValue;
 }

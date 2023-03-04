@@ -1,9 +1,9 @@
-package refactored_little.tools;
+package little.tools;
 
 using StringTools;
 using TextTools;
 
-import refactored_little.parser.Tokens;
+import little.parser.Tokens;
 
 class PrettyPrinter {
     

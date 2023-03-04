@@ -1,229 +1,478 @@
 package little.parser;
 
+import little.tools.PrettyPrinter;
 import little.parser.Tokens.ParserTokens;
 import little.lexer.Tokens.LexerTokens;
-import little.parser.Tokens.UnInfoedParserTokens;
-import little.parser.Specifics.*;
 import little.Keywords.*;
 
 using StringTools;
 using TextTools;
 
-/**
-	Converts lexer tokens into interpretable ones
-**/
 class Parser {
-	
-	public static final numberDetector:EReg = ~/([0-9]+)/;
-	public static final decimalDetector:EReg = ~/([0-9\.]+)/;
-	public static final booleanDetector:EReg = ~/true|false/;
-	public static final stringDetector:EReg = ~/"[^"]*"/;
+    public static function parse(lexerTokens:Array<LexerTokens>):Array<ParserTokens> {
+        var tokens:Array<ParserTokens> = [];
 
-	/**
-		evaluate expressions' types, and assign them.
-	**/
-	public static function typeTokens(tokens:Array<LexerTokens>):Array<UnInfoedParserTokens> {
-		var unInfoedParserTokens = [];
+        var line = 1;
 
-		for (token in tokens) {
-			unInfoedParserTokens.push(switch token {
-				case DefinitionCreation(name, value, type): DefinitionCreation(name, typeTokens([value])[0], type);
-				case ActionCreation(name, params, body, type): ActionCreation(name, typeTokens(params), typeTokens(body), type);
-				case DefinitionAccess(name): DefinitionAccess(name);
-				case DefinitionWrite(assignee, value): DefinitionWrite(assignee, typeTokens([value])[0], evaluateExpressionType(value));
-				case Sign(sign): Sign(sign);
-				case StaticValue(value): StaticValue(value, evaluateExpressionType(StaticValue(value)));
-				case Expression(parts): Expression(typeTokens(parts), evaluateExpressionType(Expression(parts)));
-				case Parameter(name, type, value): Parameter(name, if (type == null) evaluateExpressionType(value) else type, typeTokens([value])[0]);
-				case ActionCallParameter(value): ActionCallParameter(typeTokens([value])[0], evaluateExpressionType(value));
-				case ActionCall(name, params): ActionCall(name, typeTokens(params), evaluateExpressionType(params[params.length - 1]));
-				case Return(value): Return(typeTokens([value])[0], evaluateExpressionType(value));
-				case InvalidSyntax(string): InvalidSyntax(string);
-				case Condition(type, c, body): Condition(type, typeTokens([c])[0], typeTokens(body));
-				case SetLine(line): SetLine(line);
-			});
-		}
+        var i = 0;
+        while (i < lexerTokens.length) {
+            var token = lexerTokens[i];
 
-		return unInfoedParserTokens;
-	}
+            switch token {
+                case Identifier(name): tokens.push(Identifier(name));
+                case Sign(char): tokens.push(Sign(char));
+                case Number(num): {
+                    if (num.countOccurrencesOf(".") == 0) tokens.push(Number(num));
+                    else if (num.countOccurrencesOf(".") == 1) tokens.push(Decimal(num));
+                }
+                case Boolean(value): {
+                    if (value == FALSE_VALUE) tokens.push(FalseValue);
+                    else if (value == TRUE_VALUE) tokens.push(TrueValue);
+                }
+                case Characters(string): tokens.push(Characters(string));
+                case NullValue: tokens.push(NullValue);
+                case Newline: {
+                    tokens.push(SetLine(line));
+                    line++;
+                }
+                case SplitLine: tokens.push(SplitLine);
+            }
 
-	public static function assignNesting(tokens:Array<UnInfoedParserTokens>, ?currentNestingLevel:Int = 0):Array<ParserTokens> {
-		return tokens.map(token -> convertSingleToken(token, 0));
-	}
+            i++;
+        }
 
-	public static function convertSingleToken(t:UnInfoedParserTokens, nesting:Int):ParserTokens {
-		return switch t {
-			case SetLine(line): SetLine(line, nesting);
-			case DefinitionCreation(name, value, type): DefinitionCreation(name, convertSingleToken(value, nesting), type, nesting);
-			case ActionCreation(name, params, body, type): ActionCreation(name, [for (param in params) convertSingleToken(param, nesting + 1)], [for (value in body) convertSingleToken(value, nesting + 1)], type, nesting);
-			case DefinitionAccess(name): DefinitionAccess(name, nesting);
-			case DefinitionWrite(assignee, value, valueType): DefinitionWrite(assignee, convertSingleToken(value, nesting), valueType, nesting);
-			case Sign(sign): Sign(sign, nesting);
-			case StaticValue(value, type): StaticValue(value, type, nesting);
-			case Expression(parts, type): Expression([for (value in parts) convertSingleToken(value, nesting + 1)], type, nesting);
-			case Parameter(name, type, value): Parameter(name, type, convertSingleToken(value, nesting), nesting);
-			case ActionCallParameter(value, type): ActionCallParameter(convertSingleToken(value, nesting), type, nesting);
-			case ActionCall(name, params, returnType): ActionCall(name, [for (param in params) convertSingleToken(param, nesting + 1)], returnType, nesting);
-			case Return(value, type): Return(convertSingleToken(value, nesting), type, nesting);
-			case Error(title, reason): Error(title, reason, nesting);
-			case InvalidSyntax(string): InvalidSyntax(string, nesting);
-			case Condition(type, c, body): Condition(type, convertSingleToken(c, nesting + 1), [for (value in body) convertSingleToken(value, nesting + 1)], nesting);
-		} 
-	}
+        tokens = mergeBlocks(tokens);
+        tokens = mergeExpressions(tokens);
+        tokens = mergeTypeDecls(tokens);
+        tokens = mergeComplexStructures(tokens);
+        tokens = mergeCalls(tokens);
+        tokens = mergeWrites(tokens);
 
-	public static function signWithModule(tokens:Array<ParserTokens>, moduleName:String):Array<ParserTokens> {
-		return [
-			for (token in tokens) {
-				switch token {
-					case SetLine(line, nestingLevel, _): SetLine(line, nestingLevel, moduleName);
-					case DefinitionCreation(name, value, type, nestingLevel, _): DefinitionCreation(name, value, type, nestingLevel, moduleName);
-					case ActionCreation(name, params, body, type, nestingLevel, _): ActionCreation(name, params, body, type, nestingLevel, moduleName);
-					case DefinitionAccess(name, nestingLevel, _): DefinitionAccess(name, nestingLevel, moduleName);
-					case DefinitionWrite(assignee, value, valueType, nestingLevel, _): DefinitionWrite(assignee, value, valueType, nestingLevel, moduleName);
-					case Sign(sign, nestingLevel, _): Sign(sign, nestingLevel, moduleName);
-					case StaticValue(value, type, nestingLevel, _): StaticValue(value, type, nestingLevel, moduleName);
-					case Expression(parts, type, nestingLevel, _): Expression(parts, type, nestingLevel, moduleName);
-					case Parameter(name, type, value, nestingLevel, _): Parameter(name, type, value, nestingLevel, moduleName);
-					case ActionCallParameter(value, type, nestingLevel, _): ActionCallParameter(value, type, nestingLevel, moduleName);
-					case ActionCall(name, params, returnType, nestingLevel, _): ActionCall(name, params, returnType, nestingLevel, moduleName);
-					case Return(value, type, nestingLevel, _): Return(value, type, nestingLevel, moduleName);
-					case Error(title, reason, nestingLevel, _): Error(title, reason, nestingLevel, moduleName);
-					case InvalidSyntax(string, nestingLevel, _): InvalidSyntax(string, nestingLevel, moduleName);
-					case Condition(type, c, body, nestingLevel, _): Condition(type, c, body, nestingLevel, moduleName);
-				}
-			}
-		];
-	}
 
-	public static function prettyPrintAst(ast:Array<UnInfoedParserTokens>, ?spacingBetweenNodes:Int = 6) {
-		s = " ".multiply(spacingBetweenNodes);
-		var unfilteredResult = getTree(Expression(ast, ""), [], 0, true);
-		var filtered = "";
-		for (line in unfilteredResult.split("\n")) {
-			if (line == "└─── Expression")
-				continue;
-			filtered += line.substring(spacingBetweenNodes - 1) + "\n";
-		}
-		return "\nAst\n" + filtered;
-	}
+        return tokens;
+    }
 
-	static function prefixFA(pArray:Array<Int>) {
-		var prefix = "";
-		for (i in 0...l) {
-			if (pArray[i] == 1) {
-				prefix += "│" + s.substring(1);
-			} else {
-				prefix += s;
-			}
-		}
-		return prefix;
-	}
+    public static function mergeTypeDecls(pre:Array<ParserTokens>):Array<ParserTokens> {
+        
+        if (pre == null) return null;
 
-	static function pushIndex(pArray:Array<Int>, i:Int) {
-		var arr = pArray.copy();
-		arr[i + 1] = 1;
-		return arr;
-	}
+        var post:Array<ParserTokens> = [];
 
-	static var s = "";
-	static var l = 0;
+        var i = 0;
+        while (i < pre.length) {
+            var token = pre[i];
+            switch token {
+                case Identifier(word): {
+                    if (word == TYPE_DECL_OR_CAST && i + 1 < pre.length) {
+                        var lookahead = pre[i + 1];
+                        post.push(TypeDeclaration(lookahead));
+                        i++;
+                    } else {
+                        post.push(token);
+                    }
+                }
+                case Expression(parts, type): post.push(Expression(mergeTypeDecls(parts), null));
+                case Block(body, type): post.push(Block(mergeTypeDecls(body), null));
+                case _: post.push(token);
+            }
+            i++;
+        }
 
-	static function getTree(root:UnInfoedParserTokens, prefix:Array<Int>, level:Int, last:Bool):String {
-		l = level;
-		var t = if (last) "└" else "├";
-		var c = "├";
-		var d = "───";
-		if (root == null)
-			return "";
-		switch root {
-			case SetLine(line):
-				return '${prefixFA(prefix)}$t$d SetLine($line)\n';
-			case DefinitionCreation(name, value, type):
-				{
-					return
-						'${prefixFA(prefix)}$t$d Definition Creation\n${getTree(StaticValue(name, ""), prefix.copy(), level + 1, false)}${getTree(StaticValue(type, ""), prefix.copy(), level + 1, false)}${getTree(value, prefix.copy(), level + 1, true)}';
-				}
-			case ActionCreation(name, params, body, type):
-				{
-					var title = '${prefixFA(prefix)}$t$d Action Creation\n';
-					title += getTree(StaticValue(name, ""), prefix.copy(), level + 1, false);
-					title += getTree(StaticValue(type, ""), prefix.copy(), level + 1, false);
-					title += getTree(Expression(params, ""), pushIndex(prefix, level), level + 1, false);
-					title += getTree(Expression(body, ""), prefix.copy(), level + 1, true);
-					return title;
-				}
-			case Condition(type, exp, body):
-				{
-					var title = '${prefixFA(prefix)}$t$d Condition\n';
-					title += getTree(StaticValue(type, ""), prefix.copy(), level + 1, false);
-					title += getTree(exp, pushIndex(prefix, level), level + 1, false);
-					title += getTree(Expression(body, ""), prefix.copy(), level + 1, true);
-					return title;
-				}
-			case DefinitionAccess(name):
-				return '${prefixFA(prefix)}$t$d $name\n';
-			case DefinitionWrite(assignee, value, type):
-				{
-					var addon = type != "" ? ' ($type)' : "";
-					return'${prefixFA(prefix)}$t$d Definition Write$addon\n${getTree(StaticValue(assignee, ""), prefix.copy(), level + 1, false)}${getTree(value, prefix.copy(), level + 1, true)}';
-				}
-			case Sign(value):
-				{
-					return '${prefixFA(prefix)}$t$d $value\n';
-				}
-			case StaticValue(value, type): {
-				var addon = type != "" ? ' ($type)' : "";
-				return '${prefixFA(prefix)}$t$d $value$addon\n';
-			}
-			case Expression(parts, type):
-				{
-					if (parts.length == 0)
-						return '${prefixFA(prefix)}$t$d <empty expression>\n';
-					var addon = type != "" ? ' ($type)' : "";
-					var strParts = ['${prefixFA(prefix)}$t$d Expression$addon\n'].concat([
-						for (i in 0...parts.length - 1) getTree(parts[i], pushIndex(prefix, level), level + 1, false)
-					]);
-					strParts.push(getTree(parts[parts.length - 1], prefix.copy(), level + 1, true));
-					return strParts.join("");
-				}
-			case Parameter(name, type, value):
-				{
-					if (name == "")
-						name = "<unnamed>";
-					if (type == "")
-						type = "<untyped>";
-					var addon = type != "" ? ' ($type)' : "";
-					return
-						'${prefixFA(prefix)}$t$d Parameter$addon\n${getTree(StaticValue(name, ""), prefix.copy(), level + 1, false)}${getTree(value, prefix.copy(), level + 1, true)}';
-				}
-			case ActionCallParameter(value, type):
-				{
-					var addon = type != "" ? ' ($type)' : "";
-					return '${prefixFA(prefix)}$t$d Parameter$addon\n${getTree(value, prefix.copy(), level + 1, true)}';
-				}
-			case ActionCall(name, params, type):
-				{
-					var addon = type != "" ? ' ($type)' : "";
-					var strParts = [
-						'${prefixFA(prefix)}$t$d Action Call$addon\n${getTree(StaticValue(name, ""), prefix.copy(), level + 1, false)}'
-					].concat([
-						for (i in 0...params.length - 1) getTree(params[i], pushIndex(prefix, level), level + 1, false)
-					]);
-					if (params.length == 0)
-						return strParts.join("");
-					strParts.push(getTree(params[params.length - 1], prefix.copy(), level + 1, true));
-					return strParts.join("");
-				}
-			case Return(value, type): {
-				var addon = type != "" ? ' ($type)' : "";
-				return '${prefixFA(prefix)}$t$d Return$addon\n${getTree(value, prefix.copy(), level + 1, true)}';
-			}
-			case Error(title, reason): {
-				return '${prefixFA(prefix)}$t$d Error - $title:\n${getTree(StaticValue(reason, ""), prefix.copy(), level + 1, true)}';
-			}
-			case InvalidSyntax(s):
-				return '${prefixFA(prefix)}$t$d INVALID SYNTAX: $s\n';
-		}
-		return "";
-	}
+        return post;
+    }
+
+    public static function mergeBlocks(pre:Array<ParserTokens>):Array<ParserTokens> {
+
+        if (pre == null) return null;
+
+        var post:Array<ParserTokens> = [];
+
+        var i = 0;
+        while (i < pre.length) {
+            var token = pre[i];
+            switch token {
+                case Sign("{"): {
+                    var blockBody:Array<ParserTokens> = [];
+                    var blockStack = 1; // Open and close the block on the correct curly bracket
+                    while (i + 1 < pre.length) {
+                        var lookahead = pre[i + 1];
+                        if (Type.enumEq(lookahead, Sign("{"))) {
+                            blockStack++;
+                            blockBody.push(lookahead);
+                        } else if (Type.enumEq(lookahead, Sign("}"))) {
+                            blockStack--;
+                            if (blockStack == 0) break;
+                            blockBody.push(lookahead);
+                        } else blockBody.push(lookahead);
+                        i++;
+                    }
+                    post.push(Block(mergeBlocks(blockBody), null)); // The check performed above includes unmerged blocks inside the outer block. These unmerged blocks should be merged
+                    i++;
+                }
+                case Expression(parts, type): post.push(Expression(mergeBlocks(parts), null));
+                case Block(body, type): post.push(Block(mergeBlocks(body), null));
+                case _: post.push(token);
+            }
+            i++;
+        }
+
+        return post;
+    }
+
+    public static function mergeExpressions(pre:Array<ParserTokens>):Array<ParserTokens> {
+
+        if (pre == null) return null;
+
+        var post:Array<ParserTokens> = [];
+
+        var i = 0;
+        while (i < pre.length) {
+            var token = pre[i];
+            switch token {
+                case Sign("("): {
+                    var expressionBody:Array<ParserTokens> = [];
+                    var expressionStack = 1; // Open and close the block on the correct curly bracket
+                    while (i + 1 < pre.length) {
+                        var lookahead = pre[i + 1];
+                        if (Type.enumEq(lookahead, Sign("("))) {
+                            expressionStack++;
+                            expressionBody.push(lookahead);
+                        } else if (Type.enumEq(lookahead, Sign(")"))) {
+                            expressionStack--;
+                            if (expressionStack == 0) break;
+                            expressionBody.push(lookahead);
+                        } else expressionBody.push(lookahead);
+                        i++;
+                    }
+                    post.push(Expression(mergeExpressions(expressionBody), null)); // The check performed above includes unmerged blocks inside the outer block. These unmerged blocks should be merged
+                    i++;
+                }
+
+                case Expression(parts, type): post.push(Expression(mergeExpressions(parts), null));
+                case Block(body, type): post.push(Block(mergeExpressions(body), null));
+                case _: post.push(token);
+            }
+            i++;
+        }
+
+        return post;
+    }
+
+    public static function mergeComplexStructures(pre:Array<ParserTokens>):Array<ParserTokens> {
+
+        if (pre == null) return null;
+
+        var post:Array<ParserTokens> = [];
+
+        var i = 0;
+        while (i < pre.length) {
+            var token = pre[i];
+
+            switch token {
+                case Identifier(_ == VARIABLE_DECLARATION => true): {
+                    i++;
+                    if (i >= pre.length) return null;
+
+                    var name:ParserTokens = null;
+                    var type:ParserTokens = null;
+                    while (i < pre.length) {
+                        var lookahead = pre[i];
+                        switch lookahead {
+                            case TypeDeclaration(typeToken): {
+                                if (name == null) return null;
+                                type = typeToken;
+                                break;
+                            }
+                            case SetLine(_) | SplitLine | Sign("="): i--; break;
+                            case Block(body, type): {
+                                if (name == null) name = Block(mergeComplexStructures(body), type);
+                                else if (type == null) type = Block(mergeComplexStructures(body), type);
+                                else {
+                                    i--;
+                                    break;
+                                }
+                            }
+                            case Expression(body, type): {
+                                if (name == null) name = Expression(mergeComplexStructures(body), type);
+                                else if (type == null) type = Expression(mergeComplexStructures(body), type);
+                                else {
+                                    i--;
+                                    break;
+                                }
+                            }
+                            case _: {
+                                if (name == null) name = lookahead;
+                                else if (type == null) type = lookahead;
+                                else {
+                                    i--;
+                                    break;
+                                }
+                            }
+                        }
+                        i++;
+                    }
+                    post.push(Define(name, type));
+                }
+                case Identifier(_ == FUNCTION_DECLARATION => true): {
+                    i++;
+                    if (i >= pre.length) return null;
+                    
+                    var name:ParserTokens = null;
+                    var params:ParserTokens = null;
+                    var type:ParserTokens = null;
+                    while (i < pre.length) {
+                        var lookahead = pre[i];
+                        switch lookahead {
+                            case TypeDeclaration(typeToken): {
+                                if (name == null) return null;
+                                else if (type == null) return null;
+                                type = typeToken;
+                                break;
+                            }
+                            case SetLine(_) | SplitLine | Sign("="): i--; break;
+                            case Block(body, type): {
+                                if (name == null) name = Block(mergeComplexStructures(body), type);
+                                else if (params == null) params = Block(mergeComplexStructures(body), type);
+                                else if (type == null) type = Block(mergeComplexStructures(body), type);
+                                else {
+                                    i--;
+                                    break;
+                                }
+                            }
+                            case Expression(body, type): {
+                                if (name == null) name = Expression(mergeComplexStructures(body), type);
+                                else if (params == null) params = Expression(mergeComplexStructures(body), type);
+                                else if (type == null) type = Expression(mergeComplexStructures(body), type);
+                                else {
+                                    i--;
+                                    break;
+                                }
+                            }
+                            case _: {
+                                if (name == null) name = lookahead;
+                                else if (params == null) params = lookahead;
+                                else if (type == null) type = lookahead;
+                                else {
+                                    i--;
+                                    break;
+                                }
+                            }
+                        }
+                        i++;
+                    }
+                    i--;
+                    post.push(Action(name, params, type));
+                }
+                case Identifier(CONDITION_TYPES.contains(_) => true): {
+                    i++;
+                    if (i >= pre.length) return null;
+
+                    var name:ParserTokens = Identifier(token.getParameters()[0]);
+                    var exp:ParserTokens = null;
+                    var body:ParserTokens = null;
+                    var type:ParserTokens = null;
+
+                    while (i < pre.length) {
+                        var lookahead = pre[i];
+                        switch lookahead {
+                            case SetLine(_) | SplitLine:
+                            case Block(b, type): {
+                                if (exp == null) exp = Block(mergeComplexStructures(b), type);
+                                else if (body == null) body = Block(mergeComplexStructures(b), type)
+                                else break;
+                            }
+                            case Expression(parts, type): {
+                                if (exp == null) exp = Expression(mergeComplexStructures(parts), type);
+                                else if (body == null) body = Expression(mergeComplexStructures(parts), type)
+                                else break;
+                            }
+                            case _: {
+                                if (exp == null) exp = lookahead;
+                                else if (body == null) body = lookahead;
+                                else break;
+                            }
+                        }
+                        i++;
+                    }
+                    i--;
+                    if (i + 1 < pre.length) {
+                        switch pre[i + 1] {
+                            case Block(_, _) | TypeDeclaration(_): type = pre[i + 1];
+                            case _:
+                        }
+                    }
+                    post.push(Condition(name, exp, body, type));
+                }
+                case Identifier(_ == FUNCTION_RETURN => true): {
+                    i++;
+                    if (i >= pre.length) return null;
+
+                    var valueToReturn:Array<ParserTokens> = [];
+                    while (i < pre.length) {
+                        var lookahead = pre[i];
+                        switch lookahead {
+                            case SetLine(_) | SplitLine: i--; break;
+                            case Block(body, type): {
+                                valueToReturn.push(Block(mergeComplexStructures(body), type));
+                            }
+                            case Expression(body, type): {
+                                valueToReturn.push(Expression(mergeComplexStructures(body), type));
+                            }
+                            case _: valueToReturn.push(lookahead);
+                        }
+                        i++;
+                    }
+                    post.push(Return(if (valueToReturn.length == 1) valueToReturn[0] else Expression(valueToReturn.copy(), null), null));
+                }
+                case Expression(parts, type): post.push(Expression(mergeComplexStructures(parts), null));
+                case Block(body, type): post.push(Block(mergeComplexStructures(body), null));
+                case _: post.push(token);
+            }
+            i++;
+        }
+
+        return post;
+    }
+
+    public static function mergeWrites(pre:Array<ParserTokens>):Array<ParserTokens> {
+
+        if (pre == null) return null;
+
+        var post:Array<ParserTokens> = [];
+
+        var potentialAssignee:ParserTokens = NullValue;
+        var i = 0;
+        while (i < pre.length) {
+            var token = pre[i];
+            switch token {
+                case Sign("="): {
+                    if (i + 1 >= pre.length) break;
+
+                    var currentAssignee:Array<ParserTokens> = [potentialAssignee];
+                    // potentialAssignee might be a function call
+                    // In that case, we should lookbehind for expressions, and stop when we find anything that isn't an expression
+                    switch potentialAssignee {
+                        case Expression(_, _): {
+                            while (true) {
+                                switch post[post.length - 1] {
+                                    case Sign(_) | SetLine(_) | SplitLine: break;
+                                    case Expression(_, _): {
+                                        currentAssignee.unshift(post.pop());
+
+                                    }
+                                    case _: {
+                                        currentAssignee.unshift(post.pop());
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        case _:
+                    }
+
+                    var assignees = [currentAssignee.length == 1 ? currentAssignee[0] : Expression(currentAssignee.copy(), null)];
+                    currentAssignee = [];
+                    var value:ParserTokens;
+                    while (i + 1 < pre.length) {
+                        var lookahead = pre[i + 1];
+                        switch lookahead {
+
+                            case Sign("="): {
+                                var assignee = currentAssignee.length == 1 ? currentAssignee[0] : Expression(currentAssignee.copy(), null);
+                                assignees.push(assignee);
+                                currentAssignee = [];
+                            }
+                            case SplitLine | SetLine(_): break;
+                            case _: currentAssignee.push(lookahead);
+                        }
+                        i++;
+                    }
+
+                    // The last currentAssignee is the value;
+                    value = Expression(currentAssignee, null);
+                    post.push(Write(assignees, value, null));
+                    potentialAssignee = null;
+                }
+                case Expression(parts, type): {
+                    post.push(potentialAssignee);
+                    potentialAssignee = Expression(mergeWrites(parts), type);
+                }
+                case Block(body, type): {
+                    post.push(potentialAssignee);
+                    potentialAssignee = Block(mergeWrites(body), type);
+                }
+                case Define(name, type): {
+                    post.push(potentialAssignee);
+                    potentialAssignee = Define(mergeWrites([name])[0], type);
+                }
+                case Action(name, params, type): {
+                    post.push(potentialAssignee);
+                    potentialAssignee = Action(mergeWrites([name])[0], mergeWrites([params])[0], type);
+                }
+                case Condition(name, exp, body, type): {
+                    post.push(potentialAssignee);
+                    potentialAssignee = Condition(mergeWrites([name])[0], mergeWrites([exp])[0], mergeWrites([body])[0], type);
+                }
+                case Return(value, type): {
+                    post.push(potentialAssignee);
+                    potentialAssignee = Return(mergeWrites([value])[0], type);
+                }
+                case ActionCall(name, params): {
+                    post.push(potentialAssignee);
+                    potentialAssignee = ActionCall(mergeWrites([name])[0], mergeWrites([params])[0]);
+                }
+                case _: {
+                    post.push(potentialAssignee);
+                    potentialAssignee = token;
+                }
+            }
+
+            i++;
+        }
+        if (potentialAssignee != null) post.push(potentialAssignee);
+        post.shift();
+        return post;
+    }
+
+    public static function mergeCalls(pre:Array<ParserTokens>):Array<ParserTokens> {
+
+        if (pre == null) return null;
+
+        var post:Array<ParserTokens> = [];
+
+        var i = 0;
+        while (i < pre.length) {
+            // Todo: Bandage, should return to thus later to figure out why token can be null
+            if (pre[i] == null) {i++; continue;}
+            var token = pre[i];
+            switch token {
+                case Expression(parts, type): {
+                    parts = mergeCalls(parts);
+                    if (i == 0) {
+                        post.push(Expression(parts, type));
+                    } else {
+                        var lookbehind = pre[i - 1];
+                        switch lookbehind {
+                            case Sign(_) | SplitLine | SetLine(_): post.push(Expression(parts, type));
+                            case _: {
+                                var previous = post.pop(); // When parsing a function that returns a function, this handles the "nested call" correctly
+                                token = PartArray(parts);
+                                post.push(ActionCall(previous, token));
+                            }
+                        }
+                    }
+                }
+                case Block(body, type): post.push(Block(mergeCalls(body), type));
+                case Define(name, type): post.push(Define(mergeCalls([name])[0], type));
+                case Action(name, params, type): post.push(Action(mergeCalls([name])[0], mergeCalls([params])[0], type));
+                case Condition(name, exp, body, type): post.push(Condition(mergeCalls([name])[0], mergeCalls([exp])[0], mergeCalls([body])[0], type));
+                case Return(value, type): post.push(Return(mergeCalls([value])[0], type));
+                case PartArray(parts): post.push(PartArray(mergeCalls(parts)));
+                case _: post.push(token);
+            }
+            i++;
+        }
+
+        return post;
+    }
 }

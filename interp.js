@@ -361,15 +361,15 @@ refactored_$little_lexer_Lexer.mergeOrSplitKnownSigns = function(tokens) {
 	}
 	return post;
 };
-var refactored_$little_lexer_LexerTokens = $hxEnums["refactored_little.lexer.LexerTokens"] = { __ename__:true,__constructs__:null
-	,Identifier: ($_=function(name) { return {_hx_index:0,name:name,__enum__:"refactored_little.lexer.LexerTokens",toString:$estr}; },$_._hx_name="Identifier",$_.__params__ = ["name"],$_)
-	,Sign: ($_=function(char) { return {_hx_index:1,char:char,__enum__:"refactored_little.lexer.LexerTokens",toString:$estr}; },$_._hx_name="Sign",$_.__params__ = ["char"],$_)
-	,Number: ($_=function(num) { return {_hx_index:2,num:num,__enum__:"refactored_little.lexer.LexerTokens",toString:$estr}; },$_._hx_name="Number",$_.__params__ = ["num"],$_)
-	,Boolean: ($_=function(value) { return {_hx_index:3,value:value,__enum__:"refactored_little.lexer.LexerTokens",toString:$estr}; },$_._hx_name="Boolean",$_.__params__ = ["value"],$_)
-	,Characters: ($_=function(string) { return {_hx_index:4,string:string,__enum__:"refactored_little.lexer.LexerTokens",toString:$estr}; },$_._hx_name="Characters",$_.__params__ = ["string"],$_)
-	,NullValue: {_hx_name:"NullValue",_hx_index:5,__enum__:"refactored_little.lexer.LexerTokens",toString:$estr}
-	,Newline: {_hx_name:"Newline",_hx_index:6,__enum__:"refactored_little.lexer.LexerTokens",toString:$estr}
-	,SplitLine: {_hx_name:"SplitLine",_hx_index:7,__enum__:"refactored_little.lexer.LexerTokens",toString:$estr}
+var refactored_$little_lexer_LexerTokens = $hxEnums["little.lexer.LexerTokens"] = { __ename__:true,__constructs__:null
+	,Identifier: ($_=function(name) { return {_hx_index:0,name:name,__enum__:"little.lexer.LexerTokens",toString:$estr}; },$_._hx_name="Identifier",$_.__params__ = ["name"],$_)
+	,Sign: ($_=function(char) { return {_hx_index:1,char:char,__enum__:"little.lexer.LexerTokens",toString:$estr}; },$_._hx_name="Sign",$_.__params__ = ["char"],$_)
+	,Number: ($_=function(num) { return {_hx_index:2,num:num,__enum__:"little.lexer.LexerTokens",toString:$estr}; },$_._hx_name="Number",$_.__params__ = ["num"],$_)
+	,Boolean: ($_=function(value) { return {_hx_index:3,value:value,__enum__:"little.lexer.LexerTokens",toString:$estr}; },$_._hx_name="Boolean",$_.__params__ = ["value"],$_)
+	,Characters: ($_=function(string) { return {_hx_index:4,string:string,__enum__:"little.lexer.LexerTokens",toString:$estr}; },$_._hx_name="Characters",$_.__params__ = ["string"],$_)
+	,NullValue: {_hx_name:"NullValue",_hx_index:5,__enum__:"little.lexer.LexerTokens",toString:$estr}
+	,Newline: {_hx_name:"Newline",_hx_index:6,__enum__:"little.lexer.LexerTokens",toString:$estr}
+	,SplitLine: {_hx_name:"SplitLine",_hx_index:7,__enum__:"little.lexer.LexerTokens",toString:$estr}
 };
 refactored_$little_lexer_LexerTokens.__constructs__ = [refactored_$little_lexer_LexerTokens.Identifier,refactored_$little_lexer_LexerTokens.Sign,refactored_$little_lexer_LexerTokens.Number,refactored_$little_lexer_LexerTokens.Boolean,refactored_$little_lexer_LexerTokens.Characters,refactored_$little_lexer_LexerTokens.NullValue,refactored_$little_lexer_LexerTokens.Newline,refactored_$little_lexer_LexerTokens.SplitLine];
 var refactored_$little_parser_Parser = function() { };
@@ -1081,29 +1081,29 @@ refactored_$little_parser_Parser.mergeCalls = function(pre) {
 	}
 	return post;
 };
-var refactored_$little_parser_ParserTokens = $hxEnums["refactored_little.parser.ParserTokens"] = { __ename__:true,__constructs__:null
-	,SetLine: ($_=function(line) { return {_hx_index:0,line:line,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}; },$_._hx_name="SetLine",$_.__params__ = ["line"],$_)
-	,SplitLine: {_hx_name:"SplitLine",_hx_index:1,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}
-	,Define: ($_=function(name,type) { return {_hx_index:2,name:name,type:type,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Define",$_.__params__ = ["name","type"],$_)
-	,Action: ($_=function(name,params,type) { return {_hx_index:3,name:name,params:params,type:type,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Action",$_.__params__ = ["name","params","type"],$_)
-	,Condition: ($_=function(name,exp,body,type) { return {_hx_index:4,name:name,exp:exp,body:body,type:type,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Condition",$_.__params__ = ["name","exp","body","type"],$_)
-	,Read: ($_=function(name) { return {_hx_index:5,name:name,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Read",$_.__params__ = ["name"],$_)
-	,Write: ($_=function(assignees,value,type) { return {_hx_index:6,assignees:assignees,value:value,type:type,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Write",$_.__params__ = ["assignees","value","type"],$_)
-	,Identifier: ($_=function(word) { return {_hx_index:7,word:word,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Identifier",$_.__params__ = ["word"],$_)
-	,TypeDeclaration: ($_=function(type) { return {_hx_index:8,type:type,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}; },$_._hx_name="TypeDeclaration",$_.__params__ = ["type"],$_)
-	,ActionCall: ($_=function(name,params) { return {_hx_index:9,name:name,params:params,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}; },$_._hx_name="ActionCall",$_.__params__ = ["name","params"],$_)
-	,Return: ($_=function(value,type) { return {_hx_index:10,value:value,type:type,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Return",$_.__params__ = ["value","type"],$_)
-	,Expression: ($_=function(parts,type) { return {_hx_index:11,parts:parts,type:type,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Expression",$_.__params__ = ["parts","type"],$_)
-	,Block: ($_=function(body,type) { return {_hx_index:12,body:body,type:type,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Block",$_.__params__ = ["body","type"],$_)
-	,PartArray: ($_=function(parts) { return {_hx_index:13,parts:parts,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}; },$_._hx_name="PartArray",$_.__params__ = ["parts"],$_)
-	,Parameter: ($_=function(name,type) { return {_hx_index:14,name:name,type:type,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Parameter",$_.__params__ = ["name","type"],$_)
-	,Sign: ($_=function(sign) { return {_hx_index:15,sign:sign,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Sign",$_.__params__ = ["sign"],$_)
-	,Number: ($_=function(num) { return {_hx_index:16,num:num,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Number",$_.__params__ = ["num"],$_)
-	,Decimal: ($_=function(num) { return {_hx_index:17,num:num,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Decimal",$_.__params__ = ["num"],$_)
-	,Characters: ($_=function(string) { return {_hx_index:18,string:string,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Characters",$_.__params__ = ["string"],$_)
-	,NullValue: {_hx_name:"NullValue",_hx_index:19,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}
-	,TrueValue: {_hx_name:"TrueValue",_hx_index:20,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}
-	,FalseValue: {_hx_name:"FalseValue",_hx_index:21,__enum__:"refactored_little.parser.ParserTokens",toString:$estr}
+var refactored_$little_parser_ParserTokens = $hxEnums["little.parser.ParserTokens"] = { __ename__:true,__constructs__:null
+	,SetLine: ($_=function(line) { return {_hx_index:0,line:line,__enum__:"little.parser.ParserTokens",toString:$estr}; },$_._hx_name="SetLine",$_.__params__ = ["line"],$_)
+	,SplitLine: {_hx_name:"SplitLine",_hx_index:1,__enum__:"little.parser.ParserTokens",toString:$estr}
+	,Define: ($_=function(name,type) { return {_hx_index:2,name:name,type:type,__enum__:"little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Define",$_.__params__ = ["name","type"],$_)
+	,Action: ($_=function(name,params,type) { return {_hx_index:3,name:name,params:params,type:type,__enum__:"little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Action",$_.__params__ = ["name","params","type"],$_)
+	,Condition: ($_=function(name,exp,body,type) { return {_hx_index:4,name:name,exp:exp,body:body,type:type,__enum__:"little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Condition",$_.__params__ = ["name","exp","body","type"],$_)
+	,Read: ($_=function(name) { return {_hx_index:5,name:name,__enum__:"little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Read",$_.__params__ = ["name"],$_)
+	,Write: ($_=function(assignees,value,type) { return {_hx_index:6,assignees:assignees,value:value,type:type,__enum__:"little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Write",$_.__params__ = ["assignees","value","type"],$_)
+	,Identifier: ($_=function(word) { return {_hx_index:7,word:word,__enum__:"little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Identifier",$_.__params__ = ["word"],$_)
+	,TypeDeclaration: ($_=function(type) { return {_hx_index:8,type:type,__enum__:"little.parser.ParserTokens",toString:$estr}; },$_._hx_name="TypeDeclaration",$_.__params__ = ["type"],$_)
+	,ActionCall: ($_=function(name,params) { return {_hx_index:9,name:name,params:params,__enum__:"little.parser.ParserTokens",toString:$estr}; },$_._hx_name="ActionCall",$_.__params__ = ["name","params"],$_)
+	,Return: ($_=function(value,type) { return {_hx_index:10,value:value,type:type,__enum__:"little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Return",$_.__params__ = ["value","type"],$_)
+	,Expression: ($_=function(parts,type) { return {_hx_index:11,parts:parts,type:type,__enum__:"little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Expression",$_.__params__ = ["parts","type"],$_)
+	,Block: ($_=function(body,type) { return {_hx_index:12,body:body,type:type,__enum__:"little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Block",$_.__params__ = ["body","type"],$_)
+	,PartArray: ($_=function(parts) { return {_hx_index:13,parts:parts,__enum__:"little.parser.ParserTokens",toString:$estr}; },$_._hx_name="PartArray",$_.__params__ = ["parts"],$_)
+	,Parameter: ($_=function(name,type) { return {_hx_index:14,name:name,type:type,__enum__:"little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Parameter",$_.__params__ = ["name","type"],$_)
+	,Sign: ($_=function(sign) { return {_hx_index:15,sign:sign,__enum__:"little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Sign",$_.__params__ = ["sign"],$_)
+	,Number: ($_=function(num) { return {_hx_index:16,num:num,__enum__:"little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Number",$_.__params__ = ["num"],$_)
+	,Decimal: ($_=function(num) { return {_hx_index:17,num:num,__enum__:"little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Decimal",$_.__params__ = ["num"],$_)
+	,Characters: ($_=function(string) { return {_hx_index:18,string:string,__enum__:"little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Characters",$_.__params__ = ["string"],$_)
+	,NullValue: {_hx_name:"NullValue",_hx_index:19,__enum__:"little.parser.ParserTokens",toString:$estr}
+	,TrueValue: {_hx_name:"TrueValue",_hx_index:20,__enum__:"little.parser.ParserTokens",toString:$estr}
+	,FalseValue: {_hx_name:"FalseValue",_hx_index:21,__enum__:"little.parser.ParserTokens",toString:$estr}
 };
 refactored_$little_parser_ParserTokens.__constructs__ = [refactored_$little_parser_ParserTokens.SetLine,refactored_$little_parser_ParserTokens.SplitLine,refactored_$little_parser_ParserTokens.Define,refactored_$little_parser_ParserTokens.Action,refactored_$little_parser_ParserTokens.Condition,refactored_$little_parser_ParserTokens.Read,refactored_$little_parser_ParserTokens.Write,refactored_$little_parser_ParserTokens.Identifier,refactored_$little_parser_ParserTokens.TypeDeclaration,refactored_$little_parser_ParserTokens.ActionCall,refactored_$little_parser_ParserTokens.Return,refactored_$little_parser_ParserTokens.Expression,refactored_$little_parser_ParserTokens.Block,refactored_$little_parser_ParserTokens.PartArray,refactored_$little_parser_ParserTokens.Parameter,refactored_$little_parser_ParserTokens.Sign,refactored_$little_parser_ParserTokens.Number,refactored_$little_parser_ParserTokens.Decimal,refactored_$little_parser_ParserTokens.Characters,refactored_$little_parser_ParserTokens.NullValue,refactored_$little_parser_ParserTokens.TrueValue,refactored_$little_parser_ParserTokens.FalseValue];
 var refactored_$little_tools_PrettyPrinter = function() { };

@@ -4,8 +4,7 @@ import haxe.EnumTools;
 import little.parser.Tokens.ParserTokens;
 import little.parser.Parser;
 import haxe.extern.EitherType;
-import little.parser.Tokens.ParserTokens;
-import little.tools.Layer;
+import little.parser.Tokens.UnInfoedParserTokens;
 
 using StringTools;
 using TextTools;
@@ -25,11 +24,6 @@ class Runtime {
         The next token to be interpreted
     **/
     public static var currentToken(default, null):ParserTokens;
-
-    /**
-    	The module in which tokens are currently interpreted.
-    **/
-    public static var currentModule(default, null):String;
 
     /**
         The token that has just been interpreted
@@ -90,11 +84,23 @@ class Runtime {
         callStack.push(token);
         
         stdout += '\nLine $line: ';
-        var module:String = currentModule, title:String = "", reason:String;
+        var module:String, title:String = "", reason:String;
         var content = switch token {
+            case StaticValue(value, "", _, moduleName): {
+                module = moduleName;
+                reason = value;
+                '${if (Little.debug) (layer : String).toUpperCase() + " " else ""}Module $moduleName, Line $line: ' +  value;
+            }
+            case Error(t, value, _, moduleName): {
+                module = moduleName;
+                title = t;
+                reason = value;
+                '${if (Little.debug) (layer : String).toUpperCase() + " " else ""}Module $moduleName, Line $line: $t:\n\t$value';
+            }
             case _: {
+                module = token.getParameters()[token.getParameters().length - 1];
                 reason = Std.string(token);
-                '${if (Little.debug) (layer : String).toUpperCase() + ": " else ""}Module ${token.getParameters()[token.getParameters().length - 1]}, Line $line:  ${token}';
+                '${if (Little.debug) (layer : String).toUpperCase() + " " else ""}Module ${token.getParameters()[token.getParameters().length - 1]}, Line $line:  ${token}';
             }
         }
         stdout += '\nLine $line: ' + content;

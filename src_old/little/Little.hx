@@ -27,6 +27,7 @@ class Little {
     public static function loadModule(code:String, name:String) {
         Interpreter.errorThrown = false;
         Runtime.line = 0;
+        Interpreter.interpret(Parser.signWithModule(Parser.assignNesting(Parser.typeTokens(Lexer.splitBlocks1(Lexer.lexIntoComplex(code)))), name));
     }
 
     /**
@@ -54,9 +55,8 @@ class Little {
         Runtime.stdout = "";
         final previous = Little.debug;
         if (debug != null) Little.debug = debug;
-        Interpreter.interpret(Parser.parse(Lexer.lex(code)), {});
-        Interpreter.varMemory = [];
-        Interpreter.funcMemory = [];
+        Interpreter.interpret(Parser.signWithModule(Parser.assignNesting(Parser.typeTokens(Lexer.splitBlocks1(Lexer.lexIntoComplex(code)))), MAIN_MODULE_NAME));
+        Interpreter.memory = [];
         if (debug != null) Little.debug = previous;
     }
 

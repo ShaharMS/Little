@@ -30,14 +30,14 @@ define x as Number = define y as Decimal = 6
 		trace(text, output);
 		text.addEventListener("keyup", (_) -> {
 			try {
-				output.innerHTML = refactored_little.tools.PrettyPrinter.printParserAst(refactored_little.parser.Parser.parse(refactored_little.lexer.Lexer.lex(untyped text.value)));
+				output.innerHTML = little.tools.PrettyPrinter.printParserAst(little.parser.Parser.parse(little.lexer.Lexer.lex(untyped text.value)));
 			} catch (e) {
             }
 		});
-		output.innerHTML = refactored_little.tools.PrettyPrinter.printParserAst(refactored_little.parser.Parser.parse(refactored_little.lexer.Lexer.lex(untyped text.value)));
+		output.innerHTML = little.tools.PrettyPrinter.printParserAst(little.parser.Parser.parse(little.lexer.Lexer.lex(untyped text.value)));
 		text.innerHTML = code;
 		#else
-		trace(refactored_little.tools.PrettyPrinter.printParserAst(refactored_little.parser.Parser.parse(refactored_little.lexer.Lexer.lex(untyped text.value))));
+		trace(little.tools.PrettyPrinter.printParserAst(little.parser.Parser.parse(little.lexer.Lexer.lex(untyped text.value))));
 		#end
 	}
 }
