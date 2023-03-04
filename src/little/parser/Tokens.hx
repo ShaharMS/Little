@@ -41,6 +41,11 @@ enum ParserTokens {
     **/
     External(haxeValue:Dynamic);
 
+    /**
+    	Used for errors
+    **/
+    ErrorMessage(msg:String);
+
     NullValue;
     TrueValue;
     FalseValue;

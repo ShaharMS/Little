@@ -1,7 +1,8 @@
 package little.tools;
 
 enum abstract Layer(String) from String to String {
-    var LEXER = "lexer";
-    var PARSER = "parser";
-    var INTERPRETER = "interpreter";
+    var LEXER = "Lexer";
+    var PARSER = "Parser";
+    var INTERPRETER = "Interpreter";
+    var INTERPRETER_TOKEN_STRINGIFIER = "Interpreter, Token Stringifier";
 }

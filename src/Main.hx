@@ -4,9 +4,6 @@ package;
 import js.Browser;
 #end
 import little.parser.Parser;
-import little.expressions.Expressions;
-import little.lexer.Specifics;
-import texter.general.math.MathLexer;
 import little.lexer.Lexer;
 
 using StringTools;

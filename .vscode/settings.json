@@ -9,6 +9,7 @@
         "Funcs",
         "keyup",
         "MULTICHAR",
+        "STRINGIFIER",
         "struct",
         "texter",
         "unreferenceable",
