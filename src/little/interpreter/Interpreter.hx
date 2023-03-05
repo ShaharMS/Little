@@ -67,7 +67,8 @@ class Interpreter {
         if (token.getName() == "ErrorMessage") Runtime.throwError(token, INTERPRETER_TOKEN_STRINGIFIER);
 
         switch token {
-            case Block(body, type): return stringifySimpleToken(runTokens([token], currentConfig.prioritizeVariableDeclarations, currentConfig.prioritizeFunctionDeclarations, currentConfig.strictTyping));
+            case Block(body, type): return stringifySimpleToken(runTokens(body, currentConfig.prioritizeVariableDeclarations, currentConfig.prioritizeFunctionDeclarations, currentConfig.strictTyping));
+            case Expression(parts, type): return stringifySimpleToken(evaluate(token));
             case Characters(string): return string;
             case Number(num): return num;
             case Decimal(num): return num;
@@ -85,5 +86,35 @@ class Interpreter {
         }
 
         return "Something went wrong";
+    }
+
+    public static function evaluate(exp:ParserTokens):ParserTokens {
+        var nVal:Int = null, dVal:Float = null, sVal:String = null, bVal:Bool = null, mode:String = "";
+        var returnVal:ParserTokens = null;
+
+        if (exp.getName() == "ErrorMessage") Runtime.throwError(exp, INTERPRETER_TOKEN_STRINGIFIER);
+
+        switch exp {
+            case Expression(parts, type): {
+                for (token in parts) {
+                    var tokenVal = evaluate(token); // Handles nested Blocks/Expressions
+                }
+            }
+            case Block(body, type): {
+                var returnVal = runTokens(body, currentConfig.prioritizeVariableDeclarations, currentConfig.prioritizeFunctionDeclarations, currentConfig.strictTyping);
+                return evaluate(returnVal);
+            }
+            case Number(_) | Decimal(_) | Characters(_) | TrueValue | FalseValue | NullValue: return exp;
+            case Write(_, value, _): return evaluate(value);
+            case Read(name): {
+                var str = stringifySimpleToken(name);
+                return evaluate(if (varMemory[str] != null) varMemory[str] else if (funcMemory[str] != null) funcMemory[str] else ErrorMessage('No Such Definition/Action: $str'));
+            }
+            case _:
+        }
+
+        
+
+        return returnVal;
     }
 }
