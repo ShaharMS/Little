@@ -89,16 +89,11 @@ class Interpreter {
     }
 
     public static function evaluate(exp:ParserTokens):ParserTokens {
-        var nVal:Int = null, dVal:Float = null, sVal:String = null, bVal:Bool = null, mode:String = "";
-        var returnVal:ParserTokens = null;
-
-        if (exp.getName() == "ErrorMessage") Runtime.throwError(exp, INTERPRETER_TOKEN_STRINGIFIER);
+        if (exp.getName() == "ErrorMessage") Runtime.throwError(exp, INTERPRETER_EVALUATOR);
 
         switch exp {
             case Expression(parts, type): {
-                for (token in parts) {
-                    var tokenVal = evaluate(token); // Handles nested Blocks/Expressions
-                }
+                return evaluateExpressionParts(parts);
             }
             case Block(body, type): {
                 var returnVal = runTokens(body, currentConfig.prioritizeVariableDeclarations, currentConfig.prioritizeFunctionDeclarations, currentConfig.strictTyping);
@@ -115,6 +110,10 @@ class Interpreter {
 
         
 
-        return returnVal;
+        return null;
+    }
+
+    public static function evaluateExpressionParts(parts:Array<ParserTokens>) {
+        return null;
     }
 }
