@@ -1,6 +1,7 @@
 package little.interpreter;
 
 import little.parser.Tokens.ParserTokens;
+import little.Keywords.*;
 
 @:access(little.interpreter.Runtime)
 class Interpreter {
@@ -89,7 +90,7 @@ class Interpreter {
     }
 
     public static function evaluate(exp:ParserTokens):ParserTokens {
-        if (exp.getName() == "ErrorMessage") Runtime.throwError(exp, INTERPRETER_EVALUATOR);
+        if (exp.getName() == "ErrorMessage") Runtime.throwError(exp, INTERPRETER_VALUE_EVALUATOR);
 
         switch exp {
             case Expression(parts, type): {
@@ -114,6 +115,30 @@ class Interpreter {
     }
 
     public static function evaluateExpressionParts(parts:Array<ParserTokens>) {
+
+        var value = "", valueType = TYPE_UNKNOWN, mode = "";
+
+        for (token in parts) {
+            var val:ParserTokens = null;
+            switch token {
+                case Block(body, type): {
+                    val = runTokens(body, currentConfig.prioritizeVariableDeclarations, currentConfig.prioritizeFunctionDeclarations, currentConfig.strictTyping);
+                }
+                case Expression(parts, type): {
+                    val = evaluateExpressionParts(parts);
+                }
+                case _: val = evaluate(token); // Safety net, for expressions containing things other then values/reads
+            }
+
+            switch val {
+                case Sign(sign): {
+
+                }
+
+                case _:
+            }
+        }
+
         return null;
     }
 }

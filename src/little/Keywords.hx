@@ -28,5 +28,10 @@ class Keywords {
     public static var CONDITION_TYPES:Array<String> = ["if", "while", "whenever", "for"];
     public static var SPECIAL_OR_MULTICHAR_SIGNS:Array<String> = ["++", "--", "**", "+=", "-=", ">=", "<=", "=="];
 
+    /**
+    	When changing this to a multi-char sign (such as "->"), remember to also push that sign to `SPECIAL_OR_MULTICHAR_SIGNS`, so it would be parsed correctly.
+    **/
+    public static var PROPERTY_ACCESS_SIGN:String = ".";
+
     
 }
