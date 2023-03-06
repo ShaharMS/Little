@@ -500,6 +500,10 @@ class Parser {
                     post.push(potentialAssignee);
                     potentialAssignee = ActionCall(mergeWrites([name])[0], mergeWrites([params])[0]);
                 }
+                case PropertyAccess(name, property): {
+                    post.push(potentialAssignee);
+                    potentialAssignee = PropertyAccess(mergeWrites([name])[0], mergeWrites([property])[0]);
+                }
                 case _: {
                     post.push(potentialAssignee);
                     potentialAssignee = token;

@@ -877,136 +877,6 @@ little_parser_Parser.mergeComplexStructures = function(pre) {
 	}
 	return post;
 };
-little_parser_Parser.mergeWrites = function(pre) {
-	if(pre == null) {
-		return null;
-	}
-	var post = [];
-	var potentialAssignee = little_parser_ParserTokens.NullValue;
-	var i = 0;
-	_hx_loop1: while(i < pre.length) {
-		var token = pre[i];
-		switch(token._hx_index) {
-		case 2:
-			var name = token.name;
-			var type = token.type;
-			post.push(potentialAssignee);
-			potentialAssignee = little_parser_ParserTokens.Define(little_parser_Parser.mergeWrites([name])[0],type);
-			break;
-		case 3:
-			var name1 = token.name;
-			var params = token.params;
-			var type1 = token.type;
-			post.push(potentialAssignee);
-			potentialAssignee = little_parser_ParserTokens.Action(little_parser_Parser.mergeWrites([name1])[0],little_parser_Parser.mergeWrites([params])[0],type1);
-			break;
-		case 4:
-			var name2 = token.name;
-			var exp = token.exp;
-			var body = token.body;
-			var type2 = token.type;
-			post.push(potentialAssignee);
-			potentialAssignee = little_parser_ParserTokens.Condition(little_parser_Parser.mergeWrites([name2])[0],little_parser_Parser.mergeWrites([exp])[0],little_parser_Parser.mergeWrites([body])[0],type2);
-			break;
-		case 9:
-			var name3 = token.name;
-			var params1 = token.params;
-			post.push(potentialAssignee);
-			potentialAssignee = little_parser_ParserTokens.ActionCall(little_parser_Parser.mergeWrites([name3])[0],little_parser_Parser.mergeWrites([params1])[0]);
-			break;
-		case 10:
-			var value = token.value;
-			var type3 = token.type;
-			post.push(potentialAssignee);
-			potentialAssignee = little_parser_ParserTokens.Return(little_parser_Parser.mergeWrites([value])[0],type3);
-			break;
-		case 11:
-			var parts = token.parts;
-			var type4 = token.type;
-			post.push(potentialAssignee);
-			potentialAssignee = little_parser_ParserTokens.Expression(little_parser_Parser.mergeWrites(parts),type4);
-			break;
-		case 12:
-			var body1 = token.body;
-			var type5 = token.type;
-			post.push(potentialAssignee);
-			potentialAssignee = little_parser_ParserTokens.Block(little_parser_Parser.mergeWrites(body1),type5);
-			break;
-		case 16:
-			if(token.sign == "=") {
-				if(i + 1 >= pre.length) {
-					break _hx_loop1;
-				}
-				var currentAssignee = [potentialAssignee];
-				if(potentialAssignee._hx_index == 11) {
-					var _g = potentialAssignee.parts;
-					var _g1 = potentialAssignee.type;
-					_hx_loop2: while(true) {
-						var _g2 = post[post.length - 1];
-						switch(_g2._hx_index) {
-						case 0:
-							var _g3 = _g2.line;
-							break _hx_loop2;
-						case 1:
-							break _hx_loop2;
-						case 11:
-							var _g4 = _g2.parts;
-							var _g5 = _g2.type;
-							currentAssignee.unshift(post.pop());
-							break;
-						case 16:
-							var _g6 = _g2.sign;
-							break _hx_loop2;
-						default:
-							currentAssignee.unshift(post.pop());
-							break _hx_loop2;
-						}
-					}
-				}
-				var assignees = [currentAssignee.length == 1 ? currentAssignee[0] : little_parser_ParserTokens.Expression(currentAssignee.slice(),null)];
-				currentAssignee = [];
-				_hx_loop3: while(i + 1 < pre.length) {
-					var lookahead = pre[i + 1];
-					switch(lookahead._hx_index) {
-					case 0:
-						var _g7 = lookahead.line;
-						break _hx_loop3;
-					case 1:
-						break _hx_loop3;
-					case 16:
-						if(lookahead.sign == "=") {
-							var assignee = currentAssignee.length == 1 ? currentAssignee[0] : little_parser_ParserTokens.Expression(currentAssignee.slice(),null);
-							assignees.push(assignee);
-							currentAssignee = [];
-						} else {
-							currentAssignee.push(lookahead);
-						}
-						break;
-					default:
-						currentAssignee.push(lookahead);
-					}
-					++i;
-				}
-				var value1 = little_parser_ParserTokens.Expression(currentAssignee,null);
-				post.push(little_parser_ParserTokens.Write(assignees,value1,null));
-				potentialAssignee = null;
-			} else {
-				post.push(potentialAssignee);
-				potentialAssignee = token;
-			}
-			break;
-		default:
-			post.push(potentialAssignee);
-			potentialAssignee = token;
-		}
-		++i;
-	}
-	if(potentialAssignee != null) {
-		post.push(potentialAssignee);
-	}
-	post.shift();
-	return post;
-};
 little_parser_Parser.mergeCalls = function(pre) {
 	if(pre == null) {
 		return null;
@@ -1160,6 +1030,142 @@ little_parser_Parser.mergePropertyOperations = function(pre) {
 		}
 		++i;
 	}
+	return post;
+};
+little_parser_Parser.mergeWrites = function(pre) {
+	if(pre == null) {
+		return null;
+	}
+	var post = [];
+	var potentialAssignee = little_parser_ParserTokens.NullValue;
+	var i = 0;
+	_hx_loop1: while(i < pre.length) {
+		var token = pre[i];
+		switch(token._hx_index) {
+		case 2:
+			var name = token.name;
+			var type = token.type;
+			post.push(potentialAssignee);
+			potentialAssignee = little_parser_ParserTokens.Define(little_parser_Parser.mergeWrites([name])[0],type);
+			break;
+		case 3:
+			var name1 = token.name;
+			var params = token.params;
+			var type1 = token.type;
+			post.push(potentialAssignee);
+			potentialAssignee = little_parser_ParserTokens.Action(little_parser_Parser.mergeWrites([name1])[0],little_parser_Parser.mergeWrites([params])[0],type1);
+			break;
+		case 4:
+			var name2 = token.name;
+			var exp = token.exp;
+			var body = token.body;
+			var type2 = token.type;
+			post.push(potentialAssignee);
+			potentialAssignee = little_parser_ParserTokens.Condition(little_parser_Parser.mergeWrites([name2])[0],little_parser_Parser.mergeWrites([exp])[0],little_parser_Parser.mergeWrites([body])[0],type2);
+			break;
+		case 9:
+			var name3 = token.name;
+			var params1 = token.params;
+			post.push(potentialAssignee);
+			potentialAssignee = little_parser_ParserTokens.ActionCall(little_parser_Parser.mergeWrites([name3])[0],little_parser_Parser.mergeWrites([params1])[0]);
+			break;
+		case 10:
+			var value = token.value;
+			var type3 = token.type;
+			post.push(potentialAssignee);
+			potentialAssignee = little_parser_ParserTokens.Return(little_parser_Parser.mergeWrites([value])[0],type3);
+			break;
+		case 11:
+			var parts = token.parts;
+			var type4 = token.type;
+			post.push(potentialAssignee);
+			potentialAssignee = little_parser_ParserTokens.Expression(little_parser_Parser.mergeWrites(parts),type4);
+			break;
+		case 12:
+			var body1 = token.body;
+			var type5 = token.type;
+			post.push(potentialAssignee);
+			potentialAssignee = little_parser_ParserTokens.Block(little_parser_Parser.mergeWrites(body1),type5);
+			break;
+		case 15:
+			var name4 = token.name;
+			var property = token.property;
+			post.push(potentialAssignee);
+			potentialAssignee = little_parser_ParserTokens.PropertyAccess(little_parser_Parser.mergeWrites([name4])[0],little_parser_Parser.mergeWrites([property])[0]);
+			break;
+		case 16:
+			if(token.sign == "=") {
+				if(i + 1 >= pre.length) {
+					break _hx_loop1;
+				}
+				var currentAssignee = [potentialAssignee];
+				if(potentialAssignee._hx_index == 11) {
+					var _g = potentialAssignee.parts;
+					var _g1 = potentialAssignee.type;
+					_hx_loop2: while(true) {
+						var _g2 = post[post.length - 1];
+						switch(_g2._hx_index) {
+						case 0:
+							var _g3 = _g2.line;
+							break _hx_loop2;
+						case 1:
+							break _hx_loop2;
+						case 11:
+							var _g4 = _g2.parts;
+							var _g5 = _g2.type;
+							currentAssignee.unshift(post.pop());
+							break;
+						case 16:
+							var _g6 = _g2.sign;
+							break _hx_loop2;
+						default:
+							currentAssignee.unshift(post.pop());
+							break _hx_loop2;
+						}
+					}
+				}
+				var assignees = [currentAssignee.length == 1 ? currentAssignee[0] : little_parser_ParserTokens.Expression(currentAssignee.slice(),null)];
+				currentAssignee = [];
+				_hx_loop3: while(i + 1 < pre.length) {
+					var lookahead = pre[i + 1];
+					switch(lookahead._hx_index) {
+					case 0:
+						var _g7 = lookahead.line;
+						break _hx_loop3;
+					case 1:
+						break _hx_loop3;
+					case 16:
+						if(lookahead.sign == "=") {
+							var assignee = currentAssignee.length == 1 ? currentAssignee[0] : little_parser_ParserTokens.Expression(currentAssignee.slice(),null);
+							assignees.push(assignee);
+							currentAssignee = [];
+						} else {
+							currentAssignee.push(lookahead);
+						}
+						break;
+					default:
+						currentAssignee.push(lookahead);
+					}
+					++i;
+				}
+				var value1 = little_parser_ParserTokens.Expression(currentAssignee,null);
+				post.push(little_parser_ParserTokens.Write(assignees,value1,null));
+				potentialAssignee = null;
+			} else {
+				post.push(potentialAssignee);
+				potentialAssignee = token;
+			}
+			break;
+		default:
+			post.push(potentialAssignee);
+			potentialAssignee = token;
+		}
+		++i;
+	}
+	if(potentialAssignee != null) {
+		post.push(potentialAssignee);
+	}
+	post.shift();
 	return post;
 };
 var little_parser_ParserTokens = $hxEnums["little.parser.ParserTokens"] = { __ename__:true,__constructs__:null
@@ -1398,7 +1404,7 @@ little_Keywords.FALSE_VALUE = "false";
 little_Keywords.CONDITION_TYPES = ["if","while","whenever","for"];
 little_Keywords.SPECIAL_OR_MULTICHAR_SIGNS = ["++","--","**","+=","-=",">=","<=","=="];
 little_Keywords.PROPERTY_ACCESS_SIGN = ".";
-little_lexer_Lexer.signs = ["!","\"","#","$","%","&","'","(",")","*","+",",","-",".","/",":",";","<","=",">","?","@","[","\\","]","^","_","`","{","|","}","~","^"];
+little_lexer_Lexer.signs = ["!","#","$","%","&","'","(",")","*","+",",","-",".","/",":",";","<","=",">","?","@","[","\\","]","^","_","`","{","|","}","~","^"];
 little_tools_PrettyPrinter.s = "";
 little_tools_PrettyPrinter.l = 0;
 Main.main();
