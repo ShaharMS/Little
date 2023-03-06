@@ -34,7 +34,7 @@ define x as Number = define y as Decimal = 6
 		output.innerHTML = little.tools.PrettyPrinter.printParserAst(little.parser.Parser.parse(little.lexer.Lexer.lex(untyped text.value)));
 		text.innerHTML = code;
 		#else
-		trace(little.tools.PrettyPrinter.printParserAst(little.parser.Parser.parse(little.lexer.Lexer.lex(untyped text.value))));
+		trace(little.tools.PrettyPrinter.printParserAst(little.parser.Parser.parse(little.lexer.Lexer.lex(code))));
 		#end
 	}
 }
