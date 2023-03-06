@@ -33,7 +33,8 @@ class Lexer {
                     i++;
                 }
                 i--;
-                tokens.push(Number(num));
+                if (num == ".") tokens.push(Sign("."))
+                else tokens.push(Number(num));
                 
             } else if (char == "\n") {
                 tokens.push(Newline);

@@ -24,6 +24,7 @@ enum ParserTokens {
     PartArray(parts:Array<ParserTokens>);
 
     Parameter(name:ParserTokens, type:ParserTokens);
+    PropertyAccess(name:ParserTokens, property:ParserTokens);
 
     Sign(sign:String);
     Number(num:String);

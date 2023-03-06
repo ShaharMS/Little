@@ -46,8 +46,8 @@ class Parser {
         tokens = mergeTypeDecls(tokens);
         tokens = mergeComplexStructures(tokens);
         tokens = mergeCalls(tokens);
+        tokens = mergePropertyOperations(tokens);
         tokens = mergeWrites(tokens);
-
 
         return tokens;
     }
@@ -334,6 +334,85 @@ class Parser {
         return post;
     }
 
+    public static function mergeCalls(pre:Array<ParserTokens>):Array<ParserTokens> {
+
+        if (pre == null) return null;
+
+        var post:Array<ParserTokens> = [];
+
+        var i = 0;
+        while (i < pre.length) {
+            // Todo: Bandage, should return to thus later to figure out why token can be null
+            if (pre[i] == null) {i++; continue;}
+            var token = pre[i];
+            switch token {
+                case Expression(parts, type): {
+                    parts = mergeCalls(parts);
+                    if (i == 0) {
+                        post.push(Expression(parts, type));
+                    } else {
+                        var lookbehind = pre[i - 1];
+                        switch lookbehind {
+                            case Sign(_) | SplitLine | SetLine(_): post.push(Expression(parts, type));
+                            case _: {
+                                var previous = post.pop(); // When parsing a function that returns a function, this handles the "nested call" correctly
+                                token = PartArray(parts);
+                                post.push(ActionCall(previous, token));
+                            }
+                        }
+                    }
+                }
+                case Block(body, type): post.push(Block(mergeCalls(body), type));
+                case Define(name, type): post.push(Define(mergeCalls([name])[0], type));
+                case Action(name, params, type): post.push(Action(mergeCalls([name])[0], mergeCalls([params])[0], type));
+                case Condition(name, exp, body, type): post.push(Condition(mergeCalls([name])[0], mergeCalls([exp])[0], mergeCalls([body])[0], type));
+                case Return(value, type): post.push(Return(mergeCalls([value])[0], type));
+                case PartArray(parts): post.push(PartArray(mergeCalls(parts)));
+                case _: post.push(token);
+            }
+            i++;
+        }
+
+        return post;
+    }
+
+    public static function mergePropertyOperations(pre:Array<ParserTokens>) :Array<ParserTokens> {
+
+        if (pre == null) return null;
+
+        var post:Array<ParserTokens> = [];
+
+        var i = 0;
+        while (i < pre.length) {
+            var token = pre[i];
+            switch token {
+
+                case Sign(_ == PROPERTY_ACCESS_SIGN => true): {
+                    if (i++ >= pre.length) return null;
+                    var lookahead = pre[i];
+                    switch lookahead {
+                        case SplitLine | SetLine(_) | Sign(_): return null;
+                        case _: {
+                            var field = post.pop();
+                            post.push(PropertyAccess(field, lookahead));
+                        }
+                    }
+                }
+                case Block(body, type): post.push(Block(mergePropertyOperations(body), type));
+                case Define(name, type): post.push(Define(mergePropertyOperations([name])[0], type));
+                case Action(name, params, type): post.push(Action(mergePropertyOperations([name])[0], mergePropertyOperations([params])[0], type));
+                case Condition(name, exp, body, type): post.push(Condition(mergePropertyOperations([name])[0], mergePropertyOperations([exp])[0], mergePropertyOperations([body])[0], type));
+                case Return(value, type): post.push(Return(mergePropertyOperations([value])[0], type));
+                case PartArray(parts): post.push(PartArray(mergePropertyOperations(parts)));
+                case ActionCall(name, params): post.push(ActionCall(mergePropertyOperations([name])[0], mergePropertyOperations([params])[0]));
+                case _: post.push(token);
+            }
+            i++;
+        }
+
+        return post;
+    }
+
     public static function mergeWrites(pre:Array<ParserTokens>):Array<ParserTokens> {
 
         if (pre == null) return null;
@@ -431,48 +510,6 @@ class Parser {
         }
         if (potentialAssignee != null) post.push(potentialAssignee);
         post.shift();
-        return post;
-    }
-
-    public static function mergeCalls(pre:Array<ParserTokens>):Array<ParserTokens> {
-
-        if (pre == null) return null;
-
-        var post:Array<ParserTokens> = [];
-
-        var i = 0;
-        while (i < pre.length) {
-            // Todo: Bandage, should return to thus later to figure out why token can be null
-            if (pre[i] == null) {i++; continue;}
-            var token = pre[i];
-            switch token {
-                case Expression(parts, type): {
-                    parts = mergeCalls(parts);
-                    if (i == 0) {
-                        post.push(Expression(parts, type));
-                    } else {
-                        var lookbehind = pre[i - 1];
-                        switch lookbehind {
-                            case Sign(_) | SplitLine | SetLine(_): post.push(Expression(parts, type));
-                            case _: {
-                                var previous = post.pop(); // When parsing a function that returns a function, this handles the "nested call" correctly
-                                token = PartArray(parts);
-                                post.push(ActionCall(previous, token));
-                            }
-                        }
-                    }
-                }
-                case Block(body, type): post.push(Block(mergeCalls(body), type));
-                case Define(name, type): post.push(Define(mergeCalls([name])[0], type));
-                case Action(name, params, type): post.push(Action(mergeCalls([name])[0], mergeCalls([params])[0], type));
-                case Condition(name, exp, body, type): post.push(Condition(mergeCalls([name])[0], mergeCalls([exp])[0], mergeCalls([body])[0], type));
-                case Return(value, type): post.push(Return(mergeCalls([value])[0], type));
-                case PartArray(parts): post.push(PartArray(mergeCalls(parts)));
-                case _: post.push(token);
-            }
-            i++;
-        }
-
         return post;
     }
 }

@@ -139,6 +139,9 @@ class PrettyPrinter {
 			case Return(value, type): {
 				return '${prefixFA(prefix)}$t$d Return\n${getTree(value, prefix.copy(), level + 1, type == null)}${getTree(type, prefix.copy(), level + 1, true)}';
 			}
+			case PropertyAccess(name, property): {
+				return '${prefixFA(prefix)}$t$d Property Access\n${getTree(name, pushIndex(prefix, level), level + 1, false)}${getTree(property, prefix.copy(), level + 1, true)}';
+			}
 		}
 		return "";
 	}
