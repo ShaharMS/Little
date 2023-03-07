@@ -37,27 +37,26 @@ class Interpreter {
             switch token {
                 case SetLine(line): Runtime.line = line;
                 case Module(name): Runtime.currentModule = name;
-                case Number(num):
-                case Decimal(num):
-                case Characters(string):
-                case NullValue:
-                case TrueValue:
-                case FalseValue:
                 case SplitLine:
-                case Define(name, type): 
-                case Action(name, params, type):
+                case Define(name, type): varMemory[stringifySimpleToken(name)] = NullValue;
+                case Action(name, params, type): funcMemory[stringifySimpleToken(name)] = NullValue;
                 case Condition(name, exp, body, type):
-                case Read(name):
-                case Write(assignees, value, type):
-                case Identifier(word):
-                case TypeDeclaration(type):
-                case ActionCall(name, params):
-                case Return(value, type):
-                case Expression(parts, type):
-                case Block(body, type):
-                case PartArray(parts):
-                case Parameter(name, type):
-                case Sign(sign):
+                case Write(assignees, value, type): {
+                    for (assignee in assignees) {
+                        varMemory[stringifySimpleToken(assignee)] = evaluate(value);
+                    }
+                }
+                case ActionCall(name, params): {
+                    var funcBlock = funcMemory[stringifySimpleToken(name)];
+                    runTokens(params.getParameters()[0].concat(funcBlock.getParameters()[0]), preParseVars, preParseFuncs, strict);
+                }
+                case Return(value, type): {
+                    returnVal = value;
+                    break;
+                }
+                case Block(body, type): {
+                    runTokens(body, preParseVars, preParseFuncs, strict);
+                }
                 case External(haxeValue):
                 case _:
             }
