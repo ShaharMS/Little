@@ -103,7 +103,7 @@ class Interpreter {
                 var returnVal = runTokens(body, currentConfig.prioritizeVariableDeclarations, currentConfig.prioritizeFunctionDeclarations, currentConfig.strictTyping);
                 return evaluate(returnVal);
             }
-            case Number(_) | Decimal(_) | Characters(_) | TrueValue | FalseValue | NullValue: return exp;
+            case Number(_) | Decimal(_) | Characters(_) | TrueValue | FalseValue | NullValue | Sign(_) | Module(_): return exp;
             case Write(_, value, _): return evaluate(value);
             case Read(name): {
                 var str = stringifySimpleToken(name);
@@ -114,7 +114,7 @@ class Interpreter {
 
         
 
-        return null;
+        return ErrorMessage('Unable to evaluate token $exp');
     }
 
     public static function evaluateExpressionParts(parts:Array<ParserTokens>):ParserTokens {
@@ -132,11 +132,13 @@ class Interpreter {
                 }
                 case _: val = evaluate(token); // Safety net, for expressions containing things other then values/reads
             }
-
             switch val {
                 case Sign(sign): mode = sign;
                 case TrueValue | FalseValue: {
-                    if (valueType == TYPE_BOOLEAN) {
+                    if (valueType == TYPE_UNKNOWN) {
+                        valueType = TYPE_BOOLEAN;
+                        value = (val == TrueValue).string();
+                    } else if (valueType == TYPE_BOOLEAN) {
                         var bool = (val == TrueValue);
                         switch mode {
                             case "&&": value = (value.parseBool() && bool).string();
@@ -168,11 +170,19 @@ class Interpreter {
                     }
                 }
                 case Number(num): {
-                    if (valueType == TYPE_BOOLEAN) {
+                    if (valueType == TYPE_UNKNOWN) {
                         valueType = TYPE_INT;
-                        // Convert true/false to 1/0
-                        value = value.replace(TRUE_VALUE, "1").replace(FALSE_VALUE, "0").replace(NULL_VALUE, "0");
-                    } else if (valueType == TYPE_FLOAT || valueType == TYPE_INT) {
+                        switch mode {
+                            case "+": value = "" + (num.parseInt());
+                            case "-": value = "" + (-num.parseInt());
+                            case _: return ErrorMessage('Cannot preform $mode $TYPE_INT($num) At the start of an expression');
+                        }
+                    } else if (valueType == TYPE_FLOAT || valueType == TYPE_INT || valueType == TYPE_BOOLEAN) {
+                        if (valueType == TYPE_BOOLEAN) {
+                            valueType = TYPE_INT;
+                            // Convert true/false to 1/0
+                            value = value.replace(TRUE_VALUE, "1").replace(FALSE_VALUE, "0").replace(NULL_VALUE, "0");
+                        }
                         switch mode {
                             case "+": value = "" + (value.parseInt() + num.parseInt());
                             case "-": value = "" + (value.parseInt() - num.parseInt());
@@ -193,11 +203,19 @@ class Interpreter {
                     }
                 }
                 case Decimal(num): {
-                    if (valueType == TYPE_BOOLEAN) {
+                    if (valueType == TYPE_UNKNOWN) {
                         valueType = TYPE_FLOAT;
-                        // Convert true/false to 1/0
-                        value = value.replace(TRUE_VALUE, "1").replace(FALSE_VALUE, "0").replace(NULL_VALUE, "0");
-                    } else if (valueType == TYPE_FLOAT || valueType == TYPE_INT) {
+                        switch mode {
+                            case "+": value = "" + (num.parseFloat());
+                            case "-": value = "" + (-num.parseFloat());
+                            case _: return ErrorMessage('Cannot preform $mode $TYPE_FLOAT($num) At the start of an expression');
+                        }
+                    } else if (valueType == TYPE_FLOAT || valueType == TYPE_INT || valueType == TYPE_BOOLEAN) {
+                        if (valueType == TYPE_BOOLEAN) {
+                            // Convert true/false to 1/0
+                            value = value.replace(TRUE_VALUE, "1").replace(FALSE_VALUE, "0").replace(NULL_VALUE, "0");
+                        }
+                        valueType = TYPE_FLOAT;
                         switch mode {
                             case "+": value = "" + (value.parseFloat() + num.parseFloat());
                             case "-": value = "" + (value.parseFloat() - num.parseFloat());
@@ -234,6 +252,7 @@ class Interpreter {
             case _:
         }
 
+        trace(valueType, value);
         return null;
     }
 }
