@@ -35,7 +35,7 @@ define x as Number = define y as Decimal = 6
 		output.innerHTML = little.tools.PrettyPrinter.printParserAst(little.parser.Parser.parse(little.lexer.Lexer.lex(untyped text.value)));
 		text.innerHTML = code;
 		#else
-		trace(Interpreter.evaluateExpressionParts(little.parser.Parser.parse(little.lexer.Lexer.lex('(true && true) + 5 + 3 + 8.6345345'))));
+		trace(Interpreter.evaluateExpressionParts(little.parser.Parser.parse(little.lexer.Lexer.lex('1 + 1 * 3'))));
 		#end
 	}
 }
