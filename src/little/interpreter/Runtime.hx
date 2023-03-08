@@ -74,7 +74,7 @@ class Runtime {
     /**
     	A string, containing everything that was printed to the console during the program's runtime.
     **/
-    public static var stdout:String;
+    public static var stdout:String = "";
 
     /**
     	Contains every function call interpreted during the program's runtime.
@@ -89,16 +89,19 @@ class Runtime {
 
         callStack.push(token);
         
-        stdout += '\nLine $line: ';
         var module:String = currentModule, title:String = "", reason:String;
         var content = switch token {
             case _: {
                 reason = Std.string(token);
-                '${if (Little.debug) (layer : String).toUpperCase() + ": " else ""}Module ${token.getParameters()[token.getParameters().length - 1]}, Line $line:  ${token}';
+                '${if (Little.debug) (layer : String).toUpperCase() + ": " else ""}Module ${token.getParameters()[token.getParameters().length - 1]}, Line $line:  ${reason}';
             }
         }
-        stdout += '\nLine $line: ' + content;
+        stdout += '\n$content';
         exitCode = EnumValueTools.getIndex(cast layer);
         onErrorThrown(module, line, title, reason);
+    }
+
+    public static function print(item:EitherType<String, ParserTokens>) {
+        stdout += '${if (Little.debug) (INTERPRETER : String).toUpperCase() + ": " else ""}Module ${item.getParameters()[item.getParameters().length - 1]}, Line $line:  ${Std.string(item)}';
     }
 }

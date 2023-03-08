@@ -64,10 +64,20 @@ class Little {
         
     }
 
-    // public static function registerFunction(actionName:String, ?actionModuleName:String, expectedParameters:Array<RegisteredParameter>, callback:Array<RegisteredParameter> -> Void) {
-    //     var moduleName = actionModuleName == null ? REGISTERED_MODULE_NAME : actionModuleName;
-    //     var parameters = [for (param in expectedParameters) Parameter(param.name, param.type, StaticValue(param.defaultValue), 1, moduleName)];
-    // }
+    /**
+    	Allows usage of a function written in haxe inside Little code.
+
+    	@param actionName The name by which to identify the function
+    	@param actionModuleName when & if this function ever throws an error/prints to standard output, the name provided here will be present in the error message as the responsible module.
+    	@param expectedParameters a `ParserTokens.PartArray` consisting of `ParserTokens.Define`s which contain the names & types of the parameters that should be passed on to the function. For example: 
+            ```
+            PartArray([Define])
+            ```
+    	@param callback 
+    **/
+    public static function registerFunction(actionName:String, ?actionModuleName:String, expectedParameters:ParserTokens, callback:ParserTokens -> ParserTokens) {
+
+    }
 
     public static function registerClass() {
         

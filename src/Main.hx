@@ -1,5 +1,6 @@
 package;
 
+import little.tools.PrettyPrinter;
 import little.interpreter.Interpreter;
 #if js
 import js.Browser;
@@ -36,6 +37,7 @@ define x as Number = define y as Decimal = 6
 		text.innerHTML = code;
 		#else
 		trace(Interpreter.evaluateExpressionParts(little.parser.Parser.parse(little.lexer.Lexer.lex('1 + 1 * 3'))));
+		// trace(PrettyPrinter.printParserAst(Interpreter.forceCorrectOrderOfOperations(Parser.parse(Lexer.lex('1 + 1 * 3')))));
 		#end
 	}
 }

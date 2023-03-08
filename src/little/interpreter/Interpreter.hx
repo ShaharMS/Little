@@ -14,6 +14,7 @@ class Interpreter {
     
     public static var varMemory:Map<String, ParserTokens> = [];
     public static var funcMemory:Map<String, ParserTokens> = [];
+    public static var externalFuncMemory:Map<String, ParserTokens -> ParserTokens> = [];
 
     public static var currentConfig:RunConfig;
 
@@ -28,6 +29,7 @@ class Interpreter {
     public static function runTokens(tokens:Array<ParserTokens>, preParseVars:Bool, preParseFuncs:Bool, strict:Bool):ParserTokens {
         // Todo: support preParseVars
         // Todo: support preParseFuncs
+        // Todo: support strict typing
 
         var returnVal:ParserTokens = null;
 
@@ -48,7 +50,11 @@ class Interpreter {
                 }
                 case ActionCall(name, params): {
                     var funcBlock = funcMemory[stringifySimpleToken(name)];
-                    runTokens(params.getParameters()[0].concat(funcBlock.getParameters()[0]), preParseVars, preParseFuncs, strict);
+                    if (funcBlock.getName() == "External") {
+                        externalFuncMemory[funcBlock.getParameters()[0]](params);
+                    } else {
+                        runTokens(params.getParameters()[0].concat(funcBlock.getParameters()[0]), preParseVars, preParseFuncs, strict);
+                    }
                 }
                 case Return(value, type): {
                     returnVal = value;
@@ -117,6 +123,8 @@ class Interpreter {
     }
 
     public static function evaluateExpressionParts(parts:Array<ParserTokens>):ParserTokens {
+
+        parts = forceCorrectOrderOfOperations(parts);
 
         var value = "", valueType = TYPE_UNKNOWN, mode = "+";
 
@@ -253,5 +261,45 @@ class Interpreter {
 
         trace(valueType, value);
         return null;
+    }
+
+    public static function forceCorrectOrderOfOperations(pre:Array<ParserTokens>):Array<ParserTokens> {
+        
+        if (pre.length == 3) return pre; // No need to reorder, nothing can be out of order
+
+        // First, wrap ^ and √
+        var post = [];
+        var i = 0;
+        while (i < pre.length) {
+            var token = pre[i];
+            switch token {
+                case Sign("√") | Sign("^"): {
+                    i++;
+                    post.push(Expression([post.pop(), token, pre[i]], null));
+                }
+                case _: post.push(token);
+            }
+            i++;
+        }
+
+        // Then, * and /
+
+        pre = post.copy();
+        post = [];
+
+        var i = 0;
+        while (i < pre.length) {
+            var token = pre[i];
+            switch token {
+                case Sign("/") | Sign("*"): {
+                    i++;
+                    post.push(Expression([post.pop(), token, pre[i]], null));
+                }
+                case _: post.push(token);
+            }
+            i++;
+        }
+
+        return post;
     }
 }

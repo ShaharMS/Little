@@ -40,7 +40,7 @@ enum ParserTokens {
     /**
     	Used for denoting an external var/func in the interpreter.
     **/
-    External(haxeValue:Dynamic);
+    External(identifierName:String);
 
     /**
     	Used for errors
