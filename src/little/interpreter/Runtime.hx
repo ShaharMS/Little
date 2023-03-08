@@ -101,7 +101,7 @@ class Runtime {
         onErrorThrown(module, line, title, reason);
     }
 
-    public static function print(item:EitherType<String, ParserTokens>) {
-        stdout += '${if (Little.debug) (INTERPRETER : String).toUpperCase() + ": " else ""}Module ${item.getParameters()[item.getParameters().length - 1]}, Line $line:  ${Std.string(item)}';
+    public static function print(item:String) {
+        stdout += '\n${if (Little.debug) (INTERPRETER : String).toUpperCase() + ": " else ""}Module $currentModule, Line $line:  ${Std.string(item)}';
     }
 }

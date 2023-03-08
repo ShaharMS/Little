@@ -1,5 +1,6 @@
 package little;
 
+import little.tools.PrepareRun;
 import little.parser.Tokens.ParserTokens;
 import little.lexer.Lexer;
 import little.parser.Parser;
@@ -54,9 +55,11 @@ class Little {
         Runtime.stdout = "";
         final previous = Little.debug;
         if (debug != null) Little.debug = debug;
-        Interpreter.interpret(Parser.parse(Lexer.lex(code)), {});
         Interpreter.varMemory = [];
         Interpreter.funcMemory = [];
+        PrepareRun.addFunctions();
+        trace(Interpreter.varMemory, Interpreter.funcMemory);
+        Interpreter.interpret(Parser.parse(Lexer.lex(code)), {});
         if (debug != null) Little.debug = previous;
     }
 
@@ -76,7 +79,8 @@ class Little {
     	@param callback 
     **/
     public static function registerFunction(actionName:String, ?actionModuleName:String, expectedParameters:ParserTokens, callback:ParserTokens -> ParserTokens) {
-
+        Interpreter.externalFuncMemory[actionName] = callback;
+        Interpreter.funcMemory[actionName] = External(actionName);
     }
 
     public static function registerClass() {

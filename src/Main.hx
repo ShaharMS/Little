@@ -1,5 +1,7 @@
 package;
 
+import little.Little;
+import little.interpreter.Runtime;
 import little.tools.PrettyPrinter;
 import little.interpreter.Interpreter;
 #if js
@@ -36,8 +38,10 @@ define x as Number = define y as Decimal = 6
 		output.innerHTML = little.tools.PrettyPrinter.printParserAst(little.parser.Parser.parse(little.lexer.Lexer.lex(untyped text.value)));
 		text.innerHTML = code;
 		#else
-		trace(Interpreter.evaluateExpressionParts(little.parser.Parser.parse(little.lexer.Lexer.lex('1 + 1 * 3'))));
+		// Little.run('print(1 + 1 * 3)');
+		// trace(Runtime.stdout);
 		// trace(PrettyPrinter.printParserAst(Interpreter.forceCorrectOrderOfOperations(Parser.parse(Lexer.lex('1 + 1 * 3')))));
+		trace(Parser.parse(Lexer.lex('define x as String')));
 		#end
 	}
 }

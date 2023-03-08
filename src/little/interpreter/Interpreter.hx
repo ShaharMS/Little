@@ -19,6 +19,7 @@ class Interpreter {
     public static var currentConfig:RunConfig;
 
     public static function interpret(tokens:Array<ParserTokens>, runConfig:RunConfig) {
+        trace(tokens);
         currentConfig = runConfig;
         if (tokens[0].getName() != "Module") {
             tokens.unshift(Module(runConfig.defaultModuleName));
@@ -35,22 +36,29 @@ class Interpreter {
 
         var i = 0;
         while (i < tokens.length) {
-            var token = tokens[0];
+            var token = tokens[i];
             switch token {
                 case SetLine(line): Runtime.line = line;
                 case Module(name): Runtime.currentModule = name;
                 case SplitLine:
-                case Define(name, type): varMemory[stringifySimpleToken(name)] = NullValue;
-                case Action(name, params, type): funcMemory[stringifySimpleToken(name)] = NullValue;
-                case Condition(name, exp, body, type):
+                case Define(name, type): {
+                    returnVal = varMemory[stringifySimpleToken(name)] = NullValue;
+                }
+                case Action(name, params, type): {
+                    returnVal = funcMemory[stringifySimpleToken(name)] = NullValue;
+                }
+                case Condition(name, exp, body, type): // Unimplemented for now
                 case Write(assignees, value, type): {
+                    value = evaluate(value);
                     for (assignee in assignees) {
-                        varMemory[stringifySimpleToken(assignee)] = evaluate(value);
+                        varMemory[stringifySimpleToken(assignee)] = value;
                     }
+                    returnVal = value;
                 }
                 case ActionCall(name, params): {
                     var funcBlock = funcMemory[stringifySimpleToken(name)];
-                    if (funcBlock.getName() == "External") {
+                    trace(funcBlock);
+                    returnVal = if (funcBlock.getName() == "External") {
                         externalFuncMemory[funcBlock.getParameters()[0]](params);
                     } else {
                         runTokens(params.getParameters()[0].concat(funcBlock.getParameters()[0]), preParseVars, preParseFuncs, strict);
@@ -66,6 +74,7 @@ class Interpreter {
                 case External(haxeValue):
                 case _:
             }
+            i++;
         }
 
         return returnVal;
@@ -84,6 +93,7 @@ class Interpreter {
             case TrueValue: return Keywords.TRUE_VALUE;
             case FalseValue: return Keywords.FALSE_VALUE;
             case NullValue: return Keywords.NULL_VALUE;
+            case Identifier(word) | Module(word) | External(word): return word;
             case Read(name): {
                 var str = stringifySimpleToken(name);
                 return stringifySimpleToken(if (varMemory[str] != null) varMemory[str] else if (funcMemory[str] != null) funcMemory[str] else ErrorMessage('No Such Definition/Action: $str'));
@@ -101,7 +111,7 @@ class Interpreter {
         if (exp.getName() == "ErrorMessage") Runtime.throwError(exp, INTERPRETER_VALUE_EVALUATOR);
 
         switch exp {
-            case Expression(parts, type): {
+            case Expression(parts, _) | PartArray(parts): {
                 return evaluateExpressionParts(parts);
             }
             case Block(body, type): {
