@@ -58,7 +58,6 @@ class Little {
         Interpreter.varMemory = [];
         Interpreter.funcMemory = [];
         PrepareRun.addFunctions();
-        trace(Interpreter.varMemory, Interpreter.funcMemory);
         Interpreter.interpret(Parser.parse(Lexer.lex(code)), {});
         if (debug != null) Little.debug = previous;
     }
@@ -71,7 +70,7 @@ class Little {
     	Allows usage of a function written in haxe inside Little code.
 
     	@param actionName The name by which to identify the function
-    	@param actionModuleName when & if this function ever throws an error/prints to standard output, the name provided here will be present in the error message as the responsible module.
+    	@param actionModuleName The module from which access to this function is granted. Also, when & if this function ever throws an error/prints to standard output, the name provided here will be present in the error message as the responsible module.
     	@param expectedParameters a `ParserTokens.PartArray` consisting of `ParserTokens.Define`s which contain the names & types of the parameters that should be passed on to the function. For example: 
             ```
             PartArray([Define])
@@ -79,8 +78,23 @@ class Little {
     	@param callback 
     **/
     public static function registerFunction(actionName:String, ?actionModuleName:String, expectedParameters:ParserTokens, callback:ParserTokens -> ParserTokens) {
-        Interpreter.externalFuncMemory[actionName] = callback;
+        Interpreter.externalFuncMemory[actionName] = (params) -> {
+            if (actionModuleName != null) runtime.currentModule = actionModuleName;
+            return callback(params);
+        }
         Interpreter.funcMemory[actionName] = External(actionName);
+        if (actionModuleName != null) {
+            if (Interpreter.varMemory[actionModuleName] == null) {
+                Interpreter.varMemory[actionModuleName] = PartArray([Action(Identifier(actionName), expectedParameters, null)]);
+            } else if (Interpreter.varMemory[actionModuleName].getName() == "PartArray") {
+                var props = Interpreter.varMemory[actionModuleName].getParameters()[0];
+                props.push(Action(Identifier(actionName), expectedParameters, null));
+                Interpreter.varMemory[actionModuleName] = PartArray(props);
+            } else {
+                // Todo: throw a "notice" instead of an error, telling the user the previous value of $actionModuleName has been overridden
+                Interpreter.varMemory[actionModuleName] = PartArray([Action(Identifier(actionName), expectedParameters, null)]);
+            }
+        }
     }
 
     public static function registerClass() {

@@ -40,14 +40,22 @@ class Parser {
 
             i++;
         }
-
+        trace("before:", tokens);
         tokens = mergeBlocks(tokens);
+        trace("blocks:", tokens);
         tokens = mergeExpressions(tokens);
+        trace("expressions:", tokens);
         tokens = mergeTypeDecls(tokens);
+        trace("types:", tokens);
         tokens = mergeComplexStructures(tokens);
+        trace("structs:", tokens);
         tokens = mergeCalls(tokens);
+        trace("calls:", tokens);
         tokens = mergePropertyOperations(tokens);
+        trace("props:", tokens);
         tokens = mergeWrites(tokens);
+        trace("writes:", tokens);
+
 
         return tokens;
     }
@@ -466,7 +474,6 @@ class Parser {
                         }
                         i++;
                     }
-
                     // The last currentAssignee is the value;
                     value = Expression(currentAssignee, null);
                     post.push(Write(assignees, value, null));
@@ -508,10 +515,12 @@ class Parser {
                     post.push(potentialAssignee);
                     potentialAssignee = token;
                 }
+                
             }
 
             i++;
         }
+        trace(potentialAssignee);
         if (potentialAssignee != null) post.push(potentialAssignee);
         post.shift();
         return post;

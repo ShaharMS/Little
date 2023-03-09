@@ -37,6 +37,7 @@ class Interpreter {
         var i = 0;
         while (i < tokens.length) {
             var token = tokens[i];
+            if (token == null) {i++; continue;}
             switch token {
                 case SetLine(line): Runtime.line = line;
                 case Module(name): Runtime.currentModule = name;
@@ -45,7 +46,7 @@ class Interpreter {
                     returnVal = varMemory[stringifySimpleToken(name)] = NullValue;
                 }
                 case Action(name, params, type): {
-                    returnVal = funcMemory[stringifySimpleToken(name)] = NullValue;
+                    returnVal = funcMemory[stringifySimpleToken(name)] = PartArray([params, NullValue]);
                 }
                 case Condition(name, exp, body, type): // Unimplemented for now
                 case Write(assignees, value, type): {
@@ -61,7 +62,10 @@ class Interpreter {
                     returnVal = if (funcBlock.getName() == "External") {
                         externalFuncMemory[funcBlock.getParameters()[0]](params);
                     } else {
-                        runTokens(params.getParameters()[0].concat(funcBlock.getParameters()[0]), preParseVars, preParseFuncs, strict);
+                        var parameters:Array<ParserTokens> = params.getParameters()[0];
+                        var expected:Array<ParserTokens> = funcBlock.getParameters()[0].getParameters()[0];
+
+                        null;
                     }
                 }
                 case Return(value, type): {
@@ -69,9 +73,8 @@ class Interpreter {
                     break;
                 }
                 case Block(body, type): {
-                    runTokens(body, preParseVars, preParseFuncs, strict);
+                    returnVal = runTokens(body, preParseVars, preParseFuncs, strict);
                 }
-                case External(haxeValue):
                 case _:
             }
             i++;
@@ -98,6 +101,14 @@ class Interpreter {
                 var str = stringifySimpleToken(name);
                 return stringifySimpleToken(if (varMemory[str] != null) varMemory[str] else if (funcMemory[str] != null) funcMemory[str] else ErrorMessage('No Such Definition/Action: $str'));
             }
+            case ActionCall(name, params): {
+                var funcBlock = funcMemory[stringifySimpleToken(name)];
+                return stringifySimpleToken(if (funcBlock.getName() == "External") {
+                    externalFuncMemory[funcBlock.getParameters()[0]](params);
+                } else {
+                    runTokens(params.getParameters()[0].concat(funcBlock.getParameters()[0]), false, false, false);
+                });
+            }
             case Write(_, value, _): {
                 return stringifySimpleToken(value);
             }
@@ -123,6 +134,14 @@ class Interpreter {
             case Read(name): {
                 var str = stringifySimpleToken(name);
                 return evaluate(if (varMemory[str] != null) varMemory[str] else if (funcMemory[str] != null) funcMemory[str] else ErrorMessage('No Such Definition/Action: $str'));
+            }
+            case ActionCall(name, params): {
+                var funcBlock = funcMemory[stringifySimpleToken(name)];
+                return evaluate(if (funcBlock.getName() == "External") {
+                    externalFuncMemory[funcBlock.getParameters()[0]](params);
+                } else {
+                    runTokens(params.getParameters()[0].concat(funcBlock.getParameters()[0]), false, false, false);
+                });
             }
             case _:
         }
@@ -174,6 +193,7 @@ class Interpreter {
                                 valueType = TYPE_FLOAT;
                                 value = "" + (value.parseInt() / num);
                             }
+                            case "^": value = "" + (Math.pow(value.parseInt(), num));
                             case _: return ErrorMessage('Cannot preform $valueType($value) $mode $TYPE_BOOLEAN(${(val == TrueValue)})');
                         }
                     } else if (valueType == TYPE_STRING) {
@@ -208,6 +228,7 @@ class Interpreter {
                                 valueType = TYPE_FLOAT;
                                 value = "" + (value.parseInt() / num.parseInt());
                             }
+                            case "^": value = "" + (Math.pow(value.parseInt(), num.parseInt()));
                             case _: return ErrorMessage('Cannot preform $valueType($value) $mode $TYPE_INT($num)');
                         }
                     } else if (valueType == TYPE_STRING) {
@@ -238,6 +259,7 @@ class Interpreter {
                             case "-": value = "" + (value.parseFloat() - num.parseFloat());
                             case "*": value = "" + (value.parseFloat() * num.parseFloat());
                             case "/": value = "" + (value.parseFloat() / num.parseFloat());
+                            case "^": value = "" + (Math.pow(value.parseFloat(), num.parseFloat()));
                             case _: return ErrorMessage('Cannot preform $valueType($value) $mode $TYPE_FLOAT($num)');
                         }
                     } else if (valueType == TYPE_STRING) {

@@ -82,7 +82,7 @@ class PrettyPrinter {
 					return title;
 				}
 			case Read(name):
-				return '${prefixFA(prefix)}$t$d $name\n';
+				return '${prefixFA(prefix)}$t$d Read: $name\n';
 			case Write(assignees, value, type):
 				{
 					return'${prefixFA(prefix)}$t$d Definition Write\n${getTree(PartArray(assignees), pushIndex(prefix, level), level + 1, false)}${getTree(value, prefix.copy(), level + 1, type == null)}${getTree(type, prefix.copy(), level + 1, true)}';

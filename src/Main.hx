@@ -27,21 +27,31 @@ define x as Number = define y as Decimal = 6
 	static function main() {
 		#if js
 		var text = Browser.document.getElementById("input");
-		var output = Browser.document.getElementById("output");
+		var output = Browser.document.getElementById("output-parser");
+		var stdout = Browser.document.getElementById("output");
 		trace(text, output);
 		text.addEventListener("keyup", (_) -> {
 			try {
 				output.innerHTML = little.tools.PrettyPrinter.printParserAst(little.parser.Parser.parse(little.lexer.Lexer.lex(untyped text.value)));
 			} catch (e) {
             }
+
+			try {
+				Little.run(untyped text.value);
+				stdout.innerHTML = Runtime.stdout;
+			} catch (e) {}
 		});
 		output.innerHTML = little.tools.PrettyPrinter.printParserAst(little.parser.Parser.parse(little.lexer.Lexer.lex(untyped text.value)));
 		text.innerHTML = code;
-		#else
-		// Little.run('print(1 + 1 * 3)');
-		// trace(Runtime.stdout);
+		#elseif sys
+		while (true) {
+			Sys.print("  >> ");
+			Little.run(Sys.stdin().readLine());
+		trace(Runtime.stdout);
+		}
+		
 		// trace(PrettyPrinter.printParserAst(Interpreter.forceCorrectOrderOfOperations(Parser.parse(Lexer.lex('1 + 1 * 3')))));
-		trace(Parser.parse(Lexer.lex('define x as String')));
+		// trace(Parser.parse(Lexer.lex('define x as String')));
 		#end
 	}
 }
