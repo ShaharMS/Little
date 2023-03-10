@@ -389,7 +389,7 @@ little_interpreter_Interpreter.runTokens = function(tokens,preParseVars,preParse
 			var name = token.name;
 			var type = token.type;
 			var this1 = little_interpreter_Interpreter.varMemory;
-			var k = little_interpreter_Interpreter.stringifySimpleToken(name);
+			var k = little_interpreter_Interpreter.stringifyTokenValue(name);
 			var v = little_parser_ParserTokens.NullValue;
 			this1.h[k] = v;
 			returnVal = v;
@@ -399,7 +399,7 @@ little_interpreter_Interpreter.runTokens = function(tokens,preParseVars,preParse
 			var params = token.params;
 			var type1 = token.type;
 			var this2 = little_interpreter_Interpreter.funcMemory;
-			var k1 = little_interpreter_Interpreter.stringifySimpleToken(name1);
+			var k1 = little_interpreter_Interpreter.stringifyTokenValue(name1);
 			var v1 = little_parser_ParserTokens.PartArray([params,little_parser_ParserTokens.NullValue]);
 			this2.h[k1] = v1;
 			returnVal = v1;
@@ -420,7 +420,7 @@ little_interpreter_Interpreter.runTokens = function(tokens,preParseVars,preParse
 				var assignee = assignees[_g];
 				++_g;
 				var this3 = little_interpreter_Interpreter.varMemory;
-				var k2 = little_interpreter_Interpreter.stringifySimpleToken(assignee);
+				var k2 = little_interpreter_Interpreter.stringifyTokenValue(assignee);
 				this3.h[k2] = value;
 			}
 			returnVal = value;
@@ -429,7 +429,7 @@ little_interpreter_Interpreter.runTokens = function(tokens,preParseVars,preParse
 			var name3 = token.name;
 			var params1 = token.params;
 			var this4 = little_interpreter_Interpreter.funcMemory;
-			var key = little_interpreter_Interpreter.stringifySimpleToken(name3);
+			var key = little_interpreter_Interpreter.stringifyTokenValue(name3);
 			var funcBlock = this4.h[key];
 			haxe_Log.trace(funcBlock,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 61, className : "little.interpreter.Interpreter", methodName : "runTokens"});
 			if($hxEnums[funcBlock.__enum__].__constructs__[funcBlock._hx_index]._hx_name == "External") {
@@ -462,20 +462,20 @@ little_interpreter_Interpreter.runTokens = function(tokens,preParseVars,preParse
 	}
 	return returnVal;
 };
-little_interpreter_Interpreter.stringifySimpleToken = function(token) {
+little_interpreter_Interpreter.stringifyTokenValue = function(token) {
 	if($hxEnums[token.__enum__].__constructs__[token._hx_index]._hx_name == "ErrorMessage") {
 		little_interpreter_Runtime.throwError(token,"Interpreter, Token Stringifier");
 	}
 	switch(token._hx_index) {
 	case 5:
 		var name = token.name;
-		var str = little_interpreter_Interpreter.stringifySimpleToken(name);
-		return little_interpreter_Interpreter.stringifySimpleToken(little_interpreter_Interpreter.varMemory.h[str] != null ? little_interpreter_Interpreter.varMemory.h[str] : little_interpreter_Interpreter.funcMemory.h[str] != null ? little_interpreter_Interpreter.funcMemory.h[str] : little_parser_ParserTokens.ErrorMessage("No Such Definition/Action: " + str));
+		var str = little_interpreter_Interpreter.stringifyTokenValue(name);
+		return little_interpreter_Interpreter.stringifyTokenValue(little_interpreter_Interpreter.varMemory.h[str] != null ? little_interpreter_Interpreter.varMemory.h[str] : little_interpreter_Interpreter.funcMemory.h[str] != null ? little_interpreter_Interpreter.funcMemory.h[str] : little_parser_ParserTokens.ErrorMessage("No Such Definition/Action: " + str));
 	case 6:
 		var _g = token.assignees;
 		var _g = token.type;
 		var value = token.value;
-		return little_interpreter_Interpreter.stringifySimpleToken(value);
+		return little_interpreter_Interpreter.stringifyTokenValue(value);
 	case 7:
 		var word = token.word;
 		return word;
@@ -483,7 +483,7 @@ little_interpreter_Interpreter.stringifySimpleToken = function(token) {
 		var name = token.name;
 		var params = token.params;
 		var this1 = little_interpreter_Interpreter.funcMemory;
-		var key = little_interpreter_Interpreter.stringifySimpleToken(name);
+		var key = little_interpreter_Interpreter.stringifyTokenValue(name);
 		var funcBlock = this1.h[key];
 		var tmp;
 		if($hxEnums[funcBlock.__enum__].__constructs__[funcBlock._hx_index]._hx_name == "External") {
@@ -493,15 +493,15 @@ little_interpreter_Interpreter.stringifySimpleToken = function(token) {
 		} else {
 			tmp = little_interpreter_Interpreter.runTokens(Type.enumParameters(params)[0].concat(Type.enumParameters(funcBlock)[0]),false,false,false);
 		}
-		return little_interpreter_Interpreter.stringifySimpleToken(tmp);
+		return little_interpreter_Interpreter.stringifyTokenValue(tmp);
 	case 11:
 		var parts = token.parts;
 		var type = token.type;
-		return little_interpreter_Interpreter.stringifySimpleToken(little_interpreter_Interpreter.evaluate(token));
+		return little_interpreter_Interpreter.stringifyTokenValue(little_interpreter_Interpreter.evaluate(token));
 	case 12:
 		var body = token.body;
 		var type = token.type;
-		return little_interpreter_Interpreter.stringifySimpleToken(little_interpreter_Interpreter.runTokens(body,little_interpreter_Interpreter.currentConfig.prioritizeVariableDeclarations,little_interpreter_Interpreter.currentConfig.prioritizeFunctionDeclarations,little_interpreter_Interpreter.currentConfig.strictTyping));
+		return little_interpreter_Interpreter.stringifyTokenValue(little_interpreter_Interpreter.runTokens(body,little_interpreter_Interpreter.currentConfig.prioritizeVariableDeclarations,little_interpreter_Interpreter.currentConfig.prioritizeFunctionDeclarations,little_interpreter_Interpreter.currentConfig.strictTyping));
 	case 17:
 		var num = token.num;
 		return num;
@@ -534,7 +534,7 @@ little_interpreter_Interpreter.evaluate = function(exp) {
 	switch(exp._hx_index) {
 	case 5:
 		var name = exp.name;
-		var str = little_interpreter_Interpreter.stringifySimpleToken(name);
+		var str = little_interpreter_Interpreter.stringifyTokenValue(name);
 		return little_interpreter_Interpreter.evaluate(little_interpreter_Interpreter.varMemory.h[str] != null ? little_interpreter_Interpreter.varMemory.h[str] : little_interpreter_Interpreter.funcMemory.h[str] != null ? little_interpreter_Interpreter.funcMemory.h[str] : little_parser_ParserTokens.ErrorMessage("No Such Definition/Action: " + str));
 	case 6:
 		var _g = exp.assignees;
@@ -1824,11 +1824,11 @@ var little_tools_PrepareRun = function() { };
 little_tools_PrepareRun.__name__ = true;
 little_tools_PrepareRun.addFunctions = function() {
 	little_Little.registerFunction("print",null,little_parser_ParserTokens.PartArray([little_parser_ParserTokens.Define(little_parser_ParserTokens.Identifier("item"),null)]),function(params) {
-		little_interpreter_Runtime.print(little_interpreter_Interpreter.stringifySimpleToken(little_interpreter_Interpreter.evaluate(params)));
+		little_interpreter_Runtime.print(little_interpreter_Interpreter.stringifyTokenValue(little_interpreter_Interpreter.evaluate(params)));
 		return little_parser_ParserTokens.NullValue;
 	});
 	little_Little.registerFunction("sqrt","Math",little_parser_ParserTokens.PartArray([little_parser_ParserTokens.Define(little_parser_ParserTokens.Identifier("decimal"),little_parser_ParserTokens.Identifier(little_Keywords.TYPE_FLOAT))]),function(params) {
-		return little_parser_ParserTokens.Decimal("" + Math.sqrt(parseFloat(little_interpreter_Interpreter.stringifySimpleToken(little_interpreter_Interpreter.evaluate(params)))));
+		return little_parser_ParserTokens.Decimal("" + Math.sqrt(parseFloat(little_interpreter_Interpreter.stringifyTokenValue(little_interpreter_Interpreter.evaluate(params)))));
 	});
 };
 var little_tools_PrettyPrinter = function() { };

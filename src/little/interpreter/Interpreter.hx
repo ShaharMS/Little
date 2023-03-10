@@ -1,7 +1,9 @@
 package little.interpreter;
 
+import little.tools.Layer;
 import little.parser.Tokens.ParserTokens;
 import little.Keywords.*;
+
 using StringTools;
 using Std;
 using Math;
@@ -43,21 +45,21 @@ class Interpreter {
                 case Module(name): Runtime.currentModule = name;
                 case SplitLine:
                 case Define(name, type): {
-                    returnVal = varMemory[stringifySimpleToken(name)] = NullValue;
+                    returnVal = varMemory[stringifyTokenValue(name)] = NullValue;
                 }
                 case Action(name, params, type): {
-                    returnVal = funcMemory[stringifySimpleToken(name)] = PartArray([params, NullValue]);
+                    returnVal = funcMemory[stringifyTokenValue(name)] = PartArray([params, NullValue]);
                 }
                 case Condition(name, exp, body, type): // Unimplemented for now
                 case Write(assignees, value, type): {
                     value = evaluate(value);
                     for (assignee in assignees) {
-                        varMemory[stringifySimpleToken(assignee)] = value;
+                        varMemory[stringifyTokenValue(assignee)] = value;
                     }
                     returnVal = value;
                 }
                 case ActionCall(name, params): {
-                    var funcBlock = funcMemory[stringifySimpleToken(name)];
+                    var funcBlock = funcMemory[stringifyTokenValue(name)];
                     trace(funcBlock);
                     returnVal = if (funcBlock.getName() == "External") {
                         externalFuncMemory[funcBlock.getParameters()[0]](params);
@@ -83,13 +85,13 @@ class Interpreter {
         return returnVal;
     }
 
-    public static function stringifySimpleToken(token:ParserTokens):String {
+    public static function stringifyTokenValue(token:ParserTokens):String {
 
-        if (token.getName() == "ErrorMessage") Runtime.throwError(token, INTERPRETER_TOKEN_STRINGIFIER);
+        if (token.getName() == "ErrorMessage") Runtime.throwError(token, INTERPRETER_TOKEN_VALUE_STRINGIFIER);
 
         switch token {
-            case Block(body, type): return stringifySimpleToken(runTokens(body, currentConfig.prioritizeVariableDeclarations, currentConfig.prioritizeFunctionDeclarations, currentConfig.strictTyping));
-            case Expression(parts, type): return stringifySimpleToken(evaluate(token));
+            case Block(body, type): return stringifyTokenValue(runTokens(body, currentConfig.prioritizeVariableDeclarations, currentConfig.prioritizeFunctionDeclarations, currentConfig.strictTyping));
+            case Expression(parts, type): return stringifyTokenValue(evaluate(token));
             case Characters(string): return string;
             case Number(num): return num;
             case Decimal(num): return num;
@@ -98,19 +100,72 @@ class Interpreter {
             case NullValue: return Keywords.NULL_VALUE;
             case Identifier(word) | Module(word) | External(word): return word;
             case Read(name): {
-                var str = stringifySimpleToken(name);
-                return stringifySimpleToken(if (varMemory[str] != null) varMemory[str] else if (funcMemory[str] != null) funcMemory[str] else ErrorMessage('No Such Definition/Action: $str'));
+                var str = stringifyTokenValue(name);
+                return stringifyTokenValue(if (varMemory[str] != null) varMemory[str] else if (funcMemory[str] != null) funcMemory[str] else ErrorMessage('No Such Definition/Action: $str'));
             }
             case ActionCall(name, params): {
-                var funcBlock = funcMemory[stringifySimpleToken(name)];
-                return stringifySimpleToken(if (funcBlock.getName() == "External") {
+                var funcBlock = funcMemory[stringifyTokenValue(name)];
+                return stringifyTokenValue(if (funcBlock.getName() == "External") {
                     externalFuncMemory[funcBlock.getParameters()[0]](params);
                 } else {
                     runTokens(params.getParameters()[0].concat(funcBlock.getParameters()[0]), false, false, false);
                 });
             }
             case Write(_, value, _): {
-                return stringifySimpleToken(value);
+                return stringifyTokenValue(value);
+            }
+            case Define(name, type): {
+                varMemory[stringifyTokenValue(name)] = NullValue;
+                return stringifyTokenValue(name);
+            }
+            case Action(name, params, type): {
+                funcMemory[stringifyTokenValue(name)] = PartArray([params, NullValue]);
+                return stringifyTokenValue(name);
+            }
+            case PartArray(parts): {
+                return [for (p in parts) evaluate(p).string()].join(", "); 
+            }
+            case _:
+        }
+
+        return "Something went wrong";
+    }
+
+    public static function stringifyTokenIdentifier(token:ParserTokens):String {
+        if (token.getName() == "ErrorMessage") Runtime.throwError(token, INTERPRETER_TOKEN_IDENTIFIER_STRINGIFIER);
+
+        switch token {
+            case Block(body, type): return stringifyTokenIdentifier(runTokens(body, currentConfig.prioritizeVariableDeclarations, currentConfig.prioritizeFunctionDeclarations, currentConfig.strictTyping));
+            case Expression(parts, type): return stringifyTokenIdentifier(evaluate(token));
+            case Characters(string): return string;
+            case Number(num): return num;
+            case Decimal(num): return num;
+            case TrueValue: return Keywords.TRUE_VALUE;
+            case FalseValue: return Keywords.FALSE_VALUE;
+            case NullValue: return Keywords.NULL_VALUE;
+            case Identifier(word) | Module(word) | External(word): return word;
+            case Read(name): {
+                return stringifyTokenIdentifier(name);
+            }
+            case ActionCall(name, params): {
+                var funcBlock = funcMemory[stringifyTokenValue(name)];
+                return stringifyTokenIdentifier(if (funcBlock.getName() == "External") {
+                    externalFuncMemory[funcBlock.getParameters()[0]](params);
+                } else {
+                    runTokens(params.getParameters()[0].concat(funcBlock.getParameters()[0]), false, false, false);
+                });
+            }
+            case Write(assignees, _, _): {
+                return stringifyTokenIdentifier(assignees[0]);
+            }
+            case Define(name, type): {
+                return stringifyTokenIdentifier(name);
+            }
+            case Action(name, params, type): {
+                return stringifyTokenIdentifier(name);
+            }
+            case PartArray(parts): {
+                return [for (p in parts) evaluate(p).string()].join(", "); 
             }
             case _:
         }
@@ -119,29 +174,38 @@ class Interpreter {
     }
 
     public static function evaluate(exp:ParserTokens):ParserTokens {
+        
         if (exp.getName() == "ErrorMessage") Runtime.throwError(exp, INTERPRETER_VALUE_EVALUATOR);
 
         switch exp {
-            case Expression(parts, _) | PartArray(parts): {
+            case Expression(parts, _): {
                 return evaluateExpressionParts(parts);
             }
             case Block(body, type): {
                 var returnVal = runTokens(body, currentConfig.prioritizeVariableDeclarations, currentConfig.prioritizeFunctionDeclarations, currentConfig.strictTyping);
                 return evaluate(returnVal);
             }
-            case Number(_) | Decimal(_) | Characters(_) | TrueValue | FalseValue | NullValue | Sign(_) | Module(_): return exp;
+            case Number(_) | Decimal(_) | Characters(_) | TrueValue | FalseValue | NullValue | Sign(_) | Module(_) | PartArray(_): return exp;
+            case Identifier(word): {
+                return evaluate(if (varMemory[word] != null) varMemory[word] else if (funcMemory[word] != null) funcMemory[word] else ErrorMessage('No Such Definition/Action: $word'));
+            }
             case Write(_, value, _): return evaluate(value);
             case Read(name): {
-                var str = stringifySimpleToken(name);
+                var str = stringifyTokenValue(name);
                 return evaluate(if (varMemory[str] != null) varMemory[str] else if (funcMemory[str] != null) funcMemory[str] else ErrorMessage('No Such Definition/Action: $str'));
             }
             case ActionCall(name, params): {
-                var funcBlock = funcMemory[stringifySimpleToken(name)];
+                var funcBlock = funcMemory[stringifyTokenValue(name)];
                 return evaluate(if (funcBlock.getName() == "External") {
                     externalFuncMemory[funcBlock.getParameters()[0]](params);
                 } else {
-                    runTokens(params.getParameters()[0].concat(funcBlock.getParameters()[0]), false, false, false);
+                    runTokens(params.getParameters()[0].concat(funcBlock.getParameters()[0]), currentConfig.prioritizeVariableDeclarations, currentConfig.prioritizeFunctionDeclarations, currentConfig.strictTyping);
                 });
+            }
+            case PropertyAccess(name, property): {
+                var str = stringifyTokenIdentifier(name);
+                var value = if (varMemory[str] != null) varMemory[str] else if (funcMemory[str] != null) funcMemory[str] else ErrorMessage('No Such Definition/Action: $str');
+                if (value.getName() == "ErrorMessage") Runtime.throwError(value, INTERPRETER_VALUE_EVALUATOR);
             }
             case _:
         }
@@ -158,17 +222,10 @@ class Interpreter {
         var value = "", valueType = TYPE_UNKNOWN, mode = "+";
 
         for (token in parts) {
-            var val:ParserTokens = null;
-            switch token {
-                case Block(body, type): {
-                    val = runTokens(body, currentConfig.prioritizeVariableDeclarations, currentConfig.prioritizeFunctionDeclarations, currentConfig.strictTyping);
-                }
-                case Expression(parts, type): {
-                    val = evaluateExpressionParts(parts);
-                }
-                case _: val = evaluate(token); // Safety net, for expressions containing things other then values/reads
-            }
+
+            var val:ParserTokens = evaluate(token);
             switch val {
+                case ErrorMessage(_): Runtime.throwError(val, Layer.INTERPRETER_VALUE_EVALUATOR);
                 case Sign(sign): mode = sign;
                 case TrueValue | FalseValue: {
                     if (valueType == TYPE_UNKNOWN) {

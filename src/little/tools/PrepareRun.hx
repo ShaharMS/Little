@@ -10,7 +10,7 @@ class PrepareRun {
     
     public static function addFunctions() {
         Little.registerFunction("print", null, PartArray([Define(Identifier("item"), null)]), (params) -> {
-            Runtime.print(Interpreter.stringifySimpleToken(Interpreter.evaluate(params)));
+            Runtime.print(Interpreter.stringifyTokenValue(Interpreter.evaluate(params)));
             return NullValue;
         });
 
@@ -19,7 +19,7 @@ class PrepareRun {
         //------------------------------------------
 
         Little.registerFunction("sqrt", "Math", PartArray([Define(Identifier("decimal"), Identifier(TYPE_FLOAT))]), (params) -> {
-            return Decimal('${Math.sqrt(Interpreter.stringifySimpleToken(Interpreter.evaluate(params)).parseFloat())}');
+            return Decimal('${Math.sqrt(Interpreter.stringifyTokenValue(Interpreter.evaluate(params)).parseFloat())}');
         });
     }
 

@@ -46,7 +46,7 @@ define x as Number = define y as Decimal = 6
 		#elseif sys
 		while (true) {
 			Sys.print("  >> ");
-			Little.run(Sys.stdin().readLine());
+			Little.run(Sys.stdin().readLine(), true);
 		trace(Runtime.stdout);
 		}
 		

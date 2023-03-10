@@ -93,12 +93,12 @@ class Runtime {
         var content = switch token {
             case _: {
                 reason = Std.string(token);
-                '${if (Little.debug) (layer : String).toUpperCase() + ": " else ""}Module ${token.getParameters()[token.getParameters().length - 1]}, Line $line:  ${reason}';
+                '${if (Little.debug) (layer : String).toUpperCase() + ": " else ""}Module ${currentModule}, Line $line:  ${reason}';
             }
         }
         stdout += '\n$content';
-        exitCode = EnumValueTools.getIndex(cast layer);
-        onErrorThrown(module, line, title, reason);
+        exitCode = Layer.getIndexOf(layer);
+        if (onErrorThrown != null) onErrorThrown(module, line, title, reason);
     }
 
     public static function print(item:String) {
