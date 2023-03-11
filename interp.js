@@ -355,7 +355,7 @@ little_interpreter_Interpreter.interpret = function(tokens,runConfig) {
 little_interpreter_Interpreter.runTokens = function(tokens,preParseVars,preParseFuncs,strict) {
 	var returnVal = null;
 	var i = 0;
-	_hx_loop1: while(i < tokens.length) {
+	while(i < tokens.length) {
 		var token = tokens[i];
 		if(token == null) {
 			++i;
@@ -397,7 +397,6 @@ little_interpreter_Interpreter.runTokens = function(tokens,preParseVars,preParse
 			var assignees = token.assignees;
 			var value = token.value;
 			var type3 = token.type;
-			value = little_interpreter_Interpreter.evaluate(value);
 			var _g = 0;
 			while(_g < assignees.length) {
 				var assignee = assignees[_g];
@@ -413,16 +412,21 @@ little_interpreter_Interpreter.runTokens = function(tokens,preParseVars,preParse
 			var params1 = token.params;
 			var this4 = little_interpreter_Interpreter.memory;
 			var key1 = little_interpreter_Interpreter.stringifyTokenValue(name3);
-			returnVal = this4.h[key1].useFunction(params1);
+			if(this4.h[key1] == null) {
+				var tmp = "No Such Action: " + little_interpreter_Interpreter.stringifyTokenValue(name3);
+			}
+			var this5 = little_interpreter_Interpreter.memory;
+			var key2 = little_interpreter_Interpreter.stringifyTokenValue(name3);
+			returnVal = this5.h[key2].useFunction(params1);
 			break;
 		case 10:
 			var value1 = token.value;
 			var type4 = token.type;
-			returnVal = value1;
-			break _hx_loop1;
+			return little_interpreter_Interpreter.evaluate(value1);
 		case 12:
 			var body1 = token.body;
 			var type5 = token.type;
+			haxe_Log.trace(body1,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 69, className : "little.interpreter.Interpreter", methodName : "runTokens"});
 			returnVal = little_interpreter_Interpreter.runTokens(body1,preParseVars,preParseFuncs,strict);
 			break;
 		case 20:
@@ -515,10 +519,32 @@ little_interpreter_Interpreter.stringifyTokenValue = function(token) {
 	return "Something went wrong";
 };
 little_interpreter_Interpreter.evaluate = function(exp) {
+	if(exp == null) {
+		haxe_Log.trace("null token",{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 166, className : "little.interpreter.Interpreter", methodName : "evaluate"});
+		return little_parser_ParserTokens.NullValue;
+	}
 	if($hxEnums[exp.__enum__].__constructs__[exp._hx_index]._hx_name == "ErrorMessage") {
 		little_interpreter_Runtime.throwError(exp,"Interpreter, Value Evaluator");
+		return exp;
 	}
 	switch(exp._hx_index) {
+	case 2:
+		var name = exp.name;
+		var type = exp.type;
+		var str = little_interpreter_Interpreter.stringifyTokenValue(name);
+		var this1 = little_interpreter_Interpreter.memory;
+		var v = new little_interpreter_MemoryObject(little_parser_ParserTokens.NullValue,null,null,type);
+		this1.h[str] = v;
+		return name;
+	case 3:
+		var name = exp.name;
+		var params = exp.params;
+		var type = exp.type;
+		var str = little_interpreter_Interpreter.stringifyTokenValue(name);
+		var this1 = little_interpreter_Interpreter.memory;
+		var v = new little_interpreter_MemoryObject(little_parser_ParserTokens.NullValue,new haxe_ds_StringMap(),Type.enumParameters(params)[0],type);
+		this1.h[str] = v;
+		return name;
 	case 5:
 		var name = exp.name;
 		var str = little_interpreter_Interpreter.stringifyTokenValue(name);
@@ -534,6 +560,11 @@ little_interpreter_Interpreter.evaluate = function(exp) {
 	case 9:
 		var name = exp.name;
 		var params = exp.params;
+		var this1 = little_interpreter_Interpreter.memory;
+		var key = little_interpreter_Interpreter.stringifyTokenValue(name);
+		if(this1.h[key] == null) {
+			return little_parser_ParserTokens.ErrorMessage("No Such Action: " + little_interpreter_Interpreter.stringifyTokenValue(name));
+		}
 		var this1 = little_interpreter_Interpreter.memory;
 		var key = little_interpreter_Interpreter.stringifyTokenValue(name);
 		return little_interpreter_Interpreter.evaluate(this1.h[key].useFunction(params));
@@ -586,9 +617,9 @@ little_interpreter_Interpreter.evaluateExpressionParts = function(parts) {
 	while(_g < parts.length) {
 		var token = parts[_g];
 		++_g;
-		haxe_Log.trace(token,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 209, className : "little.interpreter.Interpreter", methodName : "evaluateExpressionParts"});
+		haxe_Log.trace(token,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 226, className : "little.interpreter.Interpreter", methodName : "evaluateExpressionParts"});
 		var val = little_interpreter_Interpreter.evaluate(token);
-		haxe_Log.trace(val,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 211, className : "little.interpreter.Interpreter", methodName : "evaluateExpressionParts"});
+		haxe_Log.trace(val,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 228, className : "little.interpreter.Interpreter", methodName : "evaluateExpressionParts"});
 		switch(val._hx_index) {
 		case 16:
 			var sign = val.sign;
@@ -803,12 +834,12 @@ little_interpreter_Interpreter.evaluateExpressionParts = function(parts) {
 				_hx_tmp = valueType == little_Keywords.TYPE_STRING;
 				if(_hx_tmp == true) {
 					return little_parser_ParserTokens.Characters(value);
+				} else {
+					return little_parser_ParserTokens.NullValue;
 				}
 			}
 		}
 	}
-	haxe_Log.trace(valueType,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 336, className : "little.interpreter.Interpreter", methodName : "evaluateExpressionParts", customParams : [value]});
-	return null;
 };
 little_interpreter_Interpreter.forceCorrectOrderOfOperations = function(pre) {
 	if(pre.length == 3) {
@@ -874,28 +905,30 @@ little_interpreter_MemoryObject.prototype = {
 			return little_parser_ParserTokens.ErrorMessage("Incorrect parameter group format, given group format: " + $hxEnums[parameters.__enum__].__constructs__[parameters._hx_index]._hx_name + ", expectedFormat: " + Std.string(little_parser_ParserTokens.PartArray));
 		}
 		var given = [];
-		var currentParam = [];
-		var _params = Type.enumParameters(parameters)[0];
-		var _g = 0;
-		while(_g < _params.length) {
-			var value = _params[_g];
-			++_g;
-			switch(value._hx_index) {
-			case 0:
-				var _g1 = value.line;
-				given.push(little_parser_ParserTokens.Expression(currentParam.slice(),null));
-				currentParam = [];
-				break;
-			case 1:
-				given.push(little_parser_ParserTokens.Expression(currentParam.slice(),null));
-				currentParam = [];
-				break;
-			default:
-				currentParam.push(value);
+		if(Type.enumParameters(parameters)[0].length != 0) {
+			var currentParam = [];
+			var _params = Type.enumParameters(parameters)[0];
+			var _g = 0;
+			while(_g < _params.length) {
+				var value = _params[_g];
+				++_g;
+				switch(value._hx_index) {
+				case 0:
+					var _g1 = value.line;
+					given.push(little_parser_ParserTokens.Expression(currentParam.slice(),null));
+					currentParam = [];
+					break;
+				case 1:
+					given.push(little_parser_ParserTokens.Expression(currentParam.slice(),null));
+					currentParam = [];
+					break;
+				default:
+					currentParam.push(value);
+				}
 			}
-		}
-		if(currentParam.length != 0) {
-			given.push(little_parser_ParserTokens.Expression(currentParam.slice(),null));
+			if(currentParam.length != 0) {
+				given.push(little_parser_ParserTokens.Expression(currentParam.slice(),null));
+			}
 		}
 		if(given.length != this.params.length) {
 			return little_parser_ParserTokens.ErrorMessage("Incorrect number of parameters, expected: " + this.params.length + ", given: " + given.length);
@@ -924,6 +957,7 @@ little_interpreter_MemoryObject.prototype = {
 				paramsDecl.push(this.value);
 				body = paramsDecl;
 			}
+			haxe_Log.trace(little_tools_PrettyPrinter.printParserAst(body),{ fileName : "src/little/interpreter/MemoryObject.hx", lineNumber : 70, className : "little.interpreter.MemoryObject", methodName : "useFunction"});
 			return little_interpreter_Interpreter.runTokens(body,null,null,null);
 		}
 	}
@@ -1731,14 +1765,18 @@ little_parser_Parser.mergeWrites = function(pre) {
 		case 2:
 			var name = token.name;
 			var type = token.type;
-			post.push(potentialAssignee);
+			if(potentialAssignee != null) {
+				post.push(potentialAssignee);
+			}
 			potentialAssignee = little_parser_ParserTokens.Define(little_parser_Parser.mergeWrites([name])[0],type);
 			break;
 		case 3:
 			var name1 = token.name;
 			var params = token.params;
 			var type1 = token.type;
-			post.push(potentialAssignee);
+			if(potentialAssignee != null) {
+				post.push(potentialAssignee);
+			}
 			potentialAssignee = little_parser_ParserTokens.Action(little_parser_Parser.mergeWrites([name1])[0],little_parser_Parser.mergeWrites([params])[0],type1);
 			break;
 		case 4:
@@ -1746,37 +1784,49 @@ little_parser_Parser.mergeWrites = function(pre) {
 			var exp = token.exp;
 			var body = token.body;
 			var type2 = token.type;
-			post.push(potentialAssignee);
+			if(potentialAssignee != null) {
+				post.push(potentialAssignee);
+			}
 			potentialAssignee = little_parser_ParserTokens.Condition(little_parser_Parser.mergeWrites([name2])[0],little_parser_Parser.mergeWrites([exp])[0],little_parser_Parser.mergeWrites([body])[0],type2);
 			break;
 		case 9:
 			var name3 = token.name;
 			var params1 = token.params;
-			post.push(potentialAssignee);
+			if(potentialAssignee != null) {
+				post.push(potentialAssignee);
+			}
 			potentialAssignee = little_parser_ParserTokens.ActionCall(little_parser_Parser.mergeWrites([name3])[0],little_parser_Parser.mergeWrites([params1])[0]);
 			break;
 		case 10:
 			var value = token.value;
 			var type3 = token.type;
-			post.push(potentialAssignee);
+			if(potentialAssignee != null) {
+				post.push(potentialAssignee);
+			}
 			potentialAssignee = little_parser_ParserTokens.Return(little_parser_Parser.mergeWrites([value])[0],type3);
 			break;
 		case 11:
 			var parts = token.parts;
 			var type4 = token.type;
-			post.push(potentialAssignee);
+			if(potentialAssignee != null) {
+				post.push(potentialAssignee);
+			}
 			potentialAssignee = little_parser_ParserTokens.Expression(little_parser_Parser.mergeWrites(parts),type4);
 			break;
 		case 12:
 			var body1 = token.body;
 			var type5 = token.type;
-			post.push(potentialAssignee);
+			if(potentialAssignee != null) {
+				post.push(potentialAssignee);
+			}
 			potentialAssignee = little_parser_ParserTokens.Block(little_parser_Parser.mergeWrites(body1),type5);
 			break;
 		case 15:
 			var name4 = token.name;
 			var property = token.property;
-			post.push(potentialAssignee);
+			if(potentialAssignee != null) {
+				post.push(potentialAssignee);
+			}
 			potentialAssignee = little_parser_ParserTokens.PropertyAccess(little_parser_Parser.mergeWrites([name4])[0],little_parser_Parser.mergeWrites([property])[0]);
 			break;
 		case 16:
@@ -1785,41 +1835,16 @@ little_parser_Parser.mergeWrites = function(pre) {
 					break _hx_loop1;
 				}
 				var currentAssignee = [potentialAssignee];
-				if(potentialAssignee._hx_index == 11) {
-					var _g = potentialAssignee.parts;
-					var _g1 = potentialAssignee.type;
-					_hx_loop2: while(true) {
-						var _g2 = post[post.length - 1];
-						switch(_g2._hx_index) {
-						case 0:
-							var _g3 = _g2.line;
-							break _hx_loop2;
-						case 1:
-							break _hx_loop2;
-						case 11:
-							var _g4 = _g2.parts;
-							var _g5 = _g2.type;
-							currentAssignee.unshift(post.pop());
-							break;
-						case 16:
-							var _g6 = _g2.sign;
-							break _hx_loop2;
-						default:
-							currentAssignee.unshift(post.pop());
-							break _hx_loop2;
-						}
-					}
-				}
 				var assignees = [currentAssignee.length == 1 ? currentAssignee[0] : little_parser_ParserTokens.Expression(currentAssignee.slice(),null)];
 				currentAssignee = [];
-				_hx_loop3: while(i + 1 < pre.length) {
+				_hx_loop2: while(i + 1 < pre.length) {
 					var lookahead = pre[i + 1];
 					switch(lookahead._hx_index) {
 					case 0:
-						var _g7 = lookahead.line;
-						break _hx_loop3;
+						var _g = lookahead.line;
+						break _hx_loop2;
 					case 1:
-						break _hx_loop3;
+						break _hx_loop2;
 					case 16:
 						if(lookahead.sign == "=") {
 							var assignee = currentAssignee.length == 1 ? currentAssignee[0] : little_parser_ParserTokens.Expression(currentAssignee.slice(),null);
@@ -1834,16 +1859,20 @@ little_parser_Parser.mergeWrites = function(pre) {
 					}
 					++i;
 				}
-				var value1 = little_parser_ParserTokens.Expression(currentAssignee,null);
+				var value1 = currentAssignee.length == 1 ? currentAssignee[0] : little_parser_ParserTokens.Expression(currentAssignee,null);
 				post.push(little_parser_ParserTokens.Write(assignees,value1,null));
 				potentialAssignee = null;
 			} else {
-				post.push(potentialAssignee);
+				if(potentialAssignee != null) {
+					post.push(potentialAssignee);
+				}
 				potentialAssignee = token;
 			}
 			break;
 		default:
-			post.push(potentialAssignee);
+			if(potentialAssignee != null) {
+				post.push(potentialAssignee);
+			}
 			potentialAssignee = token;
 		}
 		++i;
@@ -2165,7 +2194,7 @@ little_interpreter_Runtime.callStack = [];
 little_Little.runtime = little_interpreter_Runtime;
 little_Little.debug = false;
 little_interpreter_Interpreter.errorThrown = false;
-little_lexer_Lexer.signs = ["!","#","$","%","&","'","(",")","*","+",",","-",".","/",":",";","<","=",">","?","@","[","\\","]","^","_","`","{","|","}","~","^","√"];
+little_lexer_Lexer.signs = ["!","#","$","%","&","'","(",")","*","+","-",".","/",":","<","=",">","?","@","[","\\","]","^","_","`","{","|","}","~","^","√"];
 little_tools_PrettyPrinter.s = "";
 little_tools_PrettyPrinter.l = 0;
 Main.main();
