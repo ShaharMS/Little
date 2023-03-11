@@ -63,10 +63,10 @@ class Interpreter {
                     returnVal = memory[stringifyTokenValue(name)].useFunction(params);
                 }
                 case Return(value, type): {
-                    returnVal = value;
-                    break;
+                    return evaluate(value);
                 }
                 case Block(body, type): {
+                    trace(body);
                     returnVal = runTokens(body, preParseVars, preParseFuncs, strict);
                 }
                 case _:
@@ -162,8 +162,14 @@ class Interpreter {
     }
 
     public static function evaluate(exp:ParserTokens):ParserTokens {
-        
-        if (exp.getName() == "ErrorMessage") Runtime.throwError(exp, INTERPRETER_VALUE_EVALUATOR);
+        if (exp == null) {
+            trace("null token");
+            return NullValue;
+        }
+        if (exp.getName() == "ErrorMessage") {
+            Runtime.throwError(exp, INTERPRETER_VALUE_EVALUATOR);
+            return exp;
+        }
 
         switch exp {
             case Expression(parts, _): {

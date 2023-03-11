@@ -1,5 +1,6 @@
 package little.interpreter;
 
+import little.tools.PrettyPrinter;
 import little.tools.Layer;
 import little.parser.Tokens.ParserTokens;
 
@@ -66,7 +67,7 @@ class MemoryObject {
                 paramsDecl.push(value);
                 body = paramsDecl;
             }
-
+            trace(PrettyPrinter.printParserAst(body));
             return Interpreter.runTokens(body, null, null, null);
         }
     }

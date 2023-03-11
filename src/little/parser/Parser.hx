@@ -450,7 +450,7 @@ class Parser {
                         i++;
                     }
                     // The last currentAssignee is the value;
-                    value = Expression(currentAssignee, null);
+                    value = if (currentAssignee.length == 1) currentAssignee[0] else Expression(currentAssignee, null);
                     post.push(Write(assignees, value, null));
                     potentialAssignee = null;
                 }
