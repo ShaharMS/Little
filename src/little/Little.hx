@@ -1,5 +1,6 @@
 package little;
 
+import little.interpreter.MemoryObject;
 import little.tools.PrepareRun;
 import little.parser.Tokens.ParserTokens;
 import little.lexer.Lexer;
@@ -55,8 +56,7 @@ class Little {
         Runtime.stdout = "";
         final previous = Little.debug;
         if (debug != null) Little.debug = debug;
-        Interpreter.varMemory = [];
-        Interpreter.funcMemory = [];
+        Interpreter.memory = [];
         PrepareRun.addFunctions();
         Interpreter.interpret(Parser.parse(Lexer.lex(code)), {});
         if (debug != null) Little.debug = previous;
@@ -77,24 +77,17 @@ class Little {
             ```
     	@param callback 
     **/
-    public static function registerFunction(actionName:String, ?actionModuleName:String, expectedParameters:ParserTokens, callback:ParserTokens -> ParserTokens) {
-        Interpreter.externalFuncMemory[actionName] = (params) -> {
-            if (actionModuleName != null) runtime.currentModule = actionModuleName;
-            return callback(params);
-        }
-        Interpreter.funcMemory[actionName] = External(actionName);
-        if (actionModuleName != null) {
-            if (Interpreter.varMemory[actionModuleName] == null) {
-                Interpreter.varMemory[actionModuleName] = PartArray([Action(Identifier(actionName), expectedParameters, null)]);
-            } else if (Interpreter.varMemory[actionModuleName].getName() == "PartArray") {
-                var props = Interpreter.varMemory[actionModuleName].getParameters()[0];
-                props.push(Action(Identifier(actionName), expectedParameters, null));
-                Interpreter.varMemory[actionModuleName] = PartArray(props);
-            } else {
-                // Todo: throw a "notice" instead of an error, telling the user the previous value of $actionModuleName has been overridden
-                Interpreter.varMemory[actionModuleName] = PartArray([Action(Identifier(actionName), expectedParameters, null)]);
-            }
-        }
+    public static function registerFunction(actionName:String, ?actionModuleName:String, expectedParameters:Array<ParserTokens>, callback:Array<ParserTokens> -> ParserTokens) {
+        Interpreter.memory[actionName] = new MemoryObject(
+            External(params -> {
+                if (actionModuleName != null) runtime.currentModule = actionModuleName;
+                return callback(params);
+            }), 
+            [], 
+            expectedParameters, 
+            null, 
+            true
+        );
     }
 
     public static function registerClass() {

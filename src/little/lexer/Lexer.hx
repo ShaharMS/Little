@@ -8,7 +8,7 @@ using TextTools;
 
 class Lexer {
     
-    static var signs = ["!", "#", "$", "%", "&", "'", "(", ")", "*", "+", ",", "-", ".", "/", ":", ";", "<", "=", ">", "?", "@", "[", "\\", "]", "^", "_", "`", "{", "|", "}", "~", "^", "√"];
+    static var signs = ["!", "#", "$", "%", "&", "'", "(", ")", "*", "+", "-", ".", "/", ":", "<", "=", ">", "?", "@", "[", "\\", "]", "^", "_", "`", "{", "|", "}", "~", "^", "√"];
 
     public static function lex(code:String):Array<LexerTokens> {
         var tokens:Array<LexerTokens> = [];
@@ -38,7 +38,7 @@ class Lexer {
                 
             } else if (char == "\n") {
                 tokens.push(Newline);
-            } else if (char == ";") {
+            } else if (char == ";" || char == ",") {
                 tokens.push(SplitLine);
             } else if (signs.contains(char)) {
                 var sign = char;

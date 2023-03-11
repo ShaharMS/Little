@@ -40,21 +40,21 @@ class Parser {
 
             i++;
         }
-        trace("before:", tokens);
+        // trace("before:", tokens);
         tokens = mergeBlocks(tokens);
-        trace("blocks:", tokens);
+        // trace("blocks:", tokens);
         tokens = mergeExpressions(tokens);
-        trace("expressions:", tokens);
+        // trace("expressions:", tokens);
         tokens = mergeTypeDecls(tokens);
-        trace("types:", tokens);
+        // trace("types:", tokens);
         tokens = mergeComplexStructures(tokens);
-        trace("structs:", tokens);
+        // trace("structs:", tokens);
         tokens = mergeCalls(tokens);
-        trace("calls:", tokens);
+        // trace("calls:", tokens);
         tokens = mergePropertyOperations(tokens);
-        trace("props:", tokens);
+        // trace("props:", tokens);
         tokens = mergeWrites(tokens);
-        trace("writes:", tokens);
+        // trace("writes:", tokens);
 
 
         return tokens;
@@ -243,7 +243,6 @@ class Parser {
                                 else if (params == null) params = Block(mergeComplexStructures(body), type);
                                 else if (type == null) type = Block(mergeComplexStructures(body), type);
                                 else {
-                                    i--;
                                     break;
                                 }
                             }
@@ -252,7 +251,6 @@ class Parser {
                                 else if (params == null) params = Expression(mergeComplexStructures(body), type);
                                 else if (type == null) type = Expression(mergeComplexStructures(body), type);
                                 else {
-                                    i--;
                                     break;
                                 }
                             }
@@ -261,14 +259,12 @@ class Parser {
                                 else if (params == null) params = lookahead;
                                 else if (type == null) type = lookahead;
                                 else {
-                                    i--;
                                     break;
                                 }
                             }
                         }
                         i++;
                     }
-                    i--;
                     post.push(Action(name, params, type));
                 }
                 case Identifier(CONDITION_TYPES.contains(_) => true): {
@@ -436,27 +432,6 @@ class Parser {
                     if (i + 1 >= pre.length) break;
 
                     var currentAssignee:Array<ParserTokens> = [potentialAssignee];
-                    // potentialAssignee might be a function call
-                    // In that case, we should lookbehind for expressions, and stop when we find anything that isn't an expression
-                    switch potentialAssignee {
-                        case Expression(_, _): {
-                            while (true) {
-                                switch post[post.length - 1] {
-                                    case Sign(_) | SetLine(_) | SplitLine: break;
-                                    case Expression(_, _): {
-                                        currentAssignee.unshift(post.pop());
-
-                                    }
-                                    case _: {
-                                        currentAssignee.unshift(post.pop());
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                        case _:
-                    }
-
                     var assignees = [currentAssignee.length == 1 ? currentAssignee[0] : Expression(currentAssignee.copy(), null)];
                     currentAssignee = [];
                     var value:ParserTokens;
@@ -480,39 +455,39 @@ class Parser {
                     potentialAssignee = null;
                 }
                 case Expression(parts, type): {
-                    post.push(potentialAssignee);
+                    if (potentialAssignee != null) post.push(potentialAssignee);
                     potentialAssignee = Expression(mergeWrites(parts), type);
                 }
                 case Block(body, type): {
-                    post.push(potentialAssignee);
+                    if (potentialAssignee != null) post.push(potentialAssignee);
                     potentialAssignee = Block(mergeWrites(body), type);
                 }
                 case Define(name, type): {
-                    post.push(potentialAssignee);
+                    if (potentialAssignee != null) post.push(potentialAssignee);
                     potentialAssignee = Define(mergeWrites([name])[0], type);
                 }
                 case Action(name, params, type): {
-                    post.push(potentialAssignee);
+                    if (potentialAssignee != null) post.push(potentialAssignee);
                     potentialAssignee = Action(mergeWrites([name])[0], mergeWrites([params])[0], type);
                 }
                 case Condition(name, exp, body, type): {
-                    post.push(potentialAssignee);
+                    if (potentialAssignee != null) post.push(potentialAssignee);
                     potentialAssignee = Condition(mergeWrites([name])[0], mergeWrites([exp])[0], mergeWrites([body])[0], type);
                 }
                 case Return(value, type): {
-                    post.push(potentialAssignee);
+                    if (potentialAssignee != null) post.push(potentialAssignee);
                     potentialAssignee = Return(mergeWrites([value])[0], type);
                 }
                 case ActionCall(name, params): {
-                    post.push(potentialAssignee);
+                    if (potentialAssignee != null) post.push(potentialAssignee);
                     potentialAssignee = ActionCall(mergeWrites([name])[0], mergeWrites([params])[0]);
                 }
                 case PropertyAccess(name, property): {
-                    post.push(potentialAssignee);
+                    if (potentialAssignee != null) post.push(potentialAssignee);
                     potentialAssignee = PropertyAccess(mergeWrites([name])[0], mergeWrites([property])[0]);
                 }
                 case _: {
-                    post.push(potentialAssignee);
+                    if (potentialAssignee != null) post.push(potentialAssignee);
                     potentialAssignee = token;
                 }
                 
@@ -520,7 +495,7 @@ class Parser {
 
             i++;
         }
-        trace(potentialAssignee);
+        // trace(potentialAssignee);
         if (potentialAssignee != null) post.push(potentialAssignee);
         post.shift();
         return post;
