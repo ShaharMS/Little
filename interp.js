@@ -528,6 +528,10 @@ little_interpreter_Interpreter.evaluate = function(exp) {
 		return exp;
 	}
 	switch(exp._hx_index) {
+	case 0:
+		var line = exp.line;
+		little_interpreter_Runtime.line = line;
+		break;
 	case 2:
 		var name = exp.name;
 		var type = exp.type;
@@ -600,8 +604,9 @@ little_interpreter_Interpreter.evaluate = function(exp) {
 		var _g = exp.string;
 		return exp;
 	case 20:
-		var _g = exp.name;
-		return exp;
+		var name = exp.name;
+		little_interpreter_Runtime.currentModule = name;
+		break;
 	case 23:case 24:case 25:
 		return exp;
 	default:
@@ -617,9 +622,9 @@ little_interpreter_Interpreter.evaluateExpressionParts = function(parts) {
 	while(_g < parts.length) {
 		var token = parts[_g];
 		++_g;
-		haxe_Log.trace(token,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 226, className : "little.interpreter.Interpreter", methodName : "evaluateExpressionParts"});
+		haxe_Log.trace(token,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 228, className : "little.interpreter.Interpreter", methodName : "evaluateExpressionParts"});
 		var val = little_interpreter_Interpreter.evaluate(token);
-		haxe_Log.trace(val,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 228, className : "little.interpreter.Interpreter", methodName : "evaluateExpressionParts"});
+		haxe_Log.trace(val,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 230, className : "little.interpreter.Interpreter", methodName : "evaluateExpressionParts"});
 		switch(val._hx_index) {
 		case 16:
 			var sign = val.sign;
@@ -889,18 +894,34 @@ little_interpreter_KeywordConfig.__name__ = true;
 var little_interpreter_MemoryObject = function(value,props,params,type,external) {
 	this.external = false;
 	this.type = null;
-	this.params = [];
+	this.params = null;
 	this.props = new haxe_ds_StringMap();
 	this.value = little_parser_ParserTokens.NullValue;
 	this.value = value;
 	this.props = props;
-	this.params = params;
+	this.set_params(params);
 	this.type = type;
 	this.external = external;
 };
 little_interpreter_MemoryObject.__name__ = true;
 little_interpreter_MemoryObject.prototype = {
-	useFunction: function(parameters) {
+	set_params: function(parameters) {
+		return this.params = parameters.filter(function(p) {
+			switch(p._hx_index) {
+			case 0:
+				var _g = p.line;
+				return false;
+			case 1:
+				return false;
+			default:
+				return true;
+			}
+		});
+	}
+	,useFunction: function(parameters) {
+		if(this.params == null) {
+			return little_parser_ParserTokens.ErrorMessage("Cannot call definition");
+		}
 		if($hxEnums[parameters.__enum__].__constructs__[parameters._hx_index]._hx_name != "PartArray") {
 			return little_parser_ParserTokens.ErrorMessage("Incorrect parameter group format, given group format: " + $hxEnums[parameters.__enum__].__constructs__[parameters._hx_index]._hx_name + ", expectedFormat: " + Std.string(little_parser_ParserTokens.PartArray));
 		}
@@ -931,7 +952,7 @@ little_interpreter_MemoryObject.prototype = {
 			}
 		}
 		if(given.length != this.params.length) {
-			return little_parser_ParserTokens.ErrorMessage("Incorrect number of parameters, expected: " + this.params.length + ", given: " + given.length);
+			return little_parser_ParserTokens.ErrorMessage("Incorrect number of parameters, expected: " + this.params.length + " (" + Std.string(this.params) + "), given: " + given.length + " (" + Std.string(given) + ")");
 		}
 		if(this.external) {
 			var e = this.value;
@@ -957,7 +978,7 @@ little_interpreter_MemoryObject.prototype = {
 				paramsDecl.push(this.value);
 				body = paramsDecl;
 			}
-			haxe_Log.trace(little_tools_PrettyPrinter.printParserAst(body),{ fileName : "src/little/interpreter/MemoryObject.hx", lineNumber : 70, className : "little.interpreter.MemoryObject", methodName : "useFunction"});
+			haxe_Log.trace(little_tools_PrettyPrinter.printParserAst(body),{ fileName : "src/little/interpreter/MemoryObject.hx", lineNumber : 75, className : "little.interpreter.MemoryObject", methodName : "useFunction"});
 			return little_interpreter_Interpreter.runTokens(body,null,null,null);
 		}
 	}

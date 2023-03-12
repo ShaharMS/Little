@@ -172,6 +172,8 @@ class Interpreter {
         }
 
         switch exp {
+            case SetLine(line): Runtime.line = line;
+            case Module(name): Runtime.currentModule = name;
             case Expression(parts, _): {
                 return evaluateExpressionParts(parts);
             }
@@ -182,7 +184,7 @@ class Interpreter {
             case PartArray(parts): {
                 return PartArray([for (p in parts) evaluate(p)]);
             }
-            case Number(_) | Decimal(_) | Characters(_) | TrueValue | FalseValue | NullValue | Sign(_) | Module(_): return exp;
+            case Number(_) | Decimal(_) | Characters(_) | TrueValue | FalseValue | NullValue | Sign(_): return exp;
             case Identifier(word): {
                 return evaluate(if (memory[word] != null) memory[word].value else ErrorMessage('No Such Definition: $word'));
             }

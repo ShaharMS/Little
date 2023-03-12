@@ -13,9 +13,13 @@ import little.parser.Tokens.ParserTokens;
 class MemoryObject {
     public var value:ParserTokens = NullValue;
     @:optional public var props:Map<String, MemoryObject> = [];
-    @:optional public var params:Array<ParserTokens> = [];
+    @:optional public var params(default, set):Array<ParserTokens> = null;
     @:optional public var type:ParserTokens = null;
     @:optional public var external:Bool = false;
+
+    function set_params(parameters) {
+        return params = parameters.filter(p -> switch p {case SplitLine | SetLine(_): false; case _: true;});
+    }
 
     public function new(?value:ParserTokens, ?props:Map<String, MemoryObject>, ?params:Array<ParserTokens>, ?type:ParserTokens, ?external:Bool) {
         this.value = value;
@@ -27,6 +31,7 @@ class MemoryObject {
 
 
     public function useFunction(parameters:ParserTokens):ParserTokens {
+        if (params == null) return ErrorMessage('Cannot call definition');
         if (parameters.getName() != "PartArray") return ErrorMessage('Incorrect parameter group format, given group format: ${parameters.getName()}, expectedFormat: ${PartArray}');
 
 
@@ -46,7 +51,7 @@ class MemoryObject {
             if (currentParam.length != 0) given.push(Expression(currentParam.copy(), null));
         }
 
-        if (given.length != params.length) return ErrorMessage('Incorrect number of parameters, expected: ${params.length}, given: ${given.length}');
+        if (given.length != params.length) return ErrorMessage('Incorrect number of parameters, expected: ${params.length} ($params), given: ${given.length} ($given)');
 
         if (external) {
             if (value.getName() != "External") return ErrorMessage('Undefined external function');
