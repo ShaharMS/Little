@@ -1,5 +1,6 @@
 package little;
 
+import haxe.extern.EitherType;
 import little.interpreter.MemoryObject;
 import little.tools.PrepareRun;
 import little.parser.Tokens.ParserTokens;
@@ -58,12 +59,33 @@ class Little {
         if (debug != null) Little.debug = debug;
         Interpreter.memory = [];
         PrepareRun.addFunctions();
+        registerVariable("working", () -> Characters("pretty much"));
         Interpreter.interpret(Parser.parse(Lexer.lex(code)), {});
         if (debug != null) Little.debug = previous;
     }
 
-    public static function registerVariable() {
-        
+    public static function registerVariable(variableName:String, ?variableModuleName:String, allowWriting:Bool = false, ?staticValue:ParserTokens, ?valueGetter:Void -> ParserTokens, ?valueSetter:ParserTokens -> ParserTokens) {
+        Interpreter.memory[variableName] = new MemoryObject(
+            External(params -> {
+                if (variableModuleName != null) runtime.currentModule = variableModuleName;
+                return try {
+                    if (staticValue != null) staticValue;
+                    else valueGetter();
+                } catch (e) {
+                    ErrorMessage('External Variable Error: ' + e.details());
+                }
+            }), 
+            [], 
+            null, 
+            null, 
+            true
+        );
+
+        if (valueSetter != null) {
+            Interpreter.memory[variableName].set_value = function (v) {
+                return Interpreter.memory[variableName].value = valueSetter(v);
+            }
+        }
     }
 
     /**
@@ -77,21 +99,24 @@ class Little {
             ```
     	@param callback 
     **/
-    public static function registerFunction(actionName:String, ?actionModuleName:String, expectedParameters:Array<ParserTokens>, callback:Array<ParserTokens> -> ParserTokens) {
+    public static function registerFunction(actionName:String, ?actionModuleName:String, expectedParameters:EitherType<String, Array<ParserTokens>>, callback:Array<ParserTokens> -> ParserTokens) {
+        var params = if (expectedParameters is String) {
+            Parser.parse(Lexer.lex(expectedParameters));
+        } else expectedParameters;
         Interpreter.memory[actionName] = new MemoryObject(
             External(params -> {
                 if (actionModuleName != null) runtime.currentModule = actionModuleName;
-                return callback(params);
+                return try {
+                    callback(params);
+                } catch (e) {
+                    ErrorMessage('External Function Error: ' + e.details());
+                }
             }), 
             [], 
             expectedParameters, 
             null, 
             true
         );
-    }
-
-    public static function registerClass() {
-        
     }
 }
 

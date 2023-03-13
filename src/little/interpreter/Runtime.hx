@@ -92,8 +92,8 @@ class Runtime {
         var module:String = currentModule, title:String = "", reason:String;
         var content = switch token {
             case _: {
-                reason = Std.string(token);
-                '${if (Little.debug) (layer : String).toUpperCase() + ": " else ""}Module ${currentModule}, Line $line:  ${reason}';
+                reason = Std.string(token).remove(token.getName()).substring(1).replaceLast(")", "");
+                '${if (Little.debug) (layer : String).toUpperCase() + ": " else ""}ERROR: Module ${currentModule}, Line $line:  ${reason}';
             }
         }
         stdout += '\n$content';

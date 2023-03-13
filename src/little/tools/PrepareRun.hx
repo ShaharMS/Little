@@ -9,9 +9,14 @@ import little.Keywords.*;
 class PrepareRun {
     
     public static function addFunctions() {
+
         Little.registerFunction("print", null, [Define(Identifier("item"), null)], (params) -> {
             trace(params[0]);
             Runtime.print(Interpreter.stringifyTokenValue(Interpreter.evaluate(params[0])));
+            return NullValue;
+        });
+        Little.registerFunction("error", null, [Define(Identifier("message"), null)], (params) -> {
+            Runtime.throwError(Interpreter.evaluate(params[0]));
             return NullValue;
         });
 

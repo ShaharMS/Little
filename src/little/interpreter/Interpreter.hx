@@ -207,6 +207,7 @@ class Interpreter {
                 memory[str] = new MemoryObject(NullValue, [], params.getParameters()[0], type);
                 return name;
             }
+            case External(get): return evaluate(get([]));
             // case PropertyAccess(name, property): {
             //    return evaluate()
             // }

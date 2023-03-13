@@ -11,7 +11,12 @@ import little.parser.Tokens.ParserTokens;
 	Represents a function/variable in memory. contains usage fields.
 **/
 class MemoryObject {
-    public var value:ParserTokens = NullValue;
+    public var value(default, set):ParserTokens = NullValue;
+
+    public dynamic function set_value(val:ParserTokens) {
+        return value = val;
+    }
+
     @:optional public var props:Map<String, MemoryObject> = [];
     @:optional public var params(default, set):Array<ParserTokens> = null;
     @:optional public var type:ParserTokens = null;

@@ -32,6 +32,9 @@ class Keywords {
     	When changing this to a multi-char sign (such as "->"), remember to also push that sign to `SPECIAL_OR_MULTICHAR_SIGNS`, so it would be parsed correctly.
     **/
     public static var PROPERTY_ACCESS_SIGN:String = ".";
-
-    
+    public static var EQUALS_SIGN:String = "==";
+    public static var NOT_EQUALS_SIGN:String = "!=";
+    public static var XOR_SIGN:String = "^^";
+    public static var OR_SIGN:String = "||";
+    public static var AND_SIGN:String = "&&";
 }
