@@ -11,7 +11,6 @@ class PrepareRun {
     public static function addFunctions() {
 
         Little.registerFunction("print", null, [Define(Identifier("item"), null)], (params) -> {
-            trace(params[0]);
             Runtime.print(Interpreter.stringifyTokenValue(Interpreter.evaluate(params[0])));
             return NullValue;
         });

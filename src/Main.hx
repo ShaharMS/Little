@@ -47,7 +47,7 @@ define x as Number = define y as Decimal = 6
 		while (true) {
 			Sys.print("  >> ");
 			Little.run(Sys.stdin().readLine(), true);
-		trace(Runtime.stdout);
+			trace(Runtime.stdout);
 		}
 		
 		// trace(PrettyPrinter.printParserAst(Interpreter.forceCorrectOrderOfOperations(Parser.parse(Lexer.lex('1 + 1 * 3')))));

@@ -23,7 +23,7 @@ class Interpreter {
         if (tokens[0].getName() != "Module") {
             tokens.unshift(Module(runConfig.defaultModuleName));
         }
-        runTokens(tokens, runConfig.prioritizeVariableDeclarations, runConfig.prioritizeFunctionDeclarations, runConfig.strictTyping);
+        return runTokens(tokens, runConfig.prioritizeVariableDeclarations, runConfig.prioritizeFunctionDeclarations, runConfig.strictTyping);
     }
 
     public static function runTokens(tokens:Array<ParserTokens>, preParseVars:Bool, preParseFuncs:Bool, strict:Bool):ParserTokens {
@@ -53,13 +53,25 @@ class Interpreter {
                 }
                 case Condition(name, exp, body, type): // Unimplemented for now
                 case Write(assignees, value, type): {
-                    for (assignee in assignees) {
-                        memory[stringifyTokenValue(assignee)].value = value;
+                    var v = evaluate(value);
+                    for (a in assignees) {
+                        var assignee = accessObject(a);
+                        if (assignee == null) continue;
+                        if (assignee.params != null)
+                            assignee.value = value;
+                        else {
+                            if (v.getName() == "ErrorMessage") {
+                                Runtime.throwError(v, INTERPRETER);
+                                assignee.value = NullValue;
+                            } else {
+                                assignee.value = v;
+                            }
+                        }
                     }
                     returnVal = value;
                 }
                 case ActionCall(name, params): {
-                    if (memory[stringifyTokenValue(name)] == null) ErrorMessage("No Such Action: " + stringifyTokenValue(name));
+                    if (memory[stringifyTokenValue(name)] == null) ErrorMessage('No Such Action:  `${stringifyTokenValue(name)}`');
                     returnVal = memory[stringifyTokenValue(name)].useFunction(params);
                 }
                 case Return(value, type): {
@@ -69,96 +81,14 @@ class Interpreter {
                     trace(body);
                     returnVal = runTokens(body, preParseVars, preParseFuncs, strict);
                 }
-                case _:
+                case PropertyAccess(name, property): {
+                    returnVal = evaluate(token);
+                }
+                case _: returnVal = evaluate(token);
             }
             i++;
         }
-
         return returnVal;
-    }
-
-    public static function stringifyTokenValue(token:ParserTokens):String {
-
-        if (token.getName() == "ErrorMessage") Runtime.throwError(token, INTERPRETER_TOKEN_VALUE_STRINGIFIER);
-
-        switch token {
-            case Block(body, type): return stringifyTokenValue(runTokens(body, currentConfig.prioritizeVariableDeclarations, currentConfig.prioritizeFunctionDeclarations, currentConfig.strictTyping));
-            case Expression(parts, type): return stringifyTokenValue(evaluate(token));
-            case Characters(string): return string;
-            case Number(num): return num;
-            case Decimal(num): return num;
-            case TrueValue: return Keywords.TRUE_VALUE;
-            case FalseValue: return Keywords.FALSE_VALUE;
-            case NullValue: return Keywords.NULL_VALUE;
-            case Identifier(word) | Module(word): return word;
-            case Read(name): {
-                var str = stringifyTokenValue(name);
-                return stringifyTokenValue(if (memory[str] != null) memory[str].value else ErrorMessage('No Such Definition: $str'));
-            }
-            case ActionCall(name, params): {
-                var str = stringifyTokenValue(name);
-                return stringifyTokenValue(if (memory[str] != null) memory[str].useFunction(params) else ErrorMessage('No Such Action: $str'));
-            }
-            case Write(_, value, _): {
-                return stringifyTokenValue(value);
-            }
-            case Define(name, type): {
-                memory[stringifyTokenValue(name)] = new MemoryObject(NullValue, type);
-                return stringifyTokenValue(name);
-            }
-            case Action(name, params, type): {
-                memory[stringifyTokenValue(name)] = new MemoryObject(NullValue, [], params.getParameters()[0], type);
-                return stringifyTokenValue(name);
-            }
-            case PartArray(parts): {
-                return [for (p in parts) stringifyTokenValue(evaluate(p))].join(","); 
-            }
-            case _:
-        }
-
-        return "Something went wrong";
-    }
-
-    public static function stringifyTokenIdentifier(token:ParserTokens, prop = false):String {
-        if (token.getName() == "ErrorMessage") Runtime.throwError(token, INTERPRETER_TOKEN_IDENTIFIER_STRINGIFIER);
-
-        switch token {
-            case Block(body, type): return stringifyTokenIdentifier(runTokens(body, currentConfig.prioritizeVariableDeclarations, currentConfig.prioritizeFunctionDeclarations, currentConfig.strictTyping));
-            case Expression(parts, type): return stringifyTokenIdentifier(evaluate(token));
-            case Characters(string): return string;
-            case Number(num): return num;
-            case Decimal(num): return num;
-            case TrueValue: return Keywords.TRUE_VALUE;
-            case FalseValue: return Keywords.FALSE_VALUE;
-            case NullValue: return Keywords.NULL_VALUE;
-            case Identifier(word) | Module(word): return word;
-            case Read(name): {
-                return stringifyTokenIdentifier(name);
-            }
-            case ActionCall(name, params): {
-                if (prop) return stringifyTokenValue(name);
-                var str = stringifyTokenValue(name);
-                return stringifyTokenIdentifier(if (memory[str] != null) memory[str].useFunction(params) else ErrorMessage('No Such Action: $str'));
-            }
-            case Write(assignees, _, _): {
-                return stringifyTokenIdentifier(assignees[0]);
-            }
-            case Define(name, type): {
-                return stringifyTokenIdentifier(name);
-            }
-            case Action(name, params, type): {
-                return stringifyTokenIdentifier(name);
-            }
-            case PartArray(parts): {
-                return [for (p in parts) stringifyTokenValue(evaluate(p))].join(","); 
-            }
-            case PropertyAccess(name, property): {
-                return stringifyTokenIdentifier(name);
-            }
-            case _:
-        }
-
-        return "Something went wrong";
     }
 
     public static function evaluate(exp:ParserTokens):ParserTokens {
@@ -186,15 +116,15 @@ class Interpreter {
             }
             case Number(_) | Decimal(_) | Characters(_) | TrueValue | FalseValue | NullValue | Sign(_): return exp;
             case Identifier(word): {
-                return evaluate(if (memory[word] != null) memory[word].value else ErrorMessage('No Such Definition: $word'));
+                return evaluate(if (memory[word] != null) memory[word].value else ErrorMessage('No Such Definition: `$word`'));
             }
             case Write(_, value, _): return evaluate(value);
             case Read(name): {
                 var str = stringifyTokenValue(name);
-                return evaluate(if (memory[str] != null) memory[str].value else ErrorMessage('No Such Definition: $str'));
+                return evaluate(if (memory[str] != null) memory[str].value else ErrorMessage('No Such Definition: `$str`'));
             }
             case ActionCall(name, params): {
-                if (memory[stringifyTokenValue(name)] == null) return ErrorMessage("No Such Action: " + stringifyTokenValue(name));
+                if (memory[stringifyTokenValue(name)] == null) return ErrorMessage('No Such Action:  `${stringifyTokenValue(name)}`');
                 return evaluate(memory[stringifyTokenValue(name)].useFunction(params));
             }
             case Define(name, type): {
@@ -208,15 +138,207 @@ class Interpreter {
                 return name;
             }
             case External(get): return evaluate(get([]));
-            // case PropertyAccess(name, property): {
-            //    return evaluate()
-            // }
+            case PropertyAccess(name, property): {
+                var str = stringifyTokenValue(name);
+                var prop = stringifyTokenIdentifier(property);
+                if (memory[str] == null) return ErrorMessage('Unable to access property `$str$PROPERTY_ACCESS_SIGN$prop` - No Such Definition: `$str`');
+                var obj = memory[str];
+                function access(object:MemoryObject, prop:ParserTokens, objName:String):ParserTokens {
+                    switch property {
+                        case PropertyAccess(name, property): {
+                            objName = objName + '$PROPERTY_ACCESS_SIGN${stringifyTokenValue(name)}';
+                            if (object.props[stringifyTokenIdentifier(name)] == null) {
+                                // We can already know that object.name.property is null
+                                return ErrorMessage('Unable to access `$objName$PROPERTY_ACCESS_SIGN${stringifyTokenIdentifier(property)}`: `$objName` Does not contain property `${stringifyTokenIdentifier(property)}`.');
+                            }
+                            return access(object.props[stringifyTokenValue(name)], property, objName);
+                        }
+                        case ActionCall(name, params): {
+                            if (object.props[stringifyTokenValue(name)] == null) {
+                                return ErrorMessage('Unable to call `$objName$PROPERTY_ACCESS_SIGN${stringifyTokenValue(name)}(${stringifyTokenValue(params)})`: `$objName` Does not contain property `${stringifyTokenIdentifier(name)}`.');
+                            }
+                            return object.props[stringifyTokenValue(name)].useFunction(params);
+                        }
+                        case _: {
+                            if (object.props[stringifyTokenValue(prop)] == null) {
+                                object.props[stringifyTokenValue(prop)] = new MemoryObject(NullValue);
+                            }
+                            return object.props[stringifyTokenValue(prop)].value;
+                        }
+                    }
+                }
+                return access(obj, property, str);
+                
+            }
             case _:
         }
 
         
 
-        return ErrorMessage('Unable to evaluate token $exp');
+        return ErrorMessage('Unable to evaluate token `$exp`');
+    }
+
+    public static function accessObject(exp:ParserTokens):MemoryObject {
+        
+        switch exp {
+            case Expression(parts, _): {
+                return accessObject(evaluateExpressionParts(parts));
+            }
+            case Block(body, type): {
+                var returnVal = runTokens(body, currentConfig.prioritizeVariableDeclarations, currentConfig.prioritizeFunctionDeclarations, currentConfig.strictTyping);
+                return accessObject(evaluate(returnVal));
+            }
+            case Number(_) | Decimal(_) | Characters(_) | TrueValue | FalseValue | NullValue | Sign(_): return memory[stringifyTokenValue(exp)];
+            case Identifier(word): {
+                evaluate(if (memory[word] != null) memory[word].value else ErrorMessage('No Such Definition: `$word`'));
+                return memory[word];
+            }
+            case Read(name): {
+                var word = stringifyTokenValue(name);
+                evaluate(if (memory[word] != null) memory[word].value else ErrorMessage('No Such Definition: `$word`'));
+                return memory[word];
+            }
+            case ActionCall(name, params): {
+                if (memory[stringifyTokenValue(name)] == null) evaluate(ErrorMessage('No Such Action:  `${stringifyTokenValue(name)}`'));
+                return accessObject(memory[stringifyTokenValue(name)].useFunction(params));
+            }
+            case Define(name, type): {
+                var str = stringifyTokenValue(name);
+                memory[str] = new MemoryObject(NullValue, type);
+                return memory[str];
+            }
+            case Action(name, params, type): {
+                var str = stringifyTokenValue(name);
+                memory[str] = new MemoryObject(NullValue, [], params.getParameters()[0], type);
+                return memory[str];
+            }
+            case PropertyAccess(name, property): {
+                var str = stringifyTokenValue(name);
+                var prop = stringifyTokenIdentifier(property);
+                if (memory[str] == null) evaluate(ErrorMessage('Unable to access property `$str$PROPERTY_ACCESS_SIGN$prop` - No Such Definition: `$str`'));
+                var obj = memory[str];
+                function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
+                    switch property {
+                        case PropertyAccess(name, property): {
+                            objName += '$PROPERTY_ACCESS_SIGN${stringifyTokenValue(name)}';
+                            trace(object, name, property);
+                            if (object.props[stringifyTokenIdentifier(name)] == null) {
+                                // We can already know that object.name.property is null
+                                evaluate(ErrorMessage('Unable to access `$objName$PROPERTY_ACCESS_SIGN${stringifyTokenIdentifier(property)}`: `$objName` Does not contain property `${stringifyTokenIdentifier(property)}`.'));
+                                return null;
+                            }
+                            return access(object.props[stringifyTokenValue(name)], property, objName);
+                        }
+                        case ActionCall(name, params): {
+                            if (object.props[stringifyTokenValue(name)] == null) {
+                                evaluate(ErrorMessage('Unable to call `$objName$PROPERTY_ACCESS_SIGN${stringifyTokenValue(name)}(${stringifyTokenValue(params)})`: `$objName` Does not contain property `${stringifyTokenIdentifier(name)}`.'));
+                                return null;
+                            }
+                            return accessObject(object.props[stringifyTokenValue(name)].useFunction(params));
+                        }
+                        case _: {
+                            if (object.props[stringifyTokenValue(prop)] == null) {
+                                object.props[stringifyTokenValue(prop)] = new MemoryObject(NullValue);
+                            }
+                            return object.props[stringifyTokenValue(prop)];
+                        }
+                    }
+                }
+                return access(obj, property, str);
+                
+            }
+            case _:
+        }
+
+        trace("null object");
+        return null;
+    }
+
+    public static function stringifyTokenValue(token:ParserTokens):String {
+
+        if (token.getName() == "ErrorMessage") Runtime.throwError(token, INTERPRETER_TOKEN_VALUE_STRINGIFIER);
+
+        switch token {
+            case Block(body, type): return stringifyTokenValue(runTokens(body, currentConfig.prioritizeVariableDeclarations, currentConfig.prioritizeFunctionDeclarations, currentConfig.strictTyping));
+            case Expression(parts, type): return stringifyTokenValue(evaluate(token));
+            case Characters(string): return string;
+            case Number(num): return num;
+            case Decimal(num): return num;
+            case TrueValue: return Keywords.TRUE_VALUE;
+            case FalseValue: return Keywords.FALSE_VALUE;
+            case NullValue: return Keywords.NULL_VALUE;
+            case Identifier(word) | Module(word): return word;
+            case Read(name): {
+                var str = stringifyTokenValue(name);
+                return stringifyTokenValue(if (memory[str] != null) memory[str].value else ErrorMessage('No Such Definition: `$str`'));
+            }
+            case ActionCall(name, params): {
+                var str = stringifyTokenValue(name);
+                return stringifyTokenValue(if (memory[str] != null) memory[str].useFunction(params) else ErrorMessage('No Such Action: `$str`'));
+            }
+            case Write(_, value, _): {
+                return stringifyTokenValue(value);
+            }
+            case Define(name, type): {
+                memory[stringifyTokenValue(name)] = new MemoryObject(NullValue, [], null, type);
+                return stringifyTokenValue(name);
+            }
+            case Action(name, params, type): {
+                memory[stringifyTokenValue(name)] = new MemoryObject(NullValue, [], params.getParameters()[0], type);
+                return stringifyTokenValue(name);
+            }
+            case PartArray(parts): {
+                return [for (p in parts) stringifyTokenValue(evaluate(p))].join(","); 
+            }
+            case PropertyAccess(name, property): {
+                return stringifyTokenValue(name);
+            }
+            case _:
+        }
+        trace(token);
+        return "Something went wrong";
+    }
+
+    public static function stringifyTokenIdentifier(token:ParserTokens, prop = false):String {
+        if (token.getName() == "ErrorMessage") Runtime.throwError(token, INTERPRETER_TOKEN_IDENTIFIER_STRINGIFIER);
+
+        switch token {
+            case Block(body, type): return stringifyTokenIdentifier(runTokens(body, currentConfig.prioritizeVariableDeclarations, currentConfig.prioritizeFunctionDeclarations, currentConfig.strictTyping));
+            case Expression(parts, type): return stringifyTokenIdentifier(evaluate(token));
+            case Characters(string): return string;
+            case Number(num): return num;
+            case Decimal(num): return num;
+            case TrueValue: return Keywords.TRUE_VALUE;
+            case FalseValue: return Keywords.FALSE_VALUE;
+            case NullValue: return Keywords.NULL_VALUE;
+            case Identifier(word) | Module(word): return word;
+            case Read(name): {
+                return stringifyTokenIdentifier(name);
+            }
+            case ActionCall(name, params): {
+                if (prop) return stringifyTokenValue(name);
+                var str = stringifyTokenValue(name);
+                return stringifyTokenIdentifier(if (memory[str] != null) memory[str].useFunction(params) else ErrorMessage('No Such Action: `$str`'));
+            }
+            case Write(assignees, _, _): {
+                return stringifyTokenIdentifier(assignees[0]);
+            }
+            case Define(name, type): {
+                return stringifyTokenIdentifier(name);
+            }
+            case Action(name, params, type): {
+                return stringifyTokenIdentifier(name);
+            }
+            case PartArray(parts): {
+                return [for (p in parts) stringifyTokenValue(evaluate(p))].join(","); 
+            }
+            case PropertyAccess(name, property): {
+                return stringifyTokenIdentifier(name);
+            }
+            case _:
+        }
+        trace(token);
+        return "Something went wrong";
     }
 
     public static function evaluateExpressionParts(parts:Array<ParserTokens>):ParserTokens {
@@ -243,7 +365,7 @@ class Interpreter {
                             case "||": value = (value.parseBool() || bool).string();
                             case "==": value = (value.parseBool() == bool).string();
                             case "^^" | "!=": value = (value.parseBool() != bool).string(); // xor
-                            case _: return ErrorMessage('Cannot preform $valueType($value) $mode $TYPE_BOOLEAN($bool)');
+                            case _: return ErrorMessage('Cannot preform `$valueType($value) $mode $TYPE_BOOLEAN($bool)`');
                         }
                     } else if (valueType == TYPE_INT || valueType == TYPE_FLOAT) {
                         var num = (val == TrueValue) ? 1 : 0;
@@ -256,7 +378,7 @@ class Interpreter {
                                 value = "" + (value.parseInt() / num);
                             }
                             case "^": value = "" + (Math.pow(value.parseInt(), num));
-                            case _: return ErrorMessage('Cannot preform $valueType($value) $mode $TYPE_BOOLEAN(${(val == TrueValue)})');
+                            case _: return ErrorMessage('Cannot preform `$valueType($value) $mode $TYPE_BOOLEAN(${(val == TrueValue)})`');
                         }
                     } else if (valueType == TYPE_STRING) {
                         var bool = (val == TrueValue) ? "true" : "false";
@@ -264,7 +386,7 @@ class Interpreter {
                             case "+": value += bool;
                             case "-": value = value.replaceLast(bool, "");
                             case "*": value = value.multiply(bool.parseBool() ? 1 : 0);
-                            case _: return ErrorMessage('Cannot preform $valueType($value) $mode $TYPE_BOOLEAN(${(val == TrueValue)})');
+                            case _: return ErrorMessage('Cannot preform `$valueType($value) $mode $TYPE_BOOLEAN(${(val == TrueValue)})`');
                         }
                     }
                 }
@@ -274,7 +396,7 @@ class Interpreter {
                         switch mode {
                             case "+": value = "" + (num.parseInt());
                             case "-": value = "" + (-num.parseInt());
-                            case _: return ErrorMessage('Cannot preform $mode $TYPE_INT($num) At the start of an expression');
+                            case _: return ErrorMessage('Cannot preform `$mode $TYPE_INT($num)` At the start of an expression');
                         }
                     } else if (valueType == TYPE_FLOAT || valueType == TYPE_INT || valueType == TYPE_BOOLEAN) {
                         if (valueType == TYPE_BOOLEAN) {
@@ -291,14 +413,14 @@ class Interpreter {
                                 value = "" + (value.parseInt() / num.parseInt());
                             }
                             case "^": value = "" + (Math.pow(value.parseInt(), num.parseInt()));
-                            case _: return ErrorMessage('Cannot preform $valueType($value) $mode $TYPE_INT($num)');
+                            case _: return ErrorMessage('Cannot preform `$valueType($value) $mode $TYPE_INT($num)`');
                         }
                     } else if (valueType == TYPE_STRING) {
                         switch mode {
                             case "+": value += num;
                             case "-": value = value.replaceLast(num, "");
                             case "*": value = value.multiply(num.parseInt());
-                            case _: return ErrorMessage('Cannot preform $valueType($value) $mode $TYPE_INT($num)');
+                            case _: return ErrorMessage('Cannot preform `$valueType($value) $mode $TYPE_INT($num)`');
                         }
                     }
                 }
@@ -308,7 +430,7 @@ class Interpreter {
                         switch mode {
                             case "+": value = "" + (num.parseFloat());
                             case "-": value = "" + (-num.parseFloat());
-                            case _: return ErrorMessage('Cannot preform $mode $TYPE_FLOAT($num) At the start of an expression');
+                            case _: return ErrorMessage('Cannot preform `$mode $TYPE_FLOAT($num)` At the start of an expression');
                         }
                     } else if (valueType == TYPE_FLOAT || valueType == TYPE_INT || valueType == TYPE_BOOLEAN) {
                         if (valueType == TYPE_BOOLEAN) {
@@ -322,13 +444,13 @@ class Interpreter {
                             case "*": value = "" + (value.parseFloat() * num.parseFloat());
                             case "/": value = "" + (value.parseFloat() / num.parseFloat());
                             case "^": value = "" + (Math.pow(value.parseFloat(), num.parseFloat()));
-                            case _: return ErrorMessage('Cannot preform $valueType($value) $mode $TYPE_FLOAT($num)');
+                            case _: return ErrorMessage('Cannot preform `$valueType($value) $mode $TYPE_FLOAT($num)`');
                         }
                     } else if (valueType == TYPE_STRING) {
                         switch mode {
                             case "+": value += num;
                             case "-": value = value.replaceLast(num, "");
-                            case _: return ErrorMessage('Cannot preform $valueType($value) $mode $TYPE_FLOAT($num)');
+                            case _: return ErrorMessage('Cannot preform `$valueType($value) $mode $TYPE_FLOAT($num)`');
                         }
                     }
                 }
@@ -337,7 +459,7 @@ class Interpreter {
                     switch mode {
                         case "+": value += string;
                         case "-": value = value.replaceLast(string, "");
-                        case _: return ErrorMessage('Cannot preform $valueType($value) $mode $TYPE_STRING($string)');
+                        case _: return ErrorMessage('Cannot preform `$valueType($value) $mode $TYPE_STRING($string)`');
                     }
                 }
 

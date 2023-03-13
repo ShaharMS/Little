@@ -28,11 +28,11 @@ class MemoryObject {
     }
 
     public function new(?value:ParserTokens, ?props:Map<String, MemoryObject>, ?params:Array<ParserTokens>, ?type:ParserTokens, ?external:Bool) {
-        this.value = value;
-        this.props = props;
+        this.value = value == null ? NullValue : value;
+        this.props = props == null ? [] : props;
         this.params = params;
         this.type = type;
-        this.external = external;
+        this.external = external == null ? false : external;
     }
 
 

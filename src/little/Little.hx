@@ -59,7 +59,6 @@ class Little {
         if (debug != null) Little.debug = debug;
         Interpreter.memory = [];
         PrepareRun.addFunctions();
-        registerVariable("working", () -> Characters("pretty much"));
         Interpreter.interpret(Parser.parse(Lexer.lex(code)), {});
         if (debug != null) Little.debug = previous;
     }
@@ -76,7 +75,7 @@ class Little {
                 }
             }), 
             [], 
-            null, 
+            null,
             null, 
             true
         );

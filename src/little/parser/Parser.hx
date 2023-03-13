@@ -386,32 +386,32 @@ class Parser {
 
         var post:Array<ParserTokens> = [];
 
-        var i = 0;
-        while (i < pre.length) {
+        var i = pre.length - 1;
+        while (i >= 0) {
             var token = pre[i];
             switch token {
 
                 case Sign(_ == PROPERTY_ACCESS_SIGN => true): {
-                    if (i++ >= pre.length) return null;
-                    var lookahead = pre[i];
-                    switch lookahead {
+                    if (i-- >= pre.length) return null;
+                    var lookbehind = pre[i];
+                    switch lookbehind {
                         case SplitLine | SetLine(_) | Sign(_): return null;
                         case _: {
-                            var field = post.pop();
-                            post.push(PropertyAccess(field, lookahead));
+                            var field = post.shift();
+                            post.unshift(PropertyAccess(lookbehind, field));
                         }
                     }
                 }
-                case Block(body, type): post.push(Block(mergePropertyOperations(body), type));
-                case Define(name, type): post.push(Define(mergePropertyOperations([name])[0], type));
-                case Action(name, params, type): post.push(Action(mergePropertyOperations([name])[0], mergePropertyOperations([params])[0], type));
-                case Condition(name, exp, body, type): post.push(Condition(mergePropertyOperations([name])[0], mergePropertyOperations([exp])[0], mergePropertyOperations([body])[0], type));
-                case Return(value, type): post.push(Return(mergePropertyOperations([value])[0], type));
-                case PartArray(parts): post.push(PartArray(mergePropertyOperations(parts)));
-                case ActionCall(name, params): post.push(ActionCall(mergePropertyOperations([name])[0], mergePropertyOperations([params])[0]));
-                case _: post.push(token);
+                case Block(body, type): post.unshift(Block(mergePropertyOperations(body), type));
+                case Define(name, type): post.unshift(Define(mergePropertyOperations([name])[0], type));
+                case Action(name, params, type): post.unshift(Action(mergePropertyOperations([name])[0], mergePropertyOperations([params])[0], type));
+                case Condition(name, exp, body, type): post.unshift(Condition(mergePropertyOperations([name])[0], mergePropertyOperations([exp])[0], mergePropertyOperations([body])[0], type));
+                case Return(value, type): post.unshift(Return(mergePropertyOperations([value])[0], type));
+                case PartArray(parts): post.unshift(PartArray(mergePropertyOperations(parts)));
+                case ActionCall(name, params): post.unshift(ActionCall(mergePropertyOperations([name])[0], mergePropertyOperations([params])[0]));
+                case _: post.unshift(token);
             }
-            i++;
+            i--;
         }
 
         return post;
