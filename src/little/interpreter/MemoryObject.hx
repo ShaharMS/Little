@@ -18,6 +18,7 @@ class MemoryObject {
     @:optional public var external:Bool = false;
 
     function set_params(parameters) {
+        if (parameters == null) return params = null;
         return params = parameters.filter(p -> switch p {case SplitLine | SetLine(_): false; case _: true;});
     }
 
