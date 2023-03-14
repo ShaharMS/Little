@@ -490,7 +490,7 @@ class Interpreter {
         while (i < pre.length) {
             var token = pre[i];
             switch token {
-                case Sign("√") | Sign("^"): {
+                case Sign("^"): {
                     i++;
                     post.push(Expression([post.pop(), token, pre[i]], null));
                 }
