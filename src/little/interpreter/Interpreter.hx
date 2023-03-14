@@ -138,20 +138,22 @@ class Interpreter {
                 return name;
             }
             case External(get): return evaluate(get([]));
-            case PropertyAccess(name, property): {
-                var str = stringifyTokenValue(name);
-                var prop = stringifyTokenIdentifier(property);
-                if (memory[str] == null) return ErrorMessage('Unable to access property `$str$PROPERTY_ACCESS_SIGN$prop` - No Such Definition: `$str`');
+            case PropertyAccess(n, p): {
+                var str = stringifyTokenValue(n);
+                var prop = stringifyTokenIdentifier(p);
+                trace(n, p);
+                if (memory[str] == null) evaluate(ErrorMessage('Unable to access property `$str$PROPERTY_ACCESS_SIGN$prop` - No Such Definition: `$str`'));
                 var obj = memory[str];
                 function access(object:MemoryObject, prop:ParserTokens, objName:String):ParserTokens {
-                    switch property {
-                        case PropertyAccess(name, property): {
-                            objName = objName + '$PROPERTY_ACCESS_SIGN${stringifyTokenValue(name)}';
-                            if (object.props[stringifyTokenIdentifier(name)] == null) {
+                    switch prop {
+                        case PropertyAccess(_, property): {
+                            objName += '$PROPERTY_ACCESS_SIGN${stringifyTokenValue(prop)}';
+                            trace(object, stringifyTokenValue(prop), property);
+                            if (object.props[stringifyTokenValue(prop)] == null) {
                                 // We can already know that object.name.property is null
                                 return ErrorMessage('Unable to access `$objName$PROPERTY_ACCESS_SIGN${stringifyTokenIdentifier(property)}`: `$objName` Does not contain property `${stringifyTokenIdentifier(property)}`.');
                             }
-                            return access(object.props[stringifyTokenValue(name)], property, objName);
+                            return access(object.props[stringifyTokenValue(prop)], property, objName);
                         }
                         case ActionCall(name, params): {
                             if (object.props[stringifyTokenValue(name)] == null) {
@@ -167,7 +169,7 @@ class Interpreter {
                         }
                     }
                 }
-                return access(obj, property, str);
+                return access(obj, p, str);
                 
             }
             case _:
@@ -212,22 +214,23 @@ class Interpreter {
                 memory[str] = new MemoryObject(NullValue, [], params.getParameters()[0], type);
                 return memory[str];
             }
-            case PropertyAccess(name, property): {
-                var str = stringifyTokenValue(name);
-                var prop = stringifyTokenIdentifier(property);
+            case PropertyAccess(n, p): {
+                var str = stringifyTokenValue(n);
+                var prop = stringifyTokenIdentifier(p);
+                trace(n, p);
                 if (memory[str] == null) evaluate(ErrorMessage('Unable to access property `$str$PROPERTY_ACCESS_SIGN$prop` - No Such Definition: `$str`'));
                 var obj = memory[str];
                 function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
-                    switch property {
-                        case PropertyAccess(name, property): {
-                            objName += '$PROPERTY_ACCESS_SIGN${stringifyTokenValue(name)}';
-                            trace(object, name, property);
-                            if (object.props[stringifyTokenIdentifier(name)] == null) {
+                    switch prop {
+                        case PropertyAccess(_, property): {
+                            objName += '$PROPERTY_ACCESS_SIGN${stringifyTokenValue(prop)}';
+                            trace(object, stringifyTokenValue(prop), property);
+                            if (object.props[stringifyTokenValue(prop)] == null) {
                                 // We can already know that object.name.property is null
                                 evaluate(ErrorMessage('Unable to access `$objName$PROPERTY_ACCESS_SIGN${stringifyTokenIdentifier(property)}`: `$objName` Does not contain property `${stringifyTokenIdentifier(property)}`.'));
                                 return null;
                             }
-                            return access(object.props[stringifyTokenValue(name)], property, objName);
+                            return access(object.props[stringifyTokenValue(prop)], property, objName);
                         }
                         case ActionCall(name, params): {
                             if (object.props[stringifyTokenValue(name)] == null) {
@@ -244,7 +247,7 @@ class Interpreter {
                         }
                     }
                 }
-                return access(obj, property, str);
+                return access(obj, p, str);
                 
             }
             case _:
