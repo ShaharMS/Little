@@ -44,7 +44,7 @@ class Runtime {
 
         @param line The line the interpreter just finished running.
     **/
-    public static var onLineChanged:Int -> Void;
+    public static var onLineChanged:Array<Int -> Void> = [];
 
     /**
     	Dispatches after finishing interpreting a token.
@@ -59,7 +59,7 @@ class Runtime {
 
         After each iteration, this method gets called, passing the token we've just parsed as an argument.
     **/
-    public static var onTokenInterpreted:ParserTokens -> Void;
+    public static var onTokenInterpreted:Array<ParserTokens -> Void> = [];
 
     /**
     	Dispatches right after an error is thrown, and printed to the console.
@@ -69,7 +69,7 @@ class Runtime {
         @param title The error's title. When a non-`Error(title, reason)` token is thrown, this value is empty.
         @param reason The contents of the error.
     **/
-    public static var onErrorThrown:(String, Int, String, String) -> Void;
+    public static var onErrorThrown:Array<(String, Int, String, String) -> Void> = [];
 
     /**
     	A string, containing everything that was printed to the console during the program's runtime.
@@ -98,7 +98,7 @@ class Runtime {
         }
         stdout += '\n$content';
         exitCode = Layer.getIndexOf(layer);
-        if (onErrorThrown != null) onErrorThrown(module, line, title, reason);
+        for (func in onErrorThrown) func(module, line, title, reason);
     }
 
     public static function print(item:String) {

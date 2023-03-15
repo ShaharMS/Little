@@ -81,7 +81,7 @@ class Little {
         );
 
         if (valueSetter != null) {
-            Interpreter.memory[variableName].set_value = function (v) {
+            Interpreter.memory[variableName].valueSetter = function (v) {
                 return Interpreter.memory[variableName].value = valueSetter(v);
             }
         }

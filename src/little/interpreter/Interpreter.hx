@@ -78,7 +78,6 @@ class Interpreter {
                     return evaluate(value);
                 }
                 case Block(body, type): {
-                    trace(body);
                     returnVal = runTokens(body, preParseVars, preParseFuncs, strict);
                 }
                 case PropertyAccess(name, property): {

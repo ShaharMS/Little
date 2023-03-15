@@ -13,9 +13,23 @@ import little.parser.Tokens.ParserTokens;
 class MemoryObject {
     public var value(default, set):ParserTokens = NullValue;
 
-    public dynamic function set_value(val:ParserTokens) {
-        return value = val;
+    function set_value(val:ParserTokens) {
+        value = valueSetter(val);
+        for (setter in setterListeners) {
+            setter(value);
+        }
+        return value;
     }
+
+    public dynamic function valueSetter(val:ParserTokens) {
+        return val;
+    }
+
+    /**
+        Setter listeners can retrieve the new value right after its set, but theyre unable to directly edit it.  
+        Each element of this array needs to be a function, that takes in a ParserToken (the new value), and return Void.
+    **/
+    public var setterListeners:Array<ParserTokens -> Void> = [];
 
     @:optional public var props:Map<String, MemoryObject> = [];
     @:optional public var params(default, set):Array<ParserTokens> = null;
