@@ -71,6 +71,7 @@ class Interpreter {
                     returnVal = value;
                 }
                 case ActionCall(name, params): {
+                    trace(name, memory[stringifyTokenValue(name)].params);
                     if (memory[stringifyTokenValue(name)] == null) ErrorMessage('No Such Action:  `${stringifyTokenValue(name)}`');
                     returnVal = memory[stringifyTokenValue(name)].useFunction(params);
                 }

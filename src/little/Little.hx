@@ -102,7 +102,13 @@ class Little {
         var params = if (expectedParameters is String) {
             Parser.parse(Lexer.lex(expectedParameters));
         } else expectedParameters;
-        Interpreter.memory[actionName] = new MemoryObject(
+
+        var memoryUnit = if (actionModuleName != null) {
+            Interpreter.memory[actionModuleName] = new MemoryObject(Module(actionModuleName), [], null, Identifier(TYPE_MODULE), true);
+            Interpreter.memory[actionModuleName].props[actionName];
+        } else Interpreter.memory[actionName];
+
+        memoryUnit = new MemoryObject(
             External(params -> {
                 if (actionModuleName != null) runtime.currentModule = actionModuleName;
                 return try {

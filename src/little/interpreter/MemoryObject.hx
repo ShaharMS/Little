@@ -73,6 +73,8 @@ class MemoryObject {
 
         if (given.length != params.length) return ErrorMessage('Incorrect number of parameters, expected: ${params.length} ($params), given: ${given.length} ($given)');
 
+        given = [for (element in given) Interpreter.evaluate(element)];
+
         if (external) {
             if (value.getName() != "External") return ErrorMessage('Undefined external function');
             return (value.getParameters()[0] : Array<ParserTokens> -> ParserTokens)(given);
