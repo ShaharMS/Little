@@ -34,3 +34,13 @@ The language is very minimal by design, and only has a couple of reserved words:
  - **`nothing`** - the language's `null` value.
 
 The resereved words' translations may change a bit across different languages to make programming more intuitive, and to keep the same code structure.
+
+## Language Features
+
+### Everything can be a code block
+
+Code blocks, represented by enclosing lines of code/expressions with (by default) curly brackets, can be used for everything! From:
+ - expression generation:
+```
+x = {define y = 0; y += 5; (6^2 * y)} //180
+```
