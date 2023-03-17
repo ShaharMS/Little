@@ -181,19 +181,24 @@ class Parser {
                     i++;
                     if (i >= pre.length) return null;
 
-                    var name:ParserTokens = null;
+                    var name:Array<ParserTokens> = [];
+                    var pushToName = true;
                     var type:ParserTokens = null;
                     while (i < pre.length) {
                         var lookahead = pre[i];
                         switch lookahead {
                             case TypeDeclaration(typeToken): {
-                                if (name == null) return null;
+                                if (name.length == 0) return null;
                                 type = typeToken;
                                 break;
                             }
                             case SetLine(_) | SplitLine | Sign("="): i--; break;
+                            case Sign(_ == PROPERTY_ACCESS_SIGN => true): {
+                                pushToName = true;
+                                name.push(lookahead);
+                            }
                             case Block(body, type): {
-                                if (name == null) name = Block(mergeComplexStructures(body), type);
+                                if (pushToName) {name.push(Block(mergeComplexStructures(body), type)); pushToName = false;}
                                 else if (type == null) type = Block(mergeComplexStructures(body), type);
                                 else {
                                     i--;
@@ -201,7 +206,7 @@ class Parser {
                                 }
                             }
                             case Expression(body, type): {
-                                if (name == null) name = Expression(mergeComplexStructures(body), type);
+                                if (pushToName) {name.push(Expression(mergeComplexStructures(body), type)); pushToName = false;}
                                 else if (type == null) type = Expression(mergeComplexStructures(body), type);
                                 else {
                                     i--;
@@ -209,7 +214,7 @@ class Parser {
                                 }
                             }
                             case _: {
-                                if (name == null) name = lookahead;
+                                if (pushToName) {name.push(lookahead); pushToName = false;}
                                 else if (type == null) type = lookahead;
                                 else {
                                     i--;
@@ -219,27 +224,33 @@ class Parser {
                         }
                         i++;
                     }
-                    post.push(Define(name, type));
+                    post.push(Define(if (name.length == 1) name[0] else PartArray(name) /* Soon to be: PropertyAccess */, type));
                 }
                 case Identifier(_ == FUNCTION_DECLARATION => true): {
                     i++;
                     if (i >= pre.length) return null;
                     
-                    var name:ParserTokens = null;
+                    var name:Array<ParserTokens> = [];
+                    var pushToName = true;
                     var params:ParserTokens = null;
                     var type:ParserTokens = null;
                     while (i < pre.length) {
                         var lookahead = pre[i];
                         switch lookahead {
                             case TypeDeclaration(typeToken): {
-                                if (name == null) return null;
+                                if (name.length == 0) return null;
                                 else if (type == null) return null;
                                 type = typeToken;
                                 break;
                             }
                             case SetLine(_) | SplitLine | Sign("="): i--; break;
+                            case Sign(_ == PROPERTY_ACCESS_SIGN => true): {
+                                if (params != null) {i--; break;}
+                                pushToName = true;
+                                name.push(lookahead);
+                            }
                             case Block(body, type): {
-                                if (name == null) name = Block(mergeComplexStructures(body), type);
+                                if (pushToName) {name.push(Block(mergeComplexStructures(body), type)); pushToName = false;}
                                 else if (params == null) params = Block(mergeComplexStructures(body), type);
                                 else if (type == null) type = Block(mergeComplexStructures(body), type);
                                 else {
@@ -247,7 +258,7 @@ class Parser {
                                 }
                             }
                             case Expression(body, type): {
-                                if (name == null) name = Expression(mergeComplexStructures(body), type);
+                                if (pushToName) {name.push(Expression(mergeComplexStructures(body), type)); pushToName = false;}
                                 else if (params == null) params = Expression(mergeComplexStructures(body), type);
                                 else if (type == null) type = Expression(mergeComplexStructures(body), type);
                                 else {
@@ -255,7 +266,7 @@ class Parser {
                                 }
                             }
                             case _: {
-                                if (name == null) name = lookahead;
+                                if (pushToName) {name.push(lookahead); pushToName = false;}
                                 else if (params == null) params = lookahead;
                                 else if (type == null) type = lookahead;
                                 else {
@@ -265,7 +276,7 @@ class Parser {
                         }
                         i++;
                     }
-                    post.push(Action(name, params, type));
+                    post.push(Action(if (name.length == 1) name[0] else PartArray(name) /* Soon to be: PropertyAccess */, params, type));
                 }
                 case Identifier(CONDITION_TYPES.contains(_) => true): {
                     i++;
@@ -403,8 +414,8 @@ class Parser {
                     }
                 }
                 case Block(body, type): post.unshift(Block(mergePropertyOperations(body), type));
-                case Define(name, type): post.unshift(Define(mergePropertyOperations([name])[0], type));
-                case Action(name, params, type): post.unshift(Action(mergePropertyOperations([name])[0], mergePropertyOperations([params])[0], type));
+                case Define(name, type): post.unshift(Define(mergePropertyOperations(if (name.getName() == "PartArray") name.getParameters()[0] else [name])[0], type));
+                case Action(name, params, type): post.unshift(Action(mergePropertyOperations(if (name.getName() == "PartArray") name.getParameters()[0] else [name])[0], mergePropertyOperations([params])[0], type));
                 case Condition(name, exp, body, type): post.unshift(Condition(mergePropertyOperations([name])[0], mergePropertyOperations([exp])[0], mergePropertyOperations([body])[0], type));
                 case Return(value, type): post.unshift(Return(mergePropertyOperations([value])[0], type));
                 case PartArray(parts): post.unshift(PartArray(mergePropertyOperations(parts)));

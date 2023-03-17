@@ -103,12 +103,7 @@ class Little {
             Parser.parse(Lexer.lex(expectedParameters));
         } else expectedParameters;
 
-        var memoryUnit = if (actionModuleName != null) {
-            Interpreter.memory[actionModuleName] = new MemoryObject(Module(actionModuleName), [], null, Identifier(TYPE_MODULE), true);
-            Interpreter.memory[actionModuleName].props[actionName];
-        } else Interpreter.memory[actionName];
-
-        memoryUnit = new MemoryObject(
+        var memObject = new MemoryObject(
             External(params -> {
                 if (actionModuleName != null) runtime.currentModule = actionModuleName;
                 return try {
@@ -122,7 +117,10 @@ class Little {
             null, 
             true
         );
+
+        if (actionModuleName != null) {
+            Interpreter.memory[actionModuleName] = new MemoryObject(Module(actionModuleName), [], null, Identifier(TYPE_MODULE), true);
+            Interpreter.memory[actionModuleName].props[actionName] = memObject;
+        } else Interpreter.memory[actionName] = memObject;
     }
 }
-
-typedef RegisteredParameter = {name:String, type:String, defaultValue:Dynamic}

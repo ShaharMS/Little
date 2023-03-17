@@ -18,7 +18,7 @@ class Interpreter {
     public static var currentConfig:RunConfig;
 
     public static function interpret(tokens:Array<ParserTokens>, runConfig:RunConfig) {
-        trace(tokens);
+        //trace(tokens);
         currentConfig = runConfig;
         if (tokens[0].getName() != "Module") {
             tokens.unshift(Module(runConfig.defaultModuleName));
@@ -26,10 +26,12 @@ class Interpreter {
         return runTokens(tokens, runConfig.prioritizeVariableDeclarations, runConfig.prioritizeFunctionDeclarations, runConfig.strictTyping);
     }
 
-    public static function runTokens(tokens:Array<ParserTokens>, preParseVars:Bool, preParseFuncs:Bool, strict:Bool):ParserTokens {
+    public static function runTokens(tokens:Array<ParserTokens>, preParseVars:Bool, preParseFuncs:Bool, strict:Bool, ?memory:Map<String, MemoryObject>):ParserTokens {
         // Todo: support preParseVars
         // Todo: support preParseFuncs
         // Todo: support strict typing
+
+        if (memory == null) memory = Interpreter.memory; // If no memory map is given, use the base one.
 
         var returnVal:ParserTokens = null;
 
@@ -42,14 +44,14 @@ class Interpreter {
                 case Module(name): Runtime.currentModule = name;
                 case SplitLine:
                 case Define(name, type): {
-                    var str = stringifyTokenValue(name);
-                    memory[str] = new MemoryObject(NullValue, type);
-                    returnVal = memory[str].value;
+                    var object = accessObject(name, memory);
+                    object = new MemoryObject(NullValue, type);
+                    returnVal = object.value;
                 }
                 case Action(name, params, type): {
-                    var str = stringifyTokenValue(name);
-                    memory[str] = new MemoryObject(NullValue, [], params.getParameters()[0], type);
-                    returnVal = memory[str].value;
+                    var object = accessObject(name, memory);
+                    object = new MemoryObject(NullValue, [], params.getParameters()[0], type);
+                    returnVal = object.value;
                 }
                 case Condition(name, exp, body, type): // Unimplemented for now
                 case Write(assignees, value, type): {
@@ -71,9 +73,10 @@ class Interpreter {
                     returnVal = value;
                 }
                 case ActionCall(name, params): {
-                    trace(name, memory[stringifyTokenValue(name)].params);
-                    if (memory[stringifyTokenValue(name)] == null) ErrorMessage('No Such Action:  `${stringifyTokenValue(name)}`');
-                    returnVal = memory[stringifyTokenValue(name)].useFunction(params);
+                    if (memory[stringifyTokenValue(name)] == null) {
+                        Runtime.throwError(ErrorMessage('No Such Action:  `${stringifyTokenValue(name)}`'));
+                    } 
+                    else returnVal = memory[stringifyTokenValue(name)].useFunction(params);
                 }
                 case Return(value, type): {
                     return evaluate(value);
@@ -91,7 +94,10 @@ class Interpreter {
         return returnVal;
     }
 
-    public static function evaluate(exp:ParserTokens):ParserTokens {
+    public static function evaluate(exp:ParserTokens, ?memory:Map<String, MemoryObject>):ParserTokens {
+
+        if (memory == null) memory = Interpreter.memory; // If no memory map is given, use the base one.
+
         if (exp == null) {
             trace("null token");
             return NullValue;
@@ -128,49 +134,18 @@ class Interpreter {
                 return evaluate(memory[stringifyTokenValue(name)].useFunction(params));
             }
             case Define(name, type): {
-                var str = stringifyTokenValue(name);
-                memory[str] = new MemoryObject(NullValue, type);
-                return name;
+                var object = accessObject(name, memory);
+                object = new MemoryObject(NullValue, type);
+                return object.value;
             }
             case Action(name, params, type): {
-                var str = stringifyTokenValue(name);
-                memory[str] = new MemoryObject(NullValue, [], params.getParameters()[0], type);
-                return name;
+                var object = accessObject(name, memory);
+                object = new MemoryObject(NullValue, [], params.getParameters()[0], type);
+                return object.value;
             }
             case External(get): return evaluate(get([]));
-            case PropertyAccess(n, p): {
-                var str = stringifyTokenValue(n);
-                var prop = stringifyTokenIdentifier(p);
-                trace(n, p);
-                if (memory[str] == null) evaluate(ErrorMessage('Unable to access property `$str$PROPERTY_ACCESS_SIGN$prop` - No Such Definition: `$str`'));
-                var obj = memory[str];
-                function access(object:MemoryObject, prop:ParserTokens, objName:String):ParserTokens {
-                    switch prop {
-                        case PropertyAccess(_, property): {
-                            objName += '$PROPERTY_ACCESS_SIGN${stringifyTokenValue(prop)}';
-                            trace(object, stringifyTokenValue(prop), property);
-                            if (object.props[stringifyTokenValue(prop)] == null) {
-                                // We can already know that object.name.property is null
-                                return ErrorMessage('Unable to access `$objName$PROPERTY_ACCESS_SIGN${stringifyTokenIdentifier(property)}`: `$objName` Does not contain property `${stringifyTokenIdentifier(property)}`.');
-                            }
-                            return access(object.props[stringifyTokenValue(prop)], property, objName);
-                        }
-                        case ActionCall(name, params): {
-                            if (object.props[stringifyTokenValue(name)] == null) {
-                                return ErrorMessage('Unable to call `$objName$PROPERTY_ACCESS_SIGN${stringifyTokenValue(name)}(${stringifyTokenValue(params)})`: `$objName` Does not contain property `${stringifyTokenIdentifier(name)}`.');
-                            }
-                            return object.props[stringifyTokenValue(name)].useFunction(params);
-                        }
-                        case _: {
-                            if (object.props[stringifyTokenValue(prop)] == null) {
-                                object.props[stringifyTokenValue(prop)] = new MemoryObject(NullValue);
-                            }
-                            return object.props[stringifyTokenValue(prop)].value;
-                        }
-                    }
-                }
-                return access(obj, p, str);
-                
+            case PropertyAccess(_, _): {
+                return accessObject(exp, memory).value;
             }
             case _:
         }
@@ -180,8 +155,10 @@ class Interpreter {
         return ErrorMessage('Unable to evaluate token `$exp`');
     }
 
-    public static function accessObject(exp:ParserTokens):MemoryObject {
+    public static function accessObject(exp:ParserTokens, ?memory:Map<String, MemoryObject>):MemoryObject {
         
+        if (memory == null) memory = Interpreter.memory; // If no memory map is given, use the base one.
+
         switch exp {
             case Expression(parts, _): {
                 return accessObject(evaluateExpressionParts(parts));
@@ -205,14 +182,68 @@ class Interpreter {
                 return accessObject(memory[stringifyTokenValue(name)].useFunction(params));
             }
             case Define(name, type): {
-                var str = stringifyTokenValue(name);
-                memory[str] = new MemoryObject(NullValue, type);
-                return memory[str];
+                function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
+                    switch prop {
+                        case PropertyAccess(_, property): {
+                            objName += '$PROPERTY_ACCESS_SIGN${stringifyTokenValue(prop)}';
+                            trace(object, stringifyTokenValue(prop), property);
+                            if (object.props[stringifyTokenValue(prop)] == null) {
+                                // We can already know that object.name.property is null
+                                evaluate(ErrorMessage('Unable to create `$objName$PROPERTY_ACCESS_SIGN${stringifyTokenIdentifier(property)}`: `$objName` Does not contain property `${stringifyTokenIdentifier(property)}`.'));
+                                return null;
+                            }
+                            return access(object.props[stringifyTokenValue(prop)], property, objName);
+                        }
+                        case _: {
+                            if (object.props[stringifyTokenIdentifier(prop)] == null) {
+                                object.props[stringifyTokenIdentifier(prop)] = new MemoryObject(NullValue, type);
+                            }
+                            return object.props[stringifyTokenIdentifier(prop)];
+                        }
+                    }
+                }
+                switch name {
+                    case PropertyAccess(name, property): {
+                        var obj = access(memory[stringifyTokenValue(name)], property, stringifyTokenValue(name));
+                        return obj;
+                    }
+                    case _: {
+                        memory[stringifyTokenValue(name)] = new MemoryObject(NullValue, type); 
+                        return memory[stringifyTokenValue(name)];
+                    }
+                }
             }
             case Action(name, params, type): {
-                var str = stringifyTokenValue(name);
-                memory[str] = new MemoryObject(NullValue, [], params.getParameters()[0], type);
-                return memory[str];
+                function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
+                    switch prop {
+                        case PropertyAccess(_, property): {
+                            objName += '$PROPERTY_ACCESS_SIGN${stringifyTokenValue(prop)}';
+                            trace(object, stringifyTokenValue(prop), property);
+                            if (object.props[stringifyTokenValue(prop)] == null) {
+                                // We can already know that object.name.property is null
+                                evaluate(ErrorMessage('Unable to create `$objName$PROPERTY_ACCESS_SIGN${stringifyTokenIdentifier(property)}`: `$objName` Does not contain property `${stringifyTokenIdentifier(property)}`.'));
+                                return null;
+                            }
+                            return access(object.props[stringifyTokenValue(prop)], property, objName);
+                        }
+                        case _: {
+                            if (object.props[stringifyTokenIdentifier(prop)] == null) {
+                                object.props[stringifyTokenIdentifier(prop)] = new MemoryObject(NullValue, [], params.getParameters()[0], type);
+                            }
+                            return object.props[stringifyTokenIdentifier(prop)];
+                        }
+                    }
+                }
+                switch name {
+                    case PropertyAccess(name, property): {
+                        var obj = access(memory[stringifyTokenValue(name)], property, stringifyTokenValue(name));
+                        return obj;
+                    }
+                    case _: {
+                        memory[stringifyTokenValue(name)] = new MemoryObject(NullValue, [], params.getParameters()[0], type); 
+                        return memory[stringifyTokenValue(name)];
+                    }
+                }
             }
             case PropertyAccess(n, p): {
                 var str = stringifyTokenValue(n);
@@ -237,13 +268,14 @@ class Interpreter {
                                 evaluate(ErrorMessage('Unable to call `$objName$PROPERTY_ACCESS_SIGN${stringifyTokenValue(name)}(${stringifyTokenValue(params)})`: `$objName` Does not contain property `${stringifyTokenIdentifier(name)}`.'));
                                 return null;
                             }
-                            return accessObject(object.props[stringifyTokenValue(name)].useFunction(params));
+                            return new MemoryObject(object.props[stringifyTokenValue(name)].useFunction(params)); // Todo: Should a new memory object actually be created here?
                         }
                         case _: {
-                            if (object.props[stringifyTokenValue(prop)] == null) {
-                                object.props[stringifyTokenValue(prop)] = new MemoryObject(NullValue);
+                            if (object.props[stringifyTokenIdentifier(prop)] == null) {
+                                object.props[stringifyTokenIdentifier(prop)] = new MemoryObject(NullValue);
+                                trace("Created new: " + objName, prop );
                             }
-                            return object.props[stringifyTokenValue(prop)];
+                            return object.props[stringifyTokenIdentifier(prop)];
                         }
                     }
                 }
@@ -257,9 +289,9 @@ class Interpreter {
         return null;
     }
 
-    public static function stringifyTokenValue(token:ParserTokens):String {
+    public static function stringifyTokenValue(token:ParserTokens, ?memory:Map<String, MemoryObject>):String {
 
-        if (token.getName() == "ErrorMessage") Runtime.throwError(token, INTERPRETER_TOKEN_VALUE_STRINGIFIER);
+        if (memory == null) memory = Interpreter.memory; // If no memory map is given, use the base one.
 
         switch token {
             case Block(body, type): return stringifyTokenValue(runTokens(body, currentConfig.prioritizeVariableDeclarations, currentConfig.prioritizeFunctionDeclarations, currentConfig.strictTyping));
@@ -302,8 +334,9 @@ class Interpreter {
         return "Something went wrong";
     }
 
-    public static function stringifyTokenIdentifier(token:ParserTokens, prop = false):String {
-        if (token.getName() == "ErrorMessage") Runtime.throwError(token, INTERPRETER_TOKEN_IDENTIFIER_STRINGIFIER);
+    public static function stringifyTokenIdentifier(token:ParserTokens, ?prop = false, ?memory:Map<String, MemoryObject>):String {
+
+        if (memory == null) memory = Interpreter.memory; // If no memory map is given, use the base one.
 
         switch token {
             case Block(body, type): return stringifyTokenIdentifier(runTokens(body, currentConfig.prioritizeVariableDeclarations, currentConfig.prioritizeFunctionDeclarations, currentConfig.strictTyping));
@@ -344,7 +377,9 @@ class Interpreter {
         return "Something went wrong";
     }
 
-    public static function evaluateExpressionParts(parts:Array<ParserTokens>):ParserTokens {
+    public static function evaluateExpressionParts(parts:Array<ParserTokens>, ?memory:Map<String, MemoryObject>):ParserTokens {
+
+        if (memory == null) memory = Interpreter.memory; // If no memory map is given, use the base one.
 
         parts = forceCorrectOrderOfOperations(parts);
 
