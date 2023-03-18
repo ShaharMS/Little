@@ -764,6 +764,7 @@ little_Little.run = function(code,debug) {
 	}
 	little_interpreter_Interpreter.memory = new haxe_ds_StringMap();
 	little_tools_PrepareRun.addFunctions();
+	little_tools_PrepareRun.addConditions();
 	little_interpreter_Interpreter.interpret(little_parser_Parser.parse(little_lexer_Lexer.lex(code)),new little_interpreter_RunConfig(null,null,null,null,null));
 	if(debug != null) {
 		little_Little.debug = previous;
@@ -790,6 +791,19 @@ little_Little.registerFunction = function(actionName,actionModuleName,expectedPa
 	} else {
 		little_interpreter_Interpreter.memory.h[actionName] = memObject;
 	}
+};
+little_Little.registerCondition = function(conditionName,callback) {
+	little_Keywords.CONDITION_TYPES.push(conditionName);
+	var this1 = little_interpreter_Interpreter.memory;
+	var v = new little_interpreter_MemoryObject(little_parser_ParserTokens.External(function(params) {
+		try {
+			return callback(Type.enumParameters(params[0])[0],Type.enumParameters(params[1])[0]);
+		} catch( _g ) {
+			var e = haxe_Exception.caught(_g);
+			return little_parser_ParserTokens.ErrorMessage("External Function Error: " + e.details());
+		}
+	}),new haxe_ds_StringMap(),null,null,true);
+	this1.h[conditionName] = v;
 };
 var little_interpreter_Interpreter = function() { };
 little_interpreter_Interpreter.__name__ = true;
@@ -1155,7 +1169,7 @@ little_interpreter_Interpreter.accessObject = function(exp,memory) {
 				}
 				var this1 = object.props;
 				var key = little_interpreter_Interpreter.stringifyTokenValue(name);
-				return little_interpreter_Interpreter.accessObject(this1.h[key].useFunction(params),object.props);
+				return new little_interpreter_MemoryObject(this1.h[key].useFunction(params));
 			case 15:
 				var _g = prop.name;
 				var property = prop.property;
@@ -2793,6 +2807,21 @@ little_tools_PrepareRun.addFunctions = function() {
 		return little_parser_ParserTokens.Decimal("" + Math.sqrt(parseFloat(little_interpreter_Interpreter.stringifyTokenValue(little_interpreter_Interpreter.evaluate(params[0])))));
 	});
 };
+little_tools_PrepareRun.addConditions = function() {
+	little_Little.registerCondition("while",function(params,body) {
+		var val = little_parser_ParserTokens.NullValue;
+		var safetyNet = 0;
+		while(little_interpreter_Interpreter.evaluateExpressionParts(params) == little_parser_ParserTokens.TrueValue) {
+			if(safetyNet > 10000) {
+				return little_parser_ParserTokens.ErrorMessage("Too many iterations");
+			}
+			haxe_Log.trace(params,{ fileName : "src/little/tools/PrepareRun.hx", lineNumber : 47, className : "little.tools.PrepareRun", methodName : "addConditions"});
+			val = little_interpreter_Interpreter.interpret(body,little_interpreter_Interpreter.currentConfig);
+			++safetyNet;
+		}
+		return val;
+	});
+};
 var little_tools_PrettyPrinter = function() { };
 little_tools_PrettyPrinter.__name__ = true;
 little_tools_PrettyPrinter.printParserAst = function(ast,spacingBetweenNodes) {
@@ -3036,7 +3065,7 @@ little_Keywords.TYPE_BOOLEAN = "Boolean";
 little_Keywords.TYPE_STRING = "Characters";
 little_Keywords.TYPE_MODULE = "Type";
 little_Keywords.TYPE_UNKNOWN = "Unknown";
-little_Keywords.CONDITION_TYPES = ["if","while","whenever","for"];
+little_Keywords.CONDITION_TYPES = ["if","else"];
 little_Keywords.SPECIAL_OR_MULTICHAR_SIGNS = ["++","--","**","+=","-=",">=","<=","==","&&","||","^^","!="];
 little_Keywords.PROPERTY_ACCESS_SIGN = ".";
 little_interpreter_Runtime.line = 0;

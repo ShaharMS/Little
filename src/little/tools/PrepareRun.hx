@@ -5,6 +5,8 @@ import little.parser.Parser;
 import little.interpreter.Interpreter;
 import little.interpreter.Runtime;
 
+import little.parser.Tokens;
+
 using Std;
 
 import little.Keywords.*;
@@ -36,4 +38,18 @@ class PrepareRun {
         });
     }
 
+    public static function addConditions() {
+        Little.registerCondition("while", (params, body) -> {
+            var val = NullValue;
+            var safetyNet = 0;
+            while (Interpreter.evaluateExpressionParts(params) == TrueValue) {
+                if (safetyNet > 10000) return ErrorMessage("Too many iterations");
+                trace(params);
+                val = Interpreter.interpret(body, Interpreter.currentConfig);
+                safetyNet++;
+            }
+
+            return val;
+        });
+    }
 }

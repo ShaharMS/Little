@@ -59,6 +59,7 @@ class Little {
         if (debug != null) Little.debug = debug;
         Interpreter.memory = [];
         PrepareRun.addFunctions();
+        PrepareRun.addConditions();
         Interpreter.interpret(Parser.parse(Lexer.lex(code)), {});
         if (debug != null) Little.debug = previous;
     }
@@ -122,5 +123,22 @@ class Little {
             Interpreter.memory[actionModuleName] = new MemoryObject(Module(actionModuleName), [], null, Identifier(TYPE_MODULE), true);
             Interpreter.memory[actionModuleName].props[actionName] = memObject;
         } else Interpreter.memory[actionName] = memObject;
+    }
+
+    public static function registerCondition(conditionName:String, callback:(Array<ParserTokens>, Array<ParserTokens>) -> ParserTokens) {
+        CONDITION_TYPES.push(conditionName);
+        Interpreter.memory[conditionName] = new MemoryObject(
+            External(params -> {
+                return try {
+                    callback(params[0].getParameters()[0], params[1].getParameters()[0]);
+                } catch (e) {
+                    ErrorMessage('External Function Error: ' + e.details());
+                }
+            }), 
+            [], 
+            null, 
+            null, 
+            true
+        );
     }
 }
