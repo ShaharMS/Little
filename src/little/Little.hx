@@ -149,4 +149,8 @@ class Little {
             true
         );
     }
+
+    public static function registerHaxeClass() {
+        
+    }
 }
