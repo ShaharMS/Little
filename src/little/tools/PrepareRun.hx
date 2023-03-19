@@ -26,7 +26,7 @@ class PrepareRun {
             return Read(Identifier(Interpreter.stringifyTokenValue(params[0])));
         });
         Little.registerFunction("run", null, [Define(Identifier("code"), Identifier(TYPE_STRING))], (params) -> {
-            return Interpreter.interpret(Parser.parse(Lexer.lex(Interpreter.stringifyTokenValue(params[0]))), Interpreter.currentConfig);
+            return Interpreter.interpret(Parser.parse(Lexer.lex(params[0].getParameters()[0])), Interpreter.currentConfig);
         });
 
         //------------------------------------------

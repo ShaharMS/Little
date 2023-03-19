@@ -416,6 +416,18 @@ class Interpreter {
                                 value = "" + (value.parseInt() / num);
                             }
                             case "^": value = "" + (Math.pow(value.parseInt(), num));
+                            case "==" | ">=" |">" | "<" |  "<=" | "!=": {
+                                valueType = TYPE_BOOLEAN;
+                                value = switch mode {
+                                    case "==": "" + (value == num.string());
+                                    case ">=": "" + (value.parseFloat() >= num);
+                                    case ">" : "" + (value.parseFloat() > num);
+                                    case "<" : "" + (value.parseFloat() < num);
+                                    case "<=": "" + (value.parseFloat() <= num);
+                                    case "!=": "" + (value != num.string());
+                                    case _: return ErrorMessage('Cannot preform `$valueType($value) $mode $TYPE_BOOLEAN($num)`'); 
+                                }
+                            }
                             case _: return ErrorMessage('Cannot preform `$valueType($value) $mode $TYPE_BOOLEAN(${(val == TrueValue)})`');
                         }
                     } else if (valueType == TYPE_STRING) {
@@ -424,6 +436,14 @@ class Interpreter {
                             case "+": value += bool;
                             case "-": value = value.replaceLast(bool, "");
                             case "*": value = value.multiply(bool.parseBool() ? 1 : 0);
+                            case "==" | ">=" |">" | "<" |  "<=" | "!=": {
+                                valueType = TYPE_BOOLEAN;
+                                value = switch mode {
+                                    case "==": "" + false;
+                                    case "!=": "" + true;
+                                    case _: return ErrorMessage('Cannot preform `$valueType($value) $mode $TYPE_BOOLEAN($bool)`'); 
+                                }
+                            }
                             case _: return ErrorMessage('Cannot preform `$valueType($value) $mode $TYPE_BOOLEAN(${(val == TrueValue)})`');
                         }
                     }
@@ -451,6 +471,18 @@ class Interpreter {
                                 value = "" + (value.parseInt() / num.parseInt());
                             }
                             case "^": value = "" + (Math.pow(value.parseInt(), num.parseInt()));
+                            case "==" | ">=" |">" | "<" |  "<=" | "!=": {
+                                valueType = TYPE_BOOLEAN;
+                                value = switch mode {
+                                    case "==": "" + (value == num);
+                                    case ">=": "" + (value.parseInt() >= num.parseInt());
+                                    case ">" : "" + (value.parseInt() > num.parseInt());
+                                    case "<" : "" + (value.parseInt() < num.parseInt());
+                                    case "<=": "" + (value.parseInt() <= num.parseInt());
+                                    case "!=": "" + (value != num);
+                                    case _: return ErrorMessage('Cannot preform `$valueType($value) $mode $TYPE_INT($num)`'); 
+                                }
+                            }
                             case _: return ErrorMessage('Cannot preform `$valueType($value) $mode $TYPE_INT($num)`');
                         }
                     } else if (valueType == TYPE_STRING) {
@@ -458,6 +490,14 @@ class Interpreter {
                             case "+": value += num;
                             case "-": value = value.replaceLast(num, "");
                             case "*": value = value.multiply(num.parseInt());
+                            case "==" | ">=" |">" | "<" |  "<=" | "!=": {
+                                valueType = TYPE_BOOLEAN;
+                                value = switch mode {
+                                    case "==": "" + false;
+                                    case "!=": "" + true;
+                                    case _: return ErrorMessage('Cannot preform `$valueType($value) $mode $TYPE_INT($num)`'); 
+                                }
+                            }
                             case _: return ErrorMessage('Cannot preform `$valueType($value) $mode $TYPE_INT($num)`');
                         }
                     }
@@ -482,12 +522,32 @@ class Interpreter {
                             case "*": value = "" + (value.parseFloat() * num.parseFloat());
                             case "/": value = "" + (value.parseFloat() / num.parseFloat());
                             case "^": value = "" + (Math.pow(value.parseFloat(), num.parseFloat()));
+                            case "==" | ">=" |">" | "<" |  "<=" | "!=": {
+                                valueType = TYPE_BOOLEAN;
+                                value = switch mode {
+                                    case "==": "" + (value == num);
+                                    case ">=": "" + (value.parseFloat() >= num.parseFloat());
+                                    case ">" : "" + (value.parseFloat() > num.parseFloat());
+                                    case "<" : "" + (value.parseFloat() < num.parseFloat());
+                                    case "<=": "" + (value.parseFloat() <= num.parseFloat());
+                                    case "!=": "" + (value != num);
+                                    case _: return ErrorMessage('Cannot preform `$valueType($value) $mode $TYPE_FLOAT($num)`'); 
+                                }
+                            }
                             case _: return ErrorMessage('Cannot preform `$valueType($value) $mode $TYPE_FLOAT($num)`');
                         }
                     } else if (valueType == TYPE_STRING) {
                         switch mode {
                             case "+": value += num;
                             case "-": value = value.replaceLast(num, "");
+                            case "==" | ">=" | ">" | "<" | "<=" | "!=": {
+                                valueType = TYPE_BOOLEAN;
+                                value = switch mode {
+                                    case "==": "" + false;
+                                    case "!=": "" + true;
+                                    case _: return ErrorMessage('Cannot preform `$valueType($value) $mode $TYPE_FLOAT($num)`'); 
+                                }
+                            }
                             case _: return ErrorMessage('Cannot preform `$valueType($value) $mode $TYPE_FLOAT($num)`');
                         }
                     }
@@ -497,6 +557,18 @@ class Interpreter {
                     switch mode {
                         case "+": value += string;
                         case "-": value = value.replaceLast(string, "");
+                        case "==" | ">=" |">" | "<" |  "<=" | "!=": {
+                            valueType = TYPE_BOOLEAN;
+                            value = switch mode {
+                                case "==": "" + (value == string);
+                                case ">=": "" + (value.length >= string.length);
+                                case ">" : "" + (value.length > string.length);
+                                case "<" : "" + (value.length < string.length);
+                                case "<=": "" + (value.length <= string.length);
+                                case "!=": "" + (value != string);
+                                case _: return ErrorMessage('Cannot preform `$valueType($value) $mode $TYPE_STRING($string)`'); 
+                            }
+                        }
                         case _: return ErrorMessage('Cannot preform `$valueType($value) $mode $TYPE_STRING($string)`');
                     }
                 }

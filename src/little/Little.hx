@@ -67,11 +67,15 @@ class Little {
     public static function registerVariable(variableName:String, ?variableModuleName:String, allowWriting:Bool = false, ?staticValue:ParserTokens, ?valueGetter:Void -> ParserTokens, ?valueSetter:ParserTokens -> ParserTokens) {
         Interpreter.memory[variableName] = new MemoryObject(
             External(params -> {
+                var currentModuleName = runtime.currentModule;
                 if (variableModuleName != null) runtime.currentModule = variableModuleName;
                 return try {
-                    if (staticValue != null) staticValue;
+                    var val = if (staticValue != null) staticValue;
                     else valueGetter();
+                    runtime.currentModule = currentModuleName;
+                    val;
                 } catch (e) {
+                    runtime.currentModule = currentModuleName;
                     ErrorMessage('External Variable Error: ' + e.details());
                 }
             }), 
@@ -106,10 +110,14 @@ class Little {
 
         var memObject = new MemoryObject(
             External(params -> {
+                var currentModuleName = runtime.currentModule;
                 if (actionModuleName != null) runtime.currentModule = actionModuleName;
                 return try {
-                    callback(params);
+                    var val = callback(params);
+                    runtime.currentModule = currentModuleName;
+                    val;
                 } catch (e) {
+                    runtime.currentModule = currentModuleName;
                     ErrorMessage('External Function Error: ' + e.details());
                 }
             }), 

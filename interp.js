@@ -773,13 +773,17 @@ little_Little.run = function(code,debug) {
 little_Little.registerFunction = function(actionName,actionModuleName,expectedParameters,callback) {
 	var params = typeof(expectedParameters) == "string" ? little_parser_Parser.parse(little_lexer_Lexer.lex(expectedParameters)) : expectedParameters;
 	var memObject = new little_interpreter_MemoryObject(little_parser_ParserTokens.External(function(params) {
+		var currentModuleName = little_Little.runtime.currentModule;
 		if(actionModuleName != null) {
 			little_Little.runtime.currentModule = actionModuleName;
 		}
 		try {
-			return callback(params);
+			var val = callback(params);
+			little_Little.runtime.currentModule = currentModuleName;
+			return val;
 		} catch( _g ) {
 			var e = haxe_Exception.caught(_g);
+			little_Little.runtime.currentModule = currentModuleName;
 			return little_parser_ParserTokens.ErrorMessage("External Function Error: " + e.details());
 		}
 	}),new haxe_ds_StringMap(),expectedParameters,null,true);
@@ -1441,6 +1445,31 @@ little_interpreter_Interpreter.evaluateExpressionParts = function(parts,memory) 
 					valueType = little_Keywords.TYPE_FLOAT;
 					value = "" + Std.parseInt(value) / Std.parseInt(num);
 					break;
+				case "!=":case "<":case "<=":case "==":case ">":case ">=":
+					valueType = little_Keywords.TYPE_BOOLEAN;
+					switch(mode) {
+					case "!=":
+						value = "" + Std.string(value != num);
+						break;
+					case "<":
+						value = "" + Std.string(Std.parseInt(value) < Std.parseInt(num));
+						break;
+					case "<=":
+						value = "" + Std.string(Std.parseInt(value) <= Std.parseInt(num));
+						break;
+					case "==":
+						value = "" + Std.string(value == num);
+						break;
+					case ">":
+						value = "" + Std.string(Std.parseInt(value) > Std.parseInt(num));
+						break;
+					case ">=":
+						value = "" + Std.string(Std.parseInt(value) >= Std.parseInt(num));
+						break;
+					default:
+						return little_parser_ParserTokens.ErrorMessage("Cannot preform `" + valueType + "(" + value + ") " + mode + " " + little_Keywords.TYPE_INT + "(" + num + ")`");
+					}
+					break;
 				case "^":
 					value = "" + Math.pow(Std.parseInt(value),Std.parseInt(num));
 					break;
@@ -1457,6 +1486,19 @@ little_interpreter_Interpreter.evaluateExpressionParts = function(parts,memory) 
 					break;
 				case "-":
 					value = little_tools_TextTools.replaceLast(value,num,"");
+					break;
+				case "!=":case "<":case "<=":case "==":case ">":case ">=":
+					valueType = little_Keywords.TYPE_BOOLEAN;
+					switch(mode) {
+					case "!=":
+						value = "true";
+						break;
+					case "==":
+						value = "false";
+						break;
+					default:
+						return little_parser_ParserTokens.ErrorMessage("Cannot preform `" + valueType + "(" + value + ") " + mode + " " + little_Keywords.TYPE_INT + "(" + num + ")`");
+					}
 					break;
 				default:
 					return little_parser_ParserTokens.ErrorMessage("Cannot preform `" + valueType + "(" + value + ") " + mode + " " + little_Keywords.TYPE_INT + "(" + num + ")`");
@@ -1495,6 +1537,31 @@ little_interpreter_Interpreter.evaluateExpressionParts = function(parts,memory) 
 				case "/":
 					value = "" + parseFloat(value) / parseFloat(num1);
 					break;
+				case "!=":case "<":case "<=":case "==":case ">":case ">=":
+					valueType = little_Keywords.TYPE_BOOLEAN;
+					switch(mode) {
+					case "!=":
+						value = "" + Std.string(value != num1);
+						break;
+					case "<":
+						value = "" + Std.string(parseFloat(value) < parseFloat(num1));
+						break;
+					case "<=":
+						value = "" + Std.string(parseFloat(value) <= parseFloat(num1));
+						break;
+					case "==":
+						value = "" + Std.string(value == num1);
+						break;
+					case ">":
+						value = "" + Std.string(parseFloat(value) > parseFloat(num1));
+						break;
+					case ">=":
+						value = "" + Std.string(parseFloat(value) >= parseFloat(num1));
+						break;
+					default:
+						return little_parser_ParserTokens.ErrorMessage("Cannot preform `" + valueType + "(" + value + ") " + mode + " " + little_Keywords.TYPE_FLOAT + "(" + num1 + ")`");
+					}
+					break;
 				case "^":
 					value = "" + Math.pow(parseFloat(value),parseFloat(num1));
 					break;
@@ -1508,6 +1575,19 @@ little_interpreter_Interpreter.evaluateExpressionParts = function(parts,memory) 
 					break;
 				case "-":
 					value = little_tools_TextTools.replaceLast(value,num1,"");
+					break;
+				case "!=":case "<":case "<=":case "==":case ">":case ">=":
+					valueType = little_Keywords.TYPE_BOOLEAN;
+					switch(mode) {
+					case "!=":
+						value = "true";
+						break;
+					case "==":
+						value = "false";
+						break;
+					default:
+						return little_parser_ParserTokens.ErrorMessage("Cannot preform `" + valueType + "(" + value + ") " + mode + " " + little_Keywords.TYPE_FLOAT + "(" + num1 + ")`");
+					}
 					break;
 				default:
 					return little_parser_ParserTokens.ErrorMessage("Cannot preform `" + valueType + "(" + value + ") " + mode + " " + little_Keywords.TYPE_FLOAT + "(" + num1 + ")`");
@@ -1523,6 +1603,31 @@ little_interpreter_Interpreter.evaluateExpressionParts = function(parts,memory) 
 				break;
 			case "-":
 				value = little_tools_TextTools.replaceLast(value,string,"");
+				break;
+			case "!=":case "<":case "<=":case "==":case ">":case ">=":
+				valueType = little_Keywords.TYPE_BOOLEAN;
+				switch(mode) {
+				case "!=":
+					value = "" + Std.string(value != string);
+					break;
+				case "<":
+					value = "" + Std.string(value.length < string.length);
+					break;
+				case "<=":
+					value = "" + Std.string(value.length <= string.length);
+					break;
+				case "==":
+					value = "" + Std.string(value == string);
+					break;
+				case ">":
+					value = "" + Std.string(value.length > string.length);
+					break;
+				case ">=":
+					value = "" + Std.string(value.length >= string.length);
+					break;
+				default:
+					return little_parser_ParserTokens.ErrorMessage("Cannot preform `" + valueType + "(" + value + ") " + mode + " " + little_Keywords.TYPE_STRING + "(" + string + ")`");
+				}
 				break;
 			default:
 				return little_parser_ParserTokens.ErrorMessage("Cannot preform `" + valueType + "(" + value + ") " + mode + " " + little_Keywords.TYPE_STRING + "(" + string + ")`");
@@ -1570,6 +1675,31 @@ little_interpreter_Interpreter.evaluateExpressionParts = function(parts,memory) 
 					valueType = little_Keywords.TYPE_FLOAT;
 					value = "" + Std.parseInt(value) / num2;
 					break;
+				case "!=":case "<":case "<=":case "==":case ">":case ">=":
+					valueType = little_Keywords.TYPE_BOOLEAN;
+					switch(mode) {
+					case "!=":
+						value = "" + Std.string(value != (num2 == null ? "null" : "" + num2));
+						break;
+					case "<":
+						value = "" + Std.string(parseFloat(value) < num2);
+						break;
+					case "<=":
+						value = "" + Std.string(parseFloat(value) <= num2);
+						break;
+					case "==":
+						value = "" + Std.string(value == (num2 == null ? "null" : "" + num2));
+						break;
+					case ">":
+						value = "" + Std.string(parseFloat(value) > num2);
+						break;
+					case ">=":
+						value = "" + Std.string(parseFloat(value) >= num2);
+						break;
+					default:
+						return little_parser_ParserTokens.ErrorMessage("Cannot preform `" + valueType + "(" + value + ") " + mode + " " + little_Keywords.TYPE_BOOLEAN + "(" + num2 + ")`");
+					}
+					break;
 				case "^":
 					value = "" + Math.pow(Std.parseInt(value),num2);
 					break;
@@ -1587,6 +1717,19 @@ little_interpreter_Interpreter.evaluateExpressionParts = function(parts,memory) 
 					break;
 				case "-":
 					value = little_tools_TextTools.replaceLast(value,bool1,"");
+					break;
+				case "!=":case "<":case "<=":case "==":case ">":case ">=":
+					valueType = little_Keywords.TYPE_BOOLEAN;
+					switch(mode) {
+					case "!=":
+						value = "true";
+						break;
+					case "==":
+						value = "false";
+						break;
+					default:
+						return little_parser_ParserTokens.ErrorMessage("Cannot preform `" + valueType + "(" + value + ") " + mode + " " + little_Keywords.TYPE_BOOLEAN + "(" + bool1 + ")`");
+					}
 					break;
 				default:
 					return little_parser_ParserTokens.ErrorMessage("Cannot preform `" + valueType + "(" + value + ") " + mode + " " + little_Keywords.TYPE_BOOLEAN + "(" + Std.string(val == little_parser_ParserTokens.TrueValue) + ")`");
@@ -2801,7 +2944,7 @@ little_tools_PrepareRun.addFunctions = function() {
 		return little_parser_ParserTokens.Read(little_parser_ParserTokens.Identifier(little_interpreter_Interpreter.stringifyTokenValue(params[0])));
 	});
 	little_Little.registerFunction("run",null,[little_parser_ParserTokens.Define(little_parser_ParserTokens.Identifier("code"),little_parser_ParserTokens.Identifier(little_Keywords.TYPE_STRING))],function(params) {
-		return little_interpreter_Interpreter.interpret(little_parser_Parser.parse(little_lexer_Lexer.lex(little_interpreter_Interpreter.stringifyTokenValue(params[0]))),little_interpreter_Interpreter.currentConfig);
+		return little_interpreter_Interpreter.interpret(little_parser_Parser.parse(little_lexer_Lexer.lex(Type.enumParameters(params[0])[0])),little_interpreter_Interpreter.currentConfig);
 	});
 	little_Little.registerFunction("sqrt","Math",[little_parser_ParserTokens.Define(little_parser_ParserTokens.Identifier("decimal"),little_parser_ParserTokens.Identifier(little_Keywords.TYPE_FLOAT))],function(params) {
 		return little_parser_ParserTokens.Decimal("" + Math.sqrt(parseFloat(little_interpreter_Interpreter.stringifyTokenValue(little_interpreter_Interpreter.evaluate(params[0])))));
