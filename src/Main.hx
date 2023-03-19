@@ -1,5 +1,6 @@
 package;
 
+import little.tools.Conversion;
 import little.Little;
 import little.interpreter.Runtime;
 import little.tools.PrettyPrinter;
@@ -44,6 +45,35 @@ define x as Number = define y as Decimal = 6
 		output.innerHTML = little.tools.PrettyPrinter.printParserAst(little.parser.Parser.parse(little.lexer.Lexer.lex(untyped text.value)));
 		text.innerHTML = code;
 		#elseif sys
+
+		// {
+		// 	var cls = Math;
+		// 	var fieldValues = new Map<String, Dynamic>();
+		// 	var fieldFunctions = new Map<String, Dynamic>();
+
+		// 	// Iterate over the fields of the Math class
+		// 	for (field in Reflect.fields(cls)) {
+		// 		// Check if the field is a static field
+		// 		// Get the field value and store it in the fieldValues map
+		// 		var value = Reflect.field(cls, field);
+		// 		// Check if the field is a function (i.e., a method)
+		// 		if (Reflect.isFunction(value)) {
+		// 			// Store the function in the fieldFunctions map
+		// 			fieldFunctions.set(field, value);
+		// 		} else {
+        // 	        fieldValues.set(field, value);
+        // 	    }
+
+		// 	}
+
+		// 	// Test the maps by printing the values of Math.PI and Math.sqrt()
+		// 	trace(fieldValues.get("PI")); // Output: 3.141592653589793
+		// 	trace(fieldFunctions.get("sqrt")(9)); // Output: 3
+		// }
+
+		Conversion.wrapHaxeFunction(Math.atan2);
+
+
 		while (true) {
 			Sys.print("  >> ");
 			Little.run(Sys.stdin().readLine(), true);
