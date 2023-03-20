@@ -18,9 +18,8 @@ class Plugins {
 				// Store the function in the fieldFunctions map
 				fieldFunctions.set(field, value);
 			} else {
-                fieldValues.set(field, value);
-            }
-			
+				fieldValues.set(field, value);
+			}
 		}
 	}
 }
