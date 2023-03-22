@@ -1,5 +1,6 @@
 package;
 
+import little.tools.Data;
 import little.tools.Plugins;
 import little.tools.Conversion;
 import little.Little;
@@ -46,6 +47,8 @@ define x as Number = define y as Decimal = 6
 		output.innerHTML = little.tools.PrettyPrinter.printParserAst(little.parser.Parser.parse(little.lexer.Lexer.lex(untyped text.value)));
 		text.innerHTML = code;
 		#elseif sys
+
+		Little.plugin.registerHaxeClass(Data.getClassInfo("Little"));
 
 		while (true) {
 			Sys.print("  >> ");

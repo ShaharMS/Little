@@ -5,16 +5,6 @@ import little.parser.Tokens.ParserTokens;
 import little.Keywords.*;
 
 class Conversion {
-    public static function toLittleFunction(func:Expr):Array<ParserTokens> -> ParserTokens {
-
-
-
-
-
-
-        var details = Macros.inspectFunction(func);
-        return null;
-    }
 
     public static function toLittleValue(val:Dynamic):ParserTokens {
         var type = toLittleType(Type.typeof(val).getName().substring(1));

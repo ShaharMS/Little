@@ -1,5 +1,6 @@
 package little;
 
+import little.tools.Plugins;
 import haxe.extern.EitherType;
 import little.interpreter.MemoryObject;
 import little.tools.PrepareRun;
@@ -15,6 +16,7 @@ import little.Keywords.*;
 class Little {
     
     public static var runtime(default, null) = Runtime;
+    public static var plugin(default, null) = Plugins;
 
     public static var debug:Bool = false;
 
@@ -148,9 +150,5 @@ class Little {
             null, 
             true
         );
-    }
-
-    public static function registerHaxeClass() {
-        
     }
 }

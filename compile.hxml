@@ -5,4 +5,4 @@
 #--js interp.js
 --interp
 --debug
---dce full
+# --dce full
