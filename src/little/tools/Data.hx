@@ -50,9 +50,34 @@ class Data {
 			}
 		}
 
+		function getWriteAccess(k:haxe.macro.Type.FieldKind) {
+			return switch k {
+				case FVar(read, write): {
+					switch write {
+						case AccNormal: true;
+						case AccNo: false;
+						case AccNever: false;
+						case AccResolve: false;
+						case AccCall: true;
+						case AccInline: true;
+						case AccRequire(r, msg): false;
+						case AccCtor: false;
+					}
+				}
+				case FMethod(k): {
+					false;
+				}
+			}
+		}
+
 		switch e.expr {
 			case EConst(CString(path)):
-				var t = haxe.macro.Context.getType(path);
+				var t:haxe.macro.Type;
+				try {
+					t = haxe.macro.Context.getType(path);
+				} catch (_) {
+					haxe.macro.Context.error(path + ' Is not a class. Did you misspell the type/package?', e.pos);
+				}
 				switch t {
 					case TInst(inst, _): {
 						var statics = inst.get().statics.get();
@@ -61,6 +86,7 @@ class Data {
 							switch type {
 								case TFun(args, ret): {
 									stats.push(macro {
+										className: $v{path},
 										name: $v{field.name},
 										parameters: $a{
 											args.map(param -> macro {
@@ -69,20 +95,31 @@ class Data {
 												optional: $v{param.opt}
 											})
 										},
-										returnType: $v{getTypeString(ret)}
+										returnType: $v{getTypeString(ret)},
+										fieldType: "function",
+										allowWrite: $v{getWriteAccess(field.kind)}
 									});
 								}
-								case _:
+								case _: {
+									stats.push(macro {
+										className: $v{path},
+										name: $v{field.name},
+										fieldType: "var",
+										parameters: [],
+										returnType: $v{getTypeString(field.type)},
+										allowWrite: $v{getWriteAccess(field.kind)}
+									});
+								}
 							}
 						}
-						return macro ($a{stats} : Array<{name:String, parameters:Array<{name:String, type:String, optional:Bool}>, returnType:String}>);
+						return macro ($a{stats} : Array<{className:String, name:String, parameters:Array<{name:String, type:String, optional:Bool}>, returnType:String, fieldType:String, allowWrite:Bool}>);
 					}
 						// var statics = inst.get().statics.get();
 						// return macro $v{statics.map(s -> s.name)};
-					case _: haxe.macro.Context.error('Not a class.', e.pos);
+					case _: haxe.macro.Context.error(e + 'Is not a class. Did you misspell the type/package?', e.pos);
 				}
 			case _:
-				haxe.macro.Context.error('Expected const string.', e.pos);
+				haxe.macro.Context.error('Expected string constant, found ${e.expr} instead', e.pos);
 		}
 		return macro null;
 	}
