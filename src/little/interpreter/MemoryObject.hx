@@ -71,7 +71,7 @@ class MemoryObject {
             if (currentParam.length != 0) given.push(Expression(currentParam.copy(), null));
         }
 
-        if (given.length != params.length) return ErrorMessage('Incorrect number of parameters, expected: ${params.length} ($params), given: ${given.length} ($given)');
+        if (given.length != params.length) return ErrorMessage('Incorrect number of parameters, expected: ${params.length} (${PrettyPrinter.parseParamsString(params)}), given: ${given.length} (${PrettyPrinter.parseParamsString(given, false)})');
 
         given = [for (element in given) Interpreter.evaluate(element)];
 

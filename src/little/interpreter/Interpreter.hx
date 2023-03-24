@@ -18,7 +18,7 @@ class Interpreter {
     public static var currentConfig:RunConfig;
 
     public static function interpret(tokens:Array<ParserTokens>, runConfig:RunConfig) {
-        //trace(tokens);
+        //// trace(tokens);
         currentConfig = runConfig;
         if (tokens[0].getName() != "Module") {
             tokens.unshift(Module(runConfig.defaultModuleName));
@@ -99,7 +99,7 @@ class Interpreter {
         if (memory == null) memory = Interpreter.memory; // If no memory map is given, use the base one.
 
         if (exp == null) {
-            trace("null token");
+            // trace("null token");
             return NullValue;
         }
         if (exp.getName() == "ErrorMessage") {
@@ -186,7 +186,7 @@ class Interpreter {
                     switch prop {
                         case PropertyAccess(_, property): {
                             objName += '$PROPERTY_ACCESS_SIGN${stringifyTokenValue(prop)}';
-                            trace(object, stringifyTokenValue(prop), property);
+                            // trace(object, stringifyTokenValue(prop), property);
                             if (object.props[stringifyTokenValue(prop)] == null) {
                                 // We can already know that object.name.property is null
                                 evaluate(ErrorMessage('Unable to create `$objName$PROPERTY_ACCESS_SIGN${stringifyTokenIdentifier(property)}`: `$objName` Does not contain property `${stringifyTokenIdentifier(property)}`.'));
@@ -218,7 +218,7 @@ class Interpreter {
                     switch prop {
                         case PropertyAccess(_, property): {
                             objName += '$PROPERTY_ACCESS_SIGN${stringifyTokenValue(prop)}';
-                            trace(object, stringifyTokenValue(prop), property);
+                            // trace(object, stringifyTokenValue(prop), property);
                             if (object.props[stringifyTokenValue(prop)] == null) {
                                 // We can already know that object.name.property is null
                                 evaluate(ErrorMessage('Unable to create `$objName$PROPERTY_ACCESS_SIGN${stringifyTokenIdentifier(property)}`: `$objName` Does not contain property `${stringifyTokenIdentifier(property)}`.'));
@@ -248,14 +248,14 @@ class Interpreter {
             case PropertyAccess(n, p): {
                 var str = stringifyTokenValue(n);
                 var prop = stringifyTokenIdentifier(p);
-                trace(n, p);
+                // trace(n, p);
                 if (memory[str] == null) evaluate(ErrorMessage('Unable to access property `$str$PROPERTY_ACCESS_SIGN$prop` - No Such Definition: `$str`'));
                 var obj = memory[str];
                 function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
                     switch prop {
                         case PropertyAccess(_, property): {
                             objName += '$PROPERTY_ACCESS_SIGN${stringifyTokenValue(prop)}';
-                            trace(object, stringifyTokenValue(prop), property);
+                            // trace(object, stringifyTokenValue(prop), property);
                             if (object.props[stringifyTokenValue(prop)] == null) {
                                 // We can already know that object.name.property is null
                                 evaluate(ErrorMessage('Unable to access `$objName$PROPERTY_ACCESS_SIGN${stringifyTokenIdentifier(property)}`: `$objName` Does not contain property `${stringifyTokenIdentifier(property)}`.'));
@@ -273,7 +273,7 @@ class Interpreter {
                         case _: {
                             if (object.props[stringifyTokenIdentifier(prop)] == null) {
                                 object.props[stringifyTokenIdentifier(prop)] = new MemoryObject(NullValue);
-                                trace("Created new: " + objName, prop );
+                                // trace("Created new: " + objName, prop );
                             }
                             return object.props[stringifyTokenIdentifier(prop)];
                         }
@@ -285,7 +285,7 @@ class Interpreter {
             case _:
         }
 
-        trace("null object");
+        // trace("null object");
         return null;
     }
 
@@ -330,7 +330,7 @@ class Interpreter {
             }
             case _:
         }
-        trace(token);
+        // trace(token);
         return "Something went wrong";
     }
 
@@ -373,7 +373,7 @@ class Interpreter {
             }
             case _:
         }
-        trace(token);
+        // trace(token);
         return "Something went wrong";
     }
 
@@ -386,9 +386,9 @@ class Interpreter {
         var value = "", valueType = TYPE_UNKNOWN, mode = "+";
 
         for (token in parts) {
-            trace(token);
+            // trace(token);
             var val:ParserTokens = evaluate(token);
-            trace(val);
+            // trace(val);
             switch val {
                 case ErrorMessage(_): Runtime.throwError(val, Layer.INTERPRETER_VALUE_EVALUATOR);
                 case Sign(sign): mode = sign;

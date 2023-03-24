@@ -1,5 +1,6 @@
 package little.tools;
 
+import little.interpreter.Interpreter;
 using StringTools;
 using TextTools;
 
@@ -144,5 +145,34 @@ class PrettyPrinter {
 			}
 		}
 		return "";
+	}
+
+
+
+
+
+
+
+
+
+	public static function parseParamsString(params:Array<ParserTokens>, isExpected:Bool = true) {
+		if (isExpected) {
+			var str = [];
+			for (param in params) {
+				switch param {
+					case Define(name, type): {
+						str.push('${Interpreter.stringifyTokenValue(name)} ${Keywords.TYPE_DECL_OR_CAST} ${Interpreter.stringifyTokenValue(type)}');
+					}
+					case _:
+				}
+			}
+			return str.join(", ");
+		} else {
+			var str = [];
+			for (param in params) {
+				str.push(Interpreter.stringifyTokenValue(param));
+			}
+			return str.join(", ");
+		}
 	}
 }

@@ -36,8 +36,7 @@ define x as Number = define y as Decimal = 6
 		text.addEventListener("keyup", (_) -> {
 			try {
 				output.innerHTML = little.tools.PrettyPrinter.printParserAst(little.parser.Parser.parse(little.lexer.Lexer.lex(untyped text.value)));
-			} catch (e) {
-            }
+			} catch (e) {}
 
 			try {
 				Little.run(untyped text.value);
@@ -47,15 +46,13 @@ define x as Number = define y as Decimal = 6
 		output.innerHTML = little.tools.PrettyPrinter.printParserAst(little.parser.Parser.parse(little.lexer.Lexer.lex(untyped text.value)));
 		text.innerHTML = code;
 		#elseif sys
-
-		Little.plugin.registerHaxeClass(Data.getClassInfo("Little"));
-
+	
 		while (true) {
 			Sys.print("  >> ");
 			Little.run(Sys.stdin().readLine(), true);
 			trace(Runtime.stdout);
 		}
-		
+
 		// trace(PrettyPrinter.printParserAst(Interpreter.forceCorrectOrderOfOperations(Parser.parse(Lexer.lex('1 + 1 * 3')))));
 		// trace(Parser.parse(Lexer.lex('define x as String')));
 		#end

@@ -33,9 +33,7 @@ class PrepareRun {
         //                  Math
         //------------------------------------------
 
-        Little.registerFunction("sqrt", "Math", [Define(Identifier("decimal"), Identifier(TYPE_FLOAT))], (params) -> {
-            return Decimal('${Math.sqrt(Interpreter.stringifyTokenValue(Interpreter.evaluate(params[0])).parseFloat())}');
-        });
+        Little.plugin.registerHaxeClass(Data.getClassInfo("Math"));
     }
 
     public static function addConditions() {
