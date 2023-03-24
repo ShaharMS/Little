@@ -1,11 +1,17 @@
 package little.tools;
 
+import haxe.extern.EitherType;
+import little.lexer.Lexer;
+import little.parser.Parser;
 import little.interpreter.Interpreter;
 import little.parser.Tokens.ParserTokens;
 import little.interpreter.MemoryObject;
 import little.Little.*;
 import little.Keywords.*;
 
+
+@:access(little.Little)
+@:access(little.interpreter.Runtime)
 class Plugins {
 	/**
 		Registers an entire Haxe class's static fields & methods, to allow accessing them through Little. for example:
@@ -78,6 +84,137 @@ class Plugins {
 
 		Interpreter.memory[stats[0].className] = motherObj;
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+    public static function registerVariable(variableName:String, ?variableModuleName:String, allowWriting:Bool = false, ?staticValue:ParserTokens, ?valueGetter:Void -> ParserTokens, ?valueSetter:ParserTokens -> ParserTokens) {
+        Interpreter.memory[variableName] = new MemoryObject(
+            External(params -> {
+                var currentModuleName = Little.runtime.currentModule;
+                if (variableModuleName != null) Little.runtime.currentModule = variableModuleName;
+                return try {
+                    var val = if (staticValue != null) staticValue;
+                    else valueGetter();
+                    Little.runtime.currentModule = currentModuleName;
+                    val;
+                } catch (e) {
+                    Little.runtime.currentModule = currentModuleName;
+                    ErrorMessage('External Variable Error: ' + e.details());
+                }
+            }), 
+            [], 
+            null,
+            null, 
+            true
+        );
+
+        if (valueSetter != null) {
+            Interpreter.memory[variableName].valueSetter = function (v) {
+                return Interpreter.memory[variableName].value = valueSetter(v);
+            }
+        }
+    }
+
+    /**
+    	Allows usage of a function written in haxe inside Little code.
+
+    	@param actionName The name by which to identify the function
+    	@param actionModuleName The module from which access to this function is granted. Also, when & if this function ever throws an error/prints to standard output, the name provided here will be present in the error message as the responsible module.
+    	@param expectedParameters an `Array<ParserTokens>` consisting of `ParserTokens.Define`s which contain the names & types of the parameters that should be passed on to the function. For example:
+            ```
+            [Define(Identifier(x), Identifier("String"))]
+            ```
+    	@param callback 
+    **/
+    public static function registerFunction(actionName:String, ?actionModuleName:String, expectedParameters:EitherType<String, Array<ParserTokens>>, callback:Array<ParserTokens> -> ParserTokens) {
+        var params = if (expectedParameters is String) {
+            Parser.parse(Lexer.lex(expectedParameters));
+        } else expectedParameters;
+
+        var memObject = new MemoryObject(
+            External(params -> {
+                var currentModuleName = Little.runtime.currentModule;
+                if (actionModuleName != null) Little.runtime.currentModule = actionModuleName;
+                return try {
+                    var val = callback(params);
+                    Little.runtime.currentModule = currentModuleName;
+                    val;
+                } catch (e) {
+                    Little.runtime.currentModule = currentModuleName;
+                    ErrorMessage('External Function Error: ' + e.details());
+                }
+            }), 
+            [], 
+            expectedParameters, 
+            null, 
+            true
+        );
+
+        if (actionModuleName != null) {
+            Interpreter.memory[actionModuleName] = new MemoryObject(Module(actionModuleName), [], null, Identifier(TYPE_MODULE), true);
+            Interpreter.memory[actionModuleName].props[actionName] = memObject;
+        } else Interpreter.memory[actionName] = memObject;
+    }
+
+    public static function registerCondition(conditionName:String, ?expectedConditionPattern:EitherType<String, Array<ParserTokens>> ,callback:(Array<ParserTokens>, Array<ParserTokens>) -> ParserTokens) {
+        CONDITION_TYPES.push(conditionName);
+
+		var params = if (expectedConditionPattern is String) {
+            Parser.parse(Lexer.lex(expectedConditionPattern));
+        } else expectedConditionPattern;
+
+        Interpreter.memory[conditionName] = new MemoryObject(
+            ExternalCondition((con, body) -> {
+                return try {
+                    callback(con, body);
+                } catch (e) {
+                    ErrorMessage('External Condition Error: ' + e.details());
+                }
+            }), 
+            [], 
+            expectedConditionPattern, 
+            null, 
+            true,
+			true
+        );
+    }
 }
 
 typedef ItemInfo = {
