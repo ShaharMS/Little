@@ -34,6 +34,7 @@ class PrepareRun {
         //------------------------------------------
 
         Little.plugin.registerHaxeClass(Data.getClassInfo("Math"));
+        Little.plugin.registerHaxeClass(Data.getClassInfo("StringTools"));
     }
 
     public static function addConditions() {
@@ -41,7 +42,6 @@ class PrepareRun {
             var val = NullValue;
             var safetyNet = 0;
             while (Conversion.toHaxeValue(Interpreter.evaluateExpressionParts(params))) {
-                if (safetyNet > 10000) return ErrorMessage("Too many iterations");
                 val = Interpreter.interpret(body, Interpreter.currentConfig);
                 safetyNet++;
             }
@@ -53,6 +53,119 @@ class PrepareRun {
             var val = NullValue;
             if (Conversion.toHaxeValue(Interpreter.evaluateExpressionParts(params))) {
                 val = Interpreter.interpret(body, Interpreter.currentConfig);
+            }
+
+            return val;
+        });
+
+        Little.plugin.registerCondition("for", (params:Array<ParserTokens>, body) -> {
+            var val = NullValue;
+
+            var fp = [];
+
+            // Incase one does `from (4 + 2)` and it accidentally parses a function
+            for (p in params) {
+                switch p {
+                    case ActionCall(_.getParameters()[0] == FOR_LOOP_IDENTIFIERS.FROM => true, params): {
+                        fp.push(Identifier(FOR_LOOP_IDENTIFIERS.FROM));
+                        fp.push(Expression(params.getParameters()[0], null));
+                    }
+                    case ActionCall(_.getParameters()[0] == FOR_LOOP_IDENTIFIERS.TO => true, params): {
+                        fp.push(Identifier(FOR_LOOP_IDENTIFIERS.TO));
+                        fp.push(Expression(params.getParameters()[0], null));
+                    }
+                    case ActionCall(_.getParameters()[0] == FOR_LOOP_IDENTIFIERS.JUMP => true, params): {
+                        fp.push(Identifier(FOR_LOOP_IDENTIFIERS.JUMP));
+                        fp.push(Expression(params.getParameters()[0], null));
+                    }
+                    case _: fp.push(p);
+                }
+            }
+
+            params = fp;
+
+            var handle = Interpreter.accessObject(params[0]);
+            if (handle == null) {
+                Runtime.throwError(ErrorMessage('For loop must start with a variable to count on (expected definition/block, found: `${params[0]}`)'));
+                return val;
+            }
+            
+            var from:Null<Float> = null, to:Null<Float> = null, jump:Float = 1;
+
+            function parserForLoop(token:ParserTokens, next:ParserTokens) {
+                switch token {
+                    case Identifier(_ == FOR_LOOP_IDENTIFIERS.FROM => true): {
+                        var val = Conversion.toHaxeValue(Interpreter.evaluate(next));
+                        if (val is Float || val is Int) {
+                            from = val;
+                        } else {
+                            Runtime.throwError(ErrorMessage('For loop\'s `${FOR_LOOP_IDENTIFIERS.FROM}` argument must be of type $TYPE_INT/$TYPE_FLOAT (given: ${Interpreter.stringifyTokenValue(next)} as ${Interpreter.evaluate(next).getName()})'));
+                        }
+                    }
+                    case Identifier(_ == FOR_LOOP_IDENTIFIERS.TO => true): {
+                        var val = Conversion.toHaxeValue(Interpreter.evaluate(next));
+                        if (val is Float || val is Int) {
+                            to = val;
+                        } else {
+                            Runtime.throwError(ErrorMessage('For loop\'s `${FOR_LOOP_IDENTIFIERS.TO}` argument must be of type $TYPE_INT/$TYPE_FLOAT (given: ${Interpreter.stringifyTokenValue(next)} as ${Interpreter.evaluate(next).getName()})'));
+                        }
+                    }
+                    case Identifier(_ == FOR_LOOP_IDENTIFIERS.JUMP => true): {
+                        var val = Conversion.toHaxeValue(Interpreter.evaluate(next));
+                        if (val is Float || val is Int) {
+                            if (val < 0) {
+                                Runtime.throwError(ErrorMessage('For loop\'s `${FOR_LOOP_IDENTIFIERS.JUMP}` argument must be positive (given: ${Interpreter.stringifyTokenValue(next)}). Notice - the usage of the `${FOR_LOOP_IDENTIFIERS.JUMP}` argument switches from increasing to decreasing the value of `${params[0].getParameters()[0]}` if `${FOR_LOOP_IDENTIFIERS.FROM}` is larger than `${FOR_LOOP_IDENTIFIERS.TO}`. Defaulting to 1'));
+                            } else jump = val;
+                        } else {
+                            Runtime.throwError(ErrorMessage('For loop\'s `${FOR_LOOP_IDENTIFIERS.JUMP}` argument must be of type $TYPE_INT/$TYPE_FLOAT (given: ${Interpreter.stringifyTokenValue(next)} as ${Interpreter.evaluate(next).getName()}). Defaulting to `1`'));
+                        }
+                    }
+                    case Block(_): {
+                        var ident = Interpreter.evaluate(token);
+                        parserForLoop(ident.getName() == "Characters" ? Identifier(ident.getParameters()[0]) : ident , next);
+                    }
+                    case _:
+                }
+            }
+
+            var i = 1;
+
+            while (i < fp.length) {
+                var token = fp[i];
+                var next = [];
+
+                var lookahead = fp[i + 1];
+                while (!Type.enumEq(lookahead, Identifier(FOR_LOOP_IDENTIFIERS.TO)) && !Type.enumEq(lookahead, Identifier(FOR_LOOP_IDENTIFIERS.JUMP))) {
+                    next.push(lookahead);
+                    lookahead = fp[++i + 1];
+                    if (lookahead == null) break;
+                }
+                i--;
+
+                //trace(token, next);
+                parserForLoop(token, Expression(next, null));
+                i += 2;
+            }
+
+            if (from == null) {
+                Runtime.throwError(ErrorMessage('For loop must contain a `${FOR_LOOP_IDENTIFIERS.FROM}` argument.'));
+                return val;
+            }
+            if (from == null) {
+                Runtime.throwError(ErrorMessage('For loop must contain a `${FOR_LOOP_IDENTIFIERS.TO}` argument.'));
+                return val;
+            }
+
+            if (from < to) {
+                while (from < to) {
+                    val = Interpreter.interpret([Write([params[0]], if (from == from.int()) Number("" + from) else Decimal("" + from), null)].concat(body), Interpreter.currentConfig);
+                    from += jump;
+                }
+            } else {
+                while (from > to) {
+                    val = Interpreter.interpret([Write([params[0]], if (from == from.int()) Number("" + from) else Decimal("" + from), null)].concat(body), Interpreter.currentConfig);
+                    from -= jump;
+                }
             }
 
             return val;

@@ -42,4 +42,6 @@ class Keywords {
     public static var XOR_SIGN:String = "^^";
     public static var OR_SIGN:String = "||";
     public static var AND_SIGN:String = "&&";
+
+    public static var FOR_LOOP_IDENTIFIERS:{FROM:String, TO:String, JUMP:String} = {FROM: "from", TO: "to", JUMP: "jump"};
 }

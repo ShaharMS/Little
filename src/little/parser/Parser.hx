@@ -215,7 +215,7 @@ class Parser {
                             }
                             case _: {
                                 if (pushToName) {name.push(lookahead); pushToName = false;}
-                                else if (type == null) type = lookahead;
+                                else if (type == null && lookahead.getName() == "TypeDeclaration") type = lookahead;
                                 else {
                                     i--;
                                     break;
@@ -268,7 +268,7 @@ class Parser {
                             case _: {
                                 if (pushToName) {name.push(lookahead); pushToName = false;}
                                 else if (params == null) params = lookahead;
-                                else if (type == null) type = lookahead;
+                                else if (type == null && lookahead.getName() == "TypeDeclaration") type = lookahead;
                                 else {
                                     break;
                                 }

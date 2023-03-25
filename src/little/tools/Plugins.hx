@@ -37,15 +37,17 @@ class Plugins {
 		var fieldValues = new Map<String, Dynamic>();
 		var fieldFunctions = new Map<String, Dynamic>();
 		var cls = Type.resolveClass(stats[0].className);
-		//trace(cls);
+		// trace(cls, Type.getClassFields(cls));
 		// Iterate over the fields of the Math class
-		for (field in Reflect.fields(cls)) {
+		for (s in stats) {
+            var field = s.name;
 			// Check if the field is a static field
 			// Get the field value and store it in the fieldValues map
 			var value = Reflect.field(cls, field);
 			// Check if the field is a function (i.e., a method)
 			if (Reflect.isFunction(value)) {
 				// Store the function in the fieldFunctions map
+                
 				fieldFunctions.set(field, value);
 			} else {
                 fieldValues.set(field, value);
@@ -54,8 +56,8 @@ class Plugins {
 		}
 
 		//// Test the maps by printing the values of Math.PI and Math.sqrt()
-		//trace(fieldValues.get("PI")); // Output: 3.141592653589793
-		//trace(fieldFunctions.get("sqrt")(9)); // Output: 3
+		// trace(fieldValues);
+		// trace(fieldFunctions);
 
 		var motherObj = new MemoryObject(Module(stats[0].className), [], null, Identifier(TYPE_MODULE), true); 
 
@@ -69,9 +71,11 @@ class Plugins {
 						motherObj.props[instance.name] = new MemoryObject(value, [] /*Should this be implemented?*/, null, type, true);
 					}
 				case "function": {
+                    // trace(fieldFunctions);
 					var value:ParserTokens = External((args) -> {
 						return Conversion.toLittleValue(Reflect.callMethod(null, fieldFunctions[instance.name], [for (arg in args) Conversion.toHaxeValue(arg)]));
 					});
+                    //trace(value, fieldFunctions[instance.name]);
 					var type:ParserTokens = Identifier(Conversion.toLittleType(instance.returnType));
 					var params = [];
 					for (param in instance.parameters) 

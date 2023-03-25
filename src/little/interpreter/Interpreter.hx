@@ -54,7 +54,6 @@ class Interpreter {
                     returnVal = object.value;
                 }
                 case Condition(name, exp, body, type): {
-                    trace(exp, Interpreter.evaluate(exp));
                     if (memory[stringifyTokenValue(name)] == null) {
                         Runtime.throwError(ErrorMessage('No Such Condition:  `${stringifyTokenValue(name)}`'));
                     } 

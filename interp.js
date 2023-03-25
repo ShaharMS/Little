@@ -99,18 +99,6 @@ Reflect.field = function(o,field) {
 		return null;
 	}
 };
-Reflect.fields = function(o) {
-	var a = [];
-	if(o != null) {
-		var hasOwnProperty = Object.prototype.hasOwnProperty;
-		for( var f in o ) {
-		if(f != "__id__" && f != "hx__closures__" && hasOwnProperty.call(o,f)) {
-			a.push(f);
-		}
-		}
-	}
-	return a;
-};
 Reflect.isFunction = function(f) {
 	if(typeof(f) == "function") {
 		return !(f.__name__ || f.__ename__);
@@ -1065,10 +1053,10 @@ little_tools_Plugins.registerHaxeClass = function(stats) {
 	var name = stats[0].className;
 	var cls = $hxClasses[name];
 	var _g = 0;
-	var _g1 = Reflect.fields(cls);
-	while(_g < _g1.length) {
-		var field = _g1[_g];
+	while(_g < stats.length) {
+		var s = stats[_g];
 		++_g;
+		var field = s.name;
 		var value = Reflect.field(cls,field);
 		if(Reflect.isFunction(value)) {
 			fieldFunctions_h[field] = value;
@@ -1288,7 +1276,6 @@ little_interpreter_Interpreter.runTokens = function(tokens,preParseVars,preParse
 			var exp = token.exp;
 			var body = token.body;
 			var type2 = token.type;
-			haxe_Log.trace(exp,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 57, className : "little.interpreter.Interpreter", methodName : "runTokens", customParams : [little_interpreter_Interpreter.evaluate(exp)]});
 			var key = little_interpreter_Interpreter.stringifyTokenValue(name2);
 			if(memory.h[key] == null) {
 				little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("No Such Condition:  `" + little_interpreter_Interpreter.stringifyTokenValue(name2) + "`"));
@@ -2371,7 +2358,6 @@ little_interpreter_MemoryObject.prototype = {
 	}
 	,use: function(parameters) {
 		if(this.condition) {
-			haxe_Log.trace("condition",{ fileName : "src/little/interpreter/MemoryObject.hx", lineNumber : 58, className : "little.interpreter.MemoryObject", methodName : "use"});
 			var e = this.value;
 			if($hxEnums[e.__enum__].__constructs__[e._hx_index]._hx_name != "ExternalCondition") {
 				return little_parser_ParserTokens.ErrorMessage("Undefined external condition");
@@ -2379,9 +2365,8 @@ little_interpreter_MemoryObject.prototype = {
 			if($hxEnums[parameters.__enum__].__constructs__[parameters._hx_index]._hx_name != "PartArray") {
 				return little_parser_ParserTokens.ErrorMessage("Incorrect parameter group format, given group format: " + $hxEnums[parameters.__enum__].__constructs__[parameters._hx_index]._hx_name + ", expectedFormat: " + Std.string(little_parser_ParserTokens.PartArray));
 			}
-			haxe_Log.trace("checks passed",{ fileName : "src/little/interpreter/MemoryObject.hx", lineNumber : 61, className : "little.interpreter.MemoryObject", methodName : "use"});
-			var con = Type.enumParameters(parameters)[0].getParameters()[0];
-			var body = Type.enumParameters(parameters)[1].getParameters()[0];
+			var con = Type.enumParameters(Type.enumParameters(parameters)[0][0])[0];
+			var body = Type.enumParameters(Type.enumParameters(parameters)[0][1])[0];
 			if(this.params != null) {
 				var given = [];
 				if(con.length != 0) {
@@ -2413,7 +2398,6 @@ little_interpreter_MemoryObject.prototype = {
 					return little_parser_ParserTokens.ErrorMessage("Incorrect number of expressions in condition, expected: " + this.params.length + " (" + little_tools_PrettyPrinter.parseParamsString(this.params) + "), given: " + given.length + " (" + little_tools_PrettyPrinter.parseParamsString(given,false) + ")");
 				}
 				con = given;
-				haxe_Log.trace("now, eval",{ fileName : "src/little/interpreter/MemoryObject.hx", lineNumber : 85, className : "little.interpreter.MemoryObject", methodName : "use"});
 				var _g = this.value;
 				if(_g._hx_index == 22) {
 					var use = _g.use;
@@ -2422,7 +2406,6 @@ little_interpreter_MemoryObject.prototype = {
 					return little_parser_ParserTokens.ErrorMessage("Incorrect external condition value format, expected: ExternalCondition, given: " + Std.string(this.value));
 				}
 			} else {
-				haxe_Log.trace("now, eval",{ fileName : "src/little/interpreter/MemoryObject.hx", lineNumber : 92, className : "little.interpreter.MemoryObject", methodName : "use"});
 				var _g = this.value;
 				if(_g._hx_index == 22) {
 					var use = _g.use;
@@ -2927,7 +2910,7 @@ little_parser_Parser.mergeComplexStructures = function(pre) {
 							} else if(pushToName) {
 								name.push(lookahead);
 								pushToName = false;
-							} else if(type == null) {
+							} else if(type == null && $hxEnums[lookahead.__enum__].__constructs__[lookahead._hx_index]._hx_name == "TypeDeclaration") {
 								type = lookahead;
 							} else {
 								--i;
@@ -2939,7 +2922,7 @@ little_parser_Parser.mergeComplexStructures = function(pre) {
 						if(pushToName) {
 							name.push(lookahead);
 							pushToName = false;
-						} else if(type == null) {
+						} else if(type == null && $hxEnums[lookahead.__enum__].__constructs__[lookahead._hx_index]._hx_name == "TypeDeclaration") {
 							type = lookahead;
 						} else {
 							--i;
@@ -3027,7 +3010,7 @@ little_parser_Parser.mergeComplexStructures = function(pre) {
 									pushToName1 = false;
 								} else if(params == null) {
 									params = lookahead1;
-								} else if(type3 == null) {
+								} else if(type3 == null && $hxEnums[lookahead1.__enum__].__constructs__[lookahead1._hx_index]._hx_name == "TypeDeclaration") {
 									type3 = lookahead1;
 								} else {
 									break _hx_loop3;
@@ -3040,7 +3023,7 @@ little_parser_Parser.mergeComplexStructures = function(pre) {
 								pushToName1 = false;
 							} else if(params == null) {
 								params = lookahead1;
-							} else if(type3 == null) {
+							} else if(type3 == null && $hxEnums[lookahead1.__enum__].__constructs__[lookahead1._hx_index]._hx_name == "TypeDeclaration") {
 								type3 = lookahead1;
 							} else {
 								break _hx_loop3;
@@ -3609,16 +3592,13 @@ little_tools_PrepareRun.addFunctions = function() {
 		return little_interpreter_Interpreter.interpret(little_parser_Parser.parse(little_lexer_Lexer.lex(Type.enumParameters(params[0])[0])),little_interpreter_Interpreter.currentConfig);
 	});
 	little_Little.plugin.registerHaxeClass([{ className : "Math", name : "PI", fieldType : "var", parameters : [], returnType : "Float", allowWrite : false},{ className : "Math", name : "NEGATIVE_INFINITY", fieldType : "var", parameters : [], returnType : "Float", allowWrite : false},{ className : "Math", name : "get_NEGATIVE_INFINITY", parameters : [], returnType : "Float", fieldType : "function", allowWrite : false},{ className : "Math", name : "POSITIVE_INFINITY", fieldType : "var", parameters : [], returnType : "Float", allowWrite : false},{ className : "Math", name : "get_POSITIVE_INFINITY", parameters : [], returnType : "Float", fieldType : "function", allowWrite : false},{ className : "Math", name : "NaN", fieldType : "var", parameters : [], returnType : "Float", allowWrite : false},{ className : "Math", name : "get_NaN", parameters : [], returnType : "Float", fieldType : "function", allowWrite : false},{ className : "Math", name : "abs", parameters : [{ name : "v", type : "Float", optional : false}], returnType : "Float", fieldType : "function", allowWrite : false},{ className : "Math", name : "acos", parameters : [{ name : "v", type : "Float", optional : false}], returnType : "Float", fieldType : "function", allowWrite : false},{ className : "Math", name : "asin", parameters : [{ name : "v", type : "Float", optional : false}], returnType : "Float", fieldType : "function", allowWrite : false},{ className : "Math", name : "atan", parameters : [{ name : "v", type : "Float", optional : false}], returnType : "Float", fieldType : "function", allowWrite : false},{ className : "Math", name : "atan2", parameters : [{ name : "y", type : "Float", optional : false},{ name : "x", type : "Float", optional : false}], returnType : "Float", fieldType : "function", allowWrite : false},{ className : "Math", name : "ceil", parameters : [{ name : "v", type : "Float", optional : false}], returnType : "Int", fieldType : "function", allowWrite : false},{ className : "Math", name : "cos", parameters : [{ name : "v", type : "Float", optional : false}], returnType : "Float", fieldType : "function", allowWrite : false},{ className : "Math", name : "exp", parameters : [{ name : "v", type : "Float", optional : false}], returnType : "Float", fieldType : "function", allowWrite : false},{ className : "Math", name : "floor", parameters : [{ name : "v", type : "Float", optional : false}], returnType : "Int", fieldType : "function", allowWrite : false},{ className : "Math", name : "log", parameters : [{ name : "v", type : "Float", optional : false}], returnType : "Float", fieldType : "function", allowWrite : false},{ className : "Math", name : "max", parameters : [{ name : "a", type : "Float", optional : false},{ name : "b", type : "Float", optional : false}], returnType : "Float", fieldType : "function", allowWrite : false},{ className : "Math", name : "min", parameters : [{ name : "a", type : "Float", optional : false},{ name : "b", type : "Float", optional : false}], returnType : "Float", fieldType : "function", allowWrite : false},{ className : "Math", name : "pow", parameters : [{ name : "v", type : "Float", optional : false},{ name : "exp", type : "Float", optional : false}], returnType : "Float", fieldType : "function", allowWrite : false},{ className : "Math", name : "random", parameters : [], returnType : "Float", fieldType : "function", allowWrite : false},{ className : "Math", name : "round", parameters : [{ name : "v", type : "Float", optional : false}], returnType : "Int", fieldType : "function", allowWrite : false},{ className : "Math", name : "sin", parameters : [{ name : "v", type : "Float", optional : false}], returnType : "Float", fieldType : "function", allowWrite : false},{ className : "Math", name : "sqrt", parameters : [{ name : "v", type : "Float", optional : false}], returnType : "Float", fieldType : "function", allowWrite : false},{ className : "Math", name : "tan", parameters : [{ name : "v", type : "Float", optional : false}], returnType : "Float", fieldType : "function", allowWrite : false},{ className : "Math", name : "ffloor", parameters : [{ name : "v", type : "Float", optional : false}], returnType : "Float", fieldType : "function", allowWrite : false},{ className : "Math", name : "fceil", parameters : [{ name : "v", type : "Float", optional : false}], returnType : "Float", fieldType : "function", allowWrite : false},{ className : "Math", name : "fround", parameters : [{ name : "v", type : "Float", optional : false}], returnType : "Float", fieldType : "function", allowWrite : false},{ className : "Math", name : "isFinite", parameters : [{ name : "f", type : "Float", optional : false}], returnType : "Bool", fieldType : "function", allowWrite : false},{ className : "Math", name : "isNaN", parameters : [{ name : "f", type : "Float", optional : false}], returnType : "Bool", fieldType : "function", allowWrite : false}]);
+	little_Little.plugin.registerHaxeClass([{ className : "StringTools", name : "urlEncode", parameters : [{ name : "s", type : "String", optional : false}], returnType : "String", fieldType : "function", allowWrite : false},{ className : "StringTools", name : "urlDecode", parameters : [{ name : "s", type : "String", optional : false}], returnType : "String", fieldType : "function", allowWrite : false},{ className : "StringTools", name : "htmlEscape", parameters : [{ name : "s", type : "String", optional : false},{ name : "quotes", type : "Null<Bool>", optional : true}], returnType : "String", fieldType : "function", allowWrite : false},{ className : "StringTools", name : "htmlUnescape", parameters : [{ name : "s", type : "String", optional : false}], returnType : "String", fieldType : "function", allowWrite : false},{ className : "StringTools", name : "contains", parameters : [{ name : "s", type : "String", optional : false},{ name : "value", type : "String", optional : false}], returnType : "Bool", fieldType : "function", allowWrite : false},{ className : "StringTools", name : "startsWith", parameters : [{ name : "s", type : "String", optional : false},{ name : "start", type : "String", optional : false}], returnType : "Bool", fieldType : "function", allowWrite : false},{ className : "StringTools", name : "endsWith", parameters : [{ name : "s", type : "String", optional : false},{ name : "end", type : "String", optional : false}], returnType : "Bool", fieldType : "function", allowWrite : false},{ className : "StringTools", name : "isSpace", parameters : [{ name : "s", type : "String", optional : false},{ name : "pos", type : "Int", optional : false}], returnType : "Bool", fieldType : "function", allowWrite : false},{ className : "StringTools", name : "ltrim", parameters : [{ name : "s", type : "String", optional : false}], returnType : "String", fieldType : "function", allowWrite : false},{ className : "StringTools", name : "rtrim", parameters : [{ name : "s", type : "String", optional : false}], returnType : "String", fieldType : "function", allowWrite : false},{ className : "StringTools", name : "trim", parameters : [{ name : "s", type : "String", optional : false}], returnType : "String", fieldType : "function", allowWrite : false},{ className : "StringTools", name : "lpad", parameters : [{ name : "s", type : "String", optional : false},{ name : "c", type : "String", optional : false},{ name : "l", type : "Int", optional : false}], returnType : "String", fieldType : "function", allowWrite : false},{ className : "StringTools", name : "rpad", parameters : [{ name : "s", type : "String", optional : false},{ name : "c", type : "String", optional : false},{ name : "l", type : "Int", optional : false}], returnType : "String", fieldType : "function", allowWrite : false},{ className : "StringTools", name : "replace", parameters : [{ name : "s", type : "String", optional : false},{ name : "sub", type : "String", optional : false},{ name : "by", type : "String", optional : false}], returnType : "String", fieldType : "function", allowWrite : false},{ className : "StringTools", name : "hex", parameters : [{ name : "n", type : "Int", optional : false},{ name : "digits", type : "Null<Int>", optional : true}], returnType : "String", fieldType : "function", allowWrite : false},{ className : "StringTools", name : "fastCodeAt", parameters : [{ name : "s", type : "String", optional : false},{ name : "index", type : "Int", optional : false}], returnType : "Int", fieldType : "function", allowWrite : false},{ className : "StringTools", name : "unsafeCodeAt", parameters : [{ name : "s", type : "String", optional : false},{ name : "index", type : "Int", optional : false}], returnType : "Int", fieldType : "function", allowWrite : false},{ className : "StringTools", name : "iterator", parameters : [{ name : "s", type : "String", optional : false}], returnType : "StringIterator", fieldType : "function", allowWrite : false},{ className : "StringTools", name : "keyValueIterator", parameters : [{ name : "s", type : "String", optional : false}], returnType : "StringKeyValueIterator", fieldType : "function", allowWrite : false},{ className : "StringTools", name : "isEof", parameters : [{ name : "c", type : "Int", optional : false}], returnType : "Bool", fieldType : "function", allowWrite : false},{ className : "StringTools", name : "quoteUnixArg", parameters : [{ name : "argument", type : "String", optional : false}], returnType : "String", fieldType : "function", allowWrite : false},{ className : "StringTools", name : "winMetaCharacters", fieldType : "var", parameters : [], returnType : "Array<Int>", allowWrite : true},{ className : "StringTools", name : "quoteWinArg", parameters : [{ name : "argument", type : "String", optional : false},{ name : "escapeMetaCharacters", type : "Bool", optional : false}], returnType : "String", fieldType : "function", allowWrite : false},{ className : "StringTools", name : "MIN_SURROGATE_CODE_POINT", fieldType : "var", parameters : [], returnType : "Int", allowWrite : false},{ className : "StringTools", name : "utf16CodePointAt", parameters : [{ name : "s", type : "String", optional : false},{ name : "index", type : "Int", optional : false}], returnType : "Int", fieldType : "function", allowWrite : false}]);
 };
 little_tools_PrepareRun.addConditions = function() {
 	little_Little.plugin.registerCondition("while",[little_parser_ParserTokens.Define(little_parser_ParserTokens.Identifier("rule"),little_parser_ParserTokens.Identifier(little_Keywords.TYPE_BOOLEAN))],function(params,body) {
 		var val = little_parser_ParserTokens.NullValue;
 		var safetyNet = 0;
 		while(little_tools_Conversion.toHaxeValue(little_interpreter_Interpreter.evaluateExpressionParts(params))) {
-			if(safetyNet > 10000) {
-				return little_parser_ParserTokens.ErrorMessage("Too many iterations");
-			}
-			haxe_Log.trace(params,{ fileName : "src/little/tools/PrepareRun.hx", lineNumber : 45, className : "little.tools.PrepareRun", methodName : "addConditions"});
 			val = little_interpreter_Interpreter.interpret(body,little_interpreter_Interpreter.currentConfig);
 			++safetyNet;
 		}
@@ -3626,9 +3606,146 @@ little_tools_PrepareRun.addConditions = function() {
 	});
 	little_Little.plugin.registerCondition("if",[little_parser_ParserTokens.Define(little_parser_ParserTokens.Identifier("rule"),little_parser_ParserTokens.Identifier(little_Keywords.TYPE_BOOLEAN))],function(params,body) {
 		var val = little_parser_ParserTokens.NullValue;
-		haxe_Log.trace(little_interpreter_Interpreter.evaluateExpressionParts(params),{ fileName : "src/little/tools/PrepareRun.hx", lineNumber : 55, className : "little.tools.PrepareRun", methodName : "addConditions"});
 		if(little_tools_Conversion.toHaxeValue(little_interpreter_Interpreter.evaluateExpressionParts(params))) {
 			val = little_interpreter_Interpreter.interpret(body,little_interpreter_Interpreter.currentConfig);
+		}
+		return val;
+	});
+	little_Little.plugin.registerCondition("for",null,function(params,body) {
+		var val = little_parser_ParserTokens.NullValue;
+		var fp = [];
+		var _g = 0;
+		while(_g < params.length) {
+			var p = params[_g];
+			++_g;
+			if(p._hx_index == 9) {
+				var _g1 = p.name;
+				var _g2 = p.params;
+				var _hx_tmp;
+				var _hx_tmp1;
+				if(Type.enumParameters(_g1)[0] == little_Keywords.FOR_LOOP_IDENTIFIERS.FROM == true) {
+					var params1 = _g2;
+					fp.push(little_parser_ParserTokens.Identifier(little_Keywords.FOR_LOOP_IDENTIFIERS.FROM));
+					fp.push(little_parser_ParserTokens.Expression(Type.enumParameters(params1)[0],null));
+				} else {
+					_hx_tmp1 = Type.enumParameters(_g1)[0] == little_Keywords.FOR_LOOP_IDENTIFIERS.TO;
+					if(_hx_tmp1 == true) {
+						var params2 = _g2;
+						fp.push(little_parser_ParserTokens.Identifier(little_Keywords.FOR_LOOP_IDENTIFIERS.TO));
+						fp.push(little_parser_ParserTokens.Expression(Type.enumParameters(params2)[0],null));
+					} else {
+						_hx_tmp = Type.enumParameters(_g1)[0] == little_Keywords.FOR_LOOP_IDENTIFIERS.JUMP;
+						if(_hx_tmp == true) {
+							var params3 = _g2;
+							fp.push(little_parser_ParserTokens.Identifier(little_Keywords.FOR_LOOP_IDENTIFIERS.JUMP));
+							fp.push(little_parser_ParserTokens.Expression(Type.enumParameters(params3)[0],null));
+						} else {
+							fp.push(p);
+						}
+					}
+				}
+			} else {
+				fp.push(p);
+			}
+		}
+		params = fp;
+		var handle = little_interpreter_Interpreter.accessObject(params[0]);
+		if(handle == null) {
+			little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("For loop must start with a variable to count on (expected definition/block, found: `" + Std.string(params[0]) + "`)"));
+			return val;
+		}
+		var from = null;
+		var to = null;
+		var jump = 1;
+		var parserForLoop = null;
+		parserForLoop = function(token,next) {
+			switch(token._hx_index) {
+			case 7:
+				var _g = token.word;
+				var _hx_tmp;
+				var _hx_tmp1;
+				if(_g == little_Keywords.FOR_LOOP_IDENTIFIERS.FROM == true) {
+					var val = little_tools_Conversion.toHaxeValue(little_interpreter_Interpreter.evaluate(next));
+					if(typeof(val) == "number" || typeof(val) == "number" && ((val | 0) === val)) {
+						from = val;
+					} else {
+						var parserForLoop1 = "For loop's `" + little_Keywords.FOR_LOOP_IDENTIFIERS.FROM + "` argument must be of type " + little_Keywords.TYPE_INT + "/" + little_Keywords.TYPE_FLOAT + " (given: " + little_interpreter_Interpreter.stringifyTokenValue(next) + " as ";
+						var e = little_interpreter_Interpreter.evaluate(next);
+						little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage(parserForLoop1 + $hxEnums[e.__enum__].__constructs__[e._hx_index]._hx_name + ")"));
+					}
+				} else {
+					_hx_tmp1 = _g == little_Keywords.FOR_LOOP_IDENTIFIERS.TO;
+					if(_hx_tmp1 == true) {
+						var val = little_tools_Conversion.toHaxeValue(little_interpreter_Interpreter.evaluate(next));
+						if(typeof(val) == "number" || typeof(val) == "number" && ((val | 0) === val)) {
+							to = val;
+						} else {
+							var parserForLoop1 = "For loop's `" + little_Keywords.FOR_LOOP_IDENTIFIERS.TO + "` argument must be of type " + little_Keywords.TYPE_INT + "/" + little_Keywords.TYPE_FLOAT + " (given: " + little_interpreter_Interpreter.stringifyTokenValue(next) + " as ";
+							var e = little_interpreter_Interpreter.evaluate(next);
+							little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage(parserForLoop1 + $hxEnums[e.__enum__].__constructs__[e._hx_index]._hx_name + ")"));
+						}
+					} else {
+						_hx_tmp = _g == little_Keywords.FOR_LOOP_IDENTIFIERS.JUMP;
+						if(_hx_tmp == true) {
+							var val = little_tools_Conversion.toHaxeValue(little_interpreter_Interpreter.evaluate(next));
+							if(typeof(val) == "number" || typeof(val) == "number" && ((val | 0) === val)) {
+								if(val < 0) {
+									little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("For loop's `" + little_Keywords.FOR_LOOP_IDENTIFIERS.JUMP + "` argument must be positive (given: " + little_interpreter_Interpreter.stringifyTokenValue(next) + "). Notice - the usage of the `" + little_Keywords.FOR_LOOP_IDENTIFIERS.JUMP + "` argument switches from increasing to decreasing the value of `" + Std.string(Type.enumParameters(params[0])[0]) + "` if `" + little_Keywords.FOR_LOOP_IDENTIFIERS.FROM + "` is larger than `" + little_Keywords.FOR_LOOP_IDENTIFIERS.TO + "`. Defaulting to 1"));
+								} else {
+									jump = val;
+								}
+							} else {
+								var parserForLoop1 = "For loop's `" + little_Keywords.FOR_LOOP_IDENTIFIERS.JUMP + "` argument must be of type " + little_Keywords.TYPE_INT + "/" + little_Keywords.TYPE_FLOAT + " (given: " + little_interpreter_Interpreter.stringifyTokenValue(next) + " as ";
+								var e = little_interpreter_Interpreter.evaluate(next);
+								little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage(parserForLoop1 + $hxEnums[e.__enum__].__constructs__[e._hx_index]._hx_name + "). Defaulting to `1`"));
+							}
+						}
+					}
+				}
+				break;
+			case 12:
+				var _g = token.body;
+				var _g = token.type;
+				var ident = little_interpreter_Interpreter.evaluate(token);
+				parserForLoop($hxEnums[ident.__enum__].__constructs__[ident._hx_index]._hx_name == "Characters" ? little_parser_ParserTokens.Identifier(Type.enumParameters(ident)[0]) : ident,next);
+				break;
+			default:
+			}
+		};
+		var i = 1;
+		while(i < fp.length) {
+			var token = fp[i];
+			var next = [];
+			var lookahead = fp[i + 1];
+			while(!Type.enumEq(lookahead,little_parser_ParserTokens.Identifier(little_Keywords.FOR_LOOP_IDENTIFIERS.TO)) && !Type.enumEq(lookahead,little_parser_ParserTokens.Identifier(little_Keywords.FOR_LOOP_IDENTIFIERS.JUMP))) {
+				next.push(lookahead);
+				lookahead = fp[++i + 1];
+				if(lookahead == null) {
+					break;
+				}
+			}
+			--i;
+			parserForLoop(token,little_parser_ParserTokens.Expression(next,null));
+			i += 2;
+		}
+		if(from == null) {
+			little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("For loop must contain a `" + little_Keywords.FOR_LOOP_IDENTIFIERS.FROM + "` argument."));
+			return val;
+		}
+		if(from == null) {
+			little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("For loop must contain a `" + little_Keywords.FOR_LOOP_IDENTIFIERS.TO + "` argument."));
+			return val;
+		}
+		if(from < to) {
+			while(from < to) {
+				val = little_interpreter_Interpreter.interpret([little_parser_ParserTokens.Write([params[0]],from == (from | 0) ? little_parser_ParserTokens.Number("" + from) : little_parser_ParserTokens.Decimal("" + from),null)].concat(body),little_interpreter_Interpreter.currentConfig);
+				from += jump;
+			}
+		} else {
+			while(from > to) {
+				val = little_interpreter_Interpreter.interpret([little_parser_ParserTokens.Write([params[0]],from == (from | 0) ? little_parser_ParserTokens.Number("" + from) : little_parser_ParserTokens.Decimal("" + from),null)].concat(body),little_interpreter_Interpreter.currentConfig);
+				from -= jump;
+			}
 		}
 		return val;
 	});
@@ -4119,6 +4236,7 @@ little_Keywords.NOT_EQUALS_SIGN = "!=";
 little_Keywords.XOR_SIGN = "^^";
 little_Keywords.OR_SIGN = "||";
 little_Keywords.AND_SIGN = "&&";
+little_Keywords.FOR_LOOP_IDENTIFIERS = { FROM : "from", TO : "to", JUMP : "jump"};
 little_interpreter_Runtime.line = 0;
 little_interpreter_Runtime.exitCode = 0;
 little_interpreter_Runtime.onLineChanged = [];
