@@ -61,6 +61,14 @@ HxOverrides.substr = function(s,pos,len) {
 	}
 	return s.substr(pos,len);
 };
+HxOverrides.remove = function(a,obj) {
+	var i = a.indexOf(obj);
+	if(i == -1) {
+		return false;
+	}
+	a.splice(i,1);
+	return true;
+};
 HxOverrides.now = function() {
 	return Date.now();
 };
@@ -3651,7 +3659,7 @@ little_tools_PrepareRun.addConditions = function() {
 		params = fp;
 		var handle = little_interpreter_Interpreter.accessObject(params[0]);
 		if(handle == null) {
-			little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("For loop must start with a variable to count on (expected definition/block, found: `" + Std.string(params[0]) + "`)"));
+			little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("`for` loop must start with a variable to count on (expected definition/block, found: `" + Std.string(params[0]) + "`)"));
 			return val;
 		}
 		var from = null;
@@ -3669,7 +3677,7 @@ little_tools_PrepareRun.addConditions = function() {
 					if(typeof(val) == "number" || typeof(val) == "number" && ((val | 0) === val)) {
 						from = val;
 					} else {
-						var parserForLoop1 = "For loop's `" + little_Keywords.FOR_LOOP_IDENTIFIERS.FROM + "` argument must be of type " + little_Keywords.TYPE_INT + "/" + little_Keywords.TYPE_FLOAT + " (given: " + little_interpreter_Interpreter.stringifyTokenValue(next) + " as ";
+						var parserForLoop1 = "`for` loop's `" + little_Keywords.FOR_LOOP_IDENTIFIERS.FROM + "` argument must be of type " + little_Keywords.TYPE_INT + "/" + little_Keywords.TYPE_FLOAT + " (given: " + little_interpreter_Interpreter.stringifyTokenValue(next) + " as ";
 						var e = little_interpreter_Interpreter.evaluate(next);
 						little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage(parserForLoop1 + $hxEnums[e.__enum__].__constructs__[e._hx_index]._hx_name + ")"));
 					}
@@ -3680,7 +3688,7 @@ little_tools_PrepareRun.addConditions = function() {
 						if(typeof(val) == "number" || typeof(val) == "number" && ((val | 0) === val)) {
 							to = val;
 						} else {
-							var parserForLoop1 = "For loop's `" + little_Keywords.FOR_LOOP_IDENTIFIERS.TO + "` argument must be of type " + little_Keywords.TYPE_INT + "/" + little_Keywords.TYPE_FLOAT + " (given: " + little_interpreter_Interpreter.stringifyTokenValue(next) + " as ";
+							var parserForLoop1 = "`for` loop's `" + little_Keywords.FOR_LOOP_IDENTIFIERS.TO + "` argument must be of type " + little_Keywords.TYPE_INT + "/" + little_Keywords.TYPE_FLOAT + " (given: " + little_interpreter_Interpreter.stringifyTokenValue(next) + " as ";
 							var e = little_interpreter_Interpreter.evaluate(next);
 							little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage(parserForLoop1 + $hxEnums[e.__enum__].__constructs__[e._hx_index]._hx_name + ")"));
 						}
@@ -3690,12 +3698,12 @@ little_tools_PrepareRun.addConditions = function() {
 							var val = little_tools_Conversion.toHaxeValue(little_interpreter_Interpreter.evaluate(next));
 							if(typeof(val) == "number" || typeof(val) == "number" && ((val | 0) === val)) {
 								if(val < 0) {
-									little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("For loop's `" + little_Keywords.FOR_LOOP_IDENTIFIERS.JUMP + "` argument must be positive (given: " + little_interpreter_Interpreter.stringifyTokenValue(next) + "). Notice - the usage of the `" + little_Keywords.FOR_LOOP_IDENTIFIERS.JUMP + "` argument switches from increasing to decreasing the value of `" + Std.string(Type.enumParameters(params[0])[0]) + "` if `" + little_Keywords.FOR_LOOP_IDENTIFIERS.FROM + "` is larger than `" + little_Keywords.FOR_LOOP_IDENTIFIERS.TO + "`. Defaulting to 1"));
+									little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("`for` loop's `" + little_Keywords.FOR_LOOP_IDENTIFIERS.JUMP + "` argument must be positive (given: " + little_interpreter_Interpreter.stringifyTokenValue(next) + "). Notice - the usage of the `" + little_Keywords.FOR_LOOP_IDENTIFIERS.JUMP + "` argument switches from increasing to decreasing the value of `" + Std.string(Type.enumParameters(params[0])[0]) + "` if `" + little_Keywords.FOR_LOOP_IDENTIFIERS.FROM + "` is larger than `" + little_Keywords.FOR_LOOP_IDENTIFIERS.TO + "`. Defaulting to 1"));
 								} else {
 									jump = val;
 								}
 							} else {
-								var parserForLoop1 = "For loop's `" + little_Keywords.FOR_LOOP_IDENTIFIERS.JUMP + "` argument must be of type " + little_Keywords.TYPE_INT + "/" + little_Keywords.TYPE_FLOAT + " (given: " + little_interpreter_Interpreter.stringifyTokenValue(next) + " as ";
+								var parserForLoop1 = "`for` loop's `" + little_Keywords.FOR_LOOP_IDENTIFIERS.JUMP + "` argument must be of type " + little_Keywords.TYPE_INT + "/" + little_Keywords.TYPE_FLOAT + " (given: " + little_interpreter_Interpreter.stringifyTokenValue(next) + " as ";
 								var e = little_interpreter_Interpreter.evaluate(next);
 								little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage(parserForLoop1 + $hxEnums[e.__enum__].__constructs__[e._hx_index]._hx_name + "). Defaulting to `1`"));
 							}
@@ -3729,11 +3737,11 @@ little_tools_PrepareRun.addConditions = function() {
 			i += 2;
 		}
 		if(from == null) {
-			little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("For loop must contain a `" + little_Keywords.FOR_LOOP_IDENTIFIERS.FROM + "` argument."));
+			little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("`for` loop must contain a `" + little_Keywords.FOR_LOOP_IDENTIFIERS.FROM + "` argument."));
 			return val;
 		}
 		if(from == null) {
-			little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("For loop must contain a `" + little_Keywords.FOR_LOOP_IDENTIFIERS.TO + "` argument."));
+			little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("`for` loop must contain a `" + little_Keywords.FOR_LOOP_IDENTIFIERS.TO + "` argument."));
 			return val;
 		}
 		if(from < to) {
@@ -3747,6 +3755,23 @@ little_tools_PrepareRun.addConditions = function() {
 				from -= jump;
 			}
 		}
+		return val;
+	});
+	little_Little.plugin.registerCondition("after",[little_parser_ParserTokens.Define(little_parser_ParserTokens.Identifier("rule"),little_parser_ParserTokens.Identifier(little_Keywords.TYPE_BOOLEAN))],function(params,body) {
+		var val = little_parser_ParserTokens.NullValue;
+		var handle = little_interpreter_Interpreter.accessObject(Type.enumParameters(params[0])[0][0]);
+		if(handle == null) {
+			little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("`after` condition must start with a variable to watch (expected definition, found: `" + Type.enumParameters(params[0])[0][0] + "`)"));
+			return val;
+		}
+		var dispatchAndRemove = null;
+		dispatchAndRemove = function(set) {
+			if(little_tools_Conversion.toHaxeValue(little_interpreter_Interpreter.evaluateExpressionParts(params))) {
+				little_interpreter_Interpreter.interpret(body,little_interpreter_Interpreter.currentConfig);
+				HxOverrides.remove(handle.setterListeners,dispatchAndRemove);
+			}
+		};
+		handle.setterListeners.push(dispatchAndRemove);
 		return val;
 	});
 };

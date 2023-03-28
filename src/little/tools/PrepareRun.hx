@@ -86,7 +86,7 @@ class PrepareRun {
 
             var handle = Interpreter.accessObject(params[0]);
             if (handle == null) {
-                Runtime.throwError(ErrorMessage('For loop must start with a variable to count on (expected definition/block, found: `${params[0]}`)'));
+                Runtime.throwError(ErrorMessage('`for` loop must start with a variable to count on (expected definition/block, found: `${params[0]}`)'));
                 return val;
             }
             
@@ -99,7 +99,7 @@ class PrepareRun {
                         if (val is Float || val is Int) {
                             from = val;
                         } else {
-                            Runtime.throwError(ErrorMessage('For loop\'s `${FOR_LOOP_IDENTIFIERS.FROM}` argument must be of type $TYPE_INT/$TYPE_FLOAT (given: ${Interpreter.stringifyTokenValue(next)} as ${Interpreter.evaluate(next).getName()})'));
+                            Runtime.throwError(ErrorMessage('`for` loop\'s `${FOR_LOOP_IDENTIFIERS.FROM}` argument must be of type $TYPE_INT/$TYPE_FLOAT (given: ${Interpreter.stringifyTokenValue(next)} as ${Interpreter.evaluate(next).getName()})'));
                         }
                     }
                     case Identifier(_ == FOR_LOOP_IDENTIFIERS.TO => true): {
@@ -107,17 +107,17 @@ class PrepareRun {
                         if (val is Float || val is Int) {
                             to = val;
                         } else {
-                            Runtime.throwError(ErrorMessage('For loop\'s `${FOR_LOOP_IDENTIFIERS.TO}` argument must be of type $TYPE_INT/$TYPE_FLOAT (given: ${Interpreter.stringifyTokenValue(next)} as ${Interpreter.evaluate(next).getName()})'));
+                            Runtime.throwError(ErrorMessage('`for` loop\'s `${FOR_LOOP_IDENTIFIERS.TO}` argument must be of type $TYPE_INT/$TYPE_FLOAT (given: ${Interpreter.stringifyTokenValue(next)} as ${Interpreter.evaluate(next).getName()})'));
                         }
                     }
                     case Identifier(_ == FOR_LOOP_IDENTIFIERS.JUMP => true): {
                         var val = Conversion.toHaxeValue(Interpreter.evaluate(next));
                         if (val is Float || val is Int) {
                             if (val < 0) {
-                                Runtime.throwError(ErrorMessage('For loop\'s `${FOR_LOOP_IDENTIFIERS.JUMP}` argument must be positive (given: ${Interpreter.stringifyTokenValue(next)}). Notice - the usage of the `${FOR_LOOP_IDENTIFIERS.JUMP}` argument switches from increasing to decreasing the value of `${params[0].getParameters()[0]}` if `${FOR_LOOP_IDENTIFIERS.FROM}` is larger than `${FOR_LOOP_IDENTIFIERS.TO}`. Defaulting to 1'));
+                                Runtime.throwError(ErrorMessage('`for` loop\'s `${FOR_LOOP_IDENTIFIERS.JUMP}` argument must be positive (given: ${Interpreter.stringifyTokenValue(next)}). Notice - the usage of the `${FOR_LOOP_IDENTIFIERS.JUMP}` argument switches from increasing to decreasing the value of `${params[0].getParameters()[0]}` if `${FOR_LOOP_IDENTIFIERS.FROM}` is larger than `${FOR_LOOP_IDENTIFIERS.TO}`. Defaulting to 1'));
                             } else jump = val;
                         } else {
-                            Runtime.throwError(ErrorMessage('For loop\'s `${FOR_LOOP_IDENTIFIERS.JUMP}` argument must be of type $TYPE_INT/$TYPE_FLOAT (given: ${Interpreter.stringifyTokenValue(next)} as ${Interpreter.evaluate(next).getName()}). Defaulting to `1`'));
+                            Runtime.throwError(ErrorMessage('`for` loop\'s `${FOR_LOOP_IDENTIFIERS.JUMP}` argument must be of type $TYPE_INT/$TYPE_FLOAT (given: ${Interpreter.stringifyTokenValue(next)} as ${Interpreter.evaluate(next).getName()}). Defaulting to `1`'));
                         }
                     }
                     case Block(_): {
@@ -148,11 +148,11 @@ class PrepareRun {
             }
 
             if (from == null) {
-                Runtime.throwError(ErrorMessage('For loop must contain a `${FOR_LOOP_IDENTIFIERS.FROM}` argument.'));
+                Runtime.throwError(ErrorMessage('`for` loop must contain a `${FOR_LOOP_IDENTIFIERS.FROM}` argument.'));
                 return val;
             }
             if (from == null) {
-                Runtime.throwError(ErrorMessage('For loop must contain a `${FOR_LOOP_IDENTIFIERS.TO}` argument.'));
+                Runtime.throwError(ErrorMessage('`for` loop must contain a `${FOR_LOOP_IDENTIFIERS.TO}` argument.'));
                 return val;
             }
 
@@ -167,6 +167,26 @@ class PrepareRun {
                     from -= jump;
                 }
             }
+
+            return val;
+        });
+
+        Little.plugin.registerCondition("after", [Define(Identifier("rule"), Identifier(TYPE_BOOLEAN))], (params, body) -> {
+            var val = NullValue;
+
+            var handle = Interpreter.accessObject(params[0].getParameters()[0][0]);
+            if (handle == null) {
+                Runtime.throwError(ErrorMessage('`after` condition must start with a variable to watch (expected definition, found: `${params[0].getParameters()[0][0]}`)'));
+                return val;
+            }
+
+            function dispatchAndRemove(set:ParserTokens) {
+                if (Conversion.toHaxeValue(Interpreter.evaluateExpressionParts(params))) {
+                    Interpreter.interpret(body, Interpreter.currentConfig);
+                    handle.setterListeners.remove(dispatchAndRemove);
+                }
+            }
+            handle.setterListeners.push(dispatchAndRemove);
 
             return val;
         });
