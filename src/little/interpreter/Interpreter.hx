@@ -63,15 +63,16 @@ class Interpreter {
                     }
                 }
                 case Write(assignees, value, type): {
-                    var v = evaluate(value);
+                    var v = null;
                     for (a in assignees) {
                         var assignee = accessObject(a);
                         if (assignee == null) continue;
                         if (assignee.params != null)
                             assignee.value = value;
                         else {
+                            if (v == null)
+                                v = evaluate(value);
                             if (v.getName() == "ErrorMessage") {
-                                Runtime.throwError(v, INTERPRETER);
                                 assignee.value = NullValue;
                             } else {
                                 assignee.value = v;
@@ -102,7 +103,7 @@ class Interpreter {
         return returnVal;
     }
 
-    public static function evaluate(exp:ParserTokens, ?memory:Map<String, MemoryObject>):ParserTokens {
+    public static function evaluate(exp:ParserTokens, ?memory:Map<String, MemoryObject>, ?dontThrow:Bool = false):ParserTokens {
 
         if (memory == null) memory = Interpreter.memory; // If no memory map is given, use the base one.
 
@@ -111,7 +112,7 @@ class Interpreter {
             return NullValue;
         }
         if (exp.getName() == "ErrorMessage") {
-            Runtime.throwError(exp, INTERPRETER_VALUE_EVALUATOR);
+            if (!dontThrow) Runtime.throwError(exp, INTERPRETER_VALUE_EVALUATOR);
             return exp;
         }
 
@@ -123,23 +124,41 @@ class Interpreter {
             }
             case Block(body, type): {
                 var returnVal = runTokens(body, currentConfig.prioritizeVariableDeclarations, currentConfig.prioritizeFunctionDeclarations, currentConfig.strictTyping);
-                return evaluate(returnVal);
+                return evaluate(returnVal, memory, dontThrow);
             }
             case PartArray(parts): {
-                return PartArray([for (p in parts) evaluate(p)]);
+                return PartArray([for (p in parts) evaluate(p, memory, dontThrow)]);
             }
             case Number(_) | Decimal(_) | Characters(_) | TrueValue | FalseValue | NullValue | Sign(_): return exp;
             case Identifier(word): {
-                return evaluate(if (memory[word] != null) memory[word].value else ErrorMessage('No Such Definition: `$word`'));
+                return evaluate(if (memory[word] != null) memory[word].value else ErrorMessage('No Such Definition: `$word`'), memory, dontThrow);
             }
-            case Write(_, value, _): return evaluate(value);
+            case Write(assignees, value, type): {
+                var v = null;
+                for (a in assignees) {
+                    var assignee = accessObject(a);
+                    if (assignee == null) continue;
+                    if (assignee.params != null)
+                        assignee.value = value;
+                    else {
+                        if (v == null)
+                            v = evaluate(value);
+                        if (v.getName() == "ErrorMessage") {
+                            assignee.value = NullValue;
+                        } else {
+                            assignee.value = v;
+                        }
+                    }
+                }
+                return evaluate(value, memory, dontThrow);
+            }
             case Read(name): {
                 var str = stringifyTokenValue(name);
-                return evaluate(if (memory[str] != null) memory[str].value else ErrorMessage('No Such Definition: `$str`'));
+                return evaluate(if (memory[str] != null) memory[str].value else ErrorMessage('No Such Definition: `$str`'), memory, dontThrow);
             }
             case ActionCall(name, params): {
                 if (memory[stringifyTokenValue(name)] == null) return ErrorMessage('No Such Action:  `${stringifyTokenValue(name)}`');
-                return evaluate(memory[stringifyTokenValue(name)].use(params));
+                return evaluate(memory[stringifyTokenValue(name)].use(params), memory, dontThrow);
             }
             case Define(name, type): {
                 var object = accessObject(name, memory);
@@ -151,7 +170,7 @@ class Interpreter {
                 object = new MemoryObject(NullValue, [], params.getParameters()[0], type);
                 return object.value;
             }
-            case External(get): return evaluate(get([]));
+            case External(get): return evaluate(get([]), memory, dontThrow);
             case PropertyAccess(_, _): {
                 return accessObject(exp, memory).value;
             }
@@ -398,7 +417,7 @@ class Interpreter {
             var val:ParserTokens = evaluate(token);
             // trace(val);
             switch val {
-                case ErrorMessage(_): Runtime.throwError(val, Layer.INTERPRETER_VALUE_EVALUATOR);
+                case ErrorMessage(_): Runtime.throwError(val, INTERPRETER_VALUE_EVALUATOR);
                 case Sign(sign): mode = sign;
                 case TrueValue | FalseValue: {
                     if (valueType == TYPE_UNKNOWN) {

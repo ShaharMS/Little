@@ -95,6 +95,7 @@ Main.main = function() {
 	var tmp = little_parser_Parser.parse(little_lexer_Lexer.lex(text.value));
 	output.innerHTML = little_tools_PrettyPrinter.printParserAst(tmp);
 	text.innerHTML = Main.code;
+	haxe_Log.trace(new EReg("[\\u00C0-\\u1FFF\\u2C00-\\uD7FF\\w]","").match("ה"),{ fileName : "src/Main.hx", lineNumber : 48, className : "Main", methodName : "main"});
 };
 Math.__name__ = true;
 var Reflect = function() { };
@@ -1299,7 +1300,7 @@ little_interpreter_Interpreter.runTokens = function(tokens,preParseVars,preParse
 			var assignees = token.assignees;
 			var value = token.value;
 			var type3 = token.type;
-			var v = little_interpreter_Interpreter.evaluate(value);
+			var v = null;
 			var _g = 0;
 			while(_g < assignees.length) {
 				var a = assignees[_g];
@@ -1310,11 +1311,15 @@ little_interpreter_Interpreter.runTokens = function(tokens,preParseVars,preParse
 				}
 				if(assignee.params != null) {
 					assignee.set_value(value);
-				} else if($hxEnums[v.__enum__].__constructs__[v._hx_index]._hx_name == "ErrorMessage") {
-					little_interpreter_Runtime.throwError(v,"Interpreter");
-					assignee.set_value(little_parser_ParserTokens.NullValue);
 				} else {
-					assignee.set_value(v);
+					if(v == null) {
+						v = little_interpreter_Interpreter.evaluate(value);
+					}
+					if($hxEnums[v.__enum__].__constructs__[v._hx_index]._hx_name == "ErrorMessage") {
+						assignee.set_value(little_parser_ParserTokens.NullValue);
+					} else {
+						assignee.set_value(v);
+					}
 				}
 			}
 			returnVal = value;
@@ -1355,7 +1360,10 @@ little_interpreter_Interpreter.runTokens = function(tokens,preParseVars,preParse
 	}
 	return returnVal;
 };
-little_interpreter_Interpreter.evaluate = function(exp,memory) {
+little_interpreter_Interpreter.evaluate = function(exp,memory,dontThrow) {
+	if(dontThrow == null) {
+		dontThrow = false;
+	}
 	if(memory == null) {
 		memory = little_interpreter_Interpreter.memory;
 	}
@@ -1363,7 +1371,9 @@ little_interpreter_Interpreter.evaluate = function(exp,memory) {
 		return little_parser_ParserTokens.NullValue;
 	}
 	if($hxEnums[exp.__enum__].__constructs__[exp._hx_index]._hx_name == "ErrorMessage") {
-		little_interpreter_Runtime.throwError(exp,"Interpreter, Value Evaluator");
+		if(!dontThrow) {
+			little_interpreter_Runtime.throwError(exp,"Interpreter, Value Evaluator");
+		}
 		return exp;
 	}
 	switch(exp._hx_index) {
@@ -1387,15 +1397,37 @@ little_interpreter_Interpreter.evaluate = function(exp,memory) {
 	case 5:
 		var name = exp.name;
 		var str = little_interpreter_Interpreter.stringifyTokenValue(name);
-		return little_interpreter_Interpreter.evaluate(memory.h[str] != null ? memory.h[str].value : little_parser_ParserTokens.ErrorMessage("No Such Definition: `" + str + "`"));
+		return little_interpreter_Interpreter.evaluate(memory.h[str] != null ? memory.h[str].value : little_parser_ParserTokens.ErrorMessage("No Such Definition: `" + str + "`"),memory,dontThrow);
 	case 6:
-		var _g = exp.assignees;
-		var _g = exp.type;
+		var assignees = exp.assignees;
 		var value = exp.value;
-		return little_interpreter_Interpreter.evaluate(value);
+		var type = exp.type;
+		var v = null;
+		var _g = 0;
+		while(_g < assignees.length) {
+			var a = assignees[_g];
+			++_g;
+			var assignee = little_interpreter_Interpreter.accessObject(a);
+			if(assignee == null) {
+				continue;
+			}
+			if(assignee.params != null) {
+				assignee.set_value(value);
+			} else {
+				if(v == null) {
+					v = little_interpreter_Interpreter.evaluate(value);
+				}
+				if($hxEnums[v.__enum__].__constructs__[v._hx_index]._hx_name == "ErrorMessage") {
+					assignee.set_value(little_parser_ParserTokens.NullValue);
+				} else {
+					assignee.set_value(v);
+				}
+			}
+		}
+		return little_interpreter_Interpreter.evaluate(value,memory,dontThrow);
 	case 7:
 		var word = exp.word;
-		return little_interpreter_Interpreter.evaluate(memory.h[word] != null ? memory.h[word].value : little_parser_ParserTokens.ErrorMessage("No Such Definition: `" + word + "`"));
+		return little_interpreter_Interpreter.evaluate(memory.h[word] != null ? memory.h[word].value : little_parser_ParserTokens.ErrorMessage("No Such Definition: `" + word + "`"),memory,dontThrow);
 	case 9:
 		var name = exp.name;
 		var params = exp.params;
@@ -1404,7 +1436,7 @@ little_interpreter_Interpreter.evaluate = function(exp,memory) {
 			return little_parser_ParserTokens.ErrorMessage("No Such Action:  `" + little_interpreter_Interpreter.stringifyTokenValue(name) + "`");
 		}
 		var key = little_interpreter_Interpreter.stringifyTokenValue(name);
-		return little_interpreter_Interpreter.evaluate(memory.h[key].use(params));
+		return little_interpreter_Interpreter.evaluate(memory.h[key].use(params),memory,dontThrow);
 	case 11:
 		var _g = exp.type;
 		var parts = exp.parts;
@@ -1413,7 +1445,7 @@ little_interpreter_Interpreter.evaluate = function(exp,memory) {
 		var body = exp.body;
 		var type = exp.type;
 		var returnVal = little_interpreter_Interpreter.runTokens(body,little_interpreter_Interpreter.currentConfig.prioritizeVariableDeclarations,little_interpreter_Interpreter.currentConfig.prioritizeFunctionDeclarations,little_interpreter_Interpreter.currentConfig.strictTyping);
-		return little_interpreter_Interpreter.evaluate(returnVal);
+		return little_interpreter_Interpreter.evaluate(returnVal,memory,dontThrow);
 	case 13:
 		var parts = exp.parts;
 		var _g = [];
@@ -1421,7 +1453,7 @@ little_interpreter_Interpreter.evaluate = function(exp,memory) {
 		while(_g1 < parts.length) {
 			var p = parts[_g1];
 			++_g1;
-			_g.push(little_interpreter_Interpreter.evaluate(p));
+			_g.push(little_interpreter_Interpreter.evaluate(p,memory,dontThrow));
 		}
 		return little_parser_ParserTokens.PartArray(_g);
 	case 15:
@@ -1446,7 +1478,7 @@ little_interpreter_Interpreter.evaluate = function(exp,memory) {
 		break;
 	case 21:
 		var get = exp.get;
-		return little_interpreter_Interpreter.evaluate(get([]));
+		return little_interpreter_Interpreter.evaluate(get([]),memory,dontThrow);
 	case 24:case 25:case 26:
 		return exp;
 	default:
@@ -2564,10 +2596,10 @@ little_lexer_Lexer.lex = function(code) {
 			}
 			--i;
 			tokens.push(little_lexer_LexerTokens.Sign(sign));
-		} else if(new EReg("\\w","").match(char)) {
+		} else if(new EReg("[\\u00C0-\\u1FFF\\u2C00-\\uD7FF\\w]","").match(char)) {
 			var name = char;
 			++i;
-			while(i < code.length && new EReg("\\w","").match(code.charAt(i))) {
+			while(i < code.length && new EReg("[\\u00C0-\\u1FFF\\u2C00-\\uD7FF\\w]","").match(code.charAt(i))) {
 				name += code.charAt(i);
 				++i;
 			}
