@@ -190,5 +190,24 @@ class PrepareRun {
 
             return val;
         });
+
+        Little.plugin.registerCondition("whenever", [Define(Identifier("rule"), Identifier(TYPE_BOOLEAN))], (params, body) -> {
+            var val = NullValue;
+
+            var handle = Interpreter.accessObject(params[0].getParameters()[0][0]);
+            if (handle == null) {
+                Runtime.throwError(ErrorMessage('`whenever` condition must start with a variable to watch (expected definition, found: `${params[0].getParameters()[0][0]}`)'));
+                return val;
+            }
+
+            function dispatchAndRemove(set:ParserTokens) {
+                if (Conversion.toHaxeValue(Interpreter.evaluateExpressionParts(params))) {
+                    Interpreter.interpret(body, Interpreter.currentConfig);
+                }
+            }
+            handle.setterListeners.push(dispatchAndRemove);
+
+            return val;
+        });
     }
 }

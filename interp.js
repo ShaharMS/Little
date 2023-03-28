@@ -3774,6 +3774,21 @@ little_tools_PrepareRun.addConditions = function() {
 		handle.setterListeners.push(dispatchAndRemove);
 		return val;
 	});
+	little_Little.plugin.registerCondition("whenever",[little_parser_ParserTokens.Define(little_parser_ParserTokens.Identifier("rule"),little_parser_ParserTokens.Identifier(little_Keywords.TYPE_BOOLEAN))],function(params,body) {
+		var val = little_parser_ParserTokens.NullValue;
+		var handle = little_interpreter_Interpreter.accessObject(Type.enumParameters(params[0])[0][0]);
+		if(handle == null) {
+			little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("`whenever` condition must start with a variable to watch (expected definition, found: `" + Type.enumParameters(params[0])[0][0] + "`)"));
+			return val;
+		}
+		var dispatchAndRemove = function(set) {
+			if(little_tools_Conversion.toHaxeValue(little_interpreter_Interpreter.evaluateExpressionParts(params))) {
+				little_interpreter_Interpreter.interpret(body,little_interpreter_Interpreter.currentConfig);
+			}
+		};
+		handle.setterListeners.push(dispatchAndRemove);
+		return val;
+	});
 };
 var little_tools_PrettyPrinter = function() { };
 $hxClasses["little.tools.PrettyPrinter"] = little_tools_PrettyPrinter;
