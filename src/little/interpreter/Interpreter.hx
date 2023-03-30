@@ -267,6 +267,7 @@ class Interpreter {
                         return obj;
                     }
                     case _: {
+                        trace(name, stringifyTokenValue(name));
                         memory[stringifyTokenValue(name)] = new MemoryObject(NullValue, [], params.getParameters()[0], type); 
                         return memory[stringifyTokenValue(name)];
                     }

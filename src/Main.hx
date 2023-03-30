@@ -12,20 +12,15 @@ import js.Browser;
 #end
 import little.parser.Parser;
 import little.lexer.Lexer;
+import texter.general.Char;
+
+import texter.general.CharTools;
+
 
 using StringTools;
 
 class Main {
-	static var code = '
-a() = define {define i = 5; i = i + 1; ("num" + i)} = hello() = 6
-action a(define h as String = 8; define a = 3; define xe) {
-    if (h == a) {
-        return a + 1
-    }
-    nothing; return h + a + xe + {define a = 1; (a + 1)}
-}
-define x as Number = define y as Decimal = 6
-    ';
+	static var code = 'action הדפס() = {print(5)}, הדפס()';
 
 	static function main() {
 		#if js
@@ -50,10 +45,12 @@ define x as Number = define y as Decimal = 6
 	
 		while (true) {
 			Sys.print("  >> ");
-			Little.run(Sys.stdin().readLine(), true);
+			var input = Sys.stdin().readLine();
+			Little.run(input, true);
 			trace(Runtime.stdout);
 		}
 
+		
 		// trace(PrettyPrinter.printParserAst(Interpreter.forceCorrectOrderOfOperations(Parser.parse(Lexer.lex('1 + 1 * 3')))));
 		// trace(Parser.parse(Lexer.lex('define x as String')));
 		#end
