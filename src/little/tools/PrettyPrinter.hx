@@ -162,17 +162,19 @@ class PrettyPrinter {
 			for (param in params) {
 				switch param {
 					case Define(name, type): {
-						str.push('${Interpreter.stringifyTokenValue(name)} ${Keywords.TYPE_DECL_OR_CAST} ${Interpreter.stringifyTokenValue(type)}');
+						str.push('${Interpreter.stringifyTokenValue(name)} ${Keywords.TYPE_DECL_OR_CAST} ${Interpreter.stringifyTokenValue(type != null ? type : Identifier(Keywords.TYPE_DYNAMIC))}');
 					}
 					case _:
 				}
 			}
+			if (str.length == 0) return "no parameters";
 			return str.join(", ");
 		} else {
 			var str = [];
 			for (param in params) {
 				str.push(Interpreter.stringifyTokenValue(param));
 			}
+			if (str.length == 0) return "no parameters";
 			return str.join(", ");
 		}
 	}

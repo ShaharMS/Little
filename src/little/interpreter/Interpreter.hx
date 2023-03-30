@@ -55,7 +55,7 @@ class Interpreter {
                 }
                 case Condition(name, exp, body, type): {
                     if (memory[stringifyTokenValue(name)] == null) {
-                        Runtime.throwError(ErrorMessage('No Such Condition:  `${stringifyTokenValue(name)}`'));
+                        Runtime.throwError(returnVal = ErrorMessage('No Such Condition:  `${stringifyTokenValue(name)}`'));
                     } 
                     else {
                         returnVal = memory[stringifyTokenValue(name)].use(PartArray([exp, body]));
@@ -85,7 +85,10 @@ class Interpreter {
                     if (memory[stringifyTokenValue(name)] == null) {
                         Runtime.throwError(ErrorMessage('No Such Action:  `${stringifyTokenValue(name)}`'));
                     } 
-                    else returnVal = memory[stringifyTokenValue(name)].use(params);
+                    else {
+                        returnVal = memory[stringifyTokenValue(name)].use(params);
+                        if (returnVal.getName() == "ErrorMessage") Runtime.throwError(returnVal);
+                    }
                 }
                 case Return(value, type): {
                     return evaluate(value);

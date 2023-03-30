@@ -40,7 +40,6 @@ class Main {
 		});
 		output.innerHTML = little.tools.PrettyPrinter.printParserAst(little.parser.Parser.parse(little.lexer.Lexer.lex(untyped text.value)));
 		text.innerHTML = code;
-		trace(~/[\u00C0-\u1FFF\u2C00-\uD7FF\w]/.match("ה"));
 		#elseif sys
 	
 		while (true) {
