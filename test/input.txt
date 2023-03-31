@@ -1,0 +1,6 @@
+action הדפס(define v as Number) = {
+    print(v)
+}
+
+הדפס("שלום!")
+

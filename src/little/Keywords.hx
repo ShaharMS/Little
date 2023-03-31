@@ -1,5 +1,7 @@
 package little;
 
+import little.interpreter.KeywordConfig;
+
 class Keywords {
     public static var VARIABLE_DECLARATION:String = "define";
     public static var FUNCTION_DECLARATION:String = "action";
@@ -22,8 +24,11 @@ class Keywords {
 
     public static var MAIN_MODULE_NAME:String = "Main";
     public static var REGISTERED_MODULE_NAME:String = "Registered";
+
     public static var PRINT_FUNCTION_NAME:String = "print";
     public static var RAISE_ERROR_FUNCTION_NAME:String = "error";
+    public static var READ_FUNCTION_NAME:String = "read";
+    public static var RUN_CODE_FUNCTION_NAME:String = "run";
 
     /**
     	No need to ever change this, this is a parser-only feature
@@ -44,4 +49,68 @@ class Keywords {
     public static var AND_SIGN:String = "&&";
 
     public static var FOR_LOOP_IDENTIFIERS:{FROM:String, TO:String, JUMP:String} = {FROM: "from", TO: "to", JUMP: "jump"};
+
+    public static var defaultKeywordSet:KeywordConfig = {
+        VARIABLE_DECLARATION: "define",
+        FUNCTION_DECLARATION: "action",
+        TYPE_DECL_OR_CAST: "as",
+        FUNCTION_RETURN: "return",
+        NULL_VALUE: "nothing",
+        TRUE_VALUE: "true",
+        FALSE_VALUE: "false",
+        TYPE_DYNAMIC: "Anything",
+        TYPE_VOID: "Void",
+        TYPE_INT: "Number",
+        TYPE_FLOAT: "Decimal",
+        TYPE_BOOLEAN: "Boolean",
+        TYPE_STRING: "Characters",
+        TYPE_MODULE: "Type",
+        MAIN_MODULE_NAME: "Main",
+        REGISTERED_MODULE_NAME: "Registered",
+        PRINT_FUNCTION_NAME: "print",
+        RAISE_ERROR_FUNCTION_NAME: "error",
+        READ_FUNCTION_NAME: "read",
+        RUN_CODE_FUNCTION_NAME: "run",
+        TYPE_UNKNOWN: "Unknown",
+        SPECIAL_OR_MULTICHAR_SIGNS: ["++", "--", "**", "+=", "-=", ">=", "<=", "==", "&&", "||", "^^", "!="],
+        PROPERTY_ACCESS_SIGN: ".",
+        EQUALS_SIGN: "==",
+        NOT_EQUALS_SIGN: "!=",
+        XOR_SIGN: "^^",
+        OR_SIGN: "||",
+        AND_SIGN: "&&",
+        FOR_LOOP_IDENTIFIERS: {FROM: "from", TO: "to", JUMP: "jump"}
+    };
+
+    public static function switchSet(set:KeywordConfig) {
+        VARIABLE_DECLARATION = set.VARIABLE_DECLARATION;
+        FUNCTION_DECLARATION = set.FUNCTION_DECLARATION;
+        TYPE_DECL_OR_CAST = set.TYPE_DECL_OR_CAST;
+        FUNCTION_RETURN = set.FUNCTION_RETURN;
+        NULL_VALUE = set.NULL_VALUE;
+        TRUE_VALUE = set.TRUE_VALUE;
+        FALSE_VALUE = set.FALSE_VALUE;
+        TYPE_DYNAMIC = set.TYPE_DYNAMIC;
+        TYPE_VOID = set.TYPE_VOID;
+        TYPE_INT = set.TYPE_INT;
+        TYPE_FLOAT = set.TYPE_FLOAT;
+        TYPE_BOOLEAN = set.TYPE_BOOLEAN;
+        TYPE_STRING = set.TYPE_STRING;
+        TYPE_MODULE = set.TYPE_MODULE;
+        MAIN_MODULE_NAME = set.MAIN_MODULE_NAME;
+        REGISTERED_MODULE_NAME = set.REGISTERED_MODULE_NAME;
+        PRINT_FUNCTION_NAME = set.PRINT_FUNCTION_NAME;
+        RAISE_ERROR_FUNCTION_NAME = set.RAISE_ERROR_FUNCTION_NAME;
+        READ_FUNCTION_NAME = set.READ_FUNCTION_NAME;
+        RUN_CODE_FUNCTION_NAME = set.RAISE_ERROR_FUNCTION_NAME;
+        TYPE_UNKNOWN = set.TYPE_UNKNOWN;
+        SPECIAL_OR_MULTICHAR_SIGNS = set.SPECIAL_OR_MULTICHAR_SIGNS;
+        PROPERTY_ACCESS_SIGN = set.PROPERTY_ACCESS_SIGN;
+        EQUALS_SIGN = set.EQUALS_SIGN;
+        NOT_EQUALS_SIGN = set.NOT_EQUALS_SIGN;
+        XOR_SIGN = set.XOR_SIGN;
+        OR_SIGN = set.OR_SIGN;
+        AND_SIGN = set.AND_SIGN;
+        FOR_LOOP_IDENTIFIERS = set.FOR_LOOP_IDENTIFIERS;
+    }
 }

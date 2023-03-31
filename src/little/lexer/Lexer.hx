@@ -49,10 +49,10 @@ class Lexer {
                 }
                 i--;
                 tokens.push(Sign(sign));
-            } else if (~/[^+-.!@#$%%^&*0-9 \t\n;,\(\)\[\]\{\}]/.match(char)) {
+            } else if (~/[^+-.!@#$%%^&*0-9 \t\n\r;,\(\)\[\]\{\}]/.match(char)) {
                 var name = char;
                 i++;
-                while (i < code.length && ~/[^+-.!@#$%%^&*0-9 \t\n;,\(\)\[\]\{\}]/.match(code.charAt(i))) {
+                while (i < code.length && ~/[^+-.!@#$%%^&*0-9 \t\n\r;,\(\)\[\]\{\}]/.match(code.charAt(i))) {
                     name += code.charAt(i);
                     i++;
                 }

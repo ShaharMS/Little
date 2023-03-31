@@ -20,6 +20,7 @@ class Interpreter {
     public static function interpret(tokens:Array<ParserTokens>, runConfig:RunConfig) {
         //// trace(tokens);
         currentConfig = runConfig;
+        if (tokens.length == 0) return NullValue;
         if (tokens[0].getName() != "Module") {
             tokens.unshift(Module(runConfig.defaultModuleName));
         }

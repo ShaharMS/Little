@@ -14,18 +14,18 @@ class PrepareRun {
     
     public static function addFunctions() {
 
-        Little.plugin.registerFunction("print", null, [Define(Identifier("item"), null)], (params) -> {
+        Little.plugin.registerFunction(PRINT_FUNCTION_NAME, null, [Define(Identifier("item"), null)], (params) -> {
             Runtime.print(Interpreter.stringifyTokenValue(Interpreter.evaluate(params[0])));
             return NullValue;
         });
-        Little.plugin.registerFunction("error", null, [Define(Identifier("message"), null)], (params) -> {
+        Little.plugin.registerFunction(RAISE_ERROR_FUNCTION_NAME, null, [Define(Identifier("message"), null)], (params) -> {
             Runtime.throwError(Interpreter.evaluate(params[0]));
             return NullValue;
         });
-        Little.plugin.registerFunction("read", null, [Define(Identifier("string"), Identifier(TYPE_STRING))], (params) -> {
+        Little.plugin.registerFunction(READ_FUNCTION_NAME, null, [Define(Identifier("string"), Identifier(TYPE_STRING))], (params) -> {
             return Read(Identifier(Interpreter.stringifyTokenValue(params[0])));
         });
-        Little.plugin.registerFunction("run", null, [Define(Identifier("code"), Identifier(TYPE_STRING))], (params) -> {
+        Little.plugin.registerFunction(RUN_CODE_FUNCTION_NAME, null, [Define(Identifier("code"), Identifier(TYPE_STRING))], (params) -> {
             return Interpreter.interpret(Parser.parse(Lexer.lex(params[0].getParameters()[0])), Interpreter.currentConfig);
         });
 
