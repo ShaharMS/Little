@@ -1,8 +1,6 @@
---library formula
---library texter
 --class-path src
 --main Main
-#--js interp.js
---interp
+--js interp.js
+#--interp
 --debug
 # --dce full

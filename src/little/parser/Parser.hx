@@ -1,13 +1,16 @@
 package little.parser;
 
+import little.tools.Layer;
 import little.tools.PrettyPrinter;
 import little.parser.Tokens.ParserTokens;
 import little.lexer.Tokens.LexerTokens;
 import little.Keywords.*;
+import little.interpreter.Runtime;
 
 using StringTools;
-using TextTools;
+using little.tools.TextTools;
 
+@:access(little.interpreter.Runtime)
 class Parser {
     public static function parse(lexerTokens:Array<LexerTokens>):Array<ParserTokens> {
         var tokens:Array<ParserTokens> = [];
@@ -48,7 +51,7 @@ class Parser {
         tokens = mergeTypeDecls(tokens);
         // trace("types:", tokens);
         tokens = mergeComplexStructures(tokens);
-        // trace("structs:", tokens);
+        // trace("structures:", tokens);
         tokens = mergeCalls(tokens);
         // trace("calls:", tokens);
         tokens = mergePropertyOperations(tokens);
@@ -60,34 +63,7 @@ class Parser {
         return tokens;
     }
 
-    public static function mergeTypeDecls(pre:Array<ParserTokens>):Array<ParserTokens> {
-        
-        if (pre == null) return null;
 
-        var post:Array<ParserTokens> = [];
-
-        var i = 0;
-        while (i < pre.length) {
-            var token = pre[i];
-            switch token {
-                case Identifier(word): {
-                    if (word == TYPE_DECL_OR_CAST && i + 1 < pre.length) {
-                        var lookahead = pre[i + 1];
-                        post.push(TypeDeclaration(lookahead));
-                        i++;
-                    } else {
-                        post.push(token);
-                    }
-                }
-                case Expression(parts, type): post.push(Expression(mergeTypeDecls(parts), null));
-                case Block(body, type): post.push(Block(mergeTypeDecls(body), null));
-                case _: post.push(token);
-            }
-            i++;
-        }
-
-        return post;
-    }
 
     public static function mergeBlocks(pre:Array<ParserTokens>):Array<ParserTokens> {
 
@@ -99,7 +75,10 @@ class Parser {
         while (i < pre.length) {
             var token = pre[i];
             switch token {
+                case SetLine(line): {setLine(line); post.push(token);}
+                case SplitLine: {nextPart(); post.push(token);}
                 case Sign("{"): {
+                    var blockStartLine = line;
                     var blockBody:Array<ParserTokens> = [];
                     var blockStack = 1; // Open and close the block on the correct curly bracket
                     while (i + 1 < pre.length) {
@@ -114,6 +93,13 @@ class Parser {
                         } else blockBody.push(lookahead);
                         i++;
                     }
+
+                    // Throw error for unclosed blocks;
+                    if (i + 1 == pre.length) {
+                        Runtime.throwError(ErrorMessage('Unclosed code block, starting at line ' + blockStartLine));
+                        return null;
+                    }
+
                     post.push(Block(mergeBlocks(blockBody), null)); // The check performed above includes unmerged blocks inside the outer block. These unmerged blocks should be merged
                     i++;
                 }
@@ -124,6 +110,7 @@ class Parser {
             i++;
         }
 
+        resetLines();
         return post;
     }
 
@@ -137,7 +124,10 @@ class Parser {
         while (i < pre.length) {
             var token = pre[i];
             switch token {
+                case SetLine(line): {setLine(line); post.push(token);}
+                case SplitLine: {nextPart(); post.push(token);}
                 case Sign("("): {
+                    var expressionStartLine = line;
                     var expressionBody:Array<ParserTokens> = [];
                     var expressionStack = 1; // Open and close the block on the correct curly bracket
                     while (i + 1 < pre.length) {
@@ -152,6 +142,11 @@ class Parser {
                         } else expressionBody.push(lookahead);
                         i++;
                     }
+                    // Throw error for unclosed expressions;
+                    if (i + 1 == pre.length) {
+                        Runtime.throwError(ErrorMessage('Unclosed expression, starting at line ' + expressionStartLine));
+                        return null;
+                    }
                     post.push(Expression(mergeExpressions(expressionBody), null)); // The check performed above includes unmerged blocks inside the outer block. These unmerged blocks should be merged
                     i++;
                 }
@@ -163,6 +158,45 @@ class Parser {
             i++;
         }
 
+        resetLines();
+        return post;
+    }
+
+    public static function mergeTypeDecls(pre:Array<ParserTokens>):Array<ParserTokens> {
+        
+        if (pre == null) return null;
+
+        var post:Array<ParserTokens> = [];
+
+        var i = 0;
+        while (i < pre.length) {
+            var token = pre[i];
+            switch token {
+                case SetLine(line): {setLine(line); post.push(token);}
+                case SplitLine: {nextPart(); post.push(token);}
+                case Identifier(word): {
+                    if (word == TYPE_DECL_OR_CAST && i + 1 < pre.length) {
+                        var lookahead = pre[i + 1];
+                        post.push(TypeDeclaration(lookahead));
+                        i++;
+                    } else if (word == TYPE_DECL_OR_CAST) {
+                        // Throw error for incomplete type declarations;
+                    if (i + 1 == pre.length) {
+                        Runtime.throwError(ErrorMessage('Incomplete type declaration, make sure to input a type after the $TYPE_DECL_OR_CAST.'));
+                        return null;
+                    }
+                    } else {
+                        post.push(token);
+                    }
+                }
+                case Expression(parts, type): post.push(Expression(mergeTypeDecls(parts), null));
+                case Block(body, type): post.push(Block(mergeTypeDecls(body), null));
+                case _: post.push(token);
+            }
+            i++;
+        }
+
+        resetLines();
         return post;
     }
 
@@ -177,9 +211,14 @@ class Parser {
             var token = pre[i];
 
             switch token {
+                case SetLine(line): {setLine(line); post.push(token);}
+                case SplitLine: {nextPart(); post.push(token);}
                 case Identifier(_ == VARIABLE_DECLARATION => true): {
                     i++;
-                    if (i >= pre.length) return null;
+                    if (i >= pre.length) {
+                        Runtime.throwError(ErrorMessage("Missing variable name, variable is cut off by the end of the file, block or expression."), Layer.PARSER);
+                        return null;
+                    }
 
                     var name:Array<ParserTokens> = [];
                     var pushToName = true;
@@ -188,7 +227,10 @@ class Parser {
                         var lookahead = pre[i];
                         switch lookahead {
                             case TypeDeclaration(typeToken): {
-                                if (name.length == 0) return null;
+                                if (name.length == 0) {
+                                    Runtime.throwError(ErrorMessage("Missing variable name before type declaration."), Layer.PARSER);
+                                    return null;
+                                }
                                 type = typeToken;
                                 break;
                             }
@@ -228,7 +270,10 @@ class Parser {
                 }
                 case Identifier(_ == FUNCTION_DECLARATION => true): {
                     i++;
-                    if (i >= pre.length) return null;
+                    if (i >= pre.length) {
+                        Runtime.throwError(ErrorMessage("Missing function name, function is cut off by the end of the file, block or expression."), Layer.PARSER);
+                        return null;
+                    }
                     
                     var name:Array<ParserTokens> = [];
                     var pushToName = true;
@@ -238,12 +283,18 @@ class Parser {
                         var lookahead = pre[i];
                         switch lookahead {
                             case TypeDeclaration(typeToken): {
-                                if (name.length == 0) return null;
-                                else if (type == null) return null;
+                                if (name.length == 0) {
+                                    Runtime.throwError(ErrorMessage("Missing function name & parameters before type declaration."), Layer.PARSER);
+                                    return null;
+                                }
+                                else if (params == null) {
+                                    Runtime.throwError(ErrorMessage("Missing function parameters before type declaration."), Layer.PARSER);
+                                    return null;
+                                }
                                 type = typeToken;
                                 break;
                             }
-                            case SetLine(_) | SplitLine | Sign("="): i--; break;
+                            case Sign("="): i--; break;
                             case Sign(_ == PROPERTY_ACCESS_SIGN => true): {
                                 if (params != null) {i--; break;}
                                 pushToName = true;
@@ -280,7 +331,10 @@ class Parser {
                 }
                 case Identifier(CONDITION_TYPES.contains(_) => true): {
                     i++;
-                    if (i >= pre.length) return null;
+                    if (i >= pre.length) {
+                        Runtime.throwError(ErrorMessage("Missing condition name, condition is cut off by the end of the file, block or expression."), Layer.PARSER);
+                        return null;
+                    }
 
                     var name:ParserTokens = Identifier(token.getParameters()[0]);
                     var exp:ParserTokens = null;
@@ -312,7 +366,7 @@ class Parser {
                     i--;
                     if (i + 1 < pre.length) {
                         switch pre[i + 1] {
-                            case Block(_, _) | TypeDeclaration(_): type = pre[i + 1];
+                            case Block(_, _) | TypeDeclaration(_): type = pre[i + 1]; i++;
                             case _:
                         }
                     }
@@ -320,7 +374,10 @@ class Parser {
                 }
                 case Identifier(_ == FUNCTION_RETURN => true): {
                     i++;
-                    if (i >= pre.length) return null;
+                    if (i >= pre.length) {
+                        Runtime.throwError(ErrorMessage("Missing return value, value is cut off by the end of the file, block or expression."), Layer.PARSER);
+                        return null;
+                    }
 
                     var valueToReturn:Array<ParserTokens> = [];
                     while (i < pre.length) {
@@ -346,6 +403,7 @@ class Parser {
             i++;
         }
 
+        resetLines();
         return post;
     }
 
@@ -361,6 +419,8 @@ class Parser {
             if (pre[i] == null) {i++; continue;}
             var token = pre[i];
             switch token {
+                case SetLine(line): {setLine(line); post.push(token);}
+                case SplitLine: {nextPart(); post.push(token);}
                 case Expression(parts, type): {
                     parts = mergeCalls(parts);
                     if (i == 0) {
@@ -388,6 +448,7 @@ class Parser {
             i++;
         }
 
+        resetLines();
         return post;
     }
 
@@ -401,12 +462,23 @@ class Parser {
         while (i >= 0) {
             var token = pre[i];
             switch token {
-
+                case SetLine(line): {setLine(line); post.unshift(token);}
+                case SplitLine: {nextPart(); post.unshift(token);}
                 case Sign(_ == PROPERTY_ACCESS_SIGN => true): {
-                    if (i-- >= pre.length) return null;
+                    if (i-- <= 0) {
+                        Runtime.throwError(ErrorMessage("Property access cut off by the start of file, block or expression."), Layer.PARSER);
+                        return null;
+                    }
                     var lookbehind = pre[i];
                     switch lookbehind {
-                        case SplitLine | SetLine(_) | Sign(_): return null;
+                        case SplitLine | SetLine(_): {
+                            Runtime.throwError(ErrorMessage("Property access cut off by the start of a line, or by a line split (; or ,)."), Layer.PARSER);
+                            return null;
+                        }
+                        case Sign(s): {
+                            Runtime.throwError(ErrorMessage('Cannot access the property of a sign ($s). Was the property access cut off by accident?'));
+                            return null;
+                        }
                         case _: {
                             var field = post.shift();
                             post.unshift(PropertyAccess(lookbehind, field));
@@ -425,6 +497,7 @@ class Parser {
             i--;
         }
 
+        resetLines();
         return post;
     }
 
@@ -439,8 +512,21 @@ class Parser {
         while (i < pre.length) {
             var token = pre[i];
             switch token {
+                case SetLine(line): {
+                    setLine(line); 
+                    if (potentialAssignee != null) post.push(potentialAssignee);
+                    potentialAssignee = token;
+                }
+                case SplitLine: {
+                    nextPart(); 
+                    if (potentialAssignee != null) post.push(potentialAssignee);
+                    potentialAssignee = token;
+                }
                 case Sign("="): {
-                    if (i + 1 >= pre.length) break;
+                    if (i + 1 >= pre.length) {
+                        Runtime.throwError(ErrorMessage("Missing value after the `=`"), Layer.PARSER);
+                        return null;
+                    }
 
                     var currentAssignee:Array<ParserTokens> = [potentialAssignee];
                     var assignees = [currentAssignee.length == 1 ? currentAssignee[0] : Expression(currentAssignee.copy(), null)];
@@ -460,6 +546,10 @@ class Parser {
                         }
                         i++;
                     }
+                    if (currentAssignee.length == 0) {
+                        Runtime.throwError(ErrorMessage("Missing value after the last `=`"), Layer.PARSER);
+                        return null;
+                    }
                     // The last currentAssignee is the value;
                     value = if (currentAssignee.length == 1) currentAssignee[0] else Expression(currentAssignee, null);
                     post.push(Write(assignees, value, null));
@@ -468,6 +558,10 @@ class Parser {
                 case Expression(parts, type): {
                     if (potentialAssignee != null) post.push(potentialAssignee);
                     potentialAssignee = Expression(mergeWrites(parts), type);
+                }
+                case PartArray(parts): {
+                    if (potentialAssignee != null) post.push(potentialAssignee);
+                    potentialAssignee = PartArray(mergeWrites(parts));
                 }
                 case Block(body, type): {
                     if (potentialAssignee != null) post.push(potentialAssignee);
@@ -509,6 +603,33 @@ class Parser {
         // trace(potentialAssignee);
         if (potentialAssignee != null) post.push(potentialAssignee);
         post.shift();
+
+        resetLines();
         return post;
+    }
+
+
+
+
+    
+
+
+
+
+
+
+
+    static var line(get, set):Int;
+    static function get_line() return Runtime.line;
+    static function set_line(l:Int) return Runtime.line = l;
+    static var linePart:Int = 0;
+    static function setLine(l:Int) {
+        line = l;
+        linePart = 0;
+    }
+    static function nextPart() linePart++;
+    static function resetLines() {
+        line = 0;
+        linePart = 0;
     }
 }

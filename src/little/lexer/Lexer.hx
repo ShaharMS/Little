@@ -4,7 +4,7 @@ import little.lexer.Tokens.LexerTokens;
 import little.Keywords.*;
 
 using StringTools;
-using TextTools;
+using little.tools.TextTools;
 
 class Lexer {
     

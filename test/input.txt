@@ -1,6 +1,6 @@
-action הדפס(define v as Number) = {
-    print(v)
-}
+define x = 4
 
-הדפס("שלום!")
-
+print(x)
+
+
+stop!

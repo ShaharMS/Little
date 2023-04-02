@@ -2,7 +2,7 @@ package little.tools;
 
 import little.interpreter.Interpreter;
 using StringTools;
-using TextTools;
+using little.tools.TextTools;
 
 import little.parser.Tokens;
 

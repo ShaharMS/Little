@@ -8,7 +8,7 @@ import little.parser.Tokens.ParserTokens;
 import little.tools.Layer;
 
 using StringTools;
-using TextTools;
+using little.tools.TextTools;
 
 /**
 	A class containing values and callbacks related to Little's runtime.

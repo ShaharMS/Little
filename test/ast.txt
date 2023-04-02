@@ -1,25 +1,15 @@
 
 Ast
- ├─── Definition Write
- │     ├─── Part Array
- │     │     └─── Action Creation
- │     │           ├─── הדפס
- │     │           └─── Expression
- │     │                 └─── Definition Creation
- │     │                       ├─── v
- │     │                       └─── Number
- │     └─── Block
- │           ├─── SetLine(1)
- │           ├─── Action Call
- │           │     ├─── print
- │           │     └─── Part Array
- │           │           └─── v
- │           └─── SetLine(2)
- ├─── SetLine(3)
- ├─── SetLine(4)
- ├─── Action Call
- │     ├─── הדפס
- │     └─── Part Array
- │           └─── "שלום!"
- └─── SetLine(5)
+ └─── Definition Write
+       ├─── Part Array
+       │     └─── Definition Creation
+       │           └─── x
+       └─── Expression
+             ├─── 4
+             ├─── Action Call
+             │     ├─── print
+             │     └─── Part Array
+             │           └─── x
+             ├─── stop
+             └─── !
 

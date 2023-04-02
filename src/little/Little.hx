@@ -57,6 +57,7 @@ class Little {
         Runtime.line = 0;
         Runtime.callStack = [];
         Runtime.stdout = "";
+        Runtime.currentModule = Keywords.MAIN_MODULE_NAME;
         final previous = Little.debug;
         if (debug != null) Little.debug = debug;
         Interpreter.memory = [];

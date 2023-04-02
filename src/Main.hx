@@ -1,8 +1,6 @@
 package;
 
-import sys.FileSystem;
 import haxe.io.Path;
-import sys.io.File;
 import little.tools.Data;
 import little.tools.Plugins;
 import little.tools.Conversion;
@@ -12,11 +10,12 @@ import little.tools.PrettyPrinter;
 import little.interpreter.Interpreter;
 #if js
 import js.Browser;
+#elseif sys 
+import sys.FileSystem;
+import sys.io.File;
 #end
 import little.parser.Parser;
 import little.lexer.Lexer;
-import texter.general.Char;
-import texter.general.CharTools;
 
 using StringTools;
 
@@ -35,7 +34,7 @@ class Main {
 			} catch (e) {}
 
 			try {
-				Little.run(untyped text.value);
+				Little.run(untyped text.value, true);
 				stdout.innerHTML = Runtime.stdout;
 			} catch (e) {}
 		});
