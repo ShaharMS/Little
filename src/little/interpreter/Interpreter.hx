@@ -100,6 +100,10 @@ class Interpreter {
                 case PropertyAccess(name, property): {
                     returnVal = evaluate(token);
                 }
+                case Read(name): {
+                    var str = stringifyTokenValue(name);
+                    returnVal =  evaluate(if (memory[str] != null) memory[str].value else ErrorMessage('No Such Definition: `$str`'));
+                }
                 case _: returnVal = evaluate(token);
             }
             i++;
@@ -115,14 +119,21 @@ class Interpreter {
             // trace("null token");
             return NullValue;
         }
-        if (exp.getName() == "ErrorMessage") {
-            if (!dontThrow) Runtime.throwError(exp, INTERPRETER_VALUE_EVALUATOR);
-            return exp;
-        }
 
         switch exp {
-            case SetLine(line): Runtime.line = line;
-            case Module(name): Runtime.currentModule = name;
+            case ErrorMessage(msg): {
+                if (!dontThrow) Runtime.throwError(exp, INTERPRETER_VALUE_EVALUATOR);
+                return exp;
+            }
+            case SetLine(line): {
+                Runtime.line = line; 
+                return NullValue;
+            }
+            case SplitLine: return NullValue;
+            case Module(name): {
+                Runtime.currentModule = name;
+                return NullValue;
+            }
             case Expression(parts, _): {
                 return evaluateExpressionParts(parts);
             }
@@ -137,6 +148,7 @@ class Interpreter {
             case Identifier(word): {
                 return evaluate(if (memory[word] != null) memory[word].value else ErrorMessage('No Such Definition: `$word`'), memory, dontThrow);
             }
+            case TypeDeclaration(type): return evaluate(type, memory, dontThrow);
             case Write(assignees, value, type): {
                 var v = null;
                 for (a in assignees) {
@@ -161,8 +173,16 @@ class Interpreter {
                 return evaluate(if (memory[str] != null) memory[str].value else ErrorMessage('No Such Definition: `$str`'), memory, dontThrow);
             }
             case ActionCall(name, params): {
-                if (memory[stringifyTokenValue(name)] == null) return ErrorMessage('No Such Action:  `${stringifyTokenValue(name)}`');
+                if (memory[stringifyTokenValue(name)] == null) return evaluate(ErrorMessage('No Such Action:  `${stringifyTokenValue(name)}`'));
                 return evaluate(memory[stringifyTokenValue(name)].use(params), memory, dontThrow);
+            }
+            case Condition(name, exp, body, type): {
+                if (memory[stringifyTokenValue(name)] == null) {
+                    return evaluate(ErrorMessage('No Such Condition:  `${stringifyTokenValue(name)}`'), memory, dontThrow);
+                } 
+                else {
+                    return evaluate(memory[stringifyTokenValue(name)].use(PartArray([exp, body])), memory, dontThrow);
+                }
             }
             case Define(name, type): {
                 var object = accessObject(name, memory);
@@ -178,12 +198,16 @@ class Interpreter {
             case PropertyAccess(_, _): {
                 return accessObject(exp, memory).value;
             }
-            case _:
+            case Return(value, type): {
+                return evaluate(value, memory, dontThrow);
+            }
+            case _: {
+                return evaluate(ErrorMessage('Unable to evaluate token `$exp`'), memory, dontThrow);
+            }
         }
 
         
 
-        return ErrorMessage('Unable to evaluate token `$exp`');
     }
 
     public static function accessObject(exp:ParserTokens, ?memory:Map<String, MemoryObject>):MemoryObject {
@@ -191,6 +215,8 @@ class Interpreter {
         if (memory == null) memory = Interpreter.memory; // If no memory map is given, use the base one.
 
         switch exp {
+            case SetLine(line): Runtime.line = line;
+            case Module(name): Runtime.currentModule = name;
             case Expression(parts, _): {
                 return accessObject(evaluateExpressionParts(parts));
             }
@@ -314,7 +340,10 @@ class Interpreter {
                 return access(obj, p, str);
                 
             }
-            case _:
+            case Return(value, type): {
+                return accessObject(value);
+            }
+            case _: trace('Token $exp is inaccessible via memory. Returning null.');
         }
 
         // trace("null object");
@@ -326,6 +355,9 @@ class Interpreter {
         if (memory == null) memory = Interpreter.memory; // If no memory map is given, use the base one.
 
         switch token {
+            case SetLine(line): return (Runtime.line = line) + "";
+            case SplitLine: return token.getName();
+            case Module(name): return Runtime.currentModule = name;
             case Block(body, type): return stringifyTokenValue(runTokens(body, currentConfig.prioritizeVariableDeclarations, currentConfig.prioritizeFunctionDeclarations, currentConfig.strictTyping));
             case Expression(parts, type): return stringifyTokenValue(evaluate(token));
             case Characters(string): return string;
@@ -334,7 +366,8 @@ class Interpreter {
             case TrueValue: return Keywords.TRUE_VALUE;
             case FalseValue: return Keywords.FALSE_VALUE;
             case NullValue: return Keywords.NULL_VALUE;
-            case Identifier(word) | Module(word): return word;
+            case Identifier(word): return word;
+            case Sign(sign): return sign;
             case Read(name): {
                 var str = stringifyTokenValue(name);
                 return stringifyTokenValue(if (memory[str] != null) memory[str].value else ErrorMessage('No Such Definition: `$str`'));
@@ -357,11 +390,17 @@ class Interpreter {
             case PartArray(parts): {
                 return [for (p in parts) stringifyTokenValue(evaluate(p))].join(","); 
             }
-            case PropertyAccess(name, property): {
-                return stringifyTokenValue(name);
+            case PropertyAccess(_, _) | Condition(_, _, _, _) | External(_) | ExternalCondition(_) | TypeDeclaration(_): {
+                return stringifyTokenValue(evaluate(token, memory));
             }
-            case _:
+            case Return(value, type): {
+                return stringifyTokenValue(value);
+            }
+            case ErrorMessage(msg): {
+                return msg;
+            }
         }
+
         // trace(token);
         return "Something went wrong";
     }
@@ -403,7 +442,28 @@ class Interpreter {
             case PropertyAccess(name, property): {
                 return stringifyTokenIdentifier(name);
             }
-            case _:
+            case Condition(name, exp, body, type): {
+                return stringifyTokenIdentifier(name);
+            }
+            case TypeDeclaration(type): {
+                return stringifyTokenIdentifier(type);
+            }
+            case SplitLine: return ','; // Returns default line splitter.
+            case Sign(sign): return sign;
+            case SetLine(line): {
+                Runtime.line = line;
+                return "\n"; // Returns default newline.
+            }
+            case Return(value, type): {
+                return stringifyTokenIdentifier(value);
+            }
+            case ErrorMessage(msg): {
+                return token.getName(); // Might look goofy, but this function returns identifier names, not identifier values.
+            }
+            case External(_) | ExternalCondition(_): {
+                Runtime.throwError(ErrorMessage('$token "does not have" a token identifier. it must be bound to one (for example, as a definiton\'s value.'), INTERPRETER_TOKEN_IDENTIFIER_STRINGIFIER);
+                return "";
+            }
         }
         // trace(token);
         return "Something went wrong";
@@ -418,9 +478,9 @@ class Interpreter {
         var value = "", valueType = TYPE_UNKNOWN, mode = "+";
 
         for (token in parts) {
-            // trace(token);
+            trace(token);
             var val:ParserTokens = evaluate(token);
-            // trace(val);
+            trace(val);
             switch val {
                 case ErrorMessage(_): Runtime.throwError(val, INTERPRETER_VALUE_EVALUATOR);
                 case Sign(sign): mode = sign;

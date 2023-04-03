@@ -127,10 +127,6 @@ class PrettyPrinter {
                 strParts.push(getTree(body[body.length - 1], prefix.copy(), level + 1, true));
                 return strParts.join("");
             }
-			case Parameter(name, type):
-				{
-					return '${prefixFA(prefix)}$t$d Parameter\n${getTree(name, prefix.copy(), level + 1, false)}${getTree(type, prefix.copy(), level + 1, true)}';
-				}
 			case ActionCall(name, params):
 				{
 					var title = '${prefixFA(prefix)}$t$d Action Call\n';

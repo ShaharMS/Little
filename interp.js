@@ -1245,6 +1245,11 @@ little_interpreter_Interpreter.runTokens = function(tokens,preParseVars,preParse
 				}
 			}
 			break;
+		case 5:
+			var name3 = token.name;
+			var str = little_interpreter_Interpreter.stringifyTokenValue(name3);
+			returnVal = little_interpreter_Interpreter.evaluate(memory.h[str] != null ? memory.h[str].value : little_parser_ParserTokens.ErrorMessage("No Such Definition: `" + str + "`"));
+			break;
 		case 6:
 			var assignees = token.assignees;
 			var value = token.value;
@@ -1274,13 +1279,13 @@ little_interpreter_Interpreter.runTokens = function(tokens,preParseVars,preParse
 			returnVal = value;
 			break;
 		case 9:
-			var name3 = token.name;
+			var name4 = token.name;
 			var params1 = token.params;
-			var key2 = little_interpreter_Interpreter.stringifyTokenValue(name3);
+			var key2 = little_interpreter_Interpreter.stringifyTokenValue(name4);
 			if(memory.h[key2] == null) {
-				little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("No Such Action:  `" + little_interpreter_Interpreter.stringifyTokenValue(name3) + "`"));
+				little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("No Such Action:  `" + little_interpreter_Interpreter.stringifyTokenValue(name4) + "`"));
 			} else {
-				var key3 = little_interpreter_Interpreter.stringifyTokenValue(name3);
+				var key3 = little_interpreter_Interpreter.stringifyTokenValue(name4);
 				returnVal = memory.h[key3].use(params1);
 				if($hxEnums[returnVal.__enum__].__constructs__[returnVal._hx_index]._hx_name == "ErrorMessage") {
 					little_interpreter_Runtime.throwError(returnVal);
@@ -1296,14 +1301,14 @@ little_interpreter_Interpreter.runTokens = function(tokens,preParseVars,preParse
 			var type5 = token.type;
 			returnVal = little_interpreter_Interpreter.runTokens(body1,preParseVars,preParseFuncs,strict);
 			break;
-		case 15:
-			var name4 = token.name;
+		case 14:
+			var name5 = token.name;
 			var property = token.property;
 			returnVal = little_interpreter_Interpreter.evaluate(token);
 			break;
-		case 20:
-			var name5 = token.name;
-			little_interpreter_Runtime.currentModule = name5;
+		case 19:
+			var name6 = token.name;
+			little_interpreter_Runtime.currentModule = name6;
 			break;
 		default:
 			returnVal = little_interpreter_Interpreter.evaluate(token);
@@ -1322,17 +1327,13 @@ little_interpreter_Interpreter.evaluate = function(exp,memory,dontThrow) {
 	if(exp == null) {
 		return little_parser_ParserTokens.NullValue;
 	}
-	if($hxEnums[exp.__enum__].__constructs__[exp._hx_index]._hx_name == "ErrorMessage") {
-		if(!dontThrow) {
-			little_interpreter_Runtime.throwError(exp,"Interpreter, Value Evaluator");
-		}
-		return exp;
-	}
 	switch(exp._hx_index) {
 	case 0:
 		var line = exp.line;
 		little_interpreter_Runtime.line = line;
-		break;
+		return little_parser_ParserTokens.NullValue;
+	case 1:
+		return little_parser_ParserTokens.NullValue;
 	case 2:
 		var name = exp.name;
 		var type = exp.type;
@@ -1346,6 +1347,19 @@ little_interpreter_Interpreter.evaluate = function(exp,memory,dontThrow) {
 		var object = little_interpreter_Interpreter.accessObject(name,memory);
 		object = new little_interpreter_MemoryObject(little_parser_ParserTokens.NullValue,new haxe_ds_StringMap(),Type.enumParameters(params)[0],type);
 		return object.value;
+	case 4:
+		var name = exp.name;
+		var exp1 = exp.exp;
+		var body = exp.body;
+		var type = exp.type;
+		var key = little_interpreter_Interpreter.stringifyTokenValue(name);
+		if(memory.h[key] == null) {
+			return little_interpreter_Interpreter.evaluate(little_parser_ParserTokens.ErrorMessage("No Such Condition:  `" + little_interpreter_Interpreter.stringifyTokenValue(name) + "`"),memory,dontThrow);
+		} else {
+			var key = little_interpreter_Interpreter.stringifyTokenValue(name);
+			return little_interpreter_Interpreter.evaluate(memory.h[key].use(little_parser_ParserTokens.PartArray([exp1,body])),memory,dontThrow);
+		}
+		break;
 	case 5:
 		var name = exp.name;
 		var str = little_interpreter_Interpreter.stringifyTokenValue(name);
@@ -1380,15 +1394,22 @@ little_interpreter_Interpreter.evaluate = function(exp,memory,dontThrow) {
 	case 7:
 		var word = exp.word;
 		return little_interpreter_Interpreter.evaluate(memory.h[word] != null ? memory.h[word].value : little_parser_ParserTokens.ErrorMessage("No Such Definition: `" + word + "`"),memory,dontThrow);
+	case 8:
+		var type = exp.type;
+		return little_interpreter_Interpreter.evaluate(type,memory,dontThrow);
 	case 9:
 		var name = exp.name;
 		var params = exp.params;
 		var key = little_interpreter_Interpreter.stringifyTokenValue(name);
 		if(memory.h[key] == null) {
-			return little_parser_ParserTokens.ErrorMessage("No Such Action:  `" + little_interpreter_Interpreter.stringifyTokenValue(name) + "`");
+			return little_interpreter_Interpreter.evaluate(little_parser_ParserTokens.ErrorMessage("No Such Action:  `" + little_interpreter_Interpreter.stringifyTokenValue(name) + "`"));
 		}
 		var key = little_interpreter_Interpreter.stringifyTokenValue(name);
 		return little_interpreter_Interpreter.evaluate(memory.h[key].use(params),memory,dontThrow);
+	case 10:
+		var value = exp.value;
+		var type = exp.type;
+		return little_interpreter_Interpreter.evaluate(value,memory,dontThrow);
 	case 11:
 		var _g = exp.type;
 		var parts = exp.parts;
@@ -1408,46 +1429,56 @@ little_interpreter_Interpreter.evaluate = function(exp,memory,dontThrow) {
 			_g.push(little_interpreter_Interpreter.evaluate(p,memory,dontThrow));
 		}
 		return little_parser_ParserTokens.PartArray(_g);
-	case 15:
+	case 14:
 		var _g = exp.name;
 		var _g = exp.property;
 		return little_interpreter_Interpreter.accessObject(exp,memory).value;
-	case 16:
+	case 15:
 		var _g = exp.sign;
+		return exp;
+	case 16:
+		var _g = exp.num;
 		return exp;
 	case 17:
 		var _g = exp.num;
 		return exp;
 	case 18:
-		var _g = exp.num;
-		return exp;
-	case 19:
 		var _g = exp.string;
 		return exp;
-	case 20:
+	case 19:
 		var name = exp.name;
 		little_interpreter_Runtime.currentModule = name;
-		break;
-	case 21:
+		return little_parser_ParserTokens.NullValue;
+	case 20:
 		var get = exp.get;
 		return little_interpreter_Interpreter.evaluate(get([]),memory,dontThrow);
-	case 24:case 25:case 26:
+	case 22:
+		var msg = exp.msg;
+		if(!dontThrow) {
+			little_interpreter_Runtime.throwError(exp,"Interpreter, Value Evaluator");
+		}
+		return exp;
+	case 23:case 24:case 25:
 		return exp;
 	default:
+		return little_interpreter_Interpreter.evaluate(little_parser_ParserTokens.ErrorMessage("Unable to evaluate token `" + Std.string(exp) + "`"),memory,dontThrow);
 	}
-	return little_parser_ParserTokens.ErrorMessage("Unable to evaluate token `" + Std.string(exp) + "`");
 };
 little_interpreter_Interpreter.accessObject = function(exp,memory) {
 	if(memory == null) {
 		memory = little_interpreter_Interpreter.memory;
 	}
 	switch(exp._hx_index) {
+	case 0:
+		var line = exp.line;
+		little_interpreter_Runtime.line = line;
+		break;
 	case 2:
 		var name = exp.name;
 		var type = exp.type;
 		var access = null;
 		access = function(object,prop,objName) {
-			if(prop._hx_index == 15) {
+			if(prop._hx_index == 14) {
 				var _g = prop.name;
 				var property = prop.property;
 				objName += "" + little_Keywords.PROPERTY_ACCESS_SIGN + little_interpreter_Interpreter.stringifyTokenValue(prop);
@@ -1475,7 +1506,7 @@ little_interpreter_Interpreter.accessObject = function(exp,memory) {
 				return this1.h[key];
 			}
 		};
-		if(name._hx_index == 15) {
+		if(name._hx_index == 14) {
 			var name1 = name.name;
 			var property = name.property;
 			var access1 = access;
@@ -1496,7 +1527,7 @@ little_interpreter_Interpreter.accessObject = function(exp,memory) {
 		var type1 = exp.type;
 		var access1 = null;
 		access1 = function(object,prop,objName) {
-			if(prop._hx_index == 15) {
+			if(prop._hx_index == 14) {
 				var _g = prop.name;
 				var property = prop.property;
 				objName += "" + little_Keywords.PROPERTY_ACCESS_SIGN + little_interpreter_Interpreter.stringifyTokenValue(prop);
@@ -1524,7 +1555,7 @@ little_interpreter_Interpreter.accessObject = function(exp,memory) {
 				return this1.h[key];
 			}
 		};
-		if(name._hx_index == 15) {
+		if(name._hx_index == 14) {
 			var name1 = name.name;
 			var property = name.property;
 			var access2 = access1;
@@ -1532,7 +1563,7 @@ little_interpreter_Interpreter.accessObject = function(exp,memory) {
 			var obj = access2(memory.h[key],property,little_interpreter_Interpreter.stringifyTokenValue(name1));
 			return obj;
 		} else {
-			haxe_Log.trace(name,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 274, className : "little.interpreter.Interpreter", methodName : "accessObject", customParams : [little_interpreter_Interpreter.stringifyTokenValue(name)]});
+			haxe_Log.trace(name,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 300, className : "little.interpreter.Interpreter", methodName : "accessObject", customParams : [little_interpreter_Interpreter.stringifyTokenValue(name)]});
 			var k = little_interpreter_Interpreter.stringifyTokenValue(name);
 			var v = new little_interpreter_MemoryObject(little_parser_ParserTokens.NullValue,new haxe_ds_StringMap(),Type.enumParameters(params)[0],type1);
 			memory.h[k] = v;
@@ -1558,6 +1589,10 @@ little_interpreter_Interpreter.accessObject = function(exp,memory) {
 		}
 		var key = little_interpreter_Interpreter.stringifyTokenValue(name);
 		return little_interpreter_Interpreter.accessObject(memory.h[key].use(params1));
+	case 10:
+		var value = exp.value;
+		var type2 = exp.type;
+		return little_interpreter_Interpreter.accessObject(value);
 	case 11:
 		var _g = exp.type;
 		var parts = exp.parts;
@@ -1567,7 +1602,7 @@ little_interpreter_Interpreter.accessObject = function(exp,memory) {
 		var type2 = exp.type;
 		var returnVal = little_interpreter_Interpreter.runTokens(body,little_interpreter_Interpreter.currentConfig.prioritizeVariableDeclarations,little_interpreter_Interpreter.currentConfig.prioritizeFunctionDeclarations,little_interpreter_Interpreter.currentConfig.strictTyping);
 		return little_interpreter_Interpreter.accessObject(little_interpreter_Interpreter.evaluate(returnVal));
-	case 15:
+	case 14:
 		var n = exp.name;
 		var p = exp.property;
 		var str = little_interpreter_Interpreter.stringifyTokenValue(n);
@@ -1591,7 +1626,7 @@ little_interpreter_Interpreter.accessObject = function(exp,memory) {
 				var this1 = object.props;
 				var key = little_interpreter_Interpreter.stringifyTokenValue(name);
 				return new little_interpreter_MemoryObject(this1.h[key].use(params));
-			case 15:
+			case 14:
 				var _g = prop.name;
 				var property = prop.property;
 				objName += "" + little_Keywords.PROPERTY_ACCESS_SIGN + little_interpreter_Interpreter.stringifyTokenValue(prop);
@@ -1620,8 +1655,12 @@ little_interpreter_Interpreter.accessObject = function(exp,memory) {
 			}
 		};
 		return access2(obj,p,str);
-	case 16:
+	case 15:
 		var _g = exp.sign;
+		var key = little_interpreter_Interpreter.stringifyTokenValue(exp);
+		return memory.h[key];
+	case 16:
+		var _g = exp.num;
 		var key = little_interpreter_Interpreter.stringifyTokenValue(exp);
 		return memory.h[key];
 	case 17:
@@ -1629,17 +1668,18 @@ little_interpreter_Interpreter.accessObject = function(exp,memory) {
 		var key = little_interpreter_Interpreter.stringifyTokenValue(exp);
 		return memory.h[key];
 	case 18:
-		var _g = exp.num;
-		var key = little_interpreter_Interpreter.stringifyTokenValue(exp);
-		return memory.h[key];
-	case 19:
 		var _g = exp.string;
 		var key = little_interpreter_Interpreter.stringifyTokenValue(exp);
 		return memory.h[key];
-	case 24:case 25:case 26:
+	case 19:
+		var name = exp.name;
+		little_interpreter_Runtime.currentModule = name;
+		break;
+	case 23:case 24:case 25:
 		var key = little_interpreter_Interpreter.stringifyTokenValue(exp);
 		return memory.h[key];
 	default:
+		haxe_Log.trace("Token " + Std.string(exp) + " is inaccessible via memory. Returning null.",{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 346, className : "little.interpreter.Interpreter", methodName : "accessObject"});
 	}
 	return null;
 };
@@ -1648,6 +1688,11 @@ little_interpreter_Interpreter.stringifyTokenValue = function(token,memory) {
 		memory = little_interpreter_Interpreter.memory;
 	}
 	switch(token._hx_index) {
+	case 0:
+		var line = token.line;
+		return (little_interpreter_Runtime.line = line) + "";
+	case 1:
+		return $hxEnums[token.__enum__].__constructs__[token._hx_index]._hx_name;
 	case 2:
 		var name = token.name;
 		var type = token.type;
@@ -1663,6 +1708,12 @@ little_interpreter_Interpreter.stringifyTokenValue = function(token,memory) {
 		var v = new little_interpreter_MemoryObject(little_parser_ParserTokens.NullValue,new haxe_ds_StringMap(),Type.enumParameters(params)[0],type);
 		memory.h[k] = v;
 		return little_interpreter_Interpreter.stringifyTokenValue(name);
+	case 4:
+		var _g = token.name;
+		var _g = token.exp;
+		var _g = token.body;
+		var _g = token.type;
+		return little_interpreter_Interpreter.stringifyTokenValue(little_interpreter_Interpreter.evaluate(token,memory));
 	case 5:
 		var name = token.name;
 		var str = little_interpreter_Interpreter.stringifyTokenValue(name);
@@ -1675,11 +1726,18 @@ little_interpreter_Interpreter.stringifyTokenValue = function(token,memory) {
 	case 7:
 		var word = token.word;
 		return word;
+	case 8:
+		var _g = token.type;
+		return little_interpreter_Interpreter.stringifyTokenValue(little_interpreter_Interpreter.evaluate(token,memory));
 	case 9:
 		var name = token.name;
 		var params = token.params;
 		var str = little_interpreter_Interpreter.stringifyTokenValue(name);
 		return little_interpreter_Interpreter.stringifyTokenValue(memory.h[str] != null ? memory.h[str].use(params) : little_parser_ParserTokens.ErrorMessage("No Such Action: `" + str + "`"));
+	case 10:
+		var value = token.value;
+		var type = token.type;
+		return little_interpreter_Interpreter.stringifyTokenValue(value);
 	case 11:
 		var parts = token.parts;
 		var type = token.type;
@@ -1698,31 +1756,41 @@ little_interpreter_Interpreter.stringifyTokenValue = function(token,memory) {
 			_g.push(little_interpreter_Interpreter.stringifyTokenValue(little_interpreter_Interpreter.evaluate(p)));
 		}
 		return _g.join(",");
+	case 14:
+		var _g = token.name;
+		var _g = token.property;
+		return little_interpreter_Interpreter.stringifyTokenValue(little_interpreter_Interpreter.evaluate(token,memory));
 	case 15:
-		var name = token.name;
-		var property = token.property;
-		return little_interpreter_Interpreter.stringifyTokenValue(name);
+		var sign = token.sign;
+		return sign;
+	case 16:
+		var num = token.num;
+		return num;
 	case 17:
 		var num = token.num;
 		return num;
 	case 18:
-		var num = token.num;
-		return num;
-	case 19:
 		var string = token.string;
 		return string;
+	case 19:
+		var name = token.name;
+		return little_interpreter_Runtime.currentModule = name;
 	case 20:
-		var word = token.name;
-		return word;
-	case 24:
+		var _g = token.get;
+		return little_interpreter_Interpreter.stringifyTokenValue(little_interpreter_Interpreter.evaluate(token,memory));
+	case 21:
+		var _g = token.use;
+		return little_interpreter_Interpreter.stringifyTokenValue(little_interpreter_Interpreter.evaluate(token,memory));
+	case 22:
+		var msg = token.msg;
+		return msg;
+	case 23:
 		return little_Keywords.NULL_VALUE;
-	case 25:
+	case 24:
 		return little_Keywords.TRUE_VALUE;
-	case 26:
+	case 25:
 		return little_Keywords.FALSE_VALUE;
-	default:
 	}
-	return "Something went wrong";
 };
 little_interpreter_Interpreter.stringifyTokenIdentifier = function(token,prop,memory) {
 	if(prop == null) {
@@ -1732,6 +1800,12 @@ little_interpreter_Interpreter.stringifyTokenIdentifier = function(token,prop,me
 		memory = little_interpreter_Interpreter.memory;
 	}
 	switch(token._hx_index) {
+	case 0:
+		var line = token.line;
+		little_interpreter_Runtime.line = line;
+		return "\n";
+	case 1:
+		return ",";
 	case 2:
 		var name = token.name;
 		var type = token.type;
@@ -1739,6 +1813,12 @@ little_interpreter_Interpreter.stringifyTokenIdentifier = function(token,prop,me
 	case 3:
 		var name = token.name;
 		var params = token.params;
+		var type = token.type;
+		return little_interpreter_Interpreter.stringifyTokenIdentifier(name);
+	case 4:
+		var name = token.name;
+		var exp = token.exp;
+		var body = token.body;
 		var type = token.type;
 		return little_interpreter_Interpreter.stringifyTokenIdentifier(name);
 	case 5:
@@ -1752,6 +1832,9 @@ little_interpreter_Interpreter.stringifyTokenIdentifier = function(token,prop,me
 	case 7:
 		var word = token.word;
 		return word;
+	case 8:
+		var type = token.type;
+		return little_interpreter_Interpreter.stringifyTokenIdentifier(type);
 	case 9:
 		var name = token.name;
 		var params = token.params;
@@ -1760,6 +1843,10 @@ little_interpreter_Interpreter.stringifyTokenIdentifier = function(token,prop,me
 		}
 		var str = little_interpreter_Interpreter.stringifyTokenValue(name);
 		return little_interpreter_Interpreter.stringifyTokenIdentifier(memory.h[str] != null ? memory.h[str].use(params) : little_parser_ParserTokens.ErrorMessage("No Such Action: `" + str + "`"));
+	case 10:
+		var value = token.value;
+		var type = token.type;
+		return little_interpreter_Interpreter.stringifyTokenIdentifier(value);
 	case 11:
 		var parts = token.parts;
 		var type = token.type;
@@ -1778,31 +1865,43 @@ little_interpreter_Interpreter.stringifyTokenIdentifier = function(token,prop,me
 			_g.push(little_interpreter_Interpreter.stringifyTokenValue(little_interpreter_Interpreter.evaluate(p)));
 		}
 		return _g.join(",");
-	case 15:
+	case 14:
 		var name = token.name;
 		var property = token.property;
 		return little_interpreter_Interpreter.stringifyTokenIdentifier(name);
+	case 15:
+		var sign = token.sign;
+		return sign;
+	case 16:
+		var num = token.num;
+		return num;
 	case 17:
 		var num = token.num;
 		return num;
 	case 18:
-		var num = token.num;
-		return num;
-	case 19:
 		var string = token.string;
 		return string;
-	case 20:
+	case 19:
 		var word = token.name;
 		return word;
-	case 24:
+	case 20:
+		var _g = token.get;
+		little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("" + Std.string(token) + " \"does not have\" a token identifier. it must be bound to one (for example, as a definiton's value."),"Interpreter, Token Identifier Stringifier");
+		return "";
+	case 21:
+		var _g = token.use;
+		little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("" + Std.string(token) + " \"does not have\" a token identifier. it must be bound to one (for example, as a definiton's value."),"Interpreter, Token Identifier Stringifier");
+		return "";
+	case 22:
+		var msg = token.msg;
+		return $hxEnums[token.__enum__].__constructs__[token._hx_index]._hx_name;
+	case 23:
 		return little_Keywords.NULL_VALUE;
-	case 25:
+	case 24:
 		return little_Keywords.TRUE_VALUE;
-	case 26:
+	case 25:
 		return little_Keywords.FALSE_VALUE;
-	default:
 	}
-	return "Something went wrong";
 };
 little_interpreter_Interpreter.evaluateExpressionParts = function(parts,memory) {
 	if(memory == null) {
@@ -1816,13 +1915,15 @@ little_interpreter_Interpreter.evaluateExpressionParts = function(parts,memory) 
 	while(_g < parts.length) {
 		var token = parts[_g];
 		++_g;
+		haxe_Log.trace(token,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 481, className : "little.interpreter.Interpreter", methodName : "evaluateExpressionParts"});
 		var val = little_interpreter_Interpreter.evaluate(token);
+		haxe_Log.trace(val,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 483, className : "little.interpreter.Interpreter", methodName : "evaluateExpressionParts"});
 		switch(val._hx_index) {
-		case 16:
+		case 15:
 			var sign = val.sign;
 			mode = sign;
 			break;
-		case 17:
+		case 16:
 			var num = val.num;
 			if(valueType == little_Keywords.TYPE_UNKNOWN) {
 				valueType = little_Keywords.TYPE_INT;
@@ -1915,7 +2016,7 @@ little_interpreter_Interpreter.evaluateExpressionParts = function(parts,memory) 
 				}
 			}
 			break;
-		case 18:
+		case 17:
 			var num1 = val.num;
 			if(valueType == little_Keywords.TYPE_UNKNOWN) {
 				valueType = little_Keywords.TYPE_FLOAT;
@@ -2004,7 +2105,7 @@ little_interpreter_Interpreter.evaluateExpressionParts = function(parts,memory) 
 				}
 			}
 			break;
-		case 19:
+		case 18:
 			var string = val.string;
 			valueType = little_Keywords.TYPE_STRING;
 			switch(mode) {
@@ -2043,11 +2144,11 @@ little_interpreter_Interpreter.evaluateExpressionParts = function(parts,memory) 
 				return little_parser_ParserTokens.ErrorMessage("Cannot preform `" + valueType + "(" + value + ") " + mode + " " + little_Keywords.TYPE_STRING + "(" + string + ")`");
 			}
 			break;
-		case 23:
+		case 22:
 			var _g1 = val.msg;
 			little_interpreter_Runtime.throwError(val,"Interpreter, Value Evaluator");
 			break;
-		case 25:case 26:
+		case 24:case 25:
 			if(valueType == little_Keywords.TYPE_UNKNOWN) {
 				valueType = little_Keywords.TYPE_BOOLEAN;
 				value = Std.string(val == little_parser_ParserTokens.TrueValue);
@@ -2185,7 +2286,7 @@ little_interpreter_Interpreter.forceCorrectOrderOfOperations = function(pre) {
 	var i = 0;
 	while(i < pre.length) {
 		var token = pre[i];
-		if(token._hx_index == 16) {
+		if(token._hx_index == 15) {
 			if(token.sign == "^") {
 				++i;
 				post.push(little_parser_ParserTokens.Expression([post.pop(),token,pre[i]],null));
@@ -2202,7 +2303,7 @@ little_interpreter_Interpreter.forceCorrectOrderOfOperations = function(pre) {
 	var i = 0;
 	while(i < pre.length) {
 		var token = pre[i];
-		if(token._hx_index == 16) {
+		if(token._hx_index == 15) {
 			switch(token.sign) {
 			case "*":case "/":
 				++i;
@@ -2309,7 +2410,7 @@ little_interpreter_MemoryObject.prototype = {
 				}
 				con = given;
 				var _g = this.value;
-				if(_g._hx_index == 22) {
+				if(_g._hx_index == 21) {
 					var use = _g.use;
 					return use(con,body);
 				} else {
@@ -2317,7 +2418,7 @@ little_interpreter_MemoryObject.prototype = {
 				}
 			} else {
 				var _g = this.value;
-				if(_g._hx_index == 22) {
+				if(_g._hx_index == 21) {
 					var use = _g.use;
 					return use(con,body);
 				} else {
@@ -2629,7 +2730,7 @@ little_parser_Parser.mergeBlocks = function(pre) {
 			var type1 = token.type;
 			post.push(little_parser_ParserTokens.Block(little_parser_Parser.mergeBlocks(body),null));
 			break;
-		case 16:
+		case 15:
 			if(token.sign == "{") {
 				var blockStartLine = little_parser_Parser.get_line();
 				var blockBody = [];
@@ -2696,7 +2797,7 @@ little_parser_Parser.mergeExpressions = function(pre) {
 			var type1 = token.type;
 			post.push(little_parser_ParserTokens.Block(little_parser_Parser.mergeExpressions(body),null));
 			break;
-		case 16:
+		case 15:
 			if(token.sign == "(") {
 				var expressionStartLine = little_parser_Parser.get_line();
 				var expressionBody = [];
@@ -2862,7 +2963,7 @@ little_parser_Parser.mergeComplexStructures = function(pre) {
 							break _hx_loop2;
 						}
 						break;
-					case 16:
+					case 15:
 						var _g2 = lookahead.sign;
 						var _hx_tmp3;
 						if(_g2 == "=") {
@@ -2952,7 +3053,7 @@ little_parser_Parser.mergeComplexStructures = function(pre) {
 								break _hx_loop3;
 							}
 							break;
-						case 16:
+						case 15:
 							var _g3 = lookahead1.sign;
 							var _hx_tmp4;
 							if(_g3 == "=") {
@@ -3186,7 +3287,7 @@ little_parser_Parser.mergeCalls = function(pre) {
 				case 1:
 					post.push(little_parser_ParserTokens.Expression(parts,type4));
 					break;
-				case 16:
+				case 15:
 					var _g1 = lookbehind.sign;
 					post.push(little_parser_ParserTokens.Expression(parts,type4));
 					break;
@@ -3269,7 +3370,7 @@ little_parser_Parser.mergePropertyOperations = function(pre) {
 			var parts = token.parts;
 			post.unshift(little_parser_ParserTokens.PartArray(little_parser_Parser.mergePropertyOperations(parts)));
 			break;
-		case 16:
+		case 15:
 			if(token.sign == little_Keywords.PROPERTY_ACCESS_SIGN == true) {
 				if(i-- <= 0) {
 					little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("Property access cut off by the start of file, block or expression."),"Parser");
@@ -3284,7 +3385,7 @@ little_parser_Parser.mergePropertyOperations = function(pre) {
 				case 1:
 					little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("Property access cut off by the start of a line, or by a line split (; or ,)."),"Parser");
 					return null;
-				case 16:
+				case 15:
 					var s = lookbehind.sign;
 					little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("Cannot access the property of a sign (" + s + "). Was the property access cut off by accident?"));
 					return null;
@@ -3395,7 +3496,7 @@ little_parser_Parser.mergeWrites = function(pre) {
 			}
 			potentialAssignee = little_parser_ParserTokens.PartArray(little_parser_Parser.mergeWrites(parts1));
 			break;
-		case 15:
+		case 14:
 			var name4 = token.name;
 			var property = token.property;
 			if(potentialAssignee != null) {
@@ -3403,7 +3504,7 @@ little_parser_Parser.mergeWrites = function(pre) {
 			}
 			potentialAssignee = little_parser_ParserTokens.PropertyAccess(little_parser_Parser.mergeWrites([name4])[0],little_parser_Parser.mergeWrites([property])[0]);
 			break;
-		case 16:
+		case 15:
 			if(token.sign == "=") {
 				if(i + 1 >= pre.length) {
 					little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("Missing value after the `=`"),"Parser");
@@ -3420,7 +3521,7 @@ little_parser_Parser.mergeWrites = function(pre) {
 						break _hx_loop2;
 					case 1:
 						break _hx_loop2;
-					case 16:
+					case 15:
 						if(lookahead.sign == "=") {
 							var assignee = currentAssignee.length == 1 ? currentAssignee[0] : little_parser_ParserTokens.Expression(currentAssignee.slice(),null);
 							assignees.push(assignee);
@@ -3495,21 +3596,20 @@ var little_parser_ParserTokens = $hxEnums["little.parser.ParserTokens"] = { __en
 	,Expression: ($_=function(parts,type) { return {_hx_index:11,parts:parts,type:type,__enum__:"little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Expression",$_.__params__ = ["parts","type"],$_)
 	,Block: ($_=function(body,type) { return {_hx_index:12,body:body,type:type,__enum__:"little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Block",$_.__params__ = ["body","type"],$_)
 	,PartArray: ($_=function(parts) { return {_hx_index:13,parts:parts,__enum__:"little.parser.ParserTokens",toString:$estr}; },$_._hx_name="PartArray",$_.__params__ = ["parts"],$_)
-	,Parameter: ($_=function(name,type) { return {_hx_index:14,name:name,type:type,__enum__:"little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Parameter",$_.__params__ = ["name","type"],$_)
-	,PropertyAccess: ($_=function(name,property) { return {_hx_index:15,name:name,property:property,__enum__:"little.parser.ParserTokens",toString:$estr}; },$_._hx_name="PropertyAccess",$_.__params__ = ["name","property"],$_)
-	,Sign: ($_=function(sign) { return {_hx_index:16,sign:sign,__enum__:"little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Sign",$_.__params__ = ["sign"],$_)
-	,Number: ($_=function(num) { return {_hx_index:17,num:num,__enum__:"little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Number",$_.__params__ = ["num"],$_)
-	,Decimal: ($_=function(num) { return {_hx_index:18,num:num,__enum__:"little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Decimal",$_.__params__ = ["num"],$_)
-	,Characters: ($_=function(string) { return {_hx_index:19,string:string,__enum__:"little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Characters",$_.__params__ = ["string"],$_)
-	,Module: ($_=function(name) { return {_hx_index:20,name:name,__enum__:"little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Module",$_.__params__ = ["name"],$_)
-	,External: ($_=function(get) { return {_hx_index:21,get:get,__enum__:"little.parser.ParserTokens",toString:$estr}; },$_._hx_name="External",$_.__params__ = ["get"],$_)
-	,ExternalCondition: ($_=function(use) { return {_hx_index:22,use:use,__enum__:"little.parser.ParserTokens",toString:$estr}; },$_._hx_name="ExternalCondition",$_.__params__ = ["use"],$_)
-	,ErrorMessage: ($_=function(msg) { return {_hx_index:23,msg:msg,__enum__:"little.parser.ParserTokens",toString:$estr}; },$_._hx_name="ErrorMessage",$_.__params__ = ["msg"],$_)
-	,NullValue: {_hx_name:"NullValue",_hx_index:24,__enum__:"little.parser.ParserTokens",toString:$estr}
-	,TrueValue: {_hx_name:"TrueValue",_hx_index:25,__enum__:"little.parser.ParserTokens",toString:$estr}
-	,FalseValue: {_hx_name:"FalseValue",_hx_index:26,__enum__:"little.parser.ParserTokens",toString:$estr}
+	,PropertyAccess: ($_=function(name,property) { return {_hx_index:14,name:name,property:property,__enum__:"little.parser.ParserTokens",toString:$estr}; },$_._hx_name="PropertyAccess",$_.__params__ = ["name","property"],$_)
+	,Sign: ($_=function(sign) { return {_hx_index:15,sign:sign,__enum__:"little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Sign",$_.__params__ = ["sign"],$_)
+	,Number: ($_=function(num) { return {_hx_index:16,num:num,__enum__:"little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Number",$_.__params__ = ["num"],$_)
+	,Decimal: ($_=function(num) { return {_hx_index:17,num:num,__enum__:"little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Decimal",$_.__params__ = ["num"],$_)
+	,Characters: ($_=function(string) { return {_hx_index:18,string:string,__enum__:"little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Characters",$_.__params__ = ["string"],$_)
+	,Module: ($_=function(name) { return {_hx_index:19,name:name,__enum__:"little.parser.ParserTokens",toString:$estr}; },$_._hx_name="Module",$_.__params__ = ["name"],$_)
+	,External: ($_=function(get) { return {_hx_index:20,get:get,__enum__:"little.parser.ParserTokens",toString:$estr}; },$_._hx_name="External",$_.__params__ = ["get"],$_)
+	,ExternalCondition: ($_=function(use) { return {_hx_index:21,use:use,__enum__:"little.parser.ParserTokens",toString:$estr}; },$_._hx_name="ExternalCondition",$_.__params__ = ["use"],$_)
+	,ErrorMessage: ($_=function(msg) { return {_hx_index:22,msg:msg,__enum__:"little.parser.ParserTokens",toString:$estr}; },$_._hx_name="ErrorMessage",$_.__params__ = ["msg"],$_)
+	,NullValue: {_hx_name:"NullValue",_hx_index:23,__enum__:"little.parser.ParserTokens",toString:$estr}
+	,TrueValue: {_hx_name:"TrueValue",_hx_index:24,__enum__:"little.parser.ParserTokens",toString:$estr}
+	,FalseValue: {_hx_name:"FalseValue",_hx_index:25,__enum__:"little.parser.ParserTokens",toString:$estr}
 };
-little_parser_ParserTokens.__constructs__ = [little_parser_ParserTokens.SetLine,little_parser_ParserTokens.SplitLine,little_parser_ParserTokens.Define,little_parser_ParserTokens.Action,little_parser_ParserTokens.Condition,little_parser_ParserTokens.Read,little_parser_ParserTokens.Write,little_parser_ParserTokens.Identifier,little_parser_ParserTokens.TypeDeclaration,little_parser_ParserTokens.ActionCall,little_parser_ParserTokens.Return,little_parser_ParserTokens.Expression,little_parser_ParserTokens.Block,little_parser_ParserTokens.PartArray,little_parser_ParserTokens.Parameter,little_parser_ParserTokens.PropertyAccess,little_parser_ParserTokens.Sign,little_parser_ParserTokens.Number,little_parser_ParserTokens.Decimal,little_parser_ParserTokens.Characters,little_parser_ParserTokens.Module,little_parser_ParserTokens.External,little_parser_ParserTokens.ExternalCondition,little_parser_ParserTokens.ErrorMessage,little_parser_ParserTokens.NullValue,little_parser_ParserTokens.TrueValue,little_parser_ParserTokens.FalseValue];
+little_parser_ParserTokens.__constructs__ = [little_parser_ParserTokens.SetLine,little_parser_ParserTokens.SplitLine,little_parser_ParserTokens.Define,little_parser_ParserTokens.Action,little_parser_ParserTokens.Condition,little_parser_ParserTokens.Read,little_parser_ParserTokens.Write,little_parser_ParserTokens.Identifier,little_parser_ParserTokens.TypeDeclaration,little_parser_ParserTokens.ActionCall,little_parser_ParserTokens.Return,little_parser_ParserTokens.Expression,little_parser_ParserTokens.Block,little_parser_ParserTokens.PartArray,little_parser_ParserTokens.PropertyAccess,little_parser_ParserTokens.Sign,little_parser_ParserTokens.Number,little_parser_ParserTokens.Decimal,little_parser_ParserTokens.Characters,little_parser_ParserTokens.Module,little_parser_ParserTokens.External,little_parser_ParserTokens.ExternalCondition,little_parser_ParserTokens.ErrorMessage,little_parser_ParserTokens.NullValue,little_parser_ParserTokens.TrueValue,little_parser_ParserTokens.FalseValue];
 var little_tools_Conversion = function() { };
 $hxClasses["little.tools.Conversion"] = little_tools_Conversion;
 little_tools_Conversion.__name__ = true;
@@ -3547,24 +3647,24 @@ little_tools_Conversion.toLittleValue = function(val) {
 little_tools_Conversion.toHaxeValue = function(val) {
 	val = little_interpreter_Interpreter.evaluate(val);
 	switch(val._hx_index) {
-	case 17:
+	case 16:
 		var num = val.num;
 		return Std.parseInt(num);
-	case 18:
+	case 17:
 		var num = val.num;
 		return parseFloat(num);
-	case 19:
+	case 18:
 		var string = val.string;
 		return string;
-	case 23:
+	case 22:
 		var msg = val.msg;
 		haxe_Log.trace("WARNING: " + msg + ". Returning null",{ fileName : "src/little/tools/Conversion.hx", lineNumber : 37, className : "little.tools.Conversion", methodName : "toHaxeValue"});
 		return null;
-	case 24:
+	case 23:
 		return null;
-	case 25:
+	case 24:
 		return true;
-	case 26:
+	case 25:
 		return false;
 	default:
 		haxe_Log.trace("WARNING: Unparsable token: " + Std.string(val) + ". Returning null",{ fileName : "src/little/tools/Conversion.hx", lineNumber : 47, className : "little.tools.Conversion", methodName : "toHaxeValue"});
@@ -3977,41 +4077,37 @@ little_tools_PrettyPrinter.getTree = function(root,prefix,level,last) {
 		return strParts1.join("");
 	case 14:
 		var name = root.name;
-		var type = root.type;
-		return "" + little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " Parameter\n" + little_tools_PrettyPrinter.getTree(name,prefix.slice(),level + 1,false) + little_tools_PrettyPrinter.getTree(type,prefix.slice(),level + 1,true);
-	case 15:
-		var name = root.name;
 		var property = root.property;
 		return "" + little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " Property Access\n" + little_tools_PrettyPrinter.getTree(name,little_tools_PrettyPrinter.pushIndex(prefix,level),level + 1,false) + little_tools_PrettyPrinter.getTree(property,prefix.slice(),level + 1,true);
-	case 16:
+	case 15:
 		var value = root.sign;
 		return "" + little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " " + value + "\n";
+	case 16:
+		var num = root.num;
+		return "" + little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " " + num + "\n";
 	case 17:
 		var num = root.num;
 		return "" + little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " " + num + "\n";
 	case 18:
-		var num = root.num;
-		return "" + little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " " + num + "\n";
-	case 19:
 		var string = root.string;
 		return "" + little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " \"" + string + "\"\n";
-	case 20:
+	case 19:
 		var name = root.name;
 		return "" + little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " Module: " + name + "\n";
-	case 21:
+	case 20:
 		var haxeValue = root.get;
 		return "" + little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " External Haxe Value Identifier: [" + Std.string(haxeValue) + "]\n";
-	case 22:
+	case 21:
 		var use = root.use;
 		return "" + little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " External Haxe Condition Identifier: [" + Std.string(use) + "]\n";
-	case 23:
+	case 22:
 		var name = root.msg;
 		return "" + little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " Error: " + name + "\n";
-	case 24:
+	case 23:
 		return "" + little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " " + little_Keywords.NULL_VALUE + "\n";
-	case 25:
+	case 24:
 		return "" + little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " " + little_Keywords.TRUE_VALUE + "\n";
-	case 26:
+	case 25:
 		return "" + little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " " + little_Keywords.FALSE_VALUE + "\n";
 	}
 };
