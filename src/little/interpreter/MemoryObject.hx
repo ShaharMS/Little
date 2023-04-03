@@ -36,19 +36,24 @@ class MemoryObject {
     @:optional public var type:ParserTokens = null;
     @:optional public var external:Bool = false;
     @:optional public var condition:Bool = false;
+    /**
+    	When under a memory object, suppose, `T`, of type `"Type"`, it acts as a property of every object of type `T`.
+    **/
+    @:optional public var nonStatic:Bool = true;
 
     function set_params(parameters) {
         if (parameters == null) return params = null;
         return params = parameters.filter(p -> switch p {case SplitLine | SetLine(_): false; case _: true;});
     }
 
-    public function new(?value:ParserTokens, ?props:Map<String, MemoryObject>, ?params:Array<ParserTokens>, ?type:ParserTokens, ?external:Bool, ?condition:Bool) {
+    public function new(?value:ParserTokens, ?props:Map<String, MemoryObject>, ?params:Array<ParserTokens>, ?type:ParserTokens, ?external:Bool, ?condition:Bool, ?nonStatic:Bool) {
         this.value = value == null ? NullValue : value;
         this.props = props == null ? [] : props;
         this.params = params;
         this.type = type;
         this.external = external == null ? false : external;
         this.condition = condition == null ? false : condition;
+        this.nonStatic = nonStatic == null ? true : nonStatic;
     }
 
 

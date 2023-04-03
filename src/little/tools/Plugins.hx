@@ -21,37 +21,52 @@ class Plugins {
 			Little.plugin.registerHaxeClass(Data.getClassInfo("Math"));
 
 		Will let you access all of Math's static fields & methods through little:
-		```py
+		```cpp
 		print(Math.sqrt(4) + Math.max(2, {define i = 3, i}))
 		```
 
-		@param cls Data about the class, obtained by using `Data.getClassInfo("YourClassName")`
-			
+		@param stats Data about the class, obtained by using `Data.getClassInfo("YourClassName")`
+		@param littleClassName When provided, remaps the class in little, placing the properties inside the value of `littleClassName` instead of the class name given previously.
 	**/
-	public static function registerHaxeClass(stats:Array<ItemInfo>) {
+	public static function registerHaxeClass(stats:Array<ItemInfo>, ?littleClassName:String) {
 
 		if (stats.length == 0) {
 			return;
 		}
-
+        littleClassName = littleClassName != null ? littleClassName : stats[0].className;
 		var fieldValues = new Map<String, Dynamic>();
 		var fieldFunctions = new Map<String, Dynamic>();
 		var cls = Type.resolveClass(stats[0].className);
 		// trace(cls, Type.getClassFields(cls));
 		// Iterate over the fields of the Math class
 		for (s in stats) {
-            var field = s.name;
-			// Check if the field is a static field
-			// Get the field value and store it in the fieldValues map
-			var value = Reflect.field(cls, field);
-			// Check if the field is a function (i.e., a method)
-			if (Reflect.isFunction(value)) {
-				// Store the function in the fieldFunctions map
-                
-				fieldFunctions.set(field, value);
-			} else {
-                fieldValues.set(field, value);
+            if (s.isStatic) {
+                var field = s.name;
+			    // Check if the field is a static field
+			    // Get the field value and store it in the fieldValues map
+			    var value = Reflect.field(cls, field);
+			    // Check if the field is a function (i.e., a method)
+			    if (Reflect.isFunction(value)) {
+			    	// Store the function in the fieldFunctions map
+                    
+			    	fieldFunctions.set(field, value);
+			    } else {
+                    fieldValues.set(field, value);
+                } 
+            } else {
+                var field = s.name;
+                var value = Reflect.field(Type.createEmptyInstance(cls), field);
+                if (Reflect.isFunction(value)) {
+                    fieldFunctions.set(field, (obj:ParserTokens, paramsArray) -> {
+                        return Reflect.callMethod(Conversion.toHaxeValue(obj), value, paramsArray);
+                    });
+                } else {
+                    fieldValues.set(field, (obj:ParserTokens) -> {
+                        return Reflect.field(Conversion.toHaxeValue(obj), field);
+                    });
+                }
             }
+           
 
 		}
 
@@ -59,34 +74,59 @@ class Plugins {
 		// trace(fieldValues);
 		// trace(fieldFunctions);
 
-		var motherObj = new MemoryObject(Module(stats[0].className), [], null, Identifier(TYPE_MODULE), true); 
+		var motherObj = new MemoryObject(Module(littleClassName), [], null, Identifier(TYPE_MODULE), true); 
 
 		for (instance in stats) {
 			//trace(instance.fieldType, instance.allowWrite, instance.name, instance.parameters, instance.returnType);
 			switch (instance.fieldType) {
 				case "var":
 					{
-						var value:ParserTokens = Conversion.toLittleValue(fieldValues[instance.name]);
-						var type:ParserTokens = Identifier(Conversion.toLittleType(instance.returnType));
-						motherObj.props[instance.name] = new MemoryObject(value, [] /*Should this be implemented?*/, null, type, true);
+                        if (instance.isStatic) {
+                            var value:ParserTokens = Conversion.toLittleValue(fieldValues[instance.name]);
+						    var type:ParserTokens = Identifier(Conversion.toLittleType(instance.returnType));
+						    motherObj.props[instance.name] = new MemoryObject(value, [] /*Should this be implemented?*/, null, type, true);
+                        } else {
+                            var value:ParserTokens = External(params -> {
+                                return Conversion.toLittleValue(fieldValues[instance.name](params[0])); // params[0] should be the current var's value when using the function
+                            });
+                            var type:ParserTokens = Identifier(Conversion.toLittleType(instance.returnType));
+                            motherObj.props[instance.name] = new MemoryObject(value, [] /*Should this be implemented?*/, [Define(Identifier("value"), Identifier(littleClassName))], type, true, false, true);
+                        }
+						
 					}
 				case "function": {
-                    // trace(fieldFunctions);
-					var value:ParserTokens = External((args) -> {
-						return Conversion.toLittleValue(Reflect.callMethod(null, fieldFunctions[instance.name], [for (arg in args) Conversion.toHaxeValue(arg)]));
-					});
-                    //trace(value, fieldFunctions[instance.name]);
-					var type:ParserTokens = Identifier(Conversion.toLittleType(instance.returnType));
-					var params = [];
-					for (param in instance.parameters) 
-						params.push(Define(Identifier(param.name), Identifier(param.type)));
+                    if (instance.isStatic) {
+                        var value:ParserTokens = External((args) -> {
+					    	return Conversion.toLittleValue(Reflect.callMethod(null, fieldFunctions[instance.name], [for (arg in args) Conversion.toHaxeValue(arg)]));
+					    });
 
-					motherObj.props[instance.name] = new MemoryObject(value, [] /*Should this be implemented?*/, params, type, true);
+					    var type:ParserTokens = Identifier(Conversion.toLittleType(instance.returnType));
+					    var params = [];
+					    for (param in instance.parameters) 
+					    	params.push(Define(Identifier(param.name), Identifier(param.type)));
+
+					    motherObj.props[instance.name] = new MemoryObject(value, [] /*Should this be implemented?*/, params, type, true);
+                    } else {
+                        var value:ParserTokens = External((args) -> {
+                            var obj = args.shift();
+                            var params = [for (a in args) Conversion.toHaxeValue(a)];
+                            return Conversion.toLittleValue(fieldFunctions[instance.name](obj, params));
+					    });
+
+					    var type:ParserTokens = Identifier(Conversion.toLittleType(instance.returnType));
+					    var params = [];
+					    for (param in instance.parameters) 
+					    	params.push(Define(Identifier(param.name), Identifier(param.type)));
+
+					    motherObj.props[instance.name] = new MemoryObject(value, [] /*Should this be implemented?*/, params, type, true);
+                    }
+
+                    
 				}
 			}
 		}
 
-		Interpreter.memory[stats[0].className] = motherObj;
+		Interpreter.memory[littleClassName] = motherObj;
 	}
 
 
@@ -227,5 +267,6 @@ typedef ItemInfo = {
 	parameters:Array<{name:String, type:String, optional:Bool}>,
 	returnType:String,
 	fieldType:String,
-	allowWrite:Bool
+	allowWrite:Bool,
+    isStatic:Bool
 } 

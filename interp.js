@@ -1944,13 +1944,13 @@ little_interpreter_Interpreter.evaluateExpressionParts = function(parts,memory) 
 				}
 				switch(mode) {
 				case "*":
-					value = "" + Std.parseInt(value) * Std.parseInt(num);
+					value = "" + parseFloat(value) * Std.parseInt(num);
 					break;
 				case "+":
-					value = "" + (Std.parseInt(value) + Std.parseInt(num));
+					value = "" + (parseFloat(value) + Std.parseInt(num));
 					break;
 				case "-":
-					value = "" + (Std.parseInt(value) - Std.parseInt(num));
+					value = "" + (parseFloat(value) - Std.parseInt(num));
 					break;
 				case "/":
 					valueType = little_Keywords.TYPE_FLOAT;
@@ -1963,19 +1963,19 @@ little_interpreter_Interpreter.evaluateExpressionParts = function(parts,memory) 
 						value = "" + Std.string(value != num);
 						break;
 					case "<":
-						value = "" + Std.string(Std.parseInt(value) < Std.parseInt(num));
+						value = "" + Std.string(parseFloat(value) < Std.parseInt(num));
 						break;
 					case "<=":
-						value = "" + Std.string(Std.parseInt(value) <= Std.parseInt(num));
+						value = "" + Std.string(parseFloat(value) <= Std.parseInt(num));
 						break;
 					case "==":
 						value = "" + Std.string(value == num);
 						break;
 					case ">":
-						value = "" + Std.string(Std.parseInt(value) > Std.parseInt(num));
+						value = "" + Std.string(parseFloat(value) > Std.parseInt(num));
 						break;
 					case ">=":
-						value = "" + Std.string(Std.parseInt(value) >= Std.parseInt(num));
+						value = "" + Std.string(parseFloat(value) >= Std.parseInt(num));
 						break;
 					default:
 						return little_parser_ParserTokens.ErrorMessage("Cannot preform `" + valueType + "(" + value + ") " + mode + " " + little_Keywords.TYPE_INT + "(" + num + ")`");
@@ -2174,13 +2174,13 @@ little_interpreter_Interpreter.evaluateExpressionParts = function(parts,memory) 
 				var num2 = val == little_parser_ParserTokens.TrueValue ? 1 : 0;
 				switch(mode) {
 				case "*":
-					value = "" + Std.parseInt(value) * num2;
+					value = "" + parseFloat(value) * num2;
 					break;
 				case "+":
-					value = "" + (Std.parseInt(value) + num2);
+					value = "" + (parseFloat(value) + num2);
 					break;
 				case "-":
-					value = "" + (Std.parseInt(value) - num2);
+					value = "" + (parseFloat(value) - num2);
 					break;
 				case "/":
 					valueType = little_Keywords.TYPE_FLOAT;

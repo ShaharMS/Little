@@ -34,7 +34,7 @@ class PrepareRun {
         //------------------------------------------
 
         Little.plugin.registerHaxeClass(Data.getClassInfo("Math"));
-        Little.plugin.registerHaxeClass(Data.getClassInfo("StringTools"));
+        Little.plugin.registerHaxeClass(Data.getClassInfo("String"), "Characters");
     }
 
     public static function addConditions() {

@@ -57,38 +57,46 @@ class Data {
 				switch t {
 					case TInst(inst, _): {
 						var statics = inst.get().statics.get();
-						for (field in statics) {
-							var type = field.type;
-							switch type {
-								case TFun(args, ret): {
-									stats.push(macro {
-										className: $v{path},
-										name: $v{field.name},
-										parameters: $a{
-											args.map(param -> macro {
-												name: $v{param.name},
-												type: $v{getTypeString(param.t)},
-												optional: $v{param.opt}
-											})
-										},
-										returnType: $v{getTypeString(ret)},
-										fieldType: "function",
-										allowWrite: $v{getWriteAccess(field.kind)}
-									});
-								}
-								case _: {
-									stats.push(macro {
-										className: $v{path},
-										name: $v{field.name},
-										fieldType: "var",
-										parameters: [],
-										returnType: $v{getTypeString(field.type)},
-										allowWrite: $v{getWriteAccess(field.kind)}
-									});
+						var publics = inst.get().fields.get();
+						var processingStatics = false;
+						for (arr in [publics, statics]) {
+							for (field in arr) {
+								var type = field.type;
+								switch type {
+									case TFun(args, ret): {
+										stats.push(macro {
+											className: $v{path},
+											name: $v{field.name},
+											parameters: $a{
+												args.map(param -> macro {
+													name: $v{param.name},
+													type: $v{getTypeString(param.t)},
+													optional: $v{param.opt}
+												})
+											},
+											returnType: $v{getTypeString(ret)},
+											fieldType: "function",
+											allowWrite: $v{getWriteAccess(field.kind)},
+											isStatic: $v{processingStatics}
+										});
+									}
+									case _: {
+										stats.push(macro {
+											className: $v{path},
+											name: $v{field.name},
+											fieldType: "var",
+											parameters: [],
+											returnType: $v{getTypeString(field.type)},
+											allowWrite: $v{getWriteAccess(field.kind)},
+											isStatic: $v{processingStatics}
+										});
+									}
 								}
 							}
+							processingStatics = true;
 						}
-						return macro ($a{stats} : Array<{className:String, name:String, parameters:Array<{name:String, type:String, optional:Bool}>, returnType:String, fieldType:String, allowWrite:Bool}>);
+						
+						return macro ($a{stats} : Array<{className:String, name:String, parameters:Array<{name:String, type:String, optional:Bool}>, returnType:String, fieldType:String, allowWrite:Bool, isStatic:Bool}>);
 					}
 						// var statics = inst.get().statics.get();
 						// return macro $v{statics.map(s -> s.name)};

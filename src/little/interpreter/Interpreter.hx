@@ -500,9 +500,9 @@ class Interpreter {
                     } else if (valueType == TYPE_INT || valueType == TYPE_FLOAT) {
                         var num = (val == TrueValue) ? 1 : 0;
                         switch mode {
-                            case "+": value = "" + (value.parseInt() + num);
-                            case "-": value = "" + (value.parseInt() - num);
-                            case "*": value = "" + (value.parseInt() * num);
+                            case "+": value = "" + (value.parseFloat() + num);
+                            case "-": value = "" + (value.parseFloat() - num);
+                            case "*": value = "" + (value.parseFloat() * num);
                             case "/": {
                                 valueType = TYPE_FLOAT;
                                 value = "" + (value.parseInt() / num);
@@ -555,9 +555,9 @@ class Interpreter {
                             value = value.replace(TRUE_VALUE, "1").replace(FALSE_VALUE, "0").replace(NULL_VALUE, "0");
                         }
                         switch mode {
-                            case "+": value = "" + (value.parseInt() + num.parseInt());
-                            case "-": value = "" + (value.parseInt() - num.parseInt());
-                            case "*": value = "" + (value.parseInt() * num.parseInt());
+                            case "+": value = "" + (value.parseFloat() + num.parseInt());
+                            case "-": value = "" + (value.parseFloat() - num.parseInt());
+                            case "*": value = "" + (value.parseFloat() * num.parseInt());
                             case "/": {
                                 valueType = TYPE_FLOAT;
                                 value = "" + (value.parseInt() / num.parseInt());
@@ -567,10 +567,10 @@ class Interpreter {
                                 valueType = TYPE_BOOLEAN;
                                 value = switch mode {
                                     case "==": "" + (value == num);
-                                    case ">=": "" + (value.parseInt() >= num.parseInt());
-                                    case ">" : "" + (value.parseInt() > num.parseInt());
-                                    case "<" : "" + (value.parseInt() < num.parseInt());
-                                    case "<=": "" + (value.parseInt() <= num.parseInt());
+                                    case ">=": "" + (value.parseFloat() >= num.parseInt());
+                                    case ">" : "" + (value.parseFloat() > num.parseInt());
+                                    case "<" : "" + (value.parseFloat() < num.parseInt());
+                                    case "<=": "" + (value.parseFloat() <= num.parseInt());
                                     case "!=": "" + (value != num);
                                     case _: return ErrorMessage('Cannot preform `$valueType($value) $mode $TYPE_INT($num)`'); 
                                 }

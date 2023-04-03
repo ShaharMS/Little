@@ -1,5 +1,6 @@
 package little.tools;
 
+import Type.ValueType;
 import little.interpreter.Interpreter;
 import haxe.Log;
 import haxe.macro.Expr;
@@ -11,8 +12,22 @@ using Std;
 
 class Conversion {
 
+    public static function extractHaxeType(type:ValueType):String {
+        return switch type {
+            case TNull: "Dynamic";
+            case TInt: "Int";
+            case TFloat: "Float";
+            case TBool: "Bool";
+            case TObject: "Dynamic";
+            case TFunction: "Dynamic"; // Todo: Change this?
+            case TClass(c): Type.getClassName(c).split(".").pop(); // Todo: Should I remove the path or nah?
+            case TEnum(e): e.getName().split(".").pop(); // Todo: Should I remove the path or nah?
+            case TUnknown: "Dynamic";
+        }
+    }
+
     public static function toLittleValue(val:Dynamic):ParserTokens {
-        var type = toLittleType(Type.typeof(val).getName().substring(1));
+        var type = toLittleType(extractHaxeType(Type.typeof(val)));
         return switch type {
             case (_ == TYPE_BOOLEAN => true): {
                 if (val) TrueValue else FalseValue;
