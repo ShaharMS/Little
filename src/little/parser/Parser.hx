@@ -486,12 +486,14 @@ class Parser {
                     }
                 }
                 case Block(body, type): post.unshift(Block(mergePropertyOperations(body), type));
+                case Expression(parts, type): post.unshift(Expression(mergePropertyOperations(parts), type));
                 case Define(name, type): post.unshift(Define(mergePropertyOperations(if (name.getName() == "PartArray") name.getParameters()[0] else [name])[0], type));
                 case Action(name, params, type): post.unshift(Action(mergePropertyOperations(if (name.getName() == "PartArray") name.getParameters()[0] else [name])[0], mergePropertyOperations([params])[0], type));
                 case Condition(name, exp, body, type): post.unshift(Condition(mergePropertyOperations([name])[0], mergePropertyOperations([exp])[0], mergePropertyOperations([body])[0], type));
                 case Return(value, type): post.unshift(Return(mergePropertyOperations([value])[0], type));
                 case PartArray(parts): post.unshift(PartArray(mergePropertyOperations(parts)));
                 case ActionCall(name, params): post.unshift(ActionCall(mergePropertyOperations([name])[0], mergePropertyOperations([params])[0]));
+                case Write(assignees, value, type): post.unshift(Write(mergePropertyOperations(assignees), mergePropertyOperations([value])[0], type));
                 case _: post.unshift(token);
             }
             i--;
@@ -552,7 +554,9 @@ class Parser {
                     }
                     // The last currentAssignee is the value;
                     value = if (currentAssignee.length == 1) currentAssignee[0] else Expression(currentAssignee, null);
-                    post.push(Write(assignees, value, null));
+                    var fValue = mergeWrites([value]);
+                    var v = if (fValue.length == 1) fValue[0] else Expression(fValue, null);
+                    post.push(Write(assignees, v, null));
                     potentialAssignee = null;
                 }
                 case Expression(parts, type): {

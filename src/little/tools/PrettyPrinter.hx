@@ -168,7 +168,7 @@ class PrettyPrinter {
 		} else {
 			var str = [];
 			for (param in params) {
-				str.push(Interpreter.stringifyTokenValue(param));
+				str.push(Interpreter.stringifyTokenIdentifier(param));
 			}
 			if (str.length == 0) return "no parameters";
 			return str.join(", ");

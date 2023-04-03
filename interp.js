@@ -3351,24 +3351,35 @@ little_parser_Parser.mergePropertyOperations = function(pre) {
 			var type2 = token.type;
 			post.unshift(little_parser_ParserTokens.Condition(little_parser_Parser.mergePropertyOperations([name2])[0],little_parser_Parser.mergePropertyOperations([exp])[0],little_parser_Parser.mergePropertyOperations([body])[0],type2));
 			break;
+		case 6:
+			var assignees = token.assignees;
+			var value = token.value;
+			var type3 = token.type;
+			post.unshift(little_parser_ParserTokens.Write(little_parser_Parser.mergePropertyOperations(assignees),little_parser_Parser.mergePropertyOperations([value])[0],type3));
+			break;
 		case 9:
 			var name3 = token.name;
 			var params1 = token.params;
 			post.unshift(little_parser_ParserTokens.ActionCall(little_parser_Parser.mergePropertyOperations([name3])[0],little_parser_Parser.mergePropertyOperations([params1])[0]));
 			break;
 		case 10:
-			var value = token.value;
-			var type3 = token.type;
-			post.unshift(little_parser_ParserTokens.Return(little_parser_Parser.mergePropertyOperations([value])[0],type3));
+			var value1 = token.value;
+			var type4 = token.type;
+			post.unshift(little_parser_ParserTokens.Return(little_parser_Parser.mergePropertyOperations([value1])[0],type4));
+			break;
+		case 11:
+			var parts = token.parts;
+			var type5 = token.type;
+			post.unshift(little_parser_ParserTokens.Expression(little_parser_Parser.mergePropertyOperations(parts),type5));
 			break;
 		case 12:
 			var body1 = token.body;
-			var type4 = token.type;
-			post.unshift(little_parser_ParserTokens.Block(little_parser_Parser.mergePropertyOperations(body1),type4));
+			var type6 = token.type;
+			post.unshift(little_parser_ParserTokens.Block(little_parser_Parser.mergePropertyOperations(body1),type6));
 			break;
 		case 13:
-			var parts = token.parts;
-			post.unshift(little_parser_ParserTokens.PartArray(little_parser_Parser.mergePropertyOperations(parts)));
+			var parts1 = token.parts;
+			post.unshift(little_parser_ParserTokens.PartArray(little_parser_Parser.mergePropertyOperations(parts1)));
 			break;
 		case 15:
 			if(token.sign == little_Keywords.PROPERTY_ACCESS_SIGN == true) {
@@ -3540,7 +3551,9 @@ little_parser_Parser.mergeWrites = function(pre) {
 					return null;
 				}
 				var value1 = currentAssignee.length == 1 ? currentAssignee[0] : little_parser_ParserTokens.Expression(currentAssignee,null);
-				post.push(little_parser_ParserTokens.Write(assignees,value1,null));
+				var fValue = little_parser_Parser.mergeWrites([value1]);
+				var v = fValue.length == 1 ? fValue[0] : little_parser_ParserTokens.Expression(fValue,null);
+				post.push(little_parser_ParserTokens.Write(assignees,v,null));
 				potentialAssignee = null;
 			} else {
 				if(potentialAssignee != null) {
@@ -4137,7 +4150,7 @@ little_tools_PrettyPrinter.parseParamsString = function(params,isExpected) {
 		while(_g < params.length) {
 			var param = params[_g];
 			++_g;
-			str.push(little_interpreter_Interpreter.stringifyTokenValue(param));
+			str.push(little_interpreter_Interpreter.stringifyTokenIdentifier(param));
 		}
 		if(str.length == 0) {
 			return "no parameters";
