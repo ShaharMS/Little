@@ -224,7 +224,12 @@ class Interpreter {
                 var returnVal = runTokens(body, currentConfig.prioritizeVariableDeclarations, currentConfig.prioritizeFunctionDeclarations, currentConfig.strictTyping);
                 return accessObject(evaluate(returnVal));
             }
-            case Number(_) | Decimal(_) | Characters(_) | TrueValue | FalseValue | NullValue | Sign(_): return memory[stringifyTokenValue(exp)];
+            case Number(_): return new MemoryObject(exp, null, null, Identifier(TYPE_INT));
+            case Decimal(_): return new MemoryObject(exp, null, null, Identifier(TYPE_FLOAT));
+            case Characters(_): return new MemoryObject(exp, null, null, Identifier(TYPE_STRING));
+            case Sign(_): return new MemoryObject(exp, null, null, Identifier(TYPE_SIGN));
+            case TrueValue | FalseValue: return new MemoryObject(exp, null, null, Identifier(TYPE_BOOLEAN));
+            case NullValue: return new MemoryObject(exp, null, null, Identifier(TYPE_VOID));
             case Identifier(word): {
                 evaluate(if (memory[word] != null) memory[word].value else ErrorMessage('No Such Definition: `$word`'));
                 return memory[word];
@@ -344,6 +349,147 @@ class Interpreter {
                 return accessObject(value);
             }
             case _: trace('Token $exp is inaccessible via memory. Returning null.');
+        }
+
+        // trace("null object");
+        return null;
+    }
+
+    public static function createObject(exp:ParserTokens, ?memory:Map<String, MemoryObject>):MemoryObject {
+        if (memory == null) memory = Interpreter.memory; // If no memory map is given, use the base one.
+
+        switch exp {
+            case SetLine(line): Runtime.line = line;
+            case Module(name): Runtime.currentModule = name;
+            case Expression(parts, _): {
+                return createObject(evaluateExpressionParts(parts));
+            }
+            case Block(body, type): {
+                var returnVal = runTokens(body, currentConfig.prioritizeVariableDeclarations, currentConfig.prioritizeFunctionDeclarations, currentConfig.strictTyping);
+                return createObject(evaluate(returnVal));
+            }
+            case Number(_): return new MemoryObject(exp, null, null, Identifier(TYPE_INT));
+            case Decimal(_): return new MemoryObject(exp, null, null, Identifier(TYPE_FLOAT));
+            case Characters(_): return new MemoryObject(exp, null, null, Identifier(TYPE_STRING));
+            case Sign(_): return new MemoryObject(exp, null, null, Identifier(TYPE_SIGN));
+            case TrueValue | FalseValue: return new MemoryObject(exp, null, null, Identifier(TYPE_BOOLEAN));
+            case NullValue: return new MemoryObject(exp, null, null, Identifier(TYPE_VOID));
+            case Identifier(word): {
+                var value = evaluate(if (memory[word] != null) memory[word].value else ErrorMessage('No Such Definition: `$word`'));
+                return createObject(value);
+            }
+            case Read(name): {
+                var word = stringifyTokenValue(name);
+                var value = evaluate(if (memory[word] != null) memory[word].value else ErrorMessage('No Such Definition: `$word`'));
+                return return createObject(value);
+            }
+            case ActionCall(name, params): {
+                if (memory[stringifyTokenValue(name)] == null) evaluate(ErrorMessage('No Such Action:  `${stringifyTokenValue(name)}`'));
+                return createObject(memory[stringifyTokenValue(name)].use(params));
+            }
+            case Define(name, type): {
+                function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
+                    switch prop {
+                        case PropertyAccess(_, property): {
+                            objName += '$PROPERTY_ACCESS_SIGN${stringifyTokenValue(prop)}';
+                            // trace(object, stringifyTokenValue(prop), property);
+                            if (object.props[stringifyTokenValue(prop)] == null) {
+                                // We can already know that object.name.property is null
+                                evaluate(ErrorMessage('Unable to create `$objName$PROPERTY_ACCESS_SIGN${stringifyTokenIdentifier(property)}`: `$objName` Does not contain property `${stringifyTokenIdentifier(property)}`.'));
+                                return new MemoryObject(NullValue, type);
+                            }
+                            return access(object.props[stringifyTokenValue(prop)], property, objName);
+                        }
+                        case _: {
+                            if (object.props[stringifyTokenIdentifier(prop)] == null) {
+                                object.props[stringifyTokenIdentifier(prop)] = new MemoryObject(NullValue, type);
+                            }
+                            return object.props[stringifyTokenIdentifier(prop)];
+                        }
+                    }
+                }
+                switch name {
+                    case PropertyAccess(name, property): {
+                        var obj = access(memory[stringifyTokenValue(name)], property, stringifyTokenValue(name));
+                        return createObject(obj.value); // Counter intuitive, but consistency is more important
+                    }
+                    case _: {
+                        return new MemoryObject(NullValue, type); 
+                    }
+                }
+            }
+            case Action(name, params, type): {
+                function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
+                    switch prop {
+                        case PropertyAccess(_, property): {
+                            objName += '$PROPERTY_ACCESS_SIGN${stringifyTokenValue(prop)}';
+                            // trace(object, stringifyTokenValue(prop), property);
+                            if (object.props[stringifyTokenValue(prop)] == null) {
+                                // We can already know that object.name.property is null
+                                evaluate(ErrorMessage('Unable to create `$objName$PROPERTY_ACCESS_SIGN${stringifyTokenIdentifier(property)}`: `$objName` Does not contain property `${stringifyTokenIdentifier(property)}`.'));
+                                return new MemoryObject(NullValue, type);
+                            }
+                            return access(object.props[stringifyTokenValue(prop)], property, objName);
+                        }
+                        case _: {
+                            if (object.props[stringifyTokenIdentifier(prop)] == null) {
+                                object.props[stringifyTokenIdentifier(prop)] = new MemoryObject(NullValue, [], params.getParameters()[0], type);
+                            }
+                            return object.props[stringifyTokenIdentifier(prop)];
+                        }
+                    }
+                }
+                switch name {
+                    case PropertyAccess(name, property): {
+                        var obj = access(memory[stringifyTokenValue(name)], property, stringifyTokenValue(name));
+                        return createObject(obj.value);
+                    }
+                    case _: {
+                        return new MemoryObject(NullValue, [], params.getParameters()[0], type); 
+                    }
+                }
+            }
+            case PropertyAccess(n, p): {
+                var str = stringifyTokenValue(n);
+                var prop = stringifyTokenIdentifier(p);
+                // trace(n, p);
+                if (memory[str] == null) evaluate(ErrorMessage('Unable to access property `$str$PROPERTY_ACCESS_SIGN$prop` - No Such Definition: `$str`'));
+                var obj = memory[str];
+                function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
+                    switch prop {
+                        case PropertyAccess(_, property): {
+                            objName += '$PROPERTY_ACCESS_SIGN${stringifyTokenValue(prop)}';
+                            // trace(object, stringifyTokenValue(prop), property);
+                            if (object.props[stringifyTokenValue(prop)] == null) {
+                                // We can already know that object.name.property is null
+                                evaluate(ErrorMessage('Unable to access `$objName$PROPERTY_ACCESS_SIGN${stringifyTokenIdentifier(property)}`: `$objName` Does not contain property `${stringifyTokenIdentifier(property)}`.'));
+                                return null;
+                            }
+                            return access(object.props[stringifyTokenValue(prop)], property, objName);
+                        }
+                        case ActionCall(name, params): {
+                            if (object.props[stringifyTokenValue(name)] == null) {
+                                evaluate(ErrorMessage('Unable to call `$objName$PROPERTY_ACCESS_SIGN${stringifyTokenValue(name)}(${stringifyTokenValue(params)})`: `$objName` Does not contain property `${stringifyTokenIdentifier(name)}`.'));
+                                return null;
+                            }
+                            return new MemoryObject(object.props[stringifyTokenValue(name)].use(params)); // Todo: Should a new memory object actually be created here?
+                        }
+                        case _: {
+                            if (object.props[stringifyTokenIdentifier(prop)] == null) {
+                                object.props[stringifyTokenIdentifier(prop)] = new MemoryObject(NullValue);
+                                // trace("Created new: " + objName, prop );
+                            }
+                            return object.props[stringifyTokenIdentifier(prop)];
+                        }
+                    }
+                }
+                return createObject(access(obj, p, str).value); // Todo: Very questionable...
+                
+            }
+            case Return(value, type): {
+                return createObject(value);
+            }
+            case _: trace('Unable to create memory object from $exp. Returning null.');
         }
 
         // trace("null object");

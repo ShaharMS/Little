@@ -21,6 +21,12 @@ class KeywordConfig {
     **/
     @:optional public var TYPE_MODULE:String = "Type";
 
+    /**
+    	Represents the type of a sign (for example, +)
+        Exists for fun, but still functional :)
+    **/
+    @:optional public var TYPE_SIGN:String = "Sign";
+
     @:optional public var MAIN_MODULE_NAME:String = "Main";
     @:optional public var REGISTERED_MODULE_NAME:String = "Registered";
 

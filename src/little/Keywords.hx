@@ -22,6 +22,12 @@ class Keywords {
     **/
     public static var TYPE_MODULE:String = "Type";
 
+    /**
+    	Represents the type of a sign (for example, +)
+        Exists for fun, but still functional :)
+    **/
+    public static var TYPE_SIGN:String = "Sign";
+
     public static var MAIN_MODULE_NAME:String = "Main";
     public static var REGISTERED_MODULE_NAME:String = "Registered";
 
@@ -65,6 +71,7 @@ class Keywords {
         TYPE_BOOLEAN: "Boolean",
         TYPE_STRING: "Characters",
         TYPE_MODULE: "Type",
+        TYPE_SIGN: "Sign",
         MAIN_MODULE_NAME: "Main",
         REGISTERED_MODULE_NAME: "Registered",
         PRINT_FUNCTION_NAME: "print",
@@ -97,6 +104,7 @@ class Keywords {
         TYPE_BOOLEAN = set.TYPE_BOOLEAN;
         TYPE_STRING = set.TYPE_STRING;
         TYPE_MODULE = set.TYPE_MODULE;
+        TYPE_SIGN = set.TYPE_SIGN;
         MAIN_MODULE_NAME = set.MAIN_MODULE_NAME;
         REGISTERED_MODULE_NAME = set.REGISTERED_MODULE_NAME;
         PRINT_FUNCTION_NAME = set.PRINT_FUNCTION_NAME;

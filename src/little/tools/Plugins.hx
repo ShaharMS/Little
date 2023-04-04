@@ -90,7 +90,9 @@ class Plugins {
                                 return Conversion.toLittleValue(fieldValues[instance.name](params[0])); // params[0] should be the current var's value when using the function
                             });
                             var type:ParserTokens = Identifier(Conversion.toLittleType(instance.returnType));
-                            motherObj.props[instance.name] = new MemoryObject(value, [] /*Should this be implemented?*/, [Define(Identifier("value"), Identifier(littleClassName))], type, true, false, true);
+                            motherObj.props[instance.name] = new MemoryObject(value, [] /*Should this be implemented?*/, [
+                                Define(Identifier("value " /* That extra space is used to differentiate between nonstatic fields and functions. Todo: Pretty bad solution */), Identifier(littleClassName))
+                            ], type, true, false, true);
                         }
 						
 					}
@@ -117,8 +119,8 @@ class Plugins {
 					    var params = [];
 					    for (param in instance.parameters) 
 					    	params.push(Define(Identifier(param.name), Identifier(param.type)));
-
-					    motherObj.props[instance.name] = new MemoryObject(value, [] /*Should this be implemented?*/, params, type, true);
+                        params.unshift(Define(Identifier("value"), Identifier(littleClassName)));
+					    motherObj.props[instance.name] = new MemoryObject(value, [] /*Should this be implemented?*/, params, type, true, false, true);
                     }
 
                     
