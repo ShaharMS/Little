@@ -48,6 +48,8 @@ class Main {
 			trace(Runtime.stdout);
 		}
 
+		//trace(Reflect.callMethod("hey", "hey".charAt, [0]));
+
 		// var path = FileSystem.absolutePath(Path.join([Sys.getCwd(), "test", "input.txt"]));
 		// var output = FileSystem.absolutePath(Path.join([Sys.getCwd(), "test", "output.txt"]));
 		// var ast = FileSystem.absolutePath(Path.join([Sys.getCwd(), "test", "ast.txt"]));

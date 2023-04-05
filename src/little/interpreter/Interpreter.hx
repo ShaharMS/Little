@@ -314,7 +314,6 @@ class Interpreter {
                 var prop = stringifyTokenIdentifier(p);
                 // trace(n, p);
                 var obj = accessObject(n);
-                trace(obj.value, obj.type);
                 if (obj == null) evaluate(ErrorMessage('Unable to access property `$str$PROPERTY_ACCESS_SIGN$prop`: No Such Definition: `$str`'));
                 function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
                     switch prop {
@@ -628,9 +627,9 @@ class Interpreter {
         var value = "", valueType = TYPE_UNKNOWN, mode = "+";
 
         for (token in parts) {
-            trace(token);
+            //trace(token);
             var val:ParserTokens = evaluate(token);
-            trace(val);
+            //trace(val);
             switch val {
                 case ErrorMessage(_): Runtime.throwError(val, INTERPRETER_VALUE_EVALUATOR);
                 case Sign(sign): mode = sign;

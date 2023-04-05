@@ -58,8 +58,8 @@ class Plugins {
                 var value = Reflect.field(Type.createEmptyInstance(cls), field);
                 if (Reflect.isFunction(value)) {
                     fieldFunctions.set(field, (obj:ParserTokens, paramsArray) -> {
-                        trace(obj, Conversion.toHaxeValue(obj), value, paramsArray);
-                        return Reflect.callMethod(Conversion.toHaxeValue(obj), value, paramsArray);
+                        
+                        return Reflect.callMethod(Conversion.toHaxeValue(obj), Reflect.field(Conversion.toHaxeValue(obj), field), paramsArray);
                     });
                 } else {
                     fieldValues.set(field, (obj:ParserTokens) -> {
@@ -113,7 +113,6 @@ class Plugins {
                         var value:ParserTokens = External((args) -> {
                             var obj = args.shift();
                             var params = [for (a in args) Conversion.toHaxeValue(a)];
-                            trace(instance.name, fieldFunctions[instance.name](obj, params));
                             return Conversion.toLittleValue(fieldFunctions[instance.name](obj, params));
 					    });
 
