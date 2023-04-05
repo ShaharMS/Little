@@ -12,6 +12,14 @@ using Std;
 import little.Keywords.*;
 class PrepareRun {
     
+    public static var prepared:Bool = false;
+
+    public static function addTypes() {
+        Little.plugin.registerHaxeClass(Data.getClassInfo("Math"));
+        Little.plugin.registerHaxeClass(Data.getClassInfo("String"), TYPE_STRING);
+        Little.plugin.registerHaxeClass(Data.getClassInfo("Array"), "Array"); // Experimental
+    }
+
     public static function addFunctions() {
 
         Little.plugin.registerFunction(PRINT_FUNCTION_NAME, null, [Define(Identifier("item"), null)], (params) -> {
@@ -28,13 +36,6 @@ class PrepareRun {
         Little.plugin.registerFunction(RUN_CODE_FUNCTION_NAME, null, [Define(Identifier("code"), Identifier(TYPE_STRING))], (params) -> {
             return Interpreter.interpret(Parser.parse(Lexer.lex(params[0].getParameters()[0])), Interpreter.currentConfig);
         });
-
-        //------------------------------------------
-        //                  Math
-        //------------------------------------------
-
-        Little.plugin.registerHaxeClass(Data.getClassInfo("Math"));
-        Little.plugin.registerHaxeClass(Data.getClassInfo("String"), "Characters");
     }
 
     public static function addConditions() {

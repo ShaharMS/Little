@@ -3,7 +3,7 @@ package little.interpreter;
 import little.tools.PrettyPrinter;
 import little.tools.Layer;
 import little.parser.Tokens.ParserTokens;
-
+import little.interpreter.memory.MemoryTree;
 
 
 @:structInit
@@ -31,7 +31,7 @@ class MemoryObject {
     **/
     @:optional public var setterListeners:Array<ParserTokens -> Void> = [];
 
-    @:optional public var props:Map<String, MemoryObject> = [];
+    @:optional public var props:MemoryTree;
     @:optional public var params(default, set):Array<ParserTokens> = null;
     @:optional public var type:ParserTokens = null;
     @:optional public var external:Bool = false;
@@ -46,9 +46,9 @@ class MemoryObject {
         return params = parameters.filter(p -> switch p {case SplitLine | SetLine(_): false; case _: true;});
     }
 
-    public function new(?value:ParserTokens, ?props:Map<String, MemoryObject>, ?params:Array<ParserTokens>, ?type:ParserTokens, ?external:Bool, ?condition:Bool, ?nonStatic:Bool) {
+    public function new(?value:ParserTokens, ?props:MemoryTree, ?params:Array<ParserTokens>, ?type:ParserTokens, ?external:Bool, ?condition:Bool, ?nonStatic:Bool) {
         this.value = value == null ? NullValue : value;
-        this.props = props == null ? [] : props;
+        this.props = props == null ? new MemoryTree(this) : props;
         this.params = params;
         this.type = type;
         this.external = external == null ? false : external;

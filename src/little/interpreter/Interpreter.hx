@@ -3,6 +3,7 @@ package little.interpreter;
 import little.tools.Layer;
 import little.parser.Tokens.ParserTokens;
 import little.Keywords.*;
+import little.interpreter.memory.MemoryTree;
 
 using StringTools;
 using Std;
@@ -13,7 +14,7 @@ class Interpreter {
     
     public static var errorThrown = false;
 
-    public static var memory:Map<String, MemoryObject>;
+    public static var memory:MemoryTree = [];
 
     public static var currentConfig:RunConfig;
 
@@ -27,7 +28,7 @@ class Interpreter {
         return runTokens(tokens, runConfig.prioritizeVariableDeclarations, runConfig.prioritizeFunctionDeclarations, runConfig.strictTyping);
     }
 
-    public static function runTokens(tokens:Array<ParserTokens>, preParseVars:Bool, preParseFuncs:Bool, strict:Bool, ?memory:Map<String, MemoryObject>):ParserTokens {
+    public static function runTokens(tokens:Array<ParserTokens>, preParseVars:Bool, preParseFuncs:Bool, strict:Bool, ?memory:MemoryTree):ParserTokens {
         // Todo: support preParseVars
         // Todo: support preParseFuncs
         // Todo: support strict typing
@@ -51,7 +52,7 @@ class Interpreter {
                 }
                 case Action(name, params, type): {
                     var object = accessObject(name, memory);
-                    object = new MemoryObject(NullValue, [], params.getParameters()[0], type);
+                    object = new MemoryObject(NullValue, null, params.getParameters()[0], type);
                     returnVal = object.value;
                 }
                 case Condition(name, exp, body, type): {
@@ -111,7 +112,7 @@ class Interpreter {
         return returnVal;
     }
 
-    public static function evaluate(exp:ParserTokens, ?memory:Map<String, MemoryObject>, ?dontThrow:Bool = false):ParserTokens {
+    public static function evaluate(exp:ParserTokens, ?memory:MemoryTree, ?dontThrow:Bool = false):ParserTokens {
 
         if (memory == null) memory = Interpreter.memory; // If no memory map is given, use the base one.
 
@@ -191,7 +192,7 @@ class Interpreter {
             }
             case Action(name, params, type): {
                 var object = accessObject(name, memory);
-                object = new MemoryObject(NullValue, [], params.getParameters()[0], type);
+                object = new MemoryObject(NullValue, null, params.getParameters()[0], type);
                 return object.value;
             }
             case External(get): return evaluate(get([]), memory, dontThrow);
@@ -210,7 +211,7 @@ class Interpreter {
 
     }
 
-    public static function accessObject(exp:ParserTokens, ?memory:Map<String, MemoryObject>):MemoryObject {
+    public static function accessObject(exp:ParserTokens, ?memory:MemoryTree):MemoryObject {
         
         if (memory == null) memory = Interpreter.memory; // If no memory map is given, use the base one.
 
@@ -290,7 +291,7 @@ class Interpreter {
                         }
                         case _: {
                             if (object.props[stringifyTokenIdentifier(prop)] == null) {
-                                object.props[stringifyTokenIdentifier(prop)] = new MemoryObject(NullValue, [], params.getParameters()[0], type);
+                                object.props[stringifyTokenIdentifier(prop)] = new MemoryObject(NullValue, null, params.getParameters()[0], type);
                             }
                             return object.props[stringifyTokenIdentifier(prop)];
                         }
@@ -303,7 +304,7 @@ class Interpreter {
                     }
                     case _: {
                         trace(name, stringifyTokenValue(name));
-                        memory[stringifyTokenValue(name)] = new MemoryObject(NullValue, [], params.getParameters()[0], type); 
+                        memory[stringifyTokenValue(name)] = new MemoryObject(NullValue, null, params.getParameters()[0], type); 
                         return memory[stringifyTokenValue(name)];
                     }
                 }
@@ -355,7 +356,7 @@ class Interpreter {
         return null;
     }
 
-    public static function createObject(exp:ParserTokens, ?memory:Map<String, MemoryObject>):MemoryObject {
+    public static function createObject(exp:ParserTokens, ?memory:MemoryTree):MemoryObject {
         if (memory == null) memory = Interpreter.memory; // If no memory map is given, use the base one.
 
         switch exp {
@@ -433,7 +434,7 @@ class Interpreter {
                         }
                         case _: {
                             if (object.props[stringifyTokenIdentifier(prop)] == null) {
-                                object.props[stringifyTokenIdentifier(prop)] = new MemoryObject(NullValue, [], params.getParameters()[0], type);
+                                object.props[stringifyTokenIdentifier(prop)] = new MemoryObject(NullValue, null, params.getParameters()[0], type);
                             }
                             return object.props[stringifyTokenIdentifier(prop)];
                         }
@@ -445,7 +446,7 @@ class Interpreter {
                         return createObject(obj.value);
                     }
                     case _: {
-                        return new MemoryObject(NullValue, [], params.getParameters()[0], type); 
+                        return new MemoryObject(NullValue, null, params.getParameters()[0], type); 
                     }
                 }
             }
@@ -496,7 +497,7 @@ class Interpreter {
         return null;
     }
 
-    public static function stringifyTokenValue(token:ParserTokens, ?memory:Map<String, MemoryObject>):String {
+    public static function stringifyTokenValue(token:ParserTokens, ?memory:MemoryTree):String {
 
         if (memory == null) memory = Interpreter.memory; // If no memory map is given, use the base one.
 
@@ -551,7 +552,7 @@ class Interpreter {
         return "Something went wrong";
     }
 
-    public static function stringifyTokenIdentifier(token:ParserTokens, ?prop = false, ?memory:Map<String, MemoryObject>):String {
+    public static function stringifyTokenIdentifier(token:ParserTokens, ?prop = false, ?memory:MemoryTree):String {
 
         if (memory == null) memory = Interpreter.memory; // If no memory map is given, use the base one.
 
@@ -615,7 +616,7 @@ class Interpreter {
         return "Something went wrong";
     }
 
-    public static function evaluateExpressionParts(parts:Array<ParserTokens>, ?memory:Map<String, MemoryObject>):ParserTokens {
+    public static function evaluateExpressionParts(parts:Array<ParserTokens>, ?memory:MemoryTree):ParserTokens {
 
         if (memory == null) memory = Interpreter.memory; // If no memory map is given, use the base one.
 

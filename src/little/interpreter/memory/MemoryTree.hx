@@ -31,13 +31,13 @@ abstract MemoryTree(MemoryTreeBase) {
     @:op([]) public function get(name:String):MemoryObject {
         if (this.map.exists(name)) return this.map[name];
         else {
-            if (!Interpreter.memory.exists(this.objType)) {
+            if (!Interpreter.memory.underlying.map.exists(this.objType)) {
                 Runtime.throwError(ErrorMessage('Type ${this.objType} does not exist.'));
                 return null;
             }
-            if (!Interpreter.memory[this.objType].props.exists(name)) return null; // Throws non existent prop on Interpreter.accessObject().
+            if (!Interpreter.memory.underlying.map[this.objType].props.underlying.map.exists(name)) return null; // Throws non existent prop on Interpreter.accessObject().
             
-            var field = Interpreter.memory[this.objType].props[name];
+            var field = Interpreter.memory.underlying.map[this.objType].props.underlying.map[name];
             if (!field.nonStatic) {
                 Runtime.throwError(ErrorMessage('Property $name belongs to the actual type ${this.objType}, not to an object of type (${this.objType}). Try using ${this.objType}$PROPERTY_ACCESS_SIGN$name instead.'));
                 return null;
@@ -109,7 +109,7 @@ abstract MemoryTree(MemoryTreeBase) {
 
 		The order of values is undefined.
 	**/
-	public inline function copy():Map<String, MemoryObject> {
+	public inline function copy():MemoryTree {
 		return cast this.map.copy();
 	}
 
@@ -132,5 +132,13 @@ abstract MemoryTree(MemoryTreeBase) {
 	@:arrayAccess @:noCompletion public inline function arrayWrite(k:String, v:MemoryObject):MemoryObject {
 		this.map.set(k, v);
 		return v;
+	}
+
+
+	@:from static inline function fromMap<K, V>(map:Map<K, V>):MemoryTree {
+		return new MemoryTree(new MemoryObject(NullValue));
+	}
+	@:from static inline function fromArray<K>(map:Array<K>):MemoryTree {
+		return new MemoryTree(new MemoryObject(NullValue));
 	}
 }

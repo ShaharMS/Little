@@ -21,17 +21,33 @@ class Little {
     public static var debug:Bool = false;
 
     /**
-        Loads little code, without clearing memory, stdout & the callstack. useful if you want to 
+        Loads little code, without clearing memory, stdout or the callstack. useful if you want to 
         use multiple files/want to preload code for the end user to use.
 
         Notice - after calling this method, event listeners will dispatch (i.e. they're not exclusive to the `run()` method).
 
         @param code a string containing code written in Little.
         @param name a name to call the module, so it would be easily identifiable
+        @param runRightBeforeMain When set to true, instead of parsing and running the code right after this function is called, 
+            we wait for `Little.run()` to get called, and then we parse and run this module right before the main module. Defaults to false.
     **/
-    public static function loadModule(code:String, name:String) {
+    public static function loadModule(code:String, name:String, debug:Bool = false, runRightBeforeMain:Bool = false) {
         Interpreter.errorThrown = false;
         Runtime.line = 0;
+        Runtime.currentModule = name;
+        if (runRightBeforeMain) {
+
+        } else {
+            final previous = Little.debug;
+            if (debug != null) Little.debug = debug;
+            if (!PrepareRun.prepared) {
+                PrepareRun.addTypes();
+                PrepareRun.addFunctions();
+                PrepareRun.addConditions();
+            }
+            Interpreter.interpret(Parser.parse(Lexer.lex(code)), {});
+            if (debug != null) Little.debug = previous;
+        }
     }
 
     /**
@@ -60,9 +76,12 @@ class Little {
         Runtime.currentModule = Keywords.MAIN_MODULE_NAME;
         final previous = Little.debug;
         if (debug != null) Little.debug = debug;
-        Interpreter.memory = [];
-        PrepareRun.addFunctions();
-        PrepareRun.addConditions();
+        Interpreter.memory.clear();
+        if (!PrepareRun.prepared) {
+            PrepareRun.addTypes();
+            PrepareRun.addFunctions();
+            PrepareRun.addConditions();
+        }
         Interpreter.interpret(Parser.parse(Lexer.lex(code)), {});
         if (debug != null) Little.debug = previous;
     }
