@@ -91,7 +91,7 @@ class Plugins {
                             });
                             var type:ParserTokens = Identifier(Conversion.toLittleType(instance.returnType));
                             motherObj.props[instance.name] = new MemoryObject(value, [] /*Should this be implemented?*/, [
-                                Define(Identifier("value " /* That extra space is used to differentiate between nonstatic fields and functions. Todo: Pretty bad solution */), Identifier(littleClassName))
+                                Define(Identifier("value " /* That extra space is used to differentiate between non-static fields and functions. Todo: Pretty bad solution */), Identifier(littleClassName))
                             ], type, true, false, true);
                         }
 						
