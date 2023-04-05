@@ -6,6 +6,7 @@ import little.interpreter.Interpreter;
 import little.interpreter.Runtime;
 
 import little.parser.Tokens;
+import little.interpreter.MemoryObject;
 
 using Std;
 
@@ -18,6 +19,11 @@ class PrepareRun {
         Little.plugin.registerHaxeClass(Data.getClassInfo("Math"));
         Little.plugin.registerHaxeClass(Data.getClassInfo("String"), TYPE_STRING);
         Little.plugin.registerHaxeClass(Data.getClassInfo("Array"), "Array"); // Experimental
+        Interpreter.memory.set(TYPE_DYNAMIC, new MemoryObject(Module(TYPE_DYNAMIC), [], null, Identifier(TYPE_MODULE), true));
+        Interpreter.memory.set(TYPE_INT, new MemoryObject(Module(TYPE_INT), [], null, Identifier(TYPE_MODULE), true));
+        Interpreter.memory.set(TYPE_FLOAT, new MemoryObject(Module(TYPE_FLOAT), [], null, Identifier(TYPE_MODULE), true));
+        Interpreter.memory.set(TYPE_BOOLEAN, new MemoryObject(Module(TYPE_INT), [], null, Identifier(TYPE_BOOLEAN), true));
+
     }
 
     public static function addFunctions() {

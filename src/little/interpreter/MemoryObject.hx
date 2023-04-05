@@ -48,12 +48,13 @@ class MemoryObject {
 
     public function new(?value:ParserTokens, ?props:MemoryTree, ?params:Array<ParserTokens>, ?type:ParserTokens, ?external:Bool, ?condition:Bool, ?nonStatic:Bool) {
         this.value = value == null ? NullValue : value;
-        this.props = props == null ? new MemoryTree(this) : props;
         this.params = params;
         this.type = type;
         this.external = external == null ? false : external;
         this.condition = condition == null ? false : condition;
         this.nonStatic = nonStatic == null ? true : nonStatic;
+        this.props = props == null ? new MemoryTree(this) : props;
+
     }
 
 
@@ -62,7 +63,7 @@ class MemoryObject {
         if (condition) {
             // trace("condition");
             if (value.getName() != "ExternalCondition") return ErrorMessage('Undefined external condition');
-            if (parameters.getName() != "PartArray") return ErrorMessage('Incorrect parameter group format, given group format: ${parameters.getName()}, expectedFormat: ${PartArray}');
+            if (parameters.getName() != "PartArray") return ErrorMessage('Incorrect parameter group format, given group format: ${parameters.getName()}, expected Format: `PartArray`');
             // trace("checks passed");
             // trace(parameters.getParameters()[0][0]);
             var con = (parameters.getParameters()[0][0] : ParserTokens).getParameters()[0];
@@ -104,7 +105,7 @@ class MemoryObject {
         }
 
         if (params == null) return ErrorMessage('Cannot call definition');
-        if (parameters.getName() != "PartArray") return ErrorMessage('Incorrect parameter group format, given group format: ${parameters.getName()}, expectedFormat: ${PartArray}');
+        if (parameters.getName() != "PartArray") return ErrorMessage('Incorrect parameter group format, given group format: ${parameters.getName()}, expected Format: `PartArray`');
 
 
         var given:Array<ParserTokens> = [];
@@ -125,7 +126,7 @@ class MemoryObject {
 
         if (given.length != params.length) return ErrorMessage('Incorrect number of parameters, expected: ${params.length} (${PrettyPrinter.parseParamsString(params)}), given: ${given.length} (${PrettyPrinter.parseParamsString(given, false)})');
 
-        given = [for (element in given) Interpreter.evaluate(element)];
+        //given = [for (element in given) Interpreter.evaluate(element)];
 
         if (external) {
             if (value.getName() != "External") return ErrorMessage('Undefined external function');

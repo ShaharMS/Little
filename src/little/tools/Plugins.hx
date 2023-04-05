@@ -58,6 +58,7 @@ class Plugins {
                 var value = Reflect.field(Type.createEmptyInstance(cls), field);
                 if (Reflect.isFunction(value)) {
                     fieldFunctions.set(field, (obj:ParserTokens, paramsArray) -> {
+                        trace(obj, Conversion.toHaxeValue(obj), value, paramsArray);
                         return Reflect.callMethod(Conversion.toHaxeValue(obj), value, paramsArray);
                     });
                 } else {
@@ -84,15 +85,15 @@ class Plugins {
                         if (instance.isStatic) {
                             var value:ParserTokens = Conversion.toLittleValue(fieldValues[instance.name]);
 						    var type:ParserTokens = Identifier(Conversion.toLittleType(instance.returnType));
-						    motherObj.props[instance.name] = new MemoryObject(value, [] /*Should this be implemented?*/, null, type, true);
+						    motherObj.props.set(instance.name, new MemoryObject(value, [] /*Should this be implemented?*/, null, type, true));
                         } else {
                             var value:ParserTokens = External(params -> {
                                 return Conversion.toLittleValue(fieldValues[instance.name](params[0])); // params[0] should be the current var's value when using the function
                             });
                             var type:ParserTokens = Identifier(Conversion.toLittleType(instance.returnType));
-                            motherObj.props[instance.name] = new MemoryObject(value, [] /*Should this be implemented?*/, [
+                            motherObj.props.set(instance.name, new MemoryObject(value, [] /*Should this be implemented?*/, [
                                 Define(Identifier("value " /* That extra space is used to differentiate between non-static fields and functions. Todo: Pretty bad solution */), Identifier(littleClassName))
-                            ], type, true, false, true);
+                            ], type, true, false, true));
                         }
 						
 					}
@@ -107,11 +108,12 @@ class Plugins {
 					    for (param in instance.parameters) 
 					    	params.push(Define(Identifier(param.name), Identifier(param.type)));
 
-					    motherObj.props[instance.name] = new MemoryObject(value, [] /*Should this be implemented?*/, params, type, true);
+					    motherObj.props.set(instance.name, new MemoryObject(value, [] /*Should this be implemented?*/, params, type, true));
                     } else {
                         var value:ParserTokens = External((args) -> {
                             var obj = args.shift();
                             var params = [for (a in args) Conversion.toHaxeValue(a)];
+                            trace(instance.name, fieldFunctions[instance.name](obj, params));
                             return Conversion.toLittleValue(fieldFunctions[instance.name](obj, params));
 					    });
 
@@ -120,7 +122,7 @@ class Plugins {
 					    for (param in instance.parameters) 
 					    	params.push(Define(Identifier(param.name), Identifier(param.type)));
                         params.unshift(Define(Identifier("value"), Identifier(littleClassName)));
-					    motherObj.props[instance.name] = new MemoryObject(value, [] /*Should this be implemented?*/, params, type, true, false, true);
+					    motherObj.props.set(instance.name, new MemoryObject(value, [] /*Should this be implemented?*/, params, type, true, false, true));
                     }
 
                     
@@ -128,7 +130,7 @@ class Plugins {
 			}
 		}
 
-		Interpreter.memory[littleClassName] = motherObj;
+		Interpreter.memory.set(littleClassName, motherObj);
 	}
 
 
@@ -171,7 +173,7 @@ class Plugins {
 
 	
     public static function registerVariable(variableName:String, ?variableModuleName:String, allowWriting:Bool = false, ?staticValue:ParserTokens, ?valueGetter:Void -> ParserTokens, ?valueSetter:ParserTokens -> ParserTokens) {
-        Interpreter.memory[variableName] = new MemoryObject(
+        Interpreter.memory.set(variableName, new MemoryObject(
             External(params -> {
                 var currentModuleName = Little.runtime.currentModule;
                 if (variableModuleName != null) Little.runtime.currentModule = variableModuleName;
@@ -189,11 +191,11 @@ class Plugins {
             null,
             null, 
             true
-        );
+        ));
 
         if (valueSetter != null) {
-            Interpreter.memory[variableName].valueSetter = function (v) {
-                return Interpreter.memory[variableName].value = valueSetter(v);
+            Interpreter.memory.get(variableName).valueSetter = function (v) {
+                return Interpreter.memory.get(variableName).value = valueSetter(v);
             }
         }
     }
@@ -234,9 +236,9 @@ class Plugins {
         );
 
         if (actionModuleName != null) {
-            Interpreter.memory[actionModuleName] = new MemoryObject(Module(actionModuleName), [], null, Identifier(TYPE_MODULE), true);
-            Interpreter.memory[actionModuleName].props[actionName] = memObject;
-        } else Interpreter.memory[actionName] = memObject;
+            Interpreter.memory.set(actionModuleName, new MemoryObject(Module(actionModuleName), [], null, Identifier(TYPE_MODULE), true));
+            Interpreter.memory.get(actionModuleName).props.set(actionName, memObject);
+        } else Interpreter.memory.set(actionName, memObject);
     }
 
     public static function registerCondition(conditionName:String, ?expectedConditionPattern:EitherType<String, Array<ParserTokens>> ,callback:(Array<ParserTokens>, Array<ParserTokens>) -> ParserTokens) {
@@ -246,7 +248,7 @@ class Plugins {
             Parser.parse(Lexer.lex(expectedConditionPattern));
         } else expectedConditionPattern;
 
-        Interpreter.memory[conditionName] = new MemoryObject(
+        Interpreter.memory.set(conditionName, new MemoryObject(
             ExternalCondition((con, body) -> {
                 return try {
                     callback(con, body);
@@ -259,7 +261,7 @@ class Plugins {
             null, 
             true,
 			true
-        );
+        ));
     }
 }
 
