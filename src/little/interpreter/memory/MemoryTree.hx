@@ -47,6 +47,15 @@ abstract MemoryTree(MemoryTreeBase) {
 				return Interpreter.createObject(value);
 			} else { // non-static function, here we start maneuvering...
                 var value = External(params -> {
+					params = {
+						var p = [];
+						for (a in params) {
+							p.push(a);
+							p.push(SplitLine);
+						}
+						p.pop();
+						p;
+					}
                     return field.use(PartArray([this.obj.value, SplitLine].concat(params)));
                 });
                 return new MemoryObject(value, null, {var copy = field.params.copy(); copy.shift(); copy;}, null, true, false, false);
