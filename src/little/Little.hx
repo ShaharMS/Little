@@ -2,7 +2,7 @@ package little;
 
 import little.tools.Plugins;
 import haxe.extern.EitherType;
-import little.interpreter.MemoryObject;
+import little.interpreter.memory.MemoryObject;
 import little.tools.PrepareRun;
 import little.parser.Tokens.ParserTokens;
 import little.lexer.Lexer;

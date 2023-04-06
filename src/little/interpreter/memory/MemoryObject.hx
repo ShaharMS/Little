@@ -1,4 +1,4 @@
-package little.interpreter;
+package little.interpreter.memory;
 
 import little.tools.PrettyPrinter;
 import little.tools.Layer;

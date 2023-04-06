@@ -6,7 +6,7 @@ import little.interpreter.Interpreter;
 import little.interpreter.Runtime;
 
 import little.parser.Tokens;
-import little.interpreter.MemoryObject;
+import little.interpreter.memory.MemoryObject;
 
 using Std;
 

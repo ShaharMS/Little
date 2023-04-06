@@ -4,6 +4,7 @@ import little.tools.Layer;
 import little.parser.Tokens.ParserTokens;
 import little.Keywords.*;
 import little.interpreter.memory.MemoryTree;
+import little.interpreter.memory.MemoryObject;
 
 using StringTools;
 using Std;

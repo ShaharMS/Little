@@ -5,7 +5,7 @@ import little.lexer.Lexer;
 import little.parser.Parser;
 import little.interpreter.Interpreter;
 import little.parser.Tokens.ParserTokens;
-import little.interpreter.MemoryObject;
+import little.interpreter.memory.MemoryObject;
 import little.Little.*;
 import little.Keywords.*;
 
