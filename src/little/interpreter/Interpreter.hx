@@ -212,6 +212,25 @@ class Interpreter {
 
     }
 
+    public static function getValueType(token:ParserTokens):ParserTokens {
+        return switch token {
+            case SetLine(line): {
+                Runtime.line = line; 
+                NullValue;
+            }
+            case SplitLine: NullValue; 
+            case Module(_): Identifier(TYPE_MODULE);
+            case Sign(_):  Identifier(TYPE_SIGN);
+            case Number(_): Identifier(TYPE_INT);
+            case Decimal(_): Identifier(TYPE_FLOAT);
+            case Characters(_): Identifier(TYPE_STRING);
+            case NullValue: Identifier(TYPE_DYNAMIC);
+            case TrueValue: Identifier(TYPE_BOOLEAN);
+            case FalseValue: Identifier(TYPE_BOOLEAN);
+            case _: getValueType(evaluate(token));
+        }
+    }
+
     public static function accessObject(exp:ParserTokens, ?memory:MemoryTree):MemoryObject {
         
         if (memory == null) memory = Interpreter.memory; // If no memory map is given, use the base one.
