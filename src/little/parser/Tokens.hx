@@ -15,7 +15,7 @@ enum ParserTokens {
     Write(assignees:Array<ParserTokens>, value:ParserTokens, type:ParserTokens);
 
     Identifier(word:String);
-    TypeDeclaration(type:ParserTokens);
+    TypeDeclaration(value:ParserTokens, type:ParserTokens);
     ActionCall(name:ParserTokens, params:ParserTokens);
     Return(value:ParserTokens, type:ParserTokens);
 

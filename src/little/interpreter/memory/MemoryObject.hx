@@ -11,9 +11,15 @@ import little.interpreter.memory.MemoryTree;
 	Represents a function/variable in memory. contains usage fields.
 **/
 class MemoryObject {
+
+    public static var defaultProperties:Map<String, MemoryObject>;
+
     public var value(default, set):ParserTokens = NullValue;
 
     function set_value(val:ParserTokens) {
+        trace(val, Interpreter.getValueType(val));
+        var t = Interpreter.getValueType(val);
+        if (type == null && t != null) type = t;
         value = valueSetter(val);
         for (setter in setterListeners) {
             setter(value);
@@ -49,12 +55,11 @@ class MemoryObject {
     public function new(?value:ParserTokens, ?props:MemoryTree, ?params:Array<ParserTokens>, ?type:ParserTokens, ?external:Bool, ?condition:Bool, ?nonStatic:Bool) {
         this.value = value == null ? NullValue : value;
         this.params = params;
-        this.type = type;
+        this.type = type == null ? Interpreter.getValueType(this.value) : type;
         this.external = external == null ? false : external;
         this.condition = condition == null ? false : condition;
         this.nonStatic = nonStatic == null ? true : nonStatic;
         this.props = props == null ? new MemoryTree(this) : props;
-
     }
 
 

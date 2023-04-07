@@ -58,7 +58,7 @@ class Parser {
         // trace("props:", tokens);
         tokens = mergeWrites(tokens);
         // trace("writes:", tokens);
-
+        tokens = mergeValuesWithTypeDeclarations(tokens);
 
         return tokens;
     }
@@ -177,7 +177,7 @@ class Parser {
                 case Identifier(word): {
                     if (word == TYPE_DECL_OR_CAST && i + 1 < pre.length) {
                         var lookahead = pre[i + 1];
-                        post.push(TypeDeclaration(lookahead));
+                        post.push(TypeDeclaration(null, lookahead));
                         i++;
                     } else if (word == TYPE_DECL_OR_CAST) {
                         // Throw error for incomplete type declarations;
@@ -226,7 +226,7 @@ class Parser {
                     while (i < pre.length) {
                         var lookahead = pre[i];
                         switch lookahead {
-                            case TypeDeclaration(typeToken): {
+                            case TypeDeclaration(_, typeToken): {
                                 if (name.length == 0) {
                                     Runtime.throwError(ErrorMessage("Missing variable name before type declaration."), Layer.PARSER);
                                     return null;
@@ -282,7 +282,7 @@ class Parser {
                     while (i < pre.length) {
                         var lookahead = pre[i];
                         switch lookahead {
-                            case TypeDeclaration(typeToken): {
+                            case TypeDeclaration(_, typeToken): {
                                 if (name.length == 0) {
                                     Runtime.throwError(ErrorMessage("Missing function name & parameters before type declaration."), Layer.PARSER);
                                     return null;
@@ -612,8 +612,51 @@ class Parser {
         return post;
     }
 
+    public static function mergeValuesWithTypeDeclarations(pre:Array<ParserTokens>) :Array<ParserTokens> {
 
+        if (pre == null) return null;
 
+        var post:Array<ParserTokens> = [];
+
+        var i = pre.length - 1;
+        while (i >= 0) {
+            var token = pre[i];
+            switch token {
+                case SetLine(line): {setLine(line); post.unshift(token);}
+                case SplitLine: {nextPart(); post.unshift(token);}
+                case TypeDeclaration(null, type): {
+                    if (i-- <= 0) {
+                        Runtime.throwError(ErrorMessage("Value's type declaration cut off by the start of file, block or expression."), Layer.PARSER);
+                        return null;
+                    }
+                    var lookbehind = pre[i];
+                    switch lookbehind {
+                        case SplitLine | SetLine(_): {
+                            Runtime.throwError(ErrorMessage("Value's type declaration access cut off by the start of a line, or by a line split (; or ,)."), Layer.PARSER);
+                            return null;
+                        }
+                        case _: {
+                            post.unshift(TypeDeclaration(lookbehind, type));
+                        }
+                    }
+                }
+                case Block(body, type): post.unshift(Block(mergeValuesWithTypeDeclarations(body), type));
+                case Expression(parts, type): post.unshift(Expression(mergeValuesWithTypeDeclarations(parts), type));
+                case Define(name, type): post.unshift(Define(mergeValuesWithTypeDeclarations(if (name.getName() == "PartArray") name.getParameters()[0] else [name])[0], type));
+                case Action(name, params, type): post.unshift(Action(mergeValuesWithTypeDeclarations(if (name.getName() == "PartArray") name.getParameters()[0] else [name])[0], mergeValuesWithTypeDeclarations([params])[0], type));
+                case Condition(name, exp, body, type): post.unshift(Condition(mergeValuesWithTypeDeclarations([name])[0], mergeValuesWithTypeDeclarations([exp])[0], mergeValuesWithTypeDeclarations([body])[0], type));
+                case Return(value, type): post.unshift(Return(mergeValuesWithTypeDeclarations([value])[0], type));
+                case PartArray(parts): post.unshift(PartArray(mergeValuesWithTypeDeclarations(parts)));
+                case ActionCall(name, params): post.unshift(ActionCall(mergeValuesWithTypeDeclarations([name])[0], mergeValuesWithTypeDeclarations([params])[0]));
+                case Write(assignees, value, type): post.unshift(Write(mergeValuesWithTypeDeclarations(assignees), mergeValuesWithTypeDeclarations([value])[0], type));
+                case _: post.unshift(token);
+            }
+            i--;
+        }
+
+        resetLines();
+        return post;
+    }
 
     
 

@@ -93,9 +93,10 @@ class PrettyPrinter {
 				{
 					return '${prefixFA(prefix)}$t$d $value\n';
 				}
-            case TypeDeclaration(type): {
-                return '${prefixFA(prefix)}$t$d Type Declaration\n${getTree(type, prefix.copy(), level + 1, true)}';
-            }
+            case TypeDeclaration(value, type): 
+				{
+					return '${prefixFA(prefix)}$t$d Type Declaration\n${getTree(value, if (type == null) prefix.copy() else pushIndex(prefix, level), level + 1, type == null)}${getTree(type, prefix.copy(), level + 1, true)}';
+            	}
 			case Identifier(value): {
 				return '${prefixFA(prefix)}$t$d $value\n';
 			}

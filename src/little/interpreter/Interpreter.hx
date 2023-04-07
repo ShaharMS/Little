@@ -150,7 +150,18 @@ class Interpreter {
             case Identifier(word): {
                 return evaluate(if (memory.get(word) != null) memory.get(word).value else ErrorMessage('No Such Definition: `$word`'), memory, dontThrow);
             }
-            case TypeDeclaration(type): return evaluate(type, memory, dontThrow);
+            case TypeDeclaration(value, type): {
+                var val = evaluate(value, memory, dontThrow);
+                var valT = getValueType(val);
+                var t = evaluate(type, memory, dontThrow);
+
+                if (t.equals(valT)) {
+                    return val;
+                } else {
+                    Runtime.throwError(ErrorMessage('Warning: Mismatch at type declaration: the value $value has been declared as being of type $t, while its type is $valT. This might cause issues.'), INTERPRETER_VALUE_EVALUATOR);
+                    return val;
+                }
+            } 
             case Write(assignees, value, type): {
                 var v = null;
                 for (a in assignees) {
@@ -213,6 +224,10 @@ class Interpreter {
     }
 
     public static function getValueType(token:ParserTokens):ParserTokens {
+
+        trace(token);
+        if (token == null) return Identifier(TYPE_DYNAMIC);
+
         return switch token {
             case SetLine(line): {
                 Runtime.line = line; 
@@ -227,6 +242,9 @@ class Interpreter {
             case NullValue: Identifier(TYPE_DYNAMIC);
             case TrueValue: Identifier(TYPE_BOOLEAN);
             case FalseValue: Identifier(TYPE_BOOLEAN);
+            case Identifier(word): token;
+            case External(_) | ExternalCondition(_): Identifier(TYPE_DYNAMIC);
+            case TypeDeclaration(_, type): evaluate(type);
             case _: getValueType(evaluate(token));
         }
     }
@@ -614,8 +632,8 @@ class Interpreter {
             case Condition(name, exp, body, type): {
                 return stringifyTokenIdentifier(name);
             }
-            case TypeDeclaration(type): {
-                return stringifyTokenIdentifier(type);
+            case TypeDeclaration(value, type): {
+                return stringifyTokenIdentifier(value);
             }
             case SplitLine: return ','; // Returns default line splitter.
             case Sign(sign): return sign;

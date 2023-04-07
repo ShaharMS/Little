@@ -229,7 +229,7 @@ class Plugins {
                 }
             }), 
             [], 
-            expectedParameters, 
+            params, 
             null, 
             true
         );
@@ -256,11 +256,73 @@ class Plugins {
                 }
             }), 
             [], 
-            expectedConditionPattern, 
+            params, 
             null, 
             true,
 			true
         ));
+    }
+
+    public static function registerProperty(propertyName:String, onType:String, value:EitherType<FunctionInfo, VariableInfo>) {
+        if (Interpreter.memory.exists(onType)) {
+            Interpreter.memory.set(onType, new MemoryObject(Module(onType), [], null, Identifier(TYPE_MODULE), true));
+        }
+        var memObject:MemoryObject;
+        if (untyped value.callback == null) {
+            // Variable
+            var info:VariableInfo = cast value;
+            memObject = new MemoryObject(
+                External(params -> {
+                    return try {
+                        var val = if (info.staticValue != null) info.staticValue;
+                        else info.valueGetter();
+                        val;
+                    } catch (e) {
+                        ErrorMessage('External Variable Error: ' + e.details());
+                    }
+                }), 
+                [], 
+                null,
+                Identifier(info.type), 
+                true,
+                false,
+                true
+            );
+
+            if (info.valueSetter != null) {
+                memObject.valueSetter = function (v) {
+                    return memObject.value = info.valueSetter(v);
+                }
+            }
+        } else {
+            // Function
+            var info:FunctionInfo = cast value;
+
+            var params = if (info.expectedParameters is String) {
+                Parser.parse(Lexer.lex(info.expectedParameters));
+            } else info.expectedParameters;
+    
+            memObject = new MemoryObject(
+                External(params -> {
+                    return try {
+                        var val = info.callback(params);
+                        val;
+                    } catch (e) {
+                        ErrorMessage('External Function Error: ' + e.details());
+                    }
+                }), 
+                [], 
+                params, 
+                Identifier(info.type), 
+                true,
+                false,
+                true
+            );
+        }
+
+        if (onType != TYPE_DYNAMIC) {
+            MemoryObject.defaultProperties.set(propertyName, memObject);
+        } else Interpreter.memory.get(onType).props.set(propertyName, memObject);
     }
 }
 
@@ -272,4 +334,18 @@ typedef ItemInfo = {
 	fieldType:String,
 	allowWrite:Bool,
     isStatic:Bool
-} 
+}
+
+typedef FunctionInfo = {
+    expectedParameters:EitherType<String, Array<ParserTokens>>,
+    callback:Array<ParserTokens> -> ParserTokens,
+    ?allowWriting:Bool,
+    ?type:String
+}
+typedef VariableInfo = {
+    ?staticValue:ParserTokens, 
+    ?valueGetter:Void -> ParserTokens, 
+    ?valueSetter:ParserTokens -> ParserTokens,
+    ?allowWriting:Bool,
+    ?type:String
+}
