@@ -76,7 +76,7 @@ class Little {
         Runtime.currentModule = Keywords.MAIN_MODULE_NAME;
         final previous = Little.debug;
         if (debug != null) Little.debug = debug;
-        Interpreter.memory.clear();
+        Interpreter.memory.underlying.map = [];
         if (!PrepareRun.prepared) {
             PrepareRun.addTypes();
             PrepareRun.addFunctions();

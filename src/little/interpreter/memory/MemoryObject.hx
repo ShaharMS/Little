@@ -14,10 +14,11 @@ class MemoryObject {
 
     public static var defaultProperties:Map<String, MemoryObject>;
 
+    @:optional public var parent:MemoryObject;
+
     public var value(default, set):ParserTokens = NullValue;
 
     function set_value(val:ParserTokens) {
-        trace(val, Interpreter.getValueType(val));
         var t = Interpreter.getValueType(val);
         if (type == null && t != null) type = t;
         value = valueSetter(val);
@@ -43,7 +44,7 @@ class MemoryObject {
     @:optional public var external:Bool = false;
     @:optional public var condition:Bool = false;
     /**
-    	When under a memory object, suppose, `T`, of type `"Type"`, it acts as a property of every object of type `T`.
+    	When under a memory object, suppose, `T`, of type `"Type"`, it acts as a property of every object of type `Type`.
     **/
     @:optional public var nonStatic:Bool = true;
 
@@ -52,14 +53,18 @@ class MemoryObject {
         return params = parameters.filter(p -> switch p {case SplitLine | SetLine(_): false; case _: true;});
     }
 
-    public function new(?value:ParserTokens, ?props:MemoryTree, ?params:Array<ParserTokens>, ?type:ParserTokens, ?external:Bool, ?condition:Bool, ?nonStatic:Bool) {
+    public function new(?value:ParserTokens, ?props:MemoryTree, ?params:Array<ParserTokens>, ?type:ParserTokens, ?external:Bool, ?condition:Bool, ?nonStatic:Bool, ?parent:MemoryObject) {
         this.value = value == null ? NullValue : value;
         this.params = params;
         this.type = type == null ? Interpreter.getValueType(this.value) : type;
         this.external = external == null ? false : external;
         this.condition = condition == null ? false : condition;
         this.nonStatic = nonStatic == null ? true : nonStatic;
-        this.props = props == null ? new MemoryTree(this) : props;
+        this.props = new MemoryTree(this);
+        trace(value);
+        this.parent = parent != null ? parent : this; //Interesting solution
+        trace(this.value, this.parent.value);
+
     }
 
 

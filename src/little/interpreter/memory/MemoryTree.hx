@@ -10,6 +10,7 @@ class MemoryTreeBase {
     public var obj:MemoryObject;
 
     public function new(m:MemoryObject) {
+		if (m == null) m = new MemoryObject(NullValue, m);
         objType = m.type != null ? Interpreter.stringifyTokenValue(m.type) : TYPE_DYNAMIC;
         obj = m;
         
@@ -19,7 +20,10 @@ class MemoryTreeBase {
 abstract MemoryTree(MemoryTreeBase) {
 
     public var underlying(get, never):MemoryTreeBase;
-    public function get_underlying() return this;
+	public var object(get, never):MemoryObject;
+
+    function get_underlying() return this;
+    function get_object() return this.obj;
 
     public function new(obj:MemoryObject) {
         this = new MemoryTreeBase(obj);

@@ -25,7 +25,6 @@ class PrepareRun {
         Interpreter.memory.set(TYPE_BOOLEAN, new MemoryObject(Module(TYPE_INT), [], null, Identifier(TYPE_BOOLEAN), true));
 
     }
-
     public static function addFunctions() {
 
         Little.plugin.registerFunction(PRINT_FUNCTION_NAME, null, [Define(Identifier("item"), null)], (params) -> {

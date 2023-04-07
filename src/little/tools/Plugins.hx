@@ -85,7 +85,7 @@ class Plugins {
                         if (instance.isStatic) {
                             var value:ParserTokens = Conversion.toLittleValue(fieldValues[instance.name]);
 						    var type:ParserTokens = Identifier(Conversion.toLittleType(instance.returnType));
-						    motherObj.props.set(instance.name, new MemoryObject(value, [] /*Should this be implemented?*/, null, type, true));
+						    motherObj.props.set(instance.name, new MemoryObject(value, [] /*Should this be implemented?*/, null, type, true, motherObj));
                         } else {
                             var value:ParserTokens = External(params -> {
                                 return Conversion.toLittleValue(fieldValues[instance.name](params[0])); // params[0] should be the current var's value when using the function
@@ -93,7 +93,7 @@ class Plugins {
                             var type:ParserTokens = Identifier(Conversion.toLittleType(instance.returnType));
                             motherObj.props.set(instance.name, new MemoryObject(value, [] /*Should this be implemented?*/, [
                                 Define(Identifier("value " /* That extra space is used to differentiate between non-static fields and functions. Todo: Pretty bad solution */), Identifier(littleClassName))
-                            ], type, true, false, true));
+                            ], type, true, false, true, motherObj));
                         }
 						
 					}
@@ -108,7 +108,7 @@ class Plugins {
 					    for (param in instance.parameters) 
 					    	params.push(Define(Identifier(param.name), Identifier(param.type)));
 
-					    motherObj.props.set(instance.name, new MemoryObject(value, [] /*Should this be implemented?*/, params, type, true));
+					    motherObj.props.set(instance.name, new MemoryObject(value, [] /*Should this be implemented?*/, params, type, true, motherObj));
                     } else {
                         var value:ParserTokens = External((args) -> {
                             var obj = args.shift();
@@ -121,7 +121,7 @@ class Plugins {
 					    for (param in instance.parameters) 
 					    	params.push(Define(Identifier(param.name), Identifier(param.type)));
                         params.unshift(Define(Identifier("value"), Identifier(littleClassName)));
-					    motherObj.props.set(instance.name, new MemoryObject(value, [] /*Should this be implemented?*/, params, type, true, false, true));
+					    motherObj.props.set(instance.name, new MemoryObject(value, [] /*Should this be implemented?*/, params, type, true, false, true, motherObj));
                     }
 
                     
@@ -189,7 +189,8 @@ class Plugins {
             [], 
             null,
             null, 
-            true
+            true, 
+            Interpreter.memory.object
         ));
 
         if (valueSetter != null) {
@@ -235,7 +236,8 @@ class Plugins {
         );
 
         if (actionModuleName != null) {
-            Interpreter.memory.set(actionModuleName, new MemoryObject(Module(actionModuleName), [], null, Identifier(TYPE_MODULE), true));
+            Interpreter.memory.set(actionModuleName, new MemoryObject(Module(actionModuleName), [], null, Identifier(TYPE_MODULE), true, Interpreter.memory.object));
+            memObject.parent = Interpreter.memory.get(actionModuleName);
             Interpreter.memory.get(actionModuleName).props.set(actionName, memObject);
         } else Interpreter.memory.set(actionName, memObject);
     }
@@ -259,7 +261,8 @@ class Plugins {
             params, 
             null, 
             true,
-			true
+			true,
+            Interpreter.memory.object
         ));
     }
 
@@ -286,7 +289,8 @@ class Plugins {
                 Identifier(info.type), 
                 true,
                 false,
-                true
+                true,
+                Interpreter.memory.get(onType)
             );
 
             if (info.valueSetter != null) {
@@ -316,7 +320,8 @@ class Plugins {
                 Identifier(info.type), 
                 true,
                 false,
-                true
+                true,
+                Interpreter.memory.get(onType)
             );
         }
 
