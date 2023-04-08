@@ -81,6 +81,7 @@ class Little {
             PrepareRun.addTypes();
             PrepareRun.addFunctions();
             PrepareRun.addConditions();
+            PrepareRun.addProps();
         }
         Interpreter.interpret(Parser.parse(Lexer.lex(code)), {});
         if (debug != null) Little.debug = previous;

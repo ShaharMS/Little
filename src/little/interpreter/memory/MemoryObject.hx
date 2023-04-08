@@ -3,7 +3,6 @@ package little.interpreter.memory;
 import little.tools.PrettyPrinter;
 import little.tools.Layer;
 import little.parser.Tokens.ParserTokens;
-import little.interpreter.memory.MemoryTree;
 
 
 @:structInit
@@ -12,7 +11,19 @@ import little.interpreter.memory.MemoryTree;
 **/
 class MemoryObject {
 
-    public static var defaultProperties:Map<String, MemoryObject>;
+    @:noCompletion public static var objects:Array<MemoryObject> = [];
+
+    public static var defaultProperties:Map<String, MemoryObject> = [];
+
+    public static function addDefaultProperty(name:String, value:MemoryObject) {
+        defaultProperties[name] = value;
+        for (obj in objects) obj.props.set(name, value);
+    }
+
+    public static function removeDefaultProperty(name:String) {
+        defaultProperties.remove(name);
+        for (obj in objects) obj.props.remove(name);
+    }
 
     @:optional public var parent:MemoryObject;
 
@@ -61,10 +72,11 @@ class MemoryObject {
         this.condition = condition == null ? false : condition;
         this.nonStatic = nonStatic == null ? true : nonStatic;
         this.props = new MemoryTree(this);
-        trace(value);
         this.parent = parent != null ? parent : this; //Interesting solution
-        trace(this.value, this.parent.value);
+        this.props.concat(defaultProperties);
 
+        objects.push(this);
+        if (value.getParameters()[0] == "hey") trace(this.props);
     }
 
 

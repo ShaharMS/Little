@@ -37,8 +37,11 @@ abstract MemoryTree(MemoryTreeBase) {
                 return null;
             }
             if (!Interpreter.memory.silentGet(this.objType).props.exists(name)) return null; // Throws non existent prop on Interpreter.accessObject().
-            
-            var field = Interpreter.memory.silentGet(this.objType).props.silentGet(name);
+			if (!Interpreter.memory.silentGet(TYPE_DYNAMIC).props.exists(name)) return null; // Throws non existent prop on Interpreter.accessObject().
+
+            var field = Interpreter.memory.silentGet(TYPE_DYNAMIC).props.silentGet(name);
+            var master = Interpreter.memory.silentGet(this.objType).props.silentGet(name);
+			if (master != null) field = master;
             if (!field.nonStatic) {
                 Runtime.throwError(ErrorMessage('Property $name belongs to the actual type ${this.objType}, not to an object of type (${this.objType}). Try using ${this.objType}$PROPERTY_ACCESS_SIGN$name instead.'));
                 return null;
@@ -142,12 +145,14 @@ abstract MemoryTree(MemoryTreeBase) {
 		this.map.clear();
 	}
 
-	@:arrayAccess @:noCompletion public inline function arrayWrite(k:String, v:MemoryObject):MemoryObject {
-		this.map.set(k, v);
-		return v;
+	public inline function concat(map:Map<String, MemoryObject>):MemoryTree {
+		for (k => v in map.keyValueIterator()) {
+			set(k, v);
+		}
+		return cast this;
 	}
 
-	inline function silentGet(key:String) {
+	@:noCompletion public inline function silentGet(key:String) {
 		return this.map.get(key);
 	}
 

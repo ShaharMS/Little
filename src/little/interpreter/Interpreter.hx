@@ -226,7 +226,7 @@ class Interpreter {
 
     public static function getValueType(token:ParserTokens):ParserTokens {
 
-        trace(token);
+        if (token.getName() != "NullValue") trace(token);
         if (token == null) return Identifier(TYPE_DYNAMIC);
 
         return switch token {

@@ -25,6 +25,19 @@ class PrepareRun {
         Interpreter.memory.set(TYPE_BOOLEAN, new MemoryObject(Module(TYPE_INT), [], null, Identifier(TYPE_BOOLEAN), true));
 
     }
+
+    public static function addProps() {
+        Little.plugin.registerProperty("type", TYPE_DYNAMIC, true, null, {
+            valueGetter: parent -> {
+                trace(parent.value);
+                trace(Interpreter.getValueType(parent.value));
+                trace(Interpreter.stringifyTokenIdentifier(Interpreter.getValueType(parent.value)));
+                return Characters(Interpreter.stringifyTokenIdentifier(Interpreter.getValueType(parent.value)));
+            },
+            allowWriting: false
+        });
+    }
+
     public static function addFunctions() {
 
         Little.plugin.registerFunction(PRINT_FUNCTION_NAME, null, [Define(Identifier("item"), null)], (params) -> {

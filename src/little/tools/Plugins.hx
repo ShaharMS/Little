@@ -1,5 +1,6 @@
 package little.tools;
 
+import little.interpreter.Runtime;
 import haxe.extern.EitherType;
 import little.lexer.Lexer;
 import little.parser.Parser;
@@ -266,19 +267,27 @@ class Plugins {
         ));
     }
 
-    public static function registerProperty(propertyName:String, onType:String, value:EitherType<FunctionInfo, VariableInfo>) {
-        if (Interpreter.memory.exists(onType)) {
-            Interpreter.memory.set(onType, new MemoryObject(Module(onType), [], null, Identifier(TYPE_MODULE), true));
+    public static function registerProperty(propertyName:String, onObject:String, isType:Bool, ?valueOption1:FunctionInfo, ?valueOption2:VariableInfo) {
+        if (isType) {
+            if (!Interpreter.memory.exists(onObject) || Interpreter.memory.silentGet(onObject).value.getName() != "Module") {
+                Interpreter.memory.set(onObject, new MemoryObject(Module(onObject), [], null, Identifier(TYPE_MODULE), true));
+            }
+        } else {
+            if (!Interpreter.memory.exists(onObject)) {
+                Interpreter.memory.set(onObject, new MemoryObject(NullValue, [], null, Identifier(TYPE_DYNAMIC), true));
+            }
         }
+
         var memObject:MemoryObject;
-        if (untyped value.callback == null) {
+        var parent = Interpreter.memory.silentGet(onObject);
+        if (valueOption2 != null) {
             // Variable
-            var info:VariableInfo = cast value;
+            var info:VariableInfo = valueOption2;
             memObject = new MemoryObject(
                 External(params -> {
                     return try {
                         var val = if (info.staticValue != null) info.staticValue;
-                        else info.valueGetter();
+                        else info.valueGetter(parent);
                         val;
                     } catch (e) {
                         ErrorMessage('External Variable Error: ' + e.details());
@@ -289,18 +298,31 @@ class Plugins {
                 Identifier(info.type), 
                 true,
                 false,
-                true,
-                Interpreter.memory.get(onType)
+                isType,
+                parent
             );
 
             if (info.valueSetter != null) {
                 memObject.valueSetter = function (v) {
-                    return memObject.value = info.valueSetter(v);
+                    return memObject.value = info.valueSetter(parent, v);
+                }
+            }
+
+            if (info.allowWriting == false) {// null defaults to true here, so cant use !info.allowWriting
+                memObject.valueSetter = function (v) {
+                    Runtime.throwError(ErrorMessage('Directly editing the property $onObject$PROPERTY_ACCESS_SIGN$propertyName is disallowed. New value is ignored, returning original value.'));
+                    return try {
+                        var val = if (info.staticValue != null) info.staticValue;
+                        else info.valueGetter(parent);
+                        val;
+                    } catch (e) {
+                        ErrorMessage('External Variable Error: ' + e.details());
+                    }
                 }
             }
         } else {
             // Function
-            var info:FunctionInfo = cast value;
+            var info:FunctionInfo = valueOption1;
 
             var params = if (info.expectedParameters is String) {
                 Parser.parse(Lexer.lex(info.expectedParameters));
@@ -309,7 +331,7 @@ class Plugins {
             memObject = new MemoryObject(
                 External(params -> {
                     return try {
-                        var val = info.callback(params);
+                        var val = info.callback(parent, params);
                         val;
                     } catch (e) {
                         ErrorMessage('External Function Error: ' + e.details());
@@ -320,14 +342,26 @@ class Plugins {
                 Identifier(info.type), 
                 true,
                 false,
-                true,
-                Interpreter.memory.get(onType)
+                isType,
+                parent
             );
+
+            if (info.allowWriting == false) {// null defaults to true here, so cant use !info.allowWriting
+                memObject.valueSetter = function (v) {
+                    Runtime.throwError(ErrorMessage('Directly editing the property $onObject$PROPERTY_ACCESS_SIGN$propertyName is disallowed. New value is ignored, returning original value.'));
+                    return try {
+                        var val = info.callback(parent, params);
+                        val;
+                    } catch (e) {
+                        ErrorMessage('External Function Error: ' + e.details());
+                    }
+                }
+            }
         }
 
-        if (onType != TYPE_DYNAMIC) {
-            MemoryObject.defaultProperties.set(propertyName, memObject);
-        } else Interpreter.memory.get(onType).props.set(propertyName, memObject);
+        if (isType && onObject == TYPE_DYNAMIC) {
+            MemoryObject.addDefaultProperty(propertyName, memObject);
+        } else parent.props.set(propertyName, memObject);
     }
 }
 
@@ -343,14 +377,14 @@ typedef ItemInfo = {
 
 typedef FunctionInfo = {
     expectedParameters:EitherType<String, Array<ParserTokens>>,
-    callback:Array<ParserTokens> -> ParserTokens,
+    callback:(MemoryObject, Array<ParserTokens>) -> ParserTokens, //parent, params to value
     ?allowWriting:Bool,
     ?type:String
 }
 typedef VariableInfo = {
     ?staticValue:ParserTokens, 
-    ?valueGetter:Void -> ParserTokens, 
-    ?valueSetter:ParserTokens -> ParserTokens,
+    ?valueGetter:MemoryObject -> ParserTokens, //parent to value
+    ?valueSetter:(MemoryObject, ParserTokens) -> ParserTokens, //parent, provided value to value
     ?allowWriting:Bool,
     ?type:String
 }
