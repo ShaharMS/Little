@@ -147,6 +147,7 @@ abstract MemoryTree(MemoryTreeBase) {
 
 	public inline function concat(map:Map<String, MemoryObject>):MemoryTree {
 		for (k => v in map.keyValueIterator()) {
+			v.parent = this.obj;
 			set(k, v);
 		}
 		return cast this;

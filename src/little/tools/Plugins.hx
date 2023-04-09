@@ -287,7 +287,7 @@ class Plugins {
                 External(params -> {
                     return try {
                         var val = if (info.staticValue != null) info.staticValue;
-                        else info.valueGetter(parent);
+                        else info.valueGetter(memObject.parent);
                         val;
                     } catch (e) {
                         ErrorMessage('External Variable Error: ' + e.details());
@@ -304,7 +304,7 @@ class Plugins {
 
             if (info.valueSetter != null) {
                 memObject.valueSetter = function (v) {
-                    return memObject.value = info.valueSetter(parent, v);
+                    return memObject.value = info.valueSetter(memObject.parent, v);
                 }
             }
 
@@ -313,7 +313,7 @@ class Plugins {
                     Runtime.throwError(ErrorMessage('Directly editing the property $onObject$PROPERTY_ACCESS_SIGN$propertyName is disallowed. New value is ignored, returning original value.'));
                     return try {
                         var val = if (info.staticValue != null) info.staticValue;
-                        else info.valueGetter(parent);
+                        else info.valueGetter(memObject.parent);
                         val;
                     } catch (e) {
                         ErrorMessage('External Variable Error: ' + e.details());
@@ -331,7 +331,7 @@ class Plugins {
             memObject = new MemoryObject(
                 External(params -> {
                     return try {
-                        var val = info.callback(parent, params);
+                        var val = info.callback(memObject.parent, params);
                         val;
                     } catch (e) {
                         ErrorMessage('External Function Error: ' + e.details());
@@ -350,7 +350,7 @@ class Plugins {
                 memObject.valueSetter = function (v) {
                     Runtime.throwError(ErrorMessage('Directly editing the property $onObject$PROPERTY_ACCESS_SIGN$propertyName is disallowed. New value is ignored, returning original value.'));
                     return try {
-                        var val = info.callback(parent, params);
+                        var val = info.callback(memObject.parent, params);
                         val;
                     } catch (e) {
                         ErrorMessage('External Function Error: ' + e.details());

@@ -349,7 +349,7 @@ class Interpreter {
                 }
             }
             case PropertyAccess(n, p): {
-                var str = stringifyTokenValue(n);
+                var str = stringifyTokenIdentifier(n);
                 var prop = stringifyTokenIdentifier(p);
                 // trace(n, p);
                 var obj = accessObject(n);
@@ -384,6 +384,7 @@ class Interpreter {
                         }
                     }
                 }
+                trace(obj.value, obj.type, p);
                 return access(obj, p, str);
                 
             }
