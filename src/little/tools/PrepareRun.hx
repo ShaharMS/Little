@@ -30,9 +30,10 @@ class PrepareRun {
         Little.plugin.registerProperty("type", TYPE_DYNAMIC, true, null, {
             valueGetter: parent -> {
                 trace(parent.value);
+                trace(parent.type);
                 trace(Interpreter.getValueType(parent.value));
                 trace(Interpreter.stringifyTokenIdentifier(Interpreter.getValueType(parent.value)));
-                return Characters(Interpreter.stringifyTokenIdentifier(Interpreter.getValueType(parent.value)));
+                return Characters(Interpreter.stringifyTokenIdentifier(if (parent.value != null && !parent.value.equals(NullValue)) Interpreter.getValueType(parent.value) else if (parent.type != null || !parent.type.equals(NullValue)) parent.type else Identifier(TYPE_VOID)));
             },
             allowWriting: false
         });

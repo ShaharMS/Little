@@ -65,7 +65,7 @@ abstract MemoryTree(MemoryTreeBase) {
 					}
                     return field.use(PartArray([this.obj.value, SplitLine].concat(params)));
                 });
-                return new MemoryObject(value, null, {var copy = field.params.copy(); copy.shift(); copy;}, null, true, false, false);
+                return new MemoryObject(value, null, {var copy = field.params != null ? field.params.copy() : [null]; copy.shift(); copy;}, null, true, false, false);
             }
         }
 

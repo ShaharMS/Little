@@ -48,13 +48,13 @@ class Interpreter {
                 case Module(name): Runtime.currentModule = name;
                 case SplitLine:
                 case Define(name, type): {
-                    var object = accessObject(name, memory);
-                    object = new MemoryObject(NullValue, type, memory.object);
+                    var object = new MemoryObject(NullValue, type, memory.object);
+                    memory.set(stringifyTokenValue(name), object);
                     returnVal = object.value;
                 }
                 case Action(name, params, type): {
-                    var object = accessObject(name, memory);
-                    object = new MemoryObject(NullValue, null, params.getParameters()[0], type, memory.object);
+                    var object = new MemoryObject(NullValue, null, params.getParameters()[0], type, memory.object);
+                    memory.set(stringifyTokenValue(name), object);
                     returnVal = object.value;
                 }
                 case Condition(name, exp, body, type): {

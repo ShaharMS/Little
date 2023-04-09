@@ -294,7 +294,9 @@ class Plugins {
                     }
                 }), 
                 [], 
-                null,
+                if (!isType) null else [
+                    Define(Identifier("value " /* That extra space is used to differentiate between non-static fields and functions. Todo: Pretty bad solution */), Identifier(onObject))
+                ],
                 Identifier(info.type), 
                 true,
                 false,
@@ -327,7 +329,8 @@ class Plugins {
             var params = if (info.expectedParameters is String) {
                 Parser.parse(Lexer.lex(info.expectedParameters));
             } else info.expectedParameters;
-    
+            if (isType) params.unshift(Define(Identifier("value"), Identifier(onObject)));
+
             memObject = new MemoryObject(
                 External(params -> {
                     return try {

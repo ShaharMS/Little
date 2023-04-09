@@ -1140,7 +1140,7 @@ little_tools_Plugins.registerHaxeClass = function(stats,littleClassName) {
 					++_g1;
 					params.push(little_parser_ParserTokens.Define(little_parser_ParserTokens.Identifier(param.name),little_parser_ParserTokens.Identifier(param.type)));
 				}
-				little_interpreter_memory_MemoryTree.set(motherObj.props,instance[0].name,new little_interpreter_memory_MemoryObject(value,little_interpreter_memory_MemoryTree._new(new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue)),params,type,true));
+				little_interpreter_memory_MemoryTree.set(motherObj.props,instance[0].name,new little_interpreter_memory_MemoryObject(value,little_interpreter_memory_MemoryTree._new(new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue)),params,type,true,null,null,motherObj));
 			} else {
 				var value1 = little_parser_ParserTokens.External((function(instance) {
 					return function(args) {
@@ -1166,14 +1166,14 @@ little_tools_Plugins.registerHaxeClass = function(stats,littleClassName) {
 					params1.push(little_parser_ParserTokens.Define(little_parser_ParserTokens.Identifier(param1.name),little_parser_ParserTokens.Identifier(param1.type)));
 				}
 				params1.unshift(little_parser_ParserTokens.Define(little_parser_ParserTokens.Identifier("value"),little_parser_ParserTokens.Identifier(littleClassName)));
-				little_interpreter_memory_MemoryTree.set(motherObj.props,instance[0].name,new little_interpreter_memory_MemoryObject(value1,little_interpreter_memory_MemoryTree._new(new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue)),params1,type1,true,false,true));
+				little_interpreter_memory_MemoryTree.set(motherObj.props,instance[0].name,new little_interpreter_memory_MemoryObject(value1,little_interpreter_memory_MemoryTree._new(new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue)),params1,type1,true,false,true,motherObj));
 			}
 			break;
 		case "var":
 			if(instance[0].isStatic) {
 				var value2 = little_tools_Conversion.toLittleValue(fieldValues_h[instance[0].name]);
 				var type2 = little_parser_ParserTokens.Identifier(little_tools_Conversion.toLittleType(instance[0].returnType));
-				little_interpreter_memory_MemoryTree.set(motherObj.props,instance[0].name,new little_interpreter_memory_MemoryObject(value2,little_interpreter_memory_MemoryTree._new(new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue)),null,type2,true));
+				little_interpreter_memory_MemoryTree.set(motherObj.props,instance[0].name,new little_interpreter_memory_MemoryObject(value2,little_interpreter_memory_MemoryTree._new(new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue)),null,type2,true,null,null,motherObj));
 			} else {
 				var value3 = little_parser_ParserTokens.External((function(instance) {
 					return function(params) {
@@ -1181,7 +1181,7 @@ little_tools_Plugins.registerHaxeClass = function(stats,littleClassName) {
 					};
 				})(instance));
 				var type3 = little_parser_ParserTokens.Identifier(little_tools_Conversion.toLittleType(instance[0].returnType));
-				little_interpreter_memory_MemoryTree.set(motherObj.props,instance[0].name,new little_interpreter_memory_MemoryObject(value3,little_interpreter_memory_MemoryTree._new(new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue)),[little_parser_ParserTokens.Define(little_parser_ParserTokens.Identifier("value "),little_parser_ParserTokens.Identifier(littleClassName))],type3,true,false,true));
+				little_interpreter_memory_MemoryTree.set(motherObj.props,instance[0].name,new little_interpreter_memory_MemoryObject(value3,little_interpreter_memory_MemoryTree._new(new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue)),[little_parser_ParserTokens.Define(little_parser_ParserTokens.Identifier("value "),little_parser_ParserTokens.Identifier(littleClassName))],type3,true,false,true,motherObj));
 			}
 			break;
 		}
@@ -1207,7 +1207,7 @@ little_tools_Plugins.registerVariable = function(variableName,variableModuleName
 			return little_parser_ParserTokens.ErrorMessage("External Variable Error: " + e.details());
 		}
 	});
-	little_interpreter_memory_MemoryTree.set(little_interpreter_Interpreter.memory,variableName,new little_interpreter_memory_MemoryObject(tmp,little_interpreter_memory_MemoryTree._new(new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue)),null,null,true));
+	little_interpreter_memory_MemoryTree.set(little_interpreter_Interpreter.memory,variableName,new little_interpreter_memory_MemoryObject(tmp,little_interpreter_memory_MemoryTree._new(new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue)),null,null,true,null,null,little_interpreter_memory_MemoryTree.get_object(little_interpreter_Interpreter.memory)));
 	if(valueSetter != null) {
 		little_interpreter_memory_MemoryTree.get(little_interpreter_Interpreter.memory,variableName).valueSetter = function(v) {
 			return little_interpreter_memory_MemoryTree.get(little_interpreter_Interpreter.memory,variableName).set_value(valueSetter(v));
@@ -1230,9 +1230,10 @@ little_tools_Plugins.registerFunction = function(actionName,actionModuleName,exp
 			little_Little.runtime.currentModule = currentModuleName;
 			return little_parser_ParserTokens.ErrorMessage("External Function Error: " + e.details());
 		}
-	}),little_interpreter_memory_MemoryTree._new(new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue)),expectedParameters,null,true);
+	}),little_interpreter_memory_MemoryTree._new(new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue)),params,null,true);
 	if(actionModuleName != null) {
-		little_interpreter_memory_MemoryTree.set(little_interpreter_Interpreter.memory,actionModuleName,new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.Module(actionModuleName),little_interpreter_memory_MemoryTree._new(new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue)),null,little_parser_ParserTokens.Identifier(little_Keywords.TYPE_MODULE),true));
+		little_interpreter_memory_MemoryTree.set(little_interpreter_Interpreter.memory,actionModuleName,new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.Module(actionModuleName),little_interpreter_memory_MemoryTree._new(new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue)),null,little_parser_ParserTokens.Identifier(little_Keywords.TYPE_MODULE),true,null,null,little_interpreter_memory_MemoryTree.get_object(little_interpreter_Interpreter.memory)));
+		memObject.parent = little_interpreter_memory_MemoryTree.get(little_interpreter_Interpreter.memory,actionModuleName);
 		little_interpreter_memory_MemoryTree.set(little_interpreter_memory_MemoryTree.get(little_interpreter_Interpreter.memory,actionModuleName).props,actionName,memObject);
 	} else {
 		little_interpreter_memory_MemoryTree.set(little_interpreter_Interpreter.memory,actionName,memObject);
@@ -1249,7 +1250,86 @@ little_tools_Plugins.registerCondition = function(conditionName,expectedConditio
 			return little_parser_ParserTokens.ErrorMessage("External Condition Error: " + e.details());
 		}
 	});
-	little_interpreter_memory_MemoryTree.set(little_interpreter_Interpreter.memory,conditionName,new little_interpreter_memory_MemoryObject(tmp,little_interpreter_memory_MemoryTree._new(new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue)),expectedConditionPattern,null,true,true));
+	little_interpreter_memory_MemoryTree.set(little_interpreter_Interpreter.memory,conditionName,new little_interpreter_memory_MemoryObject(tmp,little_interpreter_memory_MemoryTree._new(new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue)),params,null,true,true,null,little_interpreter_memory_MemoryTree.get_object(little_interpreter_Interpreter.memory)));
+};
+little_tools_Plugins.registerProperty = function(propertyName,onObject,isType,valueOption1,valueOption2) {
+	if(isType) {
+		var tmp;
+		if(Object.prototype.hasOwnProperty.call(little_interpreter_Interpreter.memory.map.h,onObject)) {
+			var e = little_interpreter_Interpreter.memory.map.h[onObject].value;
+			tmp = $hxEnums[e.__enum__].__constructs__[e._hx_index]._hx_name != "Module";
+		} else {
+			tmp = true;
+		}
+		if(tmp) {
+			little_interpreter_memory_MemoryTree.set(little_interpreter_Interpreter.memory,onObject,new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.Module(onObject),little_interpreter_memory_MemoryTree._new(new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue)),null,little_parser_ParserTokens.Identifier(little_Keywords.TYPE_MODULE),true));
+		}
+	} else if(!Object.prototype.hasOwnProperty.call(little_interpreter_Interpreter.memory.map.h,onObject)) {
+		little_interpreter_memory_MemoryTree.set(little_interpreter_Interpreter.memory,onObject,new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,little_interpreter_memory_MemoryTree._new(new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue)),null,little_parser_ParserTokens.Identifier(little_Keywords.TYPE_DYNAMIC),true));
+	}
+	var memObject;
+	var parent = little_interpreter_Interpreter.memory.map.h[onObject];
+	if(valueOption2 != null) {
+		var info = valueOption2;
+		memObject = new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.External(function(params) {
+			try {
+				var val = info.staticValue != null ? info.staticValue : info.valueGetter(memObject.parent);
+				return val;
+			} catch( _g ) {
+				var e = haxe_Exception.caught(_g);
+				return little_parser_ParserTokens.ErrorMessage("External Variable Error: " + e.details());
+			}
+		}),little_interpreter_memory_MemoryTree._new(new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue)),!isType ? null : [little_parser_ParserTokens.Define(little_parser_ParserTokens.Identifier("value "),little_parser_ParserTokens.Identifier(onObject))],little_parser_ParserTokens.Identifier(info.type),true,false,isType,parent);
+		if(info.valueSetter != null) {
+			memObject.valueSetter = function(v) {
+				return memObject.set_value(info.valueSetter(memObject.parent,v));
+			};
+		}
+		if(info.allowWriting == false) {
+			memObject.valueSetter = function(v) {
+				little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("Directly editing the property " + onObject + little_Keywords.PROPERTY_ACCESS_SIGN + propertyName + " is disallowed. New value is ignored, returning original value."));
+				try {
+					var val = info.staticValue != null ? info.staticValue : info.valueGetter(memObject.parent);
+					return val;
+				} catch( _g ) {
+					var e = haxe_Exception.caught(_g);
+					return little_parser_ParserTokens.ErrorMessage("External Variable Error: " + e.details());
+				}
+			};
+		}
+	} else {
+		var info1 = valueOption1;
+		var params = typeof(info1.expectedParameters) == "string" ? little_parser_Parser.parse(little_lexer_Lexer.lex(info1.expectedParameters)) : info1.expectedParameters;
+		if(isType) {
+			params.unshift(little_parser_ParserTokens.Define(little_parser_ParserTokens.Identifier("value"),little_parser_ParserTokens.Identifier(onObject)));
+		}
+		memObject = new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.External(function(params) {
+			try {
+				var val = info1.callback(memObject.parent,params);
+				return val;
+			} catch( _g ) {
+				var e = haxe_Exception.caught(_g);
+				return little_parser_ParserTokens.ErrorMessage("External Function Error: " + e.details());
+			}
+		}),little_interpreter_memory_MemoryTree._new(new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue)),params,little_parser_ParserTokens.Identifier(info1.type),true,false,isType,parent);
+		if(info1.allowWriting == false) {
+			memObject.valueSetter = function(v) {
+				little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("Directly editing the property " + onObject + little_Keywords.PROPERTY_ACCESS_SIGN + propertyName + " is disallowed. New value is ignored, returning original value."));
+				try {
+					var val = info1.callback(memObject.parent,params);
+					return val;
+				} catch( _g ) {
+					var e = haxe_Exception.caught(_g);
+					return little_parser_ParserTokens.ErrorMessage("External Function Error: " + e.details());
+				}
+			};
+		}
+	}
+	if(isType && onObject == little_Keywords.TYPE_DYNAMIC) {
+		little_interpreter_memory_MemoryObject.addDefaultProperty(propertyName,memObject);
+	} else {
+		little_interpreter_memory_MemoryTree.set(parent.props,propertyName,memObject);
+	}
 };
 var little_interpreter_Runtime = function() { };
 $hxClasses["little.interpreter.Runtime"] = little_interpreter_Runtime;
@@ -1315,11 +1395,12 @@ little_Little.run = function(code,debug) {
 	if(debug != null) {
 		little_Little.debug = debug;
 	}
-	little_interpreter_Interpreter.memory.map.h = Object.create(null);
+	little_interpreter_memory_MemoryTree.get_underlying(little_interpreter_Interpreter.memory).map = new haxe_ds_StringMap();
 	if(!little_tools_PrepareRun.prepared) {
 		little_tools_PrepareRun.addTypes();
 		little_tools_PrepareRun.addFunctions();
 		little_tools_PrepareRun.addConditions();
+		little_tools_PrepareRun.addProps();
 	}
 	little_interpreter_Interpreter.interpret(little_parser_Parser.parse(little_lexer_Lexer.lex(code)),new little_interpreter_RunConfig(null,null,null,null,null));
 	if(debug != null) {
@@ -1329,6 +1410,9 @@ little_Little.run = function(code,debug) {
 var little_interpreter_memory_MemoryTree = {};
 little_interpreter_memory_MemoryTree.get_underlying = function(this1) {
 	return this1;
+};
+little_interpreter_memory_MemoryTree.get_object = function(this1) {
+	return this1.obj;
 };
 little_interpreter_memory_MemoryTree._new = function(obj) {
 	var this1 = new little_interpreter_memory_MemoryTreeBase(obj);
@@ -1345,7 +1429,14 @@ little_interpreter_memory_MemoryTree.get = function(this1,name) {
 		if(!Object.prototype.hasOwnProperty.call(little_interpreter_Interpreter.memory.map.h[this1.objType].props.map.h,name)) {
 			return null;
 		}
-		var field = little_interpreter_Interpreter.memory.map.h[this1.objType].props.map.h[name];
+		if(!Object.prototype.hasOwnProperty.call(little_interpreter_Interpreter.memory.map.h[little_Keywords.TYPE_DYNAMIC].props.map.h,name)) {
+			return null;
+		}
+		var field = little_interpreter_Interpreter.memory.map.h[little_Keywords.TYPE_DYNAMIC].props.map.h[name];
+		var master = little_interpreter_Interpreter.memory.map.h[this1.objType].props.map.h[name];
+		if(master != null) {
+			field = master;
+		}
 		if(!field.nonStatic) {
 			little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("Property " + name + " belongs to the actual type " + this1.objType + ", not to an object of type (" + this1.objType + "). Try using " + this1.objType + little_Keywords.PROPERTY_ACCESS_SIGN + name + " instead."));
 			return null;
@@ -1370,7 +1461,7 @@ little_interpreter_memory_MemoryTree.get = function(this1,name) {
 				params = p;
 				return field.use(little_parser_ParserTokens.PartArray([this1.obj.value,little_parser_ParserTokens.SplitLine].concat(params)));
 			});
-			var copy = field.params.slice();
+			var copy = field.params != null ? field.params.slice() : [null];
 			copy.shift();
 			return new little_interpreter_memory_MemoryObject(value,null,copy,null,true,false,false);
 		}
@@ -1409,9 +1500,22 @@ little_interpreter_memory_MemoryTree.toString = function(this1) {
 little_interpreter_memory_MemoryTree.clear = function(this1) {
 	this1.map.h = Object.create(null);
 };
-little_interpreter_memory_MemoryTree.arrayWrite = function(this1,k,v) {
-	this1.map.h[k] = v;
-	return v;
+little_interpreter_memory_MemoryTree.concat = function(this1,map) {
+	var h = map.h;
+	var _g_h = h;
+	var _g_keys = Object.keys(h);
+	var _g_length = _g_keys.length;
+	var _g_current = 0;
+	while(_g_current < _g_length) {
+		var key = _g_keys[_g_current++];
+		var _g1_key = key;
+		var _g1_value = _g_h[key];
+		var k = _g1_key;
+		var v = _g1_value;
+		v.parent = this1.obj;
+		little_interpreter_memory_MemoryTree.set(this1,k,v);
+	}
+	return this1;
 };
 little_interpreter_memory_MemoryTree.silentGet = function(this1,key) {
 	return this1.map.h[key];
@@ -1424,6 +1528,9 @@ little_interpreter_memory_MemoryTree.fromArray = function(map) {
 };
 var little_interpreter_memory_MemoryTreeBase = function(m) {
 	this.map = new haxe_ds_StringMap();
+	if(m == null) {
+		m = new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,null,null,null,null,null,m);
+	}
 	this.objType = m.type != null ? little_interpreter_Interpreter.stringifyTokenValue(m.type) : little_Keywords.TYPE_DYNAMIC;
 	this.obj = m;
 };
@@ -1461,7 +1568,7 @@ var little_parser_ParserTokens = $hxEnums["little.parser.ParserTokens"] = { __en
 	,FalseValue: {_hx_name:"FalseValue",_hx_index:25,__enum__:"little.parser.ParserTokens",toString:$estr}
 };
 little_parser_ParserTokens.__constructs__ = [little_parser_ParserTokens.SetLine,little_parser_ParserTokens.SplitLine,little_parser_ParserTokens.Define,little_parser_ParserTokens.Action,little_parser_ParserTokens.Condition,little_parser_ParserTokens.Read,little_parser_ParserTokens.Write,little_parser_ParserTokens.Identifier,little_parser_ParserTokens.TypeDeclaration,little_parser_ParserTokens.ActionCall,little_parser_ParserTokens.Return,little_parser_ParserTokens.Expression,little_parser_ParserTokens.Block,little_parser_ParserTokens.PartArray,little_parser_ParserTokens.PropertyAccess,little_parser_ParserTokens.Sign,little_parser_ParserTokens.Number,little_parser_ParserTokens.Decimal,little_parser_ParserTokens.Characters,little_parser_ParserTokens.Module,little_parser_ParserTokens.External,little_parser_ParserTokens.ExternalCondition,little_parser_ParserTokens.ErrorMessage,little_parser_ParserTokens.NullValue,little_parser_ParserTokens.TrueValue,little_parser_ParserTokens.FalseValue];
-var little_interpreter_memory_MemoryObject = function(value,props,params,type,external,condition,nonStatic) {
+var little_interpreter_memory_MemoryObject = function(value,props,params,type,external,condition,nonStatic,parent) {
 	this.nonStatic = true;
 	this.condition = false;
 	this.external = false;
@@ -1475,13 +1582,62 @@ var little_interpreter_memory_MemoryObject = function(value,props,params,type,ex
 	this.external = external == null ? false : external;
 	this.condition = condition == null ? false : condition;
 	this.nonStatic = nonStatic == null ? true : nonStatic;
-	this.props = props == null ? little_interpreter_memory_MemoryTree._new(this) : props;
+	this.props = little_interpreter_memory_MemoryTree._new(this);
+	this.parent = parent != null ? parent : this;
+	var this1 = this.props;
+	var h = little_interpreter_memory_MemoryObject.defaultProperties.h;
+	var _g_h = h;
+	var _g_keys = Object.keys(h);
+	var _g_length = _g_keys.length;
+	var _g_current = 0;
+	while(_g_current < _g_length) {
+		var key = _g_keys[_g_current++];
+		var _g1_key = key;
+		var _g1_value = _g_h[key];
+		var k = _g1_key;
+		var v = _g1_value;
+		v.parent = this1.obj;
+		little_interpreter_memory_MemoryTree.set(this1,k,v);
+	}
+	little_interpreter_memory_MemoryObject.objects.push(this);
+	if(Type.enumParameters(value)[0] == "hey") {
+		haxe_Log.trace(Type.enumParameters(little_interpreter_memory_MemoryTree.get(this.props,"type").value)[0](this),{ fileName : "src/little/interpreter/memory/MemoryObject.hx", lineNumber : 79, className : "little.interpreter.memory.MemoryObject", methodName : "new", customParams : [this.value,this.type]});
+	}
 };
 $hxClasses["little.interpreter.memory.MemoryObject"] = little_interpreter_memory_MemoryObject;
 little_interpreter_memory_MemoryObject.__name__ = "little.interpreter.memory.MemoryObject";
+little_interpreter_memory_MemoryObject.addDefaultProperty = function(name,value) {
+	little_interpreter_memory_MemoryObject.defaultProperties.h[name] = value;
+	var _g = 0;
+	var _g1 = little_interpreter_memory_MemoryObject.objects;
+	while(_g < _g1.length) {
+		var obj = _g1[_g];
+		++_g;
+		little_interpreter_memory_MemoryTree.set(obj.props,name,value);
+	}
+};
+little_interpreter_memory_MemoryObject.removeDefaultProperty = function(name) {
+	var _this = little_interpreter_memory_MemoryObject.defaultProperties;
+	if(Object.prototype.hasOwnProperty.call(_this.h,name)) {
+		delete(_this.h[name]);
+	}
+	var _g = 0;
+	var _g1 = little_interpreter_memory_MemoryObject.objects;
+	while(_g < _g1.length) {
+		var obj = _g1[_g];
+		++_g;
+		var _this = obj.props.map;
+		if(Object.prototype.hasOwnProperty.call(_this.h,name)) {
+			delete(_this.h[name]);
+		}
+	}
+};
 little_interpreter_memory_MemoryObject.prototype = {
 	set_value: function(val) {
-		this.type = little_interpreter_Interpreter.getValueType(val);
+		var t = little_interpreter_Interpreter.getValueType(val);
+		if(this.type == null && t != null) {
+			this.type = t;
+		}
 		this.value = this.valueSetter(val);
 		var _g = 0;
 		var _g1 = this.setterListeners;
@@ -1907,16 +2063,16 @@ little_interpreter_Interpreter.runTokens = function(tokens,preParseVars,preParse
 		case 2:
 			var name = token.name;
 			var type = token.type;
-			var object = little_interpreter_Interpreter.accessObject(name,memory);
-			object = new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,null,type);
+			var object = new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,null,type,null,null,null,little_interpreter_memory_MemoryTree.get_object(memory));
+			little_interpreter_memory_MemoryTree.set(memory,little_interpreter_Interpreter.stringifyTokenValue(name),object);
 			returnVal = object.value;
 			break;
 		case 3:
 			var name1 = token.name;
 			var params = token.params;
 			var type1 = token.type;
-			var object1 = little_interpreter_Interpreter.accessObject(name1,memory);
-			object1 = new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,Type.enumParameters(params)[0],type1);
+			var object1 = new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,Type.enumParameters(params)[0],type1,null,null,null,little_interpreter_memory_MemoryTree.get_object(memory));
+			little_interpreter_memory_MemoryTree.set(memory,little_interpreter_Interpreter.stringifyTokenValue(name1),object1);
 			returnVal = object1.value;
 			break;
 		case 4:
@@ -2025,14 +2181,14 @@ little_interpreter_Interpreter.evaluate = function(exp,memory,dontThrow) {
 		var name = exp.name;
 		var type = exp.type;
 		var object = little_interpreter_Interpreter.accessObject(name,memory);
-		object = new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,null,type);
+		object = new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,null,type,null,null,null,little_interpreter_memory_MemoryTree.get_object(memory));
 		return object.value;
 	case 3:
 		var name = exp.name;
 		var params = exp.params;
 		var type = exp.type;
 		var object = little_interpreter_Interpreter.accessObject(name,memory);
-		object = new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,Type.enumParameters(params)[0],type);
+		object = new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,Type.enumParameters(params)[0],type,null,null,null,little_interpreter_memory_MemoryTree.get_object(memory));
 		return object.value;
 	case 4:
 		var name = exp.name;
@@ -2158,6 +2314,12 @@ little_interpreter_Interpreter.evaluate = function(exp,memory,dontThrow) {
 	}
 };
 little_interpreter_Interpreter.getValueType = function(token) {
+	if($hxEnums[token.__enum__].__constructs__[token._hx_index]._hx_name != "NullValue") {
+		haxe_Log.trace(token,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 229, className : "little.interpreter.Interpreter", methodName : "getValueType"});
+	}
+	if(token == null) {
+		return little_parser_ParserTokens.Identifier(little_Keywords.TYPE_DYNAMIC);
+	}
 	switch(token._hx_index) {
 	case 0:
 		var line = token.line;
@@ -2165,6 +2327,9 @@ little_interpreter_Interpreter.getValueType = function(token) {
 		return little_parser_ParserTokens.NullValue;
 	case 1:
 		return little_parser_ParserTokens.NullValue;
+	case 7:
+		var word = token.word;
+		return token;
 	case 8:
 		var _g = token.value;
 		var type = token.type;
@@ -2184,6 +2349,12 @@ little_interpreter_Interpreter.getValueType = function(token) {
 	case 19:
 		var _g = token.name;
 		return little_parser_ParserTokens.Identifier(little_Keywords.TYPE_MODULE);
+	case 20:
+		var _g = token.get;
+		return little_parser_ParserTokens.Identifier(little_Keywords.TYPE_DYNAMIC);
+	case 21:
+		var _g = token.use;
+		return little_parser_ParserTokens.Identifier(little_Keywords.TYPE_DYNAMIC);
 	case 23:
 		return little_parser_ParserTokens.Identifier(little_Keywords.TYPE_DYNAMIC);
 	case 24:
@@ -2219,7 +2390,7 @@ little_interpreter_Interpreter.accessObject = function(exp,memory) {
 				return access(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenValue(prop)),property,objName);
 			} else {
 				if(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop)) == null) {
-					little_interpreter_memory_MemoryTree.set(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop),new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,null,type));
+					little_interpreter_memory_MemoryTree.set(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop),new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,null,type,null,null,null,object));
 				}
 				return little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop));
 			}
@@ -2230,7 +2401,7 @@ little_interpreter_Interpreter.accessObject = function(exp,memory) {
 			var obj = access(little_interpreter_memory_MemoryTree.get(memory,little_interpreter_Interpreter.stringifyTokenValue(name1)),property,little_interpreter_Interpreter.stringifyTokenValue(name1));
 			return obj;
 		} else {
-			little_interpreter_memory_MemoryTree.set(memory,little_interpreter_Interpreter.stringifyTokenValue(name),new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,null,type));
+			little_interpreter_memory_MemoryTree.set(memory,little_interpreter_Interpreter.stringifyTokenValue(name),new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,null,type,null,null,null,little_interpreter_memory_MemoryTree.get_object(memory)));
 			return little_interpreter_memory_MemoryTree.get(memory,little_interpreter_Interpreter.stringifyTokenValue(name));
 		}
 		break;
@@ -2251,7 +2422,7 @@ little_interpreter_Interpreter.accessObject = function(exp,memory) {
 				return access1(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenValue(prop)),property,objName);
 			} else {
 				if(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop)) == null) {
-					little_interpreter_memory_MemoryTree.set(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop),new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,Type.enumParameters(params)[0],type1));
+					little_interpreter_memory_MemoryTree.set(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop),new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,Type.enumParameters(params)[0],type1,null,null,null,object));
 				}
 				return little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop));
 			}
@@ -2262,8 +2433,8 @@ little_interpreter_Interpreter.accessObject = function(exp,memory) {
 			var obj = access1(little_interpreter_memory_MemoryTree.get(memory,little_interpreter_Interpreter.stringifyTokenValue(name1)),property,little_interpreter_Interpreter.stringifyTokenValue(name1));
 			return obj;
 		} else {
-			haxe_Log.trace(name,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 338, className : "little.interpreter.Interpreter", methodName : "accessObject", customParams : [little_interpreter_Interpreter.stringifyTokenValue(name)]});
-			little_interpreter_memory_MemoryTree.set(memory,little_interpreter_Interpreter.stringifyTokenValue(name),new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,Type.enumParameters(params)[0],type1));
+			haxe_Log.trace(name,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 345, className : "little.interpreter.Interpreter", methodName : "accessObject", customParams : [little_interpreter_Interpreter.stringifyTokenValue(name)]});
+			little_interpreter_memory_MemoryTree.set(memory,little_interpreter_Interpreter.stringifyTokenValue(name),new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,Type.enumParameters(params)[0],type1,null,null,null,little_interpreter_memory_MemoryTree.get_object(memory)));
 			return little_interpreter_memory_MemoryTree.get(memory,little_interpreter_Interpreter.stringifyTokenValue(name));
 		}
 		break;
@@ -2299,7 +2470,7 @@ little_interpreter_Interpreter.accessObject = function(exp,memory) {
 	case 14:
 		var n = exp.name;
 		var p = exp.property;
-		var str = little_interpreter_Interpreter.stringifyTokenValue(n);
+		var str = little_interpreter_Interpreter.stringifyTokenIdentifier(n);
 		var prop = little_interpreter_Interpreter.stringifyTokenIdentifier(p);
 		var obj = little_interpreter_Interpreter.accessObject(n);
 		if(obj == null) {
@@ -2315,7 +2486,7 @@ little_interpreter_Interpreter.accessObject = function(exp,memory) {
 					little_interpreter_Interpreter.evaluate(little_parser_ParserTokens.ErrorMessage("Unable to call `" + objName + little_Keywords.PROPERTY_ACCESS_SIGN + little_interpreter_Interpreter.stringifyTokenValue(name) + "(" + little_interpreter_Interpreter.stringifyTokenValue(params) + ")`: `" + objName + "` Does not contain property `" + little_interpreter_Interpreter.stringifyTokenIdentifier(name) + "`."));
 					return null;
 				}
-				return new little_interpreter_memory_MemoryObject(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenValue(name)).use(params));
+				return new little_interpreter_memory_MemoryObject(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenValue(name)).use(params),null,null,null,null,null,null,little_interpreter_memory_MemoryTree.get_object(memory));
 			case 14:
 				var _g = prop.name;
 				var property = prop.property;
@@ -2327,13 +2498,14 @@ little_interpreter_Interpreter.accessObject = function(exp,memory) {
 				return access2(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenValue(prop)),property,objName);
 			default:
 				if(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop)) == null) {
-					little_interpreter_memory_MemoryTree.set(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop),new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue));
+					little_interpreter_memory_MemoryTree.set(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop),new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,null,null,null,null,null,object));
 					little_interpreter_Interpreter.evaluate(little_parser_ParserTokens.ErrorMessage("Unable to access `" + str + little_Keywords.PROPERTY_ACCESS_SIGN + little_interpreter_Interpreter.stringifyTokenValue(prop) + "`: `" + str + "` Does not contain property `" + little_interpreter_Interpreter.stringifyTokenValue(prop) + "`"));
 					return null;
 				}
 				return little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop));
 			}
 		};
+		haxe_Log.trace(obj.value,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 387, className : "little.interpreter.Interpreter", methodName : "accessObject", customParams : [obj.type,p]});
 		return access2(obj,p,str);
 	case 15:
 		var _g = exp.sign;
@@ -2356,7 +2528,7 @@ little_interpreter_Interpreter.accessObject = function(exp,memory) {
 	case 24:case 25:
 		return new little_interpreter_memory_MemoryObject(exp,null,null,little_parser_ParserTokens.Identifier(little_Keywords.TYPE_BOOLEAN));
 	default:
-		haxe_Log.trace("Token " + Std.string(exp) + " is inaccessible via memory. Returning null.",{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 386, className : "little.interpreter.Interpreter", methodName : "accessObject"});
+		haxe_Log.trace("Token " + Std.string(exp) + " is inaccessible via memory. Returning null.",{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 394, className : "little.interpreter.Interpreter", methodName : "accessObject"});
 	}
 	return null;
 };
@@ -2380,12 +2552,12 @@ little_interpreter_Interpreter.createObject = function(exp,memory) {
 				objName += "" + little_Keywords.PROPERTY_ACCESS_SIGN + little_interpreter_Interpreter.stringifyTokenValue(prop);
 				if(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenValue(prop)) == null) {
 					little_interpreter_Interpreter.evaluate(little_parser_ParserTokens.ErrorMessage("Unable to create `" + objName + little_Keywords.PROPERTY_ACCESS_SIGN + little_interpreter_Interpreter.stringifyTokenIdentifier(property) + "`: `" + objName + "` Does not contain property `" + little_interpreter_Interpreter.stringifyTokenIdentifier(property) + "`."));
-					return new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,null,type);
+					return new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,null,type,null,null,null,little_interpreter_memory_MemoryTree.get_object(memory));
 				}
 				return access(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenValue(prop)),property,objName);
 			} else {
 				if(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop)) == null) {
-					little_interpreter_memory_MemoryTree.set(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop),new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,null,type));
+					little_interpreter_memory_MemoryTree.set(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop),new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,null,type,null,null,null,object));
 				}
 				return little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop));
 			}
@@ -2396,7 +2568,7 @@ little_interpreter_Interpreter.createObject = function(exp,memory) {
 			var obj = access(little_interpreter_memory_MemoryTree.get(memory,little_interpreter_Interpreter.stringifyTokenValue(name1)),property,little_interpreter_Interpreter.stringifyTokenValue(name1));
 			return little_interpreter_Interpreter.createObject(obj.value);
 		} else {
-			return new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,null,type);
+			return new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,null,type,null,null,null,little_interpreter_memory_MemoryTree.get_object(memory));
 		}
 		break;
 	case 3:
@@ -2411,12 +2583,12 @@ little_interpreter_Interpreter.createObject = function(exp,memory) {
 				objName += "" + little_Keywords.PROPERTY_ACCESS_SIGN + little_interpreter_Interpreter.stringifyTokenValue(prop);
 				if(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenValue(prop)) == null) {
 					little_interpreter_Interpreter.evaluate(little_parser_ParserTokens.ErrorMessage("Unable to create `" + objName + little_Keywords.PROPERTY_ACCESS_SIGN + little_interpreter_Interpreter.stringifyTokenIdentifier(property) + "`: `" + objName + "` Does not contain property `" + little_interpreter_Interpreter.stringifyTokenIdentifier(property) + "`."));
-					return new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,null,type1);
+					return new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,null,type1,null,null,null,little_interpreter_memory_MemoryTree.get_object(memory));
 				}
 				return access1(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenValue(prop)),property,objName);
 			} else {
 				if(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop)) == null) {
-					little_interpreter_memory_MemoryTree.set(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop),new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,Type.enumParameters(params)[0],type1));
+					little_interpreter_memory_MemoryTree.set(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop),new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,Type.enumParameters(params)[0],type1,null,null,null,object));
 				}
 				return little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop));
 			}
@@ -2427,7 +2599,7 @@ little_interpreter_Interpreter.createObject = function(exp,memory) {
 			var obj = access1(little_interpreter_memory_MemoryTree.get(memory,little_interpreter_Interpreter.stringifyTokenValue(name1)),property,little_interpreter_Interpreter.stringifyTokenValue(name1));
 			return little_interpreter_Interpreter.createObject(obj.value);
 		} else {
-			return new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,Type.enumParameters(params)[0],type1);
+			return new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,Type.enumParameters(params)[0],type1,null,null,null,little_interpreter_memory_MemoryTree.get_object(memory));
 		}
 		break;
 	case 5:
@@ -2478,7 +2650,7 @@ little_interpreter_Interpreter.createObject = function(exp,memory) {
 					little_interpreter_Interpreter.evaluate(little_parser_ParserTokens.ErrorMessage("Unable to call `" + objName + little_Keywords.PROPERTY_ACCESS_SIGN + little_interpreter_Interpreter.stringifyTokenValue(name) + "(" + little_interpreter_Interpreter.stringifyTokenValue(params) + ")`: `" + objName + "` Does not contain property `" + little_interpreter_Interpreter.stringifyTokenIdentifier(name) + "`."));
 					return null;
 				}
-				return new little_interpreter_memory_MemoryObject(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenValue(name)).use(params));
+				return new little_interpreter_memory_MemoryObject(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenValue(name)).use(params),null,null,null,null,null,null,little_interpreter_memory_MemoryTree.get_object(memory));
 			case 14:
 				var _g = prop.name;
 				var property = prop.property;
@@ -2490,7 +2662,7 @@ little_interpreter_Interpreter.createObject = function(exp,memory) {
 				return access2(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenValue(prop)),property,objName);
 			default:
 				if(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop)) == null) {
-					little_interpreter_memory_MemoryTree.set(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop),new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue));
+					little_interpreter_memory_MemoryTree.set(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop),new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,null,null,null,null,null,object));
 				}
 				return little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop));
 			}
@@ -2517,7 +2689,7 @@ little_interpreter_Interpreter.createObject = function(exp,memory) {
 	case 24:case 25:
 		return new little_interpreter_memory_MemoryObject(exp,null,null,little_parser_ParserTokens.Identifier(little_Keywords.TYPE_BOOLEAN));
 	default:
-		haxe_Log.trace("Unable to create memory object from " + Std.string(exp) + ". Returning null.",{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 527, className : "little.interpreter.Interpreter", methodName : "createObject"});
+		haxe_Log.trace("Unable to create memory object from " + Std.string(exp) + ". Returning null.",{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 535, className : "little.interpreter.Interpreter", methodName : "createObject"});
 	}
 	return null;
 };
@@ -2534,13 +2706,13 @@ little_interpreter_Interpreter.stringifyTokenValue = function(token,memory) {
 	case 2:
 		var name = token.name;
 		var type = token.type;
-		little_interpreter_memory_MemoryTree.set(memory,little_interpreter_Interpreter.stringifyTokenValue(name),new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,little_interpreter_memory_MemoryTree._new(new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue)),null,type));
+		little_interpreter_memory_MemoryTree.set(memory,little_interpreter_Interpreter.stringifyTokenValue(name),new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,little_interpreter_memory_MemoryTree._new(new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue)),null,type,null,null,null,little_interpreter_memory_MemoryTree.get_object(memory)));
 		return little_interpreter_Interpreter.stringifyTokenValue(name);
 	case 3:
 		var name = token.name;
 		var params = token.params;
 		var type = token.type;
-		little_interpreter_memory_MemoryTree.set(memory,little_interpreter_Interpreter.stringifyTokenValue(name),new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,little_interpreter_memory_MemoryTree._new(new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue)),Type.enumParameters(params)[0],type));
+		little_interpreter_memory_MemoryTree.set(memory,little_interpreter_Interpreter.stringifyTokenValue(name),new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,little_interpreter_memory_MemoryTree._new(new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue)),Type.enumParameters(params)[0],type,null,null,null,little_interpreter_memory_MemoryTree.get_object(memory)));
 		return little_interpreter_Interpreter.stringifyTokenValue(name);
 	case 4:
 		var _g = token.name;
@@ -4463,6 +4635,15 @@ little_tools_PrepareRun.addTypes = function() {
 	little_interpreter_memory_MemoryTree.set(little_interpreter_Interpreter.memory,little_Keywords.TYPE_FLOAT,new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.Module(little_Keywords.TYPE_FLOAT),little_interpreter_memory_MemoryTree._new(new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue)),null,little_parser_ParserTokens.Identifier(little_Keywords.TYPE_MODULE),true));
 	little_interpreter_memory_MemoryTree.set(little_interpreter_Interpreter.memory,little_Keywords.TYPE_BOOLEAN,new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.Module(little_Keywords.TYPE_INT),little_interpreter_memory_MemoryTree._new(new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue)),null,little_parser_ParserTokens.Identifier(little_Keywords.TYPE_BOOLEAN),true));
 };
+little_tools_PrepareRun.addProps = function() {
+	little_Little.plugin.registerProperty("type",little_Keywords.TYPE_DYNAMIC,true,null,{ valueGetter : function(parent) {
+		haxe_Log.trace(parent.value,{ fileName : "src/little/tools/PrepareRun.hx", lineNumber : 32, className : "little.tools.PrepareRun", methodName : "addProps"});
+		haxe_Log.trace(parent.type,{ fileName : "src/little/tools/PrepareRun.hx", lineNumber : 33, className : "little.tools.PrepareRun", methodName : "addProps"});
+		haxe_Log.trace(little_interpreter_Interpreter.getValueType(parent.value),{ fileName : "src/little/tools/PrepareRun.hx", lineNumber : 34, className : "little.tools.PrepareRun", methodName : "addProps"});
+		haxe_Log.trace(little_interpreter_Interpreter.stringifyTokenIdentifier(little_interpreter_Interpreter.getValueType(parent.value)),{ fileName : "src/little/tools/PrepareRun.hx", lineNumber : 35, className : "little.tools.PrepareRun", methodName : "addProps"});
+		return little_parser_ParserTokens.Characters(little_interpreter_Interpreter.stringifyTokenIdentifier(parent.value != null && !Type.enumEq(parent.value,little_parser_ParserTokens.NullValue) ? little_interpreter_Interpreter.getValueType(parent.value) : parent.type != null || !Type.enumEq(parent.type,little_parser_ParserTokens.NullValue) ? parent.type : little_parser_ParserTokens.Identifier(little_Keywords.TYPE_VOID)));
+	}, allowWriting : false});
+};
 little_tools_PrepareRun.addFunctions = function() {
 	little_Little.plugin.registerFunction(little_Keywords.PRINT_FUNCTION_NAME,null,[little_parser_ParserTokens.Define(little_parser_ParserTokens.Identifier("item"),null)],function(params) {
 		little_interpreter_Runtime.print(little_interpreter_Interpreter.stringifyTokenValue(little_interpreter_Interpreter.evaluate(params[0])));
@@ -4953,6 +5134,8 @@ little_interpreter_Runtime.callStack = [];
 little_Little.runtime = little_interpreter_Runtime;
 little_Little.plugin = little_tools_Plugins;
 little_Little.debug = false;
+little_interpreter_memory_MemoryObject.objects = [];
+little_interpreter_memory_MemoryObject.defaultProperties = new haxe_ds_StringMap();
 little_tools_TextTools.fonts = new little_tools__$TextTools_MultilangFonts();
 little_tools_TextTools.loremIpsumText = "\r\n\t\tLorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque finibus condimentum magna, eget porttitor libero aliquam non. Praesent commodo, augue nec hendrerit tincidunt, urna felis lobortis mi, non cursus libero tellus quis tellus. Vivamus ornare convallis tristique. Integer nec ornare libero. Phasellus feugiat facilisis faucibus. Vivamus porta id neque id placerat. Proin convallis vel felis et pharetra. Quisque magna justo, ullamcorper quis scelerisque eu, tincidunt vitae lectus. Nunc sed turpis justo. Aliquam porttitor, purus sit amet faucibus bibendum, ligula elit molestie purus, eu volutpat turpis sapien ac tellus. Fusce mauris arcu, volutpat ut aliquam ut, ultrices id ante. Morbi quis consectetur turpis. Integer semper lacinia urna id laoreet.\r\n\r\n\t\tUt mollis eget eros eu tempor. Phasellus nulla velit, sollicitudin eget massa a, tristique rutrum turpis. Vestibulum in dolor at elit pellentesque finibus. Nulla pharetra felis a varius molestie. Nam magna lectus, eleifend ac sagittis id, ornare id nibh. Praesent congue est non iaculis consectetur. Nullam dictum augue sit amet dignissim fringilla. Aenean semper justo velit. Sed nec lectus facilisis, sodales diam eget, imperdiet nunc. Quisque elementum nulla non orci interdum pharetra id quis arcu. Phasellus eu nunc lectus. Nam tellus tortor, pellentesque eget faucibus eu, laoreet quis odio. Pellentesque posuere in enim a blandit.\r\n\r\n\t\tDuis dignissim neque et ex iaculis, ac consequat diam gravida. In mi ex, blandit eget velit non, euismod feugiat arcu. Nulla nec fermentum neque, eget elementum mauris. Vivamus urna ligula, faucibus at facilisis sed, commodo sit amet urna. Sed porttitor feugiat purus ac tincidunt. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aliquam sollicitudin lacinia turpis quis placerat. Donec eget velit nibh. Duis vehicula orci lectus, eget rutrum arcu tincidunt et. Vestibulum ut pharetra lectus. Quisque lacinia nunc rhoncus neque venenatis consequat. Nulla rutrum ultricies sapien, sed semper lectus accumsan nec. Phasellus commodo faucibus lacinia. Donec auctor condimentum ligula. Sed quis viverra mauris.\r\n\r\n\t\tQuisque maximus justo dui, eget pretium lorem accumsan ac. Praesent eleifend faucibus orci et varius. Ut et molestie turpis, eu porta neque. Quisque vehicula, libero in tincidunt facilisis, purus eros pulvinar leo, sit amet eleifend justo ligula tempor lectus. Donec ac tortor sed ipsum tincidunt pulvinar id nec eros. In luctus purus cursus est dictum, ac sollicitudin turpis maximus. Maecenas a nisl velit. Nulla gravida lectus vel ultricies gravida. Proin vel bibendum magna. Donec aliquam ultricies quam, quis tempor nunc pharetra ut.\r\n\r\n\t\tPellentesque sit amet dui est. Aliquam erat volutpat. Integer vitae ullamcorper est, ut eleifend augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Quisque congue velit felis, vitae elementum nulla faucibus id. Donec lectus nibh, commodo eget nunc id, feugiat sagittis massa. In hac habitasse platea dictumst. Pellentesque volutpat molestie ultrices.\r\n\t";
 little_tools_Layer.LEXER = "Lexer";
@@ -4963,7 +5146,8 @@ little_tools_Layer.INTERPRETER_TOKEN_IDENTIFIER_STRINGIFIER = "Interpreter, Toke
 little_tools_Layer.INTERPRETER_VALUE_EVALUATOR = "Interpreter, Value Evaluator";
 little_tools_Layer.INTERPRETER_EXPRESSION_EVALUATOR = "Interpreter, Expression Evaluator";
 little_interpreter_Interpreter.errorThrown = false;
-little_interpreter_Interpreter.memory = little_interpreter_memory_MemoryTree._new(new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue));
+little_interpreter_Interpreter.memory = little_interpreter_memory_MemoryTree._new(little_interpreter_Interpreter.mother);
+little_interpreter_Interpreter.mother = new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue);
 little_lexer_Lexer.signs = ["!","#","$","%","&","'","(",")","*","+","-",".","/",":","<","=",">","?","@","[","\\","]","^","_","`","{","|","}","~","^","√"];
 little_parser_Parser.linePart = 0;
 little_tools_PrepareRun.prepared = false;
