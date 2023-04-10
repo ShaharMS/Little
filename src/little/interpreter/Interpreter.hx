@@ -48,14 +48,69 @@ class Interpreter {
                 case Module(name): Runtime.currentModule = name;
                 case SplitLine:
                 case Define(name, type): {
-                    var object = new MemoryObject(NullValue, type, memory.object);
-                    memory.set(stringifyTokenValue(name), object);
-                    returnVal = object.value;
+                    function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
+                        switch prop {
+                            case PropertyAccess(_, property): {
+                                objName += '$PROPERTY_ACCESS_SIGN${stringifyTokenValue(prop)}';
+                                // trace(object, stringifyTokenValue(prop), property);
+                                if (object.props.get(stringifyTokenValue(prop)) == null) {
+                                    // We can already know that object.name.property is null
+                                    evaluate(ErrorMessage('Unable to create `$objName$PROPERTY_ACCESS_SIGN${stringifyTokenIdentifier(property)}`: `$objName` Does not contain property `${stringifyTokenIdentifier(property)}`.'));
+                                    return null;
+                                }
+                                return access(object.props.get(stringifyTokenValue(prop)), property, objName);
+                            }
+                            case _: {
+                                if (object.props.get(stringifyTokenIdentifier(prop)) == null) {
+                                    object.props.set(stringifyTokenIdentifier(prop), new MemoryObject(NullValue, type, object));
+                                }
+                                return object.props.get(stringifyTokenIdentifier(prop));
+                            }
+                        }
+                    }
+                    switch name {
+                        case PropertyAccess(name, property): {
+                            var obj = access(memory.get(stringifyTokenValue(name)), property, stringifyTokenValue(name));
+                            returnVal = obj.value;
+                        }
+                        case _: {
+                            memory.set(stringifyTokenValue(name), new MemoryObject(NullValue, type != null ? type : NullValue, memory.object)); 
+                            returnVal = memory.get(stringifyTokenValue(name)).value;
+                        }
+                    }
                 }
                 case Action(name, params, type): {
-                    var object = new MemoryObject(NullValue, null, params.getParameters()[0], type, memory.object);
-                    memory.set(stringifyTokenValue(name), object);
-                    returnVal = object.value;
+                    function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
+                        switch prop {
+                            case PropertyAccess(_, property): {
+                                objName += '$PROPERTY_ACCESS_SIGN${stringifyTokenValue(prop)}';
+                                // trace(object, stringifyTokenValue(prop), property);
+                                if (object.props.get(stringifyTokenValue(prop)) == null) {
+                                    // We can already know that object.name.property is null
+                                    evaluate(ErrorMessage('Unable to create `$objName$PROPERTY_ACCESS_SIGN${stringifyTokenIdentifier(property)}`: `$objName` Does not contain property `${stringifyTokenIdentifier(property)}`.'));
+                                    return null;
+                                }
+                                return access(object.props.get(stringifyTokenValue(prop)), property, objName);
+                            }
+                            case _: {
+                                if (object.props.get(stringifyTokenIdentifier(prop)) == null) {
+                                    object.props.set(stringifyTokenIdentifier(prop), new MemoryObject(NullValue, null, params.getParameters()[0], type != null ? type : NullValue, object));
+                                }
+                                return object.props.get(stringifyTokenIdentifier(prop));
+                            }
+                        }
+                    }
+                    switch name {
+                        case PropertyAccess(name, property): {
+                            var obj = access(memory.get(stringifyTokenValue(name)), property, stringifyTokenValue(name));
+                            returnVal = obj.value;
+                        }
+                        case _: {
+                            trace(name, stringifyTokenValue(name));
+                            memory.set(stringifyTokenValue(name), new MemoryObject(NullValue, null, params.getParameters()[0], type, memory.object)); 
+                            returnVal = memory.get(stringifyTokenValue(name)).value;
+                        }
+                    }
                 }
                 case Condition(name, exp, body, type): {
                     if (memory.get(stringifyTokenValue(name)) == null) {
@@ -199,14 +254,69 @@ class Interpreter {
                 }
             }
             case Define(name, type): {
-                var object = accessObject(name, memory);
-                object = new MemoryObject(NullValue, type, memory.object);
-                return object.value;
+                function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
+                    switch prop {
+                        case PropertyAccess(_, property): {
+                            objName += '$PROPERTY_ACCESS_SIGN${stringifyTokenValue(prop)}';
+                            // trace(object, stringifyTokenValue(prop), property);
+                            if (object.props.get(stringifyTokenValue(prop)) == null) {
+                                // We can already know that object.name.property is null
+                                evaluate(ErrorMessage('Unable to create `$objName$PROPERTY_ACCESS_SIGN${stringifyTokenIdentifier(property)}`: `$objName` Does not contain property `${stringifyTokenIdentifier(property)}`.'));
+                                return null;
+                            }
+                            return access(object.props.get(stringifyTokenValue(prop)), property, objName);
+                        }
+                        case _: {
+                            if (object.props.get(stringifyTokenIdentifier(prop)) == null) {
+                                object.props.set(stringifyTokenIdentifier(prop), new MemoryObject(NullValue, type, object));
+                            }
+                            return object.props.get(stringifyTokenIdentifier(prop));
+                        }
+                    }
+                }
+                switch name {
+                    case PropertyAccess(name, property): {
+                        var obj = access(memory.get(stringifyTokenValue(name)), property, stringifyTokenValue(name));
+                        return obj.value;
+                    }
+                    case _: {
+                        memory.set(stringifyTokenValue(name), new MemoryObject(NullValue, type != null ? type : NullValue, memory.object)); 
+                        return memory.get(stringifyTokenValue(name)).value;
+                    }
+                }
             }
             case Action(name, params, type): {
-                var object = accessObject(name, memory);
-                object = new MemoryObject(NullValue, null, params.getParameters()[0], type, memory.object);
-                return object.value;
+                function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
+                    switch prop {
+                        case PropertyAccess(_, property): {
+                            objName += '$PROPERTY_ACCESS_SIGN${stringifyTokenValue(prop)}';
+                            // trace(object, stringifyTokenValue(prop), property);
+                            if (object.props.get(stringifyTokenValue(prop)) == null) {
+                                // We can already know that object.name.property is null
+                                evaluate(ErrorMessage('Unable to create `$objName$PROPERTY_ACCESS_SIGN${stringifyTokenIdentifier(property)}`: `$objName` Does not contain property `${stringifyTokenIdentifier(property)}`.'));
+                                return null;
+                            }
+                            return access(object.props.get(stringifyTokenValue(prop)), property, objName);
+                        }
+                        case _: {
+                            if (object.props.get(stringifyTokenIdentifier(prop)) == null) {
+                                object.props.set(stringifyTokenIdentifier(prop), new MemoryObject(NullValue, null, params.getParameters()[0], type != null ? type : NullValue, object));
+                            }
+                            return object.props.get(stringifyTokenIdentifier(prop));
+                        }
+                    }
+                }
+                switch name {
+                    case PropertyAccess(name, property): {
+                        var obj = access(memory.get(stringifyTokenValue(name)), property, stringifyTokenValue(name));
+                        return obj.value;
+                    }
+                    case _: {
+                        trace(name, stringifyTokenValue(name));
+                        memory.set(stringifyTokenValue(name), new MemoryObject(NullValue, null, params.getParameters()[0], type, memory.object)); 
+                        return memory.get(stringifyTokenValue(name)).value;
+                    }
+                }
             }
             case External(get): return evaluate(get([]), memory, dontThrow);
             case PropertyAccess(_, _): {
@@ -310,7 +420,7 @@ class Interpreter {
                         return obj;
                     }
                     case _: {
-                        memory.set(stringifyTokenValue(name), new MemoryObject(NullValue, type, memory.object)); 
+                        memory.set(stringifyTokenValue(name), new MemoryObject(NullValue, type != null ? type : NullValue, memory.object)); 
                         return memory.get(stringifyTokenValue(name));
                     }
                 }
@@ -330,7 +440,7 @@ class Interpreter {
                         }
                         case _: {
                             if (object.props.get(stringifyTokenIdentifier(prop)) == null) {
-                                object.props.set(stringifyTokenIdentifier(prop), new MemoryObject(NullValue, null, params.getParameters()[0], type, object));
+                                object.props.set(stringifyTokenIdentifier(prop), new MemoryObject(NullValue, null, params.getParameters()[0], type != null ? type : NullValue, object));
                             }
                             return object.props.get(stringifyTokenIdentifier(prop));
                         }
@@ -439,13 +549,13 @@ class Interpreter {
                             if (object.props.get(stringifyTokenValue(prop)) == null) {
                                 // We can already know that object.name.property is null
                                 evaluate(ErrorMessage('Unable to create `$objName$PROPERTY_ACCESS_SIGN${stringifyTokenIdentifier(property)}`: `$objName` Does not contain property `${stringifyTokenIdentifier(property)}`.'));
-                                return new MemoryObject(NullValue, type, memory.object);
+                                return new MemoryObject(NullValue, type != null ? type : NullValue, memory.object);
                             }
                             return access(object.props.get(stringifyTokenValue(prop)), property, objName);
                         }
                         case _: {
                             if (object.props.get(stringifyTokenIdentifier(prop)) == null) {
-                                object.props.set(stringifyTokenIdentifier(prop), new MemoryObject(NullValue, type, object));
+                                object.props.set(stringifyTokenIdentifier(prop), new MemoryObject(NullValue, type != null ? type : NullValue, object));
                             }
                             return object.props.get(stringifyTokenIdentifier(prop));
                         }
@@ -457,7 +567,7 @@ class Interpreter {
                         return createObject(obj.value); // Counter intuitive, but consistency is more important
                     }
                     case _: {
-                        return new MemoryObject(NullValue, type, memory.object); 
+                        return new MemoryObject(NullValue, type != null ? type : NullValue, memory.object); 
                     }
                 }
             }
@@ -470,13 +580,13 @@ class Interpreter {
                             if (object.props.get(stringifyTokenValue(prop)) == null) {
                                 // We can already know that object.name.property is null
                                 evaluate(ErrorMessage('Unable to create `$objName$PROPERTY_ACCESS_SIGN${stringifyTokenIdentifier(property)}`: `$objName` Does not contain property `${stringifyTokenIdentifier(property)}`.'));
-                                return new MemoryObject(NullValue, type, memory.object);
+                                return new MemoryObject(NullValue, type != null ? type : NullValue, memory.object);
                             }
                             return access(object.props.get(stringifyTokenValue(prop)), property, objName);
                         }
                         case _: {
                             if (object.props.get(stringifyTokenIdentifier(prop)) == null) {
-                                object.props.set(stringifyTokenIdentifier(prop), new MemoryObject(NullValue, null, params.getParameters()[0], type, object));
+                                object.props.set(stringifyTokenIdentifier(prop), new MemoryObject(NullValue, null, params.getParameters()[0], type != null ? type : NullValue, object));
                             }
                             return object.props.get(stringifyTokenIdentifier(prop));
                         }
@@ -488,7 +598,7 @@ class Interpreter {
                         return createObject(obj.value);
                     }
                     case _: {
-                        return new MemoryObject(NullValue, null, params.getParameters()[0], type, memory.object); 
+                        return new MemoryObject(NullValue, null, params.getParameters()[0], type != null ? type : NullValue, memory.object); 
                     }
                 }
             }

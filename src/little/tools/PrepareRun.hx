@@ -29,13 +29,44 @@ class PrepareRun {
     public static function addProps() {
         Little.plugin.registerProperty("type", TYPE_DYNAMIC, true, null, {
             valueGetter: parent -> {
-                trace(parent.value);
-                trace(parent.type);
-                trace(Interpreter.getValueType(parent.value));
-                trace(Interpreter.stringifyTokenIdentifier(Interpreter.getValueType(parent.value)));
                 return Characters(Interpreter.stringifyTokenIdentifier(if (parent.value != null && !parent.value.equals(NullValue)) Interpreter.getValueType(parent.value) else if (parent.type != null || !parent.type.equals(NullValue)) parent.type else Identifier(TYPE_VOID)));
             },
             allowWriting: false
+        });
+
+
+        // Froms & Tos:
+
+        // Int
+        Little.plugin.registerProperty('$TO$TYPE_FLOAT', TYPE_INT, true, {
+            expectedParameters: [],
+            callback: (parent, params) -> {
+                var val = parent.value;
+                switch val {
+                    case NullValue: TypeDeclaration(NullValue, Identifier(TYPE_FLOAT));
+                    case _: Decimal(val.getParameters()[0]);
+                }
+            }
+        });
+        Little.plugin.registerProperty('$TO$TYPE_BOOLEAN', TYPE_INT, true, {
+            expectedParameters: [],
+            callback: (parent, params) -> {
+                var val = parent.value;
+                switch val {
+                    case NullValue | Number(_.parseInt() == 0 => true): FalseValue;
+                    case _: TrueValue;
+                }
+            }
+        });
+        Little.plugin.registerProperty('$TO$TYPE_STRING', TYPE_INT, true, {
+            expectedParameters: [],
+            callback: (parent, params) -> {
+                var val = parent.value;
+                switch val {
+                    case NullValue: TypeDeclaration(NullValue, Identifier(TYPE_STRING));
+                    case _: Characters(val.getParameters()[0]);
+                }
+            }
         });
     }
 

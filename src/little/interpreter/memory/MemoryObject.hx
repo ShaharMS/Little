@@ -31,7 +31,11 @@ class MemoryObject {
 
     function set_value(val:ParserTokens) {
         var t = Interpreter.getValueType(val);
-        if (type == null && t != null) type = t;
+        if ((type == null || type.equals(NullValue)) && t != null) {
+            type = t;
+            
+            if (props.underlying != null) props.underlying.objType = Interpreter.stringifyTokenValue(t);
+        }
         value = valueSetter(val);
         for (setter in setterListeners) {
             setter(value);
@@ -64,7 +68,7 @@ class MemoryObject {
         return params = parameters.filter(p -> switch p {case SplitLine | SetLine(_): false; case _: true;});
     }
 
-    public function new(?value:ParserTokens, ?props:MemoryTree, ?params:Array<ParserTokens>, ?type:ParserTokens, ?external:Bool, ?condition:Bool, ?nonStatic:Bool, ?parent:MemoryObject) {
+    public function new(?value:ParserTokens, ?props:MemoryTree, ?params:Array<ParserTokens>, ?type:ParserTokens = NullValue, ?external:Bool, ?condition:Bool, ?nonStatic:Bool, ?parent:MemoryObject) {
         this.value = value == null ? NullValue : value;
         this.params = params;
         this.type = type == null ? Interpreter.getValueType(this.value) : type;

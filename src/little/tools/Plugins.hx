@@ -364,7 +364,10 @@ class Plugins {
 
         if (isType && onObject == TYPE_DYNAMIC) {
             MemoryObject.addDefaultProperty(propertyName, memObject);
-        } else parent.props.set(propertyName, memObject);
+        } else {
+            trace('Adding $propertyName to $onObject');
+            parent.props.set(propertyName, memObject);
+        }
     }
 }
 

@@ -56,6 +56,8 @@ class Keywords {
 
     public static var FOR_LOOP_IDENTIFIERS:{FROM:String, TO:String, JUMP:String} = {FROM: "from", TO: "to", JUMP: "jump"};
 
+    public static var TO:String = "to";
+
     public static var defaultKeywordSet:KeywordConfig = {
         VARIABLE_DECLARATION: "define",
         FUNCTION_DECLARATION: "action",

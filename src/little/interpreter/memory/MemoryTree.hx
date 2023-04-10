@@ -11,9 +11,9 @@ class MemoryTreeBase {
 
     public function new(m:MemoryObject) {
 		if (m == null) m = new MemoryObject(NullValue, m);
-        objType = m.type != null ? Interpreter.stringifyTokenValue(m.type) : TYPE_DYNAMIC;
+        objType = m.type != null && !m.type.equals(NullValue) ? Interpreter.stringifyTokenValue(m.type) : m.value != null && !m.value.equals(NullValue) ? Interpreter.stringifyTokenValue(Interpreter.getValueType(m.value)) : TYPE_DYNAMIC;
         obj = m;
-        
+        trace(objType, obj.value);
     }
 }
 
@@ -36,8 +36,8 @@ abstract MemoryTree(MemoryTreeBase) {
                 Runtime.throwError(ErrorMessage('Type ${this.objType} does not exist.'));
                 return null;
             }
-            if (!Interpreter.memory.silentGet(this.objType).props.exists(name)) return null; // Throws non existent prop on Interpreter.accessObject().
-			if (!Interpreter.memory.silentGet(TYPE_DYNAMIC).props.exists(name)) return null; // Throws non existent prop on Interpreter.accessObject().
+			trace(this.objType);
+            if (!Interpreter.memory.silentGet(this.objType).props.exists(name) && !Interpreter.memory.silentGet(TYPE_DYNAMIC).props.exists(name)) return null; // Throws non existent prop on Interpreter.accessObject().
 
             var field = Interpreter.memory.silentGet(TYPE_DYNAMIC).props.silentGet(name);
             var master = Interpreter.memory.silentGet(this.objType).props.silentGet(name);
