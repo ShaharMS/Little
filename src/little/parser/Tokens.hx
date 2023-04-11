@@ -7,8 +7,8 @@ enum ParserTokens {
     SetLine(line:Int);
     SplitLine;
 
-    Define(name:ParserTokens, type:ParserTokens);
-    Action(name:ParserTokens, params:ParserTokens, type:ParserTokens);
+    Variable(name:ParserTokens, type:ParserTokens);
+    Function(name:ParserTokens, params:ParserTokens, type:ParserTokens);
     Condition(name:ParserTokens, exp:ParserTokens, body:ParserTokens, type:ParserTokens);
 
     Read(name:ParserTokens);
@@ -16,7 +16,7 @@ enum ParserTokens {
 
     Identifier(word:String);
     TypeDeclaration(value:ParserTokens, type:ParserTokens);
-    ActionCall(name:ParserTokens, params:ParserTokens);
+    FunctionCall(name:ParserTokens, params:ParserTokens);
     Return(value:ParserTokens, type:ParserTokens);
 
     Expression(parts:Array<ParserTokens>, type:ParserTokens);

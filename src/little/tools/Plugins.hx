@@ -93,7 +93,7 @@ class Plugins {
                             });
                             var type:ParserTokens = Identifier(Conversion.toLittleType(instance.returnType));
                             motherObj.props.set(instance.name, new MemoryObject(value, [] /*Should this be implemented?*/, [
-                                Define(Identifier("value " /* That extra space is used to differentiate between non-static fields and functions. Todo: Pretty bad solution */), Identifier(littleClassName))
+                                Variable(Identifier("value " /* That extra space is used to differentiate between non-static fields and functions. Todo: Pretty bad solution */), Identifier(littleClassName))
                             ], type, true, false, true, motherObj));
                         }
 						
@@ -107,7 +107,7 @@ class Plugins {
 					    var type:ParserTokens = Identifier(Conversion.toLittleType(instance.returnType));
 					    var params = [];
 					    for (param in instance.parameters) 
-					    	params.push(Define(Identifier(param.name), Identifier(param.type)));
+					    	params.push(Variable(Identifier(param.name), Identifier(param.type)));
 
 					    motherObj.props.set(instance.name, new MemoryObject(value, [] /*Should this be implemented?*/, params, type, true, motherObj));
                     } else {
@@ -120,8 +120,8 @@ class Plugins {
 					    var type:ParserTokens = Identifier(Conversion.toLittleType(instance.returnType));
 					    var params = [];
 					    for (param in instance.parameters) 
-					    	params.push(Define(Identifier(param.name), Identifier(param.type)));
-                        params.unshift(Define(Identifier("value"), Identifier(littleClassName)));
+					    	params.push(Variable(Identifier(param.name), Identifier(param.type)));
+                        params.unshift(Variable(Identifier("value"), Identifier(littleClassName)));
 					    motherObj.props.set(instance.name, new MemoryObject(value, [] /*Should this be implemented?*/, params, type, true, false, true, motherObj));
                     }
 
@@ -206,9 +206,9 @@ class Plugins {
 
     	@param actionName The name by which to identify the function
     	@param actionModuleName The module from which access to this function is granted. Also, when & if this function ever throws an error/prints to standard output, the name provided here will be present in the error message as the responsible module.
-    	@param expectedParameters an `Array<ParserTokens>` consisting of `ParserTokens.Define`s which contain the names & types of the parameters that should be passed on to the function. For example:
+    	@param expectedParameters an `Array<ParserTokens>` consisting of `ParserTokens.Variable`s which contain the names & types of the parameters that should be passed on to the function. For example:
             ```
-            [Define(Identifier(x), Identifier("String"))]
+            [Variable(Identifier(x), Identifier("String"))]
             ```
     	@param callback 
     **/
@@ -278,7 +278,7 @@ class Plugins {
             }
         }
 
-        var memObject:MemoryObject;
+        var memObject:MemoryObject = new MemoryObject();
         var parent = Interpreter.memory.silentGet(onObject);
         if (valueOption2 != null) {
             // Variable
@@ -295,7 +295,7 @@ class Plugins {
                 }), 
                 [], 
                 if (!isType) null else [
-                    Define(Identifier("value " /* That extra space is used to differentiate between non-static fields and functions. Todo: Pretty bad solution */), Identifier(onObject))
+                    Variable(Identifier("value " /* That extra space is used to differentiate between non-static fields and functions. Todo: Pretty bad solution */), Identifier(onObject))
                 ],
                 Identifier(info.type), 
                 true,
@@ -329,7 +329,7 @@ class Plugins {
             var params = if (info.expectedParameters is String) {
                 Parser.parse(Lexer.lex(info.expectedParameters));
             } else info.expectedParameters;
-            if (isType) params.unshift(Define(Identifier("value"), Identifier(onObject)));
+            if (isType) params.unshift(Variable(Identifier("value"), Identifier(onObject)));
 
             memObject = new MemoryObject(
                 External(params -> {

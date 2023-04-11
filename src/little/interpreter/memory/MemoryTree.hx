@@ -13,7 +13,6 @@ class MemoryTreeBase {
 		if (m == null) m = new MemoryObject(NullValue, m);
         objType = m.type != null && !m.type.equals(NullValue) ? Interpreter.stringifyTokenValue(m.type) : m.value != null && !m.value.equals(NullValue) ? Interpreter.stringifyTokenValue(Interpreter.getValueType(m.value)) : TYPE_DYNAMIC;
         obj = m;
-        trace(objType, obj.value);
     }
 }
 

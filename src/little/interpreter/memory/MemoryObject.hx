@@ -80,7 +80,6 @@ class MemoryObject {
         this.props.concat(defaultProperties);
 
         objects.push(this);
-        if (value.getParameters()[0] == "hey") trace(this.props.get("type").value.getParameters()[0](this), this.value, this.type);
     }
 
 

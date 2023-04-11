@@ -1,4 +1,4 @@
 
 Module Main, Line 0:  nothing
-ERROR: Module Main, Line 0:  No Such Definition: `stop`
-ERROR: Module Main, Line 0:  No Such Definition: `stop`
+ERROR: Module Main, Line 0:  No Such Variable: `stop`
+ERROR: Module Main, Line 0:  No Such Variable: `stop`

@@ -47,7 +47,7 @@ class Interpreter {
                 case SetLine(line): Runtime.line = line;
                 case Module(name): Runtime.currentModule = name;
                 case SplitLine:
-                case Define(name, type): {
+                case Variable(name, type): {
                     function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
                         switch prop {
                             case PropertyAccess(_, property): {
@@ -79,7 +79,7 @@ class Interpreter {
                         }
                     }
                 }
-                case Action(name, params, type): {
+                case Function(name, params, type): {
                     function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
                         switch prop {
                             case PropertyAccess(_, property): {
@@ -131,18 +131,20 @@ class Interpreter {
                         else {
                             if (v == null)
                                 v = evaluate(value);
+                                trace(value, v, getValueType(v));
                             if (v.getName() == "ErrorMessage") {
                                 assignee.value = NullValue;
                             } else {
                                 assignee.value = v;
+                                trace(assignee.value, assignee.type);
                             }
                         }
                     }
-                    returnVal = value;
+                    returnVal = if (v != null) v else value;
                 }
-                case ActionCall(name, params): {
+                case FunctionCall(name, params): {
                     if (memory.get(stringifyTokenValue(name)) == null) {
-                        Runtime.throwError(ErrorMessage('No Such Action:  `${stringifyTokenValue(name)}`'));
+                        Runtime.throwError(ErrorMessage('No Such Function:  `${stringifyTokenValue(name)}`'));
                     } 
                     else {
                         returnVal = memory.get(stringifyTokenValue(name)).use(params);
@@ -160,7 +162,7 @@ class Interpreter {
                 }
                 case Read(name): {
                     var str = stringifyTokenValue(name);
-                    returnVal =  evaluate(if (memory.get(str) != null) memory.get(str).value else ErrorMessage('No Such Definition: `$str`'));
+                    returnVal =  evaluate(if (memory.get(str) != null) memory.get(str).value else ErrorMessage('No Such Variable: `$str`'));
                 }
                 case _: returnVal = evaluate(token);
             }
@@ -204,7 +206,7 @@ class Interpreter {
             }
             case Number(_) | Decimal(_) | Characters(_) | TrueValue | FalseValue | NullValue | Sign(_): return exp;
             case Identifier(word): {
-                return evaluate(if (memory.get(word) != null) memory.get(word).value else ErrorMessage('No Such Definition: `$word`'), memory, dontThrow);
+                return evaluate(if (memory.get(word) != null) memory.get(word).value else ErrorMessage('No Such Variable: `$word`'), memory, dontThrow);
             }
             case TypeDeclaration(value, type): {
                 var val = evaluate(value, memory, dontThrow);
@@ -239,10 +241,10 @@ class Interpreter {
             }
             case Read(name): {
                 var str = stringifyTokenValue(name);
-                return evaluate(if (memory.get(str) != null) memory.get(str).value else ErrorMessage('No Such Definition: `$str`'), memory, dontThrow);
+                return evaluate(if (memory.get(str) != null) memory.get(str).value else ErrorMessage('No Such Variable: `$str`'), memory, dontThrow);
             }
-            case ActionCall(name, params): {
-                if (memory.get(stringifyTokenValue(name)) == null) return evaluate(ErrorMessage('No Such Action:  `${stringifyTokenValue(name)}`'));
+            case FunctionCall(name, params): {
+                if (memory.get(stringifyTokenValue(name)) == null) return evaluate(ErrorMessage('No Such Function:  `${stringifyTokenValue(name)}`'));
                 return evaluate(memory.get(stringifyTokenValue(name)).use(params), memory, dontThrow);
             }
             case Condition(name, exp, body, type): {
@@ -253,7 +255,7 @@ class Interpreter {
                     return evaluate(memory.get(stringifyTokenValue(name)).use(PartArray([exp, body])), memory, dontThrow);
                 }
             }
-            case Define(name, type): {
+            case Variable(name, type): {
                 function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
                     switch prop {
                         case PropertyAccess(_, property): {
@@ -285,7 +287,7 @@ class Interpreter {
                     }
                 }
             }
-            case Action(name, params, type): {
+            case Function(name, params, type): {
                 function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
                     switch prop {
                         case PropertyAccess(_, property): {
@@ -336,7 +338,7 @@ class Interpreter {
 
     public static function getValueType(token:ParserTokens):ParserTokens {
 
-        if (token.getName() != "NullValue") trace(token);
+        //if (token.getName() != "NullValue" && token.getName() != "External" && token.getName() != "ExternalCondition") trace(token);
         if (token == null) return Identifier(TYPE_DYNAMIC);
 
         return switch token {
@@ -381,19 +383,19 @@ class Interpreter {
             case TrueValue | FalseValue: return new MemoryObject(exp, null, null, Identifier(TYPE_BOOLEAN));
             case NullValue: return new MemoryObject(exp, null, null, Identifier(TYPE_VOID));
             case Identifier(word): {
-                evaluate(if (memory.get(word) != null) memory.get(word).value else ErrorMessage('No Such Definition: `$word`'));
+                evaluate(if (memory.get(word) != null) memory.get(word).value else ErrorMessage('No Such Variable: `$word`'));
                 return memory.get(word);
             }
             case Read(name): {
                 var word = stringifyTokenValue(name);
-                evaluate(if (memory.get(word) != null) memory.get(word).value else ErrorMessage('No Such Definition: `$word`'));
+                evaluate(if (memory.get(word) != null) memory.get(word).value else ErrorMessage('No Such Variable: `$word`'));
                 return memory.get(word);
             }
-            case ActionCall(name, params): {
-                if (memory.get(stringifyTokenValue(name)) == null) evaluate(ErrorMessage('No Such Action:  `${stringifyTokenValue(name)}`'));
+            case FunctionCall(name, params): {
+                if (memory.get(stringifyTokenValue(name)) == null) evaluate(ErrorMessage('No Such Function:  `${stringifyTokenValue(name)}`'));
                 return accessObject(memory.get(stringifyTokenValue(name)).use(params));
             }
-            case Define(name, type): {
+            case Variable(name, type): {
                 function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
                     switch prop {
                         case PropertyAccess(_, property): {
@@ -425,7 +427,7 @@ class Interpreter {
                     }
                 }
             }
-            case Action(name, params, type): {
+            case Function(name, params, type): {
                 function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
                     switch prop {
                         case PropertyAccess(_, property): {
@@ -463,7 +465,7 @@ class Interpreter {
                 var prop = stringifyTokenIdentifier(p);
                 // trace(n, p);
                 var obj = accessObject(n);
-                if (obj == null) evaluate(ErrorMessage('Unable to access property `$str$PROPERTY_ACCESS_SIGN$prop`: No Such Definition: `$str`'));
+                if (obj == null) evaluate(ErrorMessage('Unable to access property `$str$PROPERTY_ACCESS_SIGN$prop`: No Such Variable: `$str`'));
                 function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
                     switch prop {
                         case PropertyAccess(_, property): {
@@ -476,7 +478,7 @@ class Interpreter {
                             }
                             return access(object.props.get(stringifyTokenValue(prop)), property, objName);
                         }
-                        case ActionCall(name, params): {
+                        case FunctionCall(name, params): {
                             if (object.props.get(stringifyTokenValue(name)) == null) {
                                 evaluate(ErrorMessage('Unable to call `$objName$PROPERTY_ACCESS_SIGN${stringifyTokenValue(name)}(${stringifyTokenValue(params)})`: `$objName` Does not contain property `${stringifyTokenIdentifier(name)}`.'));
                                 return null;
@@ -528,19 +530,19 @@ class Interpreter {
             case TrueValue | FalseValue: return new MemoryObject(exp, null, null, Identifier(TYPE_BOOLEAN));
             case NullValue: return new MemoryObject(exp, null, null, Identifier(TYPE_VOID));
             case Identifier(word): {
-                var value = evaluate(if (memory.get(word) != null) memory.get(word).value else ErrorMessage('No Such Definition: `$word`'));
+                var value = evaluate(if (memory.get(word) != null) memory.get(word).value else ErrorMessage('No Such Variable: `$word`'));
                 return createObject(value);
             }
             case Read(name): {
                 var word = stringifyTokenValue(name);
-                var value = evaluate(if (memory.get(word) != null) memory.get(word).value else ErrorMessage('No Such Definition: `$word`'));
+                var value = evaluate(if (memory.get(word) != null) memory.get(word).value else ErrorMessage('No Such Variable: `$word`'));
                 return return createObject(value);
             }
-            case ActionCall(name, params): {
-                if (memory.get(stringifyTokenValue(name)) == null) evaluate(ErrorMessage('No Such Action:  `${stringifyTokenValue(name)}`'));
+            case FunctionCall(name, params): {
+                if (memory.get(stringifyTokenValue(name)) == null) evaluate(ErrorMessage('No Such Function:  `${stringifyTokenValue(name)}`'));
                 return createObject(memory.get(stringifyTokenValue(name)).use(params));
             }
-            case Define(name, type): {
+            case Variable(name, type): {
                 function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
                     switch prop {
                         case PropertyAccess(_, property): {
@@ -571,7 +573,7 @@ class Interpreter {
                     }
                 }
             }
-            case Action(name, params, type): {
+            case Function(name, params, type): {
                 function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
                     switch prop {
                         case PropertyAccess(_, property): {
@@ -606,7 +608,7 @@ class Interpreter {
                 var str = stringifyTokenValue(n);
                 var prop = stringifyTokenIdentifier(p);
                 // trace(n, p);
-                if (memory.get(str) == null) evaluate(ErrorMessage('Unable to access property `$str$PROPERTY_ACCESS_SIGN$prop` - No Such Definition: `$str`'));
+                if (memory.get(str) == null) evaluate(ErrorMessage('Unable to access property `$str$PROPERTY_ACCESS_SIGN$prop` - No Such Variable: `$str`'));
                 var obj = memory.get(str);
                 function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
                     switch prop {
@@ -620,7 +622,7 @@ class Interpreter {
                             }
                             return access(object.props.get(stringifyTokenValue(prop)), property, objName);
                         }
-                        case ActionCall(name, params): {
+                        case FunctionCall(name, params): {
                             if (object.props.get(stringifyTokenValue(name)) == null) {
                                 evaluate(ErrorMessage('Unable to call `$objName$PROPERTY_ACCESS_SIGN${stringifyTokenValue(name)}(${stringifyTokenValue(params)})`: `$objName` Does not contain property `${stringifyTokenIdentifier(name)}`.'));
                                 return null;
@@ -669,20 +671,20 @@ class Interpreter {
             case Sign(sign): return sign;
             case Read(name): {
                 var str = stringifyTokenValue(name);
-                return stringifyTokenValue(if (memory.get(str) != null) memory.get(str).value else ErrorMessage('No Such Definition: `$str`'));
+                return stringifyTokenValue(if (memory.get(str) != null) memory.get(str).value else ErrorMessage('No Such Variable: `$str`'));
             }
-            case ActionCall(name, params): {
+            case FunctionCall(name, params): {
                 var str = stringifyTokenValue(name);
-                return stringifyTokenValue(if (memory.get(str) != null) memory.get(str).use(params) else ErrorMessage('No Such Action: `$str`'));
+                return stringifyTokenValue(if (memory.get(str) != null) memory.get(str).use(params) else ErrorMessage('No Such Function: `$str`'));
             }
             case Write(_, value, _): {
                 return stringifyTokenValue(value);
             }
-            case Define(name, type): {
+            case Variable(name, type): {
                 memory.set(stringifyTokenValue(name), new MemoryObject(NullValue, [], null, type, memory.object));
                 return stringifyTokenValue(name);
             }
-            case Action(name, params, type): {
+            case Function(name, params, type): {
                 memory.set(stringifyTokenValue(name), new MemoryObject(NullValue, [], params.getParameters()[0], type, memory.object));
                 return stringifyTokenValue(name);
             }
@@ -721,18 +723,18 @@ class Interpreter {
             case Read(name): {
                 return stringifyTokenIdentifier(name);
             }
-            case ActionCall(name, params): {
+            case FunctionCall(name, params): {
                 if (prop) return stringifyTokenValue(name);
                 var str = stringifyTokenValue(name);
-                return stringifyTokenIdentifier(if (memory.get(str) != null) memory.get(str).use(params) else ErrorMessage('No Such Action: `$str`'));
+                return stringifyTokenIdentifier(if (memory.get(str) != null) memory.get(str).use(params) else ErrorMessage('No Such Function: `$str`'));
             }
             case Write(assignees, _, _): {
                 return stringifyTokenIdentifier(assignees[0]);
             }
-            case Define(name, type): {
+            case Variable(name, type): {
                 return stringifyTokenIdentifier(name);
             }
-            case Action(name, params, type): {
+            case Function(name, params, type): {
                 return stringifyTokenIdentifier(name);
             }
             case PartArray(parts): {

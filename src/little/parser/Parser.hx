@@ -266,7 +266,7 @@ class Parser {
                         }
                         i++;
                     }
-                    post.push(Define(if (name.length == 1) name[0] else PartArray(name) /* Soon to be: PropertyAccess */, type));
+                    post.push(Variable(if (name.length == 1) name[0] else PartArray(name) /* Soon to be: PropertyAccess */, type));
                 }
                 case Identifier(_ == FUNCTION_DECLARATION => true): {
                     i++;
@@ -327,7 +327,7 @@ class Parser {
                         }
                         i++;
                     }
-                    post.push(Action(if (name.length == 1) name[0] else PartArray(name) /* Soon to be: PropertyAccess */, params, type));
+                    post.push(Function(if (name.length == 1) name[0] else PartArray(name) /* Soon to be: PropertyAccess */, params, type));
                 }
                 case Identifier(CONDITION_TYPES.contains(_) => true): {
                     i++;
@@ -432,14 +432,14 @@ class Parser {
                             case _: {
                                 var previous = post.pop(); // When parsing a function that returns a function, this handles the "nested call" correctly
                                 token = PartArray(parts);
-                                post.push(ActionCall(previous, token));
+                                post.push(FunctionCall(previous, token));
                             }
                         }
                     }
                 }
                 case Block(body, type): post.push(Block(mergeCalls(body), type));
-                case Define(name, type): post.push(Define(mergeCalls([name])[0], type));
-                case Action(name, params, type): post.push(Action(mergeCalls([name])[0], mergeCalls([params])[0], type));
+                case Variable(name, type): post.push(Variable(mergeCalls([name])[0], type));
+                case Function(name, params, type): post.push(Function(mergeCalls([name])[0], mergeCalls([params])[0], type));
                 case Condition(name, exp, body, type): post.push(Condition(mergeCalls([name])[0], mergeCalls([exp])[0], mergeCalls([body])[0], type));
                 case Return(value, type): post.push(Return(mergeCalls([value])[0], type));
                 case PartArray(parts): post.push(PartArray(mergeCalls(parts)));
@@ -487,12 +487,12 @@ class Parser {
                 }
                 case Block(body, type): post.unshift(Block(mergePropertyOperations(body), type));
                 case Expression(parts, type): post.unshift(Expression(mergePropertyOperations(parts), type));
-                case Define(name, type): post.unshift(Define(mergePropertyOperations(if (name.getName() == "PartArray") name.getParameters()[0] else [name])[0], type));
-                case Action(name, params, type): post.unshift(Action(mergePropertyOperations(if (name.getName() == "PartArray") name.getParameters()[0] else [name])[0], mergePropertyOperations([params])[0], type));
+                case Variable(name, type): post.unshift(Variable(mergePropertyOperations(if (name.getName() == "PartArray") name.getParameters()[0] else [name])[0], type));
+                case Function(name, params, type): post.unshift(Function(mergePropertyOperations(if (name.getName() == "PartArray") name.getParameters()[0] else [name])[0], mergePropertyOperations([params])[0], type));
                 case Condition(name, exp, body, type): post.unshift(Condition(mergePropertyOperations([name])[0], mergePropertyOperations([exp])[0], mergePropertyOperations([body])[0], type));
                 case Return(value, type): post.unshift(Return(mergePropertyOperations([value])[0], type));
                 case PartArray(parts): post.unshift(PartArray(mergePropertyOperations(parts)));
-                case ActionCall(name, params): post.unshift(ActionCall(mergePropertyOperations([name])[0], mergePropertyOperations([params])[0]));
+                case FunctionCall(name, params): post.unshift(FunctionCall(mergePropertyOperations([name])[0], mergePropertyOperations([params])[0]));
                 case Write(assignees, value, type): post.unshift(Write(mergePropertyOperations(assignees), mergePropertyOperations([value])[0], type));
                 case _: post.unshift(token);
             }
@@ -571,13 +571,13 @@ class Parser {
                     if (potentialAssignee != null) post.push(potentialAssignee);
                     potentialAssignee = Block(mergeWrites(body), type);
                 }
-                case Define(name, type): {
+                case Variable(name, type): {
                     if (potentialAssignee != null) post.push(potentialAssignee);
-                    potentialAssignee = Define(mergeWrites([name])[0], type);
+                    potentialAssignee = Variable(mergeWrites([name])[0], type);
                 }
-                case Action(name, params, type): {
+                case Function(name, params, type): {
                     if (potentialAssignee != null) post.push(potentialAssignee);
-                    potentialAssignee = Action(mergeWrites([name])[0], mergeWrites([params])[0], type);
+                    potentialAssignee = Function(mergeWrites([name])[0], mergeWrites([params])[0], type);
                 }
                 case Condition(name, exp, body, type): {
                     if (potentialAssignee != null) post.push(potentialAssignee);
@@ -587,9 +587,9 @@ class Parser {
                     if (potentialAssignee != null) post.push(potentialAssignee);
                     potentialAssignee = Return(mergeWrites([value])[0], type);
                 }
-                case ActionCall(name, params): {
+                case FunctionCall(name, params): {
                     if (potentialAssignee != null) post.push(potentialAssignee);
-                    potentialAssignee = ActionCall(mergeWrites([name])[0], mergeWrites([params])[0]);
+                    potentialAssignee = FunctionCall(mergeWrites([name])[0], mergeWrites([params])[0]);
                 }
                 case PropertyAccess(name, property): {
                     if (potentialAssignee != null) post.push(potentialAssignee);
@@ -642,12 +642,12 @@ class Parser {
                 }
                 case Block(body, type): post.unshift(Block(mergeValuesWithTypeDeclarations(body), type));
                 case Expression(parts, type): post.unshift(Expression(mergeValuesWithTypeDeclarations(parts), type));
-                case Define(name, type): post.unshift(Define(mergeValuesWithTypeDeclarations(if (name.getName() == "PartArray") name.getParameters()[0] else [name])[0], type));
-                case Action(name, params, type): post.unshift(Action(mergeValuesWithTypeDeclarations(if (name.getName() == "PartArray") name.getParameters()[0] else [name])[0], mergeValuesWithTypeDeclarations([params])[0], type));
+                case Variable(name, type): post.unshift(Variable(mergeValuesWithTypeDeclarations(if (name.getName() == "PartArray") name.getParameters()[0] else [name])[0], type));
+                case Function(name, params, type): post.unshift(Function(mergeValuesWithTypeDeclarations(if (name.getName() == "PartArray") name.getParameters()[0] else [name])[0], mergeValuesWithTypeDeclarations([params])[0], type));
                 case Condition(name, exp, body, type): post.unshift(Condition(mergeValuesWithTypeDeclarations([name])[0], mergeValuesWithTypeDeclarations([exp])[0], mergeValuesWithTypeDeclarations([body])[0], type));
                 case Return(value, type): post.unshift(Return(mergeValuesWithTypeDeclarations([value])[0], type));
                 case PartArray(parts): post.unshift(PartArray(mergeValuesWithTypeDeclarations(parts)));
-                case ActionCall(name, params): post.unshift(ActionCall(mergeValuesWithTypeDeclarations([name])[0], mergeValuesWithTypeDeclarations([params])[0]));
+                case FunctionCall(name, params): post.unshift(FunctionCall(mergeValuesWithTypeDeclarations([name])[0], mergeValuesWithTypeDeclarations([params])[0]));
                 case Write(assignees, value, type): post.unshift(Write(mergeValuesWithTypeDeclarations(assignees), mergeValuesWithTypeDeclarations([value])[0], type));
                 case _: post.unshift(token);
             }

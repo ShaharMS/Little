@@ -62,13 +62,13 @@ class PrettyPrinter {
             case FalseValue: return '${prefixFA(prefix)}$t$d ${Keywords.FALSE_VALUE}\n';
             case TrueValue: return '${prefixFA(prefix)}$t$d ${Keywords.TRUE_VALUE}\n';
             case NullValue: return '${prefixFA(prefix)}$t$d ${Keywords.NULL_VALUE}\n';
-			case Define(name, type):
+			case Variable(name, type):
 				{
-					return '${prefixFA(prefix)}$t$d Definition Creation\n${getTree(name, if (type == null) prefix.copy() else pushIndex(prefix, level), level + 1, type == null)}${getTree(type, prefix.copy(), level + 1, true)}';
+					return '${prefixFA(prefix)}$t$d Variable Creation\n${getTree(name, if (type == null) prefix.copy() else pushIndex(prefix, level), level + 1, type == null)}${getTree(type, prefix.copy(), level + 1, true)}';
 				}
-			case Action(name, params, type):
+			case Function(name, params, type):
 				{
-					var title = '${prefixFA(prefix)}$t$d Action Creation\n';
+					var title = '${prefixFA(prefix)}$t$d Function Creation\n';
 					title += getTree(name, prefix.copy(), level + 1, false);
 					title += getTree(params, prefix.copy(), level + 1, type == null);
 					title += getTree(type, prefix.copy(), level + 1, true);
@@ -87,7 +87,7 @@ class PrettyPrinter {
 				return '${prefixFA(prefix)}$t$d Read: $name\n';
 			case Write(assignees, value, type):
 				{
-					return'${prefixFA(prefix)}$t$d Definition Write\n${getTree(PartArray(assignees), pushIndex(prefix, level), level + 1, false)}${getTree(value, prefix.copy(), level + 1, type == null)}${getTree(type, prefix.copy(), level + 1, true)}';
+					return'${prefixFA(prefix)}$t$d Variable Write\n${getTree(PartArray(assignees), pushIndex(prefix, level), level + 1, false)}${getTree(value, prefix.copy(), level + 1, type == null)}${getTree(type, prefix.copy(), level + 1, true)}';
 				}
 			case Sign(value):
 				{
@@ -128,9 +128,9 @@ class PrettyPrinter {
                 strParts.push(getTree(body[body.length - 1], prefix.copy(), level + 1, true));
                 return strParts.join("");
             }
-			case ActionCall(name, params):
+			case FunctionCall(name, params):
 				{
-					var title = '${prefixFA(prefix)}$t$d Action Call\n';
+					var title = '${prefixFA(prefix)}$t$d Function Call\n';
 					title += getTree(name, pushIndex(prefix, level), level + 1, false);
 					title += getTree(params, prefix.copy(), level + 1, true);
 					return title;
@@ -158,7 +158,7 @@ class PrettyPrinter {
 			var str = [];
 			for (param in params) {
 				switch param {
-					case Define(name, type): {
+					case Variable(name, type): {
 						str.push('${Interpreter.stringifyTokenValue(name)} ${Keywords.TYPE_DECL_OR_CAST} ${Interpreter.stringifyTokenValue(type != null ? type : Identifier(Keywords.TYPE_DYNAMIC))}');
 					}
 					case _:

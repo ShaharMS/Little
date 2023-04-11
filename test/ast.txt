@@ -1,12 +1,12 @@
 
 Ast
- └─── Definition Write
+ └─── Variable Write
        ├─── Part Array
-       │     └─── Definition Creation
+       │     └─── Variable Creation
        │           └─── x
        └─── Expression
              ├─── 4
-             ├─── Action Call
+             ├─── Function Call
              │     ├─── print
              │     └─── Part Array
              │           └─── x
