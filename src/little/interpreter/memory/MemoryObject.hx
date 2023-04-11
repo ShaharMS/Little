@@ -175,4 +175,21 @@ class MemoryObject {
             return Interpreter.runTokens(body, null, null, null);
         }
     }
+    
+    /**
+    	Get object property
+    	@param propName property name as string
+    **/
+    public inline function get(propName:String) {
+        return props.get(propName);       
+    }
+
+    /**
+    	Set object propery
+    	@param propName property name as string
+    	@param object a `MemoryObject`
+    **/
+    public inline function set(propName:String, object:MemoryObject) {
+        return props.set(propName, object);       
+    }
 }
