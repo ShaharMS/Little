@@ -2531,28 +2531,16 @@ little_interpreter_Interpreter.accessObject = function(exp,memory) {
 	case 2:
 		var name = exp.name;
 		var type = exp.type;
-		var access = null;
-		access = function(object,prop,objName) {
-			if(prop._hx_index == 14) {
-				var _g = prop.name;
-				var property = prop.property;
-				objName += "" + little_Keywords.PROPERTY_ACCESS_SIGN + little_interpreter_Interpreter.stringifyTokenValue(prop);
-				if(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenValue(prop)) == null) {
-					little_interpreter_Interpreter.evaluate(little_parser_ParserTokens.ErrorMessage("Unable to create `" + objName + little_Keywords.PROPERTY_ACCESS_SIGN + little_interpreter_Interpreter.stringifyTokenIdentifier(property) + "`: `" + objName + "` Does not contain property `" + little_interpreter_Interpreter.stringifyTokenIdentifier(property) + "`."));
-					return null;
-				}
-				return access(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenValue(prop)),property,objName);
-			} else {
-				if(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop)) == null) {
-					little_interpreter_memory_MemoryTree.set(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop),new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,null,type,null,null,null,object));
-				}
-				return little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop));
+		var access = function(object,prop,objName) {
+			if(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop)) == null) {
+				little_interpreter_memory_MemoryTree.set(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop),new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,null,type,null,null,null,object));
 			}
+			return little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop));
 		};
 		if(name._hx_index == 14) {
 			var name1 = name.name;
 			var property = name.property;
-			var obj = access(little_interpreter_memory_MemoryTree.get(memory,little_interpreter_Interpreter.stringifyTokenValue(name1)),property,little_interpreter_Interpreter.stringifyTokenValue(name1));
+			var obj = access(little_interpreter_Interpreter.accessObject(name1),property,little_interpreter_Interpreter.stringifyTokenIdentifier(name1));
 			return obj;
 		} else {
 			little_interpreter_memory_MemoryTree.set(memory,little_interpreter_Interpreter.stringifyTokenValue(name),new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,null,type != null ? type : little_parser_ParserTokens.NullValue,null,null,null,little_interpreter_memory_MemoryTree.get_object(memory)));
@@ -2563,31 +2551,19 @@ little_interpreter_Interpreter.accessObject = function(exp,memory) {
 		var name = exp.name;
 		var params = exp.params;
 		var type1 = exp.type;
-		var access1 = null;
-		access1 = function(object,prop,objName) {
-			if(prop._hx_index == 14) {
-				var _g = prop.name;
-				var property = prop.property;
-				objName += "" + little_Keywords.PROPERTY_ACCESS_SIGN + little_interpreter_Interpreter.stringifyTokenValue(prop);
-				if(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenValue(prop)) == null) {
-					little_interpreter_Interpreter.evaluate(little_parser_ParserTokens.ErrorMessage("Unable to create `" + objName + little_Keywords.PROPERTY_ACCESS_SIGN + little_interpreter_Interpreter.stringifyTokenIdentifier(property) + "`: `" + objName + "` Does not contain property `" + little_interpreter_Interpreter.stringifyTokenIdentifier(property) + "`."));
-					return null;
-				}
-				return access1(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenValue(prop)),property,objName);
-			} else {
-				if(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop)) == null) {
-					little_interpreter_memory_MemoryTree.set(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop),new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,Type.enumParameters(params)[0],type1 != null ? type1 : little_parser_ParserTokens.NullValue,null,null,null,object));
-				}
-				return little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop));
+		var access1 = function(object,prop,objName) {
+			if(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop)) == null) {
+				little_interpreter_memory_MemoryTree.set(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop),new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,Type.enumParameters(params)[0],type1 != null ? type1 : little_parser_ParserTokens.NullValue,null,null,null,object));
 			}
+			return little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop));
 		};
 		if(name._hx_index == 14) {
 			var name1 = name.name;
 			var property = name.property;
-			var obj = access1(little_interpreter_memory_MemoryTree.get(memory,little_interpreter_Interpreter.stringifyTokenValue(name1)),property,little_interpreter_Interpreter.stringifyTokenValue(name1));
+			var obj = access1(little_interpreter_Interpreter.accessObject(name1),property,little_interpreter_Interpreter.stringifyTokenIdentifier(name1));
 			return obj;
 		} else {
-			haxe_Log.trace(name,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 458, className : "little.interpreter.Interpreter", methodName : "accessObject", customParams : [little_interpreter_Interpreter.stringifyTokenValue(name)]});
+			haxe_Log.trace(name,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 430, className : "little.interpreter.Interpreter", methodName : "accessObject", customParams : [little_interpreter_Interpreter.stringifyTokenValue(name)]});
 			little_interpreter_memory_MemoryTree.set(memory,little_interpreter_Interpreter.stringifyTokenValue(name),new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,Type.enumParameters(params)[0],type1,null,null,null,little_interpreter_memory_MemoryTree.get_object(memory)));
 			return little_interpreter_memory_MemoryTree.get(memory,little_interpreter_Interpreter.stringifyTokenValue(name));
 		}
@@ -2630,10 +2606,8 @@ little_interpreter_Interpreter.accessObject = function(exp,memory) {
 		if(obj == null) {
 			little_interpreter_Interpreter.evaluate(little_parser_ParserTokens.ErrorMessage("Unable to access property `" + str + little_Keywords.PROPERTY_ACCESS_SIGN + prop + "`: No Such Variable: `" + str + "`"));
 		}
-		var access2 = null;
-		access2 = function(object,prop,objName) {
-			switch(prop._hx_index) {
-			case 9:
+		var access2 = function(object,prop,objName) {
+			if(prop._hx_index == 9) {
 				var name = prop.name;
 				var params = prop.params;
 				if(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenValue(name)) == null) {
@@ -2641,26 +2615,17 @@ little_interpreter_Interpreter.accessObject = function(exp,memory) {
 					return null;
 				}
 				return new little_interpreter_memory_MemoryObject(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenValue(name)).use(params),null,null,null,null,null,null,little_interpreter_memory_MemoryTree.get_object(memory));
-			case 14:
-				var _g = prop.name;
-				var property = prop.property;
-				objName += "" + little_Keywords.PROPERTY_ACCESS_SIGN + little_interpreter_Interpreter.stringifyTokenValue(prop);
-				if(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenValue(prop)) == null) {
-					little_interpreter_Interpreter.evaluate(little_parser_ParserTokens.ErrorMessage("Unable to access `" + objName + little_Keywords.PROPERTY_ACCESS_SIGN + little_interpreter_Interpreter.stringifyTokenIdentifier(property) + "`: `" + objName + "` Does not contain property `" + little_interpreter_Interpreter.stringifyTokenIdentifier(property) + "`."));
-					return null;
-				}
-				return access2(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenValue(prop)),property,objName);
-			default:
+			} else {
 				if(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop)) == null) {
 					little_interpreter_memory_MemoryTree.set(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop),new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,null,null,null,null,null,object));
 					little_interpreter_Interpreter.evaluate(little_parser_ParserTokens.ErrorMessage("Unable to access `" + str + little_Keywords.PROPERTY_ACCESS_SIGN + little_interpreter_Interpreter.stringifyTokenValue(prop) + "`: `" + str + "` Does not contain property `" + little_interpreter_Interpreter.stringifyTokenValue(prop) + "`"));
 					return null;
 				}
-				haxe_Log.trace(little_interpreter_Interpreter.stringifyTokenIdentifier(prop),{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 496, className : "little.interpreter.Interpreter", methodName : "accessObject", customParams : [little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop)).value]});
+				haxe_Log.trace(little_interpreter_Interpreter.stringifyTokenIdentifier(prop),{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 458, className : "little.interpreter.Interpreter", methodName : "accessObject", customParams : [little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop)).value]});
 				return little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop));
 			}
 		};
-		haxe_Log.trace(obj.value,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 501, className : "little.interpreter.Interpreter", methodName : "accessObject", customParams : [obj.type,p]});
+		haxe_Log.trace(obj.value,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 463, className : "little.interpreter.Interpreter", methodName : "accessObject", customParams : [obj.type,p]});
 		return access2(obj,p,str);
 	case 15:
 		var _g = exp.sign;
@@ -2683,7 +2648,7 @@ little_interpreter_Interpreter.accessObject = function(exp,memory) {
 	case 24:case 25:
 		return new little_interpreter_memory_MemoryObject(exp,null,null,little_parser_ParserTokens.Identifier(little_Keywords.TYPE_BOOLEAN),null,null,null,little_interpreter_memory_MemoryTree.get_object(memory));
 	default:
-		haxe_Log.trace("Token " + Std.string(exp) + " is inaccessible via memory. Returning null.",{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 508, className : "little.interpreter.Interpreter", methodName : "accessObject"});
+		haxe_Log.trace("Token " + Std.string(exp) + " is inaccessible via memory. Returning null.",{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 470, className : "little.interpreter.Interpreter", methodName : "accessObject"});
 	}
 	return null;
 };
@@ -2699,28 +2664,16 @@ little_interpreter_Interpreter.createObject = function(exp,memory) {
 	case 2:
 		var name = exp.name;
 		var type = exp.type;
-		var access = null;
-		access = function(object,prop,objName) {
-			if(prop._hx_index == 14) {
-				var _g = prop.name;
-				var property = prop.property;
-				objName += "" + little_Keywords.PROPERTY_ACCESS_SIGN + little_interpreter_Interpreter.stringifyTokenValue(prop);
-				if(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenValue(prop)) == null) {
-					little_interpreter_Interpreter.evaluate(little_parser_ParserTokens.ErrorMessage("Unable to create `" + objName + little_Keywords.PROPERTY_ACCESS_SIGN + little_interpreter_Interpreter.stringifyTokenIdentifier(property) + "`: `" + objName + "` Does not contain property `" + little_interpreter_Interpreter.stringifyTokenIdentifier(property) + "`."));
-					return new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,null,type != null ? type : little_parser_ParserTokens.NullValue,null,null,null,little_interpreter_memory_MemoryTree.get_object(memory));
-				}
-				return access(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenValue(prop)),property,objName);
-			} else {
-				if(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop)) == null) {
-					little_interpreter_memory_MemoryTree.set(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop),new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,null,type != null ? type : little_parser_ParserTokens.NullValue,null,null,null,object));
-				}
-				return little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop));
+		var access = function(object,prop,objName) {
+			if(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop)) == null) {
+				little_interpreter_memory_MemoryTree.set(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop),new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,null,type != null ? type : little_parser_ParserTokens.NullValue,null,null,null,object));
 			}
+			return little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop));
 		};
 		if(name._hx_index == 14) {
 			var name1 = name.name;
 			var property = name.property;
-			var obj = access(little_interpreter_memory_MemoryTree.get(memory,little_interpreter_Interpreter.stringifyTokenValue(name1)),property,little_interpreter_Interpreter.stringifyTokenValue(name1));
+			var obj = access(little_interpreter_Interpreter.createObject(name1),property,little_interpreter_Interpreter.stringifyTokenIdentifier(name1));
 			return little_interpreter_Interpreter.createObject(obj.value);
 		} else {
 			return new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,null,type != null ? type : little_parser_ParserTokens.NullValue,null,null,null,little_interpreter_memory_MemoryTree.get_object(memory));
@@ -2730,28 +2683,16 @@ little_interpreter_Interpreter.createObject = function(exp,memory) {
 		var name = exp.name;
 		var params = exp.params;
 		var type1 = exp.type;
-		var access1 = null;
-		access1 = function(object,prop,objName) {
-			if(prop._hx_index == 14) {
-				var _g = prop.name;
-				var property = prop.property;
-				objName += "" + little_Keywords.PROPERTY_ACCESS_SIGN + little_interpreter_Interpreter.stringifyTokenValue(prop);
-				if(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenValue(prop)) == null) {
-					little_interpreter_Interpreter.evaluate(little_parser_ParserTokens.ErrorMessage("Unable to create `" + objName + little_Keywords.PROPERTY_ACCESS_SIGN + little_interpreter_Interpreter.stringifyTokenIdentifier(property) + "`: `" + objName + "` Does not contain property `" + little_interpreter_Interpreter.stringifyTokenIdentifier(property) + "`."));
-					return new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,null,type1 != null ? type1 : little_parser_ParserTokens.NullValue,null,null,null,little_interpreter_memory_MemoryTree.get_object(memory));
-				}
-				return access1(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenValue(prop)),property,objName);
-			} else {
-				if(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop)) == null) {
-					little_interpreter_memory_MemoryTree.set(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop),new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,Type.enumParameters(params)[0],type1 != null ? type1 : little_parser_ParserTokens.NullValue,null,null,null,object));
-				}
-				return little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop));
+		var access1 = function(object,prop,objName) {
+			if(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop)) == null) {
+				little_interpreter_memory_MemoryTree.set(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop),new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,Type.enumParameters(params)[0],type1 != null ? type1 : little_parser_ParserTokens.NullValue,null,null,null,object));
 			}
+			return little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop));
 		};
 		if(name._hx_index == 14) {
 			var name1 = name.name;
 			var property = name.property;
-			var obj = access1(little_interpreter_memory_MemoryTree.get(memory,little_interpreter_Interpreter.stringifyTokenValue(name1)),property,little_interpreter_Interpreter.stringifyTokenValue(name1));
+			var obj = access1(little_interpreter_Interpreter.createObject(name1),property,little_interpreter_Interpreter.stringifyTokenIdentifier(name1));
 			return little_interpreter_Interpreter.createObject(obj.value);
 		} else {
 			return new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,Type.enumParameters(params)[0],type1 != null ? type1 : little_parser_ParserTokens.NullValue,null,null,null,little_interpreter_memory_MemoryTree.get_object(memory));
@@ -2795,10 +2736,8 @@ little_interpreter_Interpreter.createObject = function(exp,memory) {
 			little_interpreter_Interpreter.evaluate(little_parser_ParserTokens.ErrorMessage("Unable to access property `" + str + little_Keywords.PROPERTY_ACCESS_SIGN + prop + "` - No Such Variable: `" + str + "`"));
 		}
 		var obj = little_interpreter_memory_MemoryTree.get(memory,str);
-		var access2 = null;
-		access2 = function(object,prop,objName) {
-			switch(prop._hx_index) {
-			case 9:
+		var access2 = function(object,prop,objName) {
+			if(prop._hx_index == 9) {
 				var name = prop.name;
 				var params = prop.params;
 				if(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenValue(name)) == null) {
@@ -2806,16 +2745,7 @@ little_interpreter_Interpreter.createObject = function(exp,memory) {
 					return null;
 				}
 				return new little_interpreter_memory_MemoryObject(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenValue(name)).use(params),null,null,null,null,null,null,little_interpreter_memory_MemoryTree.get_object(memory));
-			case 14:
-				var _g = prop.name;
-				var property = prop.property;
-				objName += "" + little_Keywords.PROPERTY_ACCESS_SIGN + little_interpreter_Interpreter.stringifyTokenValue(prop);
-				if(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenValue(prop)) == null) {
-					little_interpreter_Interpreter.evaluate(little_parser_ParserTokens.ErrorMessage("Unable to access `" + objName + little_Keywords.PROPERTY_ACCESS_SIGN + little_interpreter_Interpreter.stringifyTokenIdentifier(property) + "`: `" + objName + "` Does not contain property `" + little_interpreter_Interpreter.stringifyTokenIdentifier(property) + "`."));
-					return null;
-				}
-				return access2(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenValue(prop)),property,objName);
-			default:
+			} else {
 				if(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop)) == null) {
 					little_interpreter_memory_MemoryTree.set(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop),new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,null,null,null,null,null,object));
 				}
@@ -2844,7 +2774,7 @@ little_interpreter_Interpreter.createObject = function(exp,memory) {
 	case 24:case 25:
 		return new little_interpreter_memory_MemoryObject(exp,null,null,little_parser_ParserTokens.Identifier(little_Keywords.TYPE_BOOLEAN),null,null,null,little_interpreter_memory_MemoryTree.get_object(memory));
 	default:
-		haxe_Log.trace("Unable to create memory object from " + Std.string(exp) + ". Returning null.",{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 649, className : "little.interpreter.Interpreter", methodName : "createObject"});
+		haxe_Log.trace("Unable to create memory object from " + Std.string(exp) + ". Returning null.",{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 573, className : "little.interpreter.Interpreter", methodName : "createObject"});
 	}
 	return null;
 };
@@ -3078,9 +3008,9 @@ little_interpreter_Interpreter.evaluateExpressionParts = function(parts,memory) 
 	while(_g < parts.length) {
 		var token = parts[_g];
 		++_g;
-		haxe_Log.trace(token,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 784, className : "little.interpreter.Interpreter", methodName : "evaluateExpressionParts"});
+		haxe_Log.trace(token,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 708, className : "little.interpreter.Interpreter", methodName : "evaluateExpressionParts"});
 		var val = little_interpreter_Interpreter.evaluate(token);
-		haxe_Log.trace(val,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 786, className : "little.interpreter.Interpreter", methodName : "evaluateExpressionParts"});
+		haxe_Log.trace(val,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 710, className : "little.interpreter.Interpreter", methodName : "evaluateExpressionParts"});
 		switch(val._hx_index) {
 		case 15:
 			var sign = val.sign;
@@ -4308,7 +4238,8 @@ little_parser_Parser.mergePropertyOperations = function(pre) {
 	}
 	var post = [];
 	var i = 0;
-	while(i <= pre.length - 1) {
+	haxe_Log.trace(pre,{ fileName : "src/little/parser/Parser.hx", lineNumber : 461, className : "little.parser.Parser", methodName : "mergePropertyOperations"});
+	while(i < pre.length) {
 		var token = pre[i];
 		switch(token._hx_index) {
 		case 0:
@@ -4370,26 +4301,34 @@ little_parser_Parser.mergePropertyOperations = function(pre) {
 			break;
 		case 15:
 			if(token.sign == little_Keywords.PROPERTY_ACCESS_SIGN == true) {
-				if(i-- <= 0) {
+				if(post.length == 0) {
 					little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("Property access cut off by the start of file, block or expression."),"Parser");
 					return null;
 				}
-				var lookbehind = pre[i];
-				switch(lookbehind._hx_index) {
-				case 0:
-					var _g = lookbehind.line;
-					little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("Property access cut off by the start of a line, or by a line split (; or ,)."),"Parser");
-					return null;
-				case 1:
-					little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("Property access cut off by the start of a line, or by a line split (; or ,)."),"Parser");
-					return null;
-				case 15:
-					var s = lookbehind.sign;
-					little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("Cannot access the property of a sign (" + s + "). Was the property access cut off by accident?"));
-					return null;
-				default:
-					var field = post.pop();
+				var lookbehind = post.pop();
+				haxe_Log.trace(lookbehind,{ fileName : "src/little/parser/Parser.hx", lineNumber : 474, className : "little.parser.Parser", methodName : "mergePropertyOperations"});
+				if(lookbehind == null) {
+					var field = pre[++i];
+					haxe_Log.trace(little_parser_ParserTokens.PropertyAccess(lookbehind,field),{ fileName : "src/little/parser/Parser.hx", lineNumber : 486, className : "little.parser.Parser", methodName : "mergePropertyOperations"});
 					post.push(little_parser_ParserTokens.PropertyAccess(lookbehind,field));
+				} else {
+					switch(lookbehind._hx_index) {
+					case 0:
+						var _g = lookbehind.line;
+						little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("Property access cut off by the start of a line, or by a line split (; or ,)."),"Parser");
+						return null;
+					case 1:
+						little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("Property access cut off by the start of a line, or by a line split (; or ,)."),"Parser");
+						return null;
+					case 15:
+						var s = lookbehind.sign;
+						little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("Cannot access the property of a sign (" + s + "). Was the property access cut off by accident?"));
+						return null;
+					default:
+						var field1 = pre[++i];
+						haxe_Log.trace(little_parser_ParserTokens.PropertyAccess(lookbehind,field1),{ fileName : "src/little/parser/Parser.hx", lineNumber : 486, className : "little.parser.Parser", methodName : "mergePropertyOperations"});
+						post.push(little_parser_ParserTokens.PropertyAccess(lookbehind,field1));
+					}
 				}
 			} else {
 				post.push(token);
@@ -4398,7 +4337,7 @@ little_parser_Parser.mergePropertyOperations = function(pre) {
 		default:
 			post.push(token);
 		}
-		--i;
+		++i;
 	}
 	little_parser_Parser.resetLines();
 	return post;
