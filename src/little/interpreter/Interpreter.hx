@@ -358,7 +358,8 @@ class Interpreter {
             case Identifier(word): getValueType(evaluate(Read(token)));
             case External(_) | ExternalCondition(_): Identifier(TYPE_DYNAMIC);
             case TypeDeclaration(_, type): evaluate(type);
-            case _: getValueType(evaluate(token));
+            case ErrorMessage(msg): Identifier(TYPE_DYNAMIC);
+            case _: trace(token); getValueType(evaluate(token));
         }
     }
 

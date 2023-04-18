@@ -54,7 +54,7 @@ abstract MemoryTree(MemoryTreeBase) {
 			} else { // non-static function, here we start maneuvering...
                 var value = External(params -> {
 					params = {
-						var p = [];
+						var p = [this.obj.value, SplitLine];
 						for (a in params) {
 							p.push(a);
 							p.push(SplitLine);
@@ -62,7 +62,10 @@ abstract MemoryTree(MemoryTreeBase) {
 						p.pop();
 						p;
 					}
-                    return field.use(PartArray([this.obj.value, SplitLine].concat(params)));
+					field.parent = object; // First, make the action use the actual value instead of the class
+					var v = field.use(PartArray(params)); // Call the function
+					field.parent = field; // Now, reset the parent for correct parent-child connection :)
+                    return v;
                 });
                 return new MemoryObject(value, null, {var copy = field.params != null ? field.params.copy() : [null]; copy.shift(); copy;}, null, true, false, false);
             }

@@ -27,7 +27,7 @@ class MemoryObject {
 
     @:optional public var parent:MemoryObject;
 
-    public var value(default, set):ParserTokens = NullValue;
+    @:optional public var value(default, set):ParserTokens = NullValue;
 
     function set_value(val:ParserTokens) {
         var t = Interpreter.getValueType(val);
@@ -78,6 +78,7 @@ class MemoryObject {
         this.props = new MemoryTree(this);
         this.parent = parent != null ? parent : this; //Interesting solution
         this.props.concat(defaultProperties);
+        trace(this.type);
 
         objects.push(this);
     }

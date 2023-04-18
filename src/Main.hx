@@ -44,8 +44,15 @@ class Main {
 		while (true) {
 			Sys.print("  >> ");
 			var input = Sys.stdin().readLine();
-			Little.run(input, true);
-			trace(Runtime.stdout);
+			try {
+				Little.run(input, true);
+				trace(Runtime.stdout);
+			} catch (e) {
+				trace(Lexer.lex(input));
+				trace(PrettyPrinter.printParserAst(Parser.parse(Lexer.lex(input))));
+				trace(e.details());
+				trace(Runtime.stdout);
+			}
 		}
 
 		//trace(Reflect.callMethod("hey", "hey".charAt, [0]));

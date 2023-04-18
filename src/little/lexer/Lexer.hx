@@ -34,6 +34,10 @@ class Lexer {
                 }
                 i--;
                 if (num == ".") tokens.push(Sign("."))
+                else if (num.endsWith(".")) {
+                    tokens.push(Number(num.replaceLast(".", "")));
+                    tokens.push(Sign("."));
+                }
                 else tokens.push(Number(num));
                 
             } else if (char == "\n") {
