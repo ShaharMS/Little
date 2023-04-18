@@ -74,7 +74,8 @@ class PrepareRun {
     public static function addFunctions() {
 
         Little.plugin.registerFunction(PRINT_FUNCTION_NAME, null, [Variable(Identifier("item"), null)], (params) -> {
-            Runtime.print(Interpreter.stringifyTokenValue(Interpreter.evaluate(params[0])));
+            var t = if (params[0].getParameters()[0].length == 1) params[0].getParameters()[0][0] else params[0];
+            Runtime.print(Interpreter.stringifyTokenValue(Interpreter.evaluate(t)));
             return NullValue;
         });
         Little.plugin.registerFunction(RAISE_ERROR_FUNCTION_NAME, null, [Variable(Identifier("message"), null)], (params) -> {

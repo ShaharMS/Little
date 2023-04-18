@@ -67,7 +67,7 @@ abstract MemoryTree(MemoryTreeBase) {
                 return new MemoryObject(value, null, {var copy = field.params != null ? field.params.copy() : [null]; copy.shift(); copy;}, null, true, false, false);
             }
         }
-
+		trace("cant find property " + name + 'on val ${object.value}');
         return null;
     }
 

@@ -355,7 +355,7 @@ class Interpreter {
             case NullValue: Identifier(TYPE_DYNAMIC);
             case TrueValue: Identifier(TYPE_BOOLEAN);
             case FalseValue: Identifier(TYPE_BOOLEAN);
-            case Identifier(word): token;
+            case Identifier(word): getValueType(evaluate(Read(token)));
             case External(_) | ExternalCondition(_): Identifier(TYPE_DYNAMIC);
             case TypeDeclaration(_, type): evaluate(type);
             case _: getValueType(evaluate(token));
@@ -376,12 +376,12 @@ class Interpreter {
                 var returnVal = runTokens(body, currentConfig.prioritizeVariableDeclarations, currentConfig.prioritizeFunctionDeclarations, currentConfig.strictTyping);
                 return accessObject(evaluate(returnVal));
             }
-            case Number(_): return new MemoryObject(exp, null, null, Identifier(TYPE_INT));
-            case Decimal(_): return new MemoryObject(exp, null, null, Identifier(TYPE_FLOAT));
-            case Characters(_): return new MemoryObject(exp, null, null, Identifier(TYPE_STRING));
-            case Sign(_): return new MemoryObject(exp, null, null, Identifier(TYPE_SIGN));
-            case TrueValue | FalseValue: return new MemoryObject(exp, null, null, Identifier(TYPE_BOOLEAN));
-            case NullValue: return new MemoryObject(exp, null, null, Identifier(TYPE_VOID));
+            case Number(_): return new MemoryObject(exp, null, null, Identifier(TYPE_INT), memory.object);
+            case Decimal(_): return new MemoryObject(exp, null, null, Identifier(TYPE_FLOAT), memory.object);
+            case Characters(_): return new MemoryObject(exp, null, null, Identifier(TYPE_STRING), memory.object);
+            case Sign(_): return new MemoryObject(exp, null, null, Identifier(TYPE_SIGN), memory.object);
+            case TrueValue | FalseValue: return new MemoryObject(exp, null, null, Identifier(TYPE_BOOLEAN), memory.object);
+            case NullValue: return new MemoryObject(exp, null, null, Identifier(TYPE_DYNAMIC), memory.object);
             case Identifier(word): {
                 evaluate(if (memory.get(word) != null) memory.get(word).value else ErrorMessage('No Such Variable: `$word`'));
                 return memory.get(word);
@@ -523,12 +523,12 @@ class Interpreter {
                 var returnVal = runTokens(body, currentConfig.prioritizeVariableDeclarations, currentConfig.prioritizeFunctionDeclarations, currentConfig.strictTyping);
                 return createObject(evaluate(returnVal));
             }
-            case Number(_): return new MemoryObject(exp, null, null, Identifier(TYPE_INT));
-            case Decimal(_): return new MemoryObject(exp, null, null, Identifier(TYPE_FLOAT));
-            case Characters(_): return new MemoryObject(exp, null, null, Identifier(TYPE_STRING));
-            case Sign(_): return new MemoryObject(exp, null, null, Identifier(TYPE_SIGN));
-            case TrueValue | FalseValue: return new MemoryObject(exp, null, null, Identifier(TYPE_BOOLEAN));
-            case NullValue: return new MemoryObject(exp, null, null, Identifier(TYPE_VOID));
+            case Number(_): return new MemoryObject(exp, null, null, Identifier(TYPE_INT), memory.object);
+            case Decimal(_): return new MemoryObject(exp, null, null, Identifier(TYPE_FLOAT), memory.object);
+            case Characters(_): return new MemoryObject(exp, null, null, Identifier(TYPE_STRING), memory.object);
+            case Sign(_): return new MemoryObject(exp, null, null, Identifier(TYPE_SIGN), memory.object);
+            case TrueValue | FalseValue: return new MemoryObject(exp, null, null, Identifier(TYPE_BOOLEAN), memory.object);
+            case NullValue: return new MemoryObject(exp, null, null, Identifier(TYPE_VOID), memory.object);
             case Identifier(word): {
                 var value = evaluate(if (memory.get(word) != null) memory.get(word).value else ErrorMessage('No Such Variable: `$word`'));
                 return createObject(value);
