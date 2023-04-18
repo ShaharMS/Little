@@ -49,7 +49,10 @@ abstract MemoryTree(MemoryTreeBase) {
 			var fieldNameIdentifier:ParserTokens = valField.getParameters()[0];
 			var fieldName:String = fieldNameIdentifier.getParameters()[0];
 			if (fieldName.charAt(fieldName.length - 1) == " ") {
+				field.parent = object;
 				var value = field.use(PartArray([this.obj.value]));
+				field.parent = field;
+				trace(value);
 				return Interpreter.createObject(value);
 			} else { // non-static function, here we start maneuvering...
                 var value = External(params -> {

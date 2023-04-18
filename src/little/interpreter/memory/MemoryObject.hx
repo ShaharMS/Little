@@ -77,8 +77,6 @@ class MemoryObject {
         this.nonStatic = nonStatic == null ? true : nonStatic;
         this.props = new MemoryTree(this);
         this.parent = parent != null ? parent : this; //Interesting solution
-        this.props.concat(defaultProperties);
-        trace(this.type);
 
         objects.push(this);
     }
