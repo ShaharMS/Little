@@ -398,28 +398,14 @@ class Interpreter {
             }
             case Variable(name, type): {
                 function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
-                    switch prop {
-                        case PropertyAccess(_, property): {
-                            objName += '$PROPERTY_ACCESS_SIGN${stringifyTokenValue(prop)}';
-                            // trace(object, stringifyTokenValue(prop), property);
-                            if (object.props.get(stringifyTokenValue(prop)) == null) {
-                                // We can already know that object.name.property is null
-                                evaluate(ErrorMessage('Unable to create `$objName$PROPERTY_ACCESS_SIGN${stringifyTokenIdentifier(property)}`: `$objName` Does not contain property `${stringifyTokenIdentifier(property)}`.'));
-                                return null;
-                            }
-                            return access(object.props.get(stringifyTokenValue(prop)), property, objName);
-                        }
-                        case _: {
-                            if (object.props.get(stringifyTokenIdentifier(prop)) == null) {
-                                object.props.set(stringifyTokenIdentifier(prop), new MemoryObject(NullValue, type, object));
-                            }
-                            return object.props.get(stringifyTokenIdentifier(prop));
-                        }
+                    if (object.props.get(stringifyTokenIdentifier(prop)) == null) {
+                        object.props.set(stringifyTokenIdentifier(prop), new MemoryObject(NullValue, type, object));
                     }
+                    return object.props.get(stringifyTokenIdentifier(prop));
                 }
                 switch name {
                     case PropertyAccess(name, property): {
-                        var obj = access(memory.get(stringifyTokenValue(name)), property, stringifyTokenValue(name));
+                        var obj = access(accessObject(name), property, stringifyTokenIdentifier(name));
                         return obj;
                     }
                     case _: {
@@ -430,28 +416,14 @@ class Interpreter {
             }
             case Function(name, params, type): {
                 function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
-                    switch prop {
-                        case PropertyAccess(_, property): {
-                            objName += '$PROPERTY_ACCESS_SIGN${stringifyTokenValue(prop)}';
-                            // trace(object, stringifyTokenValue(prop), property);
-                            if (object.props.get(stringifyTokenValue(prop)) == null) {
-                                // We can already know that object.name.property is null
-                                evaluate(ErrorMessage('Unable to create `$objName$PROPERTY_ACCESS_SIGN${stringifyTokenIdentifier(property)}`: `$objName` Does not contain property `${stringifyTokenIdentifier(property)}`.'));
-                                return null;
-                            }
-                            return access(object.props.get(stringifyTokenValue(prop)), property, objName);
-                        }
-                        case _: {
-                            if (object.props.get(stringifyTokenIdentifier(prop)) == null) {
-                                object.props.set(stringifyTokenIdentifier(prop), new MemoryObject(NullValue, null, params.getParameters()[0], type != null ? type : NullValue, object));
-                            }
-                            return object.props.get(stringifyTokenIdentifier(prop));
-                        }
+                    if (object.props.get(stringifyTokenIdentifier(prop)) == null) {
+                        object.props.set(stringifyTokenIdentifier(prop), new MemoryObject(NullValue, null, params.getParameters()[0], type != null ? type : NullValue, object));
                     }
+                    return object.props.get(stringifyTokenIdentifier(prop));
                 }
                 switch name {
                     case PropertyAccess(name, property): {
-                        var obj = access(memory.get(stringifyTokenValue(name)), property, stringifyTokenValue(name));
+                        var obj = access(accessObject(name), property, stringifyTokenIdentifier(name));
                         return obj;
                     }
                     case _: {
@@ -469,16 +441,6 @@ class Interpreter {
                 if (obj == null) evaluate(ErrorMessage('Unable to access property `$str$PROPERTY_ACCESS_SIGN$prop`: No Such Variable: `$str`'));
                 function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
                     switch prop {
-                        case PropertyAccess(_, property): {
-                            objName += '$PROPERTY_ACCESS_SIGN${stringifyTokenValue(prop)}';
-                            // trace(object, stringifyTokenValue(prop), property);
-                            if (object.props.get(stringifyTokenValue(prop)) == null) {
-                                // We can already know that object.name.property is null
-                                evaluate(ErrorMessage('Unable to access `$objName$PROPERTY_ACCESS_SIGN${stringifyTokenIdentifier(property)}`: `$objName` Does not contain property `${stringifyTokenIdentifier(property)}`.'));
-                                return null;
-                            }
-                            return access(object.props.get(stringifyTokenValue(prop)), property, objName);
-                        }
                         case FunctionCall(name, params): {
                             if (object.props.get(stringifyTokenValue(name)) == null) {
                                 evaluate(ErrorMessage('Unable to call `$objName$PROPERTY_ACCESS_SIGN${stringifyTokenValue(name)}(${stringifyTokenValue(params)})`: `$objName` Does not contain property `${stringifyTokenIdentifier(name)}`.'));
@@ -546,28 +508,14 @@ class Interpreter {
             }
             case Variable(name, type): {
                 function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
-                    switch prop {
-                        case PropertyAccess(_, property): {
-                            objName += '$PROPERTY_ACCESS_SIGN${stringifyTokenValue(prop)}';
-                            // trace(object, stringifyTokenValue(prop), property);
-                            if (object.props.get(stringifyTokenValue(prop)) == null) {
-                                // We can already know that object.name.property is null
-                                evaluate(ErrorMessage('Unable to create `$objName$PROPERTY_ACCESS_SIGN${stringifyTokenIdentifier(property)}`: `$objName` Does not contain property `${stringifyTokenIdentifier(property)}`.'));
-                                return new MemoryObject(NullValue, type != null ? type : NullValue, memory.object);
-                            }
-                            return access(object.props.get(stringifyTokenValue(prop)), property, objName);
-                        }
-                        case _: {
-                            if (object.props.get(stringifyTokenIdentifier(prop)) == null) {
-                                object.props.set(stringifyTokenIdentifier(prop), new MemoryObject(NullValue, type != null ? type : NullValue, object));
-                            }
-                            return object.props.get(stringifyTokenIdentifier(prop));
-                        }
+                    if (object.props.get(stringifyTokenIdentifier(prop)) == null) {
+                        object.props.set(stringifyTokenIdentifier(prop), new MemoryObject(NullValue, type != null ? type : NullValue, object));
                     }
+                    return object.props.get(stringifyTokenIdentifier(prop));
                 }
                 switch name {
                     case PropertyAccess(name, property): {
-                        var obj = access(memory.get(stringifyTokenValue(name)), property, stringifyTokenValue(name));
+                        var obj = access(createObject(name), property, stringifyTokenIdentifier(name));
                         return createObject(obj.value); // Counter intuitive, but consistency is more important
                     }
                     case _: {
@@ -577,28 +525,14 @@ class Interpreter {
             }
             case Function(name, params, type): {
                 function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
-                    switch prop {
-                        case PropertyAccess(_, property): {
-                            objName += '$PROPERTY_ACCESS_SIGN${stringifyTokenValue(prop)}';
-                            // trace(object, stringifyTokenValue(prop), property);
-                            if (object.props.get(stringifyTokenValue(prop)) == null) {
-                                // We can already know that object.name.property is null
-                                evaluate(ErrorMessage('Unable to create `$objName$PROPERTY_ACCESS_SIGN${stringifyTokenIdentifier(property)}`: `$objName` Does not contain property `${stringifyTokenIdentifier(property)}`.'));
-                                return new MemoryObject(NullValue, type != null ? type : NullValue, memory.object);
-                            }
-                            return access(object.props.get(stringifyTokenValue(prop)), property, objName);
-                        }
-                        case _: {
-                            if (object.props.get(stringifyTokenIdentifier(prop)) == null) {
-                                object.props.set(stringifyTokenIdentifier(prop), new MemoryObject(NullValue, null, params.getParameters()[0], type != null ? type : NullValue, object));
-                            }
-                            return object.props.get(stringifyTokenIdentifier(prop));
-                        }
+                    if (object.props.get(stringifyTokenIdentifier(prop)) == null) {
+                        object.props.set(stringifyTokenIdentifier(prop), new MemoryObject(NullValue, null, params.getParameters()[0], type != null ? type : NullValue, object));
                     }
+                    return object.props.get(stringifyTokenIdentifier(prop));
                 }
                 switch name {
                     case PropertyAccess(name, property): {
-                        var obj = access(memory.get(stringifyTokenValue(name)), property, stringifyTokenValue(name));
+                        var obj = access(createObject(name), property, stringifyTokenIdentifier(name));
                         return createObject(obj.value);
                     }
                     case _: {
@@ -614,16 +548,6 @@ class Interpreter {
                 var obj = memory.get(str);
                 function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
                     switch prop {
-                        case PropertyAccess(_, property): {
-                            objName += '$PROPERTY_ACCESS_SIGN${stringifyTokenValue(prop)}';
-                            // trace(object, stringifyTokenValue(prop), property);
-                            if (object.props.get(stringifyTokenValue(prop)) == null) {
-                                // We can already know that object.name.property is null
-                                evaluate(ErrorMessage('Unable to access `$objName$PROPERTY_ACCESS_SIGN${stringifyTokenIdentifier(property)}`: `$objName` Does not contain property `${stringifyTokenIdentifier(property)}`.'));
-                                return null;
-                            }
-                            return access(object.props.get(stringifyTokenValue(prop)), property, objName);
-                        }
                         case FunctionCall(name, params): {
                             if (object.props.get(stringifyTokenValue(name)) == null) {
                                 evaluate(ErrorMessage('Unable to call `$objName$PROPERTY_ACCESS_SIGN${stringifyTokenValue(name)}(${stringifyTokenValue(params)})`: `$objName` Does not contain property `${stringifyTokenIdentifier(name)}`.'));

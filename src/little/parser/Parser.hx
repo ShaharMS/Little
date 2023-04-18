@@ -415,8 +415,7 @@ class Parser {
 
         var i = 0;
         while (i < pre.length) {
-            // Todo: Bandage, should return to thus later to figure out why token can be null
-            if (pre[i] == null) {i++; continue;}
+
             var token = pre[i];
             switch token {
                 case SetLine(line): {setLine(line); post.push(token);}
@@ -458,18 +457,21 @@ class Parser {
 
         var post:Array<ParserTokens> = [];
 
-        var i = pre.length - 1;
-        while (i >= 0) {
+        var i = 0;
+        trace(pre);
+        while (i < pre.length) {
+
             var token = pre[i];
             switch token {
-                case SetLine(line): {setLine(line); post.unshift(token);}
-                case SplitLine: {nextPart(); post.unshift(token);}
+                case SetLine(line): {setLine(line); post.push(token);}
+                case SplitLine: {nextPart(); post.push(token);}
                 case Sign(_ == PROPERTY_ACCESS_SIGN => true): {
-                    if (i-- <= 0) {
+                    if (post.length == 0) {
                         Runtime.throwError(ErrorMessage("Property access cut off by the start of file, block or expression."), Layer.PARSER);
                         return null;
                     }
-                    var lookbehind = pre[i];
+                    var lookbehind = post.pop();
+                    trace(lookbehind);
                     switch lookbehind {
                         case SplitLine | SetLine(_): {
                             Runtime.throwError(ErrorMessage("Property access cut off by the start of a line, or by a line split (; or ,)."), Layer.PARSER);
@@ -480,23 +482,24 @@ class Parser {
                             return null;
                         }
                         case _: {
-                            var field = post.shift();
-                            post.unshift(PropertyAccess(lookbehind, field));
+                            var field = pre[++i];
+                            trace(PropertyAccess(lookbehind, field));
+                            post.push(PropertyAccess(lookbehind, field));
                         }
                     }
                 }
-                case Block(body, type): post.unshift(Block(mergePropertyOperations(body), type));
-                case Expression(parts, type): post.unshift(Expression(mergePropertyOperations(parts), type));
-                case Variable(name, type): post.unshift(Variable(mergePropertyOperations(if (name.getName() == "PartArray") name.getParameters()[0] else [name])[0], type));
-                case Function(name, params, type): post.unshift(Function(mergePropertyOperations(if (name.getName() == "PartArray") name.getParameters()[0] else [name])[0], mergePropertyOperations([params])[0], type));
-                case Condition(name, exp, body, type): post.unshift(Condition(mergePropertyOperations([name])[0], mergePropertyOperations([exp])[0], mergePropertyOperations([body])[0], type));
-                case Return(value, type): post.unshift(Return(mergePropertyOperations([value])[0], type));
-                case PartArray(parts): post.unshift(PartArray(mergePropertyOperations(parts)));
-                case FunctionCall(name, params): post.unshift(FunctionCall(mergePropertyOperations([name])[0], mergePropertyOperations([params])[0]));
-                case Write(assignees, value, type): post.unshift(Write(mergePropertyOperations(assignees), mergePropertyOperations([value])[0], type));
-                case _: post.unshift(token);
+                case Block(body, type): post.push(Block(mergePropertyOperations(body), type));
+                case Expression(parts, type): post.push(Expression(mergePropertyOperations(parts), type));
+                case Variable(name, type): post.push(Variable(mergePropertyOperations(if (name.getName() == "PartArray") name.getParameters()[0] else [name])[0], type));
+                case Function(name, params, type): post.push(Function(mergePropertyOperations(if (name.getName() == "PartArray") name.getParameters()[0] else [name])[0], mergePropertyOperations([params])[0], type));
+                case Condition(name, exp, body, type): post.push(Condition(mergePropertyOperations([name])[0], mergePropertyOperations([exp])[0], mergePropertyOperations([body])[0], type));
+                case Return(value, type): post.push(Return(mergePropertyOperations([value])[0], type));
+                case PartArray(parts): post.push(PartArray(mergePropertyOperations(parts)));
+                case FunctionCall(name, params): post.push(FunctionCall(mergePropertyOperations([name])[0], mergePropertyOperations([params])[0]));
+                case Write(assignees, value, type): post.push(Write(mergePropertyOperations(assignees), mergePropertyOperations([value])[0], type));
+                case _: post.push(token);
             }
-            i--;
+            i++;
         }
 
         resetLines();

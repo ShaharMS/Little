@@ -4224,10 +4224,6 @@ little_parser_Parser.mergeCalls = function(pre) {
 	var post = [];
 	var i = 0;
 	while(i < pre.length) {
-		if(pre[i] == null) {
-			++i;
-			continue;
-		}
 		var token = pre[i];
 		switch(token._hx_index) {
 		case 0:
@@ -4311,66 +4307,66 @@ little_parser_Parser.mergePropertyOperations = function(pre) {
 		return null;
 	}
 	var post = [];
-	var i = pre.length - 1;
-	while(i >= 0) {
+	var i = 0;
+	while(i <= pre.length - 1) {
 		var token = pre[i];
 		switch(token._hx_index) {
 		case 0:
 			var line = token.line;
 			little_parser_Parser.setLine(line);
-			post.unshift(token);
+			post.push(token);
 			break;
 		case 1:
 			little_parser_Parser.nextPart();
-			post.unshift(token);
+			post.push(token);
 			break;
 		case 2:
 			var name = token.name;
 			var type = token.type;
-			post.unshift(little_parser_ParserTokens.Variable(little_parser_Parser.mergePropertyOperations($hxEnums[name.__enum__].__constructs__[name._hx_index]._hx_name == "PartArray" ? Type.enumParameters(name)[0] : [name])[0],type));
+			post.push(little_parser_ParserTokens.Variable(little_parser_Parser.mergePropertyOperations($hxEnums[name.__enum__].__constructs__[name._hx_index]._hx_name == "PartArray" ? Type.enumParameters(name)[0] : [name])[0],type));
 			break;
 		case 3:
 			var name1 = token.name;
 			var params = token.params;
 			var type1 = token.type;
-			post.unshift(little_parser_ParserTokens.Function(little_parser_Parser.mergePropertyOperations($hxEnums[name1.__enum__].__constructs__[name1._hx_index]._hx_name == "PartArray" ? Type.enumParameters(name1)[0] : [name1])[0],little_parser_Parser.mergePropertyOperations([params])[0],type1));
+			post.push(little_parser_ParserTokens.Function(little_parser_Parser.mergePropertyOperations($hxEnums[name1.__enum__].__constructs__[name1._hx_index]._hx_name == "PartArray" ? Type.enumParameters(name1)[0] : [name1])[0],little_parser_Parser.mergePropertyOperations([params])[0],type1));
 			break;
 		case 4:
 			var name2 = token.name;
 			var exp = token.exp;
 			var body = token.body;
 			var type2 = token.type;
-			post.unshift(little_parser_ParserTokens.Condition(little_parser_Parser.mergePropertyOperations([name2])[0],little_parser_Parser.mergePropertyOperations([exp])[0],little_parser_Parser.mergePropertyOperations([body])[0],type2));
+			post.push(little_parser_ParserTokens.Condition(little_parser_Parser.mergePropertyOperations([name2])[0],little_parser_Parser.mergePropertyOperations([exp])[0],little_parser_Parser.mergePropertyOperations([body])[0],type2));
 			break;
 		case 6:
 			var assignees = token.assignees;
 			var value = token.value;
 			var type3 = token.type;
-			post.unshift(little_parser_ParserTokens.Write(little_parser_Parser.mergePropertyOperations(assignees),little_parser_Parser.mergePropertyOperations([value])[0],type3));
+			post.push(little_parser_ParserTokens.Write(little_parser_Parser.mergePropertyOperations(assignees),little_parser_Parser.mergePropertyOperations([value])[0],type3));
 			break;
 		case 9:
 			var name3 = token.name;
 			var params1 = token.params;
-			post.unshift(little_parser_ParserTokens.FunctionCall(little_parser_Parser.mergePropertyOperations([name3])[0],little_parser_Parser.mergePropertyOperations([params1])[0]));
+			post.push(little_parser_ParserTokens.FunctionCall(little_parser_Parser.mergePropertyOperations([name3])[0],little_parser_Parser.mergePropertyOperations([params1])[0]));
 			break;
 		case 10:
 			var value1 = token.value;
 			var type4 = token.type;
-			post.unshift(little_parser_ParserTokens.Return(little_parser_Parser.mergePropertyOperations([value1])[0],type4));
+			post.push(little_parser_ParserTokens.Return(little_parser_Parser.mergePropertyOperations([value1])[0],type4));
 			break;
 		case 11:
 			var parts = token.parts;
 			var type5 = token.type;
-			post.unshift(little_parser_ParserTokens.Expression(little_parser_Parser.mergePropertyOperations(parts),type5));
+			post.push(little_parser_ParserTokens.Expression(little_parser_Parser.mergePropertyOperations(parts),type5));
 			break;
 		case 12:
 			var body1 = token.body;
 			var type6 = token.type;
-			post.unshift(little_parser_ParserTokens.Block(little_parser_Parser.mergePropertyOperations(body1),type6));
+			post.push(little_parser_ParserTokens.Block(little_parser_Parser.mergePropertyOperations(body1),type6));
 			break;
 		case 13:
 			var parts1 = token.parts;
-			post.unshift(little_parser_ParserTokens.PartArray(little_parser_Parser.mergePropertyOperations(parts1)));
+			post.push(little_parser_ParserTokens.PartArray(little_parser_Parser.mergePropertyOperations(parts1)));
 			break;
 		case 15:
 			if(token.sign == little_Keywords.PROPERTY_ACCESS_SIGN == true) {
@@ -4392,15 +4388,15 @@ little_parser_Parser.mergePropertyOperations = function(pre) {
 					little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("Cannot access the property of a sign (" + s + "). Was the property access cut off by accident?"));
 					return null;
 				default:
-					var field = post.shift();
-					post.unshift(little_parser_ParserTokens.PropertyAccess(lookbehind,field));
+					var field = post.pop();
+					post.push(little_parser_ParserTokens.PropertyAccess(lookbehind,field));
 				}
 			} else {
-				post.unshift(token);
+				post.push(token);
 			}
 			break;
 		default:
-			post.unshift(token);
+			post.push(token);
 		}
 		--i;
 	}
