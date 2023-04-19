@@ -44,3 +44,15 @@ Code blocks, represented by enclosing lines of code/expressions with (by default
 ```
 x = {define y = 0; y += 5; (6^2 * y)} //180
 ```
+
+### Consistency is key!
+
+everything is always consistent!
+```
+define consistent = 5
+define consistent.newPropertyDeclaration = 6
+
+action declaredJustLikeVariables(define parametersAreDefinedTheSame = 6) = {
+    print("Function Bodies are also assigned using `=`")
+}
+```
