@@ -16,7 +16,7 @@ Other than teaching, the language has a lot of benefits, some I already mentione
  - small bundle size
  - fast interpreter
  - Multilingual coding
- - interfaces with external H⁹axe code (Haxe transpiler only)
+ - interfaces with external Haxe code (Haxe transpiler only)
  - makes it easy to implement code interfacing in games
  - Understandable errors that actually explain what went wrong and where
  - easy and accurate access to runtime details & definition values
@@ -37,6 +37,43 @@ The resereved words' translations may change a bit across different languages to
 
 ## Language Features
 
+### Keyword & Standard Library Modification
+
+Want to change up the keywords to ones that are quicker to type?  
+Maybe even change everything up to a whole new language?
+
+#### You're Welcome!
+**Examples:**
+
+Alternative names:
+<table>
+    <tr>
+        <td>
+        define x = 3, x = x + 6<br>action getX() = {<br>&nbsp;&nbsp;&nbsp;&nbsp;return x<br>}<br>print(getX())
+        </td>
+        <td>
+        var x = 3, x = x + 6<br>fun getX() = {<br>&nbsp;&nbsp;&nbsp;&nbsp;ret x<br>}<br>log(getX())
+        </td>
+    </tr>
+</table>
+
+Different languages (English, Hebrew, Arabic):
+<table>
+    <tr>
+        <td>
+        define x = 3, x = x + 6<br>action getX() = {<br>&nbsp;&nbsp;&nbsp;&nbsp;return x<br>}<br>print(getX())
+        </td>
+        <td>
+        הגדר ס = 3, ס = ס + 6<br>פעולה קבל_ס() = {<br>&nbsp;&nbsp;&nbsp;&nbsp;החזר ס<br>}<br>הדפס(קבל_ס())
+        </td>
+        <td>
+        السياج ع = 3, ع = ع + 6<br>فعل يحصل_ع() = {<br>&nbsp;&nbsp;&nbsp;&nbsp;استرداد ع<br>}<br>مطبعة(يحصل_ع())
+        </td>
+    </tr>
+</table>
+
+---
+
 ### Everything can be a code block
 
 Code blocks, represented by enclosing lines of code/expressions with (by default) curly brackets, can be used for everything! From:
@@ -44,6 +81,8 @@ Code blocks, represented by enclosing lines of code/expressions with (by default
 ```
 x = {define y = 0; y += 5; (6^2 * y)} //180
 ```
+
+---
 
 ### Consistency is key!
 
@@ -55,4 +94,60 @@ define consistent.newPropertyDeclaration = 6
 action declaredJustLikeVariables(define parametersAreDefinedTheSame = 6) = {
     print("Function Bodies are also assigned using `=`")
 }
+
+for (define i from 0 to 1) {
+    print("And for loop variables are also declared like normal variables.");
+}
+```
+---
+
+## Examples
+
+### Define Variables & Functions
+```hx
+define hey = 3
+
+action getHey(define negative as Boolean) {
+    // if negative is false, negative.toNumber() is 0, and the positive is returned (hey - 0).
+    return hey - (hey * negative.toNumber() * 2) 
+}
+```
+
+### While Loops & If statements
+```hx
+define i = 0
+while (i <= 10) {
+    print(i) //0, 2, 4, 6, 8, 10
+    i = i + 2
+}
+
+if (i == 9) {
+    print("How?")
+}
+```
+
+### For Loops
+```hx
+for (define i from 0 to 4) {
+    print(i)
+}
+
+for (define j from 0 to 20 jump 5) {
+    print(j) //0, 5, 10, 15
+}
+```
+
+### Whenever & after events
+```hx
+define i = 2
+after (i >= 5) {
+    print("i is " + i + "!")
+}
+whenever (i >= 3) {
+    print("woah")
+}
+i = i + 1 //woah
+i = i + 1 //woah
+i = i + 1 //woah, i is 5!
+i = i + 1 //woah
 ```
