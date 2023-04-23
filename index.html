@@ -92,15 +92,11 @@ Ast
         console.log(textboxes.length);
         for (let i = 0; i < textboxes.length; i++) {
             let box = textboxes.item(i);
-            let rect = box.getBoundingClientRect();
-            console.log(box, rect);
             let button = document.createElement('button');
             
             button.textContent = "Collapse";
             box.parentElement.append(button);
             button.style.position = "absolute";
-            button.style.top = rect.top + 5 + "px";
-            button.style.left = `calc(${rect.right}px - ${button.getBoundingClientRect().width}px - 5px)`;
 
             button.onclick = () => {
                 console.log("click");
@@ -120,6 +116,7 @@ Ast
                 button.style.top = rect.top + 5 + "px";
                 button.style.left = `calc(${rect.right}px - ${button.getBoundingClientRect().width}px - 5px)`;
             }
+            button.adjust();
             buttons.push(button);
         }
 
