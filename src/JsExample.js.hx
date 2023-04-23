@@ -1,5 +1,6 @@
 package;
 
+import js.html.TextAreaElement;
 import js.html.Document;
 import little.interpreter.Runtime;
 import little.Little;
@@ -11,44 +12,20 @@ class JsExample {
     var d = Browser.document;
 
     public function new() {
-        d.body.innerHTML = '';
-        var input = d.createTextAreaElement();
-        input.placeholder = "Code here...";
-        input.id = "input";
-        var ast = d.createTextAreaElement();
-        ast.id = "output-parser";
-        var output = d.createTextAreaElement();
-        output.id = "output";
-        var div = d.createDivElement();
-        div.appendChild(input);
-        div.appendChild(output);
-        div.appendChild(ast);
-        
-        div.style.display = "flex";
-        div.style.flexDirection = "column";
-        
-        d.body.appendChild(div);
-        d.body.style.margin = d.body.style.padding = "0px";
-        
-        for (element in [input, output, ast]) {
-            element.style.height = "33vh";
-            element.style.width = "500px";
-            element.style.display = "inline-block";
-        }
-        output.wrap = ast.wrap = "off";
-        output.style.overflowX = ast.style.overflowX = "scroll";
-
-        input.innerHTML = 'define x = 3, print(x)';
-        input.onkeyup = function(_) {
+        var input:TextAreaElement = cast d.getElementById("input");
+        var ast:TextAreaElement = cast d.getElementById("ast");
+        var output:TextAreaElement = cast d.getElementById("output");
+        trace(input, ast, output);
+        input.addEventListener("keyup", function(_) {
 			try {
-				ast.innerHTML = little.tools.PrettyPrinter.printParserAst(little.parser.Parser.parse(little.lexer.Lexer.lex(input.value)));
+				ast.value = little.tools.PrettyPrinter.printParserAst(little.parser.Parser.parse(little.lexer.Lexer.lex(input.value)));
 			} catch (e) {}
 
 			try {
 				Little.run(input.value, true);
-				output.innerHTML = Runtime.stdout;
+				output.value = Runtime.stdout;
 			} catch (e) {}
-		}
+		});
 
         input.onkeydown = function (e) {
             if (e.key == 'Tab') {
@@ -63,7 +40,6 @@ class JsExample {
                 input.selectionStart = input.selectionEnd = start + 1;
             }
         }
-        input.onkeyup();
     }
 
 }

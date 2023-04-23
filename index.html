@@ -8,7 +8,7 @@
     <title>Document</title>
 </head>
 
-<body>
+<!-- <body>
     <h3>hey!</h3>
     <div style="display: flex; flex-direction: column; justify-content: center;">
         <div style="display: flex; flex-direction: row;">
@@ -34,6 +34,57 @@
         });
     </script>
     <script src="./interp.js"></script>
+</body> -->
+
+<body>
+    <script>document.body.innerHTML = ""</script>
+
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        #code-row {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        #ast:not(.collapsed), #output:not(.collapsed) {
+            overflow-x: scroll;
+        }
+        
+        div .collapsible {
+            height: 100%;
+            min-height: 5%;
+            width: 40vw;
+            resize: vertical;
+        }
+
+        div .collapsed {
+            height: 5%;
+            width: 40vw;
+            overflow-x: hidden;
+        }
+    </style>
+
+    <div id="code-row">
+        <textarea id="input" class="collapsible" title="Code" placeholder="Code here..." style="display:inline-block; white-space:pre-wrap;">
+define x = 3, x = x + 3
+print(x)
+        </textarea>
+        <textarea id="ast" class="collapsible" title="Abstract Syntax Tree" wrap="off" placeholder="
+Ast
+├─...">
+        </textarea>
+        <textarea id="output" class="collapsible" title="Output" placeholder="INTERPRETER: Module Main, Line..." wrap="off">
+        
+        </textarea>
+    </div>
+    <script src="./interp.js"></script>
+
 </body>
 
 </html>

@@ -74,49 +74,22 @@ HxOverrides.now = function() {
 };
 var JsExample = function() {
 	this.d = window.document;
-	this.d.body.innerHTML = "";
-	var input = this.d.createElement("textarea");
-	input.placeholder = "Code here...";
-	input.id = "input";
-	var ast = this.d.createElement("textarea");
-	ast.id = "output-parser";
-	var output = this.d.createElement("textarea");
-	output.id = "output";
-	var div = this.d.createElement("div");
-	div.appendChild(input);
-	div.appendChild(output);
-	div.appendChild(ast);
-	div.style.display = "flex";
-	div.style.flexDirection = "column";
-	this.d.body.appendChild(div);
-	this.d.body.style.margin = this.d.body.style.padding = "0px";
-	var element = input;
-	element.style.height = "33vh";
-	element.style.width = "500px";
-	element.style.display = "inline-block";
-	var element = output;
-	element.style.height = "33vh";
-	element.style.width = "500px";
-	element.style.display = "inline-block";
-	var element = ast;
-	element.style.height = "33vh";
-	element.style.width = "500px";
-	element.style.display = "inline-block";
-	output.wrap = ast.wrap = "off";
-	output.style.overflowX = ast.style.overflowX = "scroll";
-	input.innerHTML = "define x = 3, print(x)";
-	input.onkeyup = function(_) {
+	var input = this.d.getElementById("input");
+	var ast = this.d.getElementById("ast");
+	var output = this.d.getElementById("output");
+	haxe_Log.trace(input,{ fileName : "src/JsExample.js.hx", lineNumber : 18, className : "JsExample", methodName : "new", customParams : [ast,output]});
+	input.addEventListener("keyup",function(_) {
 		try {
 			var tmp = little_parser_Parser.parse(little_lexer_Lexer.lex(input.value));
-			ast.innerHTML = little_tools_PrettyPrinter.printParserAst(tmp);
+			ast.value = little_tools_PrettyPrinter.printParserAst(tmp);
 		} catch( _g ) {
 		}
 		try {
 			little_Little.run(input.value,true);
-			output.innerHTML = little_interpreter_Runtime.stdout;
+			output.value = little_interpreter_Runtime.stdout;
 		} catch( _g ) {
 		}
-	};
+	});
 	input.onkeydown = function(e) {
 		if(e.key == "Tab") {
 			e.preventDefault();
@@ -126,7 +99,6 @@ var JsExample = function() {
 			input.selectionStart = input.selectionEnd = start + 1;
 		}
 	};
-	input.onkeyup();
 };
 $hxClasses["JsExample"] = JsExample;
 JsExample.__name__ = "JsExample";
