@@ -69,6 +69,7 @@
         p .str .kwd,
         p .str .kwd1,
         p .str .type,
+        p .str .nums,
         p .str .func {
             color: #ff5e00
         }
@@ -76,6 +77,7 @@
         p .cmt,
         p .cmt .kwd,
         p .cmt .kwd1,
+        p .cmt .nums,
         p .cmt .str,
         p .cmt .type,
         p .cmt .func {
@@ -166,7 +168,10 @@
             font-family: monospace;
         }
 
-        #keywords input {}
+        #keywords input {
+            width: 100%; 
+            text-align: center;
+        }
     </style>
 
     <div id="code-row">
@@ -189,24 +194,49 @@ Ast
                 <th>Keyword/Name</th>
                 <th>In Code</th>
             </tr>
-            <tr>
-                <td>Variable Declaration</td>
-                <td><input type="text" placeholder="single word" style="width: 100%; text-align: center;"></td>
-                <td>
-                    <p>define i as Number = 3</p>
-                </td>
-            </tr>
-            <tr>
-                <td>Function Declaration</td>
-                <td><input type="text" placeholder="single word" style="width: 100%; text-align: center;"></td>
-                <td>
-                    <p>action x() as Number = {<br>&nbsp;&nbsp;&nbsp;&nbsp;//Code Here<br>}</p>
-                </td>
-            </tr>
         </table>
     </div>
 
 
+    <script>
+        var Highlighter = function () { };
+
+        Highlighter.main = function () {
+            let element = window.document.getElementById("code");
+            let pos = getCaretPosition(element);
+            element.innerHTML = Highlighter.syntaxHighlight(element.innerText);
+            setCaretPosition(element, pos);
+        };
+
+        Highlighter.syntaxHighlight = function (html) {
+            var keywords1 = ["as", "if", "while", "for", "after", "whenever", "return"];
+            var keywords1EReg = new RegExp("\\b(" + keywords1.join("|") + ")\\b", "g");
+            var keywords2 = ["nothing", "true", "false", "action", "define"];
+            var keywords2EReg = new RegExp("\\b(" + keywords2.join("|") + ")\\b", "g");
+            var basicTypes = ["Number", "Decimal", "Characters", "Boolean", "Anything"]; 
+            var basicTypesEReg = new RegExp("\\b(" + basicTypes.join("|") + ")\\b", "g");
+            var functions = new RegExp("\\b([a-zA-Z0-9_]+)\\s*\\(", "g");
+            var nums = new RegExp("\\b([0-9]+\.?[0-9]*)\\b", "g");
+            //replace keywords
+            html = html.replace(keywords2EReg, "<span class='kwd1'>$1</span>");
+            html = html.replace(keywords1EReg, "<span class='kwd'>$1</span>");
+            html = html.replace(basicTypesEReg, "<span class='type'>$1</span>");
+            html = html.replace(functions, "<span class='func'>$1</span>(");
+            html = html.replace(new RegExp("(\"[^\"]*\")", "g"), "<span class='str'>$1</span>");
+            html = html.replace(new RegExp("(//.+?)(\n|$)", "g"), "<span class='cmt'>$1</span>$2");
+            html = html.replace(new RegExp("(/\\*\\*?(.|\n)+?\\*?\\*/)", "g"), "<span class='cmt'>$1</span>");
+            html = html.replace(nums, "<span class='nums'>$1</span>")
+            console.log(html);
+            return html;
+        };
+
+        Highlighter.registerOnParagraphs = function() {
+            var ps = document.getElementById('keywords').getElementsByTagName("p");
+            for (let i = 0; i < ps.length; i++) {
+                ps.item(i).onchange = () => ps.item(i).innerHTML = Highlighter.syntaxHighlight(ps.item(i).innerText)
+            }
+        }
+    </script>
 
     <script src="./interp.js"></script>
 
@@ -246,44 +276,6 @@ Ast
         }
 
         window.addEventListener("resize", (_) => { for (let j = 0; j < buttons.length; j++) buttons[j].adjust(); });
-    </script>
-
-    <script>
-        var Highlighter = function () { };
-
-        Highlighter.main = function () {
-            let element = window.document.getElementById("code");
-            let pos = getCaretPosition(element);
-            element.innerHTML = Highlighter.syntaxHighlight(element.innerText);
-            setCaretPosition(element, pos);
-        };
-
-        Highlighter.syntaxHighlight = function (html) {
-            var keywords1 = ["as", "if", "while", "for", "after", "whenever", "return"];
-            var keywords1EReg = new RegExp("\\b(" + keywords1.join("|") + ")\\b", "g");
-            var keywords2 = ["nothing", "true", "false", "action", "define"];
-            var keywords2EReg = new RegExp("\\b(" + keywords2.join("|") + ")\\b", "g");
-            var basicTypes = ["Number", "Decimal", "Characters", "Boolean", "Anything"]; 
-            var basicTypesEReg = new RegExp("\\b(" + basicTypes.join("|") + ")\\b", "g");
-            var functions = new RegExp("\\b([a-zA-Z0-9_]+)\\s*\\(", "g");
-            var nums = new RegExp("\\b([0-9]+\.?[0-9]*)\\b", "g");
-            //replace keywords
-            html = html.replace(keywords2EReg, "<span class='kwd1'>$1</span>");
-            html = html.replace(keywords1EReg, "<span class='kwd'>$1</span>");
-            html = html.replace(nums, "<span class='nums'>$1</span>")
-            html = html.replace(basicTypesEReg, "<span class='type'>$1</span>");
-            html = html.replace(functions, "<span class='func'>$1</span>(");
-            html = html.replace(new RegExp("(\"[^\"]*\")", "g"), "<span class='str'>$1</span>");
-            html = html.replace(new RegExp("(//.+?)(\n|$)", "g"), "<span class='cmt'>$1</span>$2");
-            html = html.replace(new RegExp("(/\\*\\*?(.|\n)+?\\*?\\*/)", "g"), "<span class='cmt'>$1</span>");
-            console.log(html);
-            return html;
-        };
-
-        var ps = document.getElementById('keywords').getElementsByTagName("p");
-        for (let i = 0; i < ps.length; i++) {
-            ps.item(i).innerHTML = Highlighter.syntaxHighlight(ps.item(i).innerText)
-        }
     </script>
 </body>
 

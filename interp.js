@@ -74,10 +74,11 @@ HxOverrides.now = function() {
 };
 var JsExample = function() {
 	this.d = window.document;
+	var _gthis = this;
 	var input = this.d.getElementById("input");
 	var ast = this.d.getElementById("ast");
 	var output = this.d.getElementById("output");
-	haxe_Log.trace(input,{ fileName : "src/JsExample.js.hx", lineNumber : 18, className : "JsExample", methodName : "new", customParams : [ast,output]});
+	haxe_Log.trace(input,{ fileName : "src/JsExample.js.hx", lineNumber : 26, className : "JsExample", methodName : "new", customParams : [ast,output]});
 	input.addEventListener("keyup",function(_) {
 		try {
 			var tmp = little_parser_Parser.parse(little_lexer_Lexer.lex(input.value));
@@ -99,11 +100,119 @@ var JsExample = function() {
 			input.selectionStart = input.selectionEnd = start + 1;
 		}
 	};
+	var keywordTable = this.d.getElementById("keywords");
+	var update = function() {
+		var firstRow = true;
+		var _g = 0;
+		var _g1 = keywordTable.rows;
+		while(_g < _g1.length) {
+			var row = _g1[_g];
+			++_g;
+			if(firstRow) {
+				firstRow = false;
+				continue;
+			}
+			haxe_Log.trace(row.innerHTML,{ fileName : "src/JsExample.js.hx", lineNumber : 61, className : "JsExample", methodName : "new"});
+			var p = row.getElementsByTagName("p")[0];
+			var input = row.getElementsByTagName("input")[0];
+			p.innerText = _gthis.getCodeExample(input.id);
+			p.onchange();
+		}
+	};
+	var _g = 0;
+	var _g1 = ["VARIABLE_DECLARATION","FUNCTION_DECLARATION","NULL_VALUE","RUN_CODE_FUNCTION_NAME","TYPE_DECL_OR_CAST","TYPE_FLOAT","TYPE_BOOLEAN","TYPE_STRING","TYPE_MODULE","FUNCTION_RETURN","READ_FUNCTION_NAME","TYPE_DYNAMIC","PROPERTY_ACCESS_SIGN","TRUE_VALUE","TYPE_INT","FALSE_VALUE","RAISE_ERROR_FUNCTION_NAME","TYPE_SIGN","PRINT_FUNCTION_NAME"];
+	while(_g < _g1.length) {
+		var keyword = [_g1[_g]];
+		++_g;
+		var row = this.d.createElement("tr");
+		var usage = this.d.createTextNode(JsExample.snakeToTitleCase(keyword[0]));
+		var input1 = [this.d.createElement("input")];
+		input1[0].id = keyword[0];
+		input1[0].placeholder = "single word, e.g. " + Std.string(Reflect.field(little_Keywords.defaultKeywordSet,keyword[0]));
+		input1[0].onchange = (function(input,keyword) {
+			return function() {
+				little_Keywords[keyword[0]] = input[0].value != null ? input[0].value != "" ? input[0].value : Reflect.field(little_Keywords.defaultKeywordSet,keyword[0]) : Reflect.field(little_Keywords.defaultKeywordSet,keyword[0]);
+				update();
+			};
+		})(input1,keyword);
+		var p = this.d.createElement("p");
+		var td1 = this.d.createElement("td");
+		td1.appendChild(usage);
+		var td2 = this.d.createElement("td");
+		td2.appendChild(input1[0]);
+		var td3 = this.d.createElement("td");
+		td3.appendChild(p);
+		row.appendChild(td1);
+		row.appendChild(td2);
+		row.appendChild(td3);
+		keywordTable.appendChild(row);
+	}
+	Highlighter.registerOnParagraphs();
+	update();
 };
 $hxClasses["JsExample"] = JsExample;
 JsExample.__name__ = "JsExample";
+JsExample.snakeToTitleCase = function(str) {
+	var words = str.split("_");
+	var _g = 0;
+	var _g1 = words.length;
+	while(_g < _g1) {
+		var i = _g++;
+		var word = words[i];
+		if(word.length > 0) {
+			var firstChar = word.charAt(0);
+			var rest = HxOverrides.substr(word,1,null);
+			words[i] = firstChar.toUpperCase() + rest.toLowerCase();
+		}
+	}
+	return words.join(" ");
+};
 JsExample.prototype = {
-	__class__: JsExample
+	getCodeExample: function(keyword) {
+		switch(keyword) {
+		case "FALSE_VALUE":
+			return "" + little_Keywords.VARIABLE_DECLARATION + " x " + little_Keywords.TYPE_DECL_OR_CAST + " " + little_Keywords.TYPE_BOOLEAN + " = " + little_Keywords.TRUE_VALUE + " && " + little_Keywords.FALSE_VALUE + "\nif (" + little_Keywords.FALSE_VALUE + ") {}";
+		case "FUNCTION_DECLARATION":
+			return "" + little_Keywords.FUNCTION_DECLARATION + " y(" + little_Keywords.VARIABLE_DECLARATION + " parameter, " + little_Keywords.VARIABLE_DECLARATION + " times " + little_Keywords.TYPE_DECL_OR_CAST + " " + little_Keywords.TYPE_INT + ") " + little_Keywords.TYPE_DECL_OR_CAST + " " + little_Keywords.TYPE_STRING + " =  {\n&nbsp;&nbsp;&nbsp;&nbsp;" + little_Keywords.FUNCTION_RETURN + " parameter * times\n}\n" + little_Keywords.PRINT_FUNCTION_NAME + "(y(\"Hey\", 3))";
+		case "FUNCTION_RETURN":
+			return "" + little_Keywords.FUNCTION_DECLARATION + " y() = {\n&nbsp;&nbsp;&nbsp;&nbsp;" + little_Keywords.FUNCTION_RETURN + " 8\n}";
+		case "NULL_VALUE":
+			return "if (x == " + little_Keywords.NULL_VALUE + ") {}\n" + little_Keywords.VARIABLE_DECLARATION + " x = " + little_Keywords.NULL_VALUE;
+		case "PRINT_FUNCTION_NAME":
+			return "" + little_Keywords.PRINT_FUNCTION_NAME + "(\"Hello World\")";
+		case "PROPERTY_ACCESS_SIGN":
+			return "" + little_Keywords.VARIABLE_DECLARATION + " len = 8" + little_Keywords.PROPERTY_ACCESS_SIGN + "type" + little_Keywords.PROPERTY_ACCESS_SIGN + "length\n" + little_Keywords.PRINT_FUNCTION_NAME + "(len" + little_Keywords.PROPERTY_ACCESS_SIGN + "type) //" + little_Keywords.TYPE_INT;
+		case "RAISE_ERROR_FUNCTION_NAME":
+			return "" + little_Keywords.RAISE_ERROR_FUNCTION_NAME + "(\"My Own Custom Error! :D\")";
+		case "READ_FUNCTION_NAME":
+			return "" + little_Keywords.VARIABLE_DECLARATION + " x = 3\n" + little_Keywords.RUN_CODE_FUNCTION_NAME + "(\"x\")";
+		case "RUN_CODE_FUNCTION_NAME":
+			return "" + little_Keywords.RUN_CODE_FUNCTION_NAME + "(\"" + little_Keywords.PRINT_FUNCTION_NAME + "(5 + 3)\")";
+		case "TRUE_VALUE":
+			return "" + little_Keywords.VARIABLE_DECLARATION + " x " + little_Keywords.TYPE_DECL_OR_CAST + " " + little_Keywords.TYPE_BOOLEAN + " = " + little_Keywords.TRUE_VALUE + " || " + little_Keywords.FALSE_VALUE + "\nif (" + little_Keywords.TRUE_VALUE + ") {}";
+		case "TYPE_BOOLEAN":
+			return "" + little_Keywords.VARIABLE_DECLARATION + " x " + little_Keywords.TYPE_DECL_OR_CAST + " " + little_Keywords.TYPE_BOOLEAN + " = " + little_Keywords.TRUE_VALUE + " || " + little_Keywords.FALSE_VALUE;
+		case "TYPE_DECL_OR_CAST":
+			return "" + little_Keywords.VARIABLE_DECLARATION + " x " + little_Keywords.TYPE_DECL_OR_CAST + " " + little_Keywords.TYPE_STRING + "\nx = " + little_Keywords.TRUE_VALUE + " " + little_Keywords.TYPE_DECL_OR_CAST + " " + little_Keywords.TYPE_STRING + " //\"" + little_Keywords.TRUE_VALUE + "\"";
+		case "TYPE_DYNAMIC":
+			return "" + little_Keywords.VARIABLE_DECLARATION + " x " + little_Keywords.TYPE_DECL_OR_CAST + " " + little_Keywords.TYPE_DYNAMIC + " = nothing";
+		case "TYPE_FLOAT":
+			return "" + little_Keywords.VARIABLE_DECLARATION + " x " + little_Keywords.TYPE_DECL_OR_CAST + " " + little_Keywords.TYPE_FLOAT + " = 8.8";
+		case "TYPE_INT":
+			return "" + little_Keywords.VARIABLE_DECLARATION + " x " + little_Keywords.TYPE_DECL_OR_CAST + " " + little_Keywords.TYPE_INT + " = 8";
+		case "TYPE_MODULE":
+			return "" + little_Keywords.VARIABLE_DECLARATION + " x " + little_Keywords.TYPE_DECL_OR_CAST + " " + little_Keywords.TYPE_MODULE + " = " + little_Keywords.TYPE_BOOLEAN;
+		case "TYPE_SIGN":
+			return "" + little_Keywords.VARIABLE_DECLARATION + " x " + little_Keywords.TYPE_DECL_OR_CAST + " " + little_Keywords.TYPE_SIGN + " = +";
+		case "TYPE_STRING":
+			return "" + little_Keywords.VARIABLE_DECLARATION + " x " + little_Keywords.TYPE_DECL_OR_CAST + " " + little_Keywords.TYPE_STRING + " = \"Hey There!\"";
+		case "VARIABLE_DECLARATION":
+			return "" + little_Keywords.VARIABLE_DECLARATION + " x " + little_Keywords.TYPE_DECL_OR_CAST + " " + little_Keywords.TYPE_INT + " = 8";
+		default:
+			return "Unknown Keyword";
+		}
+	}
+	,__class__: JsExample
 };
 var Main = function() { };
 $hxClasses["Main"] = Main;
