@@ -100,7 +100,7 @@ var JsExample = function() {
 			input.selectionStart = input.selectionEnd = start + 1;
 		}
 	};
-	var keywordTable = this.d.getElementById("keywords");
+	var keywordTable = this.d.getElementById("k-table-body");
 	var update = function() {
 		var firstRow = true;
 		var _g = 0;

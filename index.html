@@ -94,12 +94,34 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            color: #fefefe;
+        }
+        
+        hr {
+            color: #616161;
+            background-color: #616161;
+            height: 4px;
+            border-radius: 2px;
+        }
+
+        textarea {
+            background-color: #2b2a33;
+            border-color: #75747a;
+        }
+
+        button, input {
+            background-color: #2b2a33;
+            border: solid 1px;
+            border-radius: 2px;
+            border-color: #a1a1a9;
+            padding: 1px;
         }
 
         body {
             display: flex;
             flex-direction: row;
             align-items: flex-start;
+            background-color: #181a1b;
         }
 
         #code-row {
@@ -126,23 +148,34 @@
             overflow-x: hidden;
         }
 
-        #keywords-container {
+        #second-container {
+            display: flex;
+            flex-direction: column;
             width: 100%;
             padding: 0;
             margin: 0;
-            height: 50vh;
-            overflow-y: auto;
             margin: 10px;
-            
+            gap: 30px;
         }
 
         #keywords {
             border-collapse: collapse;
             width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        #k-table-body {  
+            display: block;
+            height: 50vh;
+            overflow-y: auto;
+            width: -moz-fit-content;
+            width: fit-content;
+            padding-right: 20px;
         }
 
         #keywords td {
-            border-top: 2px solid rgb(97, 97, 97);
+            border-top: 2px solid #616161;
             padding: 8px;
             padding-block: 12px;
             margin: 0px;
@@ -171,6 +204,7 @@
             width: 100%; 
             text-align: center;
         }
+
         @media screen and (max-width: 700px) {
             body {
                 display: flex;
@@ -180,6 +214,7 @@
                 width: 100vw;
                 height: 50vh;
             }
+
             div .collapsible {
                 width: 90vw;
                 margin-inline: auto;
@@ -187,11 +222,29 @@
             div .collapsed {
                 height: 13%;
             }
-            #keywords-container {
+
+            #k-table-body {  
+                display: block; 
+                height: max-content;
+            }
+
+            #second-container {
                 width: 90vw;
                 margin-inline: auto;
                 height: max-content;
+                display: flex;
+                flex-direction: column-reverse;
             }
+        }
+
+        #guide {
+            display: flex;
+            flex-direction: column;
+        }
+
+        #guide h1 {
+            align-self: center;
+            padding-bottom: 20px;
         }
     </style>
 
@@ -208,14 +261,21 @@ Ast
         </textarea>
     </div>
 
-    <div id="keywords-container">
+    <div id="second-container">
         <table id="keywords">
-            <tr>
+            <tbody id="k-table-body">
+                <tr>
                 <th>Usage</th>
                 <th>Keyword/Name</th>
                 <th>In Code</th>
-            </tr>
+                </tr>
+            </tbody>
         </table>
+        <hr>
+        <div id="guide">
+            <h1>Quickstart</h1>
+            <p>Coming soon :)</p>
+        </div>
     </div>
 
 

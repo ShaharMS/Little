@@ -49,7 +49,7 @@ class JsExample {
             }
         }
 
-        var keywordTable:TableElement = cast d.getElementById("keywords");
+        var keywordTable:TableElement = cast d.getElementById("k-table-body");
 
         function update() {
             var firstRow = true;
