@@ -133,7 +133,7 @@
             height: 50vh;
             overflow-y: auto;
             margin: 10px;
-            overflow-x: hidden;
+            
         }
 
         #keywords {
@@ -156,10 +156,9 @@
         }
 
         #keywords p {
-            resize: none;
-            white-space: pre-line;
-            overflow: hidden;
-            width: 100%;
+            white-space: pre-wrap;
+            overflow-y: hidden;
+            overflow-x: auto;
             text-align: initial;
             border-style: solid;
             border-width: 1px;
@@ -171,6 +170,28 @@
         #keywords input {
             width: 100%; 
             text-align: center;
+        }
+        @media screen and (max-width: 700px) {
+            body {
+                display: flex;
+                flex-direction: column;
+            }
+            #code-row {
+                width: 100vw;
+                height: 50vh;
+            }
+            div .collapsible {
+                width: 90vw;
+                margin-inline: auto;
+            }
+            div .collapsed {
+                height: 13%;
+            }
+            #keywords-container {
+                width: 90vw;
+                margin-inline: auto;
+                height: max-content;
+            }
         }
     </style>
 
