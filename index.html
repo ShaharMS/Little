@@ -237,6 +237,23 @@
             }
         }
 
+        @media screen and (max-width: 400px) {
+            #code-row {
+                width: 100vw;
+                height: 96vh;
+                margin-block: 2vh;
+            }
+            #ast {
+                display: none;
+            }
+            #second-container {
+                display: none;
+            }
+            button {
+                display: none;
+            }
+        }
+
         #guide {
             display: flex;
             flex-direction: column;
@@ -357,6 +374,10 @@ Ast
         }
 
         window.addEventListener("resize", (_) => { for (let j = 0; j < buttons.length; j++) buttons[j].adjust(); });
+    </script>
+
+    <script>
+        document.getElementById("input").dispatchEvent("onkeyup");
     </script>
 </body>
 
