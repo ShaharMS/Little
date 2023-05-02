@@ -274,6 +274,10 @@ class Parser {
                         Runtime.throwError(ErrorMessage("Missing function name, function is cut off by the end of the file, block or expression."), Layer.PARSER);
                         return null;
                     }
+                    if (i + 1 >= pre.length) {
+                        Runtime.throwError(ErrorMessage("Missing function parameter body, function is cut off by the end of the file, block or expression."), Layer.PARSER);
+                        return null;
+                    }
                     
                     var name:Array<ParserTokens> = [];
                     var pushToName = true;
