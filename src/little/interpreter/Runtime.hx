@@ -98,6 +98,7 @@ class Runtime {
         }
         stdout += '\n$content';
         exitCode = Layer.getIndexOf(layer);
+        Interpreter.errorThrown = true;
         for (func in onErrorThrown) func(module, line, title, reason);
     }
 

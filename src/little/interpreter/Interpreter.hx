@@ -22,7 +22,8 @@ class Interpreter {
     public static var currentConfig:RunConfig;
 
     public static function interpret(tokens:Array<ParserTokens>, runConfig:RunConfig) {
-        //// trace(tokens);
+        if (errorThrown) return null;
+        trace(tokens);
         currentConfig = runConfig;
         if (tokens == null || tokens.length == 0) return NullValue;
         if (tokens[0].getName() != "Module") {
@@ -456,12 +457,12 @@ class Interpreter {
                                 return null;
                                 // trace("Created new: " + objName, prop );
                             }
-                            trace(stringifyTokenIdentifier(prop), object.props.get(stringifyTokenIdentifier(prop)).value);
+                            //trace(stringifyTokenIdentifier(prop), object.props.get(stringifyTokenIdentifier(prop)).value);
                             return object.props.get(stringifyTokenIdentifier(prop));
                         }
                     }
                 }
-                trace(obj.value, obj.type, p);
+                //trace(obj.value, obj.type, p);
                 return access(obj, p, str);
                 
             }
@@ -706,9 +707,9 @@ class Interpreter {
         var value = "", valueType = TYPE_UNKNOWN, mode = "+";
 
         for (token in parts) {
-            trace(token);
+            //trace(token);
             var val:ParserTokens = evaluate(token);
-            trace(val);
+            //trace(val);
             switch val {
                 case ErrorMessage(_): Runtime.throwError(val, INTERPRETER_VALUE_EVALUATOR);
                 case Sign(sign): mode = sign;

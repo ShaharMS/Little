@@ -460,7 +460,7 @@ class Parser {
         if (pre == null) return null;
 
         var post:Array<ParserTokens> = [];
-
+        trace(pre);
         var i = 0;
         while (i < pre.length) {
 
@@ -469,6 +469,11 @@ class Parser {
                 case SetLine(line): {setLine(line); post.push(token);}
                 case SplitLine: {nextPart(); post.push(token);}
                 case Sign(_ == PROPERTY_ACCESS_SIGN => true): {
+                    trace(i, pre.length, pre);
+                    if (i + 1 >= pre.length) {
+                        Runtime.throwError(ErrorMessage("Property access cut off by the end of file, block or expression."), Layer.PARSER);
+                        return null;
+                    }
                     if (post.length == 0) {
                         Runtime.throwError(ErrorMessage("Property access cut off by the start of file, block or expression."), Layer.PARSER);
                         return null;
