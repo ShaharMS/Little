@@ -1,5 +1,6 @@
 package little.interpreter;
 
+import haxe.CallStack;
 import little.tools.Layer;
 import little.parser.Tokens.ParserTokens;
 import little.Keywords.*;
@@ -38,7 +39,6 @@ class Interpreter {
         if (memory == null) memory = Interpreter.memory; // If no memory map is given, use the base one.
 
         var returnVal:ParserTokens = null;
-
         var i = 0;
         while (i < tokens.length) {
             var token = tokens[i];
@@ -126,17 +126,17 @@ class Interpreter {
                     for (a in assignees) {
                         var assignee = accessObject(a);
                         if (assignee == null) continue;
-                        if (assignee.params != null)
+                        if (assignee.params != null) {
                             assignee.value = value;
+                        }
                         else {
-                            if (v == null)
+                            if (v == null) {
                                 v = evaluate(value);
-                                trace(value, v, getValueType(v));
+                            }
                             if (v.getName() == "ErrorMessage") {
                                 assignee.value = NullValue;
                             } else {
                                 assignee.value = v;
-                                trace(assignee.value, assignee.type);
                             }
                         }
                     }
@@ -225,11 +225,13 @@ class Interpreter {
                 for (a in assignees) {
                     var assignee = accessObject(a);
                     if (assignee == null) continue;
-                    if (assignee.params != null)
+                    if (assignee.params != null) {
                         assignee.value = value;
+                    }
                     else {
-                        if (v == null)
+                        if (v == null) {
                             v = evaluate(value);
+                        }
                         if (v.getName() == "ErrorMessage") {
                             assignee.value = NullValue;
                         } else {
@@ -237,7 +239,7 @@ class Interpreter {
                         }
                     }
                 }
-                return evaluate(value, memory, dontThrow);
+                return if (v != null) v else value;
             }
             case Read(name): {
                 var str = stringifyTokenValue(name);
@@ -427,7 +429,6 @@ class Interpreter {
                         return obj;
                     }
                     case _: {
-                        trace(name, stringifyTokenValue(name));
                         memory.set(stringifyTokenValue(name), new MemoryObject(NullValue, null, params.getParameters()[0], type, memory.object)); 
                         return memory.get(stringifyTokenValue(name));
                     }

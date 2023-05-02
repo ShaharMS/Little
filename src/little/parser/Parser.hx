@@ -458,7 +458,6 @@ class Parser {
         var post:Array<ParserTokens> = [];
 
         var i = 0;
-        trace(pre);
         while (i < pre.length) {
 
             var token = pre[i];
@@ -471,7 +470,6 @@ class Parser {
                         return null;
                     }
                     var lookbehind = post.pop();
-                    trace(lookbehind);
                     switch lookbehind {
                         case SplitLine | SetLine(_): {
                             Runtime.throwError(ErrorMessage("Property access cut off by the start of a line, or by a line split (; or ,)."), Layer.PARSER);
@@ -483,7 +481,6 @@ class Parser {
                         }
                         case _: {
                             var field = pre[++i];
-                            trace(PropertyAccess(lookbehind, field));
                             post.push(PropertyAccess(lookbehind, field));
                         }
                     }

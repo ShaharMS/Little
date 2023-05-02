@@ -1,4 +1,5 @@
-(function ($global) { "use strict";
+(function ($hx_exports, $global) { "use strict";
+$hx_exports["little"] = $hx_exports["little"] || {};
 var $hxClasses = {},$estr = function() { return js_Boot.__string_rec(this,''); },$hxEnums = $hxEnums || {},$_;
 function $extend(from, fields) {
 	var proto = Object.create(from);
@@ -78,7 +79,6 @@ var JsExample = function() {
 	var input = this.d.getElementById("input");
 	var ast = this.d.getElementById("ast");
 	var output = this.d.getElementById("output");
-	haxe_Log.trace(input,{ fileName : "src/JsExample.js.hx", lineNumber : 26, className : "JsExample", methodName : "new", customParams : [ast,output]});
 	input.addEventListener("keyup",function(_) {
 		try {
 			var tmp = little_parser_Parser.parse(little_lexer_Lexer.lex(input.value));
@@ -112,7 +112,6 @@ var JsExample = function() {
 				firstRow = false;
 				continue;
 			}
-			haxe_Log.trace(row.innerHTML,{ fileName : "src/JsExample.js.hx", lineNumber : 61, className : "JsExample", methodName : "new"});
 			var p = row.getElementsByTagName("p")[0];
 			var input = row.getElementsByTagName("input")[0];
 			p.innerText = _gthis.getCodeExample(input.id);
@@ -1486,7 +1485,7 @@ little_interpreter_Runtime.throwError = function(token,layer) {
 little_interpreter_Runtime.print = function(item) {
 	little_interpreter_Runtime.stdout += "\n" + (little_Little.debug ? "Interpreter".toUpperCase() + ": " : "") + "Module " + little_interpreter_Runtime.currentModule + ", Line " + little_interpreter_Runtime.line + ":  " + (item == null ? "null" : "" + item);
 };
-var little_Little = function() { };
+var little_Little = $hx_exports["little"]["Little"] = function() { };
 $hxClasses["little.Little"] = little_Little;
 little_Little.__name__ = "little.Little";
 little_Little.loadModule = function(code,name,debug,runRightBeforeMain) {
@@ -1508,6 +1507,7 @@ little_Little.loadModule = function(code,name,debug,runRightBeforeMain) {
 			little_tools_PrepareRun.addTypes();
 			little_tools_PrepareRun.addFunctions();
 			little_tools_PrepareRun.addConditions();
+			little_tools_PrepareRun.addProps();
 		}
 		little_interpreter_Interpreter.interpret(little_parser_Parser.parse(little_lexer_Lexer.lex(code)),new little_interpreter_RunConfig(null,null,null,null,null));
 		if(debug != null) {
@@ -1721,43 +1721,18 @@ var little_interpreter_memory_MemoryObject = function(value,props,params,type,ex
 	this.nonStatic = nonStatic == null ? true : nonStatic;
 	this.props = little_interpreter_memory_MemoryTree._new(this);
 	this.parent = parent != null ? parent : this;
-	little_interpreter_memory_MemoryObject.objects.push(this);
 };
 $hxClasses["little.interpreter.memory.MemoryObject"] = little_interpreter_memory_MemoryObject;
 little_interpreter_memory_MemoryObject.__name__ = "little.interpreter.memory.MemoryObject";
-little_interpreter_memory_MemoryObject.addDefaultProperty = function(name,value) {
-	little_interpreter_memory_MemoryObject.defaultProperties.h[name] = value;
-	var _g = 0;
-	var _g1 = little_interpreter_memory_MemoryObject.objects;
-	while(_g < _g1.length) {
-		var obj = _g1[_g];
-		++_g;
-		little_interpreter_memory_MemoryTree.set(obj.props,name,value);
-	}
-};
-little_interpreter_memory_MemoryObject.removeDefaultProperty = function(name) {
-	var _this = little_interpreter_memory_MemoryObject.defaultProperties;
-	if(Object.prototype.hasOwnProperty.call(_this.h,name)) {
-		delete(_this.h[name]);
-	}
-	var _g = 0;
-	var _g1 = little_interpreter_memory_MemoryObject.objects;
-	while(_g < _g1.length) {
-		var obj = _g1[_g];
-		++_g;
-		var _this = obj.props.map;
-		if(Object.prototype.hasOwnProperty.call(_this.h,name)) {
-			delete(_this.h[name]);
-		}
-	}
-};
 little_interpreter_memory_MemoryObject.prototype = {
 	set_value: function(val) {
-		var t = little_interpreter_Interpreter.getValueType(val);
-		if((this.type == null || Type.enumEq(this.type,little_parser_ParserTokens.NullValue)) && t != null) {
-			this.type = t;
-			if(little_interpreter_memory_MemoryTree.get_underlying(this.props) != null) {
-				little_interpreter_memory_MemoryTree.get_underlying(this.props).objType = little_interpreter_Interpreter.stringifyTokenValue(t);
+		if(this.params == null) {
+			var t = little_interpreter_Interpreter.getValueType(val);
+			if((this.type == null || Type.enumEq(this.type,little_parser_ParserTokens.NullValue)) && t != null) {
+				this.type = t;
+				if(little_interpreter_memory_MemoryTree.get_underlying(this.props) != null) {
+					little_interpreter_memory_MemoryTree.get_underlying(this.props).objType = little_interpreter_Interpreter.stringifyTokenValue(t);
+				}
 			}
 		}
 		this.value = this.valueSetter(val);
@@ -2295,12 +2270,10 @@ little_interpreter_Interpreter.runTokens = function(tokens,preParseVars,preParse
 					if(v == null) {
 						v = little_interpreter_Interpreter.evaluate(value);
 					}
-					haxe_Log.trace(value,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 134, className : "little.interpreter.Interpreter", methodName : "runTokens", customParams : [v,little_interpreter_Interpreter.getValueType(v)]});
 					if($hxEnums[v.__enum__].__constructs__[v._hx_index]._hx_name == "ErrorMessage") {
 						assignee.set_value(little_parser_ParserTokens.NullValue);
 					} else {
 						assignee.set_value(v);
-						haxe_Log.trace(assignee.value,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 139, className : "little.interpreter.Interpreter", methodName : "runTokens", customParams : [assignee.type]});
 					}
 				}
 			}
@@ -2419,7 +2392,7 @@ little_interpreter_Interpreter.evaluate = function(exp,memory,dontThrow) {
 			var obj = access1(little_interpreter_memory_MemoryTree.get(memory,little_interpreter_Interpreter.stringifyTokenValue(name1)),property,little_interpreter_Interpreter.stringifyTokenValue(name1));
 			return obj.value;
 		} else {
-			haxe_Log.trace(name,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 317, className : "little.interpreter.Interpreter", methodName : "evaluate", customParams : [little_interpreter_Interpreter.stringifyTokenValue(name)]});
+			haxe_Log.trace(name,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 319, className : "little.interpreter.Interpreter", methodName : "evaluate", customParams : [little_interpreter_Interpreter.stringifyTokenValue(name)]});
 			little_interpreter_memory_MemoryTree.set(memory,little_interpreter_Interpreter.stringifyTokenValue(name),new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,Type.enumParameters(params)[0],type1,null,null,null,little_interpreter_memory_MemoryTree.get_object(memory)));
 			return little_interpreter_memory_MemoryTree.get(memory,little_interpreter_Interpreter.stringifyTokenValue(name)).value;
 		}
@@ -2465,7 +2438,12 @@ little_interpreter_Interpreter.evaluate = function(exp,memory,dontThrow) {
 				}
 			}
 		}
-		return little_interpreter_Interpreter.evaluate(value,memory,dontThrow);
+		if(v != null) {
+			return v;
+		} else {
+			return value;
+		}
+		break;
 	case 7:
 		var word = exp.word;
 		return little_interpreter_Interpreter.evaluate(little_interpreter_memory_MemoryTree.get(memory,word) != null ? little_interpreter_memory_MemoryTree.get(memory,word).value : little_parser_ParserTokens.ErrorMessage("No Such Variable: `" + word + "`"),memory,dontThrow);
@@ -2596,7 +2574,7 @@ little_interpreter_Interpreter.getValueType = function(token) {
 	case 25:
 		return little_parser_ParserTokens.Identifier(little_Keywords.TYPE_BOOLEAN);
 	default:
-		haxe_Log.trace(token,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 362, className : "little.interpreter.Interpreter", methodName : "getValueType"});
+		haxe_Log.trace(token,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 364, className : "little.interpreter.Interpreter", methodName : "getValueType"});
 		return little_interpreter_Interpreter.getValueType(little_interpreter_Interpreter.evaluate(token));
 	}
 };
@@ -2644,7 +2622,6 @@ little_interpreter_Interpreter.accessObject = function(exp,memory) {
 			var obj = access1(little_interpreter_Interpreter.accessObject(name1),property,little_interpreter_Interpreter.stringifyTokenIdentifier(name1));
 			return obj;
 		} else {
-			haxe_Log.trace(name,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 430, className : "little.interpreter.Interpreter", methodName : "accessObject", customParams : [little_interpreter_Interpreter.stringifyTokenValue(name)]});
 			little_interpreter_memory_MemoryTree.set(memory,little_interpreter_Interpreter.stringifyTokenValue(name),new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,Type.enumParameters(params)[0],type1,null,null,null,little_interpreter_memory_MemoryTree.get_object(memory)));
 			return little_interpreter_memory_MemoryTree.get(memory,little_interpreter_Interpreter.stringifyTokenValue(name));
 		}
@@ -2702,11 +2679,11 @@ little_interpreter_Interpreter.accessObject = function(exp,memory) {
 					little_interpreter_Interpreter.evaluate(little_parser_ParserTokens.ErrorMessage("Unable to access `" + str + little_Keywords.PROPERTY_ACCESS_SIGN + little_interpreter_Interpreter.stringifyTokenValue(prop) + "`: `" + str + "` Does not contain property `" + little_interpreter_Interpreter.stringifyTokenValue(prop) + "`"));
 					return null;
 				}
-				haxe_Log.trace(little_interpreter_Interpreter.stringifyTokenIdentifier(prop),{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 458, className : "little.interpreter.Interpreter", methodName : "accessObject", customParams : [little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop)).value]});
+				haxe_Log.trace(little_interpreter_Interpreter.stringifyTokenIdentifier(prop),{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 459, className : "little.interpreter.Interpreter", methodName : "accessObject", customParams : [little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop)).value]});
 				return little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop));
 			}
 		};
-		haxe_Log.trace(obj.value,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 463, className : "little.interpreter.Interpreter", methodName : "accessObject", customParams : [obj.type,p]});
+		haxe_Log.trace(obj.value,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 464, className : "little.interpreter.Interpreter", methodName : "accessObject", customParams : [obj.type,p]});
 		return access2(obj,p,str);
 	case 15:
 		var _g = exp.sign;
@@ -2729,7 +2706,7 @@ little_interpreter_Interpreter.accessObject = function(exp,memory) {
 	case 24:case 25:
 		return new little_interpreter_memory_MemoryObject(exp,null,null,little_parser_ParserTokens.Identifier(little_Keywords.TYPE_BOOLEAN),null,null,null,little_interpreter_memory_MemoryTree.get_object(memory));
 	default:
-		haxe_Log.trace("Token " + Std.string(exp) + " is inaccessible via memory. Returning null.",{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 470, className : "little.interpreter.Interpreter", methodName : "accessObject"});
+		haxe_Log.trace("Token " + Std.string(exp) + " is inaccessible via memory. Returning null.",{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 471, className : "little.interpreter.Interpreter", methodName : "accessObject"});
 	}
 	return null;
 };
@@ -2855,7 +2832,7 @@ little_interpreter_Interpreter.createObject = function(exp,memory) {
 	case 24:case 25:
 		return new little_interpreter_memory_MemoryObject(exp,null,null,little_parser_ParserTokens.Identifier(little_Keywords.TYPE_BOOLEAN),null,null,null,little_interpreter_memory_MemoryTree.get_object(memory));
 	default:
-		haxe_Log.trace("Unable to create memory object from " + Std.string(exp) + ". Returning null.",{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 573, className : "little.interpreter.Interpreter", methodName : "createObject"});
+		haxe_Log.trace("Unable to create memory object from " + Std.string(exp) + ". Returning null.",{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 574, className : "little.interpreter.Interpreter", methodName : "createObject"});
 	}
 	return null;
 };
@@ -3089,9 +3066,9 @@ little_interpreter_Interpreter.evaluateExpressionParts = function(parts,memory) 
 	while(_g < parts.length) {
 		var token = parts[_g];
 		++_g;
-		haxe_Log.trace(token,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 708, className : "little.interpreter.Interpreter", methodName : "evaluateExpressionParts"});
+		haxe_Log.trace(token,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 709, className : "little.interpreter.Interpreter", methodName : "evaluateExpressionParts"});
 		var val = little_interpreter_Interpreter.evaluate(token);
-		haxe_Log.trace(val,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 710, className : "little.interpreter.Interpreter", methodName : "evaluateExpressionParts"});
+		haxe_Log.trace(val,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 711, className : "little.interpreter.Interpreter", methodName : "evaluateExpressionParts"});
 		switch(val._hx_index) {
 		case 15:
 			var sign = val.sign;
@@ -4319,7 +4296,6 @@ little_parser_Parser.mergePropertyOperations = function(pre) {
 	}
 	var post = [];
 	var i = 0;
-	haxe_Log.trace(pre,{ fileName : "src/little/parser/Parser.hx", lineNumber : 461, className : "little.parser.Parser", methodName : "mergePropertyOperations"});
 	while(i < pre.length) {
 		var token = pre[i];
 		switch(token._hx_index) {
@@ -4387,10 +4363,8 @@ little_parser_Parser.mergePropertyOperations = function(pre) {
 					return null;
 				}
 				var lookbehind = post.pop();
-				haxe_Log.trace(lookbehind,{ fileName : "src/little/parser/Parser.hx", lineNumber : 474, className : "little.parser.Parser", methodName : "mergePropertyOperations"});
 				if(lookbehind == null) {
 					var field = pre[++i];
-					haxe_Log.trace(little_parser_ParserTokens.PropertyAccess(lookbehind,field),{ fileName : "src/little/parser/Parser.hx", lineNumber : 486, className : "little.parser.Parser", methodName : "mergePropertyOperations"});
 					post.push(little_parser_ParserTokens.PropertyAccess(lookbehind,field));
 				} else {
 					switch(lookbehind._hx_index) {
@@ -4407,7 +4381,6 @@ little_parser_Parser.mergePropertyOperations = function(pre) {
 						return null;
 					default:
 						var field1 = pre[++i];
-						haxe_Log.trace(little_parser_ParserTokens.PropertyAccess(lookbehind,field1),{ fileName : "src/little/parser/Parser.hx", lineNumber : 486, className : "little.parser.Parser", methodName : "mergePropertyOperations"});
 						post.push(little_parser_ParserTokens.PropertyAccess(lookbehind,field1));
 					}
 				}
@@ -5342,8 +5315,6 @@ little_interpreter_Runtime.callStack = [];
 little_Little.runtime = little_interpreter_Runtime;
 little_Little.plugin = little_tools_Plugins;
 little_Little.debug = false;
-little_interpreter_memory_MemoryObject.objects = [];
-little_interpreter_memory_MemoryObject.defaultProperties = new haxe_ds_StringMap();
 little_tools_TextTools.fonts = new little_tools__$TextTools_MultilangFonts();
 little_tools_TextTools.loremIpsumText = "\r\n\t\tLorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque finibus condimentum magna, eget porttitor libero aliquam non. Praesent commodo, augue nec hendrerit tincidunt, urna felis lobortis mi, non cursus libero tellus quis tellus. Vivamus ornare convallis tristique. Integer nec ornare libero. Phasellus feugiat facilisis faucibus. Vivamus porta id neque id placerat. Proin convallis vel felis et pharetra. Quisque magna justo, ullamcorper quis scelerisque eu, tincidunt vitae lectus. Nunc sed turpis justo. Aliquam porttitor, purus sit amet faucibus bibendum, ligula elit molestie purus, eu volutpat turpis sapien ac tellus. Fusce mauris arcu, volutpat ut aliquam ut, ultrices id ante. Morbi quis consectetur turpis. Integer semper lacinia urna id laoreet.\r\n\r\n\t\tUt mollis eget eros eu tempor. Phasellus nulla velit, sollicitudin eget massa a, tristique rutrum turpis. Vestibulum in dolor at elit pellentesque finibus. Nulla pharetra felis a varius molestie. Nam magna lectus, eleifend ac sagittis id, ornare id nibh. Praesent congue est non iaculis consectetur. Nullam dictum augue sit amet dignissim fringilla. Aenean semper justo velit. Sed nec lectus facilisis, sodales diam eget, imperdiet nunc. Quisque elementum nulla non orci interdum pharetra id quis arcu. Phasellus eu nunc lectus. Nam tellus tortor, pellentesque eget faucibus eu, laoreet quis odio. Pellentesque posuere in enim a blandit.\r\n\r\n\t\tDuis dignissim neque et ex iaculis, ac consequat diam gravida. In mi ex, blandit eget velit non, euismod feugiat arcu. Nulla nec fermentum neque, eget elementum mauris. Vivamus urna ligula, faucibus at facilisis sed, commodo sit amet urna. Sed porttitor feugiat purus ac tincidunt. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aliquam sollicitudin lacinia turpis quis placerat. Donec eget velit nibh. Duis vehicula orci lectus, eget rutrum arcu tincidunt et. Vestibulum ut pharetra lectus. Quisque lacinia nunc rhoncus neque venenatis consequat. Nulla rutrum ultricies sapien, sed semper lectus accumsan nec. Phasellus commodo faucibus lacinia. Donec auctor condimentum ligula. Sed quis viverra mauris.\r\n\r\n\t\tQuisque maximus justo dui, eget pretium lorem accumsan ac. Praesent eleifend faucibus orci et varius. Ut et molestie turpis, eu porta neque. Quisque vehicula, libero in tincidunt facilisis, purus eros pulvinar leo, sit amet eleifend justo ligula tempor lectus. Donec ac tortor sed ipsum tincidunt pulvinar id nec eros. In luctus purus cursus est dictum, ac sollicitudin turpis maximus. Maecenas a nisl velit. Nulla gravida lectus vel ultricies gravida. Proin vel bibendum magna. Donec aliquam ultricies quam, quis tempor nunc pharetra ut.\r\n\r\n\t\tPellentesque sit amet dui est. Aliquam erat volutpat. Integer vitae ullamcorper est, ut eleifend augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Quisque congue velit felis, vitae elementum nulla faucibus id. Donec lectus nibh, commodo eget nunc id, feugiat sagittis massa. In hac habitasse platea dictumst. Pellentesque volutpat molestie ultrices.\r\n\t";
 little_tools_Layer.LEXER = "Lexer";
@@ -5362,6 +5333,6 @@ little_tools_PrepareRun.prepared = false;
 little_tools_PrettyPrinter.s = "";
 little_tools_PrettyPrinter.l = 0;
 Main.main();
-})(typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);
+})(typeof exports != "undefined" ? exports : typeof window != "undefined" ? window : typeof self != "undefined" ? self : this, typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);
 
 //# sourceMappingURL=interp.js.map

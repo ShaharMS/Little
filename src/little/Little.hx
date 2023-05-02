@@ -13,6 +13,7 @@ import little.Keywords.*;
 
 @:access(little.interpreter.Interpreter)
 @:access(little.interpreter.Runtime)
+@:expose
 class Little {
     
     public static var runtime(default, null) = Runtime;
@@ -44,6 +45,7 @@ class Little {
                 PrepareRun.addTypes();
                 PrepareRun.addFunctions();
                 PrepareRun.addConditions();
+                PrepareRun.addProps();
             }
             Interpreter.interpret(Parser.parse(Lexer.lex(code)), {});
             if (debug != null) Little.debug = previous;

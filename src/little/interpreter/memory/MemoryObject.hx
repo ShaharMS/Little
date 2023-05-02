@@ -11,30 +11,21 @@ import little.parser.Tokens.ParserTokens;
 **/
 class MemoryObject {
 
-    @:noCompletion public static var objects:Array<MemoryObject> = [];
-
-    public static var defaultProperties:Map<String, MemoryObject> = [];
-
-    public static function addDefaultProperty(name:String, value:MemoryObject) {
-        defaultProperties[name] = value;
-        for (obj in objects) obj.props.set(name, value);
-    }
-
-    public static function removeDefaultProperty(name:String) {
-        defaultProperties.remove(name);
-        for (obj in objects) obj.props.remove(name);
-    }
-
     @:optional public var parent:MemoryObject;
 
     @:optional public var value(default, set):ParserTokens = NullValue;
 
     function set_value(val:ParserTokens) {
-        var t = Interpreter.getValueType(val);
-        if ((type == null || type.equals(NullValue)) && t != null) {
-            type = t;
-            
-            if (props.underlying != null) props.underlying.objType = Interpreter.stringifyTokenValue(t);
+        // Todo: fix body eval not working for function, possible solutions including:
+            // Sepratate code checker for errors
+            // Allow side-effect free code running
+        if (params == null) {
+            var t = Interpreter.getValueType(val);
+            if ((type == null || type.equals(NullValue)) && t != null) {
+                type = t;
+
+                if (props.underlying != null) props.underlying.objType = Interpreter.stringifyTokenValue(t);
+            }
         }
         value = valueSetter(val);
         for (setter in setterListeners) {
@@ -77,8 +68,6 @@ class MemoryObject {
         this.nonStatic = nonStatic == null ? true : nonStatic;
         this.props = new MemoryTree(this);
         this.parent = parent != null ? parent : this; //Interesting solution
-
-        objects.push(this);
     }
 
 
