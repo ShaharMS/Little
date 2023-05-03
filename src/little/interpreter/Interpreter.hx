@@ -323,9 +323,11 @@ class Interpreter {
                     }
                 }
             }
-            case External(get): return evaluate(get([]), memory, dontThrow);
+            case External(_): return Characters("External Function/Variable");
             case PropertyAccess(_, _): {
-                return accessObject(exp, memory).value;
+                var o = accessObject(exp, memory);
+                if (o != null) return o.value;
+                return NullValue;
             }
             case Return(value, type): {
                 return evaluate(value, memory, dontThrow);
@@ -619,9 +621,11 @@ class Interpreter {
             case PartArray(parts): {
                 return [for (p in parts) stringifyTokenValue(evaluate(p))].join(","); 
             }
-            case PropertyAccess(_, _) | Condition(_, _, _, _) | External(_) | ExternalCondition(_) | TypeDeclaration(_): {
+            case PropertyAccess(_, _) | Condition(_, _, _, _)  | TypeDeclaration(_): {
                 return stringifyTokenValue(evaluate(token, memory));
             }
+            case External(_): return "External Function/Variable";
+            case ExternalCondition(_): return "External Condition";
             case Return(value, type): {
                 return stringifyTokenValue(value);
             }
