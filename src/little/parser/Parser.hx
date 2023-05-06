@@ -45,21 +45,21 @@ class Parser {
 
             i++;
         }
-        // trace("before:", tokens);
+        trace("before:", tokens);
         tokens = mergeBlocks(tokens);
-        // trace("blocks:", tokens);
+        trace("blocks:", tokens);
         tokens = mergeExpressions(tokens);
-        // trace("expressions:", tokens);
-        tokens = mergeTypeDecls(tokens);
-        // trace("types:", tokens);
-        tokens = mergeComplexStructures(tokens);
-        // trace("structures:", tokens);
-        tokens = mergeCalls(tokens);
-        // trace("calls:", tokens);
+        trace("expressions:", tokens);
         tokens = mergePropertyOperations(tokens);
-        // trace("props:", tokens);
+        trace("props:", tokens);
+        tokens = mergeTypeDecls(tokens);
+        trace("types:", tokens);
+        tokens = mergeComplexStructures(tokens);
+        trace("structures:", tokens);
+        tokens = mergeCalls(tokens);
+        trace("calls:", tokens);
         tokens = mergeWrites(tokens);
-        // trace("writes:", tokens);
+        trace("writes:", tokens);
         tokens = mergeValuesWithTypeDeclarations(tokens);
 
         return tokens;
@@ -70,6 +70,7 @@ class Parser {
     public static function mergeBlocks(pre:Array<ParserTokens>):Array<ParserTokens> {
 
         if (pre == null) return null;
+        if (pre.length == 1 && pre[0] == null) return [null];
 
         var post:Array<ParserTokens> = [];
 
@@ -105,8 +106,8 @@ class Parser {
                     post.push(Block(mergeBlocks(blockBody), null)); // The check performed above includes unmerged blocks inside the outer block. These unmerged blocks should be merged
                     i++;
                 }
-                case Expression(parts, type): post.push(Expression(mergeBlocks(parts), null));
-                case Block(body, type): post.push(Block(mergeBlocks(body), null));
+                case Expression(parts, type): post.push(Expression(mergeBlocks(parts), mergeBlocks([type])[0]));
+                case Block(body, type): post.push(Block(mergeBlocks(body), mergeBlocks([type])[0]));
                 case _: post.push(token);
             }
             i++;
@@ -119,6 +120,7 @@ class Parser {
     public static function mergeExpressions(pre:Array<ParserTokens>):Array<ParserTokens> {
 
         if (pre == null) return null;
+        if (pre.length == 1 && pre[0] == null) return [null];
 
         var post:Array<ParserTokens> = [];
 
@@ -153,8 +155,8 @@ class Parser {
                     i++;
                 }
 
-                case Expression(parts, type): post.push(Expression(mergeExpressions(parts), null));
-                case Block(body, type): post.push(Block(mergeExpressions(body), null));
+                case Expression(parts, type): post.push(Expression(mergeExpressions(parts), mergeExpressions([type])[0]));
+                case Block(body, type): post.push(Block(mergeExpressions(body), mergeExpressions([type])[0]));
                 case _: post.push(token);
             }
             i++;
@@ -167,6 +169,7 @@ class Parser {
     public static function mergeTypeDecls(pre:Array<ParserTokens>):Array<ParserTokens> {
         
         if (pre == null) return null;
+        if (pre.length == 1 && pre[0] == null) return [null];
 
         var post:Array<ParserTokens> = [];
 
@@ -179,20 +182,20 @@ class Parser {
                 case Identifier(word): {
                     if (word == TYPE_DECL_OR_CAST && i + 1 < pre.length) {
                         var lookahead = pre[i + 1];
-                        post.push(TypeDeclaration(null, lookahead));
+                        post.push(TypeDeclaration(null, mergeTypeDecls([lookahead])[0]));
                         i++;
                     } else if (word == TYPE_DECL_OR_CAST) {
                         // Throw error for incomplete type declarations;
                     if (i + 1 == pre.length) {
-                        Runtime.throwError(ErrorMessage('Incomplete type declaration, make sure to input a type after the $TYPE_DECL_OR_CAST.'));
+                        Runtime.throwError(ErrorMessage('Incomplete type declaration, make sure to input a type after the `$TYPE_DECL_OR_CAST`.'));
                         return null;
                     }
                     } else {
                         post.push(token);
                     }
                 }
-                case Expression(parts, type): post.push(Expression(mergeTypeDecls(parts), null));
-                case Block(body, type): post.push(Block(mergeTypeDecls(body), null));
+                case Expression(parts, type): post.push(Expression(mergeTypeDecls(parts), mergeTypeDecls([type])[0]));
+                case Block(body, type): post.push(Block(mergeTypeDecls(body), mergeTypeDecls([type])[0]));
                 case _: post.push(token);
             }
             i++;
@@ -205,6 +208,7 @@ class Parser {
     public static function mergeComplexStructures(pre:Array<ParserTokens>):Array<ParserTokens> {
 
         if (pre == null) return null;
+        if (pre.length == 1 && pre[0] == null) return [null];
 
         var post:Array<ParserTokens> = [];
 
@@ -242,16 +246,16 @@ class Parser {
                                 name.push(lookahead);
                             }
                             case Block(body, type): {
-                                if (pushToName) {name.push(Block(mergeComplexStructures(body), type)); pushToName = false;}
-                                else if (type == null) type = Block(mergeComplexStructures(body), type);
+                                if (pushToName) {name.push(Block(mergeComplexStructures(body), mergeComplexStructures([type])[0])); pushToName = false;}
+                                else if (type == null) type = Block(mergeComplexStructures(body), mergeComplexStructures([type])[0]);
                                 else {
                                     i--;
                                     break;
                                 }
                             }
                             case Expression(body, type): {
-                                if (pushToName) {name.push(Expression(mergeComplexStructures(body), type)); pushToName = false;}
-                                else if (type == null) type = Expression(mergeComplexStructures(body), type);
+                                if (pushToName) {name.push(Expression(mergeComplexStructures(body), mergeComplexStructures([type])[0])); pushToName = false;}
+                                else if (type == null) type = Expression(mergeComplexStructures(body), mergeComplexStructures([type])[0]);
                                 else {
                                     i--;
                                     break;
@@ -297,7 +301,7 @@ class Parser {
                                     Runtime.throwError(ErrorMessage("Missing function parameters before type declaration."), Layer.PARSER);
                                     return null;
                                 }
-                                type = typeToken;
+                                type = mergeComplexStructures([typeToken])[0];
                                 break;
                             }
                             case Sign("="): i--; break;
@@ -307,17 +311,17 @@ class Parser {
                                 name.push(lookahead);
                             }
                             case Block(body, type): {
-                                if (pushToName) {name.push(Block(mergeComplexStructures(body), type)); pushToName = false;}
-                                else if (params == null) params = Block(mergeComplexStructures(body), type);
-                                else if (type == null) type = Block(mergeComplexStructures(body), type);
+                                if (pushToName) {name.push(Block(mergeComplexStructures(body), mergeComplexStructures([type])[0])); pushToName = false;}
+                                else if (params == null) params = Block(mergeComplexStructures(body), mergeComplexStructures([type])[0]);
+                                else if (type == null) type = Block(mergeComplexStructures(body), mergeComplexStructures([type])[0]);
                                 else {
                                     break;
                                 }
                             }
                             case Expression(body, type): {
-                                if (pushToName) {name.push(Expression(mergeComplexStructures(body), type)); pushToName = false;}
-                                else if (params == null) params = Expression(mergeComplexStructures(body), type);
-                                else if (type == null) type = Expression(mergeComplexStructures(body), type);
+                                if (pushToName) {name.push(Expression(mergeComplexStructures(body), mergeComplexStructures([type])[0])); pushToName = false;}
+                                else if (params == null) params = Expression(mergeComplexStructures(body), mergeComplexStructures([type])[0]);
+                                else if (type == null) type = Expression(mergeComplexStructures(body), mergeComplexStructures([type])[0]);
                                 else {
                                     break;
                                 }
@@ -325,7 +329,7 @@ class Parser {
                             case _: {
                                 if (pushToName) {name.push(lookahead); pushToName = false;}
                                 else if (params == null) params = lookahead;
-                                else if (type == null && lookahead.getName() == "TypeDeclaration") type = lookahead;
+                                else if (type == null && lookahead.getName() == "TypeDeclaration") type = mergeComplexStructures([lookahead.getParameters()[1]])[0];
                                 else {
                                     break;
                                 }
@@ -333,7 +337,7 @@ class Parser {
                         }
                         i++;
                     }
-                    post.push(Function(if (name.length == 1) name[0] else PartArray(name) /* Soon to be: PropertyAccess */, params, type));
+                    post.push(Function(if (name.length == 1) name[0] else PartArray(name) /* Will be converted to PropertyAccess later on*/, params, type));
                 }
                 case Identifier(CONDITION_TYPES.contains(_) => true): {
                     i++;
@@ -352,13 +356,13 @@ class Parser {
                         switch lookahead {
                             case SetLine(_) | SplitLine:
                             case Block(b, type): {
-                                if (exp == null) exp = Block(mergeComplexStructures(b), type);
-                                else if (body == null) body = Block(mergeComplexStructures(b), type)
+                                if (exp == null) exp = Block(mergeComplexStructures(b), mergeComplexStructures([type])[0]);
+                                else if (body == null) body = Block(mergeComplexStructures(b), mergeComplexStructures([type])[0])
                                 else break;
                             }
                             case Expression(parts, type): {
-                                if (exp == null) exp = Expression(mergeComplexStructures(parts), type);
-                                else if (body == null) body = Expression(mergeComplexStructures(parts), type)
+                                if (exp == null) exp = Expression(mergeComplexStructures(parts), mergeComplexStructures([type])[0]);
+                                else if (body == null) body = Expression(mergeComplexStructures(parts), mergeComplexStructures([type])[0])
                                 else break;
                             }
                             case _: {
@@ -391,10 +395,10 @@ class Parser {
                         switch lookahead {
                             case SetLine(_) | SplitLine: i--; break;
                             case Block(body, type): {
-                                valueToReturn.push(Block(mergeComplexStructures(body), type));
+                                valueToReturn.push(Block(mergeComplexStructures(body), mergeComplexStructures([type])[0]));
                             }
                             case Expression(body, type): {
-                                valueToReturn.push(Expression(mergeComplexStructures(body), type));
+                                valueToReturn.push(Expression(mergeComplexStructures(body), mergeComplexStructures([type])[0]));
                             }
                             case _: valueToReturn.push(lookahead);
                         }
@@ -402,8 +406,8 @@ class Parser {
                     }
                     post.push(Return(if (valueToReturn.length == 1) valueToReturn[0] else Expression(valueToReturn.copy(), null), null));
                 }
-                case Expression(parts, type): post.push(Expression(mergeComplexStructures(parts), null));
-                case Block(body, type): post.push(Block(mergeComplexStructures(body), null));
+                case Expression(parts, type): post.push(Expression(mergeComplexStructures(parts), mergeComplexStructures([type])[0]));
+                case Block(body, type): post.push(Block(mergeComplexStructures(body), mergeComplexStructures([type])[0]));
                 case _: post.push(token);
             }
             i++;
@@ -416,6 +420,7 @@ class Parser {
     public static function mergeCalls(pre:Array<ParserTokens>):Array<ParserTokens> {
 
         if (pre == null) return null;
+        if (pre.length == 1 && pre[0] == null) return [null];
 
         var post:Array<ParserTokens> = [];
 
@@ -442,11 +447,11 @@ class Parser {
                         }
                     }
                 }
-                case Block(body, type): post.push(Block(mergeCalls(body), type));
-                case Variable(name, type): post.push(Variable(mergeCalls([name])?.get(0), type));
-                case Function(name, params, type): post.push(Function(mergeCalls([name])?.get(0), mergeCalls([params])?.get(0), type));
-                case Condition(name, exp, body, type): post.push(Condition(mergeCalls([name])?.get(0), mergeCalls([exp])?.get(0), mergeCalls([body])?.get(0), type));
-                case Return(value, type): post.push(Return(mergeCalls([value])?.get(0), type));
+                case Block(body, type): post.push(Block(mergeCalls(body), mergeCalls([type])[0]));
+                case Variable(name, type): post.push(Variable(mergeCalls([name])[0], mergeCalls([type])[0]));
+                case Function(name, params, type): post.push(Function(mergeCalls([name])[0], mergeCalls([params])[0], mergeCalls([type])[0]));
+                case Condition(name, exp, body, type): post.push(Condition(mergeCalls([name])[0], mergeCalls([exp])[0], mergeCalls([body])[0], mergeCalls([type])[0]));
+                case Return(value, type): post.push(Return(mergeCalls([value])[0], mergeCalls([type])[0]));
                 case PartArray(parts): post.push(PartArray(mergeCalls(parts)));
                 case _: post.push(token);
             }
@@ -460,6 +465,7 @@ class Parser {
     public static function mergePropertyOperations(pre:Array<ParserTokens>) :Array<ParserTokens> {
 
         if (pre == null) return null;
+        if (pre.length == 1 && pre[0] == null) return [null];
 
         var post:Array<ParserTokens> = [];
         trace(pre);
@@ -496,15 +502,15 @@ class Parser {
                         }
                     }
                 }
-                case Block(body, type): post.push(Block(mergePropertyOperations(body), type));
-                case Expression(parts, type): post.push(Expression(mergePropertyOperations(parts), type));
-                case Variable(name, type): post.push(Variable(mergePropertyOperations(if (name.getName() == "PartArray") name.getParameters()?.get(0) else [name])?.get(0), type));
-                case Function(name, params, type): post.push(Function(mergePropertyOperations(if (name.getName() == "PartArray") name.getParameters()?.get(0) else [name])?.get(0), mergePropertyOperations([params])?.get(0), type));
-                case Condition(name, exp, body, type): post.push(Condition(mergePropertyOperations([name])?.get(0), mergePropertyOperations([exp])?.get(0), mergePropertyOperations([body])?.get(0), type));
-                case Return(value, type): post.push(Return(mergePropertyOperations([value])?.get(0), type));
+                case Block(body, type): post.push(Block(mergePropertyOperations(body), mergePropertyOperations([type])[0]));
+                case Expression(parts, type): post.push(Expression(mergePropertyOperations(parts), mergePropertyOperations([type])[0]));
+                case Variable(name, type): post.push(Variable(mergePropertyOperations(if (name.getName() == "PartArray") name.getParameters()[0] else [name])[0], mergePropertyOperations([type])[0]));
+                case Function(name, params, type): post.push(Function(mergePropertyOperations(if (name.getName() == "PartArray") name.getParameters()[0] else [name])[0], mergePropertyOperations([params])[0], mergePropertyOperations([type])[0]));
+                case Condition(name, exp, body, type): post.push(Condition(mergePropertyOperations([name])[0], mergePropertyOperations([exp])[0], mergePropertyOperations([body])[0], mergePropertyOperations([type])[0]));
+                case Return(value, type): post.push(Return(mergePropertyOperations([value])[0], mergePropertyOperations([type])[0]));
                 case PartArray(parts): post.push(PartArray(mergePropertyOperations(parts)));
-                case FunctionCall(name, params): post.push(FunctionCall(mergePropertyOperations([name])?.get(0), mergePropertyOperations([params])?.get(0)));
-                case Write(assignees, value, type): post.push(Write(mergePropertyOperations(assignees), mergePropertyOperations([value])?.get(0), type));
+                case FunctionCall(name, params): post.push(FunctionCall(mergePropertyOperations([name])[0], mergePropertyOperations([params])[0]));
+                case Write(assignees, value, type): post.push(Write(mergePropertyOperations(assignees), mergePropertyOperations([value])[0], mergePropertyOperations([type])[0]));
                 case _: post.push(token);
             }
             i++;
@@ -517,6 +523,7 @@ class Parser {
     public static function mergeWrites(pre:Array<ParserTokens>):Array<ParserTokens> {
 
         if (pre == null) return null;
+        if (pre.length == 1 && pre[0] == null) return [null];
 
         var post:Array<ParserTokens> = [];
 
@@ -572,7 +579,7 @@ class Parser {
                 }
                 case Expression(parts, type): {
                     if (potentialAssignee != null) post.push(potentialAssignee);
-                    potentialAssignee = Expression(mergeWrites(parts), type);
+                    potentialAssignee = Expression(mergeWrites(parts), mergeWrites([type])[0]);
                 }
                 case PartArray(parts): {
                     if (potentialAssignee != null) post.push(potentialAssignee);
@@ -580,31 +587,31 @@ class Parser {
                 }
                 case Block(body, type): {
                     if (potentialAssignee != null) post.push(potentialAssignee);
-                    potentialAssignee = Block(mergeWrites(body), type);
+                    potentialAssignee = Block(mergeWrites(body), mergeWrites([type])[0]);
                 }
                 case Variable(name, type): {
                     if (potentialAssignee != null) post.push(potentialAssignee);
-                    potentialAssignee = Variable(mergeWrites([name])?.get(0), type);
+                    potentialAssignee = Variable(mergeWrites([name])[0], mergeWrites([type])[0]);
                 }
                 case Function(name, params, type): {
                     if (potentialAssignee != null) post.push(potentialAssignee);
-                    potentialAssignee = Function(mergeWrites([name])?.get(0), mergeWrites([params])?.get(0), type);
+                    potentialAssignee = Function(mergeWrites([name])[0], mergeWrites([params])[0], mergeWrites([type])[0]);
                 }
                 case Condition(name, exp, body, type): {
                     if (potentialAssignee != null) post.push(potentialAssignee);
-                    potentialAssignee = Condition(mergeWrites([name])?.get(0), mergeWrites([exp])?.get(0), mergeWrites([body])?.get(0), type);
+                    potentialAssignee = Condition(mergeWrites([name])[0], mergeWrites([exp])[0], mergeWrites([body])[0], mergeWrites([type])[0]);
                 }
                 case Return(value, type): {
                     if (potentialAssignee != null) post.push(potentialAssignee);
-                    potentialAssignee = Return(mergeWrites([value])?.get(0), type);
+                    potentialAssignee = Return(mergeWrites([value])[0], mergeWrites([type])[0]);
                 }
                 case FunctionCall(name, params): {
                     if (potentialAssignee != null) post.push(potentialAssignee);
-                    potentialAssignee = FunctionCall(mergeWrites([name])?.get(0), mergeWrites([params])?.get(0));
+                    potentialAssignee = FunctionCall(mergeWrites([name])[0], mergeWrites([params])[0]);
                 }
                 case PropertyAccess(name, property): {
                     if (potentialAssignee != null) post.push(potentialAssignee);
-                    potentialAssignee = PropertyAccess(mergeWrites([name])?.get(0), mergeWrites([property])?.get(0));
+                    potentialAssignee = PropertyAccess(mergeWrites([name])[0], mergeWrites([property])[0]);
                 }
                 case _: {
                     if (potentialAssignee != null) post.push(potentialAssignee);
@@ -626,6 +633,7 @@ class Parser {
     public static function mergeValuesWithTypeDeclarations(pre:Array<ParserTokens>) :Array<ParserTokens> {
 
         if (pre == null) return null;
+        if (pre.length == 1 && pre[0] == null) return [null];
 
         var post:Array<ParserTokens> = [];
 
@@ -651,15 +659,15 @@ class Parser {
                         }
                     }
                 }
-                case Block(body, type): post.unshift(Block(mergeValuesWithTypeDeclarations(body), type));
-                case Expression(parts, type): post.unshift(Expression(mergeValuesWithTypeDeclarations(parts), type));
-                case Variable(name, type): post.unshift(Variable(mergeValuesWithTypeDeclarations(if (name.getName() == "PartArray") name.getParameters()?.get(0) else [name])?.get(0), type));
-                case Function(name, params, type): post.unshift(Function(mergeValuesWithTypeDeclarations(if (name.getName() == "PartArray") name.getParameters()?.get(0) else [name])?.get(0), mergeValuesWithTypeDeclarations([params])?.get(0), type));
-                case Condition(name, exp, body, type): post.unshift(Condition(mergeValuesWithTypeDeclarations([name])?.get(0), mergeValuesWithTypeDeclarations([exp])?.get(0), mergeValuesWithTypeDeclarations([body])?.get(0), type));
-                case Return(value, type): post.unshift(Return(mergeValuesWithTypeDeclarations([value])?.get(0), type));
+                case Block(body, type): post.unshift(Block(mergeValuesWithTypeDeclarations(body), mergeValuesWithTypeDeclarations([type])[0]));
+                case Expression(parts, type): post.unshift(Expression(mergeValuesWithTypeDeclarations(parts), mergeValuesWithTypeDeclarations([type])[0]));
+                case Variable(name, type): post.unshift(Variable(mergeValuesWithTypeDeclarations(if (name.getName() == "PartArray") name.getParameters()[0] else [name])[0], mergeValuesWithTypeDeclarations([type])[0]));
+                case Function(name, params, type): post.unshift(Function(mergeValuesWithTypeDeclarations(if (name.getName() == "PartArray") name.getParameters()[0] else [name])[0], mergeValuesWithTypeDeclarations([params])[0], mergeValuesWithTypeDeclarations([type])[0]));
+                case Condition(name, exp, body, type): post.unshift(Condition(mergeValuesWithTypeDeclarations([name])[0], mergeValuesWithTypeDeclarations([exp])[0], mergeValuesWithTypeDeclarations([body])[0], mergeValuesWithTypeDeclarations([type])[0]));
+                case Return(value, type): post.unshift(Return(mergeValuesWithTypeDeclarations([value])[0], mergeValuesWithTypeDeclarations([type])[0]));
                 case PartArray(parts): post.unshift(PartArray(mergeValuesWithTypeDeclarations(parts)));
-                case FunctionCall(name, params): post.unshift(FunctionCall(mergeValuesWithTypeDeclarations([name])?.get(0), mergeValuesWithTypeDeclarations([params])?.get(0)));
-                case Write(assignees, value, type): post.unshift(Write(mergeValuesWithTypeDeclarations(assignees), mergeValuesWithTypeDeclarations([value])?.get(0), type));
+                case FunctionCall(name, params): post.unshift(FunctionCall(mergeValuesWithTypeDeclarations([name])[0], mergeValuesWithTypeDeclarations([params])[0]));
+                case Write(assignees, value, type): post.unshift(Write(mergeValuesWithTypeDeclarations(assignees), mergeValuesWithTypeDeclarations([value])[0], mergeValuesWithTypeDeclarations([type])[0]));
                 case _: post.unshift(token);
             }
             i--;
