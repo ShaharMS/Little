@@ -53,4 +53,9 @@ enum ParserTokens {
     NullValue;
     TrueValue;
     FalseValue;
+
+    /**
+        Used for no-body conditions
+    **/
+    NoBody;
 }

@@ -300,6 +300,9 @@ Ast
         </div>
     </div>
 
+    <script>
+        var types = []
+    </script>
 
     <script>
         var Highlighter = function () { };
@@ -317,7 +320,7 @@ Ast
             var keywords1EReg = new RegExp("\\b(" + keywords1.join("|") + ")\\b", "g");
             var keywords2 = ["nothing", "true", "false", "action", "define"];
             var keywords2EReg = new RegExp("\\b(" + keywords2.join("|") + ")\\b", "g");
-            var basicTypes = ["Number", "Decimal", "Characters", "Boolean", "Anything", "Sign", "Type"]; 
+            var basicTypes = ["Number", "Decimal", "Characters", "Boolean", "Anything", "Sign", "Type"].concat(types); 
             var basicTypesEReg = new RegExp("\\b(" + basicTypes.join("|") + ")\\b", "g");
             var functions = new RegExp("\\b([a-zA-Z0-9_]+)\\s*\\(", "g");
             var nums = new RegExp("\\b([0-9]+\.?[0-9]*)\\b", "g");
@@ -331,7 +334,6 @@ Ast
             html = html.replace(new RegExp("(//.+?)(\n|$)", "g"), "<span class='cmt'>$1</span>$2");
             html = html.replace(new RegExp("(/\\*\\*?(.|\n)+?\\*?\\*/)", "g"), "<span class='cmt'>$1</span>");
             html = html.replace(nums, "<span class='nums'>$1</span>")
-            console.log(html);
             return html;
         };
 
@@ -381,10 +383,6 @@ Ast
         }
 
         window.addEventListener("resize", (_) => { for (let j = 0; j < buttons.length; j++) buttons[j].adjust(); });
-    </script>
-
-    <script>
-        document.getElementById("input").dispatchEvent("onkeyup");
     </script>
 </body>
 

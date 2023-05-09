@@ -105,6 +105,7 @@ class PrepareRun {
 
         Little.plugin.registerCondition("if", [Variable(Identifier("rule"), Identifier(Keywords.TYPE_BOOLEAN))] , (params, body) -> {
             var val = NullValue;
+            trace(params, body);
             if (Conversion.toHaxeValue(Interpreter.evaluateExpressionParts(params))) {
                 val = Interpreter.interpret(body, Interpreter.currentConfig);
             }

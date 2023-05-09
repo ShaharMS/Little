@@ -58,7 +58,6 @@ class JsExample {
                     firstRow = false;
                     continue;
                 }
-                trace(row.innerHTML);
                 var p = row.getElementsByTagName("p")[0];
                 var input = row.getElementsByTagName("input")[0];
                 p.innerText = getCodeExample(input.id);
@@ -97,6 +96,7 @@ class JsExample {
         }
 
         Syntax.plainCode("Highlighter.registerOnParagraphs()");
+        Syntax.plainCode('document.getElementById("input").dispatchEvent(new Event("onkeyup"));');
 
         update();
 

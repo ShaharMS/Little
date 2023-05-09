@@ -80,7 +80,7 @@ class MemoryObject {
             // trace("checks passed");
             // trace(parameters.getParameters()[0][0]);
             var con = (parameters.getParameters()[0][0] : ParserTokens).getParameters()[0];
-            var body = (parameters.getParameters()[0][1] : ParserTokens).getParameters()[0];
+            var body = [(parameters.getParameters()[0][1] : ParserTokens)];
 
             if (params != null) { // Used to "strongly type" the condition
                 var given:Array<ParserTokens> = [];

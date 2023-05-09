@@ -47,6 +47,7 @@ class Main {
 			var input = Sys.stdin().readLine();
 			try {
 				Little.run(input, true);
+				trace(PrettyPrinter.printParserAst(Parser.parse(Lexer.lex(input))));
 				trace(Runtime.stdout);
 			} catch (e) {
 				trace(Lexer.lex(input));

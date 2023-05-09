@@ -55,6 +55,7 @@ class PrettyPrinter {
             case Characters(string): return '${prefixFA(prefix)}$t$d "$string"\n';
 			case Module(name): return '${prefixFA(prefix)}$t$d Module: $name\n';
 			case ErrorMessage(name): return '${prefixFA(prefix)}$t$d Error: $name\n';
+			case NoBody:  return '${prefixFA(prefix)}$t$d <no body>\n';
 			case External(haxeValue): return '${prefixFA(prefix)}$t$d External Haxe Value Identifier: [$haxeValue]\n';
 			case ExternalCondition(use): return '${prefixFA(prefix)}$t$d External Haxe Condition Identifier: [$use]\n';
             case Decimal(num): return '${prefixFA(prefix)}$t$d $num\n';

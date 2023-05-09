@@ -586,6 +586,7 @@ class Interpreter {
         if (memory == null) memory = Interpreter.memory; // If no memory map is given, use the base one.
 
         switch token {
+            case NoBody: return "<no body>";
             case SetLine(line): return (Runtime.line = line) + "";
             case SplitLine: return token.getName();
             case Module(name): return Runtime.currentModule = name;
@@ -643,6 +644,7 @@ class Interpreter {
         if (memory == null) memory = Interpreter.memory; // If no memory map is given, use the base one.
 
         switch token {
+            case NoBody: return "<no body>";
             case Block(body, type): return stringifyTokenIdentifier(runTokens(body, currentConfig.prioritizeVariableDeclarations, currentConfig.prioritizeFunctionDeclarations, currentConfig.strictTyping));
             case Expression(parts, type): return stringifyTokenIdentifier(evaluate(token));
             case Characters(string): return string;
