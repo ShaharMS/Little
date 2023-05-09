@@ -44,6 +44,10 @@
             color: #DDD;
         }
 
+        p .ident {
+            color: #9cdcfe
+        }
+
         p .nums {
             color: #b5cea8
         }
@@ -65,7 +69,7 @@
         }
 
         p .str,
-        p .str,
+        p .str .ident,
         p .str .kwd,
         p .str .kwd1,
         p .str .type,
@@ -75,6 +79,7 @@
         }
 
         p .cmt,
+        p .cmt .ident,
         p .cmt .kwd,
         p .cmt .kwd1,
         p .cmt .nums,
@@ -307,15 +312,17 @@ Ast
         };
 
         Highlighter.syntaxHighlight = function (html) {
+            var idents = new RegExp("(?!&)\\b(\\w+)\\b(?!;)(?!\\s*\\()", "g");
             var keywords1 = ["as", "if", "while", "for", "after", "whenever", "return"];
             var keywords1EReg = new RegExp("\\b(" + keywords1.join("|") + ")\\b", "g");
             var keywords2 = ["nothing", "true", "false", "action", "define"];
             var keywords2EReg = new RegExp("\\b(" + keywords2.join("|") + ")\\b", "g");
-            var basicTypes = ["Number", "Decimal", "Characters", "Boolean", "Anything"]; 
+            var basicTypes = ["Number", "Decimal", "Characters", "Boolean", "Anything", "Sign", "Type"]; 
             var basicTypesEReg = new RegExp("\\b(" + basicTypes.join("|") + ")\\b", "g");
             var functions = new RegExp("\\b([a-zA-Z0-9_]+)\\s*\\(", "g");
             var nums = new RegExp("\\b([0-9]+\.?[0-9]*)\\b", "g");
             //replace keywords
+            html = html.replace(idents, "<span class='ident'>$1</span>")
             html = html.replace(keywords2EReg, "<span class='kwd1'>$1</span>");
             html = html.replace(keywords1EReg, "<span class='kwd'>$1</span>");
             html = html.replace(basicTypesEReg, "<span class='type'>$1</span>");
