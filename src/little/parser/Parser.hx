@@ -48,27 +48,27 @@ class Parser {
 
             i++;
         }
-        trace("before:", tokens);
+        // trace("before:", tokens);
         tokens = mergeBlocks(tokens);
-        trace("blocks:", tokens);
+        // trace("blocks:", tokens);
         tokens = mergeExpressions(tokens);
-        trace("expressions:", tokens);
+        // trace("expressions:", tokens);
         tokens = mergePropertyOperations(tokens);
-        trace("props:", tokens);
+        // trace("props:", tokens);
         tokens = mergeTypeDecls(tokens);
-        trace("types:", tokens);
+        // trace("types:", tokens);
         tokens = mergeComplexStructures(tokens);
-        trace("structures:", tokens);
+        // trace("structures:", tokens);
         tokens = mergeCalls(tokens);
-        trace("calls:", tokens);
+        // trace("calls:", tokens);
         tokens = mergeWrites(tokens);
-        trace("writes:", tokens);
+        // trace("writes:", tokens);
         tokens = mergeValuesWithTypeDeclarations(tokens);
-        trace("casts:", tokens);
+        // trace("casts:", tokens);
         for (level in Parser.additionalParsingLevels) {
             tokens = level(tokens);
         }
-        trace("macros:", tokens);
+        // trace("macros:", tokens);
 
         return tokens;
     }
@@ -180,7 +180,6 @@ class Parser {
         if (pre.length == 1 && pre[0] == null) return [null];
 
         var post:Array<ParserTokens> = [];
-        trace(pre);
         var i = 0;
         while (i < pre.length) {
 
