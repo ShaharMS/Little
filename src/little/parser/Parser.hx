@@ -15,7 +15,7 @@ using little.parser.Parser;
 @:access(little.interpreter.Runtime)
 class Parser {
 
-    public static var additionalParsingLevels:Array<Array<ParserTokens> -> Array<ParserTokens>> = [Parser.mergeNonBlockBodies/*, Parser.mergeElses*/];
+    public static var additionalParsingLevels:Array<Array<ParserTokens> -> Array<ParserTokens>> = [Parser.mergeNonBlockBodies, Parser.mergeElses];
 
     public static function parse(lexerTokens:Array<LexerTokens>):Array<ParserTokens> {
         var tokens:Array<ParserTokens> = [];
@@ -776,17 +776,43 @@ class Parser {
             switch token {
                 case SetLine(line): {setLine(line); post.unshift(token);}
                 case SplitLine: {nextPart(); post.unshift(token);}
-                case Condition(name, exp, body, type):
-                case Variable(name, type):
-                case Function(name, params, type):
-                case Write(assignees, value, type):
-                case TypeDeclaration(value, type):
-                case FunctionCall(name, params):
-                case Return(value, type):
-                case Expression(parts, type):
-                case Block(body, type):
-                case PartArray(parts):
-                case PropertyAccess(name, property):
+                case Identifier(_ == ELSE => true): {
+                    if (post.length == 0 || post[post.length - 1].getName() != 'Condition') {
+                        post.push(token);
+                        i++;
+                        continue;
+                    }
+                    if (i + 1 >= pre.length) {
+                        Runtime.throwError(ErrorMessage('Condition has no body, body may be cut off by the end of file, block or expression.'), PARSER);
+                        return null;
+                    }
+                    var exp:ParserTokens = post[post.length - 1].getParameters()[1]; //Condition(name:ParserTokens, ->exp:ParserTokens<-, body:ParserTokens, type:ParserTokens)
+                    var type:ParserTokens = post[post.length - 1].getParameters()[3]; //Condition(name:ParserTokens, exp:ParserTokens, body:ParserTokens, ->type:ParserTokens<-)
+                    exp = Expression([exp, Sign("!="), TrueValue], Identifier(TYPE_BOOLEAN));
+                    i++;
+                    var body:ParserTokens = pre[i];
+                    switch body {
+                        case SplitLine: {
+                            Runtime.throwError(ErrorMessage('`$ELSE` condition has no body, body cut off by a line split, or does not exist'), PARSER);
+                            return null;
+                        }
+                        case SetLine(_): {
+                            Runtime.throwError(ErrorMessage('`$ELSE` condition has no body, body cut off by a new line, or does not exist'), PARSER);
+                            return null;
+                        }
+                        case _: post.push(Condition(Identifier("if"), exp, body, type));
+                    }
+                }
+                case Block(body, type): post.push(Block(mergeElses(body), mergeElses([type])[0]));
+                case Expression(parts, type): post.push(Expression(mergeElses(parts), mergeElses([type])[0]));
+                case Variable(name, type): post.push(Variable(mergeElses([name])[0], mergeElses([type])[0]));
+                case Function(name, params, type): post.push(Function(mergeElses([name])[0], mergeElses([params])[0], mergeElses([type])[0]));
+                case Condition(name, exp, body, type): post.push(Condition(mergeElses([name])[0], mergeElses([exp])[0], mergeElses([body])[0], mergeElses([type])[0]));
+                case Return(value, type): post.push(Return(mergeElses([value])[0], mergeElses([type])[0]));
+                case PartArray(parts): post.push(PartArray(mergeElses(parts)));
+                case FunctionCall(name, params): post.push(FunctionCall(mergeElses([name])[0], mergeElses([params])[0]));
+                case Write(assignees, value, type): post.push(Write(mergeElses(assignees), mergeElses([value])[0], mergeElses([type])[0]));
+                case PropertyAccess(name, property): post.push(PropertyAccess(mergeElses([name])[0], mergeElses([property])[0]));
                 case _: post.push(token);
             }
             i++;
