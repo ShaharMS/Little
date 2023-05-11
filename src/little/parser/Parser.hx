@@ -518,6 +518,11 @@ class Parser {
                         var lookbehind = pre[i - 1];
                         switch lookbehind {
                             case Sign(_) | SplitLine | SetLine(_): post.push(Expression(parts, type));
+                            case PropertyAccess(name, property): {
+                                post.pop();
+                                token = PartArray(parts);
+                                post.push(PropertyAccess(name, FunctionCall(property, token)));
+                            }
                             case _: {
                                 var previous = post.pop(); // When parsing a function that returns a function, this handles the "nested call" correctly
                                 token = PartArray(parts);

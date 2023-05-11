@@ -447,7 +447,7 @@ class Interpreter {
                     switch prop {
                         case FunctionCall(name, params): {
                             if (object.props.get(stringifyTokenValue(name)) == null) {
-                                evaluate(ErrorMessage('Unable to call `$objName$PROPERTY_ACCESS_SIGN${stringifyTokenValue(name)}(${stringifyTokenValue(params)})`: `$objName` Does not contain property `${stringifyTokenIdentifier(name)}`.'));
+                                evaluate(ErrorMessage('Unable to call `$objName$PROPERTY_ACCESS_SIGN${stringifyTokenValue(name)}(${stringifyTokenValue(params)})`: `$objName` Does not contain property `${stringifyTokenIdentifier(name)}`. Use `$FUNCTION_DECLARATION` to create a new property (`$FUNCTION_DECLARATION $str$PROPERTY_ACCESS_SIGN${stringifyTokenIdentifier(name)}(...)`)'));
                                 return null;
                             }
                             return new MemoryObject(object.props.get(stringifyTokenValue(name)).use(params), memory.object); // Todo: Should a new memory object actually be created here?
@@ -455,7 +455,7 @@ class Interpreter {
                         case _: {
                             if (object.props.get(stringifyTokenIdentifier(prop)) == null) {
                                 object.props.set(stringifyTokenIdentifier(prop), new MemoryObject(NullValue, object));
-                                evaluate(ErrorMessage('Unable to access `$str$PROPERTY_ACCESS_SIGN${stringifyTokenValue(prop)}`: `$str` Does not contain property `${stringifyTokenValue(prop)}`'));
+                                evaluate(ErrorMessage('Unable to access `$str$PROPERTY_ACCESS_SIGN${stringifyTokenValue(prop)}`: `$str` Does not contain property `${stringifyTokenValue(prop)}`. Use `$VARIABLE_DECLARATION` to create a new property (`$VARIABLE_DECLARATION $str$PROPERTY_ACCESS_SIGN${stringifyTokenValue(prop)}`)'));
                                 return null;
                                 // trace("Created new: " + objName, prop );
                             }
