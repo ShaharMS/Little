@@ -362,7 +362,7 @@ class Plugins {
             }
         }
        
-        trace('Adding $propertyName to $onObject');
+        // trace('Adding $propertyName to $onObject');
         parent.props.set(propertyName, memObject);
         
     }

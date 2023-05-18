@@ -23,7 +23,7 @@ class Interpreter {
 
     public static function interpret(tokens:Array<ParserTokens>, runConfig:RunConfig) {
         if (errorThrown) return null;
-        trace(tokens);
+        // trace(tokens);
         currentConfig = runConfig;
         if (tokens == null || tokens.length == 0) return NullValue;
         if (tokens[0].getName() != "Module") {
