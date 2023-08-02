@@ -239,7 +239,7 @@ class Actions {
             case Identifier(_): read(token);
             case FunctionCall(name, params): call(name, params);
             case Write(assignees, value, type): write(assignees, value, type);
-            case PropertyAccess(name, property): evaluate(token, memory);
+            case PropertyAccess(name, property): Interpreter.evaluate(token, memory);
             case _: null;
         }
     }

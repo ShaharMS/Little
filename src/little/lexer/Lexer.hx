@@ -16,7 +16,7 @@ class Lexer {
         var i = 0;
         while (i < code.length) {
             var char = code.charAt(i);
-
+            //if (char == '"' && code.charAt(i + 1))
             if (char == '"') {
                 var string = "";
                 i++;

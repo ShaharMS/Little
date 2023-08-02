@@ -568,7 +568,11 @@ class Interpreter {
                         }
                     }
                 }
-                return createObject(access(obj, p, str).value); // Todo: Very questionable...
+                // Actually not that questionable
+                // This function always needs to create a new object. In order to assure
+                // creation instead of referencing, we dont return access(...),
+                // but we return a new object based on the property's value.
+                return createObject(access(obj, p, str).value); // Todo: Very questionable... (not anymore :) )
                 
             }
             case Return(value, type): {

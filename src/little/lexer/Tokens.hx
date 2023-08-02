@@ -9,4 +9,5 @@ enum LexerTokens {
     NullValue;
     Newline;
     SplitLine;
+    Documentation(content:String);
 }
