@@ -16,8 +16,16 @@ class Lexer {
         var i = 0;
         while (i < code.length) {
             var char = code.charAt(i);
-            //if (char == '"' && code.charAt(i + 1))
-            if (char == '"') {
+            if (i < code.length - 6 && char == '"' && code.charAt(i + 1) == '"' && code.charAt(i + 2) == '"') {
+                var string = "";
+                i++;
+                while (i < code.length - 2 && code.charAt(i) != '"' && code.charAt(i + 1) == '"' && code.charAt(i + 2) == '"') {
+                    string += code.charAt(i);
+                    i++;
+                }
+                tokens.push(Documentation(string));
+            }
+            else if (char == '"') {
                 var string = "";
                 i++;
                 while (i < code.length && code.charAt(i) != '"') {

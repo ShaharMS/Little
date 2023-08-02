@@ -44,6 +44,7 @@ class Parser {
                     line++;
                 }
                 case SplitLine: tokens.push(SplitLine);
+                case Documentation(content): // Todo
             }
 
             i++;
