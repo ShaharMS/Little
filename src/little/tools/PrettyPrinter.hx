@@ -6,6 +6,8 @@ using little.tools.TextTools;
 
 import little.parser.Tokens;
 
+import little.Keywords.*;
+
 class PrettyPrinter {
     
     public static function printParserAst(ast:Array<ParserTokens>, ?spacingBetweenNodes:Int = 6) {
@@ -175,5 +177,53 @@ class PrettyPrinter {
 			if (str.length == 0) return "no parameters";
 			return str.join(", ");
 		}
+	}
+
+
+	static var indent = "";
+
+	public static  function stringify(?code:Array<ParserTokens>, ?token:ParserTokens) {
+		if (token != null) code = [token];
+		var s = "";
+
+		for (token in code) {
+			switch token {
+				case SetLine(line):s += '\n$indent';
+				case SplitLine: s += ", ";
+				case Variable(name, type): s += '$VARIABLE_DECLARATION $name ${if (type != null) '$TYPE_DECL_OR_CAST ${stringify(type)}' else ''}';
+				case Function(name, params, type): s += '$FUNCTION_DECLARATION ${stringify(name)}(${stringify(params)}) ${if (type != null) '$TYPE_DECL_OR_CAST ${stringify(type)}' else ''}';
+				case Condition(name, exp, body, type): 
+					indent += "	";
+					s += '${stringify(name)} (${stringify(exp)}) \n${stringify(body)} ${if (type != null) '$TYPE_DECL_OR_CAST ${stringify(type)}' else ''}';
+					indent = indent.subtract("	");
+				case Read(name): s += stringify(name);
+				case Write(assignees, value, type): s += [assignees.concat([value]).map(t -> stringify(t)).join(" = ")];
+				case Identifier(word): s += word;
+				case TypeDeclaration(value, type): s += '$TYPE_DECL_OR_CAST ${stringify(type)}';
+				case FunctionCall(name, params): s += '${stringify(name)}(${stringify(params)})';
+				case Return(value, type): s += '$FUNCTION_RETURN ${stringify(value)}';
+				case Expression(parts, type): s += stringify(parts);
+				case Block(body, type): 
+					indent += "	";
+					s += '{${stringify(body)}} ${if (type != null) '$TYPE_DECL_OR_CAST ${stringify(type)}' else ''}';
+					indent = indent.subtract("	");
+				case PartArray(parts): s += stringify(parts);
+				case PropertyAccess(name, property): s += '${stringify(name)}$PROPERTY_ACCESS_SIGN${stringify(property)}';
+				case Sign(sign): s += " " + sign + " ";
+				case Number(num): s += num;
+				case Decimal(num): s += num;
+				case Characters(string): s += '"' + string + '"';
+				case Module(name): 
+				case External(get):
+				case ExternalCondition(use):
+				case ErrorMessage(msg):
+				case NullValue: s += NULL_VALUE;
+				case TrueValue: s += TRUE_VALUE;
+				case FalseValue: s += FALSE_VALUE;
+				case NoBody:
+			}
+		}
+
+		return s;
 	}
 }

@@ -1448,7 +1448,6 @@ little_tools_Plugins.registerProperty = function(propertyName,onObject,isType,va
 			};
 		}
 	}
-	haxe_Log.trace("Adding " + propertyName + " to " + onObject,{ fileName : "src/little/tools/Plugins.hx", lineNumber : 365, className : "little.tools.Plugins", methodName : "registerProperty"});
 	little_interpreter_memory_MemoryTree.set(parent.props,propertyName,memObject);
 };
 var little_interpreter_Runtime = function() { };
@@ -1692,8 +1691,9 @@ var little_parser_ParserTokens = $hxEnums["little.parser.ParserTokens"] = { __en
 	,NullValue: {_hx_name:"NullValue",_hx_index:23,__enum__:"little.parser.ParserTokens",toString:$estr}
 	,TrueValue: {_hx_name:"TrueValue",_hx_index:24,__enum__:"little.parser.ParserTokens",toString:$estr}
 	,FalseValue: {_hx_name:"FalseValue",_hx_index:25,__enum__:"little.parser.ParserTokens",toString:$estr}
+	,NoBody: {_hx_name:"NoBody",_hx_index:26,__enum__:"little.parser.ParserTokens",toString:$estr}
 };
-little_parser_ParserTokens.__constructs__ = [little_parser_ParserTokens.SetLine,little_parser_ParserTokens.SplitLine,little_parser_ParserTokens.Variable,little_parser_ParserTokens.Function,little_parser_ParserTokens.Condition,little_parser_ParserTokens.Read,little_parser_ParserTokens.Write,little_parser_ParserTokens.Identifier,little_parser_ParserTokens.TypeDeclaration,little_parser_ParserTokens.FunctionCall,little_parser_ParserTokens.Return,little_parser_ParserTokens.Expression,little_parser_ParserTokens.Block,little_parser_ParserTokens.PartArray,little_parser_ParserTokens.PropertyAccess,little_parser_ParserTokens.Sign,little_parser_ParserTokens.Number,little_parser_ParserTokens.Decimal,little_parser_ParserTokens.Characters,little_parser_ParserTokens.Module,little_parser_ParserTokens.External,little_parser_ParserTokens.ExternalCondition,little_parser_ParserTokens.ErrorMessage,little_parser_ParserTokens.NullValue,little_parser_ParserTokens.TrueValue,little_parser_ParserTokens.FalseValue];
+little_parser_ParserTokens.__constructs__ = [little_parser_ParserTokens.SetLine,little_parser_ParserTokens.SplitLine,little_parser_ParserTokens.Variable,little_parser_ParserTokens.Function,little_parser_ParserTokens.Condition,little_parser_ParserTokens.Read,little_parser_ParserTokens.Write,little_parser_ParserTokens.Identifier,little_parser_ParserTokens.TypeDeclaration,little_parser_ParserTokens.FunctionCall,little_parser_ParserTokens.Return,little_parser_ParserTokens.Expression,little_parser_ParserTokens.Block,little_parser_ParserTokens.PartArray,little_parser_ParserTokens.PropertyAccess,little_parser_ParserTokens.Sign,little_parser_ParserTokens.Number,little_parser_ParserTokens.Decimal,little_parser_ParserTokens.Characters,little_parser_ParserTokens.Module,little_parser_ParserTokens.External,little_parser_ParserTokens.ExternalCondition,little_parser_ParserTokens.ErrorMessage,little_parser_ParserTokens.NullValue,little_parser_ParserTokens.TrueValue,little_parser_ParserTokens.FalseValue,little_parser_ParserTokens.NoBody];
 var little_interpreter_memory_MemoryObject = function(value,props,params,type,external,condition,nonStatic,parent) {
 	if(type == null) {
 		type = little_parser_ParserTokens.NullValue;
@@ -1778,7 +1778,7 @@ little_interpreter_memory_MemoryObject.prototype = {
 				return little_parser_ParserTokens.ErrorMessage("Incorrect parameter group format, given group format: " + $hxEnums[parameters.__enum__].__constructs__[parameters._hx_index]._hx_name + ", expected Format: `PartArray`");
 			}
 			var con = Type.enumParameters(Type.enumParameters(parameters)[0][0])[0];
-			var body = Type.enumParameters(Type.enumParameters(parameters)[0][1])[0];
+			var body = [Type.enumParameters(parameters)[0][1]];
 			if(this.params != null) {
 				var given = [];
 				if(con.length != 0) {
@@ -2141,7 +2141,6 @@ little_interpreter_Interpreter.interpret = function(tokens,runConfig) {
 	if(little_interpreter_Interpreter.errorThrown) {
 		return null;
 	}
-	haxe_Log.trace(tokens,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 26, className : "little.interpreter.Interpreter", methodName : "interpret"});
 	little_interpreter_Interpreter.currentConfig = runConfig;
 	if(tokens == null || tokens.length == 0) {
 		return little_parser_ParserTokens.NullValue;
@@ -2681,14 +2680,14 @@ little_interpreter_Interpreter.accessObject = function(exp,memory) {
 				var name = prop.name;
 				var params = prop.params;
 				if(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenValue(name)) == null) {
-					little_interpreter_Interpreter.evaluate(little_parser_ParserTokens.ErrorMessage("Unable to call `" + objName + little_Keywords.PROPERTY_ACCESS_SIGN + little_interpreter_Interpreter.stringifyTokenValue(name) + "(" + little_interpreter_Interpreter.stringifyTokenValue(params) + ")`: `" + objName + "` Does not contain property `" + little_interpreter_Interpreter.stringifyTokenIdentifier(name) + "`."));
+					little_interpreter_Interpreter.evaluate(little_parser_ParserTokens.ErrorMessage("Unable to call `" + objName + little_Keywords.PROPERTY_ACCESS_SIGN + little_interpreter_Interpreter.stringifyTokenValue(name) + "(" + little_interpreter_Interpreter.stringifyTokenValue(params) + ")`: `" + objName + "` Does not contain property `" + little_interpreter_Interpreter.stringifyTokenIdentifier(name) + "`. Use `" + little_Keywords.FUNCTION_DECLARATION + "` to create a new property (`" + little_Keywords.FUNCTION_DECLARATION + " " + str + little_Keywords.PROPERTY_ACCESS_SIGN + little_interpreter_Interpreter.stringifyTokenIdentifier(name) + "(...)`)"));
 					return null;
 				}
 				return new little_interpreter_memory_MemoryObject(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenValue(name)).use(params),null,null,null,null,null,null,little_interpreter_memory_MemoryTree.get_object(memory));
 			} else {
 				if(little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop)) == null) {
 					little_interpreter_memory_MemoryTree.set(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop),new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,null,null,null,null,null,object));
-					little_interpreter_Interpreter.evaluate(little_parser_ParserTokens.ErrorMessage("Unable to access `" + str + little_Keywords.PROPERTY_ACCESS_SIGN + little_interpreter_Interpreter.stringifyTokenValue(prop) + "`: `" + str + "` Does not contain property `" + little_interpreter_Interpreter.stringifyTokenValue(prop) + "`"));
+					little_interpreter_Interpreter.evaluate(little_parser_ParserTokens.ErrorMessage("Unable to access `" + str + little_Keywords.PROPERTY_ACCESS_SIGN + little_interpreter_Interpreter.stringifyTokenValue(prop) + "`: `" + str + "` Does not contain property `" + little_interpreter_Interpreter.stringifyTokenValue(prop) + "`. Use `" + little_Keywords.VARIABLE_DECLARATION + "` to create a new property (`" + little_Keywords.VARIABLE_DECLARATION + " " + str + little_Keywords.PROPERTY_ACCESS_SIGN + little_interpreter_Interpreter.stringifyTokenValue(prop) + "`)"));
 					return null;
 				}
 				return little_interpreter_memory_MemoryTree.get(object.props,little_interpreter_Interpreter.stringifyTokenIdentifier(prop));
@@ -2842,7 +2841,7 @@ little_interpreter_Interpreter.createObject = function(exp,memory) {
 	case 24:case 25:
 		return new little_interpreter_memory_MemoryObject(exp,null,null,little_parser_ParserTokens.Identifier(little_Keywords.TYPE_BOOLEAN),null,null,null,little_interpreter_memory_MemoryTree.get_object(memory));
 	default:
-		haxe_Log.trace("Unable to create memory object from " + Std.string(exp) + ". Returning null.",{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 577, className : "little.interpreter.Interpreter", methodName : "createObject"});
+		haxe_Log.trace("Unable to create memory object from " + Std.string(exp) + ". Returning null.",{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 581, className : "little.interpreter.Interpreter", methodName : "createObject"});
 	}
 	return null;
 };
@@ -2950,6 +2949,8 @@ little_interpreter_Interpreter.stringifyTokenValue = function(token,memory) {
 		return little_Keywords.TRUE_VALUE;
 	case 25:
 		return little_Keywords.FALSE_VALUE;
+	case 26:
+		return "<no body>";
 	}
 };
 little_interpreter_Interpreter.stringifyTokenIdentifier = function(token,prop,memory) {
@@ -3062,6 +3063,8 @@ little_interpreter_Interpreter.stringifyTokenIdentifier = function(token,prop,me
 		return little_Keywords.TRUE_VALUE;
 	case 25:
 		return little_Keywords.FALSE_VALUE;
+	case 26:
+		return "<no body>";
 	}
 };
 little_interpreter_Interpreter.evaluateExpressionParts = function(parts,memory) {
@@ -3513,14 +3516,22 @@ little_lexer_Lexer.lex = function(code) {
 	var i = 0;
 	while(i < code.length) {
 		var char = code.charAt(i);
-		if(char == "\"") {
+		if(i < code.length - 6 && char == "\"" && code.charAt(i + 1) == "\"" && code.charAt(i + 2) == "\"") {
 			var string = "";
 			++i;
-			while(i < code.length && code.charAt(i) != "\"") {
+			while(i < code.length - 2 && code.charAt(i) != "\"" && code.charAt(i + 1) == "\"" && code.charAt(i + 2) == "\"") {
 				string += code.charAt(i);
 				++i;
 			}
-			tokens.push(little_lexer_LexerTokens.Characters(string));
+			tokens.push(little_lexer_LexerTokens.Documentation(string));
+		} else if(char == "\"") {
+			var string1 = "";
+			++i;
+			while(i < code.length && code.charAt(i) != "\"") {
+				string1 += code.charAt(i);
+				++i;
+			}
+			tokens.push(little_lexer_LexerTokens.Characters(string1));
 		} else if(little_tools_TextTools.contains("1234567890.",char)) {
 			var num = char;
 			++i;
@@ -3623,8 +3634,9 @@ var little_lexer_LexerTokens = $hxEnums["little.lexer.LexerTokens"] = { __ename_
 	,NullValue: {_hx_name:"NullValue",_hx_index:5,__enum__:"little.lexer.LexerTokens",toString:$estr}
 	,Newline: {_hx_name:"Newline",_hx_index:6,__enum__:"little.lexer.LexerTokens",toString:$estr}
 	,SplitLine: {_hx_name:"SplitLine",_hx_index:7,__enum__:"little.lexer.LexerTokens",toString:$estr}
+	,Documentation: ($_=function(content) { return {_hx_index:8,content:content,__enum__:"little.lexer.LexerTokens",toString:$estr}; },$_._hx_name="Documentation",$_.__params__ = ["content"],$_)
 };
-little_lexer_LexerTokens.__constructs__ = [little_lexer_LexerTokens.Identifier,little_lexer_LexerTokens.Sign,little_lexer_LexerTokens.Number,little_lexer_LexerTokens.Boolean,little_lexer_LexerTokens.Characters,little_lexer_LexerTokens.NullValue,little_lexer_LexerTokens.Newline,little_lexer_LexerTokens.SplitLine];
+little_lexer_LexerTokens.__constructs__ = [little_lexer_LexerTokens.Identifier,little_lexer_LexerTokens.Sign,little_lexer_LexerTokens.Number,little_lexer_LexerTokens.Boolean,little_lexer_LexerTokens.Characters,little_lexer_LexerTokens.NullValue,little_lexer_LexerTokens.Newline,little_lexer_LexerTokens.SplitLine,little_lexer_LexerTokens.Documentation];
 var little_parser_Parser = function() { };
 $hxClasses["little.parser.Parser"] = little_parser_Parser;
 little_parser_Parser.__name__ = "little.parser.Parser";
@@ -3673,26 +3685,20 @@ little_parser_Parser.parse = function(lexerTokens) {
 		case 7:
 			tokens.push(little_parser_ParserTokens.SplitLine);
 			break;
+		case 8:
+			var content = token.content;
+			break;
 		}
 		++i;
 	}
-	haxe_Log.trace("before:",{ fileName : "src/little/parser/Parser.hx", lineNumber : 51, className : "little.parser.Parser", methodName : "parse", customParams : [tokens]});
 	tokens = little_parser_Parser.mergeBlocks(tokens);
-	haxe_Log.trace("blocks:",{ fileName : "src/little/parser/Parser.hx", lineNumber : 53, className : "little.parser.Parser", methodName : "parse", customParams : [tokens]});
 	tokens = little_parser_Parser.mergeExpressions(tokens);
-	haxe_Log.trace("expressions:",{ fileName : "src/little/parser/Parser.hx", lineNumber : 55, className : "little.parser.Parser", methodName : "parse", customParams : [tokens]});
 	tokens = little_parser_Parser.mergePropertyOperations(tokens);
-	haxe_Log.trace("props:",{ fileName : "src/little/parser/Parser.hx", lineNumber : 57, className : "little.parser.Parser", methodName : "parse", customParams : [tokens]});
 	tokens = little_parser_Parser.mergeTypeDecls(tokens);
-	haxe_Log.trace("types:",{ fileName : "src/little/parser/Parser.hx", lineNumber : 59, className : "little.parser.Parser", methodName : "parse", customParams : [tokens]});
 	tokens = little_parser_Parser.mergeComplexStructures(tokens);
-	haxe_Log.trace("structures:",{ fileName : "src/little/parser/Parser.hx", lineNumber : 61, className : "little.parser.Parser", methodName : "parse", customParams : [tokens]});
 	tokens = little_parser_Parser.mergeCalls(tokens);
-	haxe_Log.trace("calls:",{ fileName : "src/little/parser/Parser.hx", lineNumber : 63, className : "little.parser.Parser", methodName : "parse", customParams : [tokens]});
 	tokens = little_parser_Parser.mergeWrites(tokens);
-	haxe_Log.trace("writes:",{ fileName : "src/little/parser/Parser.hx", lineNumber : 65, className : "little.parser.Parser", methodName : "parse", customParams : [tokens]});
 	tokens = little_parser_Parser.mergeValuesWithTypeDeclarations(tokens);
-	haxe_Log.trace("casts:",{ fileName : "src/little/parser/Parser.hx", lineNumber : 67, className : "little.parser.Parser", methodName : "parse", customParams : [tokens]});
 	var _g = 0;
 	var _g1 = little_parser_Parser.additionalParsingLevels;
 	while(_g < _g1.length) {
@@ -3700,7 +3706,6 @@ little_parser_Parser.parse = function(lexerTokens) {
 		++_g;
 		tokens = level(tokens);
 	}
-	haxe_Log.trace("macros:",{ fileName : "src/little/parser/Parser.hx", lineNumber : 71, className : "little.parser.Parser", methodName : "parse", customParams : [tokens]});
 	return tokens;
 };
 little_parser_Parser.mergeBlocks = function(pre) {
@@ -3851,7 +3856,6 @@ little_parser_Parser.mergePropertyOperations = function(pre) {
 		return [null];
 	}
 	var post = [];
-	haxe_Log.trace(pre,{ fileName : "src/little/parser/Parser.hx", lineNumber : 183, className : "little.parser.Parser", methodName : "mergePropertyOperations"});
 	var i = 0;
 	while(i < pre.length) {
 		var token = pre[i];
@@ -4213,8 +4217,26 @@ little_parser_Parser.mergeComplexStructures = function(pre) {
 							switch(lookahead2._hx_index) {
 							case 0:
 								var _g6 = lookahead2.line;
+								if(exp == null) {
+									little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("Condition expression does not exist/is cut off by the end of a line"),"Parser");
+									return null;
+								} else if(body4 == null) {
+									little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("Condition body does not exist/is cut off by the end of a line"),"Parser");
+									return null;
+								} else {
+									break _hx_loop4;
+								}
 								break;
 							case 1:
+								if(exp == null) {
+									little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("Condition expression does not exist/is cut off by a line split"),"Parser");
+									return null;
+								} else if(body4 == null) {
+									little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("Condition body does not exist/is cut off by a line split"),"Parser");
+									return null;
+								} else {
+									break _hx_loop4;
+								}
 								break;
 							case 11:
 								var parts = lookahead2.parts;
@@ -4241,6 +4263,9 @@ little_parser_Parser.mergeComplexStructures = function(pre) {
 							default:
 								if(exp == null) {
 									exp = lookahead2;
+								} else if(body4 == null) {
+									body4 = little_parser_ParserTokens.NoBody;
+									--i;
 								} else {
 									break _hx_loop4;
 								}
@@ -4391,6 +4416,13 @@ little_parser_Parser.mergeCalls = function(pre) {
 				case 1:
 					post.push(little_parser_ParserTokens.Expression(parts,type4));
 					break;
+				case 14:
+					var name3 = lookbehind.name;
+					var property = lookbehind.property;
+					post.pop();
+					token = little_parser_ParserTokens.PartArray(parts);
+					post.push(little_parser_ParserTokens.PropertyAccess(name3,little_parser_ParserTokens.FunctionCall(property,token)));
+					break;
 				case 15:
 					var _g1 = lookbehind.sign;
 					post.push(little_parser_ParserTokens.Expression(parts,type4));
@@ -4412,9 +4444,9 @@ little_parser_Parser.mergeCalls = function(pre) {
 			post.push(little_parser_ParserTokens.PartArray(little_parser_Parser.mergeCalls(parts1)));
 			break;
 		case 14:
-			var name3 = token.name;
-			var property = token.property;
-			post.push(little_parser_ParserTokens.PropertyAccess(little_parser_Parser.mergeCalls([name3])[0],little_parser_Parser.mergeCalls([property])[0]));
+			var name4 = token.name;
+			var property1 = token.property;
+			post.push(little_parser_ParserTokens.PropertyAccess(little_parser_Parser.mergeCalls([name4])[0],little_parser_Parser.mergeCalls([property1])[0]));
 			break;
 		default:
 			post.push(token);
@@ -4730,7 +4762,7 @@ little_parser_Parser.mergeNonBlockBodies = function(pre) {
 			var _g1 = token.exp;
 			var _g2 = token.body;
 			var _g3 = token.type;
-			if(_g2 == null) {
+			if(_g2._hx_index == 26) {
 				var exp = [_g1];
 				var name2 = [_g];
 				var type2 = [_g3];
@@ -4753,7 +4785,7 @@ little_parser_Parser.mergeNonBlockBodies = function(pre) {
 							little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("Condition has no body, body cut off by a line split, or does not exist"),"Parser");
 							return null;
 						case 4:
-							if(lookahead.body == null) {
+							if(lookahead.body._hx_index == 26) {
 								var exp1 = lookahead.exp;
 								var name1 = lookahead.name;
 								var type1 = lookahead.type;
@@ -4852,49 +4884,93 @@ little_parser_Parser.mergeElses = function(pre) {
 		case 2:
 			var name = token.name;
 			var type = token.type;
+			post.push(little_parser_ParserTokens.Variable(little_parser_Parser.mergeElses([name])[0],little_parser_Parser.mergeElses([type])[0]));
 			break;
 		case 3:
 			var name1 = token.name;
 			var params = token.params;
 			var type1 = token.type;
+			post.push(little_parser_ParserTokens.Function(little_parser_Parser.mergeElses([name1])[0],little_parser_Parser.mergeElses([params])[0],little_parser_Parser.mergeElses([type1])[0]));
 			break;
 		case 4:
 			var name2 = token.name;
 			var exp = token.exp;
 			var body = token.body;
 			var type2 = token.type;
+			post.push(little_parser_ParserTokens.Condition(little_parser_Parser.mergeElses([name2])[0],little_parser_Parser.mergeElses([exp])[0],little_parser_Parser.mergeElses([body])[0],little_parser_Parser.mergeElses([type2])[0]));
 			break;
 		case 6:
 			var assignees = token.assignees;
 			var value = token.value;
 			var type3 = token.type;
+			post.push(little_parser_ParserTokens.Write(little_parser_Parser.mergeElses(assignees),little_parser_Parser.mergeElses([value])[0],little_parser_Parser.mergeElses([type3])[0]));
 			break;
-		case 8:
-			var value1 = token.value;
-			var type4 = token.type;
+		case 7:
+			if(token.word == little_Keywords.ELSE == true) {
+				var tmp;
+				if(post.length != 0) {
+					var e = post[post.length - 1];
+					tmp = $hxEnums[e.__enum__].__constructs__[e._hx_index]._hx_name != "Condition";
+				} else {
+					tmp = true;
+				}
+				if(tmp) {
+					post.push(token);
+					++i;
+					continue;
+				}
+				if(i + 1 >= pre.length) {
+					little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("Condition has no body, body may be cut off by the end of file, block or expression."),"Parser");
+					return null;
+				}
+				var exp1 = Type.enumParameters(post[post.length - 1])[1];
+				var type4 = Type.enumParameters(post[post.length - 1])[3];
+				exp1 = little_parser_ParserTokens.Expression([exp1,little_parser_ParserTokens.Sign("!="),little_parser_ParserTokens.TrueValue],little_parser_ParserTokens.Identifier(little_Keywords.TYPE_BOOLEAN));
+				++i;
+				var body1 = pre[i];
+				switch(body1._hx_index) {
+				case 0:
+					var _g = body1.line;
+					little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("`" + little_Keywords.ELSE + "` condition has no body, body cut off by a new line, or does not exist"),"Parser");
+					return null;
+				case 1:
+					little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("`" + little_Keywords.ELSE + "` condition has no body, body cut off by a line split, or does not exist"),"Parser");
+					return null;
+				default:
+					post.push(little_parser_ParserTokens.Condition(little_parser_ParserTokens.Identifier("if"),exp1,body1,type4));
+				}
+			} else {
+				post.push(token);
+			}
 			break;
 		case 9:
 			var name3 = token.name;
 			var params1 = token.params;
+			post.push(little_parser_ParserTokens.FunctionCall(little_parser_Parser.mergeElses([name3])[0],little_parser_Parser.mergeElses([params1])[0]));
 			break;
 		case 10:
-			var value2 = token.value;
+			var value1 = token.value;
 			var type5 = token.type;
+			post.push(little_parser_ParserTokens.Return(little_parser_Parser.mergeElses([value1])[0],little_parser_Parser.mergeElses([type5])[0]));
 			break;
 		case 11:
 			var parts = token.parts;
 			var type6 = token.type;
+			post.push(little_parser_ParserTokens.Expression(little_parser_Parser.mergeElses(parts),little_parser_Parser.mergeElses([type6])[0]));
 			break;
 		case 12:
-			var body1 = token.body;
+			var body2 = token.body;
 			var type7 = token.type;
+			post.push(little_parser_ParserTokens.Block(little_parser_Parser.mergeElses(body2),little_parser_Parser.mergeElses([type7])[0]));
 			break;
 		case 13:
 			var parts1 = token.parts;
+			post.push(little_parser_ParserTokens.PartArray(little_parser_Parser.mergeElses(parts1)));
 			break;
 		case 14:
 			var name4 = token.name;
 			var property = token.property;
+			post.push(little_parser_ParserTokens.PropertyAccess(little_parser_Parser.mergeElses([name4])[0],little_parser_Parser.mergeElses([property])[0]));
 			break;
 		default:
 			post.push(token);
@@ -5097,14 +5173,18 @@ little_tools_PrepareRun.addConditions = function() {
 	little_Little.plugin.registerCondition("while",[little_parser_ParserTokens.Variable(little_parser_ParserTokens.Identifier("rule"),little_parser_ParserTokens.Identifier(little_Keywords.TYPE_BOOLEAN))],function(params,body) {
 		var val = little_parser_ParserTokens.NullValue;
 		var safetyNet = 0;
-		while(little_tools_Conversion.toHaxeValue(little_interpreter_Interpreter.evaluateExpressionParts(params))) {
+		while(little_tools_Conversion.toHaxeValue(little_interpreter_Interpreter.evaluateExpressionParts(params)) && safetyNet < 500000) {
 			val = little_interpreter_Interpreter.interpret(body,little_interpreter_Interpreter.currentConfig);
 			++safetyNet;
+		}
+		if(safetyNet >= 500000) {
+			little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("Too much iteration (is `" + little_tools_PrettyPrinter.stringify(params) + "` forever `" + little_Keywords.TRUE_VALUE + "`?)"),"Interpreter");
 		}
 		return val;
 	});
 	little_Little.plugin.registerCondition("if",[little_parser_ParserTokens.Variable(little_parser_ParserTokens.Identifier("rule"),little_parser_ParserTokens.Identifier(little_Keywords.TYPE_BOOLEAN))],function(params,body) {
 		var val = little_parser_ParserTokens.NullValue;
+		haxe_Log.trace(params,{ fileName : "src/little/tools/PrepareRun.hx", lineNumber : 110, className : "little.tools.PrepareRun", methodName : "addConditions", customParams : [body]});
 		if(little_tools_Conversion.toHaxeValue(little_interpreter_Interpreter.evaluateExpressionParts(params))) {
 			val = little_interpreter_Interpreter.interpret(body,little_interpreter_Interpreter.currentConfig);
 		}
@@ -5473,6 +5553,8 @@ little_tools_PrettyPrinter.getTree = function(root,prefix,level,last) {
 		return "" + little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " " + little_Keywords.TRUE_VALUE + "\n";
 	case 25:
 		return "" + little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " " + little_Keywords.FALSE_VALUE + "\n";
+	case 26:
+		return "" + little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " <no body>\n";
 	}
 };
 little_tools_PrettyPrinter.parseParamsString = function(params,isExpected) {
@@ -5508,6 +5590,144 @@ little_tools_PrettyPrinter.parseParamsString = function(params,isExpected) {
 		}
 		return str.join(", ");
 	}
+};
+little_tools_PrettyPrinter.stringify = function(code,token) {
+	if(token != null) {
+		code = [token];
+	}
+	var s = "";
+	var _g = 0;
+	while(_g < code.length) {
+		var token = code[_g];
+		++_g;
+		switch(token._hx_index) {
+		case 0:
+			var line = token.line;
+			s += "\n" + little_tools_PrettyPrinter.indent;
+			break;
+		case 1:
+			s += ", ";
+			break;
+		case 2:
+			var name = token.name;
+			var type = token.type;
+			s += "" + little_Keywords.VARIABLE_DECLARATION + " " + Std.string(name) + " " + (type != null ? "" + little_Keywords.TYPE_DECL_OR_CAST + " " + little_tools_PrettyPrinter.stringify(null,type) : "");
+			break;
+		case 3:
+			var name1 = token.name;
+			var params = token.params;
+			var type1 = token.type;
+			s += "" + little_Keywords.FUNCTION_DECLARATION + " " + little_tools_PrettyPrinter.stringify(null,name1) + "(" + little_tools_PrettyPrinter.stringify(null,params) + ") " + (type1 != null ? "" + little_Keywords.TYPE_DECL_OR_CAST + " " + little_tools_PrettyPrinter.stringify(null,type1) : "");
+			break;
+		case 4:
+			var name2 = token.name;
+			var exp = token.exp;
+			var body = token.body;
+			var type2 = token.type;
+			little_tools_PrettyPrinter.indent += "\t";
+			s += "" + little_tools_PrettyPrinter.stringify(null,name2) + " (" + little_tools_PrettyPrinter.stringify(null,exp) + ") \n" + little_tools_PrettyPrinter.stringify(null,body) + " " + (type2 != null ? "" + little_Keywords.TYPE_DECL_OR_CAST + " " + little_tools_PrettyPrinter.stringify(null,type2) : "");
+			little_tools_PrettyPrinter.indent = little_tools_TextTools.replaceLast(little_tools_PrettyPrinter.indent,"\t","");
+			break;
+		case 5:
+			var name3 = token.name;
+			s += little_tools_PrettyPrinter.stringify(null,name3);
+			break;
+		case 6:
+			var assignees = token.assignees;
+			var value = token.value;
+			var type3 = token.type;
+			var _this = assignees.concat([value]);
+			var result = new Array(_this.length);
+			var _g1 = 0;
+			var _g2 = _this.length;
+			while(_g1 < _g2) {
+				var i = _g1++;
+				result[i] = little_tools_PrettyPrinter.stringify(null,_this[i]);
+			}
+			s += Std.string([result.join(" = ")]);
+			break;
+		case 7:
+			var word = token.word;
+			s += word;
+			break;
+		case 8:
+			var value1 = token.value;
+			var type4 = token.type;
+			s += "" + little_Keywords.TYPE_DECL_OR_CAST + " " + little_tools_PrettyPrinter.stringify(null,type4);
+			break;
+		case 9:
+			var name4 = token.name;
+			var params1 = token.params;
+			s += "" + little_tools_PrettyPrinter.stringify(null,name4) + "(" + little_tools_PrettyPrinter.stringify(null,params1) + ")";
+			break;
+		case 10:
+			var value2 = token.value;
+			var type5 = token.type;
+			s += "" + little_Keywords.FUNCTION_RETURN + " " + little_tools_PrettyPrinter.stringify(null,value2);
+			break;
+		case 11:
+			var parts = token.parts;
+			var type6 = token.type;
+			s += little_tools_PrettyPrinter.stringify(parts);
+			break;
+		case 12:
+			var body1 = token.body;
+			var type7 = token.type;
+			little_tools_PrettyPrinter.indent += "\t";
+			s += "{" + little_tools_PrettyPrinter.stringify(body1) + "} " + (type7 != null ? "" + little_Keywords.TYPE_DECL_OR_CAST + " " + little_tools_PrettyPrinter.stringify(null,type7) : "");
+			little_tools_PrettyPrinter.indent = little_tools_TextTools.replaceLast(little_tools_PrettyPrinter.indent,"\t","");
+			break;
+		case 13:
+			var parts1 = token.parts;
+			s += little_tools_PrettyPrinter.stringify(parts1);
+			break;
+		case 14:
+			var name5 = token.name;
+			var property = token.property;
+			s += "" + little_tools_PrettyPrinter.stringify(null,name5) + little_Keywords.PROPERTY_ACCESS_SIGN + little_tools_PrettyPrinter.stringify(null,property);
+			break;
+		case 15:
+			var sign = token.sign;
+			s += " " + sign + " ";
+			break;
+		case 16:
+			var num = token.num;
+			s += num;
+			break;
+		case 17:
+			var num1 = token.num;
+			s += num1;
+			break;
+		case 18:
+			var string = token.string;
+			s += "\"" + string + "\"";
+			break;
+		case 19:
+			var name6 = token.name;
+			break;
+		case 20:
+			var get = token.get;
+			break;
+		case 21:
+			var use = token.use;
+			break;
+		case 22:
+			var msg = token.msg;
+			break;
+		case 23:
+			s += little_Keywords.NULL_VALUE;
+			break;
+		case 24:
+			s += little_Keywords.TRUE_VALUE;
+			break;
+		case 25:
+			s += little_Keywords.FALSE_VALUE;
+			break;
+		case 26:
+			break;
+		}
+	}
+	return s;
 };
 var little_tools_TextDirection = $hxEnums["little.tools.TextDirection"] = { __ename__:"little.tools.TextDirection",__constructs__:null
 	,RTL: {_hx_name:"RTL",_hx_index:0,__enum__:"little.tools.TextDirection",toString:$estr}
@@ -5548,6 +5768,7 @@ little_Keywords.READ_FUNCTION_NAME = "read";
 little_Keywords.RUN_CODE_FUNCTION_NAME = "run";
 little_Keywords.TYPE_UNKNOWN = "Unknown";
 little_Keywords.CONDITION_TYPES = [];
+little_Keywords.ELSE = "else";
 little_Keywords.SPECIAL_OR_MULTICHAR_SIGNS = ["++","--","**","+=","-=",">=","<=","==","&&","||","^^","!="];
 little_Keywords.PROPERTY_ACCESS_SIGN = ".";
 little_Keywords.EQUALS_SIGN = "==";
@@ -5581,11 +5802,12 @@ little_interpreter_Interpreter.errorThrown = false;
 little_interpreter_Interpreter.memory = little_interpreter_memory_MemoryTree._new(little_interpreter_Interpreter.mother);
 little_interpreter_Interpreter.mother = new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue);
 little_lexer_Lexer.signs = ["!","#","$","%","&","'","(",")","*","+","-",".","/",":","<","=",">","?","@","[","\\","]","^","_","`","{","|","}","~","^","√"];
-little_parser_Parser.additionalParsingLevels = [little_parser_Parser.mergeNonBlockBodies];
+little_parser_Parser.additionalParsingLevels = [little_parser_Parser.mergeNonBlockBodies,little_parser_Parser.mergeElses];
 little_parser_Parser.linePart = 0;
 little_tools_PrepareRun.prepared = false;
 little_tools_PrettyPrinter.s = "";
 little_tools_PrettyPrinter.l = 0;
+little_tools_PrettyPrinter.indent = "";
 Main.main();
 })(typeof exports != "undefined" ? exports : typeof window != "undefined" ? window : typeof self != "undefined" ? self : this, typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);
 

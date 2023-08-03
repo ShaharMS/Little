@@ -95,11 +95,13 @@ class PrepareRun {
         Little.plugin.registerCondition("while", [Variable(Identifier("rule"), Identifier(Keywords.TYPE_BOOLEAN))] , (params, body) -> {
             var val = NullValue;
             var safetyNet = 0;
-            while (Conversion.toHaxeValue(Interpreter.evaluateExpressionParts(params))) {
+            while (Conversion.toHaxeValue(Interpreter.evaluateExpressionParts(params)) && safetyNet < 500000) {
                 val = Interpreter.interpret(body, Interpreter.currentConfig);
                 safetyNet++;
             }
-
+			if (safetyNet >= 500000) {
+				Runtime.throwError(ErrorMessage('Too much iteration (is `${PrettyPrinter.stringify(params)}` forever `$TRUE_VALUE`?)'), INTERPRETER);
+			}
             return val;
         });
 
