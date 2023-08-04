@@ -16,14 +16,15 @@ class Lexer {
         var i = 0;
         while (i < code.length) {
             var char = code.charAt(i);
-            if (i < code.length - 6 && char == '"' && code.charAt(i + 1) == '"' && code.charAt(i + 2) == '"') {
+            if (i < code.length - 2 && code.substr(i, 3).replace('"', "").length == 0) {
                 var string = "";
-                i++;
-                while (i < code.length - 2 && code.charAt(i) != '"' && code.charAt(i + 1) == '"' && code.charAt(i + 2) == '"') {
+				i += 3;
+                while (i < code.length - 2 && code.substr(i, 3).replace('"', "").length != 0) {
                     string += code.charAt(i);
                     i++;
                 }
-                tokens.push(Documentation(string));
+				i += 2;
+                tokens.push(Documentation(string.replace("<br>", "\n").replace("</br>", "\n")));
             }
             else if (char == '"') {
                 var string = "";

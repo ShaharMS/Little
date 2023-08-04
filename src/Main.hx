@@ -51,6 +51,7 @@ class Main {
 				trace(Runtime.stdout);
 			} catch (e) {
 				trace(Lexer.lex(input));
+				trace(Parser.parse(Lexer.lex(input)));
 				trace(PrettyPrinter.printParserAst(Parser.parse(Lexer.lex(input))));
 				trace(e.details());
 				trace(Runtime.stdout);

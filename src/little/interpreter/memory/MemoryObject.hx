@@ -49,17 +49,24 @@ class MemoryObject {
     @:optional public var type:ParserTokens = null;
     @:optional public var external:Bool = false;
     @:optional public var condition:Bool = false;
+
+    /**
+    	documentation for this variable/function/condition
+    **/
+	@:optional public var documentation:String;
+
     /**
     	When under a memory object, suppose, `T`, of type `"Type"`, it acts as a property of every object of type `Type`.
     **/
     @:optional public var nonStatic:Bool = true;
+	
 
     function set_params(parameters) {
         if (parameters == null) return params = null;
         return params = parameters.filter(p -> switch p {case SplitLine | SetLine(_): false; case _: true;});
     }
 
-    public function new(?value:ParserTokens, ?props:MemoryTree, ?params:Array<ParserTokens>, ?type:ParserTokens = NullValue, ?external:Bool, ?condition:Bool, ?nonStatic:Bool, ?parent:MemoryObject) {
+    public function new(?value:ParserTokens, ?props:MemoryTree, ?params:Array<ParserTokens>, ?type:ParserTokens = NullValue, ?external:Bool, ?condition:Bool, ?nonStatic:Bool, ?parent:MemoryObject, ?doc:String) {
         this.value = value == null ? NullValue : value;
         this.params = params;
         this.type = type == null ? Interpreter.getValueType(this.value) : type;
@@ -68,6 +75,7 @@ class MemoryObject {
         this.nonStatic = nonStatic == null ? true : nonStatic;
         this.props = new MemoryTree(this);
         this.parent = parent != null ? parent : this; //Interesting solution
+		this.documentation = doc != null ? doc : "";
     }
 
 

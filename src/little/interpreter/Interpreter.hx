@@ -48,7 +48,7 @@ class Interpreter {
                 case SetLine(line): Runtime.line = line;
                 case Module(name): Runtime.currentModule = name;
                 case SplitLine:
-                case Variable(name, type): {
+                case Variable(name, type, doc): {
                     function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
                         switch prop {
                             case PropertyAccess(_, property): {
@@ -63,7 +63,7 @@ class Interpreter {
                             }
                             case _: {
                                 if (object.props.get(stringifyTokenIdentifier(prop)) == null) {
-                                    object.props.set(stringifyTokenIdentifier(prop), new MemoryObject(NullValue, type, object));
+                                    object.props.set(stringifyTokenIdentifier(prop), new MemoryObject(NullValue, type, object, stringifyTokenValue(doc)));
                                 }
                                 return object.props.get(stringifyTokenIdentifier(prop));
                             }
@@ -75,12 +75,12 @@ class Interpreter {
                             returnVal = obj.value;
                         }
                         case _: {
-                            memory.set(stringifyTokenValue(name), new MemoryObject(NullValue, type != null ? type : NullValue, memory.object)); 
+                            memory.set(stringifyTokenValue(name), new MemoryObject(NullValue, type != null ? type : NullValue, memory.object, stringifyTokenValue(doc))); 
                             returnVal = memory.get(stringifyTokenValue(name)).value;
                         }
                     }
                 }
-                case Function(name, params, type): {
+                case Function(name, params, type, doc): {
                     function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
                         switch prop {
                             case PropertyAccess(_, property): {
@@ -95,7 +95,7 @@ class Interpreter {
                             }
                             case _: {
                                 if (object.props.get(stringifyTokenIdentifier(prop)) == null) {
-                                    object.props.set(stringifyTokenIdentifier(prop), new MemoryObject(NullValue, null, params.getParameters()[0], type != null ? type : NullValue, object));
+                                    object.props.set(stringifyTokenIdentifier(prop), new MemoryObject(NullValue, null, params.getParameters()[0], type != null ? type : NullValue, object, stringifyTokenValue(doc)));
                                 }
                                 return object.props.get(stringifyTokenIdentifier(prop));
                             }
@@ -108,7 +108,7 @@ class Interpreter {
                         }
                         case _: {
                             trace(name, stringifyTokenValue(name));
-                            memory.set(stringifyTokenValue(name), new MemoryObject(NullValue, null, params.getParameters()[0], type, memory.object)); 
+                            memory.set(stringifyTokenValue(name), new MemoryObject(NullValue, null, params.getParameters()[0], type, memory.object, stringifyTokenValue(doc))); 
                             returnVal = memory.get(stringifyTokenValue(name)).value;
                         }
                     }
@@ -258,7 +258,7 @@ class Interpreter {
                     return evaluate(memory.get(stringifyTokenValue(name)).use(PartArray([exp, body])), memory, dontThrow);
                 }
             }
-            case Variable(name, type): {
+            case Variable(name, type, doc): {
                 function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
                     switch prop {
                         case PropertyAccess(_, property): {
@@ -273,7 +273,7 @@ class Interpreter {
                         }
                         case _: {
                             if (object.props.get(stringifyTokenIdentifier(prop)) == null) {
-                                object.props.set(stringifyTokenIdentifier(prop), new MemoryObject(NullValue, type, object));
+                                object.props.set(stringifyTokenIdentifier(prop), new MemoryObject(NullValue, type, object, stringifyTokenValue(doc)));
                             }
                             return object.props.get(stringifyTokenIdentifier(prop));
                         }
@@ -285,12 +285,12 @@ class Interpreter {
                         return obj.value;
                     }
                     case _: {
-                        memory.set(stringifyTokenValue(name), new MemoryObject(NullValue, type != null ? type : NullValue, memory.object)); 
+                        memory.set(stringifyTokenValue(name), new MemoryObject(NullValue, type != null ? type : NullValue, memory.object, stringifyTokenValue(doc))); 
                         return memory.get(stringifyTokenValue(name)).value;
                     }
                 }
             }
-            case Function(name, params, type): {
+            case Function(name, params, type, doc): {
                 function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
                     switch prop {
                         case PropertyAccess(_, property): {
@@ -305,7 +305,7 @@ class Interpreter {
                         }
                         case _: {
                             if (object.props.get(stringifyTokenIdentifier(prop)) == null) {
-                                object.props.set(stringifyTokenIdentifier(prop), new MemoryObject(NullValue, null, params.getParameters()[0], type != null ? type : NullValue, object));
+                                object.props.set(stringifyTokenIdentifier(prop), new MemoryObject(NullValue, null, params.getParameters()[0], type != null ? type : NullValue, object, stringifyTokenValue(doc)));
                             }
                             return object.props.get(stringifyTokenIdentifier(prop));
                         }
@@ -318,7 +318,7 @@ class Interpreter {
                     }
                     case _: {
                         trace(name, stringifyTokenValue(name));
-                        memory.set(stringifyTokenValue(name), new MemoryObject(NullValue, null, params.getParameters()[0], type, memory.object)); 
+                        memory.set(stringifyTokenValue(name), new MemoryObject(NullValue, null, params.getParameters()[0], type, memory.object, stringifyTokenValue(doc))); 
                         return memory.get(stringifyTokenValue(name)).value;
                     }
                 }
@@ -401,10 +401,10 @@ class Interpreter {
                 if (memory.get(stringifyTokenValue(name)) == null) evaluate(ErrorMessage('No Such Function:  `${stringifyTokenValue(name)}`'));
                 return accessObject(memory.get(stringifyTokenValue(name)).use(params));
             }
-            case Variable(name, type): {
+            case Variable(name, type, doc): {
                 function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
                     if (object.props.get(stringifyTokenIdentifier(prop)) == null) {
-                        object.props.set(stringifyTokenIdentifier(prop), new MemoryObject(NullValue, type, object));
+                        object.props.set(stringifyTokenIdentifier(prop), new MemoryObject(NullValue, type, object, stringifyTokenValue(doc)));
                     }
                     return object.props.get(stringifyTokenIdentifier(prop));
                 }
@@ -414,15 +414,15 @@ class Interpreter {
                         return obj;
                     }
                     case _: {
-                        memory.set(stringifyTokenValue(name), new MemoryObject(NullValue, type != null ? type : NullValue, memory.object)); 
+                        memory.set(stringifyTokenValue(name), new MemoryObject(NullValue, type != null ? type : NullValue, memory.object, stringifyTokenValue(doc))); 
                         return memory.get(stringifyTokenValue(name));
                     }
                 }
             }
-            case Function(name, params, type): {
+            case Function(name, params, type, doc): {
                 function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
                     if (object.props.get(stringifyTokenIdentifier(prop)) == null) {
-                        object.props.set(stringifyTokenIdentifier(prop), new MemoryObject(NullValue, null, params.getParameters()[0], type != null ? type : NullValue, object));
+                        object.props.set(stringifyTokenIdentifier(prop), new MemoryObject(NullValue, null, params.getParameters()[0], type != null ? type : NullValue, object, stringifyTokenValue(doc)));
                     }
                     return object.props.get(stringifyTokenIdentifier(prop));
                 }
@@ -432,7 +432,7 @@ class Interpreter {
                         return obj;
                     }
                     case _: {
-                        memory.set(stringifyTokenValue(name), new MemoryObject(NullValue, null, params.getParameters()[0], type, memory.object)); 
+                        memory.set(stringifyTokenValue(name), new MemoryObject(NullValue, null, params.getParameters()[0], type, memory.object, stringifyTokenValue(doc))); 
                         return memory.get(stringifyTokenValue(name));
                     }
                 }
@@ -510,10 +510,10 @@ class Interpreter {
                 if (memory.get(stringifyTokenValue(name)) == null) evaluate(ErrorMessage('No Such Function:  `${stringifyTokenValue(name)}`'));
                 return createObject(memory.get(stringifyTokenValue(name)).use(params));
             }
-            case Variable(name, type): {
+            case Variable(name, type, doc): {
                 function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
                     if (object.props.get(stringifyTokenIdentifier(prop)) == null) {
-                        object.props.set(stringifyTokenIdentifier(prop), new MemoryObject(NullValue, type != null ? type : NullValue, object));
+                        object.props.set(stringifyTokenIdentifier(prop), new MemoryObject(NullValue, type != null ? type : NullValue, object, stringifyTokenValue(doc)));
                     }
                     return object.props.get(stringifyTokenIdentifier(prop));
                 }
@@ -523,14 +523,14 @@ class Interpreter {
                         return createObject(obj.value); // Counter intuitive, but consistency is more important
                     }
                     case _: {
-                        return new MemoryObject(NullValue, type != null ? type : NullValue, memory.object); 
+                        return new MemoryObject(NullValue, type != null ? type : NullValue, memory.object, stringifyTokenValue(doc)); 
                     }
                 }
             }
-            case Function(name, params, type): {
+            case Function(name, params, type, doc): {
                 function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
                     if (object.props.get(stringifyTokenIdentifier(prop)) == null) {
-                        object.props.set(stringifyTokenIdentifier(prop), new MemoryObject(NullValue, null, params.getParameters()[0], type != null ? type : NullValue, object));
+                        object.props.set(stringifyTokenIdentifier(prop), new MemoryObject(NullValue, null, params.getParameters()[0], type != null ? type : NullValue, object, stringifyTokenValue(doc)));
                     }
                     return object.props.get(stringifyTokenIdentifier(prop));
                 }
@@ -540,7 +540,7 @@ class Interpreter {
                         return createObject(obj.value);
                     }
                     case _: {
-                        return new MemoryObject(NullValue, null, params.getParameters()[0], type != null ? type : NullValue, memory.object); 
+                        return new MemoryObject(NullValue, null, params.getParameters()[0], type != null ? type : NullValue, memory.object, stringifyTokenValue(doc)); 
                     }
                 }
             }
@@ -588,6 +588,7 @@ class Interpreter {
     public static function stringifyTokenValue(token:ParserTokens, ?memory:MemoryTree):String {
 
         if (memory == null) memory = Interpreter.memory; // If no memory map is given, use the base one.
+		if (token == null) return "";
 
         switch token {
             case NoBody: return "<no body>";
@@ -615,12 +616,12 @@ class Interpreter {
             case Write(_, value, _): {
                 return stringifyTokenValue(value);
             }
-            case Variable(name, type): {
-                memory.set(stringifyTokenValue(name), new MemoryObject(NullValue, [], null, type, memory.object));
+            case Variable(name, type, doc): {
+                memory.set(stringifyTokenIdentifier(name), new MemoryObject(NullValue, [], null, type, memory.object, stringifyTokenValue(doc)));
                 return stringifyTokenValue(name);
             }
-            case Function(name, params, type): {
-                memory.set(stringifyTokenValue(name), new MemoryObject(NullValue, [], params.getParameters()[0], type, memory.object));
+            case Function(name, params, type, doc): {
+                memory.set(stringifyTokenIdentifier(name), new MemoryObject(NullValue, [], params.getParameters()[0], type, memory.object, stringifyTokenValue(doc)));
                 return stringifyTokenValue(name);
             }
             case PartArray(parts): {
@@ -634,6 +635,7 @@ class Interpreter {
             case Return(value, type): {
                 return stringifyTokenValue(value);
             }
+			case Documentation(doc): return doc;
             case ErrorMessage(msg): {
                 return msg;
             }
@@ -646,6 +648,7 @@ class Interpreter {
     public static function stringifyTokenIdentifier(token:ParserTokens, ?prop = false, ?memory:MemoryTree):String {
 
         if (memory == null) memory = Interpreter.memory; // If no memory map is given, use the base one.
+		if (token == null) return "";
 
         switch token {
             case NoBody: return "<no body>";
@@ -669,10 +672,10 @@ class Interpreter {
             case Write(assignees, _, _): {
                 return stringifyTokenIdentifier(assignees[0]);
             }
-            case Variable(name, type): {
+            case Variable(name, type, doc): {
                 return stringifyTokenIdentifier(name);
             }
-            case Function(name, params, type): {
+            case Function(name, params, type, doc): {
                 return stringifyTokenIdentifier(name);
             }
             case PartArray(parts): {
@@ -696,7 +699,7 @@ class Interpreter {
             case Return(value, type): {
                 return stringifyTokenIdentifier(value);
             }
-            case ErrorMessage(msg): {
+            case ErrorMessage(_) | Documentation(_): {
                 return token.getName(); // Might look goofy, but this function returns identifier names, not identifier values.
             }
             case External(_) | ExternalCondition(_): {

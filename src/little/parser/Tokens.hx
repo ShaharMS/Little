@@ -7,8 +7,8 @@ enum ParserTokens {
     SetLine(line:Int);
     SplitLine;
 
-    Variable(name:ParserTokens, type:ParserTokens);
-    Function(name:ParserTokens, params:ParserTokens, type:ParserTokens);
+    Variable(name:ParserTokens, type:ParserTokens, ?doc:ParserTokens);
+    Function(name:ParserTokens, params:ParserTokens, type:ParserTokens, ?doc:ParserTokens);
     Condition(name:ParserTokens, exp:ParserTokens, body:ParserTokens, type:ParserTokens);
 
     Read(name:ParserTokens);
@@ -30,6 +30,10 @@ enum ParserTokens {
     Decimal(num:String);
     Characters(string:String);
 
+	/**
+		Documentation strings
+	**/
+	Documentation(doc:String);
     
     /**
     	Used for multi-module coding & better error reporting.

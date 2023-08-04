@@ -57,6 +57,7 @@ class PrettyPrinter {
             case Characters(string): return '${prefixFA(prefix)}$t$d "$string"\n';
 			case Module(name): return '${prefixFA(prefix)}$t$d Module: $name\n';
 			case ErrorMessage(name): return '${prefixFA(prefix)}$t$d Error: $name\n';
+			case Documentation(doc): return '${prefixFA(prefix)}$t$d Documentation: ${doc.replace("\n", "\n" + prefixFA(prefix) + '│                  ')}\n';
 			case NoBody:  return '${prefixFA(prefix)}$t$d <no body>\n';
 			case External(haxeValue): return '${prefixFA(prefix)}$t$d External Haxe Value Identifier: [$haxeValue]\n';
 			case ExternalCondition(use): return '${prefixFA(prefix)}$t$d External Haxe Condition Identifier: [$use]\n';
@@ -65,16 +66,21 @@ class PrettyPrinter {
             case FalseValue: return '${prefixFA(prefix)}$t$d ${Keywords.FALSE_VALUE}\n';
             case TrueValue: return '${prefixFA(prefix)}$t$d ${Keywords.TRUE_VALUE}\n';
             case NullValue: return '${prefixFA(prefix)}$t$d ${Keywords.NULL_VALUE}\n';
-			case Variable(name, type):
+			case Variable(name, type, doc):
 				{
-					return '${prefixFA(prefix)}$t$d Variable Creation\n${getTree(name, if (type == null) prefix.copy() else pushIndex(prefix, level), level + 1, type == null)}${getTree(type, prefix.copy(), level + 1, true)}';
+					var title = '${prefixFA(prefix)}$t$d Variable Creation\n';
+					if (doc != null) title += getTree(doc, prefix.copy(), level + 1, false);
+					title += getTree(name, prefix.copy(), level + 1, type == null);
+					if (type != null) title += getTree(type, prefix.copy(), level + 1, true);
+					return title;
 				}
-			case Function(name, params, type):
+			case Function(name, params, type, doc):
 				{
 					var title = '${prefixFA(prefix)}$t$d Function Creation\n';
+					if (doc != null) title += getTree(doc, prefix.copy(), level + 1, false);
 					title += getTree(name, prefix.copy(), level + 1, false);
 					title += getTree(params, prefix.copy(), level + 1, type == null);
-					title += getTree(type, prefix.copy(), level + 1, true);
+					if (type != null) title += getTree(type, prefix.copy(), level + 1, true);
 					return title;
 				}
 			case Condition(name, exp, body, type):
@@ -213,6 +219,7 @@ class PrettyPrinter {
 				case Number(num): s += num;
 				case Decimal(num): s += num;
 				case Characters(string): s += '"' + string + '"';
+				case Documentation(doc): s += '"""' + doc + '"""';
 				case Module(name): 
 				case External(get):
 				case ExternalCondition(use):

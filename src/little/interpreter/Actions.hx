@@ -48,7 +48,7 @@ class Actions {
         // Listeners
     }
 
-    public static function declareVariable(name:ParserTokens, ?type:ParserTokens) {
+    public static function declareVariable(name:ParserTokens, type:ParserTokens, doc:ParserTokens) {
         function access(onObject:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
             switch prop {
                 case PropertyAccess(_, property): {
@@ -63,7 +63,7 @@ class Actions {
                 }
                 case _: {
                     if (onObject.get(prop.identifier()) == null) {
-                        onObject.set(prop.identifier(), new MemoryObject(NullValue, type, onObject));
+                        onObject.set(prop.identifier(), new MemoryObject(NullValue, type, onObject, doc.value()));
                     }
                     return onObject.get(prop.identifier());
                 }
@@ -74,14 +74,14 @@ class Actions {
                 access(memory.get(name.value()), property, name.value());
             }
             case _: {
-                memory.set(name.value(), new MemoryObject(NullValue, type != null ? type : NullValue, memory.object)); 
+                memory.set(name.value(), new MemoryObject(NullValue, type != null ? type : NullValue, memory.object, doc.value())); 
             }
         }
 
         // Listeners
     }
 
-    public static function declareFunction(name:ParserTokens, params:ParserTokens, ?type:ParserTokens) {
+    public static function declareFunction(name:ParserTokens, params:ParserTokens, type:ParserTokens, doc:ParserTokens) {
         function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
             switch prop {
                 case PropertyAccess(_, nestedProperty): {
@@ -96,7 +96,7 @@ class Actions {
                 }
                 case _: {
                     if (object.get(prop.identifier()) == null) {
-                        object.set(prop.identifier(), new MemoryObject(NullValue, null, params.getParameters()[0], type != null ? type : NullValue, object));
+                        object.set(prop.identifier(), new MemoryObject(NullValue, null, params.getParameters()[0], type != null ? type : NullValue, object, doc.value()));
                     }
                     return object.get(prop.identifier());
                 }
@@ -108,7 +108,7 @@ class Actions {
             }
             case _: {
                 trace(name, name.value());
-                memory.set(name.value(), new MemoryObject(NullValue, null, params.getParameters()[0], type, memory.object)); 
+                memory.set(name.value(), new MemoryObject(NullValue, null, params.getParameters()[0], type, memory.object, doc.value())); 
             }
         }
 
@@ -194,12 +194,12 @@ class Actions {
                 case SetLine(line): Runtime.line = line;
                 case Module(name): Runtime.currentModule = name;
                 case SplitLine:
-                case Variable(name, type): {
-                    declareVariable(name, type);
+                case Variable(name, type, doc): {
+                    declareVariable(name, type, doc);
                     returnVal = NullValue;
                 }
-                case Function(name, params, type): {
-                    declareFunction(name, params, type);
+                case Function(name, params, type, doc): {
+                    declareFunction(name, params, type, doc);
                     returnVal = NullValue;
                 }
                 case Condition(name, exp, body, type): {
