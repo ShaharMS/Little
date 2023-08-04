@@ -35,6 +35,12 @@ class PrepareRun {
             allowWriting: false
         });
 
+		Little.plugin.registerProperty("documentation", TYPE_DYNAMIC, true, null, {
+			valueGetter: parent -> {
+				return Characters(parent.documentation);
+			},
+			allowWriting: false
+		});
 
         // Froms & Tos:
 
