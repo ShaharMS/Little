@@ -39,8 +39,8 @@ class MemoryObject {
     }
 
     /**
-        Setter listeners can retrieve the new value right after its set, but theyre unable to directly edit it.  
-        Each element of this array needs to be a function, that takes in a ParserToken (the new value), and return Void.
+        Setter listeners can retrieve the new value right after its set, but they're unable to directly edit it.  
+        Each element of this array needs to be a function, that takes in a ParserToken (the new value), and returns Void.
     **/
     @:optional public var setterListeners:Array<ParserTokens -> Void> = [];
 
@@ -79,6 +79,13 @@ class MemoryObject {
     }
 
 
+    /**
+        If `this` is a function, `use` calls it with the given parameters.  
+        If its a condition, it executes the body 0 to n times, according to `parameters`.  
+        if its a variable, it throws an error.  
+        @param parameters 
+        @return ParserTokens
+    **/
     public function use(parameters:ParserTokens):ParserTokens {
 
         if (condition) {

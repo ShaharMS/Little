@@ -83,8 +83,9 @@ class Runtime {
 
     /**
     	Stops the execution of the program, and prints an error message to the console. Dispatches `onErrorThrown`.
-    	@param error 
-    **/
+        @param token some token which is the error, usually `ErrorMessage`
+        @param layer the "stage" from which the error was called
+        **/
     public static function throwError(token:ParserTokens, ?layer:Layer = INTERPRETER) {
 
         callStack.push(token);
@@ -102,7 +103,25 @@ class Runtime {
         for (func in onErrorThrown) func(module, line, title, reason);
     }
 
+    /**
+        Same as `throwError`, but doesnt stop execution, and has the "WARNING" prefix.
+        @param token some token which is the error, usually `ErrorMessage`
+        @param layer the "stage" from which the error was called
+    **/
+    public static function warn(token:ParserTokens, ?layer:Layer = INTERPRETER) {
+        callStack.push(token);
+        
+        var reason:String;
+        var content = switch token {
+            case _: {
+                reason = Std.string(token).remove(token.getName()).substring(1).replaceLast(")", "");
+                '${if (Little.debug) (layer : String).toUpperCase() + ": " else ""}WARNING: Module ${currentModule}, Line $line:  ${reason}';
+            }
+        }
+        stdout += '\n$content';
+    }
+
     public static function print(item:String) {
-        stdout += '\n${if (Little.debug) (INTERPRETER : String).toUpperCase() + ": " else ""}Module $currentModule, Line $line:  ${Std.string(item)}';
+        stdout += '\n${if (Little.debug) (INTERPRETER : String).toUpperCase() + ": " else ""}Module $currentModule, Line $line:  $item';
     }
 }

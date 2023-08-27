@@ -1,5 +1,7 @@
 package little.interpreter;
 
+import haxe.macro.Context.Message;
+import haxe.xml.Parser;
 import haxe.xml.Access;
 import little.tools.Layer;
 import little.interpreter.Interpreter.*;
@@ -30,11 +32,16 @@ class Actions {
         return ErrorMessage(message);
     }
 
+    public static function warn(message:String, layer:Layer = INTERPRETER):ParserTokens {
+        Runtime.warn(ErrorMessage(message), layer);
+        return ErrorMessage(message);
+    }
+
     public static function setLine(l:Int) {
         var o = Runtime.line;
         Runtime.line = l;
 
-        for (listener in Runtime.onLineChanged.iterator()) listener(o);
+        for (listener in Runtime.onLineChanged) listener(o);
     }
 
     public static function setModule(name:String) {
@@ -74,11 +81,15 @@ class Actions {
                 access(memory.get(name.value()), property, name.value());
             }
             case _: {
-                memory.set(name.value(), new MemoryObject(NullValue, type != null ? type : NullValue, memory.object, doc.value())); 
+                if (memory.exists(name.value())) {
+                    warn('Variable ${name.value()} already exists. New declaration ignored.');
+                } else memory.set(name.value(), new MemoryObject(NullValue, type != null ? type : NullValue, memory.object, doc.value())); 
             }
         }
-
+        
         // Listeners
+
+        return read(name);
     }
 
     public static function declareFunction(name:ParserTokens, params:ParserTokens, type:ParserTokens, doc:ParserTokens) {
@@ -107,12 +118,16 @@ class Actions {
                 access(memory.get(name.value()), property, name.value());
             }
             case _: {
-                trace(name, name.value());
-                memory.set(name.value(), new MemoryObject(NullValue, null, params.getParameters()[0], type, memory.object, doc.value())); 
+                
+                if (memory.exists(name.value())) {
+                    warn('Function ${name.value()} already exists. New declaration ignored.');
+                } else memory.set(name.value(), new MemoryObject(NullValue, null, params.getParameters()[0], type, memory.object, doc.value())); 
             }
         }
 
         // Listeners
+
+        return read(name);
     }
 
     public static function condition(name:ParserTokens, conditionParams:ParserTokens, body:ParserTokens, ?type:ParserTokens):ParserTokens {
@@ -138,7 +153,7 @@ class Actions {
                 assignee.value = value;
             else {
                 if (v == null)
-                    v = evaluate(value, memory);
+                    v = evaluate(value);
                     trace(value, v, getValueType(v));
                 if (v.getName() == "ErrorMessage") {
                     assignee.value = NullValue;
@@ -167,18 +182,18 @@ class Actions {
 
     public static function read(name:ParserTokens):ParserTokens {
         var word = name.identifier();
-        return evaluate(if (memory.get(word) != null) memory.get(word).value else ErrorMessage('No Such Variable: `$word`'), memory);
+        return evaluate(if (memory.get(word) != null) memory.get(word).value else ErrorMessage('No Such Variable: `$word`'));
     }
 
     public static function type(value:ParserTokens, type:ParserTokens):ParserTokens {
-        var val = evaluate(value, memory);
+        var val = evaluate(value);
         var valT = getValueType(val);
-        var t = evaluate(type, memory);
+        var t = evaluate(type);
 
         if (t.equals(valT)) {
             return val;
         } else {
-            error('Warning: Mismatch at type declaration: the value $value has been declared as being of type $t, while its type is $valT. This might cause issues.', INTERPRETER_VALUE_EVALUATOR);
+            warn('Mismatch at type declaration: the value $value has been declared as being of type $t, while its type is $valT. This might cause issues.', INTERPRETER_VALUE_EVALUATOR);
             return val;
         }
     }
@@ -228,6 +243,64 @@ class Actions {
             i++;
         }
         return returnVal;
+    }
+
+    public static function evaluate(exp:ParserTokens, ?dontThrow:Bool = false):ParserTokens {
+
+        if (memory == null) memory = Interpreter.memory; // If no memory map is given, use the base one.
+
+        if (exp == null) {
+            // trace("null token");
+            return NullValue;
+        }
+
+        switch exp {
+            case Number(_) | Decimal(_) | Characters(_) | TrueValue | FalseValue | NullValue | Sign(_): return exp;
+            case ErrorMessage(msg): {
+                if (!dontThrow) Runtime.throwError(exp, INTERPRETER_VALUE_EVALUATOR);
+                return exp;
+            }
+            case SetLine(line): {
+                setLine(line);
+                return NullValue;
+            }
+            case SplitLine: {
+                splitLine();
+                return NullValue;
+            }
+            case Module(name): {
+                setModule(name);
+                return NullValue;
+            }
+            case Expression(parts, _): {
+                return evaluateExpressionParts(parts);
+            }
+            case Block(body, type): {
+                var returnVal = run(body);
+                return evaluate(returnVal, dontThrow);
+            }
+            case PartArray(parts): {
+                return PartArray([for (p in parts) evaluate(p, dontThrow)]);
+            }
+            case Identifier(word): {
+                return evaluate(if (memory.get(word) != null) memory.get(word).value else ErrorMessage('No Such Variable: `$word`'), dontThrow);
+            }
+            case TypeDeclaration(value, t): return type(value, t);
+            case Write(assignees, value, type): return write(assignees, value, type);
+            case Read(name): return read(name);
+            case FunctionCall(name, params): return call(name, params);
+            case Condition(name, exp, body, type): return condition(name, exp, body, type);
+            case Variable(name, type, doc): return declareVariable(name, type, doc);
+            case Function(name, params, type, doc): return declareFunction(name, params, type, doc);
+            case External(_): return Characters("External Function/Variable");
+            case PropertyAccess(_, _): {
+                var o = accessObject(exp, memory);
+                if (o != null) return o.value;
+                return NullValue;
+            }
+            case Return(value, type): return evaluate(value);
+            case _: return evaluate(ErrorMessage('Unable to evaluate token `$exp`'), dontThrow);
+        }
     }
 
     public static function calculate(token:ParserTokens):ParserTokens {

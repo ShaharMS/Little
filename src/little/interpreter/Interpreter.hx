@@ -217,7 +217,7 @@ class Interpreter {
                 if (t.equals(valT)) {
                     return val;
                 } else {
-                    Runtime.throwError(ErrorMessage('Warning: Mismatch at type declaration: the value $value has been declared as being of type $t, while its type is $valT. This might cause issues.'), INTERPRETER_VALUE_EVALUATOR);
+                    Runtime.warn(ErrorMessage('Mismatch at type declaration: the value $value has been declared as being of type $t, while its type is $valT. This might cause issues.'), INTERPRETER_VALUE_EVALUATOR);
                     return val;
                 }
             } 
