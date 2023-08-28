@@ -1,5 +1,6 @@
 package little;
 
+import little.interpreter.Operators;
 import little.tools.Plugins;
 import haxe.extern.EitherType;
 import little.interpreter.memory.MemoryObject;
@@ -18,6 +19,7 @@ class Little {
     
     public static var runtime(default, null) = Runtime;
     public static var plugin(default, null) = Plugins;
+    public static var operators(default, null) = Operators;
 
     public static var debug:Bool = false;
 

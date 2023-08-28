@@ -171,7 +171,16 @@ class Plugins {
 
 
 
-	
+    /**
+        registers a haxe value/property inside Little code.
+
+        @param variableName the name of the variable, for usage in Little code.
+        @param variableModuleName the module at which the variable "is declared". errors & logs point to this module.
+        @param allowWriting Whether writing to this variable is allowed or not.
+        @param staticValue **Option 1** - a static value to assign to this variable
+        @param valueGetter **Option 2** - a function that returns a value that this variable gives when accessed.
+        @param valueSetter a function that dispatches whenever this value is assigned to. Takes effect when `allowWriting == true`.
+    **/
     public static function registerVariable(variableName:String, ?variableModuleName:String, allowWriting:Bool = false, ?staticValue:ParserTokens, ?valueGetter:Void -> ParserTokens, ?valueSetter:ParserTokens -> ParserTokens) {
         Interpreter.memory.set(variableName, new MemoryObject(
             External(params -> {
@@ -199,6 +208,22 @@ class Plugins {
                 return Interpreter.memory.get(variableName).value = valueSetter(v);
             }
         }
+        if (allowWriting == false) { //syntax here explained later on 
+            Interpreter.memory.get(variableName).valueSetter = function (v) {
+                Runtime.warn(ErrorMessage('Editing the variable $variableName is disallowed. New value is ignored, returning original value.'));
+                var currentModuleName = Little.runtime.currentModule;
+                if (variableModuleName != null) Little.runtime.currentModule = variableModuleName;
+                return try {
+                    var val = if (staticValue != null) staticValue;
+                    else valueGetter();
+                    Little.runtime.currentModule = currentModuleName;
+                    val;
+                } catch (e) {
+                    Little.runtime.currentModule = currentModuleName;
+                    ErrorMessage('External Variable Error: ' + e.details());
+                }
+            }
+        }
     }
 
     /**
@@ -210,7 +235,11 @@ class Plugins {
             ```
             [Variable(Identifier(x), Identifier("String"))]
             ```
-    	@param callback 
+            **alternatively** - can be normal parameter "list" written in little: 
+            ``` 
+            define value, define index as Number
+            ```
+    	@param callback The actual function, which gets an array of the given parameters as little tokens, and returns a value based on them
     **/
     public static function registerFunction(actionName:String, ?actionModuleName:String, expectedParameters:EitherType<String, Array<ParserTokens>>, callback:Array<ParserTokens> -> ParserTokens) {
         var params = if (expectedParameters is String) {
@@ -366,6 +395,10 @@ class Plugins {
         parent.props.set(propertyName, memObject);
         
     }
+
+    public static function registerSign(symbol:String, info:SignInfo) {
+        // TODO
+    }
 }
 
 typedef ItemInfo = {
@@ -390,4 +423,11 @@ typedef VariableInfo = {
     ?valueSetter:(MemoryObject, ParserTokens) -> ParserTokens, //parent, provided value to value
     ?allowWriting:Bool,
     ?type:String
+}
+
+typedef SignInfo = {
+    ?lhsAllowedTypes:Array<String>,
+    ?rhsAllowedTypes:Array<String>,
+    ?AllowedTypeCombos:Array<{lhs:String, rhs:String}>,
+    callback:(ParserTokens, ParserTokens) -> ParserTokens
 }
