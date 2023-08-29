@@ -1,5 +1,7 @@
 package little.tools;
 
+import haxe.exceptions.ArgumentException;
+import little.interpreter.Operators.OperatorType;
 import little.interpreter.Runtime;
 import haxe.extern.EitherType;
 import little.lexer.Lexer;
@@ -396,8 +398,65 @@ class Plugins {
         
     }
 
+    static function combosHas(combos:Array<{lhs:String, rhs:String}>, lhs:String, rhs:String) {
+        for (c in combos) if (c.rhs == rhs && c.lhs == lhs) return true;
+        return false;
+    }
+
     public static function registerSign(symbol:String, info:SignInfo) {
-        // TODO
+        if (info.operatorType == null || info.operatorType == LHS_RHS) {
+            if (info.callback == null && info.singleSidedOperatorCallback != null) 
+                throw new ArgumentException("callback", 'Incorrect callback given for operator type ${info.operatorType ?? LHS_RHS} - `singleSidedOperatorCallback` was given, when `callback` was expected');
+            else if (info.callback == null)
+                throw new ArgumentException("callback", 'No callback given for operator type ${info.operatorType ?? LHS_RHS} (`callback` is null)');
+            
+            var callbackFunc:(ParserTokens, ParserTokens) -> ParserTokens;
+
+            if (info.lhsAllowedTypes != null && info.rhsAllowedTypes == null && info.allowedTypeCombos == null) {
+                callbackFunc = (lhs, rhs) -> {
+                    if (!info.lhsAllowedTypes.contains(Interpreter.getValueType(lhs).getParameters()[0])) {
+                        var t = Interpreter.getValueType(lhs).getParameters()[0];
+                        Little.runtime.throwError(ErrorMessage('Cannot preform ${t}(${Interpreter.stringifyTokenIdentifier(lhs)}) $symbol ${Interpreter.getValueType(rhs).getParameters()[0]}(${Interpreter.stringifyTokenIdentifier(rhs)}) - Left operand cannot be of type $t (accepted types: ${info.lhsAllowedTypes})'));
+                    }
+
+                    return info.callback(lhs, rhs);
+                }
+            } else if (info.lhsAllowedTypes == null && info.rhsAllowedTypes != null && info.allowedTypeCombos == null) {
+                callbackFunc = (lhs, rhs) -> {
+                    if (!info.rhsAllowedTypes.contains(Interpreter.getValueType(rhs).getParameters()[0])) {
+                        var t = Interpreter.getValueType(rhs).getParameters()[0];
+                        Little.runtime.throwError(ErrorMessage('Cannot preform ${Interpreter.getValueType(lhs).getParameters()[0]}(${Interpreter.stringifyTokenIdentifier(lhs)}) $symbol ${t}(${Interpreter.stringifyTokenIdentifier(rhs)}) - Right operand cannot be of type $t (accepted types: ${info.rhsAllowedTypes})'));
+                    }
+
+                    return info.callback(lhs, rhs);
+                }
+            } else if (info.lhsAllowedTypes != null && info.rhsAllowedTypes == null && info.allowedTypeCombos != null) {
+                callbackFunc = (lhs, rhs) -> {
+                    var r = Interpreter.getValueType(rhs).getParameters()[0];
+                    var l = Interpreter.getValueType(lhs).getParameters()[0];
+                    if (!info.lhsAllowedTypes.contains(Interpreter.getValueType(lhs).getParameters()[0]) && !combosHas(info.allowedTypeCombos, r, l)) {
+                        Little.runtime.throwError(ErrorMessage('Cannot preform ${l}(${Interpreter.stringifyTokenIdentifier(lhs)}) $symbol ${r}(${Interpreter.stringifyTokenIdentifier(rhs)}) - Right operand cannot be of type $r while left operand is of type $l (accepted types for right operand: ${info.rhsAllowedTypes}, accepted type combinations: ${info.allowedTypeCombos.map(object -> '${object.rhs} $symbol ${object.lhs}')})'));
+                    }
+
+                    return info.callback(lhs, rhs);
+                }
+            } else if (info.lhsAllowedTypes == null && info.rhsAllowedTypes != null && info.allowedTypeCombos != null) {
+                callbackFunc = (lhs, rhs) -> {
+                    var r = Interpreter.getValueType(rhs).getParameters()[0];
+                    var l = Interpreter.getValueType(lhs).getParameters()[0];
+                    if (!info.rhsAllowedTypes.contains(Interpreter.getValueType(rhs).getParameters()[0]) && !combosHas(info.allowedTypeCombos, r, l)) {
+                        Little.runtime.throwError(ErrorMessage('Cannot preform ${l}(${Interpreter.stringifyTokenIdentifier(lhs)}) $symbol ${r}(${Interpreter.stringifyTokenIdentifier(rhs)}) - Right operand cannot be of type $r while left operand is of type $l (accepted types for right operand: ${info.rhsAllowedTypes}, accepted type combinations: ${info.allowedTypeCombos.map(object -> '${object.rhs} $symbol ${object.lhs}')})'));
+                    }
+
+                    return info.callback(lhs, rhs);
+                }
+            } else {
+
+            }
+
+        } else {
+
+        }
     }
 }
 
@@ -428,6 +487,8 @@ typedef VariableInfo = {
 typedef SignInfo = {
     ?lhsAllowedTypes:Array<String>,
     ?rhsAllowedTypes:Array<String>,
-    ?AllowedTypeCombos:Array<{lhs:String, rhs:String}>,
-    callback:(ParserTokens, ParserTokens) -> ParserTokens
+    ?allowedTypeCombos:Array<{lhs:String, rhs:String}>,
+    ?callback:(ParserTokens, ParserTokens) -> ParserTokens,
+    ?singleSidedOperatorCallback:ParserTokens -> ParserTokens,
+    ?operatorType:OperatorType
 }

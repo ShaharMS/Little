@@ -1,9 +1,12 @@
 package little.interpreter;
 
+import little.lexer.Lexer;
 import haxe.extern.EitherType;
 import little.parser.Tokens.ParserTokens;
 
+using little.tools.TextTools;
 
+@:access(little.lexer.Lexer)
 class Operators {
     
     /**
@@ -39,7 +42,19 @@ class Operators {
     public static var lhsOnly:Map<String, (ParserTokens) -> ParserTokens> = new Map();
 
     public static function add(op:String, operatorType:OperatorType, callback:EitherType<(ParserTokens) -> ParserTokens, (ParserTokens, ParserTokens) -> ParserTokens>) {
-        // TODO
+        for (i in 0...op.length) if (!Lexer.signs.contains(op.charAt(i))) Lexer.signs.push(op.charAt(i));
+        Keywords.SPECIAL_OR_MULTICHAR_SIGNS.push(op);
+        switch operatorType {
+            case LHS_RHS: {
+                standard.set(op, callback);
+            }
+            case LHS_ONLY: {
+                lhsOnly.set(op, callback);
+            }
+            case RHS_ONLY: {
+                rhsOnly.set(op, callback);
+            }
+        }
     }
 }
 
