@@ -275,9 +275,10 @@ class Actions {
             case Expression(parts, _): {
                 return evaluateExpressionParts(parts);
             }
-            case Block(body, type): {
+            case Block(body, t): {
                 var returnVal = run(body);
-                return evaluate(returnVal, dontThrow);
+                if (t == null) return evaluate(returnVal, dontThrow);
+				return evaluate(type(returnVal, t), dontThrow);
             }
             case PartArray(parts): {
                 return PartArray([for (p in parts) evaluate(p, dontThrow)]);
@@ -298,7 +299,7 @@ class Actions {
                 if (o != null) return o.value;
                 return NullValue;
             }
-            case Return(value, type): return evaluate(value);
+            case Return(value, t): return evaluate(type(value, t));
             case _: return evaluate(ErrorMessage('Unable to evaluate token `$exp`'), dontThrow);
         }
     }
@@ -306,14 +307,13 @@ class Actions {
     public static function calculate(token:ParserTokens):ParserTokens {
         return switch token {
             case Number(_) | Decimal(_) | Characters(_) | TrueValue | FalseValue | NullValue| Sign(_): token;
-            case Block(body, type): run(body);
-            case Expression(parts, type): Interpreter.evaluateExpressionParts(parts, memory);
+            case Block(body, t): type(run(body), t);
+            case Expression(parts, t): type(Interpreter.evaluateExpressionParts(parts, memory), t);
             case Read(name): read(name);
             case Identifier(_): read(token);
             case FunctionCall(name, params): call(name, params);
             case Write(assignees, value, type): write(assignees, value, type);
-            case PropertyAccess(name, property): Interpreter.evaluate(token, memory);
-            case _: null;
+            case _: evaluate(token);
         }
     }
 }

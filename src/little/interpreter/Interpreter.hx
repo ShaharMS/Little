@@ -925,9 +925,30 @@ class Interpreter {
         
         if (pre.length == 3) return pre; // No need to reorder, nothing can be out of order
 
-        // First, wrap ^ and √
+		// First, wrap user-defined operators
+		
         var post = [];
         var i = 0;
+        while (i < pre.length) {
+            var token = pre[i];
+            switch token {
+                case Sign(sign): {
+					if (!Little.operators.USER_DEFINED.contains(sign)) post.push(token);
+                    else {
+						i++;
+                    	post.push(Expression([post.pop(), token, pre[i]], null));
+					}
+                }
+                case _: post.push(token);
+            }
+            i++;
+        }
+
+        // Then, wrap ^ and √
+		pre = post.copy();
+        post = [];
+
+        i = 0;
         while (i < pre.length) {
             var token = pre[i];
             switch token {
@@ -945,7 +966,7 @@ class Interpreter {
         pre = post.copy();
         post = [];
 
-        var i = 0;
+        i = 0;
         while (i < pre.length) {
             var token = pre[i];
             switch token {

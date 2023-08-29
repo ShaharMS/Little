@@ -1,5 +1,6 @@
 package little.tools;
 
+import little.interpreter.Operators;
 import haxe.exceptions.ArgumentException;
 import little.interpreter.Operators.OperatorType;
 import little.interpreter.Runtime;
@@ -404,6 +405,9 @@ class Plugins {
     }
 
     public static function registerSign(symbol:String, info:SignInfo) {
+
+		Little.operators.USER_DEFINED.push(symbol);
+
         if (info.operatorType == null || info.operatorType == LHS_RHS) {
             if (info.callback == null && info.singleSidedOperatorCallback != null) 
                 throw new ArgumentException("callback", 'Incorrect callback given for operator type ${info.operatorType ?? LHS_RHS} - `singleSidedOperatorCallback` was given, when `callback` was expected');
@@ -412,6 +416,7 @@ class Plugins {
             
             var callbackFunc:(ParserTokens, ParserTokens) -> ParserTokens;
 
+			// A bunch of ifs in order to shorten the final callback function, improves performance a bit
             if (info.lhsAllowedTypes != null && info.rhsAllowedTypes == null && info.allowedTypeCombos == null) {
                 callbackFunc = (lhs, rhs) -> {
                     if (!info.lhsAllowedTypes.contains(Interpreter.getValueType(lhs).getParameters()[0])) {
@@ -430,12 +435,26 @@ class Plugins {
 
                     return info.callback(lhs, rhs);
                 }
+            } else if (info.lhsAllowedTypes != null && info.rhsAllowedTypes != null && info.allowedTypeCombos == null) {
+                callbackFunc = (lhs, rhs) -> {
+                    if (!info.rhsAllowedTypes.contains(Interpreter.getValueType(rhs).getParameters()[0])) {
+                        var t = Interpreter.getValueType(rhs).getParameters()[0];
+                        Little.runtime.throwError(ErrorMessage('Cannot preform ${Interpreter.getValueType(lhs).getParameters()[0]}(${Interpreter.stringifyTokenIdentifier(lhs)}) $symbol ${t}(${Interpreter.stringifyTokenIdentifier(rhs)}) - Right operand cannot be of type $t (accepted types: ${info.rhsAllowedTypes})'));
+                    }
+					
+                    if (!info.rhsAllowedTypes.contains(Interpreter.getValueType(lhs).getParameters()[0])) {
+                        var t = Interpreter.getValueType(lhs).getParameters()[0];
+                        Little.runtime.throwError(ErrorMessage('Cannot preform ${Interpreter.getValueType(lhs).getParameters()[0]}(${Interpreter.stringifyTokenIdentifier(lhs)}) $symbol ${t}(${Interpreter.stringifyTokenIdentifier(rhs)}) - Left operand cannot be of type $t (accepted types: ${info.lhsAllowedTypes})'));
+                    }
+
+                    return info.callback(lhs, rhs);
+                }
             } else if (info.lhsAllowedTypes != null && info.rhsAllowedTypes == null && info.allowedTypeCombos != null) {
                 callbackFunc = (lhs, rhs) -> {
                     var r = Interpreter.getValueType(rhs).getParameters()[0];
                     var l = Interpreter.getValueType(lhs).getParameters()[0];
-                    if (!info.lhsAllowedTypes.contains(Interpreter.getValueType(lhs).getParameters()[0]) && !combosHas(info.allowedTypeCombos, r, l)) {
-                        Little.runtime.throwError(ErrorMessage('Cannot preform ${l}(${Interpreter.stringifyTokenIdentifier(lhs)}) $symbol ${r}(${Interpreter.stringifyTokenIdentifier(rhs)}) - Right operand cannot be of type $r while left operand is of type $l (accepted types for right operand: ${info.rhsAllowedTypes}, accepted type combinations: ${info.allowedTypeCombos.map(object -> '${object.rhs} $symbol ${object.lhs}')})'));
+                    if (!info.lhsAllowedTypes.contains(l) && !combosHas(info.allowedTypeCombos, l, r)) {
+                        Little.runtime.throwError(ErrorMessage('Cannot preform ${l}(${Interpreter.stringifyTokenIdentifier(lhs)}) $symbol ${r}(${Interpreter.stringifyTokenIdentifier(rhs)}) - Right operand cannot be of type $r while left operand is of type $l (accepted types for left operand: ${info.lhsAllowedTypes}, accepted type combinations: ${info.allowedTypeCombos.map(object -> '${object.rhs} $symbol ${object.lhs}')})'));
                     }
 
                     return info.callback(lhs, rhs);
@@ -444,18 +463,58 @@ class Plugins {
                 callbackFunc = (lhs, rhs) -> {
                     var r = Interpreter.getValueType(rhs).getParameters()[0];
                     var l = Interpreter.getValueType(lhs).getParameters()[0];
-                    if (!info.rhsAllowedTypes.contains(Interpreter.getValueType(rhs).getParameters()[0]) && !combosHas(info.allowedTypeCombos, r, l)) {
+                    if (!info.rhsAllowedTypes.contains(r) && !combosHas(info.allowedTypeCombos, l, r)) {
                         Little.runtime.throwError(ErrorMessage('Cannot preform ${l}(${Interpreter.stringifyTokenIdentifier(lhs)}) $symbol ${r}(${Interpreter.stringifyTokenIdentifier(rhs)}) - Right operand cannot be of type $r while left operand is of type $l (accepted types for right operand: ${info.rhsAllowedTypes}, accepted type combinations: ${info.allowedTypeCombos.map(object -> '${object.rhs} $symbol ${object.lhs}')})'));
                     }
 
                     return info.callback(lhs, rhs);
                 }
-            } else {
+            } else if (info.lhsAllowedTypes != null && info.rhsAllowedTypes != null && info.allowedTypeCombos != null) {
+                callbackFunc = (lhs, rhs) -> {
+                    if (!info.rhsAllowedTypes.contains(Interpreter.getValueType(rhs).getParameters()[0])) {
+                        var t = Interpreter.getValueType(rhs).getParameters()[0];
+                        Little.runtime.throwError(ErrorMessage('Cannot preform ${Interpreter.getValueType(lhs).getParameters()[0]}(${Interpreter.stringifyTokenIdentifier(lhs)}) $symbol ${t}(${Interpreter.stringifyTokenIdentifier(rhs)}) - Right operand cannot be of type $t (accepted types: ${info.rhsAllowedTypes}, accepted type combinations: ${info.allowedTypeCombos.map(object -> '${object.rhs} $symbol ${object.lhs}')})'));
+                    }
+					
+                    if (!info.rhsAllowedTypes.contains(Interpreter.getValueType(lhs).getParameters()[0])) {
+                        var t = Interpreter.getValueType(lhs).getParameters()[0];
+                        Little.runtime.throwError(ErrorMessage('Cannot preform ${t}(${Interpreter.stringifyTokenIdentifier(lhs)}) $symbol ${Interpreter.getValueType(lhs).getParameters()[0]}(${Interpreter.stringifyTokenIdentifier(rhs)}) - Left operand cannot be of type $t (accepted types: ${info.lhsAllowedTypes}, accepted type combinations: ${info.allowedTypeCombos.map(object -> '${object.rhs} $symbol ${object.lhs}')})'));
+                    }
 
-            }
+                    return info.callback(lhs, rhs);
+                }
+            } else callbackFunc = info.callback;
 
-        } else {
+			Little.operators.add(symbol, LHS_RHS, callbackFunc);
+        } else { // One sided operator
+			if (info.singleSidedOperatorCallback == null && info.callback != null) 
+                throw new ArgumentException("singleSidedOperatorCallback", 'Incorrect callback given for operator type ${info.operatorType} - `callback` was given, when `singleSidedOperatorCallback` was expected');
+            else if (info.callback == null)
+                throw new ArgumentException("singleSidedOperatorCallback", 'No callback given for operator type ${info.operatorType ?? LHS_RHS} (`singleSidedOperatorCallback` is null)');
+            
+			var callbackFunc:ParserTokens -> ParserTokens;
 
+			if (info.operatorType == LHS_ONLY) {
+				callbackFunc = (lhs) -> {
+					var l = Interpreter.getValueType(lhs).getParameters()[0];
+					if (!info.lhsAllowedTypes.contains(l)) {
+						Little.runtime.throwError(ErrorMessage('Cannot perform $l(${Interpreter.stringifyTokenIdentifier(lhs)})$symbol - Operand cannot be of type $l (acceptted types: ${info.lhsAllowedTypes})'));
+					}
+
+					return info.singleSidedOperatorCallback(lhs);
+				}
+			} else {
+				callbackFunc = (rhs) -> {
+					var r = Interpreter.getValueType(rhs).getParameters()[0];
+					if (!info.lhsAllowedTypes.contains(r)) {
+						Little.runtime.throwError(ErrorMessage('Cannot perform $r(${Interpreter.stringifyTokenIdentifier(rhs)})$symbol - Operand cannot be of type $r (acceptted types: ${info.rhsAllowedTypes})'));
+					}
+
+					return info.singleSidedOperatorCallback(rhs);
+				}
+			} 
+
+			Little.operators.add(symbol, info.operatorType, callbackFunc);
         }
     }
 }

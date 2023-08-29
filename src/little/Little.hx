@@ -45,6 +45,7 @@ class Little {
             if (debug != null) Little.debug = debug;
             if (!PrepareRun.prepared) {
                 PrepareRun.addTypes();
+				PrepareRun.addSigns();
                 PrepareRun.addFunctions();
                 PrepareRun.addConditions();
                 PrepareRun.addProps();
@@ -56,8 +57,7 @@ class Little {
 
     /**
         Runs a new Little program.  
-        If you want to preload some more code, use the `Little.loadModule()` method before calling this.  
-        to unload a loaded module , use `Little.unloadModule()` with the name of the module you wish to remove.  
+        If you want to preload some more code, use the `Little.loadModule()` method before calling this.
         
          - **pay attention - all modules & registered elements are unloaded after each run.**
 
@@ -83,6 +83,7 @@ class Little {
         Interpreter.memory.underlying.map = [];
         if (!PrepareRun.prepared) {
             PrepareRun.addTypes();
+			PrepareRun.addSigns();
             PrepareRun.addFunctions();
             PrepareRun.addConditions();
             PrepareRun.addProps();

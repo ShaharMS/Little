@@ -1,5 +1,6 @@
 package little.interpreter;
 
+import eval.luv.Stream;
 import little.lexer.Lexer;
 import haxe.extern.EitherType;
 import little.parser.Tokens.ParserTokens;
@@ -7,8 +8,12 @@ import little.parser.Tokens.ParserTokens;
 using little.tools.TextTools;
 
 @:access(little.lexer.Lexer)
+@:allow(little.interpreter.Interpreter)
+@:allow(little.tools.Plugins)
 class Operators {
     
+	static var USER_DEFINED:Array<String> = [];
+
     /**
         Operators that require two sides to work, for example:
         | Operator | Code |
