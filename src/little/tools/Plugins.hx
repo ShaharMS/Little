@@ -489,7 +489,7 @@ class Plugins {
         } else { // One sided operator
 			if (info.singleSidedOperatorCallback == null && info.callback != null) 
                 throw new ArgumentException("singleSidedOperatorCallback", 'Incorrect callback given for operator type ${info.operatorType} - `callback` was given, when `singleSidedOperatorCallback` was expected');
-            else if (info.callback == null)
+            else if (info.singleSidedOperatorCallback == null)
                 throw new ArgumentException("singleSidedOperatorCallback", 'No callback given for operator type ${info.operatorType ?? LHS_RHS} (`singleSidedOperatorCallback` is null)');
             
 			var callbackFunc:ParserTokens -> ParserTokens;

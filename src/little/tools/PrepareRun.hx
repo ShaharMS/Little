@@ -100,6 +100,28 @@ class PrepareRun {
 	public static function addSigns() {
 
 		Little.plugin.registerSign("+", {
+			rhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
+			operatorType: RHS_ONLY,
+			singleSidedOperatorCallback: (rhs) -> {
+				var r = Conversion.toHaxeValue(rhs);
+				if (r is Int)
+					return Number(r + "");
+				return Decimal(r + "");
+			}
+		});
+
+		Little.plugin.registerSign("-", {
+			rhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
+			operatorType: RHS_ONLY,
+			singleSidedOperatorCallback: (rhs) -> {
+				var r = Conversion.toHaxeValue(rhs);
+				if (r is Int)
+					return Number(-r + "");
+				return Decimal(-r + "");
+			}
+		});
+
+		Little.plugin.registerSign("+", {
 			rhsAllowedTypes: [TYPE_FLOAT, TYPE_INT, TYPE_STRING],
 			lhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
 			callback: (rhs, lhs) -> {

@@ -717,208 +717,33 @@ class Interpreter {
 
         parts = forceCorrectOrderOfOperations(parts);
 
-        var value = "", valueType = TYPE_UNKNOWN, mode = "+";
-
+        var evaluatedValue:ParserTokens = null, currentSign = "", rhs:ParserTokens = null;
         for (token in parts) {
             //trace(token);
             var val:ParserTokens = evaluate(token);
             //trace(val);
             switch val {
                 case ErrorMessage(_): Runtime.throwError(val, INTERPRETER_VALUE_EVALUATOR);
-                case Sign(sign): mode = sign;
-                case TrueValue | FalseValue: {
-                    if (valueType == TYPE_UNKNOWN) {
-                        valueType = TYPE_BOOLEAN;
-                        value = (val == TrueValue).string();
-                    } else if (valueType == TYPE_BOOLEAN) {
-                        var bool = (val == TrueValue);
-                        switch mode {
-                            case "&&": value = (value.parseBool() && bool).string();
-                            case "||": value = (value.parseBool() || bool).string();
-                            case "==": value = (value.parseBool() == bool).string();
-                            case "^^" | "!=": value = (value.parseBool() != bool).string(); // xor
-                            case _: return ErrorMessage('Cannot preform `$valueType($value) $mode $TYPE_BOOLEAN($bool)`');
-                        }
-                    } else if (valueType == TYPE_INT || valueType == TYPE_FLOAT) {
-                        var num = (val == TrueValue) ? 1 : 0;
-                        switch mode {
-                            case "+": value = "" + (value.parseFloat() + num);
-                            case "-": value = "" + (value.parseFloat() - num);
-                            case "*": value = "" + (value.parseFloat() * num);
-                            case "/": {
-                                valueType = TYPE_FLOAT;
-                                value = "" + (value.parseInt() / num);
-                            }
-                            case "^": value = "" + (Math.pow(value.parseInt(), num));
-                            case "==" | ">=" |">" | "<" |  "<=" | "!=": {
-                                valueType = TYPE_BOOLEAN;
-                                value = switch mode {
-                                    case "==": "" + (value == num.string());
-                                    case ">=": "" + (value.parseFloat() >= num);
-                                    case ">" : "" + (value.parseFloat() > num);
-                                    case "<" : "" + (value.parseFloat() < num);
-                                    case "<=": "" + (value.parseFloat() <= num);
-                                    case "!=": "" + (value != num.string());
-                                    case _: return ErrorMessage('Cannot preform `$valueType($value) $mode $TYPE_BOOLEAN($num)`'); 
-                                }
-                            }
-                            case _: return ErrorMessage('Cannot preform `$valueType($value) $mode $TYPE_BOOLEAN(${(val == TrueValue)})`');
-                        }
-                    } else if (valueType == TYPE_STRING) {
-                        var bool = (val == TrueValue) ? "true" : "false";
-                        switch mode {
-                            case "+": value += bool;
-                            case "-": value = value.replaceLast(bool, "");
-                            case "*": value = value.multiply(bool.parseBool() ? 1 : 0);
-                            case "==" | ">=" |">" | "<" |  "<=" | "!=": {
-                                valueType = TYPE_BOOLEAN;
-                                value = switch mode {
-                                    case "==": "" + false;
-                                    case "!=": "" + true;
-                                    case _: return ErrorMessage('Cannot preform `$valueType($value) $mode $TYPE_BOOLEAN($bool)`'); 
-                                }
-                            }
-                            case _: return ErrorMessage('Cannot preform `$valueType($value) $mode $TYPE_BOOLEAN(${(val == TrueValue)})`');
-                        }
-                    }
-                }
-                case Number(num): {
-                    if (valueType == TYPE_UNKNOWN) {
-                        valueType = TYPE_INT;
-                        switch mode {
-                            case "+": value = "" + (num.parseInt());
-                            case "-": value = "" + (-num.parseInt());
-                            case _: return ErrorMessage('Cannot preform `$mode $TYPE_INT($num)` At the start of an expression');
-                        }
-                    } else if (valueType == TYPE_FLOAT || valueType == TYPE_INT || valueType == TYPE_BOOLEAN) {
-                        if (valueType == TYPE_BOOLEAN) {
-                            valueType = TYPE_INT;
-                            // Convert true/false to 1/0
-                            value = value.replace(TRUE_VALUE, "1").replace(FALSE_VALUE, "0").replace(NULL_VALUE, "0");
-                        }
-                        switch mode {
-                            case "+": value = "" + (value.parseFloat() + num.parseInt());
-                            case "-": value = "" + (value.parseFloat() - num.parseInt());
-                            case "*": value = "" + (value.parseFloat() * num.parseInt());
-                            case "/": {
-                                valueType = TYPE_FLOAT;
-                                value = "" + (value.parseInt() / num.parseInt());
-                            }
-                            case "^": value = "" + (Math.pow(value.parseInt(), num.parseInt()));
-                            case "==" | ">=" |">" | "<" |  "<=" | "!=": {
-                                valueType = TYPE_BOOLEAN;
-                                value = switch mode {
-                                    case "==": "" + (value == num);
-                                    case ">=": "" + (value.parseFloat() >= num.parseInt());
-                                    case ">" : "" + (value.parseFloat() > num.parseInt());
-                                    case "<" : "" + (value.parseFloat() < num.parseInt());
-                                    case "<=": "" + (value.parseFloat() <= num.parseInt());
-                                    case "!=": "" + (value != num);
-                                    case _: return ErrorMessage('Cannot preform `$valueType($value) $mode $TYPE_INT($num)`'); 
-                                }
-                            }
-                            case _: return ErrorMessage('Cannot preform `$valueType($value) $mode $TYPE_INT($num)`');
-                        }
-                    } else if (valueType == TYPE_STRING) {
-                        switch mode {
-                            case "+": value += num;
-                            case "-": value = value.replaceLast(num, "");
-                            case "*": value = value.multiply(num.parseInt());
-                            case "==" | ">=" |">" | "<" |  "<=" | "!=": {
-                                valueType = TYPE_BOOLEAN;
-                                value = switch mode {
-                                    case "==": "" + false;
-                                    case "!=": "" + true;
-                                    case _: return ErrorMessage('Cannot preform `$valueType($value) $mode $TYPE_INT($num)`'); 
-                                }
-                            }
-                            case _: return ErrorMessage('Cannot preform `$valueType($value) $mode $TYPE_INT($num)`');
-                        }
-                    }
-                }
-                case Decimal(num): {
-                    if (valueType == TYPE_UNKNOWN) {
-                        valueType = TYPE_FLOAT;
-                        switch mode {
-                            case "+": value = "" + (num.parseFloat());
-                            case "-": value = "" + (-num.parseFloat());
-                            case _: return ErrorMessage('Cannot preform `$mode $TYPE_FLOAT($num)` At the start of an expression');
-                        }
-                    } else if (valueType == TYPE_FLOAT || valueType == TYPE_INT || valueType == TYPE_BOOLEAN) {
-                        if (valueType == TYPE_BOOLEAN) {
-                            // Convert true/false to 1/0
-                            value = value.replace(TRUE_VALUE, "1").replace(FALSE_VALUE, "0").replace(NULL_VALUE, "0");
-                        }
-                        valueType = TYPE_FLOAT;
-                        switch mode {
-                            case "+": value = "" + (value.parseFloat() + num.parseFloat());
-                            case "-": value = "" + (value.parseFloat() - num.parseFloat());
-                            case "*": value = "" + (value.parseFloat() * num.parseFloat());
-                            case "/": value = "" + (value.parseFloat() / num.parseFloat());
-                            case "^": value = "" + (Math.pow(value.parseFloat(), num.parseFloat()));
-                            case "==" | ">=" |">" | "<" |  "<=" | "!=": {
-                                valueType = TYPE_BOOLEAN;
-                                value = switch mode {
-                                    case "==": "" + (value == num);
-                                    case ">=": "" + (value.parseFloat() >= num.parseFloat());
-                                    case ">" : "" + (value.parseFloat() > num.parseFloat());
-                                    case "<" : "" + (value.parseFloat() < num.parseFloat());
-                                    case "<=": "" + (value.parseFloat() <= num.parseFloat());
-                                    case "!=": "" + (value != num);
-                                    case _: return ErrorMessage('Cannot preform `$valueType($value) $mode $TYPE_FLOAT($num)`'); 
-                                }
-                            }
-                            case _: return ErrorMessage('Cannot preform `$valueType($value) $mode $TYPE_FLOAT($num)`');
-                        }
-                    } else if (valueType == TYPE_STRING) {
-                        switch mode {
-                            case "+": value += num;
-                            case "-": value = value.replaceLast(num, "");
-                            case "==" | ">=" | ">" | "<" | "<=" | "!=": {
-                                valueType = TYPE_BOOLEAN;
-                                value = switch mode {
-                                    case "==": "" + false;
-                                    case "!=": "" + true;
-                                    case _: return ErrorMessage('Cannot preform `$valueType($value) $mode $TYPE_FLOAT($num)`'); 
-                                }
-                            }
-                            case _: return ErrorMessage('Cannot preform `$valueType($value) $mode $TYPE_FLOAT($num)`');
-                        }
-                    }
-                }
-                case Characters(string): {
-                    valueType = TYPE_STRING;
-                    switch mode {
-                        case "+": value += string;
-                        case "-": value = value.replaceLast(string, "");
-                        case "==" | ">=" |">" | "<" |  "<=" | "!=": {
-                            valueType = TYPE_BOOLEAN;
-                            value = switch mode {
-                                case "==": "" + (value == string);
-                                case ">=": "" + (value.length >= string.length);
-                                case ">" : "" + (value.length > string.length);
-                                case "<" : "" + (value.length < string.length);
-                                case "<=": "" + (value.length <= string.length);
-                                case "!=": "" + (value != string);
-                                case _: return ErrorMessage('Cannot preform `$valueType($value) $mode $TYPE_STRING($string)`'); 
-                            }
-                        }
-                        case _: return ErrorMessage('Cannot preform `$valueType($value) $mode $TYPE_STRING($string)`');
-                    }
-                }
-
-                case _:
+                case Sign(sign): currentSign = sign;
+                case _: {
+					if (evaluatedValue == null) {
+						evaluatedValue = val;
+					} else if (evaluatedValue != null && currentSign != "" && rhs == null) {
+						rhs = val;
+						evaluatedValue = Operators.call(evaluatedValue, currentSign, rhs);
+						rhs = null;
+						currentSign = "";
+					} else if (evaluatedValue == null && currentSign != "") {
+						evaluatedValue = Operators.call(currentSign, val);
+						currentSign = "";
+					} else if (evaluatedValue != null) {
+						Runtime.throwError(ErrorMessage("Two values should not appear one right after the other, did you forget to insert a sign in between?"));
+					}
+				}
             }
         }
 
-        switch valueType {
-            case (_ == TYPE_INT => true): return Number(value);
-            case (_ == TYPE_FLOAT => true): return Decimal(value);
-            case (_ == TYPE_BOOLEAN => true): return value == "true" ? TrueValue : FalseValue;
-            case (_ == TYPE_STRING => true): return Characters(value);
-            case _: return NullValue;
-        }
-
+		return evaluatedValue;
     }
 
     public static function forceCorrectOrderOfOperations(pre:Array<ParserTokens>):Array<ParserTokens> {
