@@ -1,5 +1,6 @@
 package;
 
+import vision.tools.MathTools;
 import haxe.io.Path;
 import little.tools.Data;
 import little.tools.Plugins;
@@ -42,6 +43,7 @@ class Main {
 		// text.innerHTML = code;
 		new JsExample();
 		#elseif sys
+		trace(MathTools.factorial(5));
 		while (true) {
 			Sys.print("  >> ");
 			var input = Sys.stdin().readLine();

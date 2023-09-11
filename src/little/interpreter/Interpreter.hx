@@ -716,15 +716,21 @@ class Interpreter {
         if (memory == null) memory = Interpreter.memory; // If no memory map is given, use the base one.
 
         parts = forceCorrectOrderOfOperations(parts);
-
         var evaluatedValue:ParserTokens = null, currentSign = "", rhs:ParserTokens = null;
+
         for (token in parts) {
-            //trace(token);
+            trace(token);
             var val:ParserTokens = evaluate(token);
-            //trace(val);
+            trace(val);
             switch val {
                 case ErrorMessage(_): Runtime.throwError(val, INTERPRETER_VALUE_EVALUATOR);
-                case Sign(sign): currentSign = sign;
+                case Sign(sign): {
+                    if (currentSign == "") currentSign = sign;
+                    else {
+                        evaluatedValue = Operators.call(evaluatedValue, currentSign);
+                        currentSign = sign;
+                    }
+                }
                 case _: {
 					if (evaluatedValue == null) {
 						evaluatedValue = val;
@@ -743,12 +749,14 @@ class Interpreter {
             }
         }
 
+        if (currentSign != "") evaluatedValue = Operators.call(evaluatedValue, currentSign);
+
 		return evaluatedValue;
     }
 
     public static function forceCorrectOrderOfOperations(pre:Array<ParserTokens>):Array<ParserTokens> {
         
-        if (pre.length == 3) return pre; // No need to reorder, nothing can be out of order
+        if (pre.length < 3) return pre; // No need to reorder, nothing can be out of order
 
 		// First, wrap user-defined operators
 		
@@ -759,10 +767,14 @@ class Interpreter {
             switch token {
                 case Sign(sign): {
 					if (!Little.operators.USER_DEFINED.contains(sign)) post.push(token);
-                    else {
+                    else if (Operators.standard.exists(sign)){
 						i++;
                     	post.push(Expression([post.pop(), token, pre[i]], null));
-					}
+					} else if (Operators.lhsOnly.exists(sign)) {
+                        post.push(Expression([post.pop(), token], null));
+                    } else {
+                        post.push(Expression([token, post.pop()], null));
+                    }
                 }
                 case _: post.push(token);
             }

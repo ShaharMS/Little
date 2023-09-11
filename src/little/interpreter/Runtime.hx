@@ -1,5 +1,7 @@
 package little.interpreter;
 
+import little.lexer.Lexer;
+import little.interpreter.memory.MemoryObject;
 import haxe.EnumTools;
 import little.parser.Tokens.ParserTokens;
 import little.parser.Parser;
@@ -123,5 +125,17 @@ class Runtime {
 
     public static function print(item:String) {
         stdout += '\n${if (Little.debug) (INTERPRETER : String).toUpperCase() + ": " else ""}Module $currentModule, Line $line:  $item';
+    }
+
+    /**
+        Tries to access the value stored on an object denoted by `obj`.  
+        usage of property access (`thing.other`, `SomeClass.property`) is allowed.
+        When a multi-item expression is given (`"something" + 1`), only the first 
+        item of the expression will get taken into account (in this case, `"something"`.)
+        @param obj the name of the variable
+        @return MemoryObject, or null if it wasn't found
+    **/
+    public static function access(obj:String):MemoryObject {
+        return Interpreter.accessObject(Parser.parse(Lexer.lex(obj))[0]);
     }
 }

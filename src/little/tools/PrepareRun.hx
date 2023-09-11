@@ -1,5 +1,7 @@
 package little.tools;
 
+import vision.tools.MathTools;
+import little.interpreter.memory.MemoryTree;
 import little.lexer.Lexer;
 import little.parser.Parser;
 import little.interpreter.Interpreter;
@@ -98,6 +100,9 @@ class PrepareRun {
 	}
 
 	public static function addSigns() {
+		// --------------------------------------------------
+		// ------------------------RHS-----------------------
+		// --------------------------------------------------
 
 		Little.plugin.registerSign("+", {
 			rhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
@@ -121,13 +126,42 @@ class PrepareRun {
 			}
 		});
 
+		Little.plugin.registerSign("√", {
+			rhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
+			operatorType: RHS_ONLY,
+			singleSidedOperatorCallback: (rhs) -> {
+				var r:Float = Conversion.toHaxeValue(rhs);
+
+				return Decimal(Math.sqrt(r) + "");
+			}
+		});
+
+		// --------------------------------------------------
+		// ------------------------LHS-----------------------
+		// --------------------------------------------------
+
+		Little.plugin.registerSign("!", {
+			lhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
+			operatorType: LHS_ONLY,
+			singleSidedOperatorCallback: (lhs) -> {
+				var l = Conversion.toHaxeValue(lhs);
+
+				return Decimal(MathTools.factorial(l) + "");
+			}
+		});
+
+		// --------------------------------------------------
+		// ----------------------STANDARD--------------------
+		// --------------------------------------------------
+
 		Little.plugin.registerSign("+", {
 			rhsAllowedTypes: [TYPE_FLOAT, TYPE_INT, TYPE_STRING],
-			lhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
+			lhsAllowedTypes: [TYPE_FLOAT, TYPE_INT, TYPE_STRING],
 			callback: (rhs, lhs) -> {
 				var l = Conversion.toHaxeValue(lhs),
 					r = Conversion.toHaxeValue(rhs);
-				if (l is String) return Characters((l : String) + r);
+				if (l is String || r is String)
+					return Characters(cast(l + r));
 				if (l is Int && r is Int)
 					return Number(l + r + "");
 				return Decimal(l + r + "");
@@ -141,7 +175,8 @@ class PrepareRun {
 			callback: (rhs, lhs) -> {
 				var l:Dynamic = Conversion.toHaxeValue(lhs),
 					r:Dynamic = Conversion.toHaxeValue(rhs);
-				if (l is String) return Characters(TextTools.subtract(l, r));
+				if (l is String)
+					return Characters(TextTools.subtract(l, r));
 				if (l is Int && r is Int)
 					return Number(l - r + "");
 				return Decimal(l - r + "");
@@ -155,7 +190,8 @@ class PrepareRun {
 			callback: (rhs, lhs) -> {
 				var l:Dynamic = Conversion.toHaxeValue(lhs),
 					r:Dynamic = Conversion.toHaxeValue(rhs);
-				if (l is String) return Characters(TextTools.multiply(l, r));
+				if (l is String)
+					return Characters(TextTools.multiply(l, r));
 				if (l is Int && r is Int)
 					return Number(l * r + "");
 				return Decimal(l * r + "");
@@ -194,8 +230,9 @@ class PrepareRun {
 					r:Float = Conversion.toHaxeValue(rhs);
 				var lPositive = l >= 0;
 				var oddN = r % 2 == 1;
-				if (!lPositive) l = -l;
-				return Decimal(Math.pow(l * ((!lPositive && oddN) ? -1 : 1), 1/r) + "");
+				if (!lPositive)
+					l = -l;
+				return Decimal(Math.pow(l * ((!lPositive && oddN) ? -1 : 1), 1 / r) + "");
 			}
 		});
 
@@ -204,14 +241,12 @@ class PrepareRun {
 		Little.plugin.registerSign("&&", {
 			rhsAllowedTypes: [TYPE_BOOLEAN],
 			lhsAllowedTypes: [TYPE_BOOLEAN],
-			callback: (rhs, lhs) -> Conversion.toHaxeValue(lhs) && Conversion.toHaxeValue(rhs) ? TrueValue : FalseValue
-		});
+			callback: (rhs, lhs) -> Conversion.toHaxeValue(lhs) && Conversion.toHaxeValue(rhs) ? TrueValue : FalseValue});
 
 		Little.plugin.registerSign("||", {
 			rhsAllowedTypes: [TYPE_BOOLEAN],
 			lhsAllowedTypes: [TYPE_BOOLEAN],
-			callback: (rhs, lhs) -> Conversion.toHaxeValue(lhs) || Conversion.toHaxeValue(rhs) ? TrueValue : FalseValue
-		});
+			callback: (rhs, lhs) -> Conversion.toHaxeValue(lhs) || Conversion.toHaxeValue(rhs) ? TrueValue : FalseValue});
 
 		Little.plugin.registerSign("==", {
 			callback: (rhs, lhs) -> Conversion.toHaxeValue(lhs) == Conversion.toHaxeValue(rhs) ? TrueValue : FalseValue
@@ -230,11 +265,12 @@ class PrepareRun {
 		Little.plugin.registerSign(">", {
 			rhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
 			lhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
-			allowedTypeCombos: [{ lhs: TYPE_STRING, rhs: TYPE_STRING }],
+			allowedTypeCombos: [{lhs: TYPE_STRING, rhs: TYPE_STRING}],
 			callback: (rhs, lhs) -> {
 				var l:Dynamic = Conversion.toHaxeValue(lhs),
 					r:Dynamic = Conversion.toHaxeValue(rhs);
-				if (l is String) return l.length > r.length ? TrueValue : FalseValue;
+				if (l is String)
+					return l.length > r.length ? TrueValue : FalseValue;
 				return l > r ? TrueValue : FalseValue;
 			}
 		});
@@ -242,12 +278,12 @@ class PrepareRun {
 		Little.plugin.registerSign(">=", {
 			rhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
 			lhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
-			allowedTypeCombos: [{ lhs: TYPE_STRING, rhs: TYPE_STRING }],
+			allowedTypeCombos: [{lhs: TYPE_STRING, rhs: TYPE_STRING}],
 			callback: (rhs, lhs) -> {
-				
 				var l:Dynamic = Conversion.toHaxeValue(lhs),
 					r:Dynamic = Conversion.toHaxeValue(rhs);
-				if (l is String) return l.length >= r.length ? TrueValue : FalseValue;
+				if (l is String)
+					return l.length >= r.length ? TrueValue : FalseValue;
 				return l >= r ? TrueValue : FalseValue;
 			}
 		});
@@ -255,11 +291,12 @@ class PrepareRun {
 		Little.plugin.registerSign("<", {
 			rhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
 			lhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
-			allowedTypeCombos: [{ lhs: TYPE_STRING, rhs: TYPE_STRING }],
+			allowedTypeCombos: [{lhs: TYPE_STRING, rhs: TYPE_STRING}],
 			callback: (rhs, lhs) -> {
 				var l:Dynamic = Conversion.toHaxeValue(lhs),
 					r:Dynamic = Conversion.toHaxeValue(rhs);
-				if (l is String) return l.length < r.length ? TrueValue : FalseValue;
+				if (l is String)
+					return l.length < r.length ? TrueValue : FalseValue;
 				return l < r ? TrueValue : FalseValue;
 			}
 		});
@@ -267,11 +304,12 @@ class PrepareRun {
 		Little.plugin.registerSign("<=", {
 			rhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
 			lhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
-			allowedTypeCombos: [{ lhs: TYPE_STRING, rhs: TYPE_STRING }],
+			allowedTypeCombos: [{lhs: TYPE_STRING, rhs: TYPE_STRING}],
 			callback: (rhs, lhs) -> {
 				var l:Dynamic = Conversion.toHaxeValue(lhs),
 					r:Dynamic = Conversion.toHaxeValue(rhs);
-				if (l is String) return l.length <= r.length ? TrueValue : FalseValue;
+				if (l is String)
+					return l.length <= r.length ? TrueValue : FalseValue;
 				return l <= r ? TrueValue : FalseValue;
 			}
 		});

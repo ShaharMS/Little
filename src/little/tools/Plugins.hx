@@ -498,7 +498,7 @@ class Plugins {
 				callbackFunc = (lhs) -> {
 					var l = Interpreter.getValueType(lhs).getParameters()[0];
 					if (!info.lhsAllowedTypes.contains(l)) {
-						Little.runtime.throwError(ErrorMessage('Cannot perform $l(${Interpreter.stringifyTokenIdentifier(lhs)})$symbol - Operand cannot be of type $l (acceptted types: ${info.lhsAllowedTypes})'));
+						Little.runtime.throwError(ErrorMessage('Cannot perform $l(${Interpreter.stringifyTokenIdentifier(lhs)})$symbol - Operand cannot be of type $l (accepted types: ${info.lhsAllowedTypes})'));
 					}
 
 					return info.singleSidedOperatorCallback(lhs);
@@ -507,7 +507,7 @@ class Plugins {
 				callbackFunc = (rhs) -> {
 					var r = Interpreter.getValueType(rhs).getParameters()[0];
 					if (!info.lhsAllowedTypes.contains(r)) {
-						Little.runtime.throwError(ErrorMessage('Cannot perform $r(${Interpreter.stringifyTokenIdentifier(rhs)})$symbol - Operand cannot be of type $r (acceptted types: ${info.rhsAllowedTypes})'));
+						Little.runtime.throwError(ErrorMessage('Cannot perform $r(${Interpreter.stringifyTokenIdentifier(rhs)})$symbol - Operand cannot be of type $r (accepted types: ${info.rhsAllowedTypes})'));
 					}
 
 					return info.singleSidedOperatorCallback(rhs);
