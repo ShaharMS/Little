@@ -14,6 +14,8 @@ using little.tools.TextTools;
 
 import little.Keywords.*;
 
+
+@:access(little.interpreter.Operators)
 class PrepareRun {
 	public static var prepared:Bool = false;
 
@@ -100,6 +102,9 @@ class PrepareRun {
 	}
 
 	public static function addSigns() {
+
+		Little.operators.isUserDefined = false;
+
 		// --------------------------------------------------
 		// ------------------------RHS-----------------------
 		// --------------------------------------------------
@@ -135,6 +140,7 @@ class PrepareRun {
 				return Decimal(Math.sqrt(r) + "");
 			}
 		});
+		Little.operators.HIGH_PRIORITY.push("√");
 
 		// --------------------------------------------------
 		// ------------------------LHS-----------------------
@@ -149,6 +155,7 @@ class PrepareRun {
 				return Decimal(MathTools.factorial(l) + "");
 			}
 		});
+		Little.operators.HIGH_PRIORITY.push("!");
 
 		// --------------------------------------------------
 		// ----------------------STANDARD--------------------
@@ -221,6 +228,7 @@ class PrepareRun {
 				return Decimal(Math.pow(l, r) + "");
 			}
 		});
+		Little.operators.HIGH_PRIORITY.push("^");
 
 		Little.plugin.registerSign("√", {
 			rhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
@@ -313,6 +321,8 @@ class PrepareRun {
 				return l <= r ? TrueValue : FalseValue;
 			}
 		});
+
+		Little.operators.isUserDefined = true;
 	}
 
 	public static function addConditions() {

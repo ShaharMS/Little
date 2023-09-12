@@ -12,7 +12,9 @@ using little.tools.TextTools;
 @:allow(little.interpreter.Interpreter)
 @:allow(little.tools.Plugins)
 class Operators {
+	static var isUserDefined = true;
 	static var USER_DEFINED:Array<String> = [];
+	static var HIGH_PRIORITY:Array<String> = [];
 
 	/**
 		Operators that require two sides to work, for example:

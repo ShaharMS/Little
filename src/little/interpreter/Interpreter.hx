@@ -715,13 +715,24 @@ class Interpreter {
 
         if (memory == null) memory = Interpreter.memory; // If no memory map is given, use the base one.
 
+        trace("--------------------------------");
+        trace("Pre-process", parts);
         parts = forceCorrectOrderOfOperations(parts);
         var evaluatedValue:ParserTokens = null, currentSign = "", rhs:ParserTokens = null;
 
+        trace("Post-process", parts, "Start eval");
+
         for (token in parts) {
-            trace(token);
-            var val:ParserTokens = evaluate(token);
-            trace(val);
+            trace("Current", token);
+            var val:ParserTokens = switch token {
+                case Expression(p, _): {
+                    trace("Found Expression", token);
+                    trace("Recursing:", p);
+                    #if sys Sys.sleep(5); #end
+                    evaluateExpressionParts(p);
+                }
+                default: evaluate(token);
+            };
             switch val {
                 case ErrorMessage(_): Runtime.throwError(val, INTERPRETER_VALUE_EVALUATOR);
                 case Sign(sign): {
@@ -756,9 +767,9 @@ class Interpreter {
 
     public static function forceCorrectOrderOfOperations(pre:Array<ParserTokens>):Array<ParserTokens> {
         
-        if (pre.length < 3) return pre; // No need to reorder, nothing can be out of order
+        if (pre.length <= 3) return pre; // No need to reorder, nothing can be out of order
 
-		// First, wrap user-defined operators
+		// First, wrap user-defined & high priority operators
 		
         var post = [];
         var i = 0;
@@ -766,7 +777,7 @@ class Interpreter {
             var token = pre[i];
             switch token {
                 case Sign(sign): {
-					if (!Little.operators.USER_DEFINED.contains(sign)) post.push(token);
+					if (!Little.operators.USER_DEFINED.contains(sign) && !Little.operators.HIGH_PRIORITY.contains(sign)) post.push(token);
                     else if (Operators.standard.exists(sign)){
 						i++;
                     	post.push(Expression([post.pop(), token, pre[i]], null));

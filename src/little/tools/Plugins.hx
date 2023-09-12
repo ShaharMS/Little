@@ -406,7 +406,7 @@ class Plugins {
 
     public static function registerSign(symbol:String, info:SignInfo) {
 
-		Little.operators.USER_DEFINED.push(symbol);
+		if (@:privateAccess Little.operators.isUserDefined) Little.operators.USER_DEFINED.push(symbol);
 
         if (info.operatorType == null || info.operatorType == LHS_RHS) {
             if (info.callback == null && info.singleSidedOperatorCallback != null) 
