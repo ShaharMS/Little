@@ -1,7 +1,6 @@
 package little.interpreter;
 
 import little.tools.PrettyPrinter;
-import eval.luv.Stream;
 import little.lexer.Lexer;
 import haxe.extern.EitherType;
 import little.parser.Tokens.ParserTokens;
