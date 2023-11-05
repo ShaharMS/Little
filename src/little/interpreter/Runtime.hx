@@ -38,8 +38,18 @@ class Runtime {
     **/
     public static var previousToken(default, null):ParserTokens;
 
+    /**
+        | Code | Description |
+        | :---:| ---         |
+        | **0** | Everything went fine, aside from potential warnings. |
+        | **1** | An error was thrown, and terminated the program. The error is printed to stdout, and its token is kept after the fact in `Runtime.errorToken`. |
+    **/
     public static var exitCode(default, null):Int = 0;
     
+    /**
+        The last error that was thrown. On normal settings, gets set at the same time the program terminates.
+    **/
+    public static var errorToken(default, null):ParserTokens;
 
     /**
     	Dispatches every time the interpreter finishes running a line of code.
@@ -87,8 +97,9 @@ class Runtime {
     	Stops the execution of the program, and prints an error message to the console. Dispatches `onErrorThrown`.
         @param token some token which is the error, usually `ErrorMessage`
         @param layer the "stage" from which the error was called
+        @return the token that caused the error (the first parameter of this function)
         **/
-    public static function throwError(token:ParserTokens, ?layer:Layer = INTERPRETER) {
+    public static function throwError(token:ParserTokens, ?layer:Layer = INTERPRETER):ParserTokens {
 
         callStack.push(token);
         
@@ -101,8 +112,11 @@ class Runtime {
         }
         stdout += '\n$content';
         exitCode = Layer.getIndexOf(layer);
-        Interpreter.errorThrown = true;
+        errorToken = token;
+        Interpreter.errorThrown = true;        
         for (func in onErrorThrown) func(module, line, title, reason);
+
+        return token;
     }
 
     /**
@@ -125,6 +139,10 @@ class Runtime {
 
     public static function print(item:String) {
         stdout += '\n${if (Little.debug) (INTERPRETER : String).toUpperCase() + ": " else ""}Module $currentModule, Line $line:  $item';
+    }
+
+    public static function broadcast(item:String) {
+        stdout += '\n${if (Little.debug) "BROADCAST: " else ""}${item}';
     }
 
     /**

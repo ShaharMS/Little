@@ -168,7 +168,7 @@ class PrepareRun {
 				var l = Conversion.toHaxeValue(lhs),
 					r = Conversion.toHaxeValue(rhs);
 				if (l is String || r is String)
-					return Characters(cast(l + r));
+					return Characters("" + l + r);
 				if (l is Int && r is Int)
 					return Number(l + r + "");
 				return Decimal(l + r + "");

@@ -42,6 +42,14 @@ class Interpreter {
         var returnVal:ParserTokens = null;
         var i = 0;
         while (i < tokens.length) {
+
+            if (errorThrown) {
+                Runtime.broadcast("Stopping Execution...");
+                // Todo: here is future garbage collecting stuff
+                Runtime.broadcast("Done.");
+                return Runtime.errorToken;
+            }
+
             var token = tokens[i];
             if (token == null) {i++; continue;}
             switch token {
@@ -169,6 +177,14 @@ class Interpreter {
             }
             i++;
         }
+
+        if (errorThrown) {
+            Runtime.broadcast("Stopping Execution...");
+            // Todo: here is future garbage collecting stuff
+            Runtime.broadcast("Done.");
+            return Runtime.errorToken;
+        }
+
         return returnVal;
     }
 
@@ -728,7 +744,6 @@ class Interpreter {
                 case Expression(p, _): {
                     trace("Found Expression", token);
                     trace("Recursing:", p);
-                    #if sys Sys.sleep(5); #end
                     evaluateExpressionParts(p);
                 }
                 default: evaluate(token);
