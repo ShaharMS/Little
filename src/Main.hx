@@ -11,7 +11,7 @@ import little.tools.PrettyPrinter;
 import little.interpreter.Interpreter;
 #if js
 import js.Browser;
-#elseif sys 
+#elseif sys
 import sys.FileSystem;
 import sys.io.File;
 #end
@@ -47,20 +47,44 @@ class Main {
 		while (true) {
 			Sys.print("  >> ");
 			var input = Sys.stdin().readLine();
-			try {
-				Little.run(input, true);
-				trace(PrettyPrinter.printParserAst(Parser.parse(Lexer.lex(input))));
-				trace(Runtime.stdout);
-			} catch (e) {
-				trace(Lexer.lex(input));
-				trace(Parser.parse(Lexer.lex(input)));
-				trace(PrettyPrinter.printParserAst(Parser.parse(Lexer.lex(input))));
-				trace(e.details());
-				trace(Runtime.stdout);
+			if (input == "multiline!") {
+				Sys.print("---------MULTILINE MODE---------\n");
+				var code = "";
+				while (true) {
+					Sys.print("  >> ");
+					var input = Sys.stdin().readLine();
+					if (input == "run!") {
+						try {
+							Little.run(code, true);
+							trace(PrettyPrinter.printParserAst(Parser.parse(Lexer.lex(code))));
+							trace(Runtime.stdout);
+						} catch (e) {
+							trace(Lexer.lex(code));
+							trace(Parser.parse(Lexer.lex(code)));
+							trace(PrettyPrinter.printParserAst(Parser.parse(Lexer.lex(code))));
+							trace(e.details());
+							trace(Runtime.stdout);
+						}
+					} else {
+						code += input + "\n";
+					}
+				}
+			} else {
+				try {
+					Little.run(input, true);
+					trace(PrettyPrinter.printParserAst(Parser.parse(Lexer.lex(input))));
+					trace(Runtime.stdout);
+				} catch (e) {
+					trace(Lexer.lex(input));
+					trace(Parser.parse(Lexer.lex(input)));
+					trace(PrettyPrinter.printParserAst(Parser.parse(Lexer.lex(input))));
+					trace(e.details());
+					trace(Runtime.stdout);
+				}
 			}
 		}
 
-		//trace(Reflect.callMethod("hey", "hey".charAt, [0]));
+		// trace(Reflect.callMethod("hey", "hey".charAt, [0]));
 
 		// var path = FileSystem.absolutePath(Path.join([Sys.getCwd(), "test", "input.txt"]));
 		// var output = FileSystem.absolutePath(Path.join([Sys.getCwd(), "test", "output.txt"]));
@@ -83,13 +107,13 @@ class Main {
 		// 			File.saveContent(ast, little.tools.PrettyPrinter.printParserAst(little.parser.Parser.parse(little.lexer.Lexer.lex(code))));
 		// 			File.saveContent(compilerError, "");
 		// 		} catch (e) {File.saveContent(compilerError, e.details());}
-	
+
 		// 		try {
 		// 			Little.run(code);
 		// 			File.saveContent(output, Runtime.stdout);
 		// 			File.saveContent(compilerError, "");
 		// 		} catch (e) {File.saveContent(compilerError, e.details());}
-				
+
 		// 	}
 
 		// 	// Sleep for some time before checking again

@@ -49,27 +49,28 @@ class Parser {
 
             i++;
         }
-        // trace("before:", tokens);
+        trace("before:", tokens);
         tokens = mergeBlocks(tokens);
-        // trace("blocks:", tokens);
+        trace("blocks:", tokens);
         tokens = mergeExpressions(tokens);
-        // trace("expressions:", tokens);
+        trace("expressions:", tokens);
         tokens = mergePropertyOperations(tokens);
-        // trace("props:", tokens);
+        trace("props:", tokens);
         tokens = mergeTypeDecls(tokens);
-        // trace("types:", tokens);
+        trace("types:", tokens);
         tokens = mergeComplexStructures(tokens);
-        // trace("structures:", tokens);
+        trace("structures:", tokens);
         tokens = mergeCalls(tokens);
-        // trace("calls:", tokens);
+        trace("calls:", tokens);
         tokens = mergeWrites(tokens);
-        // trace("writes:", tokens);
+        trace("writes:", tokens);
         tokens = mergeValuesWithTypeDeclarations(tokens);
-        // trace("casts:", tokens);
+        trace("casts:", tokens);
         for (level in Parser.additionalParsingLevels) {
             tokens = level(tokens);
+            trace('${level}:', tokens);
         }
-        // trace("macros:", tokens);
+        trace("macros:", tokens);
 
         return tokens;
     }
@@ -784,8 +785,8 @@ class Parser {
         while (i < pre.length) {
             var token = pre[i];
             switch token {
-                case SetLine(line): {setLine(line); post.unshift(token);}
-                case SplitLine: {nextPart(); post.unshift(token);}
+                case SetLine(line): {setLine(line); post.push(token);}
+                case SplitLine: {nextPart(); post.push(token);}
                 case Identifier(_ == ELSE => true): {
                     if (post.length == 0 || post[post.length - 1].getName() != 'Condition') {
                         post.push(token);
