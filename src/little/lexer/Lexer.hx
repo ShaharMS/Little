@@ -18,12 +18,15 @@ class Lexer {
             var char = code.charAt(i);
             if (i < code.length - 2 && code.substr(i, 3).replace('"', "").length == 0) {
                 var string = "";
+                var queuedNewlines = 0;
 				i += 3;
                 while (i < code.length - 2 && code.substr(i, 3).replace('"', "").length != 0) {
                     string += code.charAt(i);
+                    if (code.charAt(i) == "\n") queuedNewlines++;
                     i++;
                 }
 				i += 2;
+                for (j in 0...queuedNewlines) tokens.push(Newline);
                 tokens.push(Documentation(string.replace("<br>", "\n").replace("</br>", "\n")));
             }
             else if (char == '"') {
