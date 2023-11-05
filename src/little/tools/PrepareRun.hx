@@ -164,7 +164,7 @@ class PrepareRun {
 		Little.plugin.registerSign("+", {
 			rhsAllowedTypes: [TYPE_FLOAT, TYPE_INT, TYPE_STRING],
 			lhsAllowedTypes: [TYPE_FLOAT, TYPE_INT, TYPE_STRING],
-			callback: (rhs, lhs) -> {
+			callback: (lhs, rhs) -> {
 				var l = Conversion.toHaxeValue(lhs),
 					r = Conversion.toHaxeValue(rhs);
 				if (l is String || r is String)
@@ -179,7 +179,7 @@ class PrepareRun {
 			rhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
 			lhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
 			allowedTypeCombos: [{lhs: TYPE_STRING, rhs: TYPE_STRING}],
-			callback: (rhs, lhs) -> {
+			callback: (lhs, rhs) -> {
 				var l:Dynamic = Conversion.toHaxeValue(lhs),
 					r:Dynamic = Conversion.toHaxeValue(rhs);
 				if (l is String)
@@ -194,7 +194,7 @@ class PrepareRun {
 			rhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
 			lhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
 			allowedTypeCombos: [{lhs: TYPE_STRING, rhs: TYPE_INT}],
-			callback: (rhs, lhs) -> {
+			callback: (lhs, rhs) -> {
 				var l:Dynamic = Conversion.toHaxeValue(lhs),
 					r:Dynamic = Conversion.toHaxeValue(rhs);
 				if (l is String)
@@ -208,7 +208,7 @@ class PrepareRun {
 		Little.plugin.registerSign("/", {
 			rhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
 			lhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
-			callback: (rhs, lhs) -> {
+			callback: (lhs, rhs) -> {
 				var l = Conversion.toHaxeValue(lhs),
 					r = Conversion.toHaxeValue(rhs);
 				if (r == 0)
@@ -220,7 +220,7 @@ class PrepareRun {
 		Little.plugin.registerSign("^", {
 			rhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
 			lhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
-			callback: (rhs, lhs) -> {
+			callback: (lhs, rhs) -> {
 				var l = Conversion.toHaxeValue(lhs),
 					r = Conversion.toHaxeValue(rhs);
 				if (l is Int && r is Int)
@@ -233,7 +233,7 @@ class PrepareRun {
 		Little.plugin.registerSign("√", {
 			rhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
 			lhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
-			callback: (rhs, lhs) -> {
+			callback: (lhs, rhs) -> {
 				var l:Float = Conversion.toHaxeValue(lhs),
 					r:Float = Conversion.toHaxeValue(rhs);
 				var lPositive = l >= 0;
@@ -249,32 +249,32 @@ class PrepareRun {
 		Little.plugin.registerSign("&&", {
 			rhsAllowedTypes: [TYPE_BOOLEAN],
 			lhsAllowedTypes: [TYPE_BOOLEAN],
-			callback: (rhs, lhs) -> Conversion.toHaxeValue(lhs) && Conversion.toHaxeValue(rhs) ? TrueValue : FalseValue});
+			callback: (lhs, rhs) -> Conversion.toHaxeValue(lhs) && Conversion.toHaxeValue(rhs) ? TrueValue : FalseValue});
 
 		Little.plugin.registerSign("||", {
 			rhsAllowedTypes: [TYPE_BOOLEAN],
 			lhsAllowedTypes: [TYPE_BOOLEAN],
-			callback: (rhs, lhs) -> Conversion.toHaxeValue(lhs) || Conversion.toHaxeValue(rhs) ? TrueValue : FalseValue});
+			callback: (lhs, rhs) -> Conversion.toHaxeValue(lhs) || Conversion.toHaxeValue(rhs) ? TrueValue : FalseValue});
 
 		Little.plugin.registerSign("==", {
-			callback: (rhs, lhs) -> Conversion.toHaxeValue(lhs) == Conversion.toHaxeValue(rhs) ? TrueValue : FalseValue
+			callback: (lhs, rhs) -> Conversion.toHaxeValue(lhs) == Conversion.toHaxeValue(rhs) ? TrueValue : FalseValue
 		});
 
 		Little.plugin.registerSign("!=", {
-			callback: (rhs, lhs) -> Conversion.toHaxeValue(lhs) != Conversion.toHaxeValue(rhs) ? TrueValue : FalseValue
+			callback: (lhs, rhs) -> Conversion.toHaxeValue(lhs) != Conversion.toHaxeValue(rhs) ? TrueValue : FalseValue
 		});
 
 		Little.plugin.registerSign("^^", {
 			rhsAllowedTypes: [TYPE_BOOLEAN],
 			lhsAllowedTypes: [TYPE_BOOLEAN],
-			callback: (rhs, lhs) -> Conversion.toHaxeValue(lhs) != Conversion.toHaxeValue(rhs) ? TrueValue : FalseValue
+			callback: (lhs, rhs) -> Conversion.toHaxeValue(lhs) != Conversion.toHaxeValue(rhs) ? TrueValue : FalseValue
 		});
 
 		Little.plugin.registerSign(">", {
 			rhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
 			lhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
 			allowedTypeCombos: [{lhs: TYPE_STRING, rhs: TYPE_STRING}],
-			callback: (rhs, lhs) -> {
+			callback: (lhs, rhs) -> {
 				var l:Dynamic = Conversion.toHaxeValue(lhs),
 					r:Dynamic = Conversion.toHaxeValue(rhs);
 				if (l is String)
@@ -287,7 +287,7 @@ class PrepareRun {
 			rhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
 			lhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
 			allowedTypeCombos: [{lhs: TYPE_STRING, rhs: TYPE_STRING}],
-			callback: (rhs, lhs) -> {
+			callback: (lhs, rhs) -> {
 				var l:Dynamic = Conversion.toHaxeValue(lhs),
 					r:Dynamic = Conversion.toHaxeValue(rhs);
 				if (l is String)
@@ -300,7 +300,7 @@ class PrepareRun {
 			rhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
 			lhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
 			allowedTypeCombos: [{lhs: TYPE_STRING, rhs: TYPE_STRING}],
-			callback: (rhs, lhs) -> {
+			callback: (lhs, rhs) -> {
 				var l:Dynamic = Conversion.toHaxeValue(lhs),
 					r:Dynamic = Conversion.toHaxeValue(rhs);
 				if (l is String)
@@ -313,7 +313,7 @@ class PrepareRun {
 			rhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
 			lhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
 			allowedTypeCombos: [{lhs: TYPE_STRING, rhs: TYPE_STRING}],
-			callback: (rhs, lhs) -> {
+			callback: (lhs, rhs) -> {
 				var l:Dynamic = Conversion.toHaxeValue(lhs),
 					r:Dynamic = Conversion.toHaxeValue(rhs);
 				if (l is String)
