@@ -1639,7 +1639,7 @@ little_tools_Plugins.registerSign = function(symbol,info) {
 			callbackFunc = function(lhs,rhs) {
 				if(info.lhsAllowedTypes.indexOf(Type.enumParameters(little_interpreter_Interpreter.getValueType(lhs))[0]) == -1) {
 					var t = Type.enumParameters(little_interpreter_Interpreter.getValueType(lhs))[0];
-					little_Little.runtime.throwError(little_parser_ParserTokens.ErrorMessage("Cannot preform " + t + "(" + little_interpreter_Interpreter.stringifyTokenIdentifier(lhs) + ") " + symbol + " " + Std.string(Type.enumParameters(little_interpreter_Interpreter.getValueType(rhs))[0]) + "(" + little_interpreter_Interpreter.stringifyTokenIdentifier(rhs) + ") - Left operand cannot be of type " + t + " (accepted types: " + Std.string(info.lhsAllowedTypes) + ")"));
+					return little_Little.runtime.throwError(little_parser_ParserTokens.ErrorMessage("Cannot preform " + t + "(" + little_interpreter_Interpreter.stringifyTokenIdentifier(lhs) + ") " + symbol + " " + Std.string(Type.enumParameters(little_interpreter_Interpreter.getValueType(rhs))[0]) + "(" + little_interpreter_Interpreter.stringifyTokenIdentifier(rhs) + ") - Left operand cannot be of type " + t + " (accepted types: " + Std.string(info.lhsAllowedTypes) + ")"));
 				}
 				return info.callback(lhs,rhs);
 			};
@@ -1647,19 +1647,21 @@ little_tools_Plugins.registerSign = function(symbol,info) {
 			callbackFunc = function(lhs,rhs) {
 				if(info.rhsAllowedTypes.indexOf(Type.enumParameters(little_interpreter_Interpreter.getValueType(rhs))[0]) == -1) {
 					var t = Type.enumParameters(little_interpreter_Interpreter.getValueType(rhs))[0];
-					little_Little.runtime.throwError(little_parser_ParserTokens.ErrorMessage("Cannot preform " + Std.string(Type.enumParameters(little_interpreter_Interpreter.getValueType(lhs))[0]) + "(" + little_interpreter_Interpreter.stringifyTokenIdentifier(lhs) + ") " + symbol + " " + t + "(" + little_interpreter_Interpreter.stringifyTokenIdentifier(rhs) + ") - Right operand cannot be of type " + t + " (accepted types: " + Std.string(info.rhsAllowedTypes) + ")"));
+					return little_Little.runtime.throwError(little_parser_ParserTokens.ErrorMessage("Cannot preform " + Std.string(Type.enumParameters(little_interpreter_Interpreter.getValueType(lhs))[0]) + "(" + little_interpreter_Interpreter.stringifyTokenIdentifier(lhs) + ") " + symbol + " " + t + "(" + little_interpreter_Interpreter.stringifyTokenIdentifier(rhs) + ") - Right operand cannot be of type " + t + " (accepted types: " + Std.string(info.rhsAllowedTypes) + ")"));
 				}
 				return info.callback(lhs,rhs);
 			};
 		} else if(info.lhsAllowedTypes != null && info.rhsAllowedTypes != null && info.allowedTypeCombos == null) {
 			callbackFunc = function(lhs,rhs) {
+				var rhsType = Type.enumParameters(little_interpreter_Interpreter.getValueType(rhs))[0];
+				var lhsType = Type.enumParameters(little_interpreter_Interpreter.getValueType(lhs))[0];
 				if(info.rhsAllowedTypes.indexOf(Type.enumParameters(little_interpreter_Interpreter.getValueType(rhs))[0]) == -1) {
 					var t = Type.enumParameters(little_interpreter_Interpreter.getValueType(rhs))[0];
-					little_Little.runtime.throwError(little_parser_ParserTokens.ErrorMessage("Cannot preform " + Std.string(Type.enumParameters(little_interpreter_Interpreter.getValueType(lhs))[0]) + "(" + little_interpreter_Interpreter.stringifyTokenIdentifier(lhs) + ") " + symbol + " " + t + "(" + little_interpreter_Interpreter.stringifyTokenIdentifier(rhs) + ") - Right operand cannot be of type " + t + " (accepted types: " + Std.string(info.rhsAllowedTypes) + ")"));
+					return little_Little.runtime.throwError(little_parser_ParserTokens.ErrorMessage("Cannot preform " + Std.string(Type.enumParameters(little_interpreter_Interpreter.getValueType(lhs))[0]) + "(" + little_interpreter_Interpreter.stringifyTokenIdentifier(lhs) + ") " + symbol + " " + t + "(" + little_interpreter_Interpreter.stringifyTokenIdentifier(rhs) + ") - Right operand cannot be of type " + t + " (accepted types: " + Std.string(info.rhsAllowedTypes) + ")"));
 				}
 				if(info.rhsAllowedTypes.indexOf(Type.enumParameters(little_interpreter_Interpreter.getValueType(lhs))[0]) == -1) {
 					var t = Type.enumParameters(little_interpreter_Interpreter.getValueType(lhs))[0];
-					little_Little.runtime.throwError(little_parser_ParserTokens.ErrorMessage("Cannot preform " + Std.string(Type.enumParameters(little_interpreter_Interpreter.getValueType(lhs))[0]) + "(" + little_interpreter_Interpreter.stringifyTokenIdentifier(lhs) + ") " + symbol + " " + t + "(" + little_interpreter_Interpreter.stringifyTokenIdentifier(rhs) + ") - Left operand cannot be of type " + t + " (accepted types: " + Std.string(info.lhsAllowedTypes) + ")"));
+					return little_Little.runtime.throwError(little_parser_ParserTokens.ErrorMessage("Cannot preform " + Std.string(Type.enumParameters(little_interpreter_Interpreter.getValueType(lhs))[0]) + "(" + little_interpreter_Interpreter.stringifyTokenIdentifier(lhs) + ") " + symbol + " " + t + "(" + little_interpreter_Interpreter.stringifyTokenIdentifier(rhs) + ") - Left operand cannot be of type " + t + " (accepted types: " + Std.string(info.lhsAllowedTypes) + ")"));
 				}
 				return info.callback(lhs,rhs);
 			};
@@ -1667,7 +1669,7 @@ little_tools_Plugins.registerSign = function(symbol,info) {
 			callbackFunc = function(lhs,rhs) {
 				var r = Type.enumParameters(little_interpreter_Interpreter.getValueType(rhs))[0];
 				var l = Type.enumParameters(little_interpreter_Interpreter.getValueType(lhs))[0];
-				if(info.lhsAllowedTypes.indexOf(l) == -1 && !little_tools_Plugins.combosHas(info.allowedTypeCombos,l,r)) {
+				if(info.lhsAllowedTypes.indexOf(l) == -1 && !little_tools_Plugins.containsCombo(info.allowedTypeCombos,l,r)) {
 					var callbackFunc = little_Little.runtime;
 					var callbackFunc1 = "Cannot preform " + l + "(" + little_interpreter_Interpreter.stringifyTokenIdentifier(lhs) + ") " + symbol + " " + r + "(" + little_interpreter_Interpreter.stringifyTokenIdentifier(rhs) + ") - Right operand cannot be of type " + r + " while left operand is of type " + l + " (accepted types for left operand: " + Std.string(info.lhsAllowedTypes) + ", accepted type combinations: ";
 					var _this = info.allowedTypeCombos;
@@ -1679,7 +1681,7 @@ little_tools_Plugins.registerSign = function(symbol,info) {
 						var object = _this[i];
 						result[i] = "" + object.rhs + " " + symbol + " " + object.lhs;
 					}
-					callbackFunc.throwError(little_parser_ParserTokens.ErrorMessage(callbackFunc1 + Std.string(result) + ")"));
+					return callbackFunc.throwError(little_parser_ParserTokens.ErrorMessage(callbackFunc1 + Std.string(result) + ")"));
 				}
 				return info.callback(lhs,rhs);
 			};
@@ -1687,7 +1689,7 @@ little_tools_Plugins.registerSign = function(symbol,info) {
 			callbackFunc = function(lhs,rhs) {
 				var r = Type.enumParameters(little_interpreter_Interpreter.getValueType(rhs))[0];
 				var l = Type.enumParameters(little_interpreter_Interpreter.getValueType(lhs))[0];
-				if(info.rhsAllowedTypes.indexOf(r) == -1 && !little_tools_Plugins.combosHas(info.allowedTypeCombos,l,r)) {
+				if(info.rhsAllowedTypes.indexOf(r) == -1 && !little_tools_Plugins.containsCombo(info.allowedTypeCombos,l,r)) {
 					var callbackFunc = little_Little.runtime;
 					var callbackFunc1 = "Cannot preform " + l + "(" + little_interpreter_Interpreter.stringifyTokenIdentifier(lhs) + ") " + symbol + " " + r + "(" + little_interpreter_Interpreter.stringifyTokenIdentifier(rhs) + ") - Right operand cannot be of type " + r + " while left operand is of type " + l + " (accepted types for right operand: " + Std.string(info.rhsAllowedTypes) + ", accepted type combinations: ";
 					var _this = info.allowedTypeCombos;
@@ -1699,16 +1701,17 @@ little_tools_Plugins.registerSign = function(symbol,info) {
 						var object = _this[i];
 						result[i] = "" + object.rhs + " " + symbol + " " + object.lhs;
 					}
-					callbackFunc.throwError(little_parser_ParserTokens.ErrorMessage(callbackFunc1 + Std.string(result) + ")"));
+					return callbackFunc.throwError(little_parser_ParserTokens.ErrorMessage(callbackFunc1 + Std.string(result) + ")"));
 				}
 				return info.callback(lhs,rhs);
 			};
 		} else if(info.lhsAllowedTypes != null && info.rhsAllowedTypes != null && info.allowedTypeCombos != null) {
 			callbackFunc = function(lhs,rhs) {
-				if(info.rhsAllowedTypes.indexOf(Type.enumParameters(little_interpreter_Interpreter.getValueType(rhs))[0]) == -1) {
-					var t = Type.enumParameters(little_interpreter_Interpreter.getValueType(rhs))[0];
+				var rhsType = Type.enumParameters(little_interpreter_Interpreter.getValueType(rhs))[0];
+				var lhsType = Type.enumParameters(little_interpreter_Interpreter.getValueType(lhs))[0];
+				if(info.rhsAllowedTypes.indexOf(rhsType) == -1 && !little_tools_Plugins.containsCombo(info.allowedTypeCombos,lhsType,rhsType)) {
 					var callbackFunc = little_Little.runtime;
-					var callbackFunc1 = "Cannot preform " + Std.string(Type.enumParameters(little_interpreter_Interpreter.getValueType(lhs))[0]) + "(" + little_interpreter_Interpreter.stringifyTokenIdentifier(lhs) + ") " + symbol + " " + t + "(" + little_interpreter_Interpreter.stringifyTokenIdentifier(rhs) + ") - Right operand cannot be of type " + t + " (accepted types: " + Std.string(info.rhsAllowedTypes) + ", accepted type combinations: ";
+					var callbackFunc1 = "Cannot preform " + lhsType + "(" + little_interpreter_Interpreter.stringifyTokenIdentifier(lhs) + ") " + symbol + " " + rhsType + "(" + little_interpreter_Interpreter.stringifyTokenIdentifier(rhs) + ") - Right operand cannot be of type " + rhsType + " (accepted types: " + Std.string(info.rhsAllowedTypes) + ", accepted type combinations: ";
 					var _this = info.allowedTypeCombos;
 					var result = new Array(_this.length);
 					var _g = 0;
@@ -1718,12 +1721,11 @@ little_tools_Plugins.registerSign = function(symbol,info) {
 						var object = _this[i];
 						result[i] = "" + object.rhs + " " + symbol + " " + object.lhs;
 					}
-					callbackFunc.throwError(little_parser_ParserTokens.ErrorMessage(callbackFunc1 + Std.string(result) + ")"));
+					return callbackFunc.throwError(little_parser_ParserTokens.ErrorMessage(callbackFunc1 + Std.string(result) + ")"));
 				}
-				if(info.rhsAllowedTypes.indexOf(Type.enumParameters(little_interpreter_Interpreter.getValueType(lhs))[0]) == -1) {
-					var t = Type.enumParameters(little_interpreter_Interpreter.getValueType(lhs))[0];
+				if(info.rhsAllowedTypes.indexOf(lhsType) == -1 && !little_tools_Plugins.containsCombo(info.allowedTypeCombos,lhsType,rhsType)) {
 					var callbackFunc = little_Little.runtime;
-					var callbackFunc1 = "Cannot preform " + t + "(" + little_interpreter_Interpreter.stringifyTokenIdentifier(lhs) + ") " + symbol + " " + Std.string(Type.enumParameters(little_interpreter_Interpreter.getValueType(lhs))[0]) + "(" + little_interpreter_Interpreter.stringifyTokenIdentifier(rhs) + ") - Left operand cannot be of type " + t + " (accepted types: " + Std.string(info.lhsAllowedTypes) + ", accepted type combinations: ";
+					var callbackFunc1 = "Cannot preform " + lhsType + "(" + little_interpreter_Interpreter.stringifyTokenIdentifier(lhs) + ") " + symbol + " " + rhsType + "(" + little_interpreter_Interpreter.stringifyTokenIdentifier(rhs) + ") - Left operand cannot be of type " + lhsType + " (accepted types: " + Std.string(info.lhsAllowedTypes) + ", accepted type combinations: ";
 					var _this = info.allowedTypeCombos;
 					var result = new Array(_this.length);
 					var _g = 0;
@@ -1733,7 +1735,7 @@ little_tools_Plugins.registerSign = function(symbol,info) {
 						var object = _this[i];
 						result[i] = "" + object.rhs + " " + symbol + " " + object.lhs;
 					}
-					callbackFunc.throwError(little_parser_ParserTokens.ErrorMessage(callbackFunc1 + Std.string(result) + ")"));
+					return callbackFunc.throwError(little_parser_ParserTokens.ErrorMessage(callbackFunc1 + Std.string(result) + ")"));
 				}
 				return info.callback(lhs,rhs);
 			};
@@ -1743,17 +1745,17 @@ little_tools_Plugins.registerSign = function(symbol,info) {
 		little_Little.operators.add(symbol,little_interpreter_OperatorType.LHS_RHS,callbackFunc);
 	} else {
 		if(info.singleSidedOperatorCallback == null && info.callback != null) {
-			throw new haxe_exceptions_ArgumentException("singleSidedOperatorCallback","Incorrect callback given for operator type " + Std.string(info.operatorType) + " - `callback` was given, when `singleSidedOperatorCallback` was expected",null,{ fileName : "src/little/tools/Plugins.hx", lineNumber : 491, className : "little.tools.Plugins", methodName : "registerSign"});
+			throw new haxe_exceptions_ArgumentException("singleSidedOperatorCallback","Incorrect callback given for operator type " + Std.string(info.operatorType) + " - `callback` was given, when `singleSidedOperatorCallback` was expected",null,{ fileName : "src/little/tools/Plugins.hx", lineNumber : 493, className : "little.tools.Plugins", methodName : "registerSign"});
 		} else if(info.singleSidedOperatorCallback == null) {
 			var tmp = info.operatorType;
-			throw new haxe_exceptions_ArgumentException("singleSidedOperatorCallback","No callback given for operator type " + Std.string(tmp != null ? tmp : little_interpreter_OperatorType.LHS_RHS) + " (`singleSidedOperatorCallback` is null)",null,{ fileName : "src/little/tools/Plugins.hx", lineNumber : 493, className : "little.tools.Plugins", methodName : "registerSign"});
+			throw new haxe_exceptions_ArgumentException("singleSidedOperatorCallback","No callback given for operator type " + Std.string(tmp != null ? tmp : little_interpreter_OperatorType.LHS_RHS) + " (`singleSidedOperatorCallback` is null)",null,{ fileName : "src/little/tools/Plugins.hx", lineNumber : 495, className : "little.tools.Plugins", methodName : "registerSign"});
 		}
 		var callbackFunc;
 		if(info.operatorType == little_interpreter_OperatorType.LHS_ONLY) {
 			callbackFunc = function(lhs) {
 				var l = Type.enumParameters(little_interpreter_Interpreter.getValueType(lhs))[0];
 				if(info.lhsAllowedTypes.indexOf(l) == -1) {
-					little_Little.runtime.throwError(little_parser_ParserTokens.ErrorMessage("Cannot perform " + l + "(" + little_interpreter_Interpreter.stringifyTokenIdentifier(lhs) + ")" + symbol + " - Operand cannot be of type " + l + " (accepted types: " + Std.string(info.lhsAllowedTypes) + ")"));
+					return little_Little.runtime.throwError(little_parser_ParserTokens.ErrorMessage("Cannot perform " + l + "(" + little_interpreter_Interpreter.stringifyTokenIdentifier(lhs) + ")" + symbol + " - Operand cannot be of type " + l + " (accepted types: " + Std.string(info.lhsAllowedTypes) + ")"));
 				}
 				return info.singleSidedOperatorCallback(lhs);
 			};
@@ -1761,13 +1763,24 @@ little_tools_Plugins.registerSign = function(symbol,info) {
 			callbackFunc = function(rhs) {
 				var r = Type.enumParameters(little_interpreter_Interpreter.getValueType(rhs))[0];
 				if(info.lhsAllowedTypes.indexOf(r) == -1) {
-					little_Little.runtime.throwError(little_parser_ParserTokens.ErrorMessage("Cannot perform " + r + "(" + little_interpreter_Interpreter.stringifyTokenIdentifier(rhs) + ")" + symbol + " - Operand cannot be of type " + r + " (accepted types: " + Std.string(info.rhsAllowedTypes) + ")"));
+					return little_Little.runtime.throwError(little_parser_ParserTokens.ErrorMessage("Cannot perform " + r + "(" + little_interpreter_Interpreter.stringifyTokenIdentifier(rhs) + ")" + symbol + " - Operand cannot be of type " + r + " (accepted types: " + Std.string(info.rhsAllowedTypes) + ")"));
 				}
 				return info.singleSidedOperatorCallback(rhs);
 			};
 		}
 		little_Little.operators.add(symbol,info.operatorType,callbackFunc);
 	}
+};
+little_tools_Plugins.containsCombo = function(array,lhs,rhs) {
+	var _g = 0;
+	while(_g < array.length) {
+		var a = array[_g];
+		++_g;
+		if(a.lhs == lhs && a.rhs == rhs) {
+			return true;
+		}
+	}
+	return false;
 };
 var little_interpreter_Runtime = function() { };
 $hxClasses["little.interpreter.Runtime"] = little_interpreter_Runtime;
@@ -1783,6 +1796,7 @@ little_interpreter_Runtime.throwError = function(token,layer) {
 	var content = "" + (little_Little.debug ? layer.toUpperCase() + ": " : "") + "ERROR: Module " + little_interpreter_Runtime.currentModule + ", Line " + little_interpreter_Runtime.line + ":  " + reason;
 	little_interpreter_Runtime.stdout += "\n" + content;
 	little_interpreter_Runtime.exitCode = little_tools_Layer.getIndexOf(layer);
+	little_interpreter_Runtime.errorToken = token;
 	little_interpreter_Interpreter.errorThrown = true;
 	var _g = 0;
 	var _g1 = little_interpreter_Runtime.onErrorThrown;
@@ -1791,6 +1805,7 @@ little_interpreter_Runtime.throwError = function(token,layer) {
 		++_g;
 		func(module,little_interpreter_Runtime.line,title,reason);
 	}
+	return token;
 };
 little_interpreter_Runtime.warn = function(token,layer) {
 	if(layer == null) {
@@ -1803,6 +1818,9 @@ little_interpreter_Runtime.warn = function(token,layer) {
 };
 little_interpreter_Runtime.print = function(item) {
 	little_interpreter_Runtime.stdout += "\n" + (little_Little.debug ? "Interpreter".toUpperCase() + ": " : "") + "Module " + little_interpreter_Runtime.currentModule + ", Line " + little_interpreter_Runtime.line + ":  " + item;
+};
+little_interpreter_Runtime.broadcast = function(item) {
+	little_interpreter_Runtime.stdout += "\n" + (little_Little.debug ? "BROADCAST: " : "") + item;
 };
 little_interpreter_Runtime.access = function(obj) {
 	return little_interpreter_Interpreter.accessObject(little_parser_Parser.parse(little_lexer_Lexer.lex(obj))[0]);
@@ -2887,6 +2905,11 @@ little_interpreter_Interpreter.runTokens = function(tokens,preParseVars,preParse
 	var returnVal = null;
 	var i = 0;
 	while(i < tokens.length) {
+		if(little_interpreter_Interpreter.errorThrown) {
+			little_interpreter_Runtime.broadcast("Stopping Execution...");
+			little_interpreter_Runtime.broadcast("Done.");
+			return little_interpreter_Runtime.errorToken;
+		}
 		var token = tokens[i];
 		if(token == null) {
 			++i;
@@ -2964,7 +2987,7 @@ little_interpreter_Interpreter.runTokens = function(tokens,preParseVars,preParse
 				var obj1 = access1[0](little_interpreter_memory_MemoryTree.get(memory,little_interpreter_Interpreter.stringifyTokenValue(name3)),property1,little_interpreter_Interpreter.stringifyTokenValue(name3));
 				returnVal = obj1.value;
 			} else {
-				haxe_Log.trace(name2,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 110, className : "little.interpreter.Interpreter", methodName : "runTokens", customParams : [little_interpreter_Interpreter.stringifyTokenValue(name2)]});
+				haxe_Log.trace(name2,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 118, className : "little.interpreter.Interpreter", methodName : "runTokens", customParams : [little_interpreter_Interpreter.stringifyTokenValue(name2)]});
 				little_interpreter_memory_MemoryTree.set(memory,little_interpreter_Interpreter.stringifyTokenValue(name2),new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,Type.enumParameters(params[0])[0],type1[0],null,null,null,little_interpreter_memory_MemoryTree.get_object(memory),little_interpreter_Interpreter.stringifyTokenValue(doc1[0])));
 				returnVal = little_interpreter_memory_MemoryTree.get(memory,little_interpreter_Interpreter.stringifyTokenValue(name2)).value;
 			}
@@ -3052,6 +3075,11 @@ little_interpreter_Interpreter.runTokens = function(tokens,preParseVars,preParse
 		}
 		++i;
 	}
+	if(little_interpreter_Interpreter.errorThrown) {
+		little_interpreter_Runtime.broadcast("Stopping Execution...");
+		little_interpreter_Runtime.broadcast("Done.");
+		return little_interpreter_Runtime.errorToken;
+	}
 	return returnVal;
 };
 little_interpreter_Interpreter.evaluate = function(exp,memory,dontThrow) {
@@ -3132,7 +3160,7 @@ little_interpreter_Interpreter.evaluate = function(exp,memory,dontThrow) {
 			var obj = access1(little_interpreter_memory_MemoryTree.get(memory,little_interpreter_Interpreter.stringifyTokenValue(name1)),property,little_interpreter_Interpreter.stringifyTokenValue(name1));
 			return obj.value;
 		} else {
-			haxe_Log.trace(name,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 320, className : "little.interpreter.Interpreter", methodName : "evaluate", customParams : [little_interpreter_Interpreter.stringifyTokenValue(name)]});
+			haxe_Log.trace(name,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 336, className : "little.interpreter.Interpreter", methodName : "evaluate", customParams : [little_interpreter_Interpreter.stringifyTokenValue(name)]});
 			little_interpreter_memory_MemoryTree.set(memory,little_interpreter_Interpreter.stringifyTokenValue(name),new little_interpreter_memory_MemoryObject(little_parser_ParserTokens.NullValue,null,Type.enumParameters(params)[0],type1,null,null,null,little_interpreter_memory_MemoryTree.get_object(memory),little_interpreter_Interpreter.stringifyTokenValue(doc1)));
 			return little_interpreter_memory_MemoryTree.get(memory,little_interpreter_Interpreter.stringifyTokenValue(name)).value;
 		}
@@ -3318,7 +3346,7 @@ little_interpreter_Interpreter.getValueType = function(token) {
 	case 26:
 		return little_parser_ParserTokens.Identifier(little_Keywords.TYPE_BOOLEAN);
 	default:
-		haxe_Log.trace(token,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 367, className : "little.interpreter.Interpreter", methodName : "getValueType"});
+		haxe_Log.trace(token,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 383, className : "little.interpreter.Interpreter", methodName : "getValueType"});
 		return little_interpreter_Interpreter.getValueType(little_interpreter_Interpreter.evaluate(token));
 	}
 };
@@ -3450,7 +3478,7 @@ little_interpreter_Interpreter.accessObject = function(exp,memory) {
 	case 25:case 26:
 		return new little_interpreter_memory_MemoryObject(exp,null,null,little_parser_ParserTokens.Identifier(little_Keywords.TYPE_BOOLEAN),null,null,null,little_interpreter_memory_MemoryTree.get_object(memory));
 	default:
-		haxe_Log.trace("Token " + Std.string(exp) + " is inaccessible via memory. Returning null.",{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 474, className : "little.interpreter.Interpreter", methodName : "accessObject"});
+		haxe_Log.trace("Token " + Std.string(exp) + " is inaccessible via memory. Returning null.",{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 490, className : "little.interpreter.Interpreter", methodName : "accessObject"});
 	}
 	return null;
 };
@@ -3578,7 +3606,7 @@ little_interpreter_Interpreter.createObject = function(exp,memory) {
 	case 25:case 26:
 		return new little_interpreter_memory_MemoryObject(exp,null,null,little_parser_ParserTokens.Identifier(little_Keywords.TYPE_BOOLEAN),null,null,null,little_interpreter_memory_MemoryTree.get_object(memory));
 	default:
-		haxe_Log.trace("Unable to create memory object from " + Std.string(exp) + ". Returning null.",{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 581, className : "little.interpreter.Interpreter", methodName : "createObject"});
+		haxe_Log.trace("Unable to create memory object from " + Std.string(exp) + ". Returning null.",{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 597, className : "little.interpreter.Interpreter", methodName : "createObject"});
 	}
 	return null;
 };
@@ -3824,24 +3852,24 @@ little_interpreter_Interpreter.evaluateExpressionParts = function(parts,memory) 
 	if(memory == null) {
 		memory = little_interpreter_Interpreter.memory;
 	}
-	haxe_Log.trace("--------------------------------",{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 718, className : "little.interpreter.Interpreter", methodName : "evaluateExpressionParts"});
-	haxe_Log.trace("Pre-process",{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 719, className : "little.interpreter.Interpreter", methodName : "evaluateExpressionParts", customParams : [parts]});
+	haxe_Log.trace("--------------------------------",{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 734, className : "little.interpreter.Interpreter", methodName : "evaluateExpressionParts"});
+	haxe_Log.trace("Pre-process",{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 735, className : "little.interpreter.Interpreter", methodName : "evaluateExpressionParts", customParams : [parts]});
 	parts = little_interpreter_Interpreter.forceCorrectOrderOfOperations(parts);
 	var evaluatedValue = null;
 	var currentSign = "";
 	var rhs = null;
-	haxe_Log.trace("Post-process",{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 723, className : "little.interpreter.Interpreter", methodName : "evaluateExpressionParts", customParams : [parts,"Start eval"]});
+	haxe_Log.trace("Post-process",{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 739, className : "little.interpreter.Interpreter", methodName : "evaluateExpressionParts", customParams : [parts,"Start eval"]});
 	var _g = 0;
 	while(_g < parts.length) {
 		var token = parts[_g];
 		++_g;
-		haxe_Log.trace("Current",{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 726, className : "little.interpreter.Interpreter", methodName : "evaluateExpressionParts", customParams : [token]});
+		haxe_Log.trace("Current",{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 742, className : "little.interpreter.Interpreter", methodName : "evaluateExpressionParts", customParams : [token]});
 		var val;
 		if(token._hx_index == 11) {
 			var _g1 = token.type;
 			var p = token.parts;
-			haxe_Log.trace("Found Expression",{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 729, className : "little.interpreter.Interpreter", methodName : "evaluateExpressionParts", customParams : [token]});
-			haxe_Log.trace("Recursing:",{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 730, className : "little.interpreter.Interpreter", methodName : "evaluateExpressionParts", customParams : [p]});
+			haxe_Log.trace("Found Expression",{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 745, className : "little.interpreter.Interpreter", methodName : "evaluateExpressionParts", customParams : [token]});
+			haxe_Log.trace("Recursing:",{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 746, className : "little.interpreter.Interpreter", methodName : "evaluateExpressionParts", customParams : [p]});
 			val = little_interpreter_Interpreter.evaluateExpressionParts(p);
 		} else {
 			val = little_interpreter_Interpreter.evaluate(token);
@@ -3987,12 +4015,22 @@ little_lexer_Lexer.lex = function(code) {
 		var char = code.charAt(i);
 		if(i < code.length - 2 && little_tools_TextTools.replace(HxOverrides.substr(code,i,3),"\"","").length == 0) {
 			var string = "";
+			var queuedNewlines = 0;
 			i += 3;
 			while(i < code.length - 2 && little_tools_TextTools.replace(HxOverrides.substr(code,i,3),"\"","").length != 0) {
 				string += code.charAt(i);
+				if(code.charAt(i) == "\n") {
+					++queuedNewlines;
+				}
 				++i;
 			}
 			i += 2;
+			var _g = 0;
+			var _g1 = queuedNewlines;
+			while(_g < _g1) {
+				var j = _g++;
+				tokens.push(little_lexer_LexerTokens.Newline);
+			}
 			tokens.push(little_lexer_LexerTokens.Documentation(little_tools_TextTools.replace(little_tools_TextTools.replace(string,"<br>","\n"),"</br>","\n")));
 		} else if(char == "\"") {
 			var string1 = "";
@@ -4034,7 +4072,7 @@ little_lexer_Lexer.lex = function(code) {
 		} else if(new EReg("[^+-.!@#$%%^&*0-9 \t\n\r;,\\(\\)\\[\\]\\{\\}]","").match(char)) {
 			var name = char;
 			++i;
-			while(i < code.length && new EReg("[^+-.!@#$%%^&*0-9 \t\n\r;,\\(\\)\\[\\]\\{\\}]","").match(code.charAt(i))) {
+			while(i < code.length && new EReg("[^+-.!@#$%%^&* \t\n\r;,\\(\\)\\[\\]\\{\\}]","").match(code.charAt(i))) {
 				name += code.charAt(i);
 				++i;
 			}
@@ -4162,21 +4200,32 @@ little_parser_Parser.parse = function(lexerTokens) {
 		}
 		++i;
 	}
+	haxe_Log.trace("before:",{ fileName : "src/little/parser/Parser.hx", lineNumber : 52, className : "little.parser.Parser", methodName : "parse", customParams : [tokens]});
 	tokens = little_parser_Parser.mergeBlocks(tokens);
+	haxe_Log.trace("blocks:",{ fileName : "src/little/parser/Parser.hx", lineNumber : 54, className : "little.parser.Parser", methodName : "parse", customParams : [tokens]});
 	tokens = little_parser_Parser.mergeExpressions(tokens);
+	haxe_Log.trace("expressions:",{ fileName : "src/little/parser/Parser.hx", lineNumber : 56, className : "little.parser.Parser", methodName : "parse", customParams : [tokens]});
 	tokens = little_parser_Parser.mergePropertyOperations(tokens);
+	haxe_Log.trace("props:",{ fileName : "src/little/parser/Parser.hx", lineNumber : 58, className : "little.parser.Parser", methodName : "parse", customParams : [tokens]});
 	tokens = little_parser_Parser.mergeTypeDecls(tokens);
+	haxe_Log.trace("types:",{ fileName : "src/little/parser/Parser.hx", lineNumber : 60, className : "little.parser.Parser", methodName : "parse", customParams : [tokens]});
 	tokens = little_parser_Parser.mergeComplexStructures(tokens);
+	haxe_Log.trace("structures:",{ fileName : "src/little/parser/Parser.hx", lineNumber : 62, className : "little.parser.Parser", methodName : "parse", customParams : [tokens]});
 	tokens = little_parser_Parser.mergeCalls(tokens);
+	haxe_Log.trace("calls:",{ fileName : "src/little/parser/Parser.hx", lineNumber : 64, className : "little.parser.Parser", methodName : "parse", customParams : [tokens]});
 	tokens = little_parser_Parser.mergeWrites(tokens);
+	haxe_Log.trace("writes:",{ fileName : "src/little/parser/Parser.hx", lineNumber : 66, className : "little.parser.Parser", methodName : "parse", customParams : [tokens]});
 	tokens = little_parser_Parser.mergeValuesWithTypeDeclarations(tokens);
+	haxe_Log.trace("casts:",{ fileName : "src/little/parser/Parser.hx", lineNumber : 68, className : "little.parser.Parser", methodName : "parse", customParams : [tokens]});
 	var _g = 0;
 	var _g1 = little_parser_Parser.additionalParsingLevels;
 	while(_g < _g1.length) {
 		var level = _g1[_g];
 		++_g;
 		tokens = level(tokens);
+		haxe_Log.trace("" + Std.string(level) + ":",{ fileName : "src/little/parser/Parser.hx", lineNumber : 71, className : "little.parser.Parser", methodName : "parse", customParams : [tokens]});
 	}
+	haxe_Log.trace("macros:",{ fileName : "src/little/parser/Parser.hx", lineNumber : 73, className : "little.parser.Parser", methodName : "parse", customParams : [tokens]});
 	return tokens;
 };
 little_parser_Parser.mergeBlocks = function(pre) {
@@ -4352,7 +4401,7 @@ little_parser_Parser.mergePropertyOperations = function(pre) {
 			break;
 		case 15:
 			if(token.sign == little_Keywords.PROPERTY_ACCESS_SIGN == true) {
-				haxe_Log.trace(i,{ fileName : "src/little/parser/Parser.hx", lineNumber : 192, className : "little.parser.Parser", methodName : "mergePropertyOperations", customParams : [pre.length,pre]});
+				haxe_Log.trace(i,{ fileName : "src/little/parser/Parser.hx", lineNumber : 193, className : "little.parser.Parser", methodName : "mergePropertyOperations", customParams : [pre.length,pre]});
 				if(i + 1 >= pre.length) {
 					little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("Property access cut off by the end of file, block or expression."),"Parser");
 					return null;
@@ -5362,11 +5411,11 @@ little_parser_Parser.mergeElses = function(pre) {
 		case 0:
 			var line = token.line;
 			little_parser_Parser.setLine(line);
-			post.unshift(token);
+			post.push(token);
 			break;
 		case 1:
 			little_parser_Parser.nextPart();
-			post.unshift(token);
+			post.push(token);
 			break;
 		case 2:
 			var name = token.name;
@@ -5691,7 +5740,7 @@ little_tools_PrepareRun.addSigns = function() {
 		var l = little_tools_Conversion.toHaxeValue(lhs);
 		var r = little_tools_Conversion.toHaxeValue(rhs);
 		if(typeof(l) == "string" || typeof(r) == "string") {
-			return little_parser_ParserTokens.Characters(l + r);
+			return little_parser_ParserTokens.Characters("" + l + r);
 		}
 		if(typeof(l) == "number" && ((l | 0) === l) && (typeof(r) == "number" && ((r | 0) === r))) {
 			return little_parser_ParserTokens.Number(l + r + "");

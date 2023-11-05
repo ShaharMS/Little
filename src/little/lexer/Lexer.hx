@@ -68,7 +68,7 @@ class Lexer {
             } else if (~/[^+-.!@#$%%^&*0-9 \t\n\r;,\(\)\[\]\{\}]/.match(char)) {
                 var name = char;
                 i++;
-                while (i < code.length && ~/[^+-.!@#$%%^&*0-9 \t\n\r;,\(\)\[\]\{\}]/.match(code.charAt(i))) {
+                while (i < code.length && ~/[^+-.!@#$%%^&* \t\n\r;,\(\)\[\]\{\}]/.match(code.charAt(i))) {
                     name += code.charAt(i);
                     i++;
                 }

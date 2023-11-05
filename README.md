@@ -76,10 +76,15 @@ Different languages (English, Hebrew, Arabic):
 
 ### Everything can be a code block
 
-Code blocks, represented by enclosing lines of code/expressions with (by default) curly brackets, can be used for everything! From:
+Code blocks, represented by enclosing lines of code/expressions with (by default) curly brackets, can be used for everything! For example:
  - expression generation:
 ```
 x = {define y = 0; y += 5; (6^2 * y)} //180
+```
+ - runtime variable declaration
+```
+define {("hey" + 1)} = 3
+print(hey1) //3
 ```
 
 ---
@@ -107,7 +112,7 @@ for (define i from 0 to 1) {
 ```hx
 define hey = 3
 
-action getHey(define negative as Boolean) {
+action getHey(define negative as Boolean) = {
     // if negative is false, negative.toNumber() is 0, and the positive is returned (hey - 0).
     return hey - (hey * negative.toNumber() * 2) 
 }
@@ -150,4 +155,19 @@ i = i + 1 //woah
 i = i + 1 //woah
 i = i + 1 //woah, i is 5!
 i = i + 1 //woah
+```
+
+### Documentation
+```hx
+"""
+Retrieves the value of `x``
+"""
+define x = 3
+
+""" Increments the value of `x`` """
+action incrementX() = { x = x + 1 }
+
+print(x) //3
+print(x.documentation) //Retrieves the value of `x`
+print(incrementX.documentation) //Increments the value of `x`
 ```
