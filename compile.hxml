@@ -1,7 +1,7 @@
 --class-path src
 --main Main
 --library vision
---js interp.js
-#--interp
+#--js interp.js
+--interp
 --debug
 # --dce full

@@ -1,5 +1,7 @@
 package;
 
+import haxe.SysTools;
+import haxe.Log;
 import vision.tools.MathTools;
 import haxe.io.Path;
 import little.tools.Data;
@@ -19,6 +21,7 @@ import little.parser.Parser;
 import little.lexer.Lexer;
 
 using StringTools;
+using little.tools.TextTools;
 
 class Main {
 	static var code = 'action הדפס() = {print(5)}, הדפס()';
@@ -47,8 +50,8 @@ class Main {
 		while (true) {
 			Sys.print("  >> ");
 			var input = Sys.stdin().readLine();
-			if (input == "multiline!") {
-				Sys.print("---------MULTILINE MODE---------\n");
+			if (input == "ml!") {
+				Sys.print("---------MULTI-LINE MODE---------\n");
 				var code = "";
 				while (true) {
 					Sys.print("  >> ");
@@ -65,8 +68,15 @@ class Main {
 							trace(e.details());
 							trace(Runtime.stdout);
 						}
+						Sys.print(code.replaceFirst("\n", "  >> ").replace("\n", "\n  >> ") + "\n");
+					} else if (input == "sl!") {
+						Sys.print("---------SINGLE-LINE MODE---------\n");
+						break;
+					} else if (input == "clear!") {
+						code = "";
+						Sys.print("---------MULTI-LINE MODE---------\n");
 					} else {
-						code += input + "\n";
+						code += "\n" + input;
 					}
 				}
 			} else {

@@ -1139,8 +1139,10 @@ js_Boot.__isNativeObj = function(o) {
 js_Boot.__resolveNativeClass = function(name) {
 	return $global[name];
 };
-var little_interpreter_KeywordConfig = function(VARIABLE_DECLARATION,FUNCTION_DECLARATION,TYPE_DECL_OR_CAST,FUNCTION_RETURN,NULL_VALUE,TRUE_VALUE,FALSE_VALUE,TYPE_DYNAMIC,TYPE_VOID,TYPE_INT,TYPE_FLOAT,TYPE_BOOLEAN,TYPE_STRING,TYPE_MODULE,TYPE_SIGN,MAIN_MODULE_NAME,REGISTERED_MODULE_NAME,PRINT_FUNCTION_NAME,RAISE_ERROR_FUNCTION_NAME,READ_FUNCTION_NAME,RUN_CODE_FUNCTION_NAME,TYPE_UNKNOWN,CONDITION_TYPES,SPECIAL_OR_MULTICHAR_SIGNS,PROPERTY_ACCESS_SIGN,EQUALS_SIGN,NOT_EQUALS_SIGN,XOR_SIGN,OR_SIGN,AND_SIGN,FOR_LOOP_IDENTIFIERS) {
-	this.FOR_LOOP_IDENTIFIERS = { FROM : "from", TO : "to", JUMP : "jump"};
+var little_interpreter_KeywordConfig = function(VARIABLE_DECLARATION,FUNCTION_DECLARATION,TYPE_DECL_OR_CAST,FUNCTION_RETURN,NULL_VALUE,TRUE_VALUE,FALSE_VALUE,TYPE_DYNAMIC,TYPE_VOID,TYPE_INT,TYPE_FLOAT,TYPE_BOOLEAN,TYPE_STRING,TYPE_MODULE,TYPE_SIGN,MAIN_MODULE_NAME,REGISTERED_MODULE_NAME,PRINT_FUNCTION_NAME,RAISE_ERROR_FUNCTION_NAME,READ_FUNCTION_NAME,RUN_CODE_FUNCTION_NAME,TYPE_UNKNOWN,CONDITION_TYPES,SPECIAL_OR_MULTICHAR_SIGNS,PROPERTY_ACCESS_SIGN,EQUALS_SIGN,NOT_EQUALS_SIGN,XOR_SIGN,OR_SIGN,AND_SIGN,FOR_LOOP_FROM,FOR_LOOP_TO,FOR_LOOP_JUMP) {
+	this.FOR_LOOP_JUMP = "jump";
+	this.FOR_LOOP_TO = "to";
+	this.FOR_LOOP_FROM = "from";
 	this.AND_SIGN = "&&";
 	this.OR_SIGN = "||";
 	this.XOR_SIGN = "^^";
@@ -1261,8 +1263,14 @@ var little_interpreter_KeywordConfig = function(VARIABLE_DECLARATION,FUNCTION_DE
 	if(AND_SIGN != null) {
 		this.AND_SIGN = AND_SIGN;
 	}
-	if(FOR_LOOP_IDENTIFIERS != null) {
-		this.FOR_LOOP_IDENTIFIERS = FOR_LOOP_IDENTIFIERS;
+	if(FOR_LOOP_FROM != null) {
+		this.FOR_LOOP_FROM = FOR_LOOP_FROM;
+	}
+	if(FOR_LOOP_TO != null) {
+		this.FOR_LOOP_TO = FOR_LOOP_TO;
+	}
+	if(FOR_LOOP_JUMP != null) {
+		this.FOR_LOOP_JUMP = FOR_LOOP_JUMP;
 	}
 };
 $hxClasses["little.interpreter.KeywordConfig"] = little_interpreter_KeywordConfig;
@@ -1303,7 +1311,9 @@ little_Keywords.switchSet = function(set) {
 	little_Keywords.XOR_SIGN = set.XOR_SIGN;
 	little_Keywords.OR_SIGN = set.OR_SIGN;
 	little_Keywords.AND_SIGN = set.AND_SIGN;
-	little_Keywords.FOR_LOOP_IDENTIFIERS = set.FOR_LOOP_IDENTIFIERS;
+	little_Keywords.FOR_LOOP_FROM = set.FOR_LOOP_FROM;
+	little_Keywords.FOR_LOOP_TO = set.FOR_LOOP_TO;
+	little_Keywords.FOR_LOOP_JUMP = set.FOR_LOOP_JUMP;
 };
 var little_interpreter_Operators = function() { };
 $hxClasses["little.interpreter.Operators"] = little_interpreter_Operators;
@@ -5659,7 +5669,7 @@ little_tools_PrepareRun.addProps = function() {
 	little_Little.plugin.registerProperty("documentation",little_Keywords.TYPE_DYNAMIC,true,null,{ valueGetter : function(parent) {
 		return little_parser_ParserTokens.Characters(parent.documentation);
 	}, allowWriting : false});
-	little_Little.plugin.registerProperty("" + little_Keywords.TO + little_Keywords.TYPE_FLOAT,little_Keywords.TYPE_INT,true,{ expectedParameters : [], callback : function(parent,params) {
+	little_Little.plugin.registerProperty("" + little_Keywords.TYPE_CAST_FUNCTION_PREFIX + little_Keywords.TYPE_FLOAT,little_Keywords.TYPE_INT,true,{ expectedParameters : [], callback : function(parent,params) {
 		var val = parent.value;
 		if(val._hx_index == 24) {
 			return little_parser_ParserTokens.TypeDeclaration(little_parser_ParserTokens.NullValue,little_parser_ParserTokens.Identifier(little_Keywords.TYPE_FLOAT));
@@ -5667,7 +5677,7 @@ little_tools_PrepareRun.addProps = function() {
 			return little_parser_ParserTokens.Decimal(Type.enumParameters(val)[0]);
 		}
 	}});
-	little_Little.plugin.registerProperty("" + little_Keywords.TO + little_Keywords.TYPE_BOOLEAN,little_Keywords.TYPE_INT,true,{ expectedParameters : [], callback : function(parent,params) {
+	little_Little.plugin.registerProperty("" + little_Keywords.TYPE_CAST_FUNCTION_PREFIX + little_Keywords.TYPE_BOOLEAN,little_Keywords.TYPE_INT,true,{ expectedParameters : [], callback : function(parent,params) {
 		var val = parent.value;
 		switch(val._hx_index) {
 		case 16:
@@ -5683,7 +5693,7 @@ little_tools_PrepareRun.addProps = function() {
 			return little_parser_ParserTokens.TrueValue;
 		}
 	}});
-	little_Little.plugin.registerProperty("" + little_Keywords.TO + little_Keywords.TYPE_STRING,little_Keywords.TYPE_INT,true,{ expectedParameters : [], callback : function(parent,params) {
+	little_Little.plugin.registerProperty("" + little_Keywords.TYPE_CAST_FUNCTION_PREFIX + little_Keywords.TYPE_STRING,little_Keywords.TYPE_INT,true,{ expectedParameters : [], callback : function(parent,params) {
 		var val = parent.value;
 		haxe_Log.trace(val,{ fileName : "src/little/tools/PrepareRun.hx", lineNumber : 77, className : "little.tools.PrepareRun", methodName : "addProps"});
 		if(val._hx_index == 24) {
@@ -5930,21 +5940,21 @@ little_tools_PrepareRun.addConditions = function() {
 				var _g2 = p.params;
 				var _hx_tmp;
 				var _hx_tmp1;
-				if(Type.enumParameters(_g1)[0] == little_Keywords.FOR_LOOP_IDENTIFIERS.FROM == true) {
+				if(Type.enumParameters(_g1)[0] == little_Keywords.FOR_LOOP_FROM == true) {
 					var params1 = _g2;
-					fp.push(little_parser_ParserTokens.Identifier(little_Keywords.FOR_LOOP_IDENTIFIERS.FROM));
+					fp.push(little_parser_ParserTokens.Identifier(little_Keywords.FOR_LOOP_FROM));
 					fp.push(little_parser_ParserTokens.Expression(Type.enumParameters(params1)[0],null));
 				} else {
-					_hx_tmp1 = Type.enumParameters(_g1)[0] == little_Keywords.FOR_LOOP_IDENTIFIERS.TO;
+					_hx_tmp1 = Type.enumParameters(_g1)[0] == little_Keywords.FOR_LOOP_TO;
 					if(_hx_tmp1 == true) {
 						var params2 = _g2;
-						fp.push(little_parser_ParserTokens.Identifier(little_Keywords.FOR_LOOP_IDENTIFIERS.TO));
+						fp.push(little_parser_ParserTokens.Identifier(little_Keywords.FOR_LOOP_TO));
 						fp.push(little_parser_ParserTokens.Expression(Type.enumParameters(params2)[0],null));
 					} else {
-						_hx_tmp = Type.enumParameters(_g1)[0] == little_Keywords.FOR_LOOP_IDENTIFIERS.JUMP;
+						_hx_tmp = Type.enumParameters(_g1)[0] == little_Keywords.FOR_LOOP_JUMP;
 						if(_hx_tmp == true) {
 							var params3 = _g2;
-							fp.push(little_parser_ParserTokens.Identifier(little_Keywords.FOR_LOOP_IDENTIFIERS.JUMP));
+							fp.push(little_parser_ParserTokens.Identifier(little_Keywords.FOR_LOOP_JUMP));
 							fp.push(little_parser_ParserTokens.Expression(Type.enumParameters(params3)[0],null));
 						} else {
 							fp.push(p);
@@ -5971,38 +5981,38 @@ little_tools_PrepareRun.addConditions = function() {
 				var _g = token.word;
 				var _hx_tmp;
 				var _hx_tmp1;
-				if(_g == little_Keywords.FOR_LOOP_IDENTIFIERS.FROM == true) {
+				if(_g == little_Keywords.FOR_LOOP_FROM == true) {
 					var val = little_tools_Conversion.toHaxeValue(little_interpreter_Interpreter.evaluate(next));
 					if(typeof(val) == "number" || typeof(val) == "number" && ((val | 0) === val)) {
 						from = val;
 					} else {
-						var parserForLoop1 = "`for` loop's `" + little_Keywords.FOR_LOOP_IDENTIFIERS.FROM + "` argument must be of type " + little_Keywords.TYPE_INT + "/" + little_Keywords.TYPE_FLOAT + " (given: " + little_interpreter_Interpreter.stringifyTokenValue(next) + " as ";
+						var parserForLoop1 = "`for` loop's `" + little_Keywords.FOR_LOOP_FROM + "` argument must be of type " + little_Keywords.TYPE_INT + "/" + little_Keywords.TYPE_FLOAT + " (given: " + little_interpreter_Interpreter.stringifyTokenValue(next) + " as ";
 						var e = little_interpreter_Interpreter.evaluate(next);
 						little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage(parserForLoop1 + $hxEnums[e.__enum__].__constructs__[e._hx_index]._hx_name + ")"));
 					}
 				} else {
-					_hx_tmp1 = _g == little_Keywords.FOR_LOOP_IDENTIFIERS.TO;
+					_hx_tmp1 = _g == little_Keywords.FOR_LOOP_TO;
 					if(_hx_tmp1 == true) {
 						var val = little_tools_Conversion.toHaxeValue(little_interpreter_Interpreter.evaluate(next));
 						if(typeof(val) == "number" || typeof(val) == "number" && ((val | 0) === val)) {
 							to = val;
 						} else {
-							var parserForLoop1 = "`for` loop's `" + little_Keywords.FOR_LOOP_IDENTIFIERS.TO + "` argument must be of type " + little_Keywords.TYPE_INT + "/" + little_Keywords.TYPE_FLOAT + " (given: " + little_interpreter_Interpreter.stringifyTokenValue(next) + " as ";
+							var parserForLoop1 = "`for` loop's `" + little_Keywords.FOR_LOOP_TO + "` argument must be of type " + little_Keywords.TYPE_INT + "/" + little_Keywords.TYPE_FLOAT + " (given: " + little_interpreter_Interpreter.stringifyTokenValue(next) + " as ";
 							var e = little_interpreter_Interpreter.evaluate(next);
 							little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage(parserForLoop1 + $hxEnums[e.__enum__].__constructs__[e._hx_index]._hx_name + ")"));
 						}
 					} else {
-						_hx_tmp = _g == little_Keywords.FOR_LOOP_IDENTIFIERS.JUMP;
+						_hx_tmp = _g == little_Keywords.FOR_LOOP_JUMP;
 						if(_hx_tmp == true) {
 							var val = little_tools_Conversion.toHaxeValue(little_interpreter_Interpreter.evaluate(next));
 							if(typeof(val) == "number" || typeof(val) == "number" && ((val | 0) === val)) {
 								if(val < 0) {
-									little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("`for` loop's `" + little_Keywords.FOR_LOOP_IDENTIFIERS.JUMP + "` argument must be positive (given: " + little_interpreter_Interpreter.stringifyTokenValue(next) + "). Notice - the usage of the `" + little_Keywords.FOR_LOOP_IDENTIFIERS.JUMP + "` argument switches from increasing to decreasing the value of `" + Std.string(Type.enumParameters(params[0])[0]) + "` if `" + little_Keywords.FOR_LOOP_IDENTIFIERS.FROM + "` is larger than `" + little_Keywords.FOR_LOOP_IDENTIFIERS.TO + "`. Defaulting to 1"));
+									little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("`for` loop's `" + little_Keywords.FOR_LOOP_JUMP + "` argument must be positive (given: " + little_interpreter_Interpreter.stringifyTokenValue(next) + "). Notice - the usage of the `" + little_Keywords.FOR_LOOP_JUMP + "` argument switches from increasing to decreasing the value of `" + Std.string(Type.enumParameters(params[0])[0]) + "` if `" + little_Keywords.FOR_LOOP_FROM + "` is larger than `" + little_Keywords.FOR_LOOP_TO + "`. Defaulting to 1"));
 								} else {
 									jump = val;
 								}
 							} else {
-								var parserForLoop1 = "`for` loop's `" + little_Keywords.FOR_LOOP_IDENTIFIERS.JUMP + "` argument must be of type " + little_Keywords.TYPE_INT + "/" + little_Keywords.TYPE_FLOAT + " (given: " + little_interpreter_Interpreter.stringifyTokenValue(next) + " as ";
+								var parserForLoop1 = "`for` loop's `" + little_Keywords.FOR_LOOP_JUMP + "` argument must be of type " + little_Keywords.TYPE_INT + "/" + little_Keywords.TYPE_FLOAT + " (given: " + little_interpreter_Interpreter.stringifyTokenValue(next) + " as ";
 								var e = little_interpreter_Interpreter.evaluate(next);
 								little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage(parserForLoop1 + $hxEnums[e.__enum__].__constructs__[e._hx_index]._hx_name + "). Defaulting to `1`"));
 							}
@@ -6024,7 +6034,7 @@ little_tools_PrepareRun.addConditions = function() {
 			var token = fp[i];
 			var next = [];
 			var lookahead = fp[i + 1];
-			while(!Type.enumEq(lookahead,little_parser_ParserTokens.Identifier(little_Keywords.FOR_LOOP_IDENTIFIERS.TO)) && !Type.enumEq(lookahead,little_parser_ParserTokens.Identifier(little_Keywords.FOR_LOOP_IDENTIFIERS.JUMP))) {
+			while(!Type.enumEq(lookahead,little_parser_ParserTokens.Identifier(little_Keywords.FOR_LOOP_TO)) && !Type.enumEq(lookahead,little_parser_ParserTokens.Identifier(little_Keywords.FOR_LOOP_JUMP))) {
 				next.push(lookahead);
 				lookahead = fp[++i + 1];
 				if(lookahead == null) {
@@ -6036,11 +6046,11 @@ little_tools_PrepareRun.addConditions = function() {
 			i += 2;
 		}
 		if(from == null) {
-			little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("`for` loop must contain a `" + little_Keywords.FOR_LOOP_IDENTIFIERS.FROM + "` argument."));
+			little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("`for` loop must contain a `" + little_Keywords.FOR_LOOP_FROM + "` argument."));
 			return val;
 		}
 		if(from == null) {
-			little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("`for` loop must contain a `" + little_Keywords.FOR_LOOP_IDENTIFIERS.TO + "` argument."));
+			little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("`for` loop must contain a `" + little_Keywords.FOR_LOOP_TO + "` argument."));
 			return val;
 		}
 		if(from < to) {
@@ -8545,9 +8555,11 @@ little_Keywords.NOT_EQUALS_SIGN = "!=";
 little_Keywords.XOR_SIGN = "^^";
 little_Keywords.OR_SIGN = "||";
 little_Keywords.AND_SIGN = "&&";
-little_Keywords.FOR_LOOP_IDENTIFIERS = { FROM : "from", TO : "to", JUMP : "jump"};
-little_Keywords.TO = "to";
-little_Keywords.defaultKeywordSet = new little_interpreter_KeywordConfig("define","action","as","return","nothing","true","false","Anything","Void","Number","Decimal","Boolean","Characters","Type","Sign","Main","Registered","print","error","read","run","Unknown",null,["++","--","**","+=","-=",">=","<=","==","&&","||","^^","!="],".","==","!=","^^","||","&&",{ FROM : "from", TO : "to", JUMP : "jump"});
+little_Keywords.FOR_LOOP_FROM = "from";
+little_Keywords.FOR_LOOP_TO = "to";
+little_Keywords.FOR_LOOP_JUMP = "jump";
+little_Keywords.TYPE_CAST_FUNCTION_PREFIX = "to";
+little_Keywords.defaultKeywordSet = new little_interpreter_KeywordConfig("define","action","as","return","nothing","true","false","Anything","Void","Number","Decimal","Boolean","Characters","Type","Sign","Main","Registered","print","error","read","run","Unknown",null,["++","--","**","+=","-=",">=","<=","==","&&","||","^^","!="],".","==","!=","^^","||","&&","from","to","jump");
 little_interpreter_Operators.isUserDefined = true;
 little_interpreter_Operators.USER_DEFINED = [];
 little_interpreter_Operators.HIGH_PRIORITY = [];

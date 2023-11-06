@@ -49,28 +49,28 @@ class Parser {
 
             i++;
         }
-        trace("before:", tokens);
+        // trace("before:", tokens);
         tokens = mergeBlocks(tokens);
-        trace("blocks:", tokens);
+        // trace("blocks:", tokens);
         tokens = mergeExpressions(tokens);
-        trace("expressions:", tokens);
+        // trace("expressions:", tokens);
         tokens = mergePropertyOperations(tokens);
-        trace("props:", tokens);
+        // trace("props:", tokens);
         tokens = mergeTypeDecls(tokens);
-        trace("types:", tokens);
+        // trace("types:", tokens);
         tokens = mergeComplexStructures(tokens);
-        trace("structures:", tokens);
+        // trace("structures:", tokens);
         tokens = mergeCalls(tokens);
-        trace("calls:", tokens);
+        // trace("calls:", tokens);
         tokens = mergeWrites(tokens);
-        trace("writes:", tokens);
+        // trace("writes:", tokens);
         tokens = mergeValuesWithTypeDeclarations(tokens);
-        trace("casts:", tokens);
+        // trace("casts:", tokens);
         for (level in Parser.additionalParsingLevels) {
             tokens = level(tokens);
-            trace('${level}:', tokens);
+            // trace('${level}:', tokens);
         }
-        trace("macros:", tokens);
+        // trace("macros:", tokens);
 
         return tokens;
     }
@@ -190,7 +190,6 @@ class Parser {
                 case SetLine(line): {setLine(line); post.push(token);}
                 case SplitLine: {nextPart(); post.push(token);}
                 case Sign(_ == PROPERTY_ACCESS_SIGN => true): {
-                    trace(i, pre.length, pre);
                     if (i + 1 >= pre.length) {
                         Runtime.throwError(ErrorMessage("Property access cut off by the end of file, block or expression."), Layer.PARSER);
                         return null;

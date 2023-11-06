@@ -21,6 +21,8 @@ class Little {
     public static var plugin(default, null) = Plugins;
     public static var operators(default, null) = Operators;
 
+    public static var keywords(default, null) = Keywords.defaultKeywordSet;
+
     public static var debug:Bool = false;
 
     /**

@@ -50,7 +50,7 @@ class PrepareRun {
 		// Froms & Tos:
 
 		// Int
-		Little.plugin.registerProperty('$TO$TYPE_FLOAT', TYPE_INT, true, {
+		Little.plugin.registerProperty('$TYPE_CAST_FUNCTION_PREFIX$TYPE_FLOAT', TYPE_INT, true, {
 			expectedParameters: [],
 			callback: (parent, params) -> {
 				var val = parent.value;
@@ -60,7 +60,7 @@ class PrepareRun {
 				}
 			}
 		});
-		Little.plugin.registerProperty('$TO$TYPE_BOOLEAN', TYPE_INT, true, {
+		Little.plugin.registerProperty('$TYPE_CAST_FUNCTION_PREFIX$TYPE_BOOLEAN', TYPE_INT, true, {
 			expectedParameters: [],
 			callback: (parent, params) -> {
 				var val = parent.value;
@@ -70,7 +70,7 @@ class PrepareRun {
 				}
 			}
 		});
-		Little.plugin.registerProperty('$TO$TYPE_STRING', TYPE_INT, true, {
+		Little.plugin.registerProperty('$TYPE_CAST_FUNCTION_PREFIX$TYPE_STRING', TYPE_INT, true, {
 			expectedParameters: [],
 			callback: (parent, params) -> {
 				var val = parent.value;
@@ -357,16 +357,16 @@ class PrepareRun {
 			// Incase one does `from (4 + 2)` and it accidentally parses a function
 			for (p in params) {
 				switch p {
-					case FunctionCall(_.getParameters()[0] == FOR_LOOP_IDENTIFIERS.FROM => true, params): {
-							fp.push(Identifier(FOR_LOOP_IDENTIFIERS.FROM));
+					case FunctionCall(_.getParameters()[0] == FOR_LOOP_FROM => true, params): {
+							fp.push(Identifier(FOR_LOOP_FROM));
 							fp.push(Expression(params.getParameters()[0], null));
 						}
-					case FunctionCall(_.getParameters()[0] == FOR_LOOP_IDENTIFIERS.TO => true, params): {
-							fp.push(Identifier(FOR_LOOP_IDENTIFIERS.TO));
+					case FunctionCall(_.getParameters()[0] == FOR_LOOP_TO => true, params): {
+							fp.push(Identifier(FOR_LOOP_TO));
 							fp.push(Expression(params.getParameters()[0], null));
 						}
-					case FunctionCall(_.getParameters()[0] == FOR_LOOP_IDENTIFIERS.JUMP => true, params): {
-							fp.push(Identifier(FOR_LOOP_IDENTIFIERS.JUMP));
+					case FunctionCall(_.getParameters()[0] == FOR_LOOP_JUMP => true, params): {
+							fp.push(Identifier(FOR_LOOP_JUMP));
 							fp.push(Expression(params.getParameters()[0], null));
 						}
 					case _: fp.push(p);
@@ -385,34 +385,34 @@ class PrepareRun {
 
 			function parserForLoop(token:ParserTokens, next:ParserTokens) {
 				switch token {
-					case Identifier(_ == FOR_LOOP_IDENTIFIERS.FROM => true):
+					case Identifier(_ == FOR_LOOP_FROM => true):
 						{
 							var val = Conversion.toHaxeValue(Interpreter.evaluate(next));
 							if (val is Float || val is Int) {
 								from = val;
 							} else {
-								Runtime.throwError(ErrorMessage('`for` loop\'s `${FOR_LOOP_IDENTIFIERS.FROM}` argument must be of type $TYPE_INT/$TYPE_FLOAT (given: ${Interpreter.stringifyTokenValue(next)} as ${Interpreter.evaluate(next).getName()})'));
+								Runtime.throwError(ErrorMessage('`for` loop\'s `${FOR_LOOP_FROM}` argument must be of type $TYPE_INT/$TYPE_FLOAT (given: ${Interpreter.stringifyTokenValue(next)} as ${Interpreter.evaluate(next).getName()})'));
 							}
 						}
-					case Identifier(_ == FOR_LOOP_IDENTIFIERS.TO => true):
+					case Identifier(_ == FOR_LOOP_TO => true):
 						{
 							var val = Conversion.toHaxeValue(Interpreter.evaluate(next));
 							if (val is Float || val is Int) {
 								to = val;
 							} else {
-								Runtime.throwError(ErrorMessage('`for` loop\'s `${FOR_LOOP_IDENTIFIERS.TO}` argument must be of type $TYPE_INT/$TYPE_FLOAT (given: ${Interpreter.stringifyTokenValue(next)} as ${Interpreter.evaluate(next).getName()})'));
+								Runtime.throwError(ErrorMessage('`for` loop\'s `${FOR_LOOP_TO}` argument must be of type $TYPE_INT/$TYPE_FLOAT (given: ${Interpreter.stringifyTokenValue(next)} as ${Interpreter.evaluate(next).getName()})'));
 							}
 						}
-					case Identifier(_ == FOR_LOOP_IDENTIFIERS.JUMP => true):
+					case Identifier(_ == FOR_LOOP_JUMP => true):
 						{
 							var val = Conversion.toHaxeValue(Interpreter.evaluate(next));
 							if (val is Float || val is Int) {
 								if (val < 0) {
-									Runtime.throwError(ErrorMessage('`for` loop\'s `${FOR_LOOP_IDENTIFIERS.JUMP}` argument must be positive (given: ${Interpreter.stringifyTokenValue(next)}). Notice - the usage of the `${FOR_LOOP_IDENTIFIERS.JUMP}` argument switches from increasing to decreasing the value of `${params[0].getParameters()[0]}` if `${FOR_LOOP_IDENTIFIERS.FROM}` is larger than `${FOR_LOOP_IDENTIFIERS.TO}`. Defaulting to 1'));
+									Runtime.throwError(ErrorMessage('`for` loop\'s `${FOR_LOOP_JUMP}` argument must be positive (given: ${Interpreter.stringifyTokenValue(next)}). Notice - the usage of the `${FOR_LOOP_JUMP}` argument switches from increasing to decreasing the value of `${params[0].getParameters()[0]}` if `${FOR_LOOP_FROM}` is larger than `${FOR_LOOP_TO}`. Defaulting to 1'));
 								} else
 									jump = val;
 							} else {
-								Runtime.throwError(ErrorMessage('`for` loop\'s `${FOR_LOOP_IDENTIFIERS.JUMP}` argument must be of type $TYPE_INT/$TYPE_FLOAT (given: ${Interpreter.stringifyTokenValue(next)} as ${Interpreter.evaluate(next).getName()}). Defaulting to `1`'));
+								Runtime.throwError(ErrorMessage('`for` loop\'s `${FOR_LOOP_JUMP}` argument must be of type $TYPE_INT/$TYPE_FLOAT (given: ${Interpreter.stringifyTokenValue(next)} as ${Interpreter.evaluate(next).getName()}). Defaulting to `1`'));
 							}
 						}
 					case Block(_):
@@ -431,8 +431,8 @@ class PrepareRun {
 				var next = [];
 
 				var lookahead = fp[i + 1];
-				while (!Type.enumEq(lookahead, Identifier(FOR_LOOP_IDENTIFIERS.TO))
-					&& !Type.enumEq(lookahead, Identifier(FOR_LOOP_IDENTIFIERS.JUMP))) {
+				while (!Type.enumEq(lookahead, Identifier(FOR_LOOP_TO))
+					&& !Type.enumEq(lookahead, Identifier(FOR_LOOP_JUMP))) {
 					next.push(lookahead);
 					lookahead = fp[++i + 1];
 					if (lookahead == null)
@@ -446,11 +446,11 @@ class PrepareRun {
 			}
 
 			if (from == null) {
-				Runtime.throwError(ErrorMessage('`for` loop must contain a `${FOR_LOOP_IDENTIFIERS.FROM}` argument.'));
+				Runtime.throwError(ErrorMessage('`for` loop must contain a `${FOR_LOOP_FROM}` argument.'));
 				return val;
 			}
 			if (from == null) {
-				Runtime.throwError(ErrorMessage('`for` loop must contain a `${FOR_LOOP_IDENTIFIERS.TO}` argument.'));
+				Runtime.throwError(ErrorMessage('`for` loop must contain a `${FOR_LOOP_TO}` argument.'));
 				return val;
 			}
 

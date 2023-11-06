@@ -53,5 +53,9 @@ class KeywordConfig {
     @:optional public var OR_SIGN:String = "||";
     @:optional public var AND_SIGN:String = "&&";
 
-    @:optional public var FOR_LOOP_IDENTIFIERS:{FROM:String, TO:String, JUMP:String} = {FROM: "from", TO: "to", JUMP: "jump"};
+    @:optional public var FOR_LOOP_FROM = "from";
+    @:optional public var FOR_LOOP_TO = "to";
+    @:optional public var FOR_LOOP_JUMP = "jump";
+
+    @:optional public var TYPE_CAST_FUNCTION_PREFIX:String = "to";
 }

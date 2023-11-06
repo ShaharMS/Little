@@ -55,9 +55,16 @@ class Keywords {
     public static var OR_SIGN:String = "||";
     public static var AND_SIGN:String = "&&";
 
-    public static var FOR_LOOP_IDENTIFIERS:{FROM:String, TO:String, JUMP:String} = {FROM: "from", TO: "to", JUMP: "jump"};
+    public static var FOR_LOOP_FROM = "from";
+    public static var FOR_LOOP_TO = "to";
+    public static var FOR_LOOP_JUMP = "jump";
 
-    public static var TO:String = "to";
+    /**
+        used when converting an object to another type using a conversion function:
+
+            define x = 3.toCharacters()
+    **/
+    public static var TYPE_CAST_FUNCTION_PREFIX = "to";
 
     public static var defaultKeywordSet:KeywordConfig = {
         VARIABLE_DECLARATION: "define",
@@ -89,7 +96,10 @@ class Keywords {
         XOR_SIGN: "^^",
         OR_SIGN: "||",
         AND_SIGN: "&&",
-        FOR_LOOP_IDENTIFIERS: {FROM: "from", TO: "to", JUMP: "jump"}
+        FOR_LOOP_FROM: "from",
+        FOR_LOOP_TO: "to",
+        FOR_LOOP_JUMP: "jump",
+        TYPE_CAST_FUNCTION_PREFIX: "to"
     };
 
     public static function switchSet(set:KeywordConfig) {
@@ -122,6 +132,9 @@ class Keywords {
         XOR_SIGN = set.XOR_SIGN;
         OR_SIGN = set.OR_SIGN;
         AND_SIGN = set.AND_SIGN;
-        FOR_LOOP_IDENTIFIERS = set.FOR_LOOP_IDENTIFIERS;
+        FOR_LOOP_FROM = set.FOR_LOOP_FROM;
+        FOR_LOOP_TO = set.FOR_LOOP_TO;
+        FOR_LOOP_JUMP = set.FOR_LOOP_JUMP;
+        TYPE_CAST_FUNCTION_PREFIX = set.TYPE_CAST_FUNCTION_PREFIX;
     }
 }
