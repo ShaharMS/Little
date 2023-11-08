@@ -16,6 +16,7 @@ import little.Keywords.*;
 
 
 @:access(little.interpreter.Operators)
+@:access(little.interpreter.Runtime)
 class PrepareRun {
 	public static var prepared:Bool = false;
 
@@ -86,7 +87,8 @@ class PrepareRun {
 	public static function addFunctions() {
 		Little.plugin.registerFunction(PRINT_FUNCTION_NAME, null, [Variable(Identifier("item"), null)], (params) -> {
 			var t = if (params[0].getParameters()[0].length == 1) params[0].getParameters()[0][0] else params[0];
-			Runtime.print(Interpreter.stringifyTokenValue(Interpreter.evaluate(t)));
+			var eval = Interpreter.evaluate(t);
+			Runtime.__print(Interpreter.stringifyTokenValue(eval), eval);
 			return NullValue;
 		});
 		Little.plugin.registerFunction(RAISE_ERROR_FUNCTION_NAME, null, [Variable(Identifier("message"), null)], (params) -> {
@@ -142,6 +144,16 @@ class PrepareRun {
 		});
 		Little.operators.HIGH_PRIORITY.push("√");
 
+		Little.plugin.registerSign("!", {
+			rhsAllowedTypes: [TYPE_BOOLEAN],
+			operatorType: RHS_ONLY,
+			singleSidedOperatorCallback: (rhs) -> {
+				var r = Conversion.toHaxeValue(rhs);
+
+				return r ? FalseValue : TrueValue;
+			}
+		});
+
 		// --------------------------------------------------
 		// ------------------------LHS-----------------------
 		// --------------------------------------------------
@@ -169,7 +181,7 @@ class PrepareRun {
 					r = Conversion.toHaxeValue(rhs);
 				if (l is String || r is String)
 					return Characters("" + l + r);
-				if (l is Int && r is Int)
+				if (Interpreter.getValueType(lhs).equals(Identifier(TYPE_INT)) && Interpreter.getValueType(rhs).equals(Identifier(TYPE_INT)))
 					return Number(l + r + "");
 				return Decimal(l + r + "");
 			}
@@ -184,7 +196,7 @@ class PrepareRun {
 					r:Dynamic = Conversion.toHaxeValue(rhs);
 				if (l is String)
 					return Characters(TextTools.subtract(l, r));
-				if (l is Int && r is Int)
+				if (Interpreter.getValueType(lhs).equals(Identifier(TYPE_INT)) && Interpreter.getValueType(rhs).equals(Identifier(TYPE_INT)))
 					return Number(l - r + "");
 				return Decimal(l - r + "");
 			}
@@ -199,7 +211,7 @@ class PrepareRun {
 					r:Dynamic = Conversion.toHaxeValue(rhs);
 				if (l is String)
 					return Characters(TextTools.multiply(l, r));
-				if (l is Int && r is Int)
+				if (Interpreter.getValueType(lhs).equals(Identifier(TYPE_INT)) && Interpreter.getValueType(rhs).equals(Identifier(TYPE_INT)))
 					return Number(l * r + "");
 				return Decimal(l * r + "");
 			}
@@ -223,7 +235,7 @@ class PrepareRun {
 			callback: (lhs, rhs) -> {
 				var l = Conversion.toHaxeValue(lhs),
 					r = Conversion.toHaxeValue(rhs);
-				if (l is Int && r is Int)
+				if (Interpreter.getValueType(lhs).equals(Identifier(TYPE_INT)) && Interpreter.getValueType(rhs).equals(Identifier(TYPE_INT)))
 					return Number(Math.pow(l, r) + "");
 				return Decimal(Math.pow(l, r) + "");
 			}
@@ -341,7 +353,6 @@ class PrepareRun {
 
 		Little.plugin.registerCondition("if", [Variable(Identifier("rule"), Identifier(Keywords.TYPE_BOOLEAN))], (params, body) -> {
 			var val = NullValue;
-			trace(params, body);
 			if (Conversion.toHaxeValue(Interpreter.evaluateExpressionParts(params))) {
 				val = Interpreter.interpret(body, Interpreter.currentConfig);
 			}
@@ -377,7 +388,7 @@ class PrepareRun {
 
 			var handle = Interpreter.accessObject(params[0]);
 			if (handle == null) {
-				Runtime.throwError(ErrorMessage('`for` loop must start with a variable to count on (expected definition/block, found: `${params[0]}`)'));
+				Runtime.throwError(ErrorMessage('`for` loop must start with a variable to count on (expected definition/block, found: `${PrettyPrinter.stringify(params[0])}`)'));
 				return val;
 			}
 
@@ -478,7 +489,7 @@ class PrepareRun {
 
 			var handle = Interpreter.accessObject(params[0].getParameters()[0][0]);
 			if (handle == null) {
-				Runtime.throwError(ErrorMessage('`after` condition must start with a variable to watch (expected definition, found: `${params[0].getParameters()[0][0]}`)'));
+				Runtime.throwError(ErrorMessage('`after` condition must start with a variable to watch (expected definition, found: `${PrettyPrinter.stringify(params[0].getParameters()[0][0])}`)'));
 				return val;
 			}
 
@@ -498,7 +509,7 @@ class PrepareRun {
 
 			var handle = Interpreter.accessObject(params[0].getParameters()[0][0]);
 			if (handle == null) {
-				Runtime.throwError(ErrorMessage('`whenever` condition must start with a variable to watch (expected definition, found: `${params[0].getParameters()[0][0]}`)'));
+				Runtime.throwError(ErrorMessage('`whenever` condition must start with a variable to watch (expected definition, found: `${PrettyPrinter.stringify(params[0].getParameters()[0][0])}`)'));
 				return val;
 			}
 

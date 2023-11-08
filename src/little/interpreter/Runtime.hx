@@ -1,5 +1,6 @@
 package little.interpreter;
 
+import eval.luv.Stream;
 import little.lexer.Lexer;
 import little.interpreter.memory.MemoryObject;
 import haxe.EnumTools;
@@ -84,9 +85,9 @@ class Runtime {
     public static var onErrorThrown:Array<(String, Int, String, String) -> Void> = [];
 
     /**
-    	A string, containing everything that was printed to the console during the program's runtime.
+    	The program's standard output.
     **/
-    public static var stdout:String = "";
+    public static var stdout = StdOut;
 
     /**
     	Contains every function call interpreted during the program's runtime.
@@ -110,7 +111,8 @@ class Runtime {
                 '${if (Little.debug) (layer : String).toUpperCase() + ": " else ""}ERROR: Module ${currentModule}, Line $line:  ${reason}';
             }
         }
-        stdout += '\n$content';
+        stdout.output += '\n$content';
+		stdout.stdoutTokens.push(token);
         exitCode = Layer.getIndexOf(layer);
         errorToken = token;
         Interpreter.errorThrown = true;        
@@ -134,16 +136,28 @@ class Runtime {
                 '${if (Little.debug) (layer : String).toUpperCase() + ": " else ""}WARNING: Module ${currentModule}, Line $line:  ${reason}';
             }
         }
-        stdout += '\n$content';
+        stdout.output += '\n$content';
+		stdout.stdoutTokens.push(token);
     }
 
     public static function print(item:String) {
-        stdout += '\n${if (Little.debug) (INTERPRETER : String).toUpperCase() + ": " else ""}Module $currentModule, Line $line:  $item';
-    }
+        stdout.output += '\n${if (Little.debug) (INTERPRETER : String).toUpperCase() + ": " else ""}Module $currentModule, Line $line:  $item';
+		stdout.stdoutTokens.push(Characters(item));
+	}
 
     public static function broadcast(item:String) {
-        stdout += '\n${if (Little.debug) "BROADCAST: " else ""}${item}';
+        stdout.output += '\n${if (Little.debug) "BROADCAST: " else ""}${item}';
+		stdout.stdoutTokens.push(Characters(item));
     }
+
+	static function __broadcast(item:String) {
+        stdout.output += '\n${if (Little.debug) "BROADCAST: " else ""}${item}';		
+	}
+
+	static function __print(item:String, representativeToken:ParserTokens) {
+		stdout.output += '\n${if (Little.debug) (INTERPRETER : String).toUpperCase() + ": " else ""}Module $currentModule, Line $line:  $item';
+		stdout.stdoutTokens.push(representativeToken);
+	}
 
     /**
         Tries to access the value stored on an object denoted by `obj`.  

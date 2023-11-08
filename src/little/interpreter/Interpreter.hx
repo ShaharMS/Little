@@ -44,9 +44,9 @@ class Interpreter {
         while (i < tokens.length) {
 
             if (errorThrown) {
-                Runtime.broadcast("Stopping Execution...");
+                Runtime.__broadcast("Stopping Execution...");
                 // Todo: here is future garbage collecting stuff
-                Runtime.broadcast("Done.");
+                Runtime.__broadcast("Done.");
                 return Runtime.errorToken;
             }
 
@@ -731,19 +731,12 @@ class Interpreter {
 
         if (memory == null) memory = Interpreter.memory; // If no memory map is given, use the base one.
 
-        trace("--------------------------------");
-        trace("Pre-process", parts);
         parts = forceCorrectOrderOfOperations(parts);
         var evaluatedValue:ParserTokens = null, currentSign = "", rhs:ParserTokens = null;
 
-        trace("Post-process", parts, "Start eval");
-
         for (token in parts) {
-            trace("Current", token);
             var val:ParserTokens = switch token {
                 case Expression(p, _): {
-                    trace("Found Expression", token);
-                    trace("Recursing:", p);
                     evaluateExpressionParts(p);
                 }
                 default: evaluate(token);
@@ -758,16 +751,16 @@ class Interpreter {
                     }
                 }
                 case _: {
-					if (evaluatedValue == null) {
-						evaluatedValue = val;
+					if (evaluatedValue == null && currentSign != "") {
+						evaluatedValue = Operators.call(currentSign, val);
+						currentSign = "";
 					} else if (evaluatedValue != null && currentSign != "" && rhs == null) {
 						rhs = val;
 						evaluatedValue = Operators.call(evaluatedValue, currentSign, rhs);
 						rhs = null;
 						currentSign = "";
-					} else if (evaluatedValue == null && currentSign != "") {
-						evaluatedValue = Operators.call(currentSign, val);
-						currentSign = "";
+					} else if (evaluatedValue == null) {
+						evaluatedValue = val;
 					} else if (evaluatedValue != null) {
 						Runtime.throwError(ErrorMessage("Two values should not appear one right after the other, did you forget to insert a sign in between?"));
 					}

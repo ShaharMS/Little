@@ -45,8 +45,9 @@ class Main {
 		// output.innerHTML = little.tools.PrettyPrinter.printParserAst(little.parser.Parser.parse(little.lexer.Lexer.lex(untyped text.value)));
 		// text.innerHTML = code;
 		new JsExample();
+		#elseif unit
+		UnitTests.run();
 		#elseif sys
-		trace(MathTools.factorial(5));
 		while (true) {
 			Sys.print("  >> ");
 			var input = Sys.stdin().readLine();
@@ -60,13 +61,13 @@ class Main {
 						try {
 							Little.run(code, true);
 							trace(PrettyPrinter.printParserAst(Parser.parse(Lexer.lex(code))));
-							trace(Runtime.stdout);
+							trace(Runtime.stdout.output);
 						} catch (e) {
 							trace(Lexer.lex(code));
 							trace(Parser.parse(Lexer.lex(code)));
 							trace(PrettyPrinter.printParserAst(Parser.parse(Lexer.lex(code))));
 							trace(e.details());
-							trace(Runtime.stdout);
+							trace(Runtime.stdout.output);
 						}
 						Sys.print(code.replaceFirst("\n", "  >> ").replace("\n", "\n  >> ") + "\n");
 					} else if (input == "sl!") {
@@ -83,13 +84,13 @@ class Main {
 				try {
 					Little.run(input, true);
 					trace(PrettyPrinter.printParserAst(Parser.parse(Lexer.lex(input))));
-					trace(Runtime.stdout);
+					trace(Runtime.stdout.output);
 				} catch (e) {
 					trace(Lexer.lex(input));
 					trace(Parser.parse(Lexer.lex(input)));
 					trace(PrettyPrinter.printParserAst(Parser.parse(Lexer.lex(input))));
 					trace(e.details());
-					trace(Runtime.stdout);
+					trace(Runtime.stdout.output);
 				}
 			}
 		}

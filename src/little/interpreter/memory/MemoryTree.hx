@@ -35,7 +35,7 @@ abstract MemoryTree(MemoryTreeBase) {
                 Runtime.throwError(ErrorMessage('Type ${this.objType} does not exist.'));
                 return null;
             }
-			trace(this.objType);
+			//trace(this.objType);
             if (!Interpreter.memory.silentGet(this.objType).props.exists(name) && !Interpreter.memory.silentGet(TYPE_DYNAMIC).props.exists(name)) return null; // Throws non existent prop on Interpreter.accessObject().
 
             var field = Interpreter.memory.silentGet(TYPE_DYNAMIC).props.silentGet(name);
@@ -52,7 +52,7 @@ abstract MemoryTree(MemoryTreeBase) {
 				field.parent = object;
 				var value = field.use(PartArray([this.obj.value]));
 				field.parent = field;
-				trace(value);
+				//trace(value);
 				return Interpreter.createObject(value);
 			} else { // non-static function, here we start maneuvering...
                 var value = External(params -> {

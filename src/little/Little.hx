@@ -78,7 +78,7 @@ class Little {
         Interpreter.errorThrown = false;
         Runtime.line = 0;
         Runtime.callStack = [];
-        Runtime.stdout = "";
+        Runtime.stdout.reset();
         Runtime.currentModule = Keywords.MAIN_MODULE_NAME;
         final previous = Little.debug;
         if (debug != null) Little.debug = debug;
@@ -89,7 +89,6 @@ class Little {
             PrepareRun.addFunctions();
             PrepareRun.addConditions();
             PrepareRun.addProps();
-            trace(operators.lhsOnly);
         }
         Interpreter.interpret(Parser.parse(Lexer.lex(code)), {});
         if (debug != null) Little.debug = previous;

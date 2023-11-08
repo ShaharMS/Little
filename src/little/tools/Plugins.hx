@@ -508,8 +508,8 @@ class Plugins {
 			} else {
 				callbackFunc = (rhs) -> {
 					var r = Interpreter.getValueType(rhs).getParameters()[0];
-					if (!info.lhsAllowedTypes.contains(r)) {
-						return Little.runtime.throwError(ErrorMessage('Cannot perform $r(${Interpreter.stringifyTokenIdentifier(rhs)})$symbol - Operand cannot be of type $r (accepted types: ${info.rhsAllowedTypes})'));
+					if (!info.rhsAllowedTypes.contains(r)) {
+						return Little.runtime.throwError(ErrorMessage('Cannot perform $symbol$r(${Interpreter.stringifyTokenIdentifier(rhs)}) - Operand cannot be of type $r (accepted types: ${info.rhsAllowedTypes})'));
 					}
 
 					return info.singleSidedOperatorCallback(rhs);

@@ -27,7 +27,7 @@ class Lexer {
                 }
 				i += 2;
                 for (j in 0...queuedNewlines) tokens.push(Newline);
-                tokens.push(Documentation(string.replace("<br>", "\n").replace("</br>", "\n")));
+                tokens.push(Documentation(string.replace("<br>", "\n").replace("</br>", "\n").trim()));
             }
             else if (char == '"') {
                 var string = "";

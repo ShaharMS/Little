@@ -28,7 +28,7 @@ class MemoryObject {
             }
         }
         value = valueSetter(val);
-        for (setter in setterListeners) {
+        for (setter in setterListeners.copy()) {
             setter(value);
         }
         return value;
@@ -61,7 +61,7 @@ class MemoryObject {
     @:optional public var nonStatic:Bool = true;
 	
 
-    function set_params(parameters) {
+    function set_params(parameters:Array<ParserTokens>) {
         if (parameters == null) return params = null;
         return params = parameters.filter(p -> switch p {case SplitLine | SetLine(_): false; case _: true;});
     }
