@@ -18,6 +18,35 @@ class Parser {
     public static var additionalParsingLevels:Array<Array<ParserTokens> -> Array<ParserTokens>> = [Parser.mergeNonBlockBodies, Parser.mergeElses];
 
     public static function parse(lexerTokens:Array<LexerTokens>):Array<ParserTokens> {
+        var tokens = convert(lexerTokens);
+
+        // trace("before:", tokens);
+        tokens = mergeBlocks(tokens);
+        // trace("blocks:", tokens);
+        tokens = mergeExpressions(tokens);
+        // trace("expressions:", tokens);
+        tokens = mergePropertyOperations(tokens);
+        // trace("props:", tokens);
+        tokens = mergeTypeDecls(tokens);
+        // trace("types:", tokens);
+        tokens = mergeComplexStructures(tokens);
+        // trace("structures:", tokens);
+        tokens = mergeCalls(tokens);
+        // trace("calls:", tokens);
+        tokens = mergeWrites(tokens);
+        // trace("writes:", tokens);
+        tokens = mergeValuesWithTypeDeclarations(tokens);
+        // trace("casts:", tokens);
+        for (level in Parser.additionalParsingLevels) {
+            tokens = level(tokens);
+            // trace('${level}:', tokens);
+        }
+        // trace("macros:", tokens);
+
+        return tokens;
+    }
+
+    public static function convert(lexerTokens:Array<LexerTokens>):Array<ParserTokens> {
         var tokens:Array<ParserTokens> = [];
 
         var line = 1;
@@ -49,32 +78,9 @@ class Parser {
 
             i++;
         }
-        // trace("before:", tokens);
-        tokens = mergeBlocks(tokens);
-        // trace("blocks:", tokens);
-        tokens = mergeExpressions(tokens);
-        // trace("expressions:", tokens);
-        tokens = mergePropertyOperations(tokens);
-        // trace("props:", tokens);
-        tokens = mergeTypeDecls(tokens);
-        // trace("types:", tokens);
-        tokens = mergeComplexStructures(tokens);
-        // trace("structures:", tokens);
-        tokens = mergeCalls(tokens);
-        // trace("calls:", tokens);
-        tokens = mergeWrites(tokens);
-        // trace("writes:", tokens);
-        tokens = mergeValuesWithTypeDeclarations(tokens);
-        // trace("casts:", tokens);
-        for (level in Parser.additionalParsingLevels) {
-            tokens = level(tokens);
-            // trace('${level}:', tokens);
-        }
-        // trace("macros:", tokens);
 
         return tokens;
     }
-
 
 
     public static function mergeBlocks(pre:Array<ParserTokens>):Array<ParserTokens> {
@@ -701,7 +707,7 @@ class Parser {
                 case PartArray(parts): post.unshift(PartArray(mergeValuesWithTypeDeclarations(parts)));
                 case FunctionCall(name, params): post.unshift(FunctionCall(mergeValuesWithTypeDeclarations([name])[0], mergeValuesWithTypeDeclarations([params])[0]));
                 case Write(assignees, value, type): post.unshift(Write(mergeValuesWithTypeDeclarations(assignees), mergeValuesWithTypeDeclarations([value])[0], mergeValuesWithTypeDeclarations([type])[0]));
-                case PropertyAccess(name, property): post.push(PropertyAccess(mergeValuesWithTypeDeclarations([name])[0], mergeValuesWithTypeDeclarations([property])[0]));
+                case PropertyAccess(name, property): post.unshift(PropertyAccess(mergeValuesWithTypeDeclarations([name])[0], mergeValuesWithTypeDeclarations([property])[0]));
                 case _: post.unshift(token);
             }
             i--;

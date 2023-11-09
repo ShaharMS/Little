@@ -50,8 +50,8 @@ class UnitTests {
 				Sys.println('        - $RESET$WHITE Expected: $ITALIC$GREEN${result.expected}$RESET');
 				Sys.println('        - $RESET$WHITE Returned: $ITALIC$RED${result.returned}$RESET');
 				Sys.print('        - $RESET$WHITE Code: \n            ${result.code.replace("\n", "\n            ")}$RESET\n');
-				Sys.print('        - $RESET$WHITE Abstract Syntax Tree:\n            ${Runtime.stdout.output.replace("\n", "\n            ")}$RESET\n');
-				Sys.print('        - $RESET$WHITE Stdout:\n            ${PrettyPrinter.printParserAst(Parser.parse(Lexer.lex(result.code))).replace("\n", "\n            ")}$RESET\n');
+				Sys.print('        - $RESET$WHITE Abstract Syntax Tree:\n            ${PrettyPrinter.printParserAst(Parser.parse(Lexer.lex(result.code))).replace("\n", "\n            ")}$RESET\n');
+				Sys.print('        - $RESET$WHITE Stdout:\n            ${Runtime.stdout.output.replace("\n", "\n            ")}$RESET\n');
 			}
 
 			Sys.sleep(1);
@@ -89,7 +89,7 @@ class UnitTests {
 	}
 
 	public static function test3():UnitTestResult {
-		var code = "action x1() = { print(1) }\naction x2(define x as Number) = { print(x) }\naction x3() = { print(x1() + x2(5)) }\n\nx1(), x2(5), x3()";
+		var code = "action x1() = { print(1) }\naction x2(define x as Number) = { print(x) }\naction x21(define x as Number) = { return x }\naction x3() = { print(1 + x21(5)) }\n\nx1(), x2(5), x3()";
 		Little.run(code);
 		var result = Characters(Runtime.stdout.stdoutTokens.map(x -> '${x.getParameters()[0]}').join(", "));
 		return {

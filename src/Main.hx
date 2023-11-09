@@ -1,5 +1,6 @@
 package;
 
+import little.tools.PrettyOutput;
 import haxe.SysTools;
 import haxe.Log;
 import vision.tools.MathTools;
@@ -70,14 +71,27 @@ class Main {
 							trace(Runtime.stdout.output);
 						}
 						Sys.print(code.replaceFirst("\n", "  >> ").replace("\n", "\n  >> ") + "\n");
-					} else if (input == "sl!") {
-						Sys.print("---------SINGLE-LINE MODE---------\n");
+					} else if (input == "default!") {
+						Sys.println("---------SINGLE-LINE MODE---------");
 						break;
 					} else if (input == "clear!") {
 						code = "";
-						Sys.print("---------MULTI-LINE MODE---------\n");
+						Sys.println("---------MULTI-LINE MODE---------");
 					} else {
 						code += "\n" + input;
+					}
+				}
+			} else if (input == "ast!") {
+				Sys.println("---------ABSTRACT SYNTAX TREE MODE---------");
+				while (true) {
+					Sys.print("  >> ");
+					var input = Sys.stdin().readLine();
+					if (input == "default!") {
+						Sys.println("---------SINGLE-LINE MODE---------");
+						break;
+					}
+					try {
+						Sys.println(PrettyPrinter.printParserAst(Parser.parse(Lexer.lex(input))));
 					}
 				}
 			} else {

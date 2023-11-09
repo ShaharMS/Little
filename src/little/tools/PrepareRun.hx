@@ -176,6 +176,7 @@ class PrepareRun {
 		Little.plugin.registerSign("+", {
 			rhsAllowedTypes: [TYPE_FLOAT, TYPE_INT, TYPE_STRING],
 			lhsAllowedTypes: [TYPE_FLOAT, TYPE_INT, TYPE_STRING],
+			allowedTypeCombos: [{lhs: TYPE_STRING, rhs: TYPE_DYNAMIC}, {lhs: TYPE_DYNAMIC, rhs: TYPE_STRING}],
 			callback: (lhs, rhs) -> {
 				var l = Conversion.toHaxeValue(lhs),
 					r = Conversion.toHaxeValue(rhs);

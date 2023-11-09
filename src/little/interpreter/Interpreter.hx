@@ -778,7 +778,6 @@ class Interpreter {
         if (pre.length <= 3) return pre; // No need to reorder, nothing can be out of order
 
 		// First, wrap user-defined & high priority operators
-		
         var post = [];
         var i = 0;
         while (i < pre.length) {
