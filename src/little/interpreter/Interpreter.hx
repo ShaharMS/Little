@@ -2,6 +2,7 @@ package little.interpreter;
 
 import haxe.CallStack;
 import little.tools.Layer;
+import little.tools.PrettyPrinter;
 import little.parser.Tokens.ParserTokens;
 import little.Keywords.*;
 import little.interpreter.memory.MemoryTree;
@@ -732,6 +733,7 @@ class Interpreter {
         if (memory == null) memory = Interpreter.memory; // If no memory map is given, use the base one.
 
         parts = forceCorrectOrderOfOperations(parts);
+		PrettyPrinter.printParserAst(parts);
         var evaluatedValue:ParserTokens = null, currentSign = "", rhs:ParserTokens = null;
 
         for (token in parts) {

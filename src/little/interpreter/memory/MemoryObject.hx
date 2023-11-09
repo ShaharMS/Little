@@ -21,10 +21,10 @@ class MemoryObject {
             // Allow side-effect free code running
         if (params == null) {
             var t = Interpreter.getValueType(val);
-            if ((type == null || type.equals(NullValue)) && t != null) {
+            if (typeOnNextAssign) {
                 type = t;
-
                 if (props.underlying != null) props.underlying.objType = Interpreter.stringifyTokenValue(t);
+				typeOnNextAssign = false;
             }
         }
         value = valueSetter(val);
@@ -46,7 +46,7 @@ class MemoryObject {
 
     @:optional public var props:MemoryTree;
     @:optional public var params(default, set):Array<ParserTokens> = null;
-    @:optional public var type:ParserTokens = null;
+    @:optional public var type:ParserTokens = NullValue;
     @:optional public var external:Bool = false;
     @:optional public var condition:Bool = false;
 
@@ -66,10 +66,17 @@ class MemoryObject {
         return params = parameters.filter(p -> switch p {case SplitLine | SetLine(_): false; case _: true;});
     }
 
-    public function new(?value:ParserTokens, ?props:MemoryTree, ?params:Array<ParserTokens>, ?type:ParserTokens = NullValue, ?external:Bool, ?condition:Bool, ?nonStatic:Bool, ?parent:MemoryObject, ?doc:String) {
-        this.value = value == null ? NullValue : value;
+	/**
+		When this object is started with no value, look for type in first assignation only.
+	**/
+	var typeOnNextAssign:Bool;
+
+    public function new(?value:ParserTokens = NullValue, ?props:MemoryTree, ?params:Array<ParserTokens>, ?type:ParserTokens = NullValue, ?external:Bool, ?condition:Bool, ?nonStatic:Bool, ?parent:MemoryObject, ?doc:String) {
+        if (this.value.equals(NullValue) && type.equals(NullValue)) typeOnNextAssign = true;
+		
+		this.value = value;
         this.params = params;
-        this.type = type == null ? Interpreter.getValueType(this.value) : type;
+        this.type = (type.equals(NullValue) && !value.equals(NullValue)) ? Interpreter.getValueType(this.value) : type;
         this.external = external == null ? false : external;
         this.condition = condition == null ? false : condition;
         this.nonStatic = nonStatic == null ? true : nonStatic;
@@ -175,7 +182,7 @@ class MemoryObject {
                 paramsDecl.push(value);
                 body = paramsDecl;
             }
-            return Interpreter.runTokens(body, null, null, null);
+            return Actions.run(body);
         }
     }
     

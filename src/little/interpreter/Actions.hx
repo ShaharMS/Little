@@ -135,7 +135,10 @@ class Actions {
             return error('No Such Condition:  `${name.value()}`');
         } 
         else {
+			trace(name.value(), memory.get(name.value()));
             var o = memory.get(name.value()).use(PartArray([conditionParams, body]));
+			trace(o);
+			if (o.equals(NullValue)) return o;
             if (o.getName() == "ErrorMessage") return error(o.value());
             return o;
         }
@@ -145,19 +148,15 @@ class Actions {
     }
 
     public static function write(assignees:Array<ParserTokens>, value:ParserTokens, ?type:ParserTokens):ParserTokens {
-        var v = null;
+        var v = evaluate(value);
         for (a in assignees) {
             var assignee = accessObject(a, memory);
             if (assignee == null) continue;
             if (assignee.params != null)
                 assignee.value = value;
             else {
-                if (v == null)
-                    v = evaluate(value);
-                    trace(value, v, getValueType(v));
-                if (v.getName() == "ErrorMessage") {
-                    assignee.value = NullValue;
-                } else {
+                trace(value, v, getValueType(v));
+                if (v.getName() != "ErrorMessage") {
                     assignee.value = v;
                     trace(assignee.value, assignee.type);
                 }
@@ -170,6 +169,7 @@ class Actions {
     }
 
     public static function call(name:ParserTokens, params:ParserTokens):ParserTokens {
+		trace(params);
         if (memory.get(name.value()) == null) {
             return error('No Such Function: `${name.value()}`');
         } 
@@ -304,16 +304,10 @@ class Actions {
         }
     }
 
-    public static function calculate(token:ParserTokens):ParserTokens {
-        return switch token {
-            case Number(_) | Decimal(_) | Characters(_) | TrueValue | FalseValue | NullValue| Sign(_): token;
-            case Block(body, t): type(run(body), t);
-            case Expression(parts, t): type(Interpreter.evaluateExpressionParts(parts, memory), t);
-            case Read(name): read(name);
-            case Identifier(_): read(token);
-            case FunctionCall(name, params): call(name, params);
-            case Write(assignees, value, type): write(assignees, value, type);
-            case _: evaluate(token);
-        }
+    public static function calculate(parts:Array<ParserTokens>):ParserTokens {
+        
+		// First - force correct order of operations
+
+
     }
 }

@@ -1,5 +1,6 @@
 package little;
 
+import little.interpreter.Actions;
 import little.interpreter.Operators;
 import little.tools.Plugins;
 import haxe.extern.EitherType;
@@ -90,7 +91,7 @@ class Little {
             PrepareRun.addConditions();
             PrepareRun.addProps();
         }
-        Interpreter.interpret(Parser.parse(Lexer.lex(code)), {});
+        Actions.run(Parser.parse(Lexer.lex(code)));
         if (debug != null) Little.debug = previous;
     }
 

@@ -1,5 +1,6 @@
 package little.tools;
 
+import little.interpreter.Actions;
 import vision.tools.MathTools;
 import little.interpreter.memory.MemoryTree;
 import little.lexer.Lexer;
@@ -86,8 +87,8 @@ class PrepareRun {
 
 	public static function addFunctions() {
 		Little.plugin.registerFunction(PRINT_FUNCTION_NAME, null, [Variable(Identifier("item"), null)], (params) -> {
-			var t = if (params[0].getParameters()[0].length == 1) params[0].getParameters()[0][0] else params[0];
-			var eval = Interpreter.evaluate(t);
+			trace(params);
+			var eval = Interpreter.evaluate(params[0]);
 			Runtime.__print(Interpreter.stringifyTokenValue(eval), eval);
 			return NullValue;
 		});
@@ -343,7 +344,7 @@ class PrepareRun {
 			var val = NullValue;
 			var safetyNet = 0;
 			while (Conversion.toHaxeValue(Interpreter.evaluateExpressionParts(params)) && safetyNet < 500000) {
-				val = Interpreter.interpret(body, Interpreter.currentConfig);
+				val = Actions.run(body);
 				safetyNet++;
 			}
 			if (safetyNet >= 500000) {
@@ -468,16 +469,16 @@ class PrepareRun {
 
 			if (from < to) {
 				while (from < to) {
-					val = Interpreter.interpret([
+					val = Actions.run([
 						Write([params[0]], if (from == from.int()) Number("" + from) else Decimal("" + from), null)
-					].concat(body), Interpreter.currentConfig);
+					].concat(body));
 					from += jump;
 				}
 			} else {
 				while (from > to) {
-					val = Interpreter.interpret([
+					val = Actions.run([
 						Write([params[0]], if (from == from.int()) Number("" + from) else Decimal("" + from), null)
-					].concat(body), Interpreter.currentConfig);
+					].concat(body));
 					from -= jump;
 				}
 			}
@@ -496,7 +497,7 @@ class PrepareRun {
 
 			function dispatchAndRemove(set:ParserTokens) {
 				if (Conversion.toHaxeValue(Interpreter.evaluateExpressionParts(params))) {
-					Interpreter.interpret(body, Interpreter.currentConfig);
+					Actions.run(body);
 					handle.setterListeners.remove(dispatchAndRemove);
 				}
 			}
@@ -516,7 +517,7 @@ class PrepareRun {
 
 			function dispatchAndRemove(set:ParserTokens) {
 				if (Conversion.toHaxeValue(Interpreter.evaluateExpressionParts(params))) {
-					Interpreter.interpret(body, Interpreter.currentConfig);
+					Actions.run(body);
 				}
 			}
 			handle.setterListeners.push(dispatchAndRemove);

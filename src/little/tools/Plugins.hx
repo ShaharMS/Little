@@ -242,7 +242,7 @@ class Plugins {
             ``` 
             define value, define index as Number
             ```
-    	@param callback The actual function, which gets an array of the given parameters as little tokens, and returns a value based on them
+    	@param callback The actual function, which gets an array of the given parameters as little tokens (specifically of type `Expression`, 0 or more of them), and returns a value based on them
     **/
     public static function registerFunction(actionName:String, ?actionModuleName:String, expectedParameters:EitherType<String, Array<ParserTokens>>, callback:Array<ParserTokens> -> ParserTokens) {
         var params = if (expectedParameters is String) {
@@ -559,6 +559,9 @@ typedef ItemInfo = {
 
 typedef FunctionInfo = {
     expectedParameters:EitherType<String, Array<ParserTokens>>,
+    /**
+    	@param MemoryObject the object
+    **/
     callback:(MemoryObject, Array<ParserTokens>) -> ParserTokens, //parent, params to value
     ?allowWriting:Bool,
     ?type:String

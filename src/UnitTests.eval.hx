@@ -1,5 +1,7 @@
 package;
 
+import sys.io.File;
+import sys.FileSystem;
 import little.tools.PrettyPrinter;
 import little.tools.Plugins.ItemInfo;
 import eval.luv.Stream;
@@ -54,9 +56,14 @@ class UnitTests {
 				Sys.print('        - $RESET$WHITE Stdout:\n            ${Runtime.stdout.output.replace("\n", "\n            ")}$RESET\n');
 			}
 
-			Sys.sleep(1);
+			if (!result.success) {
+				Sys.exit(1);
+			}
+			Sys.sleep(0.2);
 			i++;
 		}
+
+		//File.saveContent('unit_tests.md');
 	}
 
 
@@ -91,10 +98,11 @@ class UnitTests {
 	public static function test3():UnitTestResult {
 		var code = "action x1() = { print(1) }\naction x2(define x as Number) = { print(x) }\naction x21(define x as Number) = { return x }\naction x3() = { print(1 + x21(5)) }\n\nx1(), x2(5), x3()";
 		Little.run(code);
-		var result = Characters(Runtime.stdout.stdoutTokens.map(x -> '${x.getParameters()[0]}').join(", "));
+		var result = PartArray(Runtime.stdout.stdoutTokens);
+		var exp = PartArray([Number("1"), Number("5"), Number("6")]);
 		return {
 			testName: "Function declaration",
-			success: result.equals(Characters("1, 5, 6")),
+			success: !Lambda.has([for (i in 0...3) Type.enumEq(result.getParameters()[0][i], exp.getParameters()[0][i])], false),
 			returned: result,
 			expected: Characters("1, 5, 6"),
 			code: code
@@ -135,7 +143,7 @@ class UnitTests {
 		var exp = PartArray([TrueValue, Characters("i has changed"), Characters("i is 6"), Characters("i has changed")]);
 		return {
 			testName: "Events and conditionals",
-			success: !Lambda.has([for (i in 0...10) Type.enumEq(exp.getParameters()[0][i], result.getParameters()[0][i])], false),
+			success: !Lambda.has([for (i in 0...4) Type.enumEq(exp.getParameters()[0][i], result.getParameters()[0][i])], false),
 			returned: result,
 			expected: exp,
 			code: code
