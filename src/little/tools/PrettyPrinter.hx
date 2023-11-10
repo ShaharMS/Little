@@ -1,5 +1,7 @@
 package little.tools;
 
+import vision.algorithms.Radix;
+import little.interpreter.Operators;
 import little.interpreter.Interpreter;
 using StringTools;
 using little.tools.TextTools;
@@ -232,5 +234,25 @@ class PrettyPrinter {
 		}
 
 		return s;
+	}
+
+	public static function prettyPrintOperatorPriority(priority:Map<Int, Array<{sign:String, side:OperatorType}>>) {
+		var sortedKeys = Radix.sort([for (x in priority.keys()) x]);
+		
+		var string = "";
+
+		for (key in sortedKeys) {
+			string += '$key: (';
+			for (obj in priority[key]) {
+				if (obj.side == LHS_RHS) string += '_${obj.sign}_';
+				else if (obj.side == LHS_ONLY) string += '_${obj.sign}';
+				else if (obj.side == RHS_ONLY) string += '${obj.sign}_';
+
+				string += ', ';
+			}
+			string = string.replaceLast(', ', ')') + '\n';
+		}
+
+		return string;
 	}
 }

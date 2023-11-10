@@ -406,8 +406,6 @@ class Plugins {
 
     public static function registerSign(symbol:String, info:SignInfo) {
 
-		if (@:privateAccess Little.operators.isUserDefined) Little.operators.USER_DEFINED.push(symbol);
-
         if (info.operatorType == null || info.operatorType == LHS_RHS) {
             if (info.callback == null && info.singleSidedOperatorCallback != null) 
                 throw new ArgumentException("callback", 'Incorrect callback given for operator type ${info.operatorType ?? LHS_RHS} - `singleSidedOperatorCallback` was given, when `callback` was expected');
@@ -580,5 +578,9 @@ typedef SignInfo = {
     ?allowedTypeCombos:Array<{lhs:String, rhs:String}>,
     ?callback:(ParserTokens, ParserTokens) -> ParserTokens,
     ?singleSidedOperatorCallback:ParserTokens -> ParserTokens,
-    ?operatorType:OperatorType
+    ?operatorType:OperatorType,
+	/**
+		@see Operators.setPriority
+	**/
+	?priority:String,
 }

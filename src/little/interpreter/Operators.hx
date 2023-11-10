@@ -1,5 +1,6 @@
 package little.interpreter;
 
+import vision.algorithms.Radix;
 import little.tools.PrettyPrinter;
 import little.lexer.Lexer;
 import haxe.extern.EitherType;
@@ -58,35 +59,39 @@ class Operators {
 
 	/**
 		Format of parameter `opPriority`:
+
+		### Notice
+		 - When using relative (`before`/`after`) positions, make sure the referenced operator exists. otherwise, it won't be inserted at all...
 		
 		| Option | Meaning | Example |
 		| :--- | :--- | :---: |
 		| `<index>` | Inserts the operator at the specified priority level. | `2`, `1`, `5` |
 		| `first` | Inserts the operator at the first priority level (index `0`). | `first` |
 		| `last` | Inserts the operator at the last priority level (index `priority.length - 1`). | `last` |
-		| `before _<sign>_` | Inserts the operator before the sign. the sign is surrounded by underscores, which means the sign is of type `LHS_RHS`.| `before _+_`, `before _*_`|
-		| `after <sign>` | Inserts the operator after the sign. the sign is **not** surrounded by **any underscores**, which means the sign is of type `LHS_RHS`.| `after ^`, `after /`|
-		| `before _<sign>` | Inserts the operator before the sign. the sign is surrounded by underscores, which means the sign is of type `LHS_ONLY`.| `before _!`, `before _--`|
-		| `after <sign>_` | Inserts the operator after the sign. the has only one underscore to the right of it, which means the sign is of type `RHS_ONLY`.| `after -_`, `after +-`|
-		**/
+		| `with _<sign>_` | Inserts the operator at the same priority level as the given sign. The sign is surrounded by underscores, which means the sign is of type `LHS_RHS`.| `with _+_`, `with _*_`|
+		| `between <sign1> <sign2>` | Inserts the operator between the two signs. the signs are **not** surrounded by **any underscores**, which means these signs are of type `LHS_RHS`.| `between ^ +`, ` between * -`|
+		| `before _<sign>` | Inserts the operator before the sign. the sign is surrounded by underscores, which means the sign is of type `LHS_ONLY`.| `before _!`|
+		| `after <sign>_` | Inserts the operator after the sign. the has only one underscore to the right of it, which means the sign is of type `RHS_ONLY`.| `after -_`, `after +_`|
+
+	**/
 	public static function setPriority(op:String, type:OperatorType, opPriority:String) {
 		var obj = {sign: op, side: type};
 		if (opPriority == "first") {
-			if (priority[0] == null) priority[0] = [];
-			priority[0].push(obj);
+			if (priority[-1] == null) priority[-1] = [];
+			priority[-1].push(obj);
 		}
 		else if (opPriority == "last") {
 			var i = -1;
 			for (key in priority.keys()) if (i < key) i = key;
-			if (priority[i] == null) priority[i + 1] = [];
+			if (priority[i + 1] == null) priority[i + 1] = [];
 			priority[i + 1].push(obj);
 		} else if (~/[0-9]+/.match(opPriority)) {
 			var p = Std.parseInt(opPriority);
 			if (priority[p] == null) priority[p] = [];
 			priority[p].push(obj);
-		} else if (opPriority.startsWith("before") || opPriority.startsWith("after")) {
+		} else if (opPriority.startsWith("before") || opPriority.startsWith("after") || opPriority.startsWith("with")) {
 			var destinationOp, opSide;
-			var signPos = opPriority.remove("before").remove("after").trim();
+			var signPos = opPriority.remove("before").remove("after").remove("with").trim();
 			if (signPos.countOccurrencesOf("_") != 1) {
 				destinationOp = signPos.replace("_", "");
 				opSide = LHS_RHS;
@@ -105,13 +110,34 @@ class Operators {
 					if (opPriority.startsWith("before")) {
 						if (priority[key - 1] == null) priority[key - 1] = [];
 						priority[key - 1].push(obj);
-					} else {
+					} else if (opPriority.startsWith("after")) {
 						if (priority[key + 1] == null) priority[key + 1] = [];
 						priority[key + 1].push(obj);
+					} else {
+						// if inserted on the same priority level, and a priority level already exists since the 
+						// sign was found on it, we can assume priority[key] already exists
+						priority[key].push(obj);
 					}
-					return;
+					break;
 				}
 			}			
+		} else if (opPriority.startsWith("between")) {
+			var signPos = opPriority.remove("between").trim();
+			var signs = signPos.split(" ");
+
+		}
+
+		// We're working on a map, and negative indices can be used as keys. we need to make sure that
+		// all indices are positive, while keeping the order.
+		// More than that, we need the list to start at 0, so if theres no 0 in the list, we need to move everything downwards.
+		var minimumKey = Radix.sort([ for (x in priority.keys()) x])[0];
+		if (minimumKey != 0) {
+			var diff = 0 - minimumKey;
+			var priorityCopy = new Map<Int, Array<{sign:String, side:OperatorType}>>();
+			for (key => value in priority) {
+				priority[key + diff] = value;
+			}
+			priority = priorityCopy;
 		}
 	}
 
@@ -179,6 +205,22 @@ class Operators {
 			return ErrorMessage('Operator $op is used incorrectly - should not appear between two values, only to the left of one of them ($op${PrettyPrinter.stringify(rhs)} or $op${PrettyPrinter.stringify(lhs)})');
 		else
 			return ErrorMessage('Operator $op does not exist. did you make a typo?');
+	}
+
+
+	private static function signPosToObject(signPos:String):{sign:String, side:OperatorType} {
+		var destinationOp, opSide;
+			if (signPos.countOccurrencesOf("_") != 1) {
+				destinationOp = signPos.replace("_", "");
+				opSide = LHS_RHS;
+			} else if (signPos.startsWith("_")) {
+				destinationOp = signPos.replace("_", "");
+				opSide = LHS_ONLY;
+			} else {
+				destinationOp = signPos.replace("_", "");
+				opSide = RHS_ONLY;
+			}
+			return {sign: destinationOp, side: opSide};		
 	}
 }
 

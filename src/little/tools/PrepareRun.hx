@@ -106,8 +106,6 @@ class PrepareRun {
 
 	public static function addSigns() {
 
-		Little.operators.isUserDefined = false;
-
 		// --------------------------------------------------
 		// ------------------------RHS-----------------------
 		// --------------------------------------------------
@@ -115,6 +113,7 @@ class PrepareRun {
 		Little.plugin.registerSign("+", {
 			rhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
 			operatorType: RHS_ONLY,
+			priority: "last",
 			singleSidedOperatorCallback: (rhs) -> {
 				var r = Conversion.toHaxeValue(rhs);
 				if (r is Int)
@@ -126,6 +125,7 @@ class PrepareRun {
 		Little.plugin.registerSign("-", {
 			rhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
 			operatorType: RHS_ONLY,
+			priority: "with +_",
 			singleSidedOperatorCallback: (rhs) -> {
 				var r = Conversion.toHaxeValue(rhs);
 				if (r is Int)
@@ -137,17 +137,18 @@ class PrepareRun {
 		Little.plugin.registerSign("√", {
 			rhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
 			operatorType: RHS_ONLY,
+			priority: "first",
 			singleSidedOperatorCallback: (rhs) -> {
 				var r:Float = Conversion.toHaxeValue(rhs);
 
 				return Decimal(Math.sqrt(r) + "");
 			}
 		});
-		Little.operators.HIGH_PRIORITY.push("√");
 
 		Little.plugin.registerSign("!", {
 			rhsAllowedTypes: [TYPE_BOOLEAN],
 			operatorType: RHS_ONLY,
+			priority: "with +_",
 			singleSidedOperatorCallback: (rhs) -> {
 				var r = Conversion.toHaxeValue(rhs);
 
@@ -162,13 +163,13 @@ class PrepareRun {
 		Little.plugin.registerSign("!", {
 			lhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
 			operatorType: LHS_ONLY,
+			priority: "with √_",
 			singleSidedOperatorCallback: (lhs) -> {
 				var l = Conversion.toHaxeValue(lhs);
 
 				return Decimal(MathTools.factorial(l) + "");
 			}
 		});
-		Little.operators.HIGH_PRIORITY.push("!");
 
 		// --------------------------------------------------
 		// ----------------------STANDARD--------------------
@@ -178,6 +179,7 @@ class PrepareRun {
 			rhsAllowedTypes: [TYPE_FLOAT, TYPE_INT, TYPE_STRING],
 			lhsAllowedTypes: [TYPE_FLOAT, TYPE_INT, TYPE_STRING],
 			allowedTypeCombos: [{lhs: TYPE_STRING, rhs: TYPE_DYNAMIC}, {lhs: TYPE_DYNAMIC, rhs: TYPE_STRING}],
+			priority: "with +_",
 			callback: (lhs, rhs) -> {
 				var l = Conversion.toHaxeValue(lhs),
 					r = Conversion.toHaxeValue(rhs);
@@ -193,6 +195,7 @@ class PrepareRun {
 			rhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
 			lhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
 			allowedTypeCombos: [{lhs: TYPE_STRING, rhs: TYPE_STRING}],
+			priority: "with +",
 			callback: (lhs, rhs) -> {
 				var l:Dynamic = Conversion.toHaxeValue(lhs),
 					r:Dynamic = Conversion.toHaxeValue(rhs);
@@ -242,7 +245,6 @@ class PrepareRun {
 				return Decimal(Math.pow(l, r) + "");
 			}
 		});
-		Little.operators.HIGH_PRIORITY.push("^");
 
 		Little.plugin.registerSign("√", {
 			rhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
