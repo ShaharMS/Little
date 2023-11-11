@@ -11,6 +11,7 @@
         "keyup",
         "MULTICHAR",
         "STRINGIFIER",
+        "stringifiyable",
         "struct",
         "texter",
         "unreferenceable",

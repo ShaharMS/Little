@@ -27,16 +27,31 @@ class Actions {
         Actions.memory = memory;
     }
     
+    /**
+        Raise an error in the program, with the given message.
+        @param message The error message
+        @param layer The layer of the error. see `little.tools.Layer`.
+        @return the error token, as ParserTokens.ErrorMessage(msg:String)
+    **/
     public static function error(message:String, layer:Layer = INTERPRETER):ParserTokens {
         Runtime.throwError(ErrorMessage(message), layer);
         return ErrorMessage(message);
     }
 
+    /**
+        Raise a warning in the program, with the given message. A warning never stops execution.
+        @param message The warning message
+        @param layer The layer of the warning. see `little.tools.Layer`.
+        @return the warning token, as ParserTokens.ErrorMessage(msg:String)
+    **/
     public static function warn(message:String, layer:Layer = INTERPRETER):ParserTokens {
         Runtime.warn(ErrorMessage(message), layer);
         return ErrorMessage(message);
     }
 
+    /**
+        Set the current line of the program
+    **/
     public static function setLine(l:Int) {
         var o = Runtime.line;
         Runtime.line = l;
@@ -44,6 +59,9 @@ class Actions {
         for (listener in Runtime.onLineChanged) listener(o);
     }
 
+    /**
+        Set the current module
+    **/
     public static function setModule(name:String) {
         var o = Runtime.currentModule;
         Runtime.currentModule = name;
@@ -51,10 +69,19 @@ class Actions {
         // Listeners
     }
 
+    /**
+        Split the current line. In other words, create a new line, but keep the old line number.
+    **/
     public static function splitLine() {
         // Listeners
     }
 
+    /**
+        Declare a new variable. That variable will be added to the current working memory. Switch the working memory using `scwm`
+        @param name The name of the variable. Can be any token stringifiyable via `token.value()`.
+        @param type The type of the variable. Can be any token stringifiyable via `token.value()`.
+        @param doc The documentation of the variable. Should be a `ParserTokens.Documentation(doc:String)`
+    **/
     public static function declareVariable(name:ParserTokens, type:ParserTokens, doc:ParserTokens) {
         function access(onObject:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
             switch prop {
@@ -83,7 +110,7 @@ class Actions {
             case _: {
                 if (memory.exists(name.value())) {
                     warn('Variable ${name.value()} already exists. New declaration ignored.');
-                } else memory.set(name.value(), new MemoryObject(NullValue, type != null ? type : NullValue, memory.object, doc.value())); 
+                } else memory.set(name.value(), new MemoryObject(NullValue, type != null ? evaluate(type) : NullValue, memory.object, doc.value())); 
             }
         }
         
@@ -92,6 +119,13 @@ class Actions {
         return read(name);
     }
 
+    /**
+        Declare a new function. That function will be added to the current working memory. Switch the working memory using `scwm`
+        @param name The name of the function. Can be any token stringifiyable via `token.value()`.
+        @param params The parameters of the function. Should be a `ParserTokens.PartArray(parts:Array<ParserTokens>)`
+        @param type The type of the function. Can be any token stringifiyable via `token.value()`.
+        @param doc The documentation of the function. Should be a `ParserTokens.Documentation(doc:String)`
+    **/
     public static function declareFunction(name:ParserTokens, params:ParserTokens, type:ParserTokens, doc:ParserTokens) {
         function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
             switch prop {
@@ -121,7 +155,7 @@ class Actions {
                 
                 if (memory.exists(name.value())) {
                     warn('Function ${name.value()} already exists. New declaration ignored.');
-                } else memory.set(name.value(), new MemoryObject(NullValue, null, params.getParameters()[0], type, memory.object, doc.value())); 
+                } else memory.set(name.value(), new MemoryObject(NullValue, null, params.getParameters()[0], type != null ? evaluate(type) : NullValue, memory.object, doc.value())); 
             }
         }
 
@@ -206,9 +240,13 @@ class Actions {
             var token = body[i];
             if (token == null) {i++; continue;}
             switch token {
-                case SetLine(line): Runtime.line = line;
-                case Module(name): Runtime.currentModule = name;
-                case SplitLine:
+                case SetLine(line): {
+                    setLine(line);
+                }
+                case Module(name): {
+                    setModule(name);
+                }
+                case SplitLine: splitLine();
                 case Variable(name, type, doc): {
                     declareVariable(name, type, doc);
                     returnVal = NullValue;
@@ -255,7 +293,7 @@ class Actions {
         }
 
         switch exp {
-            case Number(_) | Decimal(_) | Characters(_) | TrueValue | FalseValue | NullValue | Sign(_): return exp;
+            case Number(_) | Decimal(_) | Characters(_) | TrueValue | FalseValue | NullValue | Sign(_) | Module(_): return exp;
             case ErrorMessage(msg): {
                 if (!dontThrow) Runtime.throwError(exp, INTERPRETER_VALUE_EVALUATOR);
                 return exp;
@@ -266,10 +304,6 @@ class Actions {
             }
             case SplitLine: {
                 splitLine();
-                return NullValue;
-            }
-            case Module(name): {
-                setModule(name);
                 return NullValue;
             }
             case Expression(parts, _): {

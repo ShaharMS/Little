@@ -50,7 +50,7 @@ enum ParserTokens {
     ExternalCondition(use:(con:Array<ParserTokens>, body:Array<ParserTokens>) -> ParserTokens);
 
     /**
-    	Used for errors
+    	Used for errors & warnings
     **/
     ErrorMessage(msg:String);
 
