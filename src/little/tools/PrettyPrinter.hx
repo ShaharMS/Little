@@ -86,13 +86,12 @@ class PrettyPrinter {
 					if (type != null) title += getTree(type, prefix.copy(), level + 1, true);
 					return title;
 				}
-			case Condition(name, exp, body, type):
+			case Condition(name, exp, body):
 				{
 					var title = '${prefixFA(prefix)}$t$d Condition\n';
 					title += getTree(name, prefix.copy(), level + 1, false);
 					title += getTree(exp, pushIndex(prefix, level), level + 1, false);
-					title += getTree(body, prefix.copy(), level + 1, type == null);
-					title += getTree(type, prefix.copy(), level + 1, true);
+					title += getTree(body, prefix.copy(), level + 1, true);
 					return title;
 				}
 			case Read(name):
@@ -201,9 +200,9 @@ class PrettyPrinter {
 				case SplitLine: s += ", ";
 				case Variable(name, type): s += '$VARIABLE_DECLARATION $name ${if (type != null) '$TYPE_DECL_OR_CAST ${stringify(type)}' else ''}';
 				case Function(name, params, type): s += '$FUNCTION_DECLARATION ${stringify(name)}(${stringify(params)}) ${if (type != null) '$TYPE_DECL_OR_CAST ${stringify(type)}' else ''}';
-				case Condition(name, exp, body, type): 
+				case Condition(name, exp, body): 
 					indent += "	";
-					s += '${stringify(name)} (${stringify(exp)}) \n${stringify(body)} ${if (type != null) '$TYPE_DECL_OR_CAST ${stringify(type)}' else ''}';
+					s += '${stringify(name)} (${stringify(exp)}) \n${stringify(body)}';
 					indent = indent.subtract("	");
 				case Read(name): s += stringify(name);
 				case Write(assignees, value, type): s += [assignees.concat([value]).map(t -> stringify(t)).join(" = ")];

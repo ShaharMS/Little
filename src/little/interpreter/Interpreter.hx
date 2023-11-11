@@ -122,7 +122,7 @@ class Interpreter {
                         }
                     }
                 }
-                case Condition(name, exp, body, type): {
+                case Condition(name, exp, body): {
                     if (memory.get(stringifyTokenValue(name)) == null) {
                         Runtime.throwError(returnVal = ErrorMessage('No Such Condition:  `${stringifyTokenValue(name)}`'));
                     } 
@@ -267,7 +267,7 @@ class Interpreter {
                 if (memory.get(stringifyTokenValue(name)) == null) return evaluate(ErrorMessage('No Such Function:  `${stringifyTokenValue(name)}`'));
                 return evaluate(memory.get(stringifyTokenValue(name)).use(params), memory, dontThrow);
             }
-            case Condition(name, exp, body, type): {
+            case Condition(name, exp, body): {
                 if (memory.get(stringifyTokenValue(name)) == null) {
                     return evaluate(ErrorMessage('No Such Condition:  `${stringifyTokenValue(name)}`'), memory, dontThrow);
                 } 
@@ -644,7 +644,7 @@ class Interpreter {
             case PartArray(parts): {
                 return [for (p in parts) stringifyTokenValue(evaluate(p))].join(","); 
             }
-            case PropertyAccess(_, _) | Condition(_, _, _, _)  | TypeDeclaration(_): {
+            case PropertyAccess(_, _) | Condition(_, _, _)  | TypeDeclaration(_): {
                 return stringifyTokenValue(evaluate(token, memory));
             }
             case External(_): return "External Function/Variable";
@@ -701,7 +701,7 @@ class Interpreter {
             case PropertyAccess(name, property): {
                 return stringifyTokenIdentifier(name);
             }
-            case Condition(name, exp, body, type): {
+            case Condition(name, exp, body): {
                 return stringifyTokenIdentifier(name);
             }
             case TypeDeclaration(value, type): {

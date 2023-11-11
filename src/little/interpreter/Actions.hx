@@ -164,7 +164,13 @@ class Actions {
         return read(name);
     }
 
-    public static function condition(name:ParserTokens, conditionParams:ParserTokens, body:ParserTokens, ?type:ParserTokens):ParserTokens {
+	/**
+		Calls a condition. The condition's `body` is repeated `0` to `n` times, depending on the condition's `conditionParams`.
+		@param name The name of the condition. Can be any token stringifiyable via `token.value()`.
+		@param conditionParams The parameters of the condition. Should be either a `ParserTokens.PartArray(parts:Array<ParserTokens>)`. **Note** - any `ParserToken` with a single, `Array<ParserToken>` parameter should work too (`Expression`, `Block`)
+		@param body The body of the condition. Should be a `Block(body:Array<ParserTokens>, type:ParserTokens);`
+		**/
+    public static function condition(name:ParserTokens, conditionParams:ParserTokens, body:ParserTokens):ParserTokens {
         if (memory.get(name.value()) == null) {
             return error('No Such Condition:  `${name.value()}`');
         } 
@@ -255,8 +261,8 @@ class Actions {
                     declareFunction(name, params, type, doc);
                     returnVal = NullValue;
                 }
-                case Condition(name, exp, body, type): {
-                    returnVal = condition(name, exp, body, type);
+                case Condition(name, exp, body): {
+                    returnVal = condition(name, exp, body);
                 }
                 case Write(assignees, value, type): {
                     returnVal = write(assignees, value, type);
@@ -324,7 +330,7 @@ class Actions {
             case Write(assignees, value, type): return write(assignees, value, type);
             case Read(name): return read(name);
             case FunctionCall(name, params): return call(name, params);
-            case Condition(name, exp, body, type): return condition(name, exp, body, type);
+            case Condition(name, exp, body): return condition(name, exp, body);
             case Variable(name, type, doc): return declareVariable(name, type, doc);
             case Function(name, params, type, doc): return declareFunction(name, params, type, doc);
             case External(_): return Characters("External Function/Variable");
