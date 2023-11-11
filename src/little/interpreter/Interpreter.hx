@@ -131,7 +131,7 @@ class Interpreter {
                         if (returnVal.getName() == "ErrorMessage") Runtime.throwError(returnVal);
                     }
                 }
-                case Write(assignees, value, type): {
+                case Write(assignees, value): {
                     var v = null;
                     for (a in assignees) {
                         var assignee = accessObject(a);
@@ -238,7 +238,7 @@ class Interpreter {
                     return val;
                 }
             } 
-            case Write(assignees, value, type): {
+            case Write(assignees, value): {
                 var v = null;
                 for (a in assignees) {
                     var assignee = accessObject(a);
@@ -630,7 +630,7 @@ class Interpreter {
                 var str = stringifyTokenValue(name);
                 return stringifyTokenValue(if (memory.get(str) != null) memory.get(str).use(params) else ErrorMessage('No Such Function: `$str`'));
             }
-            case Write(_, value, _): {
+            case Write(_, value): {
                 return stringifyTokenValue(value);
             }
             case Variable(name, type, doc): {
@@ -686,7 +686,7 @@ class Interpreter {
                 var str = stringifyTokenValue(name);
                 return stringifyTokenIdentifier(if (memory.get(str) != null) memory.get(str).use(params) else ErrorMessage('No Such Function: `$str`'));
             }
-            case Write(assignees, _, _): {
+            case Write(assignees, _): {
                 return stringifyTokenIdentifier(assignees[0]);
             }
             case Variable(name, type, doc): {

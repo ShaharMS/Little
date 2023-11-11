@@ -169,7 +169,7 @@ class Actions {
 		@param name The name of the condition. Can be any token stringifiyable via `token.value()`.
 		@param conditionParams The parameters of the condition. Should be either a `ParserTokens.PartArray(parts:Array<ParserTokens>)`. **Note** - any `ParserToken` with a single, `Array<ParserToken>` parameter should work too (`Expression`, `Block`)
 		@param body The body of the condition. Should be a `Block(body:Array<ParserTokens>, type:ParserTokens);`
-		**/
+	**/
     public static function condition(name:ParserTokens, conditionParams:ParserTokens, body:ParserTokens):ParserTokens {
         if (memory.get(name.value()) == null) {
             return error('No Such Condition:  `${name.value()}`');
@@ -187,7 +187,13 @@ class Actions {
 
     }
 
-    public static function write(assignees:Array<ParserTokens>, value:ParserTokens, ?type:ParserTokens):ParserTokens {
+    /**
+		Assign a value to multiple variables/functions/types.
+    	@param assignees The variables/functions/types to assign to. Should be a `ParserTokens.Variable(name:ParserTokens, type:ParserTokens, doc:ParserTokens)` or `ParserTokens.Function(name:ParserTokens, params:ParserTokens, type:ParserTokens, doc:ParserTokens)`
+    	@param value The value to assign. Can be any token which has a non-void value (not `ParserTokens.SplitLine`, `ParserTokens.SetLine(line:Int)`...)
+    	@return The value given, evaluated using `Actions.evaluate(value)`
+    **/
+    public static function write(assignees:Array<ParserTokens>, value:ParserTokens):ParserTokens {
         var v = evaluate(value);
         for (a in assignees) {
             var assignee = accessObject(a, memory);
@@ -205,9 +211,14 @@ class Actions {
 
         // Listeners
 
-        return v != null ? v : value;
+        return v;
     }
 
+	/**
+		Calls a function and returns the result using `params`.
+		@param name The name of the function. Can be any token stringifiyable via `token.value()`.
+		@param params The parameters of the function. Should be a `ParserTokens.PartArray(parts:Array<ParserTokens>)`
+	**/
     public static function call(name:ParserTokens, params:ParserTokens):ParserTokens {
 		trace(params);
         if (memory.get(name.value()) == null) {
@@ -220,11 +231,25 @@ class Actions {
         }
     }
 
+	/**
+		Reads the value of a variable/function. When reading a function, the body is returned as a `ParserTokens.Block(body:Array<ParserTokens>, type:ParserTokens)`.
+		@param name The name of the variable/function. Should be one of `ParserTokens.Identifier(name:String)`, `ParserTokens.Read(name:String)` or `ParserTokens.PropertyAccess(name:ParserTokens, property:ParserTokens)`
+		@return The value of the variable/function
+	**/
     public static function read(name:ParserTokens):ParserTokens {
+		if (name.getName() == "PropertyAccess") {
+			return evaluate(name);
+		}
         var word = name.identifier();
         return evaluate(if (memory.get(word) != null) memory.get(word).value else ErrorMessage('No Such Variable: `$word`'));
     }
 
+	/**
+		Casts a value to a type
+		@param value The value to cast. Can be any token which has a non-void value (not `ParserTokens.SplitLine`, `ParserTokens.SetLine(line:Int)`...)
+		@param type The type to cast to. Can be any token which resolves to `ParserTokens.Module(name:String)`
+		@return The value given, casted to the type.
+	**/
     public static function type(value:ParserTokens, type:ParserTokens):ParserTokens {
         var val = evaluate(value);
         var valT = getValueType(val);
@@ -238,6 +263,11 @@ class Actions {
         }
     }
 
+	/**
+		Runs the tokens and returns the result
+		@param body The tokens to run
+		@return The result of the tokens
+	**/
     public static function run(body:Array<ParserTokens>):ParserTokens {
         var returnVal:ParserTokens = null;
 
@@ -264,8 +294,8 @@ class Actions {
                 case Condition(name, exp, body): {
                     returnVal = condition(name, exp, body);
                 }
-                case Write(assignees, value, type): {
-                    returnVal = write(assignees, value, type);
+                case Write(assignees, value): {
+                    returnVal = write(assignees, value);
                 }
                 case FunctionCall(name, params): {
                     returnVal = call(name, params);
@@ -327,7 +357,7 @@ class Actions {
                 return evaluate(if (memory.get(word) != null) memory.get(word).value else ErrorMessage('No Such Variable: `$word`'), dontThrow);
             }
             case TypeDeclaration(value, t): return type(value, t);
-            case Write(assignees, value, type): return write(assignees, value, type);
+            case Write(assignees, value): return write(assignees, value);
             case Read(name): return read(name);
             case FunctionCall(name, params): return call(name, params);
             case Condition(name, exp, body): return condition(name, exp, body);
@@ -344,6 +374,23 @@ class Actions {
         }
     }
 
+	/**
+		Calculates the result of a given expression. An "alternative" to `Actions.run()`, 
+		but instead of having code running and memory writing capabilities, it's capable of 
+		calculating complex equations of different types. example:
+
+		| Function | Input | Result | Process |
+		|:---: | :--- | --- | --- |
+		| 				  		| `1 + 1` 			| `1` 		| picks up the last token. |
+		| `Actions.run()` 		| `(2 + 2)` 		| `4` 		| picks up the last token. its an expression, so it's evaluated |
+		|						| `3 + (5 * 2)!` 	| `!` 		| picks up the last token. |
+		| --------------------- | ----------------- | --------- | -------------------------------------------------------------- |
+		|  						| `1 + 1` 			| `2` 		| evaluates all tokens and calculates the relations between them |
+		| `Actions.calculate()` | `(2 + 2)` 		| `4` 		| evaluates all tokens and calculates the relations between them |
+		| 						| `3 + (5 * 2)!` 	| `3628803` | evaluates all tokens and calculates the relations between them |
+		@param parts The parts of the expression
+		@return The result of the expression
+	**/
     public static function calculate(parts:Array<ParserTokens>):ParserTokens {
         
 		// First - force correct order of operations

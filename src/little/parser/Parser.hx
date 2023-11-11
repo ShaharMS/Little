@@ -606,7 +606,7 @@ class Parser {
                     value = if (currentAssignee.length == 1) currentAssignee[0] else Expression(currentAssignee, null);
                     var fValue = mergeWrites([value]);
                     var v = if (fValue.length == 1) fValue[0] else Expression(fValue, null);
-                    post.push(Write(assignees, v, null));
+                    post.push(Write(assignees, v));
                     potentialAssignee = null;
                 }
                 case Expression(parts, type): {
@@ -699,7 +699,7 @@ class Parser {
                 case Return(value, type): post.unshift(Return(mergeValuesWithTypeDeclarations([value])[0], mergeValuesWithTypeDeclarations([type])[0]));
                 case PartArray(parts): post.unshift(PartArray(mergeValuesWithTypeDeclarations(parts)));
                 case FunctionCall(name, params): post.unshift(FunctionCall(mergeValuesWithTypeDeclarations([name])[0], mergeValuesWithTypeDeclarations([params])[0]));
-                case Write(assignees, value, type): post.unshift(Write(mergeValuesWithTypeDeclarations(assignees), mergeValuesWithTypeDeclarations([value])[0], mergeValuesWithTypeDeclarations([type])[0]));
+                case Write(assignees, value): post.unshift(Write(mergeValuesWithTypeDeclarations(assignees), mergeValuesWithTypeDeclarations([value])[0]));
                 case PropertyAccess(name, property): post.unshift(PropertyAccess(mergeValuesWithTypeDeclarations([name])[0], mergeValuesWithTypeDeclarations([property])[0]));
                 case _: post.unshift(token);
             }
@@ -760,7 +760,7 @@ class Parser {
                 case Return(value, type): post.push(Return(mergeNonBlockBodies([value])[0], mergeNonBlockBodies([type])[0]));
                 case PartArray(parts): post.push(PartArray(mergeNonBlockBodies(parts)));
                 case FunctionCall(name, params): post.push(FunctionCall(mergeNonBlockBodies([name])[0], mergeNonBlockBodies([params])[0]));
-                case Write(assignees, value, type): post.push(Write(mergeNonBlockBodies(assignees), mergeNonBlockBodies([value])[0], mergeNonBlockBodies([type])[0]));
+                case Write(assignees, value): post.push(Write(mergeNonBlockBodies(assignees), mergeNonBlockBodies([value])[0]));
                 case PropertyAccess(name, property): post.push(PropertyAccess(mergeNonBlockBodies([name])[0], mergeNonBlockBodies([property])[0]));
                 case _: post.push(token);
             }
@@ -818,7 +818,7 @@ class Parser {
                 case Return(value, type): post.push(Return(mergeElses([value])[0], mergeElses([type])[0]));
                 case PartArray(parts): post.push(PartArray(mergeElses(parts)));
                 case FunctionCall(name, params): post.push(FunctionCall(mergeElses([name])[0], mergeElses([params])[0]));
-                case Write(assignees, value, type): post.push(Write(mergeElses(assignees), mergeElses([value])[0], mergeElses([type])[0]));
+                case Write(assignees, value): post.push(Write(mergeElses(assignees), mergeElses([value])[0]));
                 case PropertyAccess(name, property): post.push(PropertyAccess(mergeElses([name])[0], mergeElses([property])[0]));
                 case _: post.push(token);
             }

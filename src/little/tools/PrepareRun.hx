@@ -483,14 +483,14 @@ class PrepareRun {
 			if (from < to) {
 				while (from < to) {
 					val = Actions.run([
-						Write([params[0]], if (from == from.int()) Number("" + from) else Decimal("" + from), null)
+						Write([params[0]], if (from == from.int()) Number("" + from) else Decimal("" + from))
 					].concat(body));
 					from += jump;
 				}
 			} else {
 				while (from > to) {
 					val = Actions.run([
-						Write([params[0]], if (from == from.int()) Number("" + from) else Decimal("" + from), null)
+						Write([params[0]], if (from == from.int()) Number("" + from) else Decimal("" + from))
 					].concat(body));
 					from -= jump;
 				}

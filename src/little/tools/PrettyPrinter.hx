@@ -96,9 +96,9 @@ class PrettyPrinter {
 				}
 			case Read(name):
 				return '${prefixFA(prefix)}$t$d Read: $name\n';
-			case Write(assignees, value, type):
+			case Write(assignees, value):
 				{
-					return'${prefixFA(prefix)}$t$d Variable Write\n${getTree(PartArray(assignees), pushIndex(prefix, level), level + 1, false)}${getTree(value, prefix.copy(), level + 1, type == null)}${getTree(type, prefix.copy(), level + 1, true)}';
+					return'${prefixFA(prefix)}$t$d Variable Write\n${getTree(PartArray(assignees), pushIndex(prefix, level), level + 1, false)}${getTree(value, prefix.copy(), level + 1, true)}';
 				}
 			case Sign(value):
 				{
@@ -205,7 +205,7 @@ class PrettyPrinter {
 					s += '${stringify(name)} (${stringify(exp)}) \n${stringify(body)}';
 					indent = indent.subtract("	");
 				case Read(name): s += stringify(name);
-				case Write(assignees, value, type): s += [assignees.concat([value]).map(t -> stringify(t)).join(" = ")];
+				case Write(assignees, value): s += [assignees.concat([value]).map(t -> stringify(t)).join(" = ")];
 				case Identifier(word): s += word;
 				case TypeDeclaration(value, type): s += '$TYPE_DECL_OR_CAST ${stringify(type)}';
 				case FunctionCall(name, params): s += '${stringify(name)}(${stringify(params)})';

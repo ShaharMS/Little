@@ -169,7 +169,7 @@ class MemoryObject {
         } else {
             var paramsDecl = [];
             for (i in 0...given.length) {
-                paramsDecl.push(Write([params[i]], given[i], null));
+                paramsDecl.push(Write([params[i]], given[i]));
             }
             paramsDecl.push(SplitLine);
 

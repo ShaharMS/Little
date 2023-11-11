@@ -12,7 +12,7 @@ enum ParserTokens {
     Condition(name:ParserTokens, exp:ParserTokens, body:ParserTokens);
 
     Read(name:ParserTokens);
-    Write(assignees:Array<ParserTokens>, value:ParserTokens, type:ParserTokens);
+    Write(assignees:Array<ParserTokens>, value:ParserTokens);
 
     Identifier(word:String);
     TypeDeclaration(value:ParserTokens, type:ParserTokens);
