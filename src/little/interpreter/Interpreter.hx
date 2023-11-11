@@ -786,7 +786,7 @@ class Interpreter {
             var token = pre[i];
             switch token {
                 case Sign(sign): {
-					if (!Little.operators.USER_DEFINED.contains(sign) && !Little.operators.HIGH_PRIORITY.contains(sign)) post.push(token);
+					if (true) post.push(token);
                     else if (Operators.standard.exists(sign)){
 						i++;
                     	post.push(Expression([post.pop(), token, pre[i]], null));

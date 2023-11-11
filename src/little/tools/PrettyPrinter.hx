@@ -1,5 +1,6 @@
 package little.tools;
 
+import haxe.ds.ArraySort;
 import vision.algorithms.Radix;
 import little.interpreter.Operators;
 import little.interpreter.Interpreter;
@@ -237,7 +238,8 @@ class PrettyPrinter {
 	}
 
 	public static function prettyPrintOperatorPriority(priority:Map<Int, Array<{sign:String, side:OperatorType}>>) {
-		var sortedKeys = Radix.sort([for (x in priority.keys()) x]);
+		var sortedKeys = [for (x in priority.keys()) x];
+		ArraySort.sort(sortedKeys, (x, y) -> x - y);
 		
 		var string = "";
 

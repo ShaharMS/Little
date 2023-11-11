@@ -211,6 +211,7 @@ class PrepareRun {
 			rhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
 			lhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
 			allowedTypeCombos: [{lhs: TYPE_STRING, rhs: TYPE_INT}],
+			priority: "between + √_",
 			callback: (lhs, rhs) -> {
 				var l:Dynamic = Conversion.toHaxeValue(lhs),
 					r:Dynamic = Conversion.toHaxeValue(rhs);
@@ -225,6 +226,7 @@ class PrepareRun {
 		Little.plugin.registerSign("/", {
 			rhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
 			lhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
+			priority: "with *",
 			callback: (lhs, rhs) -> {
 				var l = Conversion.toHaxeValue(lhs),
 					r = Conversion.toHaxeValue(rhs);
@@ -237,6 +239,7 @@ class PrepareRun {
 		Little.plugin.registerSign("^", {
 			rhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
 			lhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
+			priority: "before *",
 			callback: (lhs, rhs) -> {
 				var l = Conversion.toHaxeValue(lhs),
 					r = Conversion.toHaxeValue(rhs);
@@ -249,6 +252,7 @@ class PrepareRun {
 		Little.plugin.registerSign("√", {
 			rhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
 			lhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
+			priority: "with ^",
 			callback: (lhs, rhs) -> {
 				var l:Float = Conversion.toHaxeValue(lhs),
 					r:Float = Conversion.toHaxeValue(rhs);
@@ -265,24 +269,29 @@ class PrepareRun {
 		Little.plugin.registerSign("&&", {
 			rhsAllowedTypes: [TYPE_BOOLEAN],
 			lhsAllowedTypes: [TYPE_BOOLEAN],
+			priority: "last",
 			callback: (lhs, rhs) -> Conversion.toHaxeValue(lhs) && Conversion.toHaxeValue(rhs) ? TrueValue : FalseValue});
 
 		Little.plugin.registerSign("||", {
 			rhsAllowedTypes: [TYPE_BOOLEAN],
 			lhsAllowedTypes: [TYPE_BOOLEAN],
+			priority: "with &&",
 			callback: (lhs, rhs) -> Conversion.toHaxeValue(lhs) || Conversion.toHaxeValue(rhs) ? TrueValue : FalseValue});
 
 		Little.plugin.registerSign("==", {
+			priority: "last",
 			callback: (lhs, rhs) -> Conversion.toHaxeValue(lhs) == Conversion.toHaxeValue(rhs) ? TrueValue : FalseValue
 		});
 
 		Little.plugin.registerSign("!=", {
+			priority: "with ==",
 			callback: (lhs, rhs) -> Conversion.toHaxeValue(lhs) != Conversion.toHaxeValue(rhs) ? TrueValue : FalseValue
 		});
 
 		Little.plugin.registerSign("^^", {
 			rhsAllowedTypes: [TYPE_BOOLEAN],
 			lhsAllowedTypes: [TYPE_BOOLEAN],
+			priority: "with &&",
 			callback: (lhs, rhs) -> Conversion.toHaxeValue(lhs) != Conversion.toHaxeValue(rhs) ? TrueValue : FalseValue
 		});
 
@@ -290,6 +299,7 @@ class PrepareRun {
 			rhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
 			lhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
 			allowedTypeCombos: [{lhs: TYPE_STRING, rhs: TYPE_STRING}],
+			priority: "with ==",
 			callback: (lhs, rhs) -> {
 				var l:Dynamic = Conversion.toHaxeValue(lhs),
 					r:Dynamic = Conversion.toHaxeValue(rhs);
@@ -303,6 +313,7 @@ class PrepareRun {
 			rhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
 			lhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
 			allowedTypeCombos: [{lhs: TYPE_STRING, rhs: TYPE_STRING}],
+			priority: "with ==",
 			callback: (lhs, rhs) -> {
 				var l:Dynamic = Conversion.toHaxeValue(lhs),
 					r:Dynamic = Conversion.toHaxeValue(rhs);
@@ -316,6 +327,7 @@ class PrepareRun {
 			rhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
 			lhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
 			allowedTypeCombos: [{lhs: TYPE_STRING, rhs: TYPE_STRING}],
+			priority: "with ==",
 			callback: (lhs, rhs) -> {
 				var l:Dynamic = Conversion.toHaxeValue(lhs),
 					r:Dynamic = Conversion.toHaxeValue(rhs);
@@ -329,6 +341,7 @@ class PrepareRun {
 			rhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
 			lhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
 			allowedTypeCombos: [{lhs: TYPE_STRING, rhs: TYPE_STRING}],
+			priority: "with ==",
 			callback: (lhs, rhs) -> {
 				var l:Dynamic = Conversion.toHaxeValue(lhs),
 					r:Dynamic = Conversion.toHaxeValue(rhs);
@@ -337,8 +350,6 @@ class PrepareRun {
 				return l <= r ? TrueValue : FalseValue;
 			}
 		});
-
-		Little.operators.isUserDefined = true;
 	}
 
 	public static function addConditions() {

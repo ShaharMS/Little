@@ -307,7 +307,7 @@ class Actions {
     public static function calculate(parts:Array<ParserTokens>):ParserTokens {
         
 		// First - force correct order of operations
-
+        return null;
 
     }
 }

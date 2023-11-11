@@ -485,7 +485,7 @@ class Plugins {
                 }
             } else callbackFunc = info.callback;
 
-			Little.operators.add(symbol, LHS_RHS, callbackFunc);
+			Little.operators.add(symbol, LHS_RHS, info.priority, callbackFunc);
         } else { // One sided operator
 			if (info.singleSidedOperatorCallback == null && info.callback != null) 
                 throw new ArgumentException("singleSidedOperatorCallback", 'Incorrect callback given for operator type ${info.operatorType} - `callback` was given, when `singleSidedOperatorCallback` was expected');
@@ -514,7 +514,7 @@ class Plugins {
 				}
 			} 
 
-			Little.operators.add(symbol, info.operatorType, callbackFunc);
+			Little.operators.add(symbol, info.operatorType, info.priority, callbackFunc);
         }
     }
 

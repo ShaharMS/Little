@@ -1,5 +1,7 @@
 package;
 
+import little.interpreter.Operators;
+import little.tools.PrepareRun;
 import little.tools.PrettyOutput;
 import haxe.SysTools;
 import haxe.Log;
@@ -47,7 +49,9 @@ class Main {
 		// text.innerHTML = code;
 		new JsExample();
 		#elseif unit
-		UnitTests.run();
+		//UnitTests.run();
+		PrepareRun.addSigns();
+		trace(PrettyPrinter.prettyPrintOperatorPriority(Operators.priority));
 		#elseif sys
 		while (true) {
 			Sys.print("  >> ");

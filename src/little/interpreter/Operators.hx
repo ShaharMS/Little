@@ -1,5 +1,6 @@
 package little.interpreter;
 
+import haxe.ds.ArraySort;
 import vision.algorithms.Radix;
 import little.tools.PrettyPrinter;
 import little.lexer.Lexer;
@@ -13,7 +14,6 @@ using StringTools;
 @:allow(little.interpreter.Interpreter)
 @:allow(little.tools.Plugins)
 class Operators {
-
 	/**
 		A map containing the priority of each operator, sorted by index to an array of operand-position-dependent operators.
 		for example:
@@ -25,6 +25,7 @@ class Operators {
 		| 2 | `{sign: "^", side: STANDARD}`, `{sign: "√", side: RHS_ONLY}` |
 	**/
 	public static var priority:Map<Int, Array<{sign:String, side:OperatorType}>> = [];
+
 	/**
 		Operators that require two sides to work, for example:
 		| Operator | Code |
@@ -62,7 +63,7 @@ class Operators {
 
 		### Notice
 		 - When using relative (`before`/`after`) positions, make sure the referenced operator exists. otherwise, it won't be inserted at all...
-		
+
 		| Option | Meaning | Example |
 		| :--- | :--- | :---: |
 		| `<index>` | Inserts the operator at the specified priority level. | `2`, `1`, `5` |
@@ -77,17 +78,21 @@ class Operators {
 	public static function setPriority(op:String, type:OperatorType, opPriority:String) {
 		var obj = {sign: op, side: type};
 		if (opPriority == "first") {
-			if (priority[-1] == null) priority[-1] = [];
+			if (priority[-1] == null)
+				priority[-1] = [];
 			priority[-1].push(obj);
-		}
-		else if (opPriority == "last") {
+		} else if (opPriority == "last") {
 			var i = -1;
-			for (key in priority.keys()) if (i < key) i = key;
-			if (priority[i + 1] == null) priority[i + 1] = [];
+			for (key in priority.keys())
+				if (i < key)
+					i = key;
+			if (priority[i + 1] == null)
+				priority[i + 1] = [];
 			priority[i + 1].push(obj);
 		} else if (~/[0-9]+/.match(opPriority)) {
 			var p = Std.parseInt(opPriority);
-			if (priority[p] == null) priority[p] = [];
+			if (priority[p] == null)
+				priority[p] = [];
 			priority[p].push(obj);
 		} else if (opPriority.startsWith("before") || opPriority.startsWith("after") || opPriority.startsWith("with")) {
 			var destinationOp, opSide;
@@ -102,43 +107,82 @@ class Operators {
 				destinationOp = signPos.replace("_", "");
 				opSide = RHS_ONLY;
 			}
-			obj = {sign: destinationOp, side: opSide};
-			
+
 			for (key => value in priority) {
 				if (value.filter(x -> x.side == opSide && x.sign == destinationOp).length > 0) {
-					
 					if (opPriority.startsWith("before")) {
-						if (priority[key - 1] == null) priority[key - 1] = [];
+						if (priority[key - 1] == null)
+							priority[key - 1] = [];
 						priority[key - 1].push(obj);
 					} else if (opPriority.startsWith("after")) {
-						if (priority[key + 1] == null) priority[key + 1] = [];
+						if (priority[key + 1] == null)
+							priority[key + 1] = [];
 						priority[key + 1].push(obj);
 					} else {
-						// if inserted on the same priority level, and a priority level already exists since the 
+						// if inserted on the same priority level, and a priority level already exists since the
 						// sign was found on it, we can assume priority[key] already exists
 						priority[key].push(obj);
 					}
 					break;
 				}
-			}			
+			}
 		} else if (opPriority.startsWith("between")) {
 			var signPos = opPriority.remove("between").trim();
-			var signs = signPos.split(" ");
+			var signs = signPos.split(" ").map(x -> x.trim());
+			var sign1Data = signPosToObject(signs[0]);
+			var sign2Data = signPosToObject(signs[1]);
 
+			var sign1Level = -1, sign2Level = -1;
+
+			for (key => value in priority) {
+				if (value.filter(x -> x.side == sign1Data.side && x.sign == sign1Data.sign).length > 0) {
+					sign1Level = key;
+				}
+				if (value.filter(x -> x.side == sign2Data.side && x.sign == sign2Data.sign).length > 0) {
+					sign2Level = key;
+				}
+			}
+			if (sign1Level != -1 && sign2Level != -1 && sign1Level != sign2Level && Math.abs(sign1Level - sign2Level) <= 2) {
+				if (Math.abs(sign1Level - sign2Level) == 2) {
+					var key = Std.int((sign1Level + sign2Level) / 2);
+					if (priority[key] == null)
+						priority[key] = [];
+					priority[key].push(obj);
+				} else {
+					// We need ot create a new level between sign1Level and sign2Level, and push everything
+					// after the sign were inserting now backwards
+					var insert = Std.int(Math.max(sign1Level, sign2Level));
+					var newMap = new Map<Int, Array<{sign:String, side:OperatorType}>>();
+					for (k => v in priority) {
+						if (k < insert) {
+							newMap[k] = v;
+						} else {
+							newMap[k + 1] = v;
+						}
+					}
+					newMap[insert] = [obj];
+				}
+			}
 		}
 
 		// We're working on a map, and negative indices can be used as keys. we need to make sure that
 		// all indices are positive, while keeping the order.
 		// More than that, we need the list to start at 0, so if theres no 0 in the list, we need to move everything downwards.
-		var minimumKey = Radix.sort([ for (x in priority.keys()) x])[0];
+
+		
+		var a = [for (x in priority.keys()) x];
+		if (a.length == 0) return;
+		ArraySort.sort(a, (x, y) -> x - y);
+		var minimumKey = a[0];
 		if (minimumKey != 0) {
 			var diff = 0 - minimumKey;
 			var priorityCopy = new Map<Int, Array<{sign:String, side:OperatorType}>>();
 			for (key => value in priority) {
-				priority[key + diff] = value;
+				priorityCopy[key + diff] = value;
 			}
 			priority = priorityCopy;
 		}
+		
 	}
 
 	/**
@@ -178,7 +222,8 @@ class Operators {
 		if (lhsOnly.exists(op))
 			return lhsOnly[op](lhs);
 		else if (rhsOnly.exists(op))
-			return ErrorMessage('Operator $op is used incorrectly - should appear after the sign ($op${PrettyPrinter.stringify(lhs)} instead of ${PrettyPrinter.stringify(lhs)}$op)');
+			return
+				ErrorMessage('Operator $op is used incorrectly - should appear after the sign ($op${PrettyPrinter.stringify(lhs)} instead of ${PrettyPrinter.stringify(lhs)}$op)');
 		else if (standard.exists(op))
 			return ErrorMessage('Operator $op is used incorrectly - should appear between two values (${PrettyPrinter.stringify(lhs)} $op <some value>)');
 		else
@@ -189,7 +234,8 @@ class Operators {
 		if (rhsOnly.exists(op))
 			return rhsOnly[op](rhs);
 		else if (lhsOnly.exists(op))
-			return ErrorMessage('Operator $op is used incorrectly - should appear before the sign (${PrettyPrinter.stringify(rhs)}$op instead of $op${PrettyPrinter.stringify(rhs)})');
+			return
+				ErrorMessage('Operator $op is used incorrectly - should appear before the sign (${PrettyPrinter.stringify(rhs)}$op instead of $op${PrettyPrinter.stringify(rhs)})');
 		else if (standard.exists(op))
 			return ErrorMessage('Operator $op is used incorrectly - should appear between two values (${PrettyPrinter.stringify(rhs)} $op <some value>)');
 		else
@@ -200,27 +246,28 @@ class Operators {
 		if (standard.exists(op))
 			return standard[op](lhs, rhs);
 		else if (lhsOnly.exists(op))
-			return ErrorMessage('Operator $op is used incorrectly - should not appear between two values, only to the right of one of them (${PrettyPrinter.stringify(rhs)}$op or ${PrettyPrinter.stringify(lhs)}$op)');
+			return
+				ErrorMessage('Operator $op is used incorrectly - should not appear between two values, only to the right of one of them (${PrettyPrinter.stringify(rhs)}$op or ${PrettyPrinter.stringify(lhs)}$op)');
 		else if (rhsOnly.exists(op))
-			return ErrorMessage('Operator $op is used incorrectly - should not appear between two values, only to the left of one of them ($op${PrettyPrinter.stringify(rhs)} or $op${PrettyPrinter.stringify(lhs)})');
+			return
+				ErrorMessage('Operator $op is used incorrectly - should not appear between two values, only to the left of one of them ($op${PrettyPrinter.stringify(rhs)} or $op${PrettyPrinter.stringify(lhs)})');
 		else
 			return ErrorMessage('Operator $op does not exist. did you make a typo?');
 	}
 
-
 	private static function signPosToObject(signPos:String):{sign:String, side:OperatorType} {
 		var destinationOp, opSide;
-			if (signPos.countOccurrencesOf("_") != 1) {
-				destinationOp = signPos.replace("_", "");
-				opSide = LHS_RHS;
-			} else if (signPos.startsWith("_")) {
-				destinationOp = signPos.replace("_", "");
-				opSide = LHS_ONLY;
-			} else {
-				destinationOp = signPos.replace("_", "");
-				opSide = RHS_ONLY;
-			}
-			return {sign: destinationOp, side: opSide};		
+		if (signPos.countOccurrencesOf("_") != 1) {
+			destinationOp = signPos.replace("_", "");
+			opSide = LHS_RHS;
+		} else if (signPos.startsWith("_")) {
+			destinationOp = signPos.replace("_", "");
+			opSide = LHS_ONLY;
+		} else {
+			destinationOp = signPos.replace("_", "");
+			opSide = RHS_ONLY;
+		}
+		return {sign: destinationOp, side: opSide};
 	}
 }
 
