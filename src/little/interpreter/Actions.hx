@@ -4,7 +4,6 @@ import haxe.macro.Context.Message;
 import haxe.xml.Parser;
 import haxe.xml.Access;
 import little.tools.Layer;
-import little.interpreter.Interpreter.*;
 import little.Keywords.*;
 import little.interpreter.memory.*;
 import little.interpreter.Runtime;
@@ -196,12 +195,12 @@ class Actions {
     public static function write(assignees:Array<ParserTokens>, value:ParserTokens):ParserTokens {
         var v = evaluate(value);
         for (a in assignees) {
-            var assignee = accessObject(a, memory);
+            var assignee = Interpreter.accessObject(a, memory);
             if (assignee == null) continue;
             if (assignee.params != null)
                 assignee.value = value;
             else {
-                trace(value, v, getValueType(v));
+                trace(value, v, Interpreter.getValueType(v));
                 if (v.getName() != "ErrorMessage") {
                     assignee.value = v;
                     trace(assignee.value, assignee.type);
@@ -252,7 +251,7 @@ class Actions {
 	**/
     public static function type(value:ParserTokens, type:ParserTokens):ParserTokens {
         var val = evaluate(value);
-        var valT = getValueType(val);
+        var valT = Interpreter.getValueType(val);
         var t = evaluate(type);
 
         if (t.equals(valT)) {
@@ -319,6 +318,12 @@ class Actions {
         return returnVal;
     }
 
+    /**
+    	A combination of `Actions.run` and `Actions.calculate`, which operates on a single `ParserTokens` token
+    	@param exp the token to evaluate
+    	@param dontThrow if `true`, `Runtime.throwError` is not called when an error occurs
+    	@return the result of the evaluation
+    **/
     public static function evaluate(exp:ParserTokens, ?dontThrow:Bool = false):ParserTokens {
 
         if (memory == null) memory = Interpreter.memory; // If no memory map is given, use the base one.
@@ -343,7 +348,7 @@ class Actions {
                 return NullValue;
             }
             case Expression(parts, _): {
-                return evaluateExpressionParts(parts);
+                return calculate(parts);
             }
             case Block(body, t): {
                 var returnVal = run(body);
@@ -365,7 +370,7 @@ class Actions {
             case Function(name, params, type, doc): return declareFunction(name, params, type, doc);
             case External(_): return Characters("External Function/Variable");
             case PropertyAccess(_, _): {
-                var o = accessObject(exp, memory);
+                var o = Interpreter.accessObject(exp, memory);
                 if (o != null) return o.value;
                 return NullValue;
             }
@@ -393,8 +398,29 @@ class Actions {
 	**/
     public static function calculate(parts:Array<ParserTokens>):ParserTokens {
         
-		// First - force correct order of operations
+		
+
         return null;
 
     }
+
+	public static function group(tokens:Array<ParserTokens>) {
+		var post = [];
+		var pre = tokens;
+
+		for (operatorGroup in Little.operators.iterateByPriority()) {
+			// We'll group everything by only recognizing specific signs each "stage" - 
+			// The signs recognized first will be of the highest priority.
+			// One drawback of this system is that its a little messier to detect chaining (e.g. 5!!, √√√64)
+
+			var i = 0;
+			while (i < pre.length) {
+				var token = pre[i].is(READ, IDENTIFIER) ? evaluate(pre[i]) : pre[i];
+
+				
+			}
+		}
+
+		return null;
+	}
 }

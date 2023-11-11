@@ -186,6 +186,20 @@ class Operators {
 	}
 
 	/**
+		Iterates over the operators in arrays ordred by their priority, from `0` to `n`.
+	**/
+	public static function iterateByPriority():Iterator<Array<{sign:String, side:OperatorType}>> {
+		var a = [for (x in priority.keys()) x];
+		ArraySort.sort(a, (x, y) -> x - y);
+		var b = [for (x in a) priority[x]];
+		var i = 0;
+		return {
+			next: () -> b[i++],
+			hasNext: () -> i < b.length
+		}
+	}
+
+	/**
 		Adds an operator to be used in the program's runtime.
 		@param op the operator itself
 		@param operatorType  **STANDARD** - operator that works with both sides of the equation, for example: `5 + 5` or `5 - 5`.  

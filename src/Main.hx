@@ -27,7 +27,6 @@ using StringTools;
 using little.tools.TextTools;
 
 class Main {
-	static var code = 'action הדפס() = {print(5)}, הדפס()';
 
 	static function main() {
 		#if js
@@ -49,8 +48,8 @@ class Main {
 		// text.innerHTML = code;
 		new JsExample();
 		#elseif unit
-		//UnitTests.run();
-		PrepareRun.addSigns();
+		UnitTests.run();
+		//PrepareRun.addSigns();
 		trace(PrettyPrinter.prettyPrintOperatorPriority(Operators.priority));
 		#elseif sys
 		while (true) {
