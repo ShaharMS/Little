@@ -48,9 +48,10 @@ class Main {
 		// text.innerHTML = code;
 		new JsExample();
 		#elseif unit
-		UnitTests.run();
-		//PrepareRun.addSigns();
-		trace(PrettyPrinter.prettyPrintOperatorPriority(Operators.priority));
+		//UnitTests.run();
+		PrepareRun.addSigns();
+		trace(PrettyPrinter.printParserAst(little.interpreter.Actions.group(Parser.parse(Lexer.lex("(5 + (3 - 2)) * 5^2 + 3 * 4 / 4 + 4! + 8 + -2")))));
+		trace(Runtime.stdout.output);
 		#elseif sys
 		while (true) {
 			Sys.print("  >> ");

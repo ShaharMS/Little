@@ -34,6 +34,8 @@ class Actions {
     **/
     public static function error(message:String, layer:Layer = INTERPRETER):ParserTokens {
         Runtime.throwError(ErrorMessage(message), layer);
+        trace(Runtime.stdout.output);
+        throw "";
         return ErrorMessage(message);
     }
 
@@ -347,7 +349,8 @@ class Actions {
                 splitLine();
                 return NullValue;
             }
-            case Expression(parts, _): {
+            case Expression(parts, t): {
+                if (t != null) return type(calculate(parts), t);
                 return calculate(parts);
             }
             case Block(body, t): {
@@ -398,13 +401,13 @@ class Actions {
 	**/
     public static function calculate(parts:Array<ParserTokens>):ParserTokens {
         
-		
+		var tokens = group(parts);
 
         return null;
 
     }
 
-	public static function group(tokens:Array<ParserTokens>) {
+	public static function group(tokens:Array<ParserTokens>):Array<ParserTokens> {
 		var post = [];
 		var pre = tokens;
 
@@ -415,9 +418,99 @@ class Actions {
 
 			var i = 0;
 			while (i < pre.length) {
-				var token = pre[i].is(READ, IDENTIFIER) ? evaluate(pre[i]) : pre[i];
+				var token = pre[i].is(READ, IDENTIFIER, BLOCK) ? evaluate(pre[i]) : pre[i];
+                trace(tokens, token);
+				switch token {
+                    case Sign(operatorGroup.filter(x -> x.sign == _).length > 0 => true): {
 
-				
+                        // If theres an operator before this one, its RHS_ONLY. If theres an operator after, its LHS_ONLY
+                        // If theres no operator, its LHS_RHS
+
+                        // First lets do a simple edge case - i = pre.length - 1 => LHS_ONLY operator.
+                        if (i == pre.length - 1) {
+                            post.push(PartArray([post.pop(), token]));
+                            break;
+                        }
+
+                        var lookahead = pre[i + 1].is(READ, IDENTIFIER, BLOCK) ? evaluate(pre[i + 1]) : pre[i + 1];
+                        var lookbehind = post.length > 0 ? post[post.length - 1] /* Post has only evaluated tokens */ : Sign("_"); // Just an arbitrary "sign" to not have null here
+
+                        if (lookbehind.is(SIGN)) { // Because of our check above, valid for the start of an expression too.
+                            if (lookahead.is(SIGN)) {
+                                i++;
+                                // Look ahead until we run out of signs. Then, group the iterated signs and the final operand into an array,
+                                // and pass it onto "group()". Pay attention - this only groups signs with the current priority level.
+                                if (i + 1 >= pre.length) error("Expression ended with an operator, when an operand was expected.");
+                                var lookahead2 = pre[i + 1].is(READ, IDENTIFIER, BLOCK) ? evaluate(pre[i + 1]) : pre[i + 1];
+                                var g = [];
+                                while (lookahead2.is(SIGN) && operatorGroup.filter(x -> x.sign == lookahead2.parameter(1) && x.side == RHS_ONLY).length > 0) {
+                                    g.push(lookahead2);
+                                    i++;
+                                    if (i + 1 >= pre.length) error("Expression ended with an operator, when an operand was expected.");
+                                    lookahead2 = pre[i + 1].is(READ, IDENTIFIER, BLOCK) ? evaluate(pre[i + 1]) : pre[i + 1];
+                                } 
+                                // Last token is an operand
+                                g.push(lookahead2);
+                                post.push(PartArray([token, PartArray(group(g))]));
+                                i++; // +1 because we consumed lookahead2 for the PartArray arg
+
+                            } else if (lookahead.is(EXPRESSION)) {
+                                post.push(PartArray([token, Expression(group(lookahead.parameter(0)), lookahead.parameter(1))]));
+                            } else {
+                                post.push(PartArray([token, lookahead]));
+                            }
+                        } else if (lookahead.is(SIGN)) {
+                            // This can be one of tow cases:
+                            // - were working on a binary operator before a unary operator (1 or more)
+                            // - were working on a unary operator (1 or more) before a binary operator
+
+                            // We should naturally prioritize unary operators since they, resulting from their definition, always come first.
+                            // This makes the parsing very easy, since the first possible binary operator must be the binary one: (pretend +, - and ! are of the same priority)
+                            // 5!! + ---5
+                            // both + and - cant be LHS_ONLY, so grouping is:
+                            // (((5!)!) + (-(-(-5))))
+                            
+                            trace(lookahead, token, operatorGroup);
+                            if (operatorGroup.filter(x -> x.sign == token.parameter(1) && x.side == LHS_ONLY).length > 0) {
+                                post.push(PartArray([post.pop(), token]));
+                            } else if (operatorGroup.filter(x -> x.sign == token.parameter(1) && x.side == LHS_RHS).length > 0) {
+                                var operand1 = post.pop();
+                                var op = lookahead;
+                                // We have to repeat the check in RHS_ONLY, since RHS can also start with a sign
+                                if (i + 1 >= pre.length) error("Expression ended with an operator, when an operand was expected.");
+                                var lookahead2 = pre[i + 1].is(READ, IDENTIFIER, BLOCK) ? evaluate(pre[i + 1]) : pre[i + 1];
+                                var g = [];
+                                while (lookahead2.is(SIGN) && operatorGroup.filter(x -> x.sign == lookahead2.parameter(1) && x.side == RHS_ONLY).length > 0) {
+                                    g.push(lookahead2);
+                                    i++;
+                                    if (i + 1 >= pre.length) error("Expression ended with an operator, when an operand was expected.");
+                                    lookahead2 = pre[i + 1].is(READ, IDENTIFIER, BLOCK) ? evaluate(pre[i + 1]) : pre[i + 1];
+                                } 
+                                // Last token is an operand
+                                g.push(lookahead2);
+                                // And increment i since lookahead2 uses i + 1
+                                i++;
+
+                                var operand2 = g.length == 1 ? g[0] : PartArray(group(g));
+                                post.push(PartArray([operand1, op, operand2]));
+
+                            } else {
+                                error("An operator that expects a right side can't be preceded by an operator that expects a left side.");
+                            }
+                            
+                        } else {
+                            // Both sides are regular operands, so we just pop from `post` and take the lookahead
+                            // And no, we should'nt worry about order of operations here. because of this "algorithm"'s format, all 
+                            // operators are of the same priority, and its the user's responsibility to use parentheses when needed.
+                            post.push(PartArray([post.pop(), token, lookahead]));
+                            i++;
+                        }
+
+                    }
+                    case Expression(parts, type): post.push(Expression(group(parts), type));
+                    case _: post.push(token);
+                }
+                i++;
 			}
 		}
 

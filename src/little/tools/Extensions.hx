@@ -17,6 +17,10 @@ class Extensions {
 	public static function is(token:ParserTokens, ...tokens:ParserTokensSimple) {
 		return tokens.toArray().map(x -> x.getName().remove("_").toLowerCase()).contains(token.getName().toLowerCase());
 	}
+
+	public static function parameter(token:ParserTokens, index:Int):Dynamic {
+		return token.getParameters()[index];
+	}
 }
 
 enum ParserTokensSimple {
