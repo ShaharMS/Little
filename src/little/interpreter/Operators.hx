@@ -133,7 +133,6 @@ class Operators {
 			var sign2Data = signPosToObject(signs[1]);
 
 			var sign1Level = -1, sign2Level = -1;
-
 			for (key => value in priority) {
 				if (value.filter(x -> x.side == sign1Data.side && x.sign == sign1Data.sign).length > 0) {
 					sign1Level = key;
@@ -142,6 +141,7 @@ class Operators {
 					sign2Level = key;
 				}
 			}
+
 			if (sign1Level != -1 && sign2Level != -1 && sign1Level != sign2Level && Math.abs(sign1Level - sign2Level) <= 2) {
 				if (Math.abs(sign1Level - sign2Level) == 2) {
 					var key = Std.int((sign1Level + sign2Level) / 2);
@@ -149,7 +149,7 @@ class Operators {
 						priority[key] = [];
 					priority[key].push(obj);
 				} else {
-					// We need ot create a new level between sign1Level and sign2Level, and push everything
+					// We need to create a new level between sign1Level and sign2Level, and push everything
 					// after the sign were inserting now backwards
 					var insert = Std.int(Math.max(sign1Level, sign2Level));
 					var newMap = new Map<Int, Array<{sign:String, side:OperatorType}>>();
@@ -161,6 +161,7 @@ class Operators {
 						}
 					}
 					newMap[insert] = [obj];
+					priority = newMap;
 				}
 			}
 		}

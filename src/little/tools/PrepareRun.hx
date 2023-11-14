@@ -34,10 +34,7 @@ class PrepareRun {
 	public static function addProps() {
 		Little.plugin.registerProperty("type", TYPE_DYNAMIC, true, null, {
 			valueGetter: parent -> {
-				trace(parent.value);
-				return Characters(Interpreter.stringifyTokenIdentifier(if (parent.value != null && !parent.value.equals(NullValue))
-					Interpreter.getValueType(parent.value) else if (parent.type != null
-					|| !parent.type.equals(NullValue)) parent.type else Identifier(TYPE_VOID)));
+				return Characters(Interpreter.stringifyTokenIdentifier(Interpreter.getValueType(parent.value))); // Wait
 			},
 			allowWriting: false
 		});
@@ -87,20 +84,19 @@ class PrepareRun {
 
 	public static function addFunctions() {
 		Little.plugin.registerFunction(PRINT_FUNCTION_NAME, null, [Variable(Identifier("item"), null)], (params) -> {
-			trace(params);
-			var eval = Interpreter.evaluate(params[0]);
+			var eval = Actions.evaluate(params[0]);
 			Runtime.__print(Interpreter.stringifyTokenValue(eval), eval);
 			return NullValue;
 		});
 		Little.plugin.registerFunction(RAISE_ERROR_FUNCTION_NAME, null, [Variable(Identifier("message"), null)], (params) -> {
-			Runtime.throwError(Interpreter.evaluate(params[0]));
+			Runtime.throwError(Actions.evaluate(params[0]));
 			return NullValue;
 		});
 		Little.plugin.registerFunction(READ_FUNCTION_NAME, null, [Variable(Identifier("string"), Identifier(TYPE_STRING))], (params) -> {
 			return Read(Identifier(Interpreter.stringifyTokenValue(params[0])));
 		});
 		Little.plugin.registerFunction(RUN_CODE_FUNCTION_NAME, null, [Variable(Identifier("code"), Identifier(TYPE_STRING))], (params) -> {
-			return Interpreter.interpret(Parser.parse(Lexer.lex(params[0].getParameters()[0])), Interpreter.currentConfig);
+			return Actions.run(Parser.parse(Lexer.lex(params[0].getParameters()[0])));
 		});
 	}
 
@@ -166,7 +162,8 @@ class PrepareRun {
 			priority: "with √_",
 			singleSidedOperatorCallback: (lhs) -> {
 				var l = Conversion.toHaxeValue(lhs);
-
+				var shifted = Math.pow(10, 10) * l;
+				if (shifted != Math.floor(shifted)) return Number(Math.round(MathTools.factorial(l)) + "");
 				return Decimal(MathTools.factorial(l) + "");
 			}
 		});

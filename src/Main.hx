@@ -48,11 +48,14 @@ class Main {
 		// text.innerHTML = code;
 		new JsExample();
 		#elseif unit
-		//UnitTests.run();
-		PrepareRun.addSigns();
-		trace(PrettyPrinter.printParserAst(little.interpreter.Actions.group(Parser.parse(Lexer.lex("(5 + (3 - 2)) * 5^2 + 3 * 4 / 4 + 4! + 8 + -2")))));
-		trace(Runtime.stdout.output);
+		UnitTests.run();
+		//PrepareRun.addSigns();
+		//trace(PrettyPrinter.printParserAst(little.interpreter.Actions.group(Parser.parse(Lexer.lex("(5 + (3 - 2)) * 5^2 + 3 * 4 / 4 + 4! + 8 + -2")))));
+		//trace(little.interpreter.Actions.calculate(Parser.parse(Lexer.lex("(5 + (3 - 2)) * 5^2 + 3 * 4 / 4 + 4! + 8 + -2"))));
+		//trace(Runtime.stdout.output);
+		// trace("\n" + PrettyPrinter.prettyPrintOperatorPriority(Operators.priority));
 		#elseif sys
+		trace(MathTools.factorial(4));
 		while (true) {
 			Sys.print("  >> ");
 			var input = Sys.stdin().readLine();
