@@ -1,0 +1,6 @@
+@:directlyUsed @:used @:flatEnum
+enum little.interpreter.OperatorType {
+	LHS_RHS;
+	LHS_ONLY;
+	RHS_ONLY;
+}

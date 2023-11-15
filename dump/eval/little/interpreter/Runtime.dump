@@ -1,0 +1,88 @@
+@:directlyUsed @:used @:access(little.interpreter.Interpreter)
+class little.interpreter.Runtime {
+
+	@:value(0)
+	public static var line(default,null):Int = 0;
+
+	public static var currentToken(default,null):little.parser.ParserTokens;
+
+	public static var currentModule(default,null):String;
+
+	public static var previousToken(default,null):little.parser.ParserTokens;
+
+	@:value(0)
+	public static var exitCode(default,null):Int = 0;
+
+	public static var errorToken(default,null):little.parser.ParserTokens;
+
+	@:value([])
+	public static var onLineChanged:Array<Int -> Void> = [];
+
+	@:value([])
+	public static var onTokenInterpreted:Array<little.parser.ParserTokens -> Void> = [];
+
+	@:value([])
+	public static var onErrorThrown:Array<(String, Int, String, String) -> Void> = [];
+
+	@:value(StdOut)
+	public static var stdout:Class<little.interpreter.StdOut> = little.interpreter.StdOut;
+
+	@:value([])
+	public static var callStack:Array<little.parser.ParserTokens> = [];
+
+	@:value({ layer : INTERPRETER })
+	public static function throwError(token:little.parser.ParserTokens, layer:Null<little.tools.Layer> = "Interpreter") {
+		little.interpreter.Runtime.callStack.push(token);
+		var module = little.interpreter.Runtime.currentModule;
+		var title = "";
+		var reason = little.tools.TextTools.replaceLast(little.tools.TextTools.remove(Std.string(token), Type.enumConstructor(token)).substring(1, null), ")", "");
+		var content = "" + (if ((little.Little.debug)) cast layer.toUpperCase() + ": " else "") + "ERROR: Module " + little.interpreter.Runtime.currentModule + ", Line " + little.interpreter.Runtime.line + ":  " + reason;
+		little.interpreter.Runtime.stdout.output += "\n" + content;
+		little.interpreter.Runtime.stdout.stdoutTokens.push(token);
+		little.interpreter.Runtime.exitCode = little.tools._Layer.Layer_Impl_.getIndexOf(layer);
+		little.interpreter.Runtime.errorToken = token;
+		little.interpreter.Interpreter.errorThrown = true;
+		{
+			var ` = 0;
+			var ` = little.interpreter.Runtime.onErrorThrown;
+			while ((` < `.length)) {
+				var func = `[`];
+				++ `;
+				func(module, little.interpreter.Runtime.line, title, reason);
+			};
+		};
+		return token;
+	}
+
+	@:value({ layer : INTERPRETER })
+	public static function warn(token:little.parser.ParserTokens, layer:Null<little.tools.Layer> = "Interpreter") {
+		little.interpreter.Runtime.callStack.push(token);
+		var reason = little.tools.TextTools.replaceLast(little.tools.TextTools.remove(Std.string(token), Type.enumConstructor(token)).substring(1, null), ")", "");
+		var content = "" + (if ((little.Little.debug)) cast layer.toUpperCase() + ": " else "") + "WARNING: Module " + little.interpreter.Runtime.currentModule + ", Line " + little.interpreter.Runtime.line + ":  " + reason;
+		little.interpreter.Runtime.stdout.output += "\n" + content;
+		little.interpreter.Runtime.stdout.stdoutTokens.push(token);
+	}
+
+	public static function print(item:String) {
+		little.interpreter.Runtime.stdout.output += "\n" + (if ((little.Little.debug)) cast cast "Interpreter".toUpperCase() + ": " else "") + "Module " + little.interpreter.Runtime.currentModule + ", Line " + little.interpreter.Runtime.line + ":  " + item;
+		little.interpreter.Runtime.stdout.stdoutTokens.push(little.parser.ParserTokens.Characters(item));
+	}
+
+	public static function broadcast(item:String) {
+		little.interpreter.Runtime.stdout.output += "\n" + (if ((little.Little.debug)) "BROADCAST: " else "") + item;
+		little.interpreter.Runtime.stdout.stdoutTokens.push(little.parser.ParserTokens.Characters(item));
+	}
+
+	static function __broadcast(item:String) {
+		little.interpreter.Runtime.stdout.output += "\n" + (if ((little.Little.debug)) "BROADCAST: " else "") + item;
+	}
+
+	static function __print(item:String, representativeToken:little.parser.ParserTokens) {
+		little.interpreter.Runtime.stdout.output += "\n" + (if ((little.Little.debug)) cast cast "Interpreter".toUpperCase() + ": " else "") + "Module " + little.interpreter.Runtime.currentModule + ", Line " + little.interpreter.Runtime.line + ":  " + item;
+		little.interpreter.Runtime.stdout.stdoutTokens.push(representativeToken);
+	}
+
+	public static function access(obj:String) {
+		return little.interpreter.Interpreter.accessObject(little.parser.Parser.parse(little.lexer.Lexer.lex(obj))[0], null);
+	}
+}

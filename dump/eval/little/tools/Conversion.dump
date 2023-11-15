@@ -1,0 +1,86 @@
+@:directlyUsed @:used
+class little.tools.Conversion {
+
+	public static function extractHaxeType(type:ValueType) {
+		switch ((@:exhaustive enumIndex type)) {
+			case 0: return "Dynamic";
+			case 1: return "Int";
+			case 2: return "Float";
+			case 3: return "Bool";
+			case 4: return "Dynamic";
+			case 5: return "Dynamic";
+			case 6: {
+				var c = type[0];
+				return Type.getClassName(c).split(".").pop();
+			};
+			case 7: {
+				var e = type[0];
+				return Type.getEnumName(e).split(".").pop();
+			};
+			case 8: return "Dynamic";
+		};
+	}
+
+	public static function toLittleValue(val:Dynamic) {
+		if ((val == null)) return little.parser.ParserTokens.NullValue;
+		var type = little.tools.Conversion.toLittleType(little.tools.Conversion.extractHaxeType(Type.typeof(val)));
+		var _hx_tmp;
+		var _hx_tmp;
+		var _hx_tmp;
+		if ((type == little.Keywords.TYPE_BOOLEAN == true)) {
+			if ((val)) return little.parser.ParserTokens.TrueValue else return little.parser.ParserTokens.FalseValue;
+		} else {
+			_hx_tmp = type == little.Keywords.TYPE_FLOAT;
+			if ((_hx_tmp == true)) return little.parser.ParserTokens.Decimal(Std.string(val)) else {
+				_hx_tmp = type == little.Keywords.TYPE_INT;
+				if ((_hx_tmp == true)) return little.parser.ParserTokens.Number(Std.string(val)) else {
+					_hx_tmp = type == little.Keywords.TYPE_STRING;
+					if ((_hx_tmp == true)) return little.parser.ParserTokens.Characters(Std.string(val)) else {
+						haxe.Log.trace("WARNING: Unparsable value: " + Std.string(val) + ". Returning NullValue", {fileName : "src/little/tools/Conversion.hx", lineNumber : 46, className : "little.tools.Conversion", methodName : "toLittleValue"});
+						return little.parser.ParserTokens.NullValue;
+					};
+				};
+			};
+		};
+	}
+
+	public static function toHaxeValue(val:little.parser.ParserTokens) {
+		val = little.interpreter.Interpreter.evaluate(val, null, null);
+		switch ((enumIndex val)) {
+			case 16: {
+				var num = val[0];
+				return Std.parseInt(num);
+			};
+			case 17: {
+				var num = val[0];
+				return Std.parseFloat(num);
+			};
+			case 18: {
+				var string = val[0];
+				return string;
+			};
+			case 23: {
+				var msg = val[0];
+				haxe.Log.trace("WARNING: " + msg + ". Returning null", {fileName : "src/little/tools/Conversion.hx", lineNumber : 56, className : "little.tools.Conversion", methodName : "toHaxeValue"});
+				return null;
+			};
+			case 24: return null;
+			case 25: return true;
+			case 26: return false;
+			default: {
+				haxe.Log.trace("WARNING: Unparsable token: " + Std.string(val) + ". Returning null", {fileName : "src/little/tools/Conversion.hx", lineNumber : 66, className : "little.tools.Conversion", methodName : "toHaxeValue"});
+				return null;
+			}
+		};
+	}
+
+	public static function toLittleType(type:String) {
+		switch ((type)) {
+			case "Bool": return little.Keywords.TYPE_BOOLEAN;
+			case "Float": return little.Keywords.TYPE_FLOAT;
+			case "Int": return little.Keywords.TYPE_INT;
+			case "String": return little.Keywords.TYPE_STRING;
+			default: return little.Keywords.TYPE_DYNAMIC
+		};
+	}
+}

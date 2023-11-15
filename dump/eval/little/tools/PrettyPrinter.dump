@@ -1,0 +1,442 @@
+@:directlyUsed @:used
+class little.tools.PrettyPrinter {
+
+	@:value({ spacingBetweenNodes : 6 })
+	public static function printParserAst(ast:Array<little.parser.ParserTokens>, spacingBetweenNodes:Null<Int> = 6) {
+		if ((ast == null)) return "null (look for errors in input)";
+		little.tools.PrettyPrinter.s = little.tools.TextTools.multiply(" ", spacingBetweenNodes);
+		var unfilteredResult = little.tools.PrettyPrinter.getTree(little.parser.ParserTokens.Expression(ast, null), [], 0, true);
+		var filtered = "";
+		{
+			var ` = 0;
+			var ` = unfilteredResult.split("\n");
+			while ((` < `.length)) {
+				var line = `[`];
+				++ `;
+				if ((line == "└─── Expression")) continue;
+				filtered += line.substring(spacingBetweenNodes - 1, null) + "\n";
+			};
+		};
+		return "\nAst\n" + filtered;
+	}
+
+	static function prefixFA(pArray:Array<Int>) {
+		var prefix = "";
+		{
+			var ` = 0;
+			var ` = little.tools.PrettyPrinter.l;
+			while ((` < `)) {
+				var i = ` ++;
+				if ((pArray[i] == 1)) prefix += "│" + little.tools.PrettyPrinter.s.substring(1, null) else prefix += little.tools.PrettyPrinter.s;
+			};
+		};
+		return prefix;
+	}
+
+	static function pushIndex(pArray:Array<Int>, i:Int) {
+		var arr = pArray.copy();
+		arr[i + 1] = 1;
+		return arr;
+	}
+
+	@:value("")
+	static var s:String = "";
+
+	@:value(0)
+	static var l:Int = 0;
+
+	static function getTree(root:little.parser.ParserTokens, prefix:Array<Int>, level:Int, last:Bool) {
+		little.tools.PrettyPrinter.l = level;
+		var t = if ((last)) "└" else "├";
+		var c = "├";
+		var d = "───";
+		if ((root == null)) return "";
+		switch ((@:exhaustive enumIndex root)) {
+			case 0: {
+				var line = root[0];
+				return "" + little.tools.PrettyPrinter.prefixFA(prefix) + t + d + " SetLine(" + line + ")\n";
+			};
+			case 1: return "" + little.tools.PrettyPrinter.prefixFA(prefix) + t + d + " SplitLine\n";
+			case 2: {
+				var name = root[0];
+				var type = root[1];
+				var doc = root[2];
+				var title = "" + little.tools.PrettyPrinter.prefixFA(prefix) + t + d + " Variable Creation\n";
+				if ((doc != null)) title += little.tools.PrettyPrinter.getTree(doc, prefix.copy(), level + 1, false);
+				title += little.tools.PrettyPrinter.getTree(name, prefix.copy(), level + 1, type == null);
+				if ((type != null)) title += little.tools.PrettyPrinter.getTree(type, prefix.copy(), level + 1, true);
+				return title;
+			};
+			case 3: {
+				var name = root[0];
+				var params = root[1];
+				var type = root[2];
+				var doc = root[3];
+				var title = "" + little.tools.PrettyPrinter.prefixFA(prefix) + t + d + " Function Creation\n";
+				if ((doc != null)) title += little.tools.PrettyPrinter.getTree(doc, prefix.copy(), level + 1, false);
+				title += little.tools.PrettyPrinter.getTree(name, prefix.copy(), level + 1, false);
+				title += little.tools.PrettyPrinter.getTree(params, prefix.copy(), level + 1, type == null);
+				if ((type != null)) title += little.tools.PrettyPrinter.getTree(type, prefix.copy(), level + 1, true);
+				return title;
+			};
+			case 4: {
+				var name = root[0];
+				var exp = root[1];
+				var body = root[2];
+				var title = "" + little.tools.PrettyPrinter.prefixFA(prefix) + t + d + " Condition\n";
+				title += little.tools.PrettyPrinter.getTree(name, prefix.copy(), level + 1, false);
+				title += little.tools.PrettyPrinter.getTree(exp, little.tools.PrettyPrinter.pushIndex(prefix, level), level + 1, false);
+				title += little.tools.PrettyPrinter.getTree(body, prefix.copy(), level + 1, true);
+				return title;
+			};
+			case 5: {
+				var name = root[0];
+				return "" + little.tools.PrettyPrinter.prefixFA(prefix) + t + d + " Read: " + Std.string(name) + "\n";
+			};
+			case 6: {
+				var assignees = root[0];
+				var value = root[1];
+				return "" + little.tools.PrettyPrinter.prefixFA(prefix) + t + d + " Variable Write\n" + little.tools.PrettyPrinter.getTree(little.parser.ParserTokens.PartArray(assignees), little.tools.PrettyPrinter.pushIndex(prefix, level), level + 1, false) + little.tools.PrettyPrinter.getTree(value, prefix.copy(), level + 1, true);
+			};
+			case 7: {
+				var value = root[0];
+				return "" + little.tools.PrettyPrinter.prefixFA(prefix) + t + d + " " + value + "\n";
+			};
+			case 8: {
+				var value = root[0];
+				var type = root[1];
+				return "" + little.tools.PrettyPrinter.prefixFA(prefix) + t + d + " Type Declaration\n" + little.tools.PrettyPrinter.getTree(value, if ((type == null)) prefix.copy() else little.tools.PrettyPrinter.pushIndex(prefix, level), level + 1, type == null) + little.tools.PrettyPrinter.getTree(type, prefix.copy(), level + 1, true);
+			};
+			case 9: {
+				var name = root[0];
+				var params = root[1];
+				var title = "" + little.tools.PrettyPrinter.prefixFA(prefix) + t + d + " Function Call\n";
+				title += little.tools.PrettyPrinter.getTree(name, little.tools.PrettyPrinter.pushIndex(prefix, level), level + 1, false);
+				title += little.tools.PrettyPrinter.getTree(params, prefix.copy(), level + 1, true);
+				return title;
+			};
+			case 10: {
+				var value = root[0];
+				var type = root[1];
+				return "" + little.tools.PrettyPrinter.prefixFA(prefix) + t + d + " Return\n" + little.tools.PrettyPrinter.getTree(value, prefix.copy(), level + 1, type == null) + little.tools.PrettyPrinter.getTree(type, prefix.copy(), level + 1, true);
+			};
+			case 11: {
+				var parts = root[0];
+				var type = root[1];
+				if ((parts.length == 0)) return "" + little.tools.PrettyPrinter.prefixFA(prefix) + t + d + " <empty expression>\n";
+				var strParts = ["" + little.tools.PrettyPrinter.prefixFA(prefix) + t + d + " Expression\n" + little.tools.PrettyPrinter.getTree(type, prefix.copy(), level + 1, false)];
+				var ` = [];
+				{
+					var ` = 0;
+					var ` = parts.length - 1;
+					while ((` < `)) {
+						var i = ` ++;
+						`.push(little.tools.PrettyPrinter.getTree(parts[i], little.tools.PrettyPrinter.pushIndex(prefix, level), level + 1, false));
+					};
+				};
+				var strParts = strParts.concat(`);
+				strParts.push(little.tools.PrettyPrinter.getTree(parts[parts.length - 1], prefix.copy(), level + 1, true));
+				return strParts.join("");
+			};
+			case 12: {
+				var body = root[0];
+				var type = root[1];
+				if ((body.length == 0)) return "" + little.tools.PrettyPrinter.prefixFA(prefix) + t + d + " <empty block>\n";
+				var strParts = ["" + little.tools.PrettyPrinter.prefixFA(prefix) + t + d + " Block\n" + little.tools.PrettyPrinter.getTree(type, prefix.copy(), level + 1, false)];
+				var ` = [];
+				{
+					var ` = 0;
+					var ` = body.length - 1;
+					while ((` < `)) {
+						var i = ` ++;
+						`.push(little.tools.PrettyPrinter.getTree(body[i], little.tools.PrettyPrinter.pushIndex(prefix, level), level + 1, false));
+					};
+				};
+				var strParts = strParts.concat(`);
+				strParts.push(little.tools.PrettyPrinter.getTree(body[body.length - 1], prefix.copy(), level + 1, true));
+				return strParts.join("");
+			};
+			case 13: {
+				var body = root[0];
+				if ((body.length == 0)) return "" + little.tools.PrettyPrinter.prefixFA(prefix) + t + d + " <empty array>\n";
+				var strParts = ["" + little.tools.PrettyPrinter.prefixFA(prefix) + t + d + " Part Array\n"];
+				var ` = [];
+				{
+					var ` = 0;
+					var ` = body.length - 1;
+					while ((` < `)) {
+						var i = ` ++;
+						`.push(little.tools.PrettyPrinter.getTree(body[i], little.tools.PrettyPrinter.pushIndex(prefix, level), level + 1, false));
+					};
+				};
+				var strParts = strParts.concat(`);
+				strParts.push(little.tools.PrettyPrinter.getTree(body[body.length - 1], prefix.copy(), level + 1, true));
+				return strParts.join("");
+			};
+			case 14: {
+				var name = root[0];
+				var property = root[1];
+				return "" + little.tools.PrettyPrinter.prefixFA(prefix) + t + d + " Property Access\n" + little.tools.PrettyPrinter.getTree(name, little.tools.PrettyPrinter.pushIndex(prefix, level), level + 1, false) + little.tools.PrettyPrinter.getTree(property, prefix.copy(), level + 1, true);
+			};
+			case 15: {
+				var value = root[0];
+				return "" + little.tools.PrettyPrinter.prefixFA(prefix) + t + d + " " + value + "\n";
+			};
+			case 16: {
+				var num = root[0];
+				return "" + little.tools.PrettyPrinter.prefixFA(prefix) + t + d + " " + num + "\n";
+			};
+			case 17: {
+				var num = root[0];
+				return "" + little.tools.PrettyPrinter.prefixFA(prefix) + t + d + " " + num + "\n";
+			};
+			case 18: {
+				var string = root[0];
+				return "" + little.tools.PrettyPrinter.prefixFA(prefix) + t + d + " \"" + string + "\"\n";
+			};
+			case 19: {
+				var doc = root[0];
+				return "" + little.tools.PrettyPrinter.prefixFA(prefix) + t + d + " Documentation: " + little.tools.TextTools.replace(doc, "\n", "\n" + little.tools.PrettyPrinter.prefixFA(prefix) + "│                  ") + "\n";
+			};
+			case 20: {
+				var name = root[0];
+				return "" + little.tools.PrettyPrinter.prefixFA(prefix) + t + d + " Module: " + name + "\n";
+			};
+			case 21: {
+				var haxeValue = root[0];
+				return "" + little.tools.PrettyPrinter.prefixFA(prefix) + t + d + " External Haxe Value Identifier: [" + Std.string(haxeValue) + "]\n";
+			};
+			case 22: {
+				var use = root[0];
+				return "" + little.tools.PrettyPrinter.prefixFA(prefix) + t + d + " External Haxe Condition Identifier: [" + Std.string(use) + "]\n";
+			};
+			case 23: {
+				var name = root[0];
+				return "" + little.tools.PrettyPrinter.prefixFA(prefix) + t + d + " Error: " + name + "\n";
+			};
+			case 24: return "" + little.tools.PrettyPrinter.prefixFA(prefix) + t + d + " " + little.Keywords.NULL_VALUE + "\n";
+			case 25: return "" + little.tools.PrettyPrinter.prefixFA(prefix) + t + d + " " + little.Keywords.TRUE_VALUE + "\n";
+			case 26: return "" + little.tools.PrettyPrinter.prefixFA(prefix) + t + d + " " + little.Keywords.FALSE_VALUE + "\n";
+			case 27: return "" + little.tools.PrettyPrinter.prefixFA(prefix) + t + d + " <no body>\n";
+		};
+	}
+
+	@:value({ isExpected : true })
+	public static function parseParamsString(params:Array<little.parser.ParserTokens>, isExpected:Bool = true) {
+		if ((isExpected)) {
+			var str = [];
+			{
+				var ` = 0;
+				while ((` < params.length)) {
+					var param = params[`];
+					++ `;
+					if ((enumIndex param == 2)) {
+						var ` = param[2];
+						{
+							var name = param[0];
+							var type = param[1];
+							str.push("" + little.interpreter.Interpreter.stringifyTokenValue(name, null) + " " + little.Keywords.TYPE_DECL_OR_CAST + " " + little.interpreter.Interpreter.stringifyTokenValue(if ((type != null)) type else little.parser.ParserTokens.Identifier(little.Keywords.TYPE_DYNAMIC), null));
+						};
+					};
+				};
+			};
+			if ((str.length == 0)) return "no parameters";
+			return str.join(", ");
+		} else {
+			var str = [];
+			{
+				var ` = 0;
+				while ((` < params.length)) {
+					var param = params[`];
+					++ `;
+					str.push(little.interpreter.Interpreter.stringifyTokenIdentifier(param, null, null));
+				};
+			};
+			if ((str.length == 0)) return "no parameters";
+			return str.join(", ");
+		};
+	}
+
+	@:value("")
+	static var indent:String = "";
+
+	public static function stringify(code:Null<Array<little.parser.ParserTokens>> = null, token:Null<little.parser.ParserTokens> = null) {
+		if ((token != null)) code = [token];
+		var s = "";
+		{
+			var ` = 0;
+			while ((` < code.length)) {
+				var token = code[`];
+				++ `;
+				switch ((@:exhaustive enumIndex token)) {
+					case 0: {
+						var line = token[0];
+						s += "\n" + little.tools.PrettyPrinter.indent;
+					};
+					case 1: s += ", ";
+					case 2: {
+						var ` = token[2];
+						{
+							var name = token[0];
+							var type = token[1];
+							s += "" + little.Keywords.VARIABLE_DECLARATION + " " + Std.string(name) + " " + (if ((type != null)) "" + little.Keywords.TYPE_DECL_OR_CAST + " " + little.tools.PrettyPrinter.stringify(null, type) else "");
+						};
+					};
+					case 3: {
+						var ` = token[3];
+						{
+							var name = token[0];
+							var params = token[1];
+							var type = token[2];
+							s += "" + little.Keywords.FUNCTION_DECLARATION + " " + little.tools.PrettyPrinter.stringify(null, name) + "(" + little.tools.PrettyPrinter.stringify(null, params) + ") " + (if ((type != null)) "" + little.Keywords.TYPE_DECL_OR_CAST + " " + little.tools.PrettyPrinter.stringify(null, type) else "");
+						};
+					};
+					case 4: {
+						var name = token[0];
+						var exp = token[1];
+						var body = token[2];
+						{
+							little.tools.PrettyPrinter.indent += "\t";
+							s += "" + little.tools.PrettyPrinter.stringify(null, name) + " (" + little.tools.PrettyPrinter.stringify(null, exp) + ") \n" + little.tools.PrettyPrinter.stringify(null, body);
+							little.tools.PrettyPrinter.indent = little.tools.TextTools.replaceLast(little.tools.PrettyPrinter.indent, "\t", "");
+						};
+					};
+					case 5: {
+						var name = token[0];
+						s += little.tools.PrettyPrinter.stringify(null, name);
+					};
+					case 6: {
+						var assignees = token[0];
+						var value = token[1];
+						var ` = [];
+						{
+							var ` = 0;
+							var ` = assignees.concat([value]);
+							while ((` < `.length)) {
+								var v = `[`];
+								++ `;
+								`.push(little.tools.PrettyPrinter.stringify(null, v));
+							};
+						};
+						s += Std.string([`.join(" = ")]);
+					};
+					case 7: {
+						var word = token[0];
+						s += word;
+					};
+					case 8: {
+						var value = token[0];
+						var type = token[1];
+						s += "" + little.Keywords.TYPE_DECL_OR_CAST + " " + little.tools.PrettyPrinter.stringify(null, type);
+					};
+					case 9: {
+						var name = token[0];
+						var params = token[1];
+						s += "" + little.tools.PrettyPrinter.stringify(null, name) + "(" + little.tools.PrettyPrinter.stringify(null, params) + ")";
+					};
+					case 10: {
+						var value = token[0];
+						var type = token[1];
+						s += "" + little.Keywords.FUNCTION_RETURN + " " + little.tools.PrettyPrinter.stringify(null, value);
+					};
+					case 11: {
+						var parts = token[0];
+						var type = token[1];
+						s += little.tools.PrettyPrinter.stringify(parts, null);
+					};
+					case 12: {
+						var body = token[0];
+						var type = token[1];
+						{
+							little.tools.PrettyPrinter.indent += "\t";
+							s += "{" + little.tools.PrettyPrinter.stringify(body, null) + "} " + (if ((type != null)) "" + little.Keywords.TYPE_DECL_OR_CAST + " " + little.tools.PrettyPrinter.stringify(null, type) else "");
+							little.tools.PrettyPrinter.indent = little.tools.TextTools.replaceLast(little.tools.PrettyPrinter.indent, "\t", "");
+						};
+					};
+					case 13: {
+						var parts = token[0];
+						s += little.tools.PrettyPrinter.stringify(parts, null);
+					};
+					case 14: {
+						var name = token[0];
+						var property = token[1];
+						s += "" + little.tools.PrettyPrinter.stringify(null, name) + little.Keywords.PROPERTY_ACCESS_SIGN + little.tools.PrettyPrinter.stringify(null, property);
+					};
+					case 15: {
+						var sign = token[0];
+						s += " " + sign + " ";
+					};
+					case 16: {
+						var num = token[0];
+						s += num;
+					};
+					case 17: {
+						var num = token[0];
+						s += num;
+					};
+					case 18: {
+						var string = token[0];
+						s += "\"" + string + "\"";
+					};
+					case 19: {
+						var doc = token[0];
+						s += "\"\"\"" + doc + "\"\"\"";
+					};
+					case 20: {
+						var name = token[0];
+					};
+					case 21: {
+						var get = token[0];
+					};
+					case 22: {
+						var use = token[0];
+					};
+					case 23: {
+						var msg = token[0];
+					};
+					case 24: s += little.Keywords.NULL_VALUE;
+					case 25: s += little.Keywords.TRUE_VALUE;
+					case 26: s += little.Keywords.FALSE_VALUE;
+					case 27: {};
+				};
+			};
+		};
+		return s;
+	}
+
+	public static function prettyPrintOperatorPriority(priority:Map<Int, Array<{ sign : String, side : little.interpreter.OperatorType }>>) {
+		var ` = [];
+		{
+			var x = priority.keys();
+			while ((x.hasNext())) {
+				var x = x.next();
+				`.push(x);
+			};
+		};
+		var sortedKeys = `;
+		haxe.ds.ArraySort.sort(sortedKeys, function(x:Int, y:Int) {
+			return x - y;
+		});
+		var string = "";
+		{
+			var ` = 0;
+			while ((` < sortedKeys.length)) {
+				var key = sortedKeys[`];
+				++ `;
+				string += "" + key + ": (";
+				{
+					var ` = 0;
+					var ` = cast priority.get(key);
+					while ((` < `.length)) {
+						var obj = `[`];
+						++ `;
+						if ((obj.side == little.interpreter.OperatorType.LHS_RHS)) string += "_" + obj.sign + "_" else if ((obj.side == little.interpreter.OperatorType.LHS_ONLY)) string += "_" + obj.sign else if ((obj.side == little.interpreter.OperatorType.RHS_ONLY)) string += "" + obj.sign + "_";
+						string += ", ";
+					};
+				};
+				string = little.tools.TextTools.replaceLast(string, ", ", ")") + "\n";
+			};
+		};
+		return string;
+	}
+}

@@ -1,0 +1,2 @@
+@:used @:enum
+abstract little.tools.Layer from String to String {}

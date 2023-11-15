@@ -1,0 +1,1049 @@
+@:directlyUsed @:used @:access(little.interpreter.Runtime)
+class little.interpreter.Interpreter {
+
+	@:value(false)
+	public static var errorThrown:Bool = false;
+
+	@:value(new MemoryTree(mother))
+	public static var memory:little.interpreter.memory.MemoryTree = little.interpreter.memory._MemoryTree.MemoryTree_Impl_._new(little.interpreter.Interpreter.mother);
+
+	@:value(new MemoryObject(NullValue))
+	static var mother:little.interpreter.memory.MemoryObject = new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, null, null, null, null, null, null, null, null);
+
+	public static var currentConfig:little.interpreter.RunConfig;
+
+	public static function interpret(tokens:Array<little.parser.ParserTokens>, runConfig:little.interpreter.RunConfig) {
+		if ((little.interpreter.Interpreter.errorThrown)) return null;
+		little.interpreter.Interpreter.currentConfig = runConfig;
+		if ((tokens == null || tokens.length == 0)) return little.parser.ParserTokens.NullValue;
+		if ((Type.enumConstructor(tokens[0]) != "Module")) tokens.unshift(little.parser.ParserTokens.Module(runConfig.defaultModuleName));
+		return little.interpreter.Interpreter.runTokens(tokens, runConfig.prioritizeVariableDeclarations, runConfig.prioritizeFunctionDeclarations, runConfig.strictTyping, null);
+	}
+
+	public static function runTokens(tokens:Array<little.parser.ParserTokens>, preParseVars:Bool, preParseFuncs:Bool, strict:Bool, memory:Null<little.interpreter.memory.MemoryTree> = null) {
+		if ((memory == null)) memory = little.interpreter.Interpreter.memory;
+		var returnVal = null;
+		var i = 0;
+		while ((i < tokens.length)) {
+			if ((little.interpreter.Interpreter.errorThrown)) {
+				little.interpreter.Runtime.__broadcast("Stopping Execution...");
+				little.interpreter.Runtime.__broadcast("Done.");
+				return little.interpreter.Runtime.errorToken;
+			};
+			var token = tokens[i];
+			if ((token == null)) {
+				++ i;
+				continue;
+			};
+			switch ((enumIndex token)) {
+				case 0: {
+					var line = token[0];
+					little.interpreter.Runtime.line = line;
+				};
+				case 1: {};
+				case 2: {
+					var name = token[0];
+					var type = token[1];
+					var doc = token[2];
+					{
+						var access = [null];
+						access[0] = function(object:little.interpreter.memory.MemoryObject, prop:little.parser.ParserTokens, objName:String) {
+							if ((enumIndex prop == 14)) {
+								var ` = prop[0];
+								var property = prop[1];
+								objName += "" + little.Keywords.PROPERTY_ACCESS_SIGN + little.interpreter.Interpreter.stringifyTokenValue(prop, null);
+								if ((little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(object.props, little.interpreter.Interpreter.stringifyTokenValue(prop, null)) == null)) {
+									little.interpreter.Interpreter.evaluate(little.parser.ParserTokens.ErrorMessage("Unable to create `" + objName + little.Keywords.PROPERTY_ACCESS_SIGN + little.interpreter.Interpreter.stringifyTokenIdentifier(property, null, null) + "`: `" + objName + "` Does not contain property `" + little.interpreter.Interpreter.stringifyTokenIdentifier(property, null, null) + "`."), null, null);
+									return null;
+								};
+								return access[0](little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(object.props, little.interpreter.Interpreter.stringifyTokenValue(prop, null)), property, objName);
+							} else {
+								if ((little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(object.props, little.interpreter.Interpreter.stringifyTokenIdentifier(prop, null, null)) == null)) little.interpreter.memory._MemoryTree.MemoryTree_Impl_.set(object.props, little.interpreter.Interpreter.stringifyTokenIdentifier(prop, null, null), new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, null, null, type, null, null, null, object, little.interpreter.Interpreter.stringifyTokenValue(doc, null)));
+								return little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(object.props, little.interpreter.Interpreter.stringifyTokenIdentifier(prop, null, null));
+							};
+						};
+						if ((enumIndex name == 14)) {
+							var name = name[0];
+							var property = name[1];
+							{
+								var obj = access[0](little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory, little.interpreter.Interpreter.stringifyTokenValue(name, null)), property, little.interpreter.Interpreter.stringifyTokenValue(name, null));
+								returnVal = obj.value;
+							};
+						} else {
+							little.interpreter.memory._MemoryTree.MemoryTree_Impl_.set(memory, little.interpreter.Interpreter.stringifyTokenValue(name, null), new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, null, null, if ((type != null)) type else little.parser.ParserTokens.NullValue, null, null, null, little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get_object(memory), little.interpreter.Interpreter.stringifyTokenValue(doc, null)));
+							returnVal = little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory, little.interpreter.Interpreter.stringifyTokenValue(name, null)).value;
+						};
+					};
+				};
+				case 3: {
+					var name = token[0];
+					var params = token[1];
+					var type = token[2];
+					var doc = token[3];
+					{
+						var access = [null];
+						access[0] = function(object:little.interpreter.memory.MemoryObject, prop:little.parser.ParserTokens, objName:String) {
+							if ((enumIndex prop == 14)) {
+								var ` = prop[0];
+								var property = prop[1];
+								objName += "" + little.Keywords.PROPERTY_ACCESS_SIGN + little.interpreter.Interpreter.stringifyTokenValue(prop, null);
+								if ((little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(object.props, little.interpreter.Interpreter.stringifyTokenValue(prop, null)) == null)) {
+									little.interpreter.Interpreter.evaluate(little.parser.ParserTokens.ErrorMessage("Unable to create `" + objName + little.Keywords.PROPERTY_ACCESS_SIGN + little.interpreter.Interpreter.stringifyTokenIdentifier(property, null, null) + "`: `" + objName + "` Does not contain property `" + little.interpreter.Interpreter.stringifyTokenIdentifier(property, null, null) + "`."), null, null);
+									return null;
+								};
+								return access[0](little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(object.props, little.interpreter.Interpreter.stringifyTokenValue(prop, null)), property, objName);
+							} else {
+								if ((little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(object.props, little.interpreter.Interpreter.stringifyTokenIdentifier(prop, null, null)) == null)) little.interpreter.memory._MemoryTree.MemoryTree_Impl_.set(object.props, little.interpreter.Interpreter.stringifyTokenIdentifier(prop, null, null), new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, null, Type.enumParameters(params)[0], if ((type != null)) type else little.parser.ParserTokens.NullValue, null, null, null, object, little.interpreter.Interpreter.stringifyTokenValue(doc, null)));
+								return little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(object.props, little.interpreter.Interpreter.stringifyTokenIdentifier(prop, null, null));
+							};
+						};
+						if ((enumIndex name == 14)) {
+							var name = name[0];
+							var property = name[1];
+							{
+								var obj = access[0](little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory, little.interpreter.Interpreter.stringifyTokenValue(name, null)), property, little.interpreter.Interpreter.stringifyTokenValue(name, null));
+								returnVal = obj.value;
+							};
+						} else {
+							haxe.Log.trace(name, {fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 119, className : "little.interpreter.Interpreter", methodName : "runTokens", customParams : [little.interpreter.Interpreter.stringifyTokenValue(name, null)]});
+							little.interpreter.memory._MemoryTree.MemoryTree_Impl_.set(memory, little.interpreter.Interpreter.stringifyTokenValue(name, null), new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, null, Type.enumParameters(params)[0], type, null, null, null, little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get_object(memory), little.interpreter.Interpreter.stringifyTokenValue(doc, null)));
+							returnVal = little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory, little.interpreter.Interpreter.stringifyTokenValue(name, null)).value;
+						};
+					};
+				};
+				case 4: {
+					var name = token[0];
+					var exp = token[1];
+					var body = token[2];
+					if ((little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory, little.interpreter.Interpreter.stringifyTokenValue(name, null)) == null)) {
+						returnVal = little.parser.ParserTokens.ErrorMessage("No Such Condition:  `" + little.interpreter.Interpreter.stringifyTokenValue(name, null) + "`");
+						little.interpreter.Runtime.throwError(returnVal, null);
+					} else {
+						returnVal = little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory, little.interpreter.Interpreter.stringifyTokenValue(name, null)).use(little.parser.ParserTokens.PartArray([exp, body]));
+						if ((Type.enumConstructor(returnVal) == "ErrorMessage")) little.interpreter.Runtime.throwError(returnVal, null);
+					};
+				};
+				case 5: {
+					var name = token[0];
+					{
+						var str = little.interpreter.Interpreter.stringifyTokenValue(name, null);
+						returnVal = little.interpreter.Interpreter.evaluate(if ((little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory, str) != null)) little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory, str).value else little.parser.ParserTokens.ErrorMessage("No Such Variable: `" + str + "`"), null, null);
+					};
+				};
+				case 6: {
+					var assignees = token[0];
+					var value = token[1];
+					{
+						var v = null;
+						{
+							var ` = 0;
+							while ((` < assignees.length)) {
+								var a = assignees[`];
+								++ `;
+								var assignee = little.interpreter.Interpreter.accessObject(a, null);
+								if ((assignee == null)) continue;
+								if ((assignee.params != null)) assignee.set_value(value) else {
+									if ((v == null)) v = little.interpreter.Interpreter.evaluate(value, null, null);
+									if ((Type.enumConstructor(v) == "ErrorMessage")) assignee.set_value(little.parser.ParserTokens.NullValue) else assignee.set_value(v);
+								};
+							};
+						};
+						returnVal = if ((v != null)) v else value;
+					};
+				};
+				case 9: {
+					var name = token[0];
+					var params = token[1];
+					if ((little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory, little.interpreter.Interpreter.stringifyTokenValue(name, null)) == null)) little.interpreter.Runtime.throwError(little.parser.ParserTokens.ErrorMessage("No Such Function:  `" + little.interpreter.Interpreter.stringifyTokenValue(name, null) + "`"), null) else {
+						returnVal = little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory, little.interpreter.Interpreter.stringifyTokenValue(name, null)).use(params);
+						if ((Type.enumConstructor(returnVal) == "ErrorMessage")) little.interpreter.Runtime.throwError(returnVal, null);
+					};
+				};
+				case 10: {
+					var value = token[0];
+					var type = token[1];
+					return little.interpreter.Interpreter.evaluate(value, null, null);
+				};
+				case 12: {
+					var body = token[0];
+					var type = token[1];
+					returnVal = little.interpreter.Interpreter.runTokens(body, preParseVars, preParseFuncs, strict, null);
+				};
+				case 14: {
+					var name = token[0];
+					var property = token[1];
+					returnVal = little.interpreter.Interpreter.evaluate(token, null, null);
+				};
+				case 20: {
+					var name = token[0];
+					little.interpreter.Runtime.currentModule = name;
+				};
+				default: returnVal = little.interpreter.Interpreter.evaluate(token, null, null)
+			};
+			++ i;
+		};
+		if ((little.interpreter.Interpreter.errorThrown)) {
+			little.interpreter.Runtime.broadcast("Stopping Execution...");
+			little.interpreter.Runtime.broadcast("Done.");
+			return little.interpreter.Runtime.errorToken;
+		};
+		return returnVal;
+	}
+
+	@:value({ dontThrow : false })
+	public static function evaluate(exp:little.parser.ParserTokens, memory:Null<little.interpreter.memory.MemoryTree> = null, dontThrow:Null<Bool> = false) {
+		if ((memory == null)) memory = little.interpreter.Interpreter.memory;
+		if ((exp == null)) return little.parser.ParserTokens.NullValue;
+		switch ((enumIndex exp)) {
+			case 0: {
+				var line = exp[0];
+				little.interpreter.Runtime.line = line;
+				return little.parser.ParserTokens.NullValue;
+			};
+			case 1: return little.parser.ParserTokens.NullValue;
+			case 2: {
+				var name = exp[0];
+				var type = exp[1];
+				var doc = exp[2];
+				var access = [null];
+				access[0] = function(object:little.interpreter.memory.MemoryObject, prop:little.parser.ParserTokens, objName:String) {
+					if ((enumIndex prop == 14)) {
+						var ` = prop[0];
+						var property = prop[1];
+						objName += "" + little.Keywords.PROPERTY_ACCESS_SIGN + little.interpreter.Interpreter.stringifyTokenValue(prop, null);
+						if ((little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(object.props, little.interpreter.Interpreter.stringifyTokenValue(prop, null)) == null)) {
+							little.interpreter.Interpreter.evaluate(little.parser.ParserTokens.ErrorMessage("Unable to create `" + objName + little.Keywords.PROPERTY_ACCESS_SIGN + little.interpreter.Interpreter.stringifyTokenIdentifier(property, null, null) + "`: `" + objName + "` Does not contain property `" + little.interpreter.Interpreter.stringifyTokenIdentifier(property, null, null) + "`."), null, null);
+							return null;
+						};
+						return access[0](little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(object.props, little.interpreter.Interpreter.stringifyTokenValue(prop, null)), property, objName);
+					} else {
+						if ((little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(object.props, little.interpreter.Interpreter.stringifyTokenIdentifier(prop, null, null)) == null)) little.interpreter.memory._MemoryTree.MemoryTree_Impl_.set(object.props, little.interpreter.Interpreter.stringifyTokenIdentifier(prop, null, null), new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, null, null, type, null, null, null, object, little.interpreter.Interpreter.stringifyTokenValue(doc, null)));
+						return little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(object.props, little.interpreter.Interpreter.stringifyTokenIdentifier(prop, null, null));
+					};
+				};
+				if ((enumIndex name == 14)) {
+					var name = name[0];
+					var property = name[1];
+					var obj = access[0](little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory, little.interpreter.Interpreter.stringifyTokenValue(name, null)), property, little.interpreter.Interpreter.stringifyTokenValue(name, null));
+					return obj.value;
+				} else {
+					little.interpreter.memory._MemoryTree.MemoryTree_Impl_.set(memory, little.interpreter.Interpreter.stringifyTokenValue(name, null), new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, null, null, if ((type != null)) type else little.parser.ParserTokens.NullValue, null, null, null, little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get_object(memory), little.interpreter.Interpreter.stringifyTokenValue(doc, null)));
+					return little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory, little.interpreter.Interpreter.stringifyTokenValue(name, null)).value;
+				};
+			};
+			case 3: {
+				var name = exp[0];
+				var params = exp[1];
+				var type = exp[2];
+				var doc = exp[3];
+				var access = [null];
+				access[0] = function(object:little.interpreter.memory.MemoryObject, prop:little.parser.ParserTokens, objName:String) {
+					if ((enumIndex prop == 14)) {
+						var ` = prop[0];
+						var property = prop[1];
+						objName += "" + little.Keywords.PROPERTY_ACCESS_SIGN + little.interpreter.Interpreter.stringifyTokenValue(prop, null);
+						if ((little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(object.props, little.interpreter.Interpreter.stringifyTokenValue(prop, null)) == null)) {
+							little.interpreter.Interpreter.evaluate(little.parser.ParserTokens.ErrorMessage("Unable to create `" + objName + little.Keywords.PROPERTY_ACCESS_SIGN + little.interpreter.Interpreter.stringifyTokenIdentifier(property, null, null) + "`: `" + objName + "` Does not contain property `" + little.interpreter.Interpreter.stringifyTokenIdentifier(property, null, null) + "`."), null, null);
+							return null;
+						};
+						return access[0](little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(object.props, little.interpreter.Interpreter.stringifyTokenValue(prop, null)), property, objName);
+					} else {
+						if ((little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(object.props, little.interpreter.Interpreter.stringifyTokenIdentifier(prop, null, null)) == null)) little.interpreter.memory._MemoryTree.MemoryTree_Impl_.set(object.props, little.interpreter.Interpreter.stringifyTokenIdentifier(prop, null, null), new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, null, Type.enumParameters(params)[0], if ((type != null)) type else little.parser.ParserTokens.NullValue, null, null, null, object, little.interpreter.Interpreter.stringifyTokenValue(doc, null)));
+						return little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(object.props, little.interpreter.Interpreter.stringifyTokenIdentifier(prop, null, null));
+					};
+				};
+				if ((enumIndex name == 14)) {
+					var name = name[0];
+					var property = name[1];
+					var obj = access[0](little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory, little.interpreter.Interpreter.stringifyTokenValue(name, null)), property, little.interpreter.Interpreter.stringifyTokenValue(name, null));
+					return obj.value;
+				} else {
+					haxe.Log.trace(name, {fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 337, className : "little.interpreter.Interpreter", methodName : "evaluate", customParams : [little.interpreter.Interpreter.stringifyTokenValue(name, null)]});
+					little.interpreter.memory._MemoryTree.MemoryTree_Impl_.set(memory, little.interpreter.Interpreter.stringifyTokenValue(name, null), new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, null, Type.enumParameters(params)[0], type, null, null, null, little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get_object(memory), little.interpreter.Interpreter.stringifyTokenValue(doc, null)));
+					return little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory, little.interpreter.Interpreter.stringifyTokenValue(name, null)).value;
+				};
+			};
+			case 4: {
+				var name = exp[0];
+				var exp = exp[1];
+				var body = exp[2];
+				if ((little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory, little.interpreter.Interpreter.stringifyTokenValue(name, null)) == null)) return little.interpreter.Interpreter.evaluate(little.parser.ParserTokens.ErrorMessage("No Such Condition:  `" + little.interpreter.Interpreter.stringifyTokenValue(name, null) + "`"), memory, dontThrow) else return little.interpreter.Interpreter.evaluate(little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory, little.interpreter.Interpreter.stringifyTokenValue(name, null)).use(little.parser.ParserTokens.PartArray([exp, body])), memory, dontThrow);
+			};
+			case 5: {
+				var name = exp[0];
+				var str = little.interpreter.Interpreter.stringifyTokenValue(name, null);
+				return little.interpreter.Interpreter.evaluate(if ((little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory, str) != null)) little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory, str).value else little.parser.ParserTokens.ErrorMessage("No Such Variable: `" + str + "`"), memory, dontThrow);
+			};
+			case 6: {
+				var assignees = exp[0];
+				var value = exp[1];
+				var v = null;
+				{
+					var ` = 0;
+					while ((` < assignees.length)) {
+						var a = assignees[`];
+						++ `;
+						var assignee = little.interpreter.Interpreter.accessObject(a, null);
+						if ((assignee == null)) continue;
+						if ((assignee.params != null)) assignee.set_value(value) else {
+							if ((v == null)) v = little.interpreter.Interpreter.evaluate(value, null, null);
+							if ((Type.enumConstructor(v) == "ErrorMessage")) assignee.set_value(little.parser.ParserTokens.NullValue) else assignee.set_value(v);
+						};
+					};
+				};
+				if ((v != null)) return v else return value;
+			};
+			case 7: {
+				var word = exp[0];
+				return little.interpreter.Interpreter.evaluate(if ((little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory, word) != null)) little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory, word).value else little.parser.ParserTokens.ErrorMessage("No Such Variable: `" + word + "`"), memory, dontThrow);
+			};
+			case 8: {
+				var value = exp[0];
+				var type = exp[1];
+				var val = little.interpreter.Interpreter.evaluate(value, memory, dontThrow);
+				var valT = little.interpreter.Interpreter.getValueType(val);
+				var t = little.interpreter.Interpreter.evaluate(type, memory, dontThrow);
+				if ((Type.enumEq(t, valT))) return val else {
+					little.interpreter.Runtime.warn(little.parser.ParserTokens.ErrorMessage("Mismatch at type declaration: the value " + Std.string(value) + " has been declared as being of type " + Std.string(t) + ", while its type is " + Std.string(valT) + ". This might cause issues."), cast "Interpreter, Value Evaluator");
+					return val;
+				};
+			};
+			case 9: {
+				var name = exp[0];
+				var params = exp[1];
+				if ((little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory, little.interpreter.Interpreter.stringifyTokenValue(name, null)) == null)) return little.interpreter.Interpreter.evaluate(little.parser.ParserTokens.ErrorMessage("No Such Function:  `" + little.interpreter.Interpreter.stringifyTokenValue(name, null) + "`"), null, null);
+				return little.interpreter.Interpreter.evaluate(little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory, little.interpreter.Interpreter.stringifyTokenValue(name, null)).use(params), memory, dontThrow);
+			};
+			case 10: {
+				var value = exp[0];
+				var type = exp[1];
+				return little.interpreter.Interpreter.evaluate(value, memory, dontThrow);
+			};
+			case 11: {
+				var ` = exp[1];
+				var parts = exp[0];
+				return little.interpreter.Interpreter.evaluateExpressionParts(parts, null);
+			};
+			case 12: {
+				var body = exp[0];
+				var type = exp[1];
+				var returnVal = little.interpreter.Interpreter.runTokens(body, little.interpreter.Interpreter.currentConfig.prioritizeVariableDeclarations, little.interpreter.Interpreter.currentConfig.prioritizeFunctionDeclarations, little.interpreter.Interpreter.currentConfig.strictTyping, null);
+				return little.interpreter.Interpreter.evaluate(returnVal, memory, dontThrow);
+			};
+			case 13: {
+				var parts = exp[0];
+				var ` = [];
+				{
+					var ` = 0;
+					while ((` < parts.length)) {
+						var p = parts[`];
+						++ `;
+						`.push(little.interpreter.Interpreter.evaluate(p, memory, dontThrow));
+					};
+				};
+				return little.parser.ParserTokens.PartArray(`);
+			};
+			case 14: {
+				var ` = exp[0];
+				var ` = exp[1];
+				var o = little.interpreter.Interpreter.accessObject(exp, memory);
+				if ((o != null)) return o.value;
+				return little.parser.ParserTokens.NullValue;
+			};
+			case 15: {
+				var ` = exp[0];
+				return exp;
+			};
+			case 16: {
+				var ` = exp[0];
+				return exp;
+			};
+			case 17: {
+				var ` = exp[0];
+				return exp;
+			};
+			case 18: {
+				var ` = exp[0];
+				return exp;
+			};
+			case 20: {
+				var name = exp[0];
+				little.interpreter.Runtime.currentModule = name;
+				return little.parser.ParserTokens.NullValue;
+			};
+			case 21: {
+				var ` = exp[0];
+				return little.parser.ParserTokens.Characters("External Function/Variable");
+			};
+			case 23: {
+				var msg = exp[0];
+				if ((! dontThrow)) little.interpreter.Runtime.throwError(exp, cast "Interpreter, Value Evaluator");
+				return exp;
+			};
+			case 24, 25, 26: return exp;
+			default: return little.interpreter.Interpreter.evaluate(little.parser.ParserTokens.ErrorMessage("Unable to evaluate token `" + Std.string(exp) + "`"), memory, dontThrow)
+		};
+	}
+
+	public static function getValueType(token:little.parser.ParserTokens) {
+		if ((token == null)) return little.parser.ParserTokens.Module(little.Keywords.TYPE_DYNAMIC);
+		switch ((enumIndex token)) {
+			case 0: {
+				var ` = token[0];
+				return little.parser.ParserTokens.Module(little.Keywords.TYPE_VOID);
+			};
+			case 1: return little.parser.ParserTokens.Module(little.Keywords.TYPE_VOID);
+			case 7: {
+				var word = token[0];
+				return little.interpreter.Interpreter.getValueType(little.interpreter.Interpreter.evaluate(little.parser.ParserTokens.Read(token), null, null));
+			};
+			case 8: {
+				var ` = token[0];
+				var type = token[1];
+				return little.interpreter.Interpreter.evaluate(type, null, null);
+			};
+			case 15: {
+				var ` = token[0];
+				return little.parser.ParserTokens.Module(little.Keywords.TYPE_SIGN);
+			};
+			case 16: {
+				var ` = token[0];
+				return little.parser.ParserTokens.Module(little.Keywords.TYPE_INT);
+			};
+			case 17: {
+				var ` = token[0];
+				return little.parser.ParserTokens.Module(little.Keywords.TYPE_FLOAT);
+			};
+			case 18: {
+				var ` = token[0];
+				return little.parser.ParserTokens.Module(little.Keywords.TYPE_STRING);
+			};
+			case 20: {
+				var ` = token[0];
+				return little.parser.ParserTokens.Module(little.Keywords.TYPE_MODULE);
+			};
+			case 21: {
+				var ` = token[0];
+				return little.parser.ParserTokens.Module(little.Keywords.TYPE_DYNAMIC);
+			};
+			case 22: {
+				var ` = token[0];
+				return little.parser.ParserTokens.Module(little.Keywords.TYPE_DYNAMIC);
+			};
+			case 23: {
+				var msg = token[0];
+				return little.parser.ParserTokens.Module(little.Keywords.TYPE_DYNAMIC);
+			};
+			case 24: return little.parser.ParserTokens.Module(little.Keywords.TYPE_DYNAMIC);
+			case 25: return little.parser.ParserTokens.Module(little.Keywords.TYPE_BOOLEAN);
+			case 26: return little.parser.ParserTokens.Module(little.Keywords.TYPE_BOOLEAN);
+			default: return little.interpreter.Interpreter.getValueType(little.interpreter.Interpreter.evaluate(token, null, null))
+		};
+	}
+
+	public static function accessObject(exp:little.parser.ParserTokens, memory:Null<little.interpreter.memory.MemoryTree> = null) {
+		var memory = [memory];
+		if ((memory[0] == null)) memory[0] = little.interpreter.Interpreter.memory;
+		switch ((enumIndex exp)) {
+			case 0: {
+				var line = exp[0];
+				little.interpreter.Runtime.line = line;
+			};
+			case 2: {
+				var name = exp[0];
+				var type = exp[1];
+				var doc = exp[2];
+				var access = function(object:little.interpreter.memory.MemoryObject, prop:little.parser.ParserTokens, objName:String) {
+					if ((little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(object.props, little.interpreter.Interpreter.stringifyTokenIdentifier(prop, null, null)) == null)) little.interpreter.memory._MemoryTree.MemoryTree_Impl_.set(object.props, little.interpreter.Interpreter.stringifyTokenIdentifier(prop, null, null), new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, null, null, type, null, null, null, object, little.interpreter.Interpreter.stringifyTokenValue(doc, null)));
+					return little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(object.props, little.interpreter.Interpreter.stringifyTokenIdentifier(prop, null, null));
+				};
+				if ((enumIndex name == 14)) {
+					var name = name[0];
+					var property = name[1];
+					var obj = access(little.interpreter.Interpreter.accessObject(name, null), property, little.interpreter.Interpreter.stringifyTokenIdentifier(name, null, null));
+					return obj;
+				} else {
+					little.interpreter.memory._MemoryTree.MemoryTree_Impl_.set(memory[0], little.interpreter.Interpreter.stringifyTokenValue(name, null), new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, null, null, if ((type != null)) type else little.parser.ParserTokens.NullValue, null, null, null, little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get_object(memory[0]), little.interpreter.Interpreter.stringifyTokenValue(doc, null)));
+					return little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory[0], little.interpreter.Interpreter.stringifyTokenValue(name, null));
+				};
+			};
+			case 3: {
+				var name = exp[0];
+				var params = exp[1];
+				var type = exp[2];
+				var doc = exp[3];
+				var access = function(object:little.interpreter.memory.MemoryObject, prop:little.parser.ParserTokens, objName:String) {
+					if ((little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(object.props, little.interpreter.Interpreter.stringifyTokenIdentifier(prop, null, null)) == null)) little.interpreter.memory._MemoryTree.MemoryTree_Impl_.set(object.props, little.interpreter.Interpreter.stringifyTokenIdentifier(prop, null, null), new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, null, Type.enumParameters(params)[0], if ((type != null)) type else little.parser.ParserTokens.NullValue, null, null, null, object, little.interpreter.Interpreter.stringifyTokenValue(doc, null)));
+					return little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(object.props, little.interpreter.Interpreter.stringifyTokenIdentifier(prop, null, null));
+				};
+				if ((enumIndex name == 14)) {
+					var name = name[0];
+					var property = name[1];
+					var obj = access(little.interpreter.Interpreter.accessObject(name, null), property, little.interpreter.Interpreter.stringifyTokenIdentifier(name, null, null));
+					return obj;
+				} else {
+					little.interpreter.memory._MemoryTree.MemoryTree_Impl_.set(memory[0], little.interpreter.Interpreter.stringifyTokenValue(name, null), new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, null, Type.enumParameters(params)[0], type, null, null, null, little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get_object(memory[0]), little.interpreter.Interpreter.stringifyTokenValue(doc, null)));
+					return little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory[0], little.interpreter.Interpreter.stringifyTokenValue(name, null));
+				};
+			};
+			case 5: {
+				var name = exp[0];
+				var word = little.interpreter.Interpreter.stringifyTokenValue(name, null);
+				little.interpreter.Interpreter.evaluate(if ((little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory[0], word) != null)) little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory[0], word).value else little.parser.ParserTokens.ErrorMessage("No Such Variable: `" + word + "`"), null, null);
+				return little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory[0], word);
+			};
+			case 7: {
+				var word = exp[0];
+				little.interpreter.Interpreter.evaluate(if ((little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory[0], word) != null)) little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory[0], word).value else little.parser.ParserTokens.ErrorMessage("No Such Variable: `" + word + "`"), null, null);
+				return little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory[0], word);
+			};
+			case 9: {
+				var name = exp[0];
+				var params = exp[1];
+				if ((little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory[0], little.interpreter.Interpreter.stringifyTokenValue(name, null)) == null)) little.interpreter.Interpreter.evaluate(little.parser.ParserTokens.ErrorMessage("No Such Function:  `" + little.interpreter.Interpreter.stringifyTokenValue(name, null) + "`"), null, null);
+				return little.interpreter.Interpreter.accessObject(little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory[0], little.interpreter.Interpreter.stringifyTokenValue(name, null)).use(params), null);
+			};
+			case 10: {
+				var value = exp[0];
+				var type = exp[1];
+				return little.interpreter.Interpreter.accessObject(value, null);
+			};
+			case 11: {
+				var ` = exp[1];
+				var parts = exp[0];
+				return little.interpreter.Interpreter.accessObject(little.interpreter.Interpreter.evaluateExpressionParts(parts, null), null);
+			};
+			case 12: {
+				var body = exp[0];
+				var type = exp[1];
+				var returnVal = little.interpreter.Interpreter.runTokens(body, little.interpreter.Interpreter.currentConfig.prioritizeVariableDeclarations, little.interpreter.Interpreter.currentConfig.prioritizeFunctionDeclarations, little.interpreter.Interpreter.currentConfig.strictTyping, null);
+				return little.interpreter.Interpreter.accessObject(little.interpreter.Interpreter.evaluate(returnVal, null, null), null);
+			};
+			case 14: {
+				var n = exp[0];
+				var p = exp[1];
+				var str = little.interpreter.Interpreter.stringifyTokenIdentifier(n, null, null);
+				var prop = little.interpreter.Interpreter.stringifyTokenIdentifier(p, null, null);
+				var obj = little.interpreter.Interpreter.accessObject(n, null);
+				if ((obj == null)) little.interpreter.Interpreter.evaluate(little.parser.ParserTokens.ErrorMessage("Unable to access property `" + str + little.Keywords.PROPERTY_ACCESS_SIGN + prop + "`: No Such Variable: `" + str + "`"), null, null);
+				var access = function(object:little.interpreter.memory.MemoryObject, prop:little.parser.ParserTokens, objName:String) {
+					if ((enumIndex prop == 9)) {
+						var name = prop[0];
+						var params = prop[1];
+						if ((little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(object.props, little.interpreter.Interpreter.stringifyTokenValue(name, null)) == null)) {
+							little.interpreter.Interpreter.evaluate(little.parser.ParserTokens.ErrorMessage("Unable to call `" + objName + little.Keywords.PROPERTY_ACCESS_SIGN + little.interpreter.Interpreter.stringifyTokenValue(name, null) + "(" + little.interpreter.Interpreter.stringifyTokenValue(params, null) + ")`: `" + objName + "` Does not contain property `" + little.interpreter.Interpreter.stringifyTokenIdentifier(name, null, null) + "`. Use `" + little.Keywords.FUNCTION_DECLARATION + "` to create a new property (`" + little.Keywords.FUNCTION_DECLARATION + " " + str + little.Keywords.PROPERTY_ACCESS_SIGN + little.interpreter.Interpreter.stringifyTokenIdentifier(name, null, null) + "(...)`)"), null, null);
+							return null;
+						};
+						return new little.interpreter.memory.MemoryObject(little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(object.props, little.interpreter.Interpreter.stringifyTokenValue(name, null)).use(params), null, null, null, null, null, null, little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get_object(memory[0]), null);
+					} else {
+						if ((little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(object.props, little.interpreter.Interpreter.stringifyTokenIdentifier(prop, null, null)) == null)) {
+							little.interpreter.memory._MemoryTree.MemoryTree_Impl_.set(object.props, little.interpreter.Interpreter.stringifyTokenIdentifier(prop, null, null), new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, null, null, null, null, null, null, object, null));
+							little.interpreter.Interpreter.evaluate(little.parser.ParserTokens.ErrorMessage("Unable to access `" + str + little.Keywords.PROPERTY_ACCESS_SIGN + little.interpreter.Interpreter.stringifyTokenValue(prop, null) + "`: `" + str + "` Does not contain property `" + little.interpreter.Interpreter.stringifyTokenValue(prop, null) + "`. Use `" + little.Keywords.VARIABLE_DECLARATION + "` to create a new property (`" + little.Keywords.VARIABLE_DECLARATION + " " + str + little.Keywords.PROPERTY_ACCESS_SIGN + little.interpreter.Interpreter.stringifyTokenValue(prop, null) + "`)"), null, null);
+							return null;
+						};
+						return little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(object.props, little.interpreter.Interpreter.stringifyTokenIdentifier(prop, null, null));
+					};
+				};
+				return access(obj, p, str);
+			};
+			case 15: {
+				var ` = exp[0];
+				return new little.interpreter.memory.MemoryObject(exp, null, null, little.parser.ParserTokens.Module(little.Keywords.TYPE_SIGN), null, null, null, little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get_object(memory[0]), null);
+			};
+			case 16: {
+				var ` = exp[0];
+				return new little.interpreter.memory.MemoryObject(exp, null, null, little.parser.ParserTokens.Module(little.Keywords.TYPE_INT), null, null, null, little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get_object(memory[0]), null);
+			};
+			case 17: {
+				var ` = exp[0];
+				return new little.interpreter.memory.MemoryObject(exp, null, null, little.parser.ParserTokens.Module(little.Keywords.TYPE_FLOAT), null, null, null, little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get_object(memory[0]), null);
+			};
+			case 18: {
+				var ` = exp[0];
+				return new little.interpreter.memory.MemoryObject(exp, null, null, little.parser.ParserTokens.Module(little.Keywords.TYPE_STRING), null, null, null, little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get_object(memory[0]), null);
+			};
+			case 20: {
+				var name = exp[0];
+				little.interpreter.Runtime.currentModule = name;
+			};
+			case 24: return new little.interpreter.memory.MemoryObject(exp, null, null, little.parser.ParserTokens.Module(little.Keywords.TYPE_DYNAMIC), null, null, null, little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get_object(memory[0]), null);
+			case 25, 26: return new little.interpreter.memory.MemoryObject(exp, null, null, little.parser.ParserTokens.Module(little.Keywords.TYPE_BOOLEAN), null, null, null, little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get_object(memory[0]), null);
+			default: haxe.Log.trace("Token " + Std.string(exp) + " is inaccessible via memory. Returning null.", {fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 487, className : "little.interpreter.Interpreter", methodName : "accessObject"})
+		};
+		return null;
+	}
+
+	public static function createObject(exp:little.parser.ParserTokens, memory:Null<little.interpreter.memory.MemoryTree> = null) {
+		var memory = [memory];
+		if ((memory[0] == null)) memory[0] = little.interpreter.Interpreter.memory;
+		switch ((enumIndex exp)) {
+			case 0: {
+				var line = exp[0];
+				little.interpreter.Runtime.line = line;
+			};
+			case 2: {
+				var name = exp[0];
+				var type = exp[1];
+				var doc = exp[2];
+				var access = function(object:little.interpreter.memory.MemoryObject, prop:little.parser.ParserTokens, objName:String) {
+					if ((little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(object.props, little.interpreter.Interpreter.stringifyTokenIdentifier(prop, null, null)) == null)) little.interpreter.memory._MemoryTree.MemoryTree_Impl_.set(object.props, little.interpreter.Interpreter.stringifyTokenIdentifier(prop, null, null), new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, null, null, if ((type != null)) type else little.parser.ParserTokens.NullValue, null, null, null, object, little.interpreter.Interpreter.stringifyTokenValue(doc, null)));
+					return little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(object.props, little.interpreter.Interpreter.stringifyTokenIdentifier(prop, null, null));
+				};
+				if ((enumIndex name == 14)) {
+					var name = name[0];
+					var property = name[1];
+					var obj = access(little.interpreter.Interpreter.createObject(name, null), property, little.interpreter.Interpreter.stringifyTokenIdentifier(name, null, null));
+					return little.interpreter.Interpreter.createObject(obj.value, null);
+				} else return new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, null, null, if ((type != null)) type else little.parser.ParserTokens.NullValue, null, null, null, little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get_object(memory[0]), little.interpreter.Interpreter.stringifyTokenValue(doc, null));
+			};
+			case 3: {
+				var name = exp[0];
+				var params = exp[1];
+				var type = exp[2];
+				var doc = exp[3];
+				var access = function(object:little.interpreter.memory.MemoryObject, prop:little.parser.ParserTokens, objName:String) {
+					if ((little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(object.props, little.interpreter.Interpreter.stringifyTokenIdentifier(prop, null, null)) == null)) little.interpreter.memory._MemoryTree.MemoryTree_Impl_.set(object.props, little.interpreter.Interpreter.stringifyTokenIdentifier(prop, null, null), new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, null, Type.enumParameters(params)[0], if ((type != null)) type else little.parser.ParserTokens.NullValue, null, null, null, object, little.interpreter.Interpreter.stringifyTokenValue(doc, null)));
+					return little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(object.props, little.interpreter.Interpreter.stringifyTokenIdentifier(prop, null, null));
+				};
+				if ((enumIndex name == 14)) {
+					var name = name[0];
+					var property = name[1];
+					var obj = access(little.interpreter.Interpreter.createObject(name, null), property, little.interpreter.Interpreter.stringifyTokenIdentifier(name, null, null));
+					return little.interpreter.Interpreter.createObject(obj.value, null);
+				} else return new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, null, Type.enumParameters(params)[0], if ((type != null)) type else little.parser.ParserTokens.NullValue, null, null, null, little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get_object(memory[0]), little.interpreter.Interpreter.stringifyTokenValue(doc, null));
+			};
+			case 5: {
+				var name = exp[0];
+				var word = little.interpreter.Interpreter.stringifyTokenValue(name, null);
+				var value = little.interpreter.Interpreter.evaluate(if ((little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory[0], word) != null)) little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory[0], word).value else little.parser.ParserTokens.ErrorMessage("No Such Variable: `" + word + "`"), null, null);
+				return little.interpreter.Interpreter.createObject(value, null);
+			};
+			case 7: {
+				var word = exp[0];
+				var value = little.interpreter.Interpreter.evaluate(if ((little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory[0], word) != null)) little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory[0], word).value else little.parser.ParserTokens.ErrorMessage("No Such Variable: `" + word + "`"), null, null);
+				return little.interpreter.Interpreter.createObject(value, null);
+			};
+			case 9: {
+				var name = exp[0];
+				var params = exp[1];
+				if ((little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory[0], little.interpreter.Interpreter.stringifyTokenValue(name, null)) == null)) little.interpreter.Interpreter.evaluate(little.parser.ParserTokens.ErrorMessage("No Such Function:  `" + little.interpreter.Interpreter.stringifyTokenValue(name, null) + "`"), null, null);
+				return little.interpreter.Interpreter.createObject(little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory[0], little.interpreter.Interpreter.stringifyTokenValue(name, null)).use(params), null);
+			};
+			case 10: {
+				var value = exp[0];
+				var type = exp[1];
+				return little.interpreter.Interpreter.createObject(value, null);
+			};
+			case 11: {
+				var ` = exp[1];
+				var parts = exp[0];
+				return little.interpreter.Interpreter.createObject(little.interpreter.Interpreter.evaluateExpressionParts(parts, null), null);
+			};
+			case 12: {
+				var body = exp[0];
+				var type = exp[1];
+				var returnVal = little.interpreter.Interpreter.runTokens(body, little.interpreter.Interpreter.currentConfig.prioritizeVariableDeclarations, little.interpreter.Interpreter.currentConfig.prioritizeFunctionDeclarations, little.interpreter.Interpreter.currentConfig.strictTyping, null);
+				return little.interpreter.Interpreter.createObject(little.interpreter.Interpreter.evaluate(returnVal, null, null), null);
+			};
+			case 14: {
+				var n = exp[0];
+				var p = exp[1];
+				var str = little.interpreter.Interpreter.stringifyTokenValue(n, null);
+				var prop = little.interpreter.Interpreter.stringifyTokenIdentifier(p, null, null);
+				if ((little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory[0], str) == null)) little.interpreter.Interpreter.evaluate(little.parser.ParserTokens.ErrorMessage("Unable to access property `" + str + little.Keywords.PROPERTY_ACCESS_SIGN + prop + "` - No Such Variable: `" + str + "`"), null, null);
+				var obj = little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory[0], str);
+				var access = function(object:little.interpreter.memory.MemoryObject, prop:little.parser.ParserTokens, objName:String) {
+					if ((enumIndex prop == 9)) {
+						var name = prop[0];
+						var params = prop[1];
+						if ((little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(object.props, little.interpreter.Interpreter.stringifyTokenValue(name, null)) == null)) {
+							little.interpreter.Interpreter.evaluate(little.parser.ParserTokens.ErrorMessage("Unable to call `" + objName + little.Keywords.PROPERTY_ACCESS_SIGN + little.interpreter.Interpreter.stringifyTokenValue(name, null) + "(" + little.interpreter.Interpreter.stringifyTokenValue(params, null) + ")`: `" + objName + "` Does not contain property `" + little.interpreter.Interpreter.stringifyTokenIdentifier(name, null, null) + "`."), null, null);
+							return null;
+						};
+						return new little.interpreter.memory.MemoryObject(little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(object.props, little.interpreter.Interpreter.stringifyTokenValue(name, null)).use(params), null, null, null, null, null, null, little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get_object(memory[0]), null);
+					} else {
+						if ((little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(object.props, little.interpreter.Interpreter.stringifyTokenIdentifier(prop, null, null)) == null)) little.interpreter.memory._MemoryTree.MemoryTree_Impl_.set(object.props, little.interpreter.Interpreter.stringifyTokenIdentifier(prop, null, null), new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, null, null, null, null, null, null, object, null));
+						return little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(object.props, little.interpreter.Interpreter.stringifyTokenIdentifier(prop, null, null));
+					};
+				};
+				return little.interpreter.Interpreter.createObject(access(obj, p, str).value, null);
+			};
+			case 15: {
+				var ` = exp[0];
+				return new little.interpreter.memory.MemoryObject(exp, null, null, little.parser.ParserTokens.Module(little.Keywords.TYPE_SIGN), null, null, null, little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get_object(memory[0]), null);
+			};
+			case 16: {
+				var ` = exp[0];
+				return new little.interpreter.memory.MemoryObject(exp, null, null, little.parser.ParserTokens.Module(little.Keywords.TYPE_INT), null, null, null, little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get_object(memory[0]), null);
+			};
+			case 17: {
+				var ` = exp[0];
+				return new little.interpreter.memory.MemoryObject(exp, null, null, little.parser.ParserTokens.Module(little.Keywords.TYPE_FLOAT), null, null, null, little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get_object(memory[0]), null);
+			};
+			case 18: {
+				var ` = exp[0];
+				return new little.interpreter.memory.MemoryObject(exp, null, null, little.parser.ParserTokens.Module(little.Keywords.TYPE_STRING), null, null, null, little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get_object(memory[0]), null);
+			};
+			case 20: {
+				var name = exp[0];
+				little.interpreter.Runtime.currentModule = name;
+			};
+			case 24: return new little.interpreter.memory.MemoryObject(exp, null, null, little.parser.ParserTokens.Module(little.Keywords.TYPE_VOID), null, null, null, little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get_object(memory[0]), null);
+			case 25, 26: return new little.interpreter.memory.MemoryObject(exp, null, null, little.parser.ParserTokens.Module(little.Keywords.TYPE_BOOLEAN), null, null, null, little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get_object(memory[0]), null);
+			default: haxe.Log.trace("Unable to create memory object from " + Std.string(exp) + ". Returning null.", {fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 594, className : "little.interpreter.Interpreter", methodName : "createObject"})
+		};
+		return null;
+	}
+
+	public static function stringifyTokenValue(token:little.parser.ParserTokens, memory:Null<little.interpreter.memory.MemoryTree> = null) {
+		if ((memory == null)) memory = little.interpreter.Interpreter.memory;
+		if ((token == null)) return "";
+		switch ((@:exhaustive enumIndex token)) {
+			case 0: {
+				var line = token[0];
+				return (little.interpreter.Runtime.line = line) + "";
+			};
+			case 1: return Type.enumConstructor(token);
+			case 2: {
+				var name = token[0];
+				var type = token[1];
+				var doc = token[2];
+				little.interpreter.memory._MemoryTree.MemoryTree_Impl_.set(memory, little.interpreter.Interpreter.stringifyTokenIdentifier(name, null, null), new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, @:implicitCast little.interpreter.memory._MemoryTree.MemoryTree_Impl_._new(new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, null, null, null, null, null, null, null, null)), null, type, null, null, null, little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get_object(memory), little.interpreter.Interpreter.stringifyTokenValue(doc, null)));
+				return little.interpreter.Interpreter.stringifyTokenValue(name, null);
+			};
+			case 3: {
+				var name = token[0];
+				var params = token[1];
+				var type = token[2];
+				var doc = token[3];
+				little.interpreter.memory._MemoryTree.MemoryTree_Impl_.set(memory, little.interpreter.Interpreter.stringifyTokenIdentifier(name, null, null), new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, @:implicitCast little.interpreter.memory._MemoryTree.MemoryTree_Impl_._new(new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, null, null, null, null, null, null, null, null)), Type.enumParameters(params)[0], type, null, null, null, little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get_object(memory), little.interpreter.Interpreter.stringifyTokenValue(doc, null)));
+				return little.interpreter.Interpreter.stringifyTokenValue(name, null);
+			};
+			case 4: {
+				var ` = token[0];
+				var ` = token[1];
+				var ` = token[2];
+				return little.interpreter.Interpreter.stringifyTokenValue(little.interpreter.Interpreter.evaluate(token, memory, null), null);
+			};
+			case 5: {
+				var name = token[0];
+				var str = little.interpreter.Interpreter.stringifyTokenValue(name, null);
+				return little.interpreter.Interpreter.stringifyTokenValue(if ((little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory, str) != null)) little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory, str).value else little.parser.ParserTokens.ErrorMessage("No Such Variable: `" + str + "`"), null);
+			};
+			case 6: {
+				var ` = token[0];
+				var value = token[1];
+				return little.interpreter.Interpreter.stringifyTokenValue(value, null);
+			};
+			case 7: {
+				var word = token[0];
+				return word;
+			};
+			case 8: {
+				var ` = token[0];
+				var ` = token[1];
+				return little.interpreter.Interpreter.stringifyTokenValue(little.interpreter.Interpreter.evaluate(token, memory, null), null);
+			};
+			case 9: {
+				var name = token[0];
+				var params = token[1];
+				var str = little.interpreter.Interpreter.stringifyTokenValue(name, null);
+				return little.interpreter.Interpreter.stringifyTokenValue(if ((little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory, str) != null)) little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory, str).use(params) else little.parser.ParserTokens.ErrorMessage("No Such Function: `" + str + "`"), null);
+			};
+			case 10: {
+				var value = token[0];
+				var type = token[1];
+				return little.interpreter.Interpreter.stringifyTokenValue(value, null);
+			};
+			case 11: {
+				var parts = token[0];
+				var type = token[1];
+				return little.interpreter.Interpreter.stringifyTokenValue(little.interpreter.Interpreter.evaluate(token, null, null), null);
+			};
+			case 12: {
+				var body = token[0];
+				var type = token[1];
+				return little.interpreter.Interpreter.stringifyTokenValue(little.interpreter.Interpreter.runTokens(body, little.interpreter.Interpreter.currentConfig.prioritizeVariableDeclarations, little.interpreter.Interpreter.currentConfig.prioritizeFunctionDeclarations, little.interpreter.Interpreter.currentConfig.strictTyping, null), null);
+			};
+			case 13: {
+				var parts = token[0];
+				var ` = [];
+				{
+					var ` = 0;
+					while ((` < parts.length)) {
+						var p = parts[`];
+						++ `;
+						`.push(little.interpreter.Interpreter.stringifyTokenValue(little.interpreter.Interpreter.evaluate(p, null, null), null));
+					};
+				};
+				return `.join(",");
+			};
+			case 14: {
+				var ` = token[0];
+				var ` = token[1];
+				return little.interpreter.Interpreter.stringifyTokenValue(little.interpreter.Interpreter.evaluate(token, memory, null), null);
+			};
+			case 15: {
+				var sign = token[0];
+				return sign;
+			};
+			case 16: {
+				var num = token[0];
+				return num;
+			};
+			case 17: {
+				var num = token[0];
+				return num;
+			};
+			case 18: {
+				var string = token[0];
+				return string;
+			};
+			case 19: {
+				var doc = token[0];
+				return doc;
+			};
+			case 20: {
+				var name = token[0];
+				return little.interpreter.Runtime.currentModule = name;
+			};
+			case 21: {
+				var ` = token[0];
+				return "External Function/Variable";
+			};
+			case 22: {
+				var ` = token[0];
+				return "External Condition";
+			};
+			case 23: {
+				var msg = token[0];
+				return msg;
+			};
+			case 24: return little.Keywords.NULL_VALUE;
+			case 25: return little.Keywords.TRUE_VALUE;
+			case 26: return little.Keywords.FALSE_VALUE;
+			case 27: return "<no body>";
+		};
+	}
+
+	@:value({ prop : false })
+	public static function stringifyTokenIdentifier(token:little.parser.ParserTokens, prop:Null<Bool> = false, memory:Null<little.interpreter.memory.MemoryTree> = null) {
+		if ((memory == null)) memory = little.interpreter.Interpreter.memory;
+		if ((token == null)) return "";
+		switch ((@:exhaustive enumIndex token)) {
+			case 0: {
+				var line = token[0];
+				little.interpreter.Runtime.line = line;
+				return "\n";
+			};
+			case 1: return ",";
+			case 2: {
+				var name = token[0];
+				var type = token[1];
+				var doc = token[2];
+				return little.interpreter.Interpreter.stringifyTokenIdentifier(name, null, null);
+			};
+			case 3: {
+				var name = token[0];
+				var params = token[1];
+				var type = token[2];
+				var doc = token[3];
+				return little.interpreter.Interpreter.stringifyTokenIdentifier(name, null, null);
+			};
+			case 4: {
+				var name = token[0];
+				var exp = token[1];
+				var body = token[2];
+				return little.interpreter.Interpreter.stringifyTokenIdentifier(name, null, null);
+			};
+			case 5: {
+				var name = token[0];
+				return little.interpreter.Interpreter.stringifyTokenIdentifier(name, null, null);
+			};
+			case 6: {
+				var ` = token[1];
+				var assignees = token[0];
+				return little.interpreter.Interpreter.stringifyTokenIdentifier(assignees[0], null, null);
+			};
+			case 7: {
+				var word = token[0];
+				return word;
+			};
+			case 8: {
+				var value = token[0];
+				var type = token[1];
+				return little.interpreter.Interpreter.stringifyTokenIdentifier(value, null, null);
+			};
+			case 9: {
+				var name = token[0];
+				var params = token[1];
+				if ((prop)) return little.interpreter.Interpreter.stringifyTokenValue(name, null);
+				var str = little.interpreter.Interpreter.stringifyTokenValue(name, null);
+				return little.interpreter.Interpreter.stringifyTokenIdentifier(if ((little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory, str) != null)) little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(memory, str).use(params) else little.parser.ParserTokens.ErrorMessage("No Such Function: `" + str + "`"), null, null);
+			};
+			case 10: {
+				var value = token[0];
+				var type = token[1];
+				return little.interpreter.Interpreter.stringifyTokenIdentifier(value, null, null);
+			};
+			case 11: {
+				var parts = token[0];
+				var type = token[1];
+				return little.interpreter.Interpreter.stringifyTokenIdentifier(little.interpreter.Interpreter.evaluate(token, null, null), null, null);
+			};
+			case 12: {
+				var body = token[0];
+				var type = token[1];
+				return little.interpreter.Interpreter.stringifyTokenIdentifier(little.interpreter.Interpreter.runTokens(body, little.interpreter.Interpreter.currentConfig.prioritizeVariableDeclarations, little.interpreter.Interpreter.currentConfig.prioritizeFunctionDeclarations, little.interpreter.Interpreter.currentConfig.strictTyping, null), null, null);
+			};
+			case 13: {
+				var parts = token[0];
+				var ` = [];
+				{
+					var ` = 0;
+					while ((` < parts.length)) {
+						var p = parts[`];
+						++ `;
+						`.push(little.interpreter.Interpreter.stringifyTokenValue(little.interpreter.Interpreter.evaluate(p, null, null), null));
+					};
+				};
+				return `.join(",");
+			};
+			case 14: {
+				var name = token[0];
+				var property = token[1];
+				return little.interpreter.Interpreter.stringifyTokenIdentifier(name, null, null);
+			};
+			case 15: {
+				var sign = token[0];
+				return sign;
+			};
+			case 16: {
+				var num = token[0];
+				return num;
+			};
+			case 17: {
+				var num = token[0];
+				return num;
+			};
+			case 18: {
+				var string = token[0];
+				return string;
+			};
+			case 19: {
+				var ` = token[0];
+				return Type.enumConstructor(token);
+			};
+			case 20: {
+				var word = token[0];
+				return word;
+			};
+			case 21: {
+				var ` = token[0];
+				little.interpreter.Runtime.throwError(little.parser.ParserTokens.ErrorMessage("" + Std.string(token) + " \"does not have\" a token identifier. it must be bound to one (for example, as a definiton's value."), cast "Interpreter, Token Identifier Stringifier");
+				return "";
+			};
+			case 22: {
+				var ` = token[0];
+				little.interpreter.Runtime.throwError(little.parser.ParserTokens.ErrorMessage("" + Std.string(token) + " \"does not have\" a token identifier. it must be bound to one (for example, as a definiton's value."), cast "Interpreter, Token Identifier Stringifier");
+				return "";
+			};
+			case 23: {
+				var ` = token[0];
+				return Type.enumConstructor(token);
+			};
+			case 24: return little.Keywords.NULL_VALUE;
+			case 25: return little.Keywords.TRUE_VALUE;
+			case 26: return little.Keywords.FALSE_VALUE;
+			case 27: return "<no body>";
+		};
+	}
+
+	public static function evaluateExpressionParts(parts:Array<little.parser.ParserTokens>, memory:Null<little.interpreter.memory.MemoryTree> = null) {
+		if ((memory == null)) memory = little.interpreter.Interpreter.memory;
+		parts = little.interpreter.Interpreter.forceCorrectOrderOfOperations(parts);
+		little.tools.PrettyPrinter.printParserAst(parts, null);
+		var evaluatedValue = null;
+		var currentSign = "";
+		var rhs = null;
+		{
+			var ` = 0;
+			while ((` < parts.length)) {
+				var token = parts[`];
+				++ `;
+				var val;
+				if ((enumIndex token == 11)) {
+					var ` = token[1];
+					var p = token[0];
+					val = little.interpreter.Interpreter.evaluateExpressionParts(p, null);
+				} else val = little.interpreter.Interpreter.evaluate(token, null, null);
+				switch ((enumIndex val)) {
+					case 15: {
+						var sign = val[0];
+						if ((currentSign == "")) currentSign = sign else {
+							evaluatedValue = if ((cast cast little.interpreter.Operators.lhsOnly.exists(currentSign))) cast cast little.interpreter.Operators.lhsOnly.get(currentSign)(evaluatedValue) else if ((cast cast little.interpreter.Operators.rhsOnly.exists(currentSign))) little.parser.ParserTokens.ErrorMessage("Operator " + currentSign + " is used incorrectly - should appear after the sign (" + currentSign + little.tools.PrettyPrinter.stringify(null, evaluatedValue) + " instead of " + little.tools.PrettyPrinter.stringify(null, evaluatedValue) + currentSign + ")") else if ((cast cast little.interpreter.Operators.standard.exists(currentSign))) little.parser.ParserTokens.ErrorMessage("Operator " + currentSign + " is used incorrectly - should appear between two values (" + little.tools.PrettyPrinter.stringify(null, evaluatedValue) + " " + currentSign + " <some value>)") else little.parser.ParserTokens.ErrorMessage("Operator " + currentSign + " does not exist. did you make a typo?");
+							currentSign = sign;
+						};
+					};
+					case 23: {
+						var ` = val[0];
+						little.interpreter.Runtime.throwError(val, cast "Interpreter, Value Evaluator");
+					};
+					default: if ((evaluatedValue == null && currentSign != "")) {
+						evaluatedValue = if ((cast cast little.interpreter.Operators.rhsOnly.exists(currentSign))) cast cast little.interpreter.Operators.rhsOnly.get(currentSign)(val) else if ((cast cast little.interpreter.Operators.lhsOnly.exists(currentSign))) little.parser.ParserTokens.ErrorMessage("Operator " + currentSign + " is used incorrectly - should appear before the sign (" + little.tools.PrettyPrinter.stringify(null, val) + currentSign + " instead of " + currentSign + little.tools.PrettyPrinter.stringify(null, val) + ")") else if ((cast cast little.interpreter.Operators.standard.exists(currentSign))) little.parser.ParserTokens.ErrorMessage("Operator " + currentSign + " is used incorrectly - should appear between two values (" + little.tools.PrettyPrinter.stringify(null, val) + " " + currentSign + " <some value>)") else little.parser.ParserTokens.ErrorMessage("Operator " + currentSign + " does not exist. did you make a typo?");
+						currentSign = "";
+					} else if ((evaluatedValue != null && currentSign != "" && rhs == null)) {
+						rhs = val;
+						evaluatedValue = if ((cast cast little.interpreter.Operators.standard.exists(currentSign))) cast cast little.interpreter.Operators.standard.get(currentSign)(evaluatedValue, rhs) else if ((cast cast little.interpreter.Operators.lhsOnly.exists(currentSign))) little.parser.ParserTokens.ErrorMessage("Operator " + currentSign + " is used incorrectly - should not appear between two values, only to the right of one of them (" + little.tools.PrettyPrinter.stringify(null, rhs) + currentSign + " or " + little.tools.PrettyPrinter.stringify(null, evaluatedValue) + currentSign + ")") else if ((cast cast little.interpreter.Operators.rhsOnly.exists(currentSign))) little.parser.ParserTokens.ErrorMessage("Operator " + currentSign + " is used incorrectly - should not appear between two values, only to the left of one of them (" + currentSign + little.tools.PrettyPrinter.stringify(null, rhs) + " or " + currentSign + little.tools.PrettyPrinter.stringify(null, evaluatedValue) + ")") else little.parser.ParserTokens.ErrorMessage("Operator " + currentSign + " does not exist. did you make a typo?");
+						rhs = null;
+						currentSign = "";
+					} else if ((evaluatedValue == null)) evaluatedValue = val else if ((evaluatedValue != null)) little.interpreter.Runtime.throwError(little.parser.ParserTokens.ErrorMessage("Two values should not appear one right after the other, did you forget to insert a sign in between?"), null)
+				};
+			};
+		};
+		if ((currentSign != "")) evaluatedValue = if ((cast cast little.interpreter.Operators.lhsOnly.exists(currentSign))) cast cast little.interpreter.Operators.lhsOnly.get(currentSign)(evaluatedValue) else if ((cast cast little.interpreter.Operators.rhsOnly.exists(currentSign))) little.parser.ParserTokens.ErrorMessage("Operator " + currentSign + " is used incorrectly - should appear after the sign (" + currentSign + little.tools.PrettyPrinter.stringify(null, evaluatedValue) + " instead of " + little.tools.PrettyPrinter.stringify(null, evaluatedValue) + currentSign + ")") else if ((cast cast little.interpreter.Operators.standard.exists(currentSign))) little.parser.ParserTokens.ErrorMessage("Operator " + currentSign + " is used incorrectly - should appear between two values (" + little.tools.PrettyPrinter.stringify(null, evaluatedValue) + " " + currentSign + " <some value>)") else little.parser.ParserTokens.ErrorMessage("Operator " + currentSign + " does not exist. did you make a typo?");
+		return evaluatedValue;
+	}
+
+	public static function forceCorrectOrderOfOperations(pre:Array<little.parser.ParserTokens>) {
+		if ((pre.length <= 3)) return pre;
+		var post = [];
+		var i = 0;
+		while ((i < pre.length)) {
+			var token = pre[i];
+			if ((enumIndex token == 15)) {
+				var sign = token[0];
+				post.push(token);
+			} else post.push(token);
+			++ i;
+		};
+		pre = post.copy();
+		post = [];
+		i = 0;
+		while ((i < pre.length)) {
+			var token = pre[i];
+			if ((enumIndex token == 15)) {
+				if ((token[0] == "^")) {
+					++ i;
+					post.push(little.parser.ParserTokens.Expression([post.pop(), token, pre[i]], null));
+				} else post.push(token);
+			} else post.push(token);
+			++ i;
+		};
+		pre = post.copy();
+		post = [];
+		i = 0;
+		while ((i < pre.length)) {
+			var token = pre[i];
+			if ((enumIndex token == 15)) switch ((token[0])) {
+				case "*", "/": {
+					++ i;
+					post.push(little.parser.ParserTokens.Expression([post.pop(), token, pre[i]], null));
+				};
+				default: post.push(token)
+			} else post.push(token);
+			++ i;
+		};
+		return post;
+	}
+}

@@ -1,0 +1,65 @@
+@:keep @:directlyUsed @:used
+class StringTools {
+
+	public static function htmlEscape(s:String, quotes:Null<Bool> = null) {
+		var buf = new StringBuf();
+		{
+			var `_offset = 0;
+			var `_s = s;
+			while ((`_offset < `_s.length)) {
+				var code = StringTools.unsafeCodeAt(`_s, `_offset ++);
+				switch ((code)) {
+					case 34: if ((quotes)) buf.add("&quot;") else buf.addChar(code);
+					case 38: buf.add("&amp;");
+					case 39: if ((quotes)) buf.add("&#039;") else buf.addChar(code);
+					case 60: buf.add("&lt;");
+					case 62: buf.add("&gt;");
+					default: buf.addChar(code)
+				};
+			};
+		};
+		return buf.toString();
+	}
+
+	public static function startsWith(s:String, start:String) {
+		if ((s.length >= start.length)) return s.lastIndexOf(start, 0) == 0 else return false;
+	}
+
+	public static function endsWith(s:String, end:String) {
+		var elen = end.length;
+		var slen = s.length;
+		if ((slen >= elen)) return s.indexOf(end, slen - elen) == slen - elen else return false;
+	}
+
+	public static function isSpace(s:String, pos:Int) {
+		var c = s.charCodeAt(pos);
+		if ((! (c > 8 && c < 14))) return c == 32 else return true;
+	}
+
+	public static function ltrim(s:String) {
+		var l = s.length;
+		var r = 0;
+		while ((r < l && StringTools.isSpace(s, r))) ++ r;
+		if ((r > 0)) return s.substr(r, l - r) else return s;
+	}
+
+	public static function rtrim(s:String) {
+		var l = s.length;
+		var r = 0;
+		while ((r < l && StringTools.isSpace(s, l - r - 1))) ++ r;
+		if ((r > 0)) return s.substr(0, l - r) else return s;
+	}
+
+	public static function trim(s:String) {
+		return StringTools.ltrim(StringTools.rtrim(s));
+	}
+
+	public static function replace(s:String, sub:String, by:String) {
+		return s.split(sub).join(by);
+	}
+
+	@:has_untyped
+	public static function unsafeCodeAt(s:String, index:Int) {
+		return s.cca(index);
+	}
+}

@@ -1,0 +1,10 @@
+@:keep @:used @:directlyUsed
+class haxe.io.Eof {
+
+	public function new() {}
+
+	@:ifFeature("haxe.io.Eof.*")
+	function toString() {
+		return "Eof";
+	}
+}

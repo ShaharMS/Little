@@ -1,0 +1,40 @@
+@:used
+class little.tools.PrettyOutput {
+
+	public static function generateAstHtml(code:String) {
+		var htmlFile = "<table><tr><th>Stage</th><th>AST</th></tr>";
+		var lexical = little.parser.Parser.convert(little.lexer.Lexer.lex(code));
+		var ` = new haxe.ds.StringMap();
+		`.set("Merge Blocks", little.parser.Parser.mergeBlocks);
+		`.set("Merge Expressions", little.parser.Parser.mergeExpressions);
+		`.set("Merge Property Operations", little.parser.Parser.mergePropertyOperations);
+		`.set("Merge Type Declarations", little.parser.Parser.mergeTypeDecls);
+		`.set("Merge Complex Structures", little.parser.Parser.mergeComplexStructures);
+		`.set("Merge Calls", little.parser.Parser.mergeCalls);
+		`.set("Merge Writes", little.parser.Parser.mergeWrites);
+		`.set("Marge Values With Type Decl", little.parser.Parser.mergeValuesWithTypeDeclarations);
+		`.set("Merge Non-Block Bodies", little.parser.Parser.mergeNonBlockBodies);
+		`.set("Merge Elses", little.parser.Parser.mergeElses);
+		var map = `;
+		{
+			var map = map;
+			var `_map = map;
+			var `_keys = map.keys();
+			while ((`_keys.hasNext())) {
+				var key = `_keys.next();
+				var `_value = @:nullSafety(Off) cast `_map.get(key);
+				var `_key = key;
+				var key = `_key;
+				var func = `_value;
+				{
+					htmlFile += "<tr><th>" + key + "</th>";
+					var pretty = little.tools.PrettyPrinter.printParserAst(func(lexical), null);
+					pretty = StringTools.replace(StringTools.replace(pretty, "\n", "<br>"), "\t", "&nbsp;&nbsp;&nbsp;&nbsp;");
+					htmlFile += "<td>" + pretty + "</td></tr>";
+				};
+			};
+		};
+		htmlFile += "</table>";
+		return htmlFile;
+	}
+}

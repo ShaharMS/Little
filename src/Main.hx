@@ -47,7 +47,7 @@ class Main {
 		// output.innerHTML = little.tools.PrettyPrinter.printParserAst(little.parser.Parser.parse(little.lexer.Lexer.lex(untyped text.value)));
 		// text.innerHTML = code;
 		new JsExample();
-		#elseif unit
+		#elseif !unit
 		UnitTests.run();
 		#elseif sys
 		while (true) {

@@ -6,3 +6,4 @@
 --define unit
 --debug
 # --dce full
+-D dump=pretty

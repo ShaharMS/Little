@@ -1,0 +1,2 @@
+@:coreType
+abstract eval.luv.TStream<T> to eval.luv.Stream {}

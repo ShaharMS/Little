@@ -1,0 +1,58 @@
+@:directlyUsed @:used @:access(little.interpreter.Interpreter) @:access(little.interpreter.Runtime) @:expose
+class little.Little {
+
+	@:value(Runtime)
+	public static var runtime(default,null):Class<little.interpreter.Runtime> = little.interpreter.Runtime;
+
+	@:value(Plugins)
+	public static var plugin(default,null):Class<little.tools.Plugins> = little.tools.Plugins;
+
+	@:value(Operators)
+	public static var operators(default,null):Class<little.interpreter.Operators> = little.interpreter.Operators;
+
+	@:value(Keywords.defaultKeywordSet)
+	public static var keywords(default,null):little.interpreter.KeywordConfig = little.Keywords.defaultKeywordSet;
+
+	@:value(false)
+	public static var debug:Bool = false;
+
+	@:value({ runRightBeforeMain : false, debug : false })
+	public static function loadModule(code:String, name:String, debug:Bool = false, runRightBeforeMain:Bool = false) {
+		little.interpreter.Interpreter.errorThrown = false;
+		little.interpreter.Runtime.line = 0;
+		little.interpreter.Runtime.currentModule = name;
+		if ((! runRightBeforeMain)) {
+			var previous = little.Little.debug;
+			if ((debug != null)) little.Little.debug = debug;
+			if ((! little.tools.PrepareRun.prepared)) {
+				little.tools.PrepareRun.addTypes();
+				little.tools.PrepareRun.addSigns();
+				little.tools.PrepareRun.addFunctions();
+				little.tools.PrepareRun.addConditions();
+				little.tools.PrepareRun.addProps();
+			};
+			little.interpreter.Interpreter.interpret(little.parser.Parser.parse(little.lexer.Lexer.lex(code)), new little.interpreter.RunConfig(null, null, null, null, null));
+			if ((debug != null)) little.Little.debug = previous;
+		};
+	}
+
+	public static function run(code:String, debug:Null<Bool> = null) {
+		little.interpreter.Interpreter.errorThrown = false;
+		little.interpreter.Runtime.line = 0;
+		little.interpreter.Runtime.callStack = [];
+		little.interpreter.Runtime.stdout.reset();
+		little.interpreter.Runtime.currentModule = little.Keywords.MAIN_MODULE_NAME;
+		var previous = little.Little.debug;
+		if ((debug != null)) little.Little.debug = debug;
+		little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get_underlying(little.interpreter.Interpreter.memory).map = new haxe.ds.StringMap();
+		if ((! little.tools.PrepareRun.prepared)) {
+			little.tools.PrepareRun.addTypes();
+			little.tools.PrepareRun.addSigns();
+			little.tools.PrepareRun.addFunctions();
+			little.tools.PrepareRun.addConditions();
+			little.tools.PrepareRun.addProps();
+		};
+		little.interpreter.Actions.run(little.parser.Parser.parse(little.lexer.Lexer.lex(code)));
+		if ((debug != null)) little.Little.debug = previous;
+	}
+}

@@ -1,0 +1,349 @@
+@:directlyUsed @:used @:access(little.interpreter.Operators) @:access(little.interpreter.Runtime)
+class little.tools.PrepareRun {
+
+	@:value(false)
+	public static var prepared:Bool = false;
+
+	public static function addTypes() {
+		var x = Xml.createDocument();
+		if ((x.nodeType != Xml.Document && x.nodeType != Xml.Element)) throw "Invalid nodeType " + (if ((x.nodeType == null)) "null" else _Xml.XmlType_Impl_.toString(x.nodeType));
+		var xml = cast x;
+		little.Little.plugin.registerHaxeClass([{className : "Math", name : "PI", doc : "\r\n\t\tRepresents the ratio of the circumference of a circle to its diameter,\r\n\t\tspecified by the constant, π. `PI` is approximately `3.141592653589793`.\r\n\t", fieldType : "var", parameters : [], returnType : "Float", allowWrite : false, isStatic : true}, {className : "Math", name : "NEGATIVE_INFINITY", doc : "\r\n\t\tA special `Float` constant which denotes negative infinity.\r\n\r\n\t\tFor example, this is the result of `-1.0 / 0.0`.\r\n\r\n\t\tOperations with `NEGATIVE_INFINITY` as an operand may result in\r\n\t\t`NEGATIVE_INFINITY`, `POSITIVE_INFINITY` or `NaN`.\r\n\r\n\t\tIf this constant is converted to an `Int`, e.g. through `Std.int()`, the\r\n\t\tresult is unspecified.\r\n\t", fieldType : "var", parameters : [], returnType : "Float", allowWrite : false, isStatic : true}, {className : "Math", name : "POSITIVE_INFINITY", doc : "\r\n\t\tA special `Float` constant which denotes positive infinity.\r\n\r\n\t\tFor example, this is the result of `1.0 / 0.0`.\r\n\r\n\t\tOperations with `POSITIVE_INFINITY` as an operand may result in\r\n\t\t`NEGATIVE_INFINITY`, `POSITIVE_INFINITY` or `NaN`.\r\n\r\n\t\tIf this constant is converted to an `Int`, e.g. through `Std.int()`, the\r\n\t\tresult is unspecified.\r\n\t", fieldType : "var", parameters : [], returnType : "Float", allowWrite : false, isStatic : true}, {className : "Math", name : "NaN", doc : "\r\n\t\tA special `Float` constant which denotes an invalid number.\r\n\r\n\t\t`NaN` stands for \"Not a Number\". It occurs when a mathematically incorrect\r\n\t\toperation is executed, such as taking the square root of a negative\r\n\t\tnumber: `Math.sqrt(-1)`.\r\n\r\n\t\tAll further operations with `NaN` as an operand will result in `NaN`.\r\n\r\n\t\tIf this constant is converted to an `Int`, e.g. through `Std.int()`, the\r\n\t\tresult is unspecified.\r\n\r\n\t\tIn order to test if a value is `NaN`, you should use `Math.isNaN()` function.\r\n\t", fieldType : "var", parameters : [], returnType : "Float", allowWrite : false, isStatic : true}, {className : "Math", name : "abs", doc : "\r\n\t\tReturns the absolute value of `v`.\r\n\r\n\t\t- If `v` is positive or `0`, the result is unchanged. Otherwise the result is `-v`.\r\n\t\t- If `v` is `NEGATIVE_INFINITY` or `POSITIVE_INFINITY`, the result is `POSITIVE_INFINITY`.\r\n\t\t- If `v` is `NaN`, the result is `NaN`.\r\n\t", parameters : [{name : "v", type : "Float", optional : false}], returnType : "Float", fieldType : "function", allowWrite : false, isStatic : true}, {className : "Math", name : "min", doc : "\r\n\t\tReturns the smaller of values `a` and `b`.\r\n\r\n\t\t- If `a` or `b` are `NaN`, the result is `NaN`.\r\n\t\t- If `a` or `b` are `NEGATIVE_INFINITY`, the result is `NEGATIVE_INFINITY`.\r\n\t\t- If `a` and `b` are `POSITIVE_INFINITY`, the result is `POSITIVE_INFINITY`.\r\n\t", parameters : [{name : "a", type : "Float", optional : false}, {name : "b", type : "Float", optional : false}], returnType : "Float", fieldType : "function", allowWrite : false, isStatic : true}, {className : "Math", name : "max", doc : "\r\n\t\tReturns the greater of values `a` and `b`.\r\n\r\n\t\t- If `a` or `b` are `NaN`, the result is `NaN`.\r\n\t\t- If `a` or `b` are `POSITIVE_INFINITY`, the result is `POSITIVE_INFINITY`.\r\n\t\t- If `a` and `b` are `NEGATIVE_INFINITY`, the result is `NEGATIVE_INFINITY`.\r\n\t", parameters : [{name : "a", type : "Float", optional : false}, {name : "b", type : "Float", optional : false}], returnType : "Float", fieldType : "function", allowWrite : false, isStatic : true}, {className : "Math", name : "sin", doc : "\r\n\t\tReturns the trigonometric sine of the specified angle `v`, in radians.\r\n\r\n\t\tIf `v` is `NaN` or infinite, the result is `NaN`.\r\n\t", parameters : [{name : "v", type : "Float", optional : false}], returnType : "Float", fieldType : "function", allowWrite : false, isStatic : true}, {className : "Math", name : "cos", doc : "\r\n\t\tReturns the trigonometric cosine of the specified angle `v`, in radians.\r\n\r\n\t\tIf `v` is `NaN` or infinite, the result is `NaN`.\r\n\t", parameters : [{name : "v", type : "Float", optional : false}], returnType : "Float", fieldType : "function", allowWrite : false, isStatic : true}, {className : "Math", name : "tan", doc : "\r\n\t\tReturns the trigonometric tangent of the specified angle `v`, in radians.\r\n\r\n\t\tIf `v` is `NaN` or infinite, the result is `NaN`.\r\n\t", parameters : [{name : "v", type : "Float", optional : false}], returnType : "Float", fieldType : "function", allowWrite : false, isStatic : true}, {className : "Math", name : "asin", doc : "\r\n\t\tReturns the trigonometric arc of the specified angle `v`, in radians.\r\n\r\n\t\tIf `v` is `NaN` or infinite, the result is `NaN`.\r\n\t", parameters : [{name : "v", type : "Float", optional : false}], returnType : "Float", fieldType : "function", allowWrite : false, isStatic : true}, {className : "Math", name : "acos", doc : "\r\n\t\tReturns the trigonometric arc cosine of the specified angle `v`,\r\n\t\tin radians.\r\n\r\n\t\tIf `v` is `NaN` or infinite, the result is `NaN`.\r\n\t", parameters : [{name : "v", type : "Float", optional : false}], returnType : "Float", fieldType : "function", allowWrite : false, isStatic : true}, {className : "Math", name : "atan", doc : "\r\n\t\tReturns the trigonometric arc tangent of the specified angle `v`,\r\n\t\tin radians.\r\n\r\n\t\tIf `v` is `NaN` or infinite, the result is `NaN`.\r\n\t", parameters : [{name : "v", type : "Float", optional : false}], returnType : "Float", fieldType : "function", allowWrite : false, isStatic : true}, {className : "Math", name : "atan2", doc : "\r\n\t\tReturns the trigonometric arc tangent whose tangent is the quotient of\r\n\t\ttwo specified numbers, in radians.\r\n\r\n\t\tIf parameter `x` or `y`  is `NaN`, `NEGATIVE_INFINITY` or `POSITIVE_INFINITY`,\r\n\t\tthe result is `NaN`.\r\n\t", parameters : [{name : "y", type : "Float", optional : false}, {name : "x", type : "Float", optional : false}], returnType : "Float", fieldType : "function", allowWrite : false, isStatic : true}, {className : "Math", name : "exp", doc : "\r\n\t\tReturns Euler's number, raised to the power of `v`.\r\n\r\n\t\t`exp(1.0)` is approximately `2.718281828459`.\r\n\r\n\t\t- If `v` is `POSITIVE_INFINITY`, the result is `POSITIVE_INFINITY`.\r\n\t\t- If `v` is `NEGATIVE_INFINITY`, the result is `0.0`.\r\n\t\t- If `v` is `NaN`, the result is `NaN`.\r\n\t", parameters : [{name : "v", type : "Float", optional : false}], returnType : "Float", fieldType : "function", allowWrite : false, isStatic : true}, {className : "Math", name : "log", doc : "\r\n\t\tReturns the natural logarithm of `v`.\r\n\r\n\t\tThis is the mathematical inverse operation of exp,\r\n\t\ti.e. `log(exp(v)) == v` always holds.\r\n\r\n\t\t- If `v` is negative (including `NEGATIVE_INFINITY`) or `NaN`, the result is `NaN`.\r\n\t\t- If `v` is `POSITIVE_INFINITY`, the result is `POSITIVE_INFINITY`.\r\n\t\t- If `v` is `0.0`, the result is `NEGATIVE_INFINITY`.\r\n\t", parameters : [{name : "v", type : "Float", optional : false}], returnType : "Float", fieldType : "function", allowWrite : false, isStatic : true}, {className : "Math", name : "pow", doc : "\r\n\t\tReturns a specified base `v` raised to the specified power `exp`.\r\n\t", parameters : [{name : "v", type : "Float", optional : false}, {name : "exp", type : "Float", optional : false}], returnType : "Float", fieldType : "function", allowWrite : false, isStatic : true}, {className : "Math", name : "sqrt", doc : "\r\n\t\tReturns the square root of `v`.\r\n\r\n\t\t- If `v` is negative (including `NEGATIVE_INFINITY`) or `NaN`, the result is `NaN`.\r\n\t\t- If `v` is `POSITIVE_INFINITY`, the result is `POSITIVE_INFINITY`.\r\n\t\t- If `v` is `0.0`, the result is `0.0`.\r\n\t", parameters : [{name : "v", type : "Float", optional : false}], returnType : "Float", fieldType : "function", allowWrite : false, isStatic : true}, {className : "Math", name : "round", doc : "\r\n\t\tRounds `v` to the nearest integer value.\r\n\r\n\t\tTies are rounded up, so that `0.5` becomes `1` and `-0.5` becomes `0`.\r\n\r\n\t\tIf `v` is outside of the signed `Int32` range, or is `NaN`, `NEGATIVE_INFINITY`\r\n\t\tor `POSITIVE_INFINITY`, the result is unspecified.\r\n\t", parameters : [{name : "v", type : "Float", optional : false}], returnType : "Int", fieldType : "function", allowWrite : false, isStatic : true}, {className : "Math", name : "floor", doc : "\r\n\t\tReturns the largest integer value that is not greater than `v`.\r\n\r\n\t\tIf `v` is outside of the signed `Int32` range, or is `NaN`, `NEGATIVE_INFINITY`\r\n\t\tor `POSITIVE_INFINITY`, the result is unspecified.\r\n\t", parameters : [{name : "v", type : "Float", optional : false}], returnType : "Int", fieldType : "function", allowWrite : false, isStatic : true}, {className : "Math", name : "ceil", doc : "\r\n\t\tReturns the smallest integer value that is not less than `v`.\r\n\r\n\t\tIf `v` is outside of the signed `Int32` range, or is `NaN`, `NEGATIVE_INFINITY`\r\n\t\tor `POSITIVE_INFINITY`, the result is unspecified.\r\n\t", parameters : [{name : "v", type : "Float", optional : false}], returnType : "Int", fieldType : "function", allowWrite : false, isStatic : true}, {className : "Math", name : "random", doc : "\r\n\t\tReturns a pseudo-random number which is greater than or equal to `0.0`,\r\n\t\tand less than `1.0`.\r\n\t", parameters : [], returnType : "Float", fieldType : "function", allowWrite : false, isStatic : true}, {className : "Math", name : "ffloor", doc : "\r\n\t\tReturns the largest integer value that is not greater than `v`, as a `Float`.\r\n\r\n\t\tIf `v` is is `NaN`, `NEGATIVE_INFINITY` or `POSITIVE_INFINITY`,\r\n\t\tthe result is unspecified.\r\n\t", parameters : [{name : "v", type : "Float", optional : false}], returnType : "Float", fieldType : "function", allowWrite : false, isStatic : true}, {className : "Math", name : "fceil", doc : "\r\n\t\tReturns the smallest integer value that is not less than `v`, as a `Float`.\r\n\r\n\t\tIf `v` is is `NaN`, `NEGATIVE_INFINITY` or `POSITIVE_INFINITY`,\r\n\t\tthe result is unspecified.\r\n\t", parameters : [{name : "v", type : "Float", optional : false}], returnType : "Float", fieldType : "function", allowWrite : false, isStatic : true}, {className : "Math", name : "fround", doc : "\r\n\t\tRounds `v` to the nearest integer value, as a Float.\r\n\r\n\t\tTies are rounded up, so that `0.5` becomes `1` and `-0.5` becomes `0`.\r\n\r\n\t\tIf `v` is is `NaN`, `NEGATIVE_INFINITY` or `POSITIVE_INFINITY`,\r\n\t\tthe result is unspecified.\r\n\t", parameters : [{name : "v", type : "Float", optional : false}], returnType : "Float", fieldType : "function", allowWrite : false, isStatic : true}, {className : "Math", name : "isFinite", doc : "\r\n\t\tTells if `f` is a finite number.\r\n\r\n\t\tIf `f` is `POSITIVE_INFINITY`, `NEGATIVE_INFINITY` or `NaN`, the result\r\n\t\tis `false`, otherwise the result is `true`.\r\n\t", parameters : [{name : "f", type : "Float", optional : false}], returnType : "Bool", fieldType : "function", allowWrite : false, isStatic : true}, {className : "Math", name : "isNaN", doc : "\r\n\t\tTells if `f` is `Math.NaN`.\r\n\r\n\t\tIf `f` is `NaN`, the result is `true`, otherwise the result is `false`.\r\n\t\tIn particular, `null`, `POSITIVE_INFINITY` and `NEGATIVE_INFINITY` are\r\n\t\tnot considered `NaN`.\r\n\t", parameters : [{name : "f", type : "Float", optional : false}], returnType : "Bool", fieldType : "function", allowWrite : false, isStatic : true}], "Math");
+		little.Little.plugin.registerHaxeClass([{className : "String", name : "length", doc : "\r\n\t\tThe number of characters in `this` String.\r\n\t", fieldType : "var", parameters : [], returnType : "Int", allowWrite : false, isStatic : false}, {className : "String", name : "toUpperCase", doc : "\r\n\t\tReturns a String where all characters of `this` String are upper case.\r\n\t", parameters : [], returnType : "String", fieldType : "function", allowWrite : false, isStatic : false}, {className : "String", name : "toLowerCase", doc : "\r\n\t\tReturns a String where all characters of `this` String are lower case.\r\n\t", parameters : [], returnType : "String", fieldType : "function", allowWrite : false, isStatic : false}, {className : "String", name : "charAt", doc : "\r\n\t\tReturns the character at position `index` of `this` String.\r\n\r\n\t\tIf `index` is negative or exceeds `this.length`, the empty String `\"\"`\r\n\t\tis returned.\r\n\t", parameters : [{name : "index", type : "Int", optional : false}], returnType : "String", fieldType : "function", allowWrite : false, isStatic : false}, {className : "String", name : "charCodeAt", doc : "\r\n\t\tReturns the character code at position `index` of `this` String.\r\n\r\n\t\tIf `index` is negative or exceeds `this.length`, `null` is returned.\r\n\r\n\t\tTo obtain the character code of a single character, `\"x\".code` can be\r\n\t\tused instead to inline the character code at compile time. Note that\r\n\t\tthis only works on String literals of length 1.\r\n\t", parameters : [{name : "index", type : "Int", optional : false}], returnType : "Null<Int>", fieldType : "function", allowWrite : false, isStatic : false}, {className : "String", name : "indexOf", doc : "\r\n\t\tReturns the position of the leftmost occurrence of `str` within `this`\r\n\t\tString.\r\n\r\n\t\tIf `startIndex` is given, the search is performed within the substring\r\n\t\tof `this` String starting from `startIndex`.\r\n\r\n\t\tIf `startIndex` exceeds `this.length`, -1 is returned.\r\n\r\n\t\tIf `startIndex` is negative, the result is unspecifed.\r\n\r\n\t\tOtherwise the search is performed within `this` String. In either case,\r\n\t\tthe returned position is relative to the beginning of `this` String.\r\n\r\n\t\tIf `str` cannot be found, -1 is returned.\r\n\t", parameters : [{name : "str", type : "String", optional : false}, {name : "startIndex", type : "Null<Int>", optional : true}], returnType : "Int", fieldType : "function", allowWrite : false, isStatic : false}, {className : "String", name : "lastIndexOf", doc : "\r\n\t\tReturns the position of the rightmost occurrence of `str` within `this`\r\n\t\tString.\r\n\r\n\t\tIf `startIndex` is given, the search is performed within the substring\r\n\t\tof `this` String from 0 to `startIndex + str.length`. Otherwise the search\r\n\t\tis performed within `this` String. In either case, the returned position\r\n\t\tis relative to the beginning of `this` String.\r\n\r\n\t\tIf `startIndex` is negative, the result is unspecifed.\r\n\r\n\t\tIf `str` cannot be found, -1 is returned.\r\n\t", parameters : [{name : "str", type : "String", optional : false}, {name : "startIndex", type : "Null<Int>", optional : true}], returnType : "Int", fieldType : "function", allowWrite : false, isStatic : false}, {className : "String", name : "split", doc : "\r\n\t\tSplits `this` String at each occurrence of `delimiter`.\r\n\r\n\t\tIf `this` String is the empty String `\"\"`, the result is not consistent\r\n\t\tacross targets and may either be `[]` (on Js, Cpp) or `[\"\"]`.\r\n\r\n\t\tIf `delimiter` is the empty String `\"\"`, `this` String is split into an\r\n\t\tArray of `this.length` elements, where the elements correspond to the\r\n\t\tcharacters of `this` String.\r\n\r\n\t\tIf `delimiter` is not found within `this` String, the result is an Array\r\n\t\twith one element, which equals `this` String.\r\n\r\n\t\tIf `delimiter` is null, the result is unspecified.\r\n\r\n\t\tOtherwise, `this` String is split into parts at each occurrence of\r\n\t\t`delimiter`. If `this` String starts (or ends) with `delimiter`, the\r\n\t\tresult `Array` contains a leading (or trailing) empty String `\"\"` element.\r\n\t\tTwo subsequent delimiters also result in an empty String `\"\"` element.\r\n\t", parameters : [{name : "delimiter", type : "String", optional : false}], returnType : "Array<String>", fieldType : "function", allowWrite : false, isStatic : false}, {className : "String", name : "substr", doc : "\r\n\t\tReturns `len` characters of `this` String, starting at position `pos`.\r\n\r\n\t\tIf `len` is omitted, all characters from position `pos` to the end of\r\n\t\t`this` String are included.\r\n\r\n\t\tIf `pos` is negative, its value is calculated from the end of `this`\r\n\t\tString by `this.length + pos`. If this yields a negative value, 0 is\r\n\t\tused instead.\r\n\r\n\t\tIf the calculated position + `len` exceeds `this.length`, the characters\r\n\t\tfrom that position to the end of `this` String are returned.\r\n\r\n\t\tIf `len` is negative, the result is unspecified.\r\n\t", parameters : [{name : "pos", type : "Int", optional : false}, {name : "len", type : "Null<Int>", optional : true}], returnType : "String", fieldType : "function", allowWrite : false, isStatic : false}, {className : "String", name : "substring", doc : "\r\n\t\tReturns the part of `this` String from `startIndex` to but not including `endIndex`.\r\n\r\n\t\tIf `startIndex` or `endIndex` are negative, 0 is used instead.\r\n\r\n\t\tIf `startIndex` exceeds `endIndex`, they are swapped.\r\n\r\n\t\tIf the (possibly swapped) `endIndex` is omitted or exceeds\r\n\t\t`this.length`, `this.length` is used instead.\r\n\r\n\t\tIf the (possibly swapped) `startIndex` exceeds `this.length`, the empty\r\n\t\tString `\"\"` is returned.\r\n\t", parameters : [{name : "startIndex", type : "Int", optional : false}, {name : "endIndex", type : "Null<Int>", optional : true}], returnType : "String", fieldType : "function", allowWrite : false, isStatic : false}, {className : "String", name : "toString", doc : "\r\n\t\tReturns the String itself.\r\n\t", parameters : [], returnType : "String", fieldType : "function", allowWrite : false, isStatic : false}, {className : "String", name : "fromCharCode", doc : "\r\n\t\tReturns the String corresponding to the character code `code`.\r\n\r\n\t\tIf `code` is negative or has another invalid value, the result is\r\n\t\tunspecified.\r\n\t", parameters : [{name : "code", type : "Int", optional : false}], returnType : "String", fieldType : "function", allowWrite : false, isStatic : true}], little.Keywords.TYPE_STRING);
+		little.Little.plugin.registerHaxeClass([{className : "Array", name : "length", doc : "\r\n\t\tThe length of `this` Array.\r\n\t", fieldType : "var", parameters : [], returnType : "Int", allowWrite : false, isStatic : false}, {className : "Array", name : "concat", doc : "\r\n\t\tReturns a new Array by appending the elements of `a` to the elements of\r\n\t\t`this` Array.\r\n\r\n\t\tThis operation does not modify `this` Array.\r\n\r\n\t\tIf `a` is the empty Array `[]`, a copy of `this` Array is returned.\r\n\r\n\t\tThe length of the returned Array is equal to the sum of `this.length`\r\n\t\tand `a.length`.\r\n\r\n\t\tIf `a` is `null`, the result is unspecified.\r\n\t", parameters : [{name : "a", type : "Array<T>", optional : false}], returnType : "Array<T>", fieldType : "function", allowWrite : false, isStatic : false}, {className : "Array", name : "join", doc : "\r\n\t\tReturns a string representation of `this` Array, with `sep` separating\r\n\t\teach element.\r\n\r\n\t\tThe result of this operation is equal to `Std.string(this[0]) + sep +\r\n\t\tStd.string(this[1]) + sep + ... + sep + Std.string(this[this.length-1])`\r\n\r\n\t\tIf `this` is the empty Array `[]`, the result is the empty String `\"\"`.\r\n\t\tIf `this` has exactly one element, the result is equal to a call to\r\n\t\t`Std.string(this[0])`.\r\n\r\n\t\tIf `sep` is null, the result is unspecified.\r\n\t", parameters : [{name : "sep", type : "String", optional : false}], returnType : "String", fieldType : "function", allowWrite : false, isStatic : false}, {className : "Array", name : "pop", doc : "\r\n\t\tRemoves the last element of `this` Array and returns it.\r\n\r\n\t\tThis operation modifies `this` Array in place.\r\n\r\n\t\tIf `this` has at least one element, `this.length` will decrease by 1.\r\n\r\n\t\tIf `this` is the empty Array `[]`, null is returned and the length\r\n\t\tremains 0.\r\n\t", parameters : [], returnType : "Null<T>", fieldType : "function", allowWrite : false, isStatic : false}, {className : "Array", name : "push", doc : "\r\n\t\tAdds the element `x` at the end of `this` Array and returns the new\r\n\t\tlength of `this` Array.\r\n\r\n\t\tThis operation modifies `this` Array in place.\r\n\r\n\t\t`this.length` increases by 1.\r\n\t", parameters : [{name : "x", type : "T", optional : false}], returnType : "Int", fieldType : "function", allowWrite : false, isStatic : false}, {className : "Array", name : "reverse", doc : "\r\n\t\tReverse the order of elements of `this` Array.\r\n\r\n\t\tThis operation modifies `this` Array in place.\r\n\r\n\t\tIf `this.length < 2`, `this` remains unchanged.\r\n\t", parameters : [], returnType : "Void", fieldType : "function", allowWrite : false, isStatic : false}, {className : "Array", name : "shift", doc : "\r\n\t\tRemoves the first element of `this` Array and returns it.\r\n\r\n\t\tThis operation modifies `this` Array in place.\r\n\r\n\t\tIf `this` has at least one element, `this`.length and the index of each\r\n\t\tremaining element is decreased by 1.\r\n\r\n\t\tIf `this` is the empty Array `[]`, `null` is returned and the length\r\n\t\tremains 0.\r\n\t", parameters : [], returnType : "Null<T>", fieldType : "function", allowWrite : false, isStatic : false}, {className : "Array", name : "slice", doc : "\r\n\t\tCreates a shallow copy of the range of `this` Array, starting at and\r\n\t\tincluding `pos`, up to but not including `end`.\r\n\r\n\t\tThis operation does not modify `this` Array.\r\n\r\n\t\tThe elements are not copied and retain their identity.\r\n\r\n\t\tIf `end` is omitted or exceeds `this.length`, it defaults to the end of\r\n\t\t`this` Array.\r\n\r\n\t\tIf `pos` or `end` are negative, their offsets are calculated from the\r\n\t\tend of `this` Array by `this.length + pos` and `this.length + end`\r\n\t\trespectively. If this yields a negative value, 0 is used instead.\r\n\r\n\t\tIf `pos` exceeds `this.length` or if `end` is less than or equals\r\n\t\t`pos`, the result is `[]`.\r\n\t", parameters : [{name : "pos", type : "Int", optional : false}, {name : "end", type : "Null<Int>", optional : true}], returnType : "Array<T>", fieldType : "function", allowWrite : false, isStatic : false}, {className : "Array", name : "sort", doc : "\r\n\t\tSorts `this` Array according to the comparison function `f`, where\r\n\t\t`f(x,y)` returns 0 if x == y, a positive Int if x > y and a\r\n\t\tnegative Int if x < y.\r\n\r\n\t\tThis operation modifies `this` Array in place.\r\n\r\n\t\tThe sort operation is not guaranteed to be stable, which means that the\r\n\t\torder of equal elements may not be retained. For a stable Array sorting\r\n\t\talgorithm, `haxe.ds.ArraySort.sort()` can be used instead.\r\n\r\n\t\tIf `f` is null, the result is unspecified.\r\n\t", parameters : [{name : "f", type : "T->T->Int", optional : false}], returnType : "Void", fieldType : "function", allowWrite : false, isStatic : false}, {className : "Array", name : "splice", doc : "\r\n\t\tRemoves `len` elements from `this` Array, starting at and including\r\n\t\t`pos`, an returns them.\r\n\r\n\t\tThis operation modifies `this` Array in place.\r\n\r\n\t\tIf `len` is < 0 or `pos` exceeds `this`.length, an empty Array [] is\r\n\t\treturned and `this` Array is unchanged.\r\n\r\n\t\tIf `pos` is negative, its value is calculated from the end\tof `this`\r\n\t\tArray by `this.length + pos`. If this yields a negative value, 0 is\r\n\t\tused instead.\r\n\r\n\t\tIf the sum of the resulting values for `len` and `pos` exceed\r\n\t\t`this.length`, this operation will affect the elements from `pos` to the\r\n\t\tend of `this` Array.\r\n\r\n\t\tThe length of the returned Array is equal to the new length of `this`\r\n\t\tArray subtracted from the original length of `this` Array. In other\r\n\t\twords, each element of the original `this` Array either remains in\r\n\t\t`this` Array or becomes an element of the returned Array.\r\n\t", parameters : [{name : "pos", type : "Int", optional : false}, {name : "len", type : "Int", optional : false}], returnType : "Array<T>", fieldType : "function", allowWrite : false, isStatic : false}, {className : "Array", name : "toString", doc : "\r\n\t\tReturns a string representation of `this` Array.\r\n\r\n\t\tThe result will include the individual elements' String representations\r\n\t\tseparated by comma. The enclosing [ ] may be missing on some platforms,\r\n\t\tuse `Std.string()` to get a String representation that is consistent\r\n\t\tacross platforms.\r\n\t", parameters : [], returnType : "String", fieldType : "function", allowWrite : false, isStatic : false}, {className : "Array", name : "unshift", doc : "\r\n\t\tAdds the element `x` at the start of `this` Array.\r\n\r\n\t\tThis operation modifies `this` Array in place.\r\n\r\n\t\t`this.length` and the index of each Array element increases by 1.\r\n\t", parameters : [{name : "x", type : "T", optional : false}], returnType : "Void", fieldType : "function", allowWrite : false, isStatic : false}, {className : "Array", name : "insert", doc : "\r\n\t\tInserts the element `x` at the position `pos`.\r\n\r\n\t\tThis operation modifies `this` Array in place.\r\n\r\n\t\tThe offset is calculated like so:\r\n\r\n\t\t- If `pos` exceeds `this.length`, the offset is `this.length`.\r\n\t\t- If `pos` is negative, the offset is calculated from the end of `this`\r\n\t\t  Array, i.e. `this.length + pos`. If this yields a negative value, the\r\n\t\t  offset is 0.\r\n\t\t- Otherwise, the offset is `pos`.\r\n\r\n\t\tIf the resulting offset does not exceed `this.length`, all elements from\r\n\t\tand including that offset to the end of `this` Array are moved one index\r\n\t\tahead.\r\n\t", parameters : [{name : "pos", type : "Int", optional : false}, {name : "x", type : "T", optional : false}], returnType : "Void", fieldType : "function", allowWrite : false, isStatic : false}, {className : "Array", name : "remove", doc : "\r\n\t\tRemoves the first occurrence of `x` in `this` Array.\r\n\r\n\t\tThis operation modifies `this` Array in place.\r\n\r\n\t\tIf `x` is found by checking standard equality, it is removed from `this`\r\n\t\tArray and all following elements are reindexed accordingly. The function\r\n\t\tthen returns true.\r\n\r\n\t\tIf `x` is not found, `this` Array is not changed and the function\r\n\t\treturns false.\r\n\t", parameters : [{name : "x", type : "T", optional : false}], returnType : "Bool", fieldType : "function", allowWrite : false, isStatic : false}, {className : "Array", name : "contains", doc : "\r\n\t\tReturns whether `this` Array contains `x`.\r\n\r\n\t\tIf `x` is found by checking standard equality, the function returns `true`, otherwise\r\n\t\tthe function returns `false`.\r\n\t", parameters : [{name : "x", type : "T", optional : false}], returnType : "Bool", fieldType : "function", allowWrite : false, isStatic : false}, {className : "Array", name : "indexOf", doc : "\r\n\t\tReturns position of the first occurrence of `x` in `this` Array, searching front to back.\r\n\r\n\t\tIf `x` is found by checking standard equality, the function returns its index.\r\n\r\n\t\tIf `x` is not found, the function returns -1.\r\n\r\n\t\tIf `fromIndex` is specified, it will be used as the starting index to search from,\r\n\t\totherwise search starts with zero index. If it is negative, it will be taken as the\r\n\t\toffset from the end of `this` Array to compute the starting index. If given or computed\r\n\t\tstarting index is less than 0, the whole array will be searched, if it is greater than\r\n\t\tor equal to the length of `this` Array, the function returns -1.\r\n\t", parameters : [{name : "x", type : "T", optional : false}, {name : "fromIndex", type : "Null<Int>", optional : true}], returnType : "Int", fieldType : "function", allowWrite : false, isStatic : false}, {className : "Array", name : "lastIndexOf", doc : "\r\n\t\tReturns position of the last occurrence of `x` in `this` Array, searching back to front.\r\n\r\n\t\tIf `x` is found by checking standard equality, the function returns its index.\r\n\r\n\t\tIf `x` is not found, the function returns -1.\r\n\r\n\t\tIf `fromIndex` is specified, it will be used as the starting index to search from,\r\n\t\totherwise search starts with the last element index. If it is negative, it will be\r\n\t\ttaken as the offset from the end of `this` Array to compute the starting index. If\r\n\t\tgiven or computed starting index is greater than or equal to the length of `this` Array,\r\n\t\tthe whole array will be searched, if it is less than 0, the function returns -1.\r\n\t", parameters : [{name : "x", type : "T", optional : false}, {name : "fromIndex", type : "Null<Int>", optional : true}], returnType : "Int", fieldType : "function", allowWrite : false, isStatic : false}, {className : "Array", name : "copy", doc : "\r\n\t\tReturns a shallow copy of `this` Array.\r\n\r\n\t\tThe elements are not copied and retain their identity, so\r\n\t\t`a[i] == a.copy()[i]` is true for any valid `i`. However,\r\n\t\t`a == a.copy()` is always false.\r\n\t", parameters : [], returnType : "Array<T>", fieldType : "function", allowWrite : false, isStatic : false}, {className : "Array", name : "iterator", doc : "\r\n\t\tReturns an iterator of the Array values.\r\n\t", parameters : [], returnType : "ArrayIterator<T>", fieldType : "function", allowWrite : false, isStatic : false}, {className : "Array", name : "keyValueIterator", doc : "\r\n\t\tReturns an iterator of the Array indices and values.\r\n\t", parameters : [], returnType : "ArrayKeyValueIterator<T>", fieldType : "function", allowWrite : false, isStatic : false}, {className : "Array", name : "map", doc : "\r\n\t\tCreates a new Array by applying function `f` to all elements of `this`.\r\n\r\n\t\tThe order of elements is preserved.\r\n\r\n\t\tIf `f` is null, the result is unspecified.\r\n\t", parameters : [{name : "f", type : "T->S", optional : false}], returnType : "Array<S>", fieldType : "function", allowWrite : false, isStatic : false}, {className : "Array", name : "filter", doc : "\r\n\t\tReturns an Array containing those elements of `this` for which `f`\r\n\t\treturned true.\r\n\r\n\t\tThe individual elements are not duplicated and retain their identity.\r\n\r\n\t\tIf `f` is null, the result is unspecified.\r\n\t", parameters : [{name : "f", type : "T->Bool", optional : false}], returnType : "Array<T>", fieldType : "function", allowWrite : false, isStatic : false}, {className : "Array", name : "resize", doc : "\r\n\t\tSet the length of the Array.\r\n\r\n\t\tIf `len` is shorter than the array's current size, the last\r\n\t\t`length - len` elements will be removed. If `len` is longer, the Array\r\n\t\twill be extended, with new elements set to a target-specific default\r\n\t\tvalue:\r\n\r\n\t\t- always null on dynamic targets\r\n\t\t- 0, 0.0 or false for Int, Float and Bool respectively on static targets\r\n\t\t- null for other types on static targets\r\n\t", parameters : [{name : "len", type : "Int", optional : false}], returnType : "Void", fieldType : "function", allowWrite : false, isStatic : false}], "Array");
+		little.interpreter.memory._MemoryTree.MemoryTree_Impl_.set(little.interpreter.Interpreter.memory, little.Keywords.TYPE_DYNAMIC, new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.Module(little.Keywords.TYPE_DYNAMIC), @:implicitCast little.interpreter.memory._MemoryTree.MemoryTree_Impl_._new(new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, null, null, null, null, null, null, null, null)), null, little.parser.ParserTokens.Module(little.Keywords.TYPE_MODULE), true, null, null, null, null));
+		little.interpreter.memory._MemoryTree.MemoryTree_Impl_.set(little.interpreter.Interpreter.memory, little.Keywords.TYPE_INT, new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.Module(little.Keywords.TYPE_INT), @:implicitCast little.interpreter.memory._MemoryTree.MemoryTree_Impl_._new(new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, null, null, null, null, null, null, null, null)), null, little.parser.ParserTokens.Module(little.Keywords.TYPE_MODULE), true, null, null, null, null));
+		little.interpreter.memory._MemoryTree.MemoryTree_Impl_.set(little.interpreter.Interpreter.memory, little.Keywords.TYPE_FLOAT, new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.Module(little.Keywords.TYPE_FLOAT), @:implicitCast little.interpreter.memory._MemoryTree.MemoryTree_Impl_._new(new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, null, null, null, null, null, null, null, null)), null, little.parser.ParserTokens.Module(little.Keywords.TYPE_MODULE), true, null, null, null, null));
+		little.interpreter.memory._MemoryTree.MemoryTree_Impl_.set(little.interpreter.Interpreter.memory, little.Keywords.TYPE_BOOLEAN, new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.Module(little.Keywords.TYPE_INT), @:implicitCast little.interpreter.memory._MemoryTree.MemoryTree_Impl_._new(new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, null, null, null, null, null, null, null, null)), null, little.parser.ParserTokens.Module(little.Keywords.TYPE_BOOLEAN), true, null, null, null, null));
+	}
+
+	public static function addProps() {
+		little.Little.plugin.registerProperty("type", little.Keywords.TYPE_DYNAMIC, true, null, {valueGetter : cast function(parent:little.interpreter.memory.MemoryObject) {
+			return little.parser.ParserTokens.Characters(little.tools.Extensions.value(parent.getType()));
+		}, allowWriting : cast false});
+		little.Little.plugin.registerProperty("documentation", little.Keywords.TYPE_DYNAMIC, true, null, {valueGetter : cast function(parent:little.interpreter.memory.MemoryObject) {
+			return little.parser.ParserTokens.Characters(parent.documentation);
+		}, allowWriting : cast false});
+		little.Little.plugin.registerProperty("" + little.Keywords.TYPE_CAST_FUNCTION_PREFIX + little.Keywords.TYPE_FLOAT, little.Keywords.TYPE_INT, true, {expectedParameters : cast [], callback : function(parent:little.interpreter.memory.MemoryObject, params:Array<little.parser.ParserTokens>) {
+			var val = parent.value;
+			if ((enumIndex val == 24)) return little.parser.ParserTokens.TypeDeclaration(little.parser.ParserTokens.NullValue, little.parser.ParserTokens.Module(little.Keywords.TYPE_FLOAT)) else return little.parser.ParserTokens.Decimal(Type.enumParameters(val)[0]);
+		}}, null);
+		little.Little.plugin.registerProperty("" + little.Keywords.TYPE_CAST_FUNCTION_PREFIX + little.Keywords.TYPE_BOOLEAN, little.Keywords.TYPE_INT, true, {expectedParameters : cast [], callback : function(parent:little.interpreter.memory.MemoryObject, params:Array<little.parser.ParserTokens>) {
+			var val = parent.value;
+			switch ((enumIndex val)) {
+				case 16: if ((Std.parseInt(val[0]) == 0 == true)) return little.parser.ParserTokens.FalseValue else return little.parser.ParserTokens.TrueValue;
+				case 24: return little.parser.ParserTokens.FalseValue;
+				default: return little.parser.ParserTokens.TrueValue
+			};
+		}}, null);
+		little.Little.plugin.registerProperty("" + little.Keywords.TYPE_CAST_FUNCTION_PREFIX + little.Keywords.TYPE_STRING, little.Keywords.TYPE_INT, true, {expectedParameters : cast [], callback : function(parent:little.interpreter.memory.MemoryObject, params:Array<little.parser.ParserTokens>) {
+			var val = parent.value;
+			haxe.Log.trace(val, {fileName : "src/little/tools/PrepareRun.hx", lineNumber : 79, className : "little.tools.PrepareRun", methodName : "addProps"});
+			if ((enumIndex val == 24)) return little.parser.ParserTokens.TypeDeclaration(little.parser.ParserTokens.NullValue, little.parser.ParserTokens.Module(little.Keywords.TYPE_STRING)) else return little.parser.ParserTokens.Characters(Type.enumParameters(val)[0]);
+		}}, null);
+	}
+
+	public static function addFunctions() {
+		little.Little.plugin.registerFunction(little.Keywords.PRINT_FUNCTION_NAME, null, [little.parser.ParserTokens.Variable(little.parser.ParserTokens.Identifier("item"), null, null)], function(params:Array<little.parser.ParserTokens>) {
+			var eval = little.interpreter.Actions.evaluate(params[0], null);
+			little.interpreter.Runtime.__print(little.interpreter.Interpreter.stringifyTokenValue(eval, null), eval);
+			return little.parser.ParserTokens.NullValue;
+		});
+		little.Little.plugin.registerFunction(little.Keywords.RAISE_ERROR_FUNCTION_NAME, null, [little.parser.ParserTokens.Variable(little.parser.ParserTokens.Identifier("message"), null, null)], function(params:Array<little.parser.ParserTokens>) {
+			little.interpreter.Runtime.throwError(little.interpreter.Actions.evaluate(params[0], null), null);
+			return little.parser.ParserTokens.NullValue;
+		});
+		little.Little.plugin.registerFunction(little.Keywords.READ_FUNCTION_NAME, null, [little.parser.ParserTokens.Variable(little.parser.ParserTokens.Identifier("string"), little.parser.ParserTokens.Module(little.Keywords.TYPE_STRING), null)], function(params:Array<little.parser.ParserTokens>) {
+			return little.parser.ParserTokens.Read(little.parser.ParserTokens.Identifier(little.interpreter.Interpreter.stringifyTokenValue(params[0], null)));
+		});
+		little.Little.plugin.registerFunction(little.Keywords.RUN_CODE_FUNCTION_NAME, null, [little.parser.ParserTokens.Variable(little.parser.ParserTokens.Identifier("code"), little.parser.ParserTokens.Module(little.Keywords.TYPE_STRING), null)], function(params:Array<little.parser.ParserTokens>) {
+			return little.interpreter.Actions.run(little.parser.Parser.parse(little.lexer.Lexer.lex(Type.enumParameters(params[0])[0])));
+		});
+	}
+
+	public static function addSigns() {
+		little.Little.plugin.registerSign("+", {rhsAllowedTypes : [little.Keywords.TYPE_FLOAT, little.Keywords.TYPE_INT], operatorType : little.interpreter.OperatorType.RHS_ONLY, priority : "last", singleSidedOperatorCallback : cast function(rhs:little.parser.ParserTokens) {
+			var r = little.tools.Conversion.toHaxeValue(rhs);
+			if ((Std.isOfType(r, Int))) return little.parser.ParserTokens.Number(r + "");
+			return little.parser.ParserTokens.Decimal(r + "");
+		}});
+		little.Little.plugin.registerSign("-", {rhsAllowedTypes : [little.Keywords.TYPE_FLOAT, little.Keywords.TYPE_INT], operatorType : little.interpreter.OperatorType.RHS_ONLY, priority : "with +_", singleSidedOperatorCallback : cast function(rhs:little.parser.ParserTokens) {
+			var r = little.tools.Conversion.toHaxeValue(rhs);
+			if ((Std.isOfType(r, Int))) return little.parser.ParserTokens.Number(- r + "");
+			return little.parser.ParserTokens.Decimal(- r + "");
+		}});
+		little.Little.plugin.registerSign("√", {rhsAllowedTypes : [little.Keywords.TYPE_FLOAT, little.Keywords.TYPE_INT], operatorType : little.interpreter.OperatorType.RHS_ONLY, priority : "first", singleSidedOperatorCallback : cast function(rhs:little.parser.ParserTokens) {
+			var r = little.tools.Conversion.toHaxeValue(rhs);
+			return little.parser.ParserTokens.Decimal(Math.sqrt(r) + "");
+		}});
+		little.Little.plugin.registerSign("!", {rhsAllowedTypes : [little.Keywords.TYPE_BOOLEAN], operatorType : little.interpreter.OperatorType.RHS_ONLY, priority : "with +_", singleSidedOperatorCallback : cast function(rhs:little.parser.ParserTokens) {
+			var r = little.tools.Conversion.toHaxeValue(rhs);
+			if ((r)) return little.parser.ParserTokens.FalseValue else return little.parser.ParserTokens.TrueValue;
+		}});
+		little.Little.plugin.registerSign("!", {lhsAllowedTypes : [little.Keywords.TYPE_FLOAT, little.Keywords.TYPE_INT], operatorType : little.interpreter.OperatorType.LHS_ONLY, priority : "with √_", singleSidedOperatorCallback : cast function(lhs:little.parser.ParserTokens) {
+			var l = little.tools.Conversion.toHaxeValue(lhs);
+			var shifted = Math.pow(10, 10) * l;
+			if ((shifted != Math.floor(shifted))) return little.parser.ParserTokens.Number(Math.round(vision.tools.MathTools.factorial(l)) + "");
+			return little.parser.ParserTokens.Decimal(vision.tools.MathTools.factorial(l) + "");
+		}});
+		little.Little.plugin.registerSign("+", {rhsAllowedTypes : [little.Keywords.TYPE_FLOAT, little.Keywords.TYPE_INT, little.Keywords.TYPE_STRING], lhsAllowedTypes : [little.Keywords.TYPE_FLOAT, little.Keywords.TYPE_INT, little.Keywords.TYPE_STRING], allowedTypeCombos : [{lhs : little.Keywords.TYPE_STRING, rhs : little.Keywords.TYPE_DYNAMIC}, {lhs : little.Keywords.TYPE_DYNAMIC, rhs : little.Keywords.TYPE_STRING}], priority : "with +_", callback : cast function(lhs:little.parser.ParserTokens, rhs:little.parser.ParserTokens) {
+			var l = little.tools.Conversion.toHaxeValue(lhs);
+			var r = little.tools.Conversion.toHaxeValue(rhs);
+			if ((Std.isOfType(l, String) || Std.isOfType(r, String))) return little.parser.ParserTokens.Characters("" + little.tools.Extensions.value(lhs) + little.tools.Extensions.value(rhs));
+			if ((Type.enumEq(little.interpreter.Interpreter.getValueType(lhs), little.parser.ParserTokens.Module(little.Keywords.TYPE_INT)) && Type.enumEq(little.interpreter.Interpreter.getValueType(rhs), little.parser.ParserTokens.Module(little.Keywords.TYPE_INT)))) return little.parser.ParserTokens.Number(l + r + "");
+			return little.parser.ParserTokens.Decimal(l + r + "");
+		}});
+		little.Little.plugin.registerSign("-", {rhsAllowedTypes : [little.Keywords.TYPE_FLOAT, little.Keywords.TYPE_INT], lhsAllowedTypes : [little.Keywords.TYPE_FLOAT, little.Keywords.TYPE_INT], allowedTypeCombos : [{lhs : little.Keywords.TYPE_STRING, rhs : little.Keywords.TYPE_STRING}], priority : "with +", callback : cast function(lhs:little.parser.ParserTokens, rhs:little.parser.ParserTokens) {
+			var l = little.tools.Conversion.toHaxeValue(lhs);
+			var r = little.tools.Conversion.toHaxeValue(rhs);
+			if ((Std.isOfType(l, String))) return little.parser.ParserTokens.Characters(little.tools.TextTools.replaceLast(cast l, cast r, ""));
+			if ((Type.enumEq(little.interpreter.Interpreter.getValueType(lhs), little.parser.ParserTokens.Module(little.Keywords.TYPE_INT)) && Type.enumEq(little.interpreter.Interpreter.getValueType(rhs), little.parser.ParserTokens.Module(little.Keywords.TYPE_INT)))) return little.parser.ParserTokens.Number(l - r + "");
+			return little.parser.ParserTokens.Decimal(l - r + "");
+		}});
+		little.Little.plugin.registerSign("*", {rhsAllowedTypes : [little.Keywords.TYPE_FLOAT, little.Keywords.TYPE_INT], lhsAllowedTypes : [little.Keywords.TYPE_FLOAT, little.Keywords.TYPE_INT], allowedTypeCombos : [{lhs : little.Keywords.TYPE_STRING, rhs : little.Keywords.TYPE_INT}], priority : "between + √_", callback : cast function(lhs:little.parser.ParserTokens, rhs:little.parser.ParserTokens) {
+			var l = little.tools.Conversion.toHaxeValue(lhs);
+			var r = little.tools.Conversion.toHaxeValue(rhs);
+			if ((Std.isOfType(l, String))) return little.parser.ParserTokens.Characters(little.tools.TextTools.multiply(l, r));
+			if ((Type.enumEq(little.interpreter.Interpreter.getValueType(lhs), little.parser.ParserTokens.Module(little.Keywords.TYPE_INT)) && Type.enumEq(little.interpreter.Interpreter.getValueType(rhs), little.parser.ParserTokens.Module(little.Keywords.TYPE_INT)))) return little.parser.ParserTokens.Number(l * r + "");
+			return little.parser.ParserTokens.Decimal(l * r + "");
+		}});
+		little.Little.plugin.registerSign("/", {rhsAllowedTypes : [little.Keywords.TYPE_FLOAT, little.Keywords.TYPE_INT], lhsAllowedTypes : [little.Keywords.TYPE_FLOAT, little.Keywords.TYPE_INT], priority : "with *", callback : cast function(lhs:little.parser.ParserTokens, rhs:little.parser.ParserTokens) {
+			var l = little.tools.Conversion.toHaxeValue(lhs);
+			var r = little.tools.Conversion.toHaxeValue(rhs);
+			if ((r == 0)) little.interpreter.Runtime.throwError(little.parser.ParserTokens.ErrorMessage("Cannot divide by 0 " + (if ((Type.enumConstructor(rhs) == "Number" || Type.enumConstructor(rhs) == "Decimal")) "" else "(" + little.tools.PrettyPrinter.stringify(null, rhs) + " is 0)")), null);
+			return little.parser.ParserTokens.Decimal(l / r + "");
+		}});
+		little.Little.plugin.registerSign("^", {rhsAllowedTypes : [little.Keywords.TYPE_FLOAT, little.Keywords.TYPE_INT], lhsAllowedTypes : [little.Keywords.TYPE_FLOAT, little.Keywords.TYPE_INT], priority : "before *", callback : cast function(lhs:little.parser.ParserTokens, rhs:little.parser.ParserTokens) {
+			var l = little.tools.Conversion.toHaxeValue(lhs);
+			var r = little.tools.Conversion.toHaxeValue(rhs);
+			if ((Type.enumEq(little.interpreter.Interpreter.getValueType(lhs), little.parser.ParserTokens.Module(little.Keywords.TYPE_INT)) && Type.enumEq(little.interpreter.Interpreter.getValueType(rhs), little.parser.ParserTokens.Module(little.Keywords.TYPE_INT)))) return little.parser.ParserTokens.Number(Math.pow(l, r) + "");
+			return little.parser.ParserTokens.Decimal(Math.pow(l, r) + "");
+		}});
+		little.Little.plugin.registerSign("√", {rhsAllowedTypes : [little.Keywords.TYPE_FLOAT, little.Keywords.TYPE_INT], lhsAllowedTypes : [little.Keywords.TYPE_FLOAT, little.Keywords.TYPE_INT], priority : "with ^", callback : cast function(lhs:little.parser.ParserTokens, rhs:little.parser.ParserTokens) {
+			var l = little.tools.Conversion.toHaxeValue(lhs);
+			var r = little.tools.Conversion.toHaxeValue(rhs);
+			var lPositive = l >= 0;
+			var oddN = r % 2 == 1;
+			if ((! lPositive)) l = - l;
+			return little.parser.ParserTokens.Decimal(Math.pow(l * (if ((! lPositive && oddN)) -1 else 1), 1 / r) + "");
+		}});
+		little.Little.plugin.registerSign("&&", {rhsAllowedTypes : [little.Keywords.TYPE_BOOLEAN], lhsAllowedTypes : [little.Keywords.TYPE_BOOLEAN], priority : "last", callback : cast function(lhs:little.parser.ParserTokens, rhs:little.parser.ParserTokens) {
+			if ((little.tools.Conversion.toHaxeValue(lhs) && little.tools.Conversion.toHaxeValue(rhs))) return little.parser.ParserTokens.TrueValue else return little.parser.ParserTokens.FalseValue;
+		}});
+		little.Little.plugin.registerSign("||", {rhsAllowedTypes : [little.Keywords.TYPE_BOOLEAN], lhsAllowedTypes : [little.Keywords.TYPE_BOOLEAN], priority : "with &&", callback : cast function(lhs:little.parser.ParserTokens, rhs:little.parser.ParserTokens) {
+			if ((little.tools.Conversion.toHaxeValue(lhs) || little.tools.Conversion.toHaxeValue(rhs))) return little.parser.ParserTokens.TrueValue else return little.parser.ParserTokens.FalseValue;
+		}});
+		little.Little.plugin.registerSign("==", {priority : "last", callback : cast function(lhs:little.parser.ParserTokens, rhs:little.parser.ParserTokens) {
+			if ((little.tools.Conversion.toHaxeValue(lhs) == little.tools.Conversion.toHaxeValue(rhs))) return little.parser.ParserTokens.TrueValue else return little.parser.ParserTokens.FalseValue;
+		}});
+		little.Little.plugin.registerSign("!=", {priority : "with ==", callback : cast function(lhs:little.parser.ParserTokens, rhs:little.parser.ParserTokens) {
+			if ((little.tools.Conversion.toHaxeValue(lhs) != little.tools.Conversion.toHaxeValue(rhs))) return little.parser.ParserTokens.TrueValue else return little.parser.ParserTokens.FalseValue;
+		}});
+		little.Little.plugin.registerSign("^^", {rhsAllowedTypes : [little.Keywords.TYPE_BOOLEAN], lhsAllowedTypes : [little.Keywords.TYPE_BOOLEAN], priority : "with &&", callback : cast function(lhs:little.parser.ParserTokens, rhs:little.parser.ParserTokens) {
+			if ((little.tools.Conversion.toHaxeValue(lhs) != little.tools.Conversion.toHaxeValue(rhs))) return little.parser.ParserTokens.TrueValue else return little.parser.ParserTokens.FalseValue;
+		}});
+		little.Little.plugin.registerSign(">", {rhsAllowedTypes : [little.Keywords.TYPE_FLOAT, little.Keywords.TYPE_INT], lhsAllowedTypes : [little.Keywords.TYPE_FLOAT, little.Keywords.TYPE_INT], allowedTypeCombos : [{lhs : little.Keywords.TYPE_STRING, rhs : little.Keywords.TYPE_STRING}], priority : "with ==", callback : cast function(lhs:little.parser.ParserTokens, rhs:little.parser.ParserTokens) {
+			var l = little.tools.Conversion.toHaxeValue(lhs);
+			var r = little.tools.Conversion.toHaxeValue(rhs);
+			if ((Std.isOfType(l, String))) {
+				if ((l.length > r.length)) return little.parser.ParserTokens.TrueValue else return little.parser.ParserTokens.FalseValue;
+			};
+			if ((l > r)) return little.parser.ParserTokens.TrueValue else return little.parser.ParserTokens.FalseValue;
+		}});
+		little.Little.plugin.registerSign(">=", {rhsAllowedTypes : [little.Keywords.TYPE_FLOAT, little.Keywords.TYPE_INT], lhsAllowedTypes : [little.Keywords.TYPE_FLOAT, little.Keywords.TYPE_INT], allowedTypeCombos : [{lhs : little.Keywords.TYPE_STRING, rhs : little.Keywords.TYPE_STRING}], priority : "with ==", callback : cast function(lhs:little.parser.ParserTokens, rhs:little.parser.ParserTokens) {
+			var l = little.tools.Conversion.toHaxeValue(lhs);
+			var r = little.tools.Conversion.toHaxeValue(rhs);
+			if ((Std.isOfType(l, String))) {
+				if ((l.length >= r.length)) return little.parser.ParserTokens.TrueValue else return little.parser.ParserTokens.FalseValue;
+			};
+			if ((l >= r)) return little.parser.ParserTokens.TrueValue else return little.parser.ParserTokens.FalseValue;
+		}});
+		little.Little.plugin.registerSign("<", {rhsAllowedTypes : [little.Keywords.TYPE_FLOAT, little.Keywords.TYPE_INT], lhsAllowedTypes : [little.Keywords.TYPE_FLOAT, little.Keywords.TYPE_INT], allowedTypeCombos : [{lhs : little.Keywords.TYPE_STRING, rhs : little.Keywords.TYPE_STRING}], priority : "with ==", callback : cast function(lhs:little.parser.ParserTokens, rhs:little.parser.ParserTokens) {
+			var l = little.tools.Conversion.toHaxeValue(lhs);
+			var r = little.tools.Conversion.toHaxeValue(rhs);
+			if ((Std.isOfType(l, String))) {
+				if ((l.length < r.length)) return little.parser.ParserTokens.TrueValue else return little.parser.ParserTokens.FalseValue;
+			};
+			if ((l < r)) return little.parser.ParserTokens.TrueValue else return little.parser.ParserTokens.FalseValue;
+		}});
+		little.Little.plugin.registerSign("<=", {rhsAllowedTypes : [little.Keywords.TYPE_FLOAT, little.Keywords.TYPE_INT], lhsAllowedTypes : [little.Keywords.TYPE_FLOAT, little.Keywords.TYPE_INT], allowedTypeCombos : [{lhs : little.Keywords.TYPE_STRING, rhs : little.Keywords.TYPE_STRING}], priority : "with ==", callback : cast function(lhs:little.parser.ParserTokens, rhs:little.parser.ParserTokens) {
+			var l = little.tools.Conversion.toHaxeValue(lhs);
+			var r = little.tools.Conversion.toHaxeValue(rhs);
+			if ((Std.isOfType(l, String))) {
+				if ((l.length <= r.length)) return little.parser.ParserTokens.TrueValue else return little.parser.ParserTokens.FalseValue;
+			};
+			if ((l <= r)) return little.parser.ParserTokens.TrueValue else return little.parser.ParserTokens.FalseValue;
+		}});
+	}
+
+	public static function addConditions() {
+		little.Little.plugin.registerCondition("while", [little.parser.ParserTokens.Variable(little.parser.ParserTokens.Identifier("rule"), little.parser.ParserTokens.Identifier(little.Keywords.TYPE_BOOLEAN), null)], function(params:Array<little.parser.ParserTokens>, body:Array<little.parser.ParserTokens>) {
+			var val = little.parser.ParserTokens.NullValue;
+			var safetyNet = 0;
+			while ((little.tools.Conversion.toHaxeValue(little.interpreter.Interpreter.evaluateExpressionParts(params, null)) && safetyNet < 500000)) {
+				val = little.interpreter.Actions.run(body);
+				++ safetyNet;
+			};
+			if ((safetyNet >= 500000)) little.interpreter.Runtime.throwError(little.parser.ParserTokens.ErrorMessage("Too much iteration (is `" + little.tools.PrettyPrinter.stringify(params, null) + "` forever `" + Std.string(little.tools.ParserTokensSimple.TRUE_VALUE) + "`?)"), cast "Interpreter");
+			return val;
+		});
+		little.Little.plugin.registerCondition("if", [little.parser.ParserTokens.Variable(little.parser.ParserTokens.Identifier("rule"), little.parser.ParserTokens.Identifier(little.Keywords.TYPE_BOOLEAN), null)], function(params:Array<little.parser.ParserTokens>, body:Array<little.parser.ParserTokens>) {
+			var val = little.parser.ParserTokens.NullValue;
+			if ((little.tools.Conversion.toHaxeValue(little.interpreter.Interpreter.evaluateExpressionParts(params, null)))) val = little.interpreter.Actions.run(body);
+			return val;
+		});
+		little.Little.plugin.registerCondition("for", null, function(params:Array<little.parser.ParserTokens>, body:Array<little.parser.ParserTokens>) {
+			var params = [params];
+			var val = little.parser.ParserTokens.NullValue;
+			var fp = [];
+			{
+				var ` = 0;
+				while ((` < params[0].length)) {
+					var p = params[0][`];
+					++ `;
+					if ((enumIndex p == 9)) {
+						var ` = p[0];
+						var ` = p[1];
+						{
+							var _hx_tmp;
+							var _hx_tmp;
+							if ((Type.enumParameters(`)[0] == little.Keywords.FOR_LOOP_FROM == true)) {
+								var params = `;
+								{
+									fp.push(little.parser.ParserTokens.Identifier(little.Keywords.FOR_LOOP_FROM));
+									fp.push(little.parser.ParserTokens.Expression(Type.enumParameters(params)[0], null));
+								};
+							} else {
+								_hx_tmp = Type.enumParameters(`)[0] == little.Keywords.FOR_LOOP_TO;
+								if ((_hx_tmp == true)) {
+									var params = `;
+									{
+										fp.push(little.parser.ParserTokens.Identifier(little.Keywords.FOR_LOOP_TO));
+										fp.push(little.parser.ParserTokens.Expression(Type.enumParameters(params)[0], null));
+									};
+								} else {
+									_hx_tmp = Type.enumParameters(`)[0] == little.Keywords.FOR_LOOP_JUMP;
+									if ((_hx_tmp == true)) {
+										var params = `;
+										{
+											fp.push(little.parser.ParserTokens.Identifier(little.Keywords.FOR_LOOP_JUMP));
+											fp.push(little.parser.ParserTokens.Expression(Type.enumParameters(params)[0], null));
+										};
+									} else fp.push(p);
+								};
+							};
+						};
+					} else fp.push(p);
+				};
+			};
+			params[0] = fp;
+			var handle = little.interpreter.Interpreter.accessObject(params[0][0], null);
+			if ((handle == null)) {
+				little.interpreter.Runtime.throwError(little.parser.ParserTokens.ErrorMessage("`for` loop must start with a variable to count on (expected definition/block, found: `" + little.tools.PrettyPrinter.stringify(null, params[0][0]) + "`)"), null);
+				return val;
+			};
+			var from = [null];
+			var to = [null];
+			var jump = [1];
+			var parserForLoop = [null];
+			parserForLoop[0] = function(token:little.parser.ParserTokens, next:little.parser.ParserTokens) {
+				switch ((enumIndex token)) {
+					case 7: {
+						var ` = token[0];
+						{
+							var _hx_tmp;
+							var _hx_tmp;
+							if ((` == little.Keywords.FOR_LOOP_FROM == true)) {
+								var val = little.tools.Conversion.toHaxeValue(little.interpreter.Interpreter.evaluate(next, null, null));
+								if ((Std.isOfType(val, Float) || Std.isOfType(val, Int))) from[0] = val else little.interpreter.Runtime.throwError(little.parser.ParserTokens.ErrorMessage("`for` loop's `" + little.Keywords.FOR_LOOP_FROM + "` argument must be of type " + little.Keywords.TYPE_INT + "/" + little.Keywords.TYPE_FLOAT + " (given: " + little.interpreter.Interpreter.stringifyTokenValue(next, null) + " as " + Type.enumConstructor(cast little.interpreter.Interpreter.evaluate(next, null, null)) + ")"), null);
+							} else {
+								_hx_tmp = ` == little.Keywords.FOR_LOOP_TO;
+								if ((_hx_tmp == true)) {
+									var val = little.tools.Conversion.toHaxeValue(little.interpreter.Interpreter.evaluate(next, null, null));
+									if ((Std.isOfType(val, Float) || Std.isOfType(val, Int))) to[0] = val else little.interpreter.Runtime.throwError(little.parser.ParserTokens.ErrorMessage("`for` loop's `" + little.Keywords.FOR_LOOP_TO + "` argument must be of type " + little.Keywords.TYPE_INT + "/" + little.Keywords.TYPE_FLOAT + " (given: " + little.interpreter.Interpreter.stringifyTokenValue(next, null) + " as " + Type.enumConstructor(cast little.interpreter.Interpreter.evaluate(next, null, null)) + ")"), null);
+								} else {
+									_hx_tmp = ` == little.Keywords.FOR_LOOP_JUMP;
+									if ((_hx_tmp == true)) {
+										var val = little.tools.Conversion.toHaxeValue(little.interpreter.Interpreter.evaluate(next, null, null));
+										if ((Std.isOfType(val, Float) || Std.isOfType(val, Int))) {
+											if ((val < 0)) little.interpreter.Runtime.throwError(little.parser.ParserTokens.ErrorMessage("`for` loop's `" + little.Keywords.FOR_LOOP_JUMP + "` argument must be positive (given: " + little.interpreter.Interpreter.stringifyTokenValue(next, null) + "). Notice - the usage of the `" + little.Keywords.FOR_LOOP_JUMP + "` argument switches from increasing to decreasing the value of `" + Std.string(Type.enumParameters(params[0][0])[0]) + "` if `" + little.Keywords.FOR_LOOP_FROM + "` is larger than `" + little.Keywords.FOR_LOOP_TO + "`. Defaulting to 1"), null) else jump[0] = val;
+										} else little.interpreter.Runtime.throwError(little.parser.ParserTokens.ErrorMessage("`for` loop's `" + little.Keywords.FOR_LOOP_JUMP + "` argument must be of type " + little.Keywords.TYPE_INT + "/" + little.Keywords.TYPE_FLOAT + " (given: " + little.interpreter.Interpreter.stringifyTokenValue(next, null) + " as " + Type.enumConstructor(cast little.interpreter.Interpreter.evaluate(next, null, null)) + "). Defaulting to `1`"), null);
+									};
+								};
+							};
+						};
+					};
+					case 12: {
+						var ` = token[0];
+						var ` = token[1];
+						{
+							var ident = little.interpreter.Interpreter.evaluate(token, null, null);
+							parserForLoop[0](if ((Type.enumConstructor(ident) == "Characters")) little.parser.ParserTokens.Identifier(Type.enumParameters(ident)[0]) else ident, next);
+						};
+					};
+					default: {}
+				};
+			};
+			var i = 1;
+			while ((i < fp.length)) {
+				var token = fp[i];
+				var next = [];
+				var lookahead = fp[i + 1];
+				while ((! Type.enumEq(lookahead, little.parser.ParserTokens.Identifier(little.Keywords.FOR_LOOP_TO)) && ! Type.enumEq(lookahead, little.parser.ParserTokens.Identifier(little.Keywords.FOR_LOOP_JUMP)))) {
+					next.push(lookahead);
+					lookahead = fp[++ i + 1];
+					if ((lookahead == null)) break;
+				};
+				-- i;
+				parserForLoop[0](token, little.parser.ParserTokens.Expression(next, null));
+				i += 2;
+			};
+			if ((from[0] == null)) {
+				little.interpreter.Runtime.throwError(little.parser.ParserTokens.ErrorMessage("`for` loop must contain a `" + little.Keywords.FOR_LOOP_FROM + "` argument."), null);
+				return val;
+			};
+			if ((from[0] == null)) {
+				little.interpreter.Runtime.throwError(little.parser.ParserTokens.ErrorMessage("`for` loop must contain a `" + little.Keywords.FOR_LOOP_TO + "` argument."), null);
+				return val;
+			};
+			if ((from[0] < to[0])) while ((from[0] < to[0])) {
+				val = little.interpreter.Actions.run([little.parser.ParserTokens.Write([params[0][0]], if ((from[0] == Std.int(from[0]))) little.parser.ParserTokens.Number("" + from[0]) else little.parser.ParserTokens.Decimal("" + from[0]))].concat(body));
+				from[0] += jump[0];
+			} else while ((from[0] > to[0])) {
+				val = little.interpreter.Actions.run([little.parser.ParserTokens.Write([params[0][0]], if ((from[0] == Std.int(from[0]))) little.parser.ParserTokens.Number("" + from[0]) else little.parser.ParserTokens.Decimal("" + from[0]))].concat(body));
+				from[0] -= jump[0];
+			};
+			return val;
+		});
+		little.Little.plugin.registerCondition("after", [little.parser.ParserTokens.Variable(little.parser.ParserTokens.Identifier("rule"), little.parser.ParserTokens.Module(little.Keywords.TYPE_BOOLEAN), null)], function(params:Array<little.parser.ParserTokens>, body:Array<little.parser.ParserTokens>) {
+			var val = little.parser.ParserTokens.NullValue;
+			var handle = little.interpreter.Interpreter.accessObject(Type.enumParameters(params[0])[0][0], null);
+			if ((handle == null)) {
+				little.interpreter.Runtime.throwError(little.parser.ParserTokens.ErrorMessage("`after` condition must start with a variable to watch (expected definition, found: `" + little.tools.PrettyPrinter.stringify(Type.enumParameters(params[0])[0][0], null) + "`)"), null);
+				return val;
+			};
+			var dispatchAndRemove = [null];
+			dispatchAndRemove[0] = function(set:little.parser.ParserTokens) {
+				if ((little.tools.Conversion.toHaxeValue(little.interpreter.Interpreter.evaluateExpressionParts(params, null)))) {
+					little.interpreter.Actions.run(body);
+					handle.setterListeners.remove(dispatchAndRemove[0]);
+				};
+			};
+			handle.setterListeners.push(dispatchAndRemove[0]);
+			return val;
+		});
+		little.Little.plugin.registerCondition("whenever", [little.parser.ParserTokens.Variable(little.parser.ParserTokens.Identifier("rule"), little.parser.ParserTokens.Module(little.Keywords.TYPE_BOOLEAN), null)], function(params:Array<little.parser.ParserTokens>, body:Array<little.parser.ParserTokens>) {
+			var val = little.parser.ParserTokens.NullValue;
+			var handle = little.interpreter.Interpreter.accessObject(Type.enumParameters(params[0])[0][0], null);
+			if ((handle == null)) {
+				little.interpreter.Runtime.throwError(little.parser.ParserTokens.ErrorMessage("`whenever` condition must start with a variable to watch (expected definition, found: `" + little.tools.PrettyPrinter.stringify(Type.enumParameters(params[0])[0][0], null) + "`)"), null);
+				return val;
+			};
+			var dispatchAndRemove = function(set:little.parser.ParserTokens) {
+				if ((little.tools.Conversion.toHaxeValue(little.interpreter.Interpreter.evaluateExpressionParts(params, null)))) little.interpreter.Actions.run(body);
+			};
+			handle.setterListeners.push(dispatchAndRemove);
+			return val;
+		});
+	}
+}

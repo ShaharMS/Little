@@ -1,0 +1,18 @@
+extern class eval.Vector<T> implements ArrayAccess<eval.Vector.T> {
+
+	function new(size:Int):Void;
+
+	var length(default,null):Int;
+
+	function blit<T>(srcPos:Int, dest:eval.Vector<blit.T>, destPos:Int, len:Int):Void;
+
+	function toArray():Array<eval.Vector.T>;
+
+	function copy<T>():eval.Vector<copy.T>;
+
+	function join<T>(sep:String):String;
+
+	function map<S>(f:eval.Vector.T -> map.S):eval.Vector<map.S>;
+
+	static function fromArrayCopy<T>(array:Array<fromArrayCopy.T>):eval.Vector<fromArrayCopy.T>;
+}

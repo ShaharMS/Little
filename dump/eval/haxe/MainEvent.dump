@@ -1,0 +1,23 @@
+@:keep @:used
+class haxe.MainEvent {
+
+	function new(f:() -> Void, p:Int) {
+		this.isBlocking = true;
+		this.f = f;
+		this.priority = p;
+		this.nextRun = Math.NEGATIVE_INFINITY;
+	}
+
+	var f:() -> Void;
+
+	var prev:haxe.MainEvent;
+
+	var next:haxe.MainEvent;
+
+	@:value(true)
+	public var isBlocking:Bool;
+
+	public var nextRun(default,null):Float;
+
+	public var priority(default,null):Int;
+}

@@ -1,0 +1,32 @@
+@:directlyUsed @:used @:structInit
+class little.interpreter.RunConfig {
+
+	@:compilerGenerated @:inheritDoc
+	public function new(prioritizeFunctionDeclarations:Null<Bool>, prioritizeVariableDeclarations:Null<Bool>, strictTyping:Null<Bool>, defaultModuleName:Null<String>, keywordConfig:Null<little.interpreter.KeywordConfig>) {
+		this.keywordConfig = null;
+		this.defaultModuleName = "Main";
+		this.strictTyping = false;
+		this.prioritizeVariableDeclarations = false;
+		this.prioritizeFunctionDeclarations = false;
+		if ((prioritizeFunctionDeclarations != null)) this.prioritizeFunctionDeclarations = prioritizeFunctionDeclarations;
+		if ((prioritizeVariableDeclarations != null)) this.prioritizeVariableDeclarations = prioritizeVariableDeclarations;
+		if ((strictTyping != null)) this.strictTyping = strictTyping;
+		if ((defaultModuleName != null)) this.defaultModuleName = defaultModuleName;
+		if ((keywordConfig != null)) this.keywordConfig = keywordConfig;
+	}
+
+	@:value(false)
+	public var prioritizeFunctionDeclarations:Bool;
+
+	@:value(false)
+	public var prioritizeVariableDeclarations:Bool;
+
+	@:value(false)
+	public var strictTyping:Bool;
+
+	@:value("Main")
+	public var defaultModuleName:String;
+
+	@:value(null)
+	public var keywordConfig:little.interpreter.KeywordConfig;
+}

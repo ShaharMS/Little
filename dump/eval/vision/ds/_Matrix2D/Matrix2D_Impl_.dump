@@ -1,0 +1,560 @@
+@:directlyUsed @:used
+private class vision.ds._Matrix2D.Matrix2D_Impl_ {
+
+	public static var underlying(get,set):vision.ds.Array2D<Float>;
+
+	static inline function get_underlying(this:vision.ds.Array2D<Float>) {
+		return this;
+	}
+
+	static inline function set_underlying(this:vision.ds.Array2D<Float>, arr2d:vision.ds.Array2D<Float>) {
+		this = arr2d;
+		return this;
+	}
+
+	public static var rows(get,set):Int;
+
+	@:noCompletion
+	static inline function get_rows(this:vision.ds.Array2D<Float>) {
+		return this.width;
+	}
+
+	@:noCompletion
+	static inline function set_rows(this:vision.ds.Array2D<Float>, amount:Int) {
+		this.inner.resize(amount * this.height);
+		return this.width = amount;
+	}
+
+	public static var columns(get,set):Int;
+
+	@:noCompletion
+	static inline function get_columns(this:vision.ds.Array2D<Float>) {
+		return this.height;
+	}
+
+	@:noCompletion
+	static inline function set_columns(this:vision.ds.Array2D<Float>, amount:Int) {
+		this.inner.resize(this.width * amount);
+		return this.height = amount;
+	}
+
+	@:noCompletion
+	public static inline function _new(rows:Int, columns:Int) {
+		return cast new vision.ds.Array2D(rows, columns, null);
+	}
+
+	public static inline function invert(this:vision.ds.Array2D<Float>) {
+		this = vision.algorithms.GaussJordan.invert(this);
+		return this;
+	}
+
+	public static inline function clone(this:vision.ds.Array2D<Float>) {
+		var arr = new vision.ds.Array2D(this.width, this.height, null);
+		arr.inner = this.inner.copy();
+		return cast arr;
+	}
+
+	@:value({ pretty : true })
+	public static inline function toString(this:vision.ds.Array2D<Float>, precision:Null<Int> = null, pretty:Bool = true) {
+		if ((! pretty)) {
+			var str = "\n[[";
+			var counter = 0;
+			{
+				var ` = 0;
+				var ` = this.inner;
+				while ((` < `.length)) {
+					var item = `[`];
+					++ `;
+					if ((counter < this.width)) {
+						var add = ", " + Std.string(item);
+						if ((counter == 0)) add = add.substr(2, null);
+						str += add;
+						++ counter;
+					} else {
+						counter = 0;
+						str += "],\n [";
+						var add = "" + Std.string(item);
+						str += add;
+						++ counter;
+					};
+				};
+			};
+			return str.substring(0, str.length) + "]]";
+		};
+		var maxLen = 1;
+		{
+			var ` = 0;
+			var ` = cast this.inner;
+			while ((` < `.length)) {
+				var item = `[`];
+				++ `;
+				var len;
+				if ((precision == -1)) len = Std.string(item).length else {
+					var multiplier = Math.pow(10, precision);
+					len = Std.string(Math.round(item * multiplier) / multiplier).length;
+				};
+				if ((len > maxLen)) maxLen = len;
+			};
+		};
+		++ maxLen;
+		var st = "";
+		{
+			var ` = 0;
+			var ` = maxLen * cast this.height + 2 * (cast this.height - 1);
+			while ((` < `)) {
+				var i = ` ++;
+				st += " ";
+			};
+		};
+		var top = "\n┌ " + st + " ┐";
+		var st = "";
+		{
+			var ` = 0;
+			var ` = maxLen * cast this.height + 2 * (cast this.height - 1);
+			while ((` < `)) {
+				var i = ` ++;
+				st += " ";
+			};
+		};
+		var bottom = "└ " + st + " ┘";
+		var rows = [""];
+		var counter = 0;
+		var floor = 0;
+		{
+			var ` = 0;
+			var ` = cast this.inner;
+			while ((` < `.length)) {
+				var item = `[`];
+				++ `;
+				if ((counter < cast this.height)) {
+					var itemString;
+					if ((precision != -1)) {
+						var multiplier = Math.pow(10, precision);
+						itemString = Math.round(item * multiplier) / multiplier;
+					} else itemString = item;
+					var itemString = Std.string(itemString);
+					var add;
+					if ((precision != -1)) {
+						var multiplier = Math.pow(10, precision);
+						add = item != Math.round(item * multiplier) / multiplier;
+					} else add = false;
+					if ((add)) itemString += "…";
+					if ((itemString.length < maxLen)) {
+						var st = "";
+						{
+							var ` = 0;
+							var ` = Math.floor((maxLen - itemString.length) / 2);
+							while ((` < `)) {
+								var i = ` ++;
+								st += " ";
+							};
+						};
+						var itemString = st + itemString;
+						var st = "";
+						{
+							var ` = 0;
+							var ` = Math.ceil((maxLen - itemString.length) / 2);
+							while ((` < `)) {
+								var i = ` ++;
+								st += " ";
+							};
+						};
+						itemString = itemString + st;
+					};
+					var add = ", " + itemString;
+					if ((counter == 0)) add = add.substr(2, null);
+					rows[floor] += add;
+					++ counter;
+				} else {
+					counter = 0;
+					++ floor;
+					rows[floor] = "";
+					var itemString;
+					if ((precision != -1)) {
+						var multiplier = Math.pow(10, precision);
+						itemString = Math.round(item * multiplier) / multiplier;
+					} else itemString = item;
+					var itemString = Std.string(itemString);
+					var add;
+					if ((precision != -1)) {
+						var multiplier = Math.pow(10, precision);
+						add = item != Math.round(item * multiplier) / multiplier;
+					} else add = false;
+					if ((add)) itemString += "…";
+					if ((itemString.length < maxLen)) {
+						var st = "";
+						{
+							var ` = 0;
+							var ` = Math.floor((maxLen - itemString.length) / 2);
+							while ((` < `)) {
+								var i = ` ++;
+								st += " ";
+							};
+						};
+						var itemString = st + itemString;
+						var st = "";
+						{
+							var ` = 0;
+							var ` = Math.ceil((maxLen - itemString.length) / 2);
+							while ((` < `)) {
+								var i = ` ++;
+								st += " ";
+							};
+						};
+						itemString = itemString + st;
+					};
+					var add = "" + itemString;
+					rows[floor] += add;
+					++ counter;
+				};
+			};
+		};
+		var string = top + "\n";
+		{
+			var ` = 0;
+			while ((` < rows.length)) {
+				var r = rows[`];
+				++ `;
+				string += "│ " + r + " │\n";
+			};
+		};
+		string += bottom;
+		return string;
+	}
+
+	@:value({ degrees : true })
+	public static inline function ROTATION(angle:Float, degrees:Null<Bool> = true) {
+		var xRow = if ((degrees)) Math.cos(angle * Math.PI / 180) else Math.cos(angle);
+		var xRow = if ((degrees)) - Math.sin(angle * Math.PI / 180) else - Math.sin(angle);
+		var yRow = if ((degrees)) Math.sin(angle * Math.PI / 180) else Math.sin(angle);
+		var yRow = if ((degrees)) Math.cos(angle * Math.PI / 180) else Math.cos(angle);
+		var homogeneousRow = [0, 0, 1];
+		if ((homogeneousRow == null)) homogeneousRow = [0, 0, 1];
+		var arr = new vision.ds.Array2D(3, 3, null);
+		arr.inner = [xRow, xRow, 0].concat([yRow, yRow, 0]).concat(homogeneousRow);
+		return cast arr;
+	}
+
+	@:value({ y : 0, x : 0 })
+	public static inline function TRANSLATION(x:Float = 0, y:Float = 0) {
+		var homogeneousRow = [0, 0, 1];
+		if ((homogeneousRow == null)) homogeneousRow = [0, 0, 1];
+		var arr = new vision.ds.Array2D(3, 3, null);
+		arr.inner = [1, 0, x].concat([0, 1, y]).concat(homogeneousRow);
+		return cast arr;
+	}
+
+	@:value({ scaleY : 1, scaleX : 1 })
+	public static inline function SCALE(scaleX:Float = 1, scaleY:Float = 1) {
+		var homogeneousRow = [0, 0, 1];
+		if ((homogeneousRow == null)) homogeneousRow = [0, 0, 1];
+		var arr = new vision.ds.Array2D(3, 3, null);
+		arr.inner = [scaleX, 0, 0].concat([0, scaleY, 0]).concat(homogeneousRow);
+		return cast arr;
+	}
+
+	@:value({ shearY : 0, shearX : 0 })
+	public static inline function SHEAR(shearX:Float = 0, shearY:Float = 0) {
+		var homogeneousRow = [0, 0, 1];
+		if ((homogeneousRow == null)) homogeneousRow = [0, 0, 1];
+		var arr = new vision.ds.Array2D(3, 3, null);
+		arr.inner = [1, shearX, 0].concat([shearY, 1, 0]).concat(homogeneousRow);
+		return cast arr;
+	}
+
+	@:value({ degrees : true })
+	public static inline function REFLECTION(angle:Float, degrees:Null<Bool> = true) {
+		angle *= 2;
+		var xRow = if ((degrees)) Math.cos(angle * Math.PI / 180) else Math.cos(angle);
+		var xRow = if ((degrees)) Math.sin(angle * Math.PI / 180) else Math.sin(angle);
+		var yRow = if ((degrees)) Math.sin(angle * Math.PI / 180) else Math.sin(angle);
+		var yRow = if ((degrees)) - Math.cos(angle * Math.PI / 180) else - Math.cos(angle);
+		var homogeneousRow = [0, 0, 1];
+		if ((homogeneousRow == null)) homogeneousRow = [0, 0, 1];
+		var arr = new vision.ds.Array2D(3, 3, null);
+		arr.inner = [xRow, xRow, 0].concat([yRow, yRow, 0]).concat(homogeneousRow);
+		return cast arr;
+	}
+
+	public static inline function createFilled(rows:haxe.Rest<Array<Float>>) {
+		var arr = new vision.ds.Array2D(cast rows[0].length, cast rows.length, null);
+		arr.inner = [];
+		{
+			var `_current = 0;
+			var `_args = @:implicitCast cast cast cast rows;
+			while ((`_current < cast `_args.length)) {
+				var r = cast `_args[`_current ++];
+				arr.inner.concat(r);
+			};
+		};
+		return cast arr;
+	}
+
+	public static inline function createTransformation(xRow:Array<Float>, yRow:Array<Float>, homogeneousRow:Null<Array<Float>> = null) {
+		if ((homogeneousRow == null)) homogeneousRow = [0, 0, 1];
+		var arr = new vision.ds.Array2D(3, 3, null);
+		arr.inner = xRow.concat(yRow).concat(homogeneousRow);
+		return cast arr;
+	}
+
+	@:op(A * B)
+	public static inline function multiplyMatrices(a:vision.ds.Matrix2D, b:vision.ds.Matrix2D) {
+		if ((cast a.height != cast b.width)) throw new vision.exceptions.MatrixOperationError("mult", [a, b], cast 0);
+		var result = cast new vision.ds.Array2D(cast a.width, cast b.height, null);
+		{
+			var ` = 0;
+			var ` = cast result.height;
+			while ((` < `)) {
+				var x = ` ++;
+				{
+					var ` = 0;
+					var ` = cast result.width;
+					while ((` < `)) {
+						var y = ` ++;
+						var sum = 0.0;
+						{
+							var ` = 0;
+							var ` = cast a.height;
+							while ((` < `)) {
+								var k = ` ++;
+								sum += a.inner[y * a.height + k] * b.inner[k * b.height + x];
+							};
+						};
+						result.inner[x + y * result.height] = sum;
+					};
+				};
+			};
+		};
+		return result;
+	}
+
+	@:op(A + B)
+	public static inline function addMatrices(a:vision.ds.Matrix2D, b:vision.ds.Matrix2D) {
+		if ((cast a.width != cast b.width || cast a.height != cast b.height)) throw new vision.exceptions.MatrixOperationError("add", [a, b], cast 1);
+		var result = cast new vision.ds.Array2D(cast a.width, cast a.height, null);
+		{
+			var ` = 0;
+			var ` = cast result.height;
+			while ((` < `)) {
+				var x = ` ++;
+				{
+					var ` = 0;
+					var ` = cast result.width;
+					while ((` < `)) {
+						var y = ` ++;
+						result.inner[x + y * result.height] = a.inner[y * a.height + x] + b.inner[y * b.height + x];
+					};
+				};
+			};
+		};
+		return result;
+	}
+
+	@:op(A - B)
+	public static inline function subtractMatrices(a:vision.ds.Matrix2D, b:vision.ds.Matrix2D) {
+		if ((cast a.width != cast b.width || cast a.height != cast b.height)) throw new vision.exceptions.MatrixOperationError("sub", [a, b], cast 2);
+		var result = cast new vision.ds.Array2D(cast a.width, cast a.height, null);
+		{
+			var ` = 0;
+			var ` = cast result.height;
+			while ((` < `)) {
+				var x = ` ++;
+				{
+					var ` = 0;
+					var ` = cast result.width;
+					while ((` < `)) {
+						var y = ` ++;
+						result.inner[x + y * result.height] = a.inner[y * a.height + x] - b.inner[y * b.height + x];
+					};
+				};
+			};
+		};
+		return result;
+	}
+
+	@:op(A / B)
+	public static inline function divideMatrices(a:vision.ds.Matrix2D, b:vision.ds.Matrix2D) {
+		if ((cast a.height != cast b.width)) throw new vision.exceptions.MatrixOperationError("div", [a, b], cast 3);
+		var result = cast new vision.ds.Array2D(cast a.width, cast b.height, null);
+		{
+			var ` = 0;
+			var ` = cast result.height;
+			while ((` < `)) {
+				var x = ` ++;
+				{
+					var ` = 0;
+					var ` = cast result.width;
+					while ((` < `)) {
+						var y = ` ++;
+						var sum = 0.0;
+						{
+							var ` = 0;
+							var ` = cast a.height;
+							while ((` < `)) {
+								var k = ` ++;
+								sum += a.inner[y * a.height + k] / b.inner[k * b.height + x];
+							};
+						};
+						result.inner[x + y * result.height] = sum;
+					};
+				};
+			};
+		};
+		return result;
+	}
+
+	@:op(A *= B)
+	public static inline function multiply(this:vision.ds.Array2D<Float>, b:vision.ds.Matrix2D) {
+		if ((cast this.height != cast b.width)) throw new vision.exceptions.MatrixOperationError("mult", [this, b], cast 0);
+		var result = cast new vision.ds.Array2D(cast this.width, cast b.height, null);
+		{
+			var ` = 0;
+			var ` = cast result.height;
+			while ((` < `)) {
+				var x = ` ++;
+				{
+					var ` = 0;
+					var ` = cast result.width;
+					while ((` < `)) {
+						var y = ` ++;
+						var sum = 0.0;
+						{
+							var ` = 0;
+							var ` = cast this.height;
+							while ((` < `)) {
+								var k = ` ++;
+								sum += this.inner[y * this.height + k] * b.inner[k * b.height + x];
+							};
+						};
+						result.inner[x + y * result.height] = sum;
+					};
+				};
+			};
+		};
+		this = cast result;
+		return cast this;
+	}
+
+	@:op(A += B)
+	public static inline function add(this:vision.ds.Array2D<Float>, b:vision.ds.Matrix2D) {
+		if ((cast this.width != cast b.width || cast this.height != cast b.height)) throw new vision.exceptions.MatrixOperationError("add", [this, b], cast 1);
+		{
+			var ` = 0;
+			var ` = cast this.height;
+			while ((` < `)) {
+				var x = ` ++;
+				{
+					var ` = 0;
+					var ` = cast this.width;
+					while ((` < `)) {
+						var y = ` ++;
+						this.inner[x + y * this.height] = this.inner[y * this.height + x] + b.inner[y * b.height + x];
+					};
+				};
+			};
+		};
+		return cast this;
+	}
+
+	@:op(A -= B)
+	public static inline function subtract(this:vision.ds.Array2D<Float>, b:vision.ds.Matrix2D) {
+		if ((cast this.width != cast b.width || cast this.height != cast b.height)) throw new vision.exceptions.MatrixOperationError("sub", [this, b], cast 2);
+		{
+			var ` = 0;
+			var ` = cast this.height;
+			while ((` < `)) {
+				var x = ` ++;
+				{
+					var ` = 0;
+					var ` = cast this.width;
+					while ((` < `)) {
+						var y = ` ++;
+						this.inner[x + y * this.height] = this.inner[y * this.height + x] - b.inner[y * b.height + x];
+					};
+				};
+			};
+		};
+		return cast this;
+	}
+
+	@:op(A /= B)
+	public static inline function divide(this:vision.ds.Array2D<Float>, b:vision.ds.Matrix2D) {
+		if ((cast this.height != cast b.width)) throw new vision.exceptions.MatrixOperationError("div", [this, b], cast 3);
+		var result = cast new vision.ds.Array2D(cast this.width, cast b.height, null);
+		{
+			var ` = 0;
+			var ` = cast result.height;
+			while ((` < `)) {
+				var x = ` ++;
+				{
+					var ` = 0;
+					var ` = cast result.width;
+					while ((` < `)) {
+						var y = ` ++;
+						var sum = 0.0;
+						{
+							var ` = 0;
+							var ` = cast this.height;
+							while ((` < `)) {
+								var k = ` ++;
+								sum += this.inner[y * this.height + k] / b.inner[k * b.height + x];
+							};
+						};
+						result.inner[x + y * result.height] = sum;
+					};
+				};
+			};
+		};
+		this = cast result;
+		return cast this;
+	}
+
+	@:to
+	static function to_array_array_float(this:vision.ds.Array2D<Float>) {
+		var array = this.inner;
+		var delimiter = this.width;
+		var raised = [];
+		{
+			var ` = 0;
+			var ` = array.length;
+			while ((` < `)) {
+				var i = ` ++;
+				if ((raised[Math.floor(i / delimiter)] == null)) raised[Math.floor(i / delimiter)] = [];
+				raised[Math.floor(i / delimiter)][i % delimiter] = array[i];
+			};
+		};
+		return raised;
+	}
+
+	@:from
+	static function from_array_array_float(array:Array<Array<Float>>) {
+		var arr2d = new vision.ds.Array2D(array[0].length, array.length, null);
+		var flat = [];
+		{
+			var ` = 0;
+			while ((` < array.length)) {
+				var item = array[`];
+				++ `;
+				flat = flat.concat(item);
+			};
+		};
+		arr2d.inner = flat;
+		return cast arr2d;
+	}
+
+	@:from
+	static function from_array_array_int(array:Array<Array<Int>>) {
+		var arr2d = new vision.ds.Array2D(array[0].length, array.length, null);
+		var flat = [];
+		{
+			var ` = 0;
+			while ((` < array.length)) {
+				var item = array[`];
+				++ `;
+				flat = flat.concat(item);
+			};
+		};
+		arr2d.inner = flat;
+		return cast arr2d;
+	}
+}

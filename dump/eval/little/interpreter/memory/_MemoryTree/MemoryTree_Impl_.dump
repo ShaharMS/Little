@@ -1,0 +1,139 @@
+@:directlyUsed @:used
+private class little.interpreter.memory._MemoryTree.MemoryTree_Impl_ {
+
+	public static var underlying(get,never):little.interpreter.memory.MemoryTreeBase;
+
+	public static var object(get,never):little.interpreter.memory.MemoryObject;
+
+	static function get_underlying(this:little.interpreter.memory.MemoryTreeBase) {
+		return this;
+	}
+
+	static function get_object(this:little.interpreter.memory.MemoryTreeBase) {
+		return this.obj;
+	}
+
+	@:noCompletion
+	public static function _new(obj:little.interpreter.memory.MemoryObject) {
+		return cast new little.interpreter.memory.MemoryTreeBase(obj);
+	}
+
+	public static function get(this:little.interpreter.memory.MemoryTreeBase, name:String) {
+		if ((cast cast this.map.exists(name))) return cast cast this.map.get(name) else {
+			if ((! cast cast cast little.interpreter.Interpreter.memory.map.exists(this.objType))) {
+				little.interpreter.Runtime.throwError(little.parser.ParserTokens.ErrorMessage("Type " + this.objType + " does not exist."), null);
+				return null;
+			};
+			if ((! cast cast cast cast cast cast little.interpreter.Interpreter.memory.map.get(this.objType).props.map.exists(name) && ! cast cast cast cast cast cast little.interpreter.Interpreter.memory.map.get(little.Keywords.TYPE_DYNAMIC).props.map.exists(name))) return null;
+			var field = [cast cast cast cast cast cast little.interpreter.Interpreter.memory.map.get(little.Keywords.TYPE_DYNAMIC).props.map.get(name)];
+			var master = cast cast cast cast cast cast little.interpreter.Interpreter.memory.map.get(this.objType).props.map.get(name);
+			if ((master != null)) field[0] = master;
+			if ((! field[0].nonStatic)) {
+				little.interpreter.Runtime.throwError(little.parser.ParserTokens.ErrorMessage("Property " + name + " belongs to the actual type " + this.objType + ", not to an object of type (" + this.objType + "). Try using " + this.objType + little.Keywords.PROPERTY_ACCESS_SIGN + name + " instead."), null);
+				return null;
+			};
+			var valField = field[0].params[0];
+			var fieldNameIdentifier = Type.enumParameters(valField)[0];
+			var fieldName = Type.enumParameters(fieldNameIdentifier)[0];
+			if ((fieldName.charAt(fieldName.length - 1) == " ")) {
+				field[0].parent = little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get_object(this);
+				var value = field[0].use(little.parser.ParserTokens.PartArray([this.obj.value]));
+				field[0].parent = field[0];
+				return little.interpreter.Interpreter.createObject(value, null);
+			} else {
+				var value = little.parser.ParserTokens.External(function(params:Array<little.parser.ParserTokens>) {
+					var p = [this.obj.value, little.parser.ParserTokens.SplitLine];
+					{
+						var ` = 0;
+						while ((` < params.length)) {
+							var a = params[`];
+							++ `;
+							p.push(a);
+							p.push(little.parser.ParserTokens.SplitLine);
+						};
+					};
+					p.pop();
+					params = p;
+					field[0].parent = little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get_object(this);
+					var v = field[0].use(little.parser.ParserTokens.PartArray(params));
+					field[0].parent = field[0];
+					return v;
+				});
+				var copy = if ((field[0].params != null)) field[0].params.copy() else [null];
+				copy.shift();
+				return new little.interpreter.memory.MemoryObject(value, null, copy, null, true, false, false, null, null);
+			};
+		};
+	}
+
+	public static function set(this:little.interpreter.memory.MemoryTreeBase, name:String, value:little.interpreter.memory.MemoryObject) {
+		cast cast this.map.set(name, value);
+	}
+
+	public static inline function exists(this:little.interpreter.memory.MemoryTreeBase, key:String) {
+		return cast cast this.map.exists(key);
+	}
+
+	public static inline function remove(this:little.interpreter.memory.MemoryTreeBase, key:String) {
+		return cast cast this.map.remove(key);
+	}
+
+	public static inline function keys(this:little.interpreter.memory.MemoryTreeBase) {
+		return cast cast this.map.keys();
+	}
+
+	public static inline function iterator(this:little.interpreter.memory.MemoryTreeBase) {
+		return cast cast this.map.iterator();
+	}
+
+	public static inline function keyValueIterator(this:little.interpreter.memory.MemoryTreeBase) {
+		return cast new haxe.iterators.MapKeyValueIterator(cast cast this.map);
+	}
+
+	public static inline function copy(this:little.interpreter.memory.MemoryTreeBase) {
+		return cast cast cast cast cast this.map.copy();
+	}
+
+	public static inline function toString(this:little.interpreter.memory.MemoryTreeBase) {
+		return cast cast this.map.toString();
+	}
+
+	public static inline function clear(this:little.interpreter.memory.MemoryTreeBase) {
+		cast cast this.map.clear();
+	}
+
+	public static inline function concat(this:little.interpreter.memory.MemoryTreeBase, map:Map<String, little.interpreter.memory.MemoryObject>) {
+		{
+			var map = map;
+			var `_map = map;
+			var `_keys = map.keys();
+			while ((`_keys.hasNext())) {
+				var key = `_keys.next();
+				var `_value = @:nullSafety(Off) cast `_map.get(key);
+				var `_key = key;
+				var k = `_key;
+				var v = `_value;
+				{
+					v.parent = this.obj;
+					little.interpreter.memory._MemoryTree.MemoryTree_Impl_.set(this, k, v);
+				};
+			};
+		};
+		return cast this;
+	}
+
+	@:noCompletion
+	public static inline function silentGet(this:little.interpreter.memory.MemoryTreeBase, key:String) {
+		return cast cast this.map.get(key);
+	}
+
+	@:from
+	static inline function fromMap<K, V>(map:Map<fromMap.K, fromMap.V>) {
+		return little.interpreter.memory._MemoryTree.MemoryTree_Impl_._new(new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, null, null, null, null, null, null, null, null));
+	}
+
+	@:from
+	static inline function fromArray<K>(map:Array<fromArray.K>) {
+		return little.interpreter.memory._MemoryTree.MemoryTree_Impl_._new(new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, null, null, null, null, null, null, null, null));
+	}
+}

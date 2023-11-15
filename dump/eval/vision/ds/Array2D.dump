@@ -1,0 +1,127 @@
+@:directlyUsed @:used
+class vision.ds.Array2D<T> {
+
+	public inline function new(width:Int, height:Int, fillWith:Null<vision.ds.Array2D.T> = null) {
+		this.width = width;
+		this.height = height;
+		this.inner = new Array();
+		this.inner.resize(width * height);
+		if ((fillWith != null)) {
+			var ` = 0;
+			var ` = this.inner.length;
+			while ((` < `)) {
+				var i = ` ++;
+				this.inner[i] = fillWith;
+			};
+		};
+	}
+
+	public var inner:Array<vision.ds.Array2D.T>;
+
+	public var width(default,set):Int;
+
+	public var height(default,set):Int;
+
+	public var length(get,set):Int;
+
+	public inline function get(x:Int, y:Int) {
+		return this.inner[y * this.height + x];
+	}
+
+	public inline function set(x:Int, y:Int, val:vision.ds.Array2D.T) {
+		return this.inner[x + y * this.height] = val;
+	}
+
+	public inline function row(y:Int) {
+		var ` = [];
+		{
+			var ` = y * this.width;
+			var ` = y * this.width + this.width;
+			while ((` < `)) {
+				var i = ` ++;
+				`.push(this.inner[i]);
+			};
+		};
+		return `;
+	}
+
+	public inline function column(x:Int) {
+		var ` = [];
+		{
+			var ` = 0;
+			var ` = this.height;
+			while ((` < `)) {
+				var i = ` ++;
+				`.push(this.inner[i * this.width + x]);
+			};
+		};
+		return `;
+	}
+
+	public inline function iterator() {
+		return new haxe.iterators.ArrayIterator(this.inner);
+	}
+
+	public inline function fill(value:vision.ds.Array2D.T) {
+		{
+			var ` = 0;
+			var ` = this.inner.length;
+			while ((` < `)) {
+				var i = ` ++;
+				this.inner[i] = value;
+			};
+		};
+		return this;
+	}
+
+	public inline function clone() {
+		var arr = new vision.ds.Array2D(this.width, this.height, null);
+		arr.inner = this.inner.copy();
+		return arr;
+	}
+
+	public inline function toString() {
+		var str = "\n[[";
+		var counter = 0;
+		{
+			var ` = 0;
+			var ` = this.inner;
+			while ((` < `.length)) {
+				var item = `[`];
+				++ `;
+				if ((counter < this.width)) {
+					var add = ", " + Std.string(item);
+					if ((counter == 0)) add = add.substr(2, null);
+					str += add;
+					++ counter;
+				} else {
+					counter = 0;
+					str += "],\n [";
+					var add = "" + Std.string(item);
+					str += add;
+					++ counter;
+				};
+			};
+		};
+		return str.substring(0, str.length) + "]]";
+	}
+
+	inline function get_length() {
+		return this.inner.length;
+	}
+
+	inline function set_length(value:Int) {
+		this.inner.resize(value);
+		return value;
+	}
+
+	inline function set_width(value:Int) {
+		this.inner.resize(value * this.height);
+		return this.width = value;
+	}
+
+	inline function set_height(value:Int) {
+		this.inner.resize(this.width * value);
+		return this.height = value;
+	}
+}

@@ -1,0 +1,15 @@
+@:keep @:directlyUsed @:used
+class haxe.exceptions.ArgumentException extends haxe.exceptions.PosException {
+
+	public function new(argument:String, message:Null<String> = null, previous:Null<haxe.Exception> = null, pos:Null<haxe.PosInfos> = null) {
+		{
+			super(if ((message == null)) "Invalid argument \"" + argument + "\"" else message, previous, pos);
+			this.argument = argument;
+		};
+		{
+			this.__skipStack ++;
+		};
+	}
+
+	public var argument(default,ctor):String;
+}

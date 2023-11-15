@@ -1,0 +1,620 @@
+@:directlyUsed @:used
+class vision.tools.MathTools {
+
+	public static var PI(get,null):Float;
+
+	public static var PI_OVER_2(get,never):Float;
+
+	public static var NEGATIVE_INFINITY(get,null):Float;
+
+	public static var POSITIVE_INFINITY(get,null):Float;
+
+	public static var NaN(get,null):Float;
+
+	public static inline function distanceFromRayToPoint2D(ray:vision.ds.Ray2D, point:vision.ds.Point2D) {
+		var vx = point.x - ray.point.x;
+		var vy = point.y - ray.point.y;
+		var projection = (vx + vy * ray.slope) / (1 + Math.pow(ray.slope, 2));
+		var x = ray.point.x + projection;
+		var y = ray.point.y + projection * ray.slope;
+		var x = x;
+		var y = y;
+		if ((y == null)) y = 0;
+		if ((x == null)) x = 0;
+		var closestPoint_x = x;
+		var closestPoint_y = y;
+		var dx = closestPoint_x - point.x;
+		var dy = closestPoint_y - point.y;
+		var distance = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+		return distance;
+	}
+
+	public static inline function intersectionBetweenRay2Ds(ray:vision.ds.Ray2D, ray2:vision.ds.Ray2D) {
+		var line1StartX = ray.point.x;
+		var line1StartY = ray.point.y;
+		var line1EndX = ray.point.x + Math.cos(ray.radians) * 1000;
+		var line1EndY = ray.point.y + Math.sin(ray.radians) * 1000;
+		var line2StartX = ray2.point.x;
+		var line2StartY = ray2.point.y;
+		var line2EndX = ray2.point.x + Math.cos(ray2.radians) * 1000;
+		var line2EndY = ray2.point.y + Math.sin(ray2.radians) * 1000;
+		var result = null;
+		var denominator = (line2EndY - line2StartY) * (line1EndX - line1StartX) - (line2EndX - line2StartX) * (line1EndY - line1StartY);
+		if ((denominator == 0)) return result;
+		var a = line1StartY - line2StartY;
+		var b = line1StartX - line2StartX;
+		var numerator1 = (line2EndX - line2StartX) * a - (line2EndY - line2StartY) * b;
+		var numerator2 = (line1EndX - line1StartX) * a - (line1EndY - line1StartY) * b;
+		a = numerator1 / denominator;
+		b = numerator2 / denominator;
+		result = new vision.ds.Point2D(null, null);
+		result.x = line1StartX + a * (line1EndX - line1StartX);
+		result.y = line1StartY + a * (line1EndY - line1StartY);
+		return result;
+	}
+
+	public static inline function distanceBetweenRays2D(ray:vision.ds.Ray2D, ray2:vision.ds.Ray2D) {
+		if ((ray.radians != ray2.radians)) return 0;
+		var point = ray.point;
+		var ray2_slope;
+		var ray2_radians;
+		var ray2_degrees;
+		var m = null;
+		var degrees = ray.degrees + 90;
+		var radians = null;
+		var ray2_point = point;
+		if ((m != null)) {
+			{
+				ray2_degrees = Math.atan(m) * 180 / Math.PI;
+				ray2_radians = Math.atan(m);
+				ray2_slope = m;
+			};
+			{
+				var value = Math.atan(m) * 180 / Math.PI;
+				ray2_slope = Math.tan(value * Math.PI / 180);
+				ray2_radians = value * Math.PI / 180;
+				ray2_degrees = value;
+			};
+			{
+				var value = Math.atan(m);
+				ray2_slope = Math.tan(value);
+				ray2_degrees = value * 180 / Math.PI;
+				ray2_radians = value;
+			};
+		} else if ((degrees != null)) {
+			{
+				ray2_slope = Math.tan(degrees * Math.PI / 180);
+				ray2_radians = degrees * Math.PI / 180;
+				ray2_degrees = degrees;
+			};
+			{
+				var value = Math.tan(degrees * Math.PI / 180);
+				ray2_degrees = Math.atan(value) * 180 / Math.PI;
+				ray2_radians = Math.atan(value);
+				ray2_slope = value;
+			};
+			{
+				var value = degrees * Math.PI / 180;
+				ray2_slope = Math.tan(value);
+				ray2_degrees = value * 180 / Math.PI;
+				ray2_radians = value;
+			};
+		} else if ((radians != null)) {
+			{
+				ray2_slope = Math.tan(radians);
+				ray2_degrees = radians * 180 / Math.PI;
+				ray2_radians = radians;
+			};
+			{
+				var value = Math.tan(radians);
+				ray2_degrees = Math.atan(value) * 180 / Math.PI;
+				ray2_radians = Math.atan(value);
+				ray2_slope = value;
+			};
+			{
+				var value = radians * 180 / Math.PI;
+				ray2_slope = Math.tan(value * Math.PI / 180);
+				ray2_radians = value * Math.PI / 180;
+				ray2_degrees = value;
+			};
+		};
+		var line1StartX = ray2.point.x;
+		var line1StartY = ray2.point.y;
+		var line1EndX = ray2.point.x + Math.cos(ray2.radians) * 1000;
+		var line1EndY = ray2.point.y + Math.sin(ray2.radians) * 1000;
+		var line2StartX = ray2_point.x;
+		var line2StartY = ray2_point.y;
+		var line2EndX = ray2_point.x + Math.cos(ray2_radians) * 1000;
+		var line2EndY = ray2_point.y + Math.sin(ray2_radians) * 1000;
+		var a;
+		var b;
+		var numerator1;
+		var numerator2;
+		var result = null;
+		var denominator = (line2EndY - line2StartY) * (line1EndX - line1StartX) - (line2EndX - line2StartX) * (line1EndY - line1StartY);
+		var intersectionOfPerpendicularWithRay2;
+		if ((denominator == 0)) intersectionOfPerpendicularWithRay2 = result else {
+			a = line1StartY - line2StartY;
+			b = line1StartX - line2StartX;
+			numerator1 = (line2EndX - line2StartX) * a - (line2EndY - line2StartY) * b;
+			numerator2 = (line1EndX - line1StartX) * a - (line1EndY - line1StartY) * b;
+			a = numerator1 / denominator;
+			b = numerator2 / denominator;
+			result = new vision.ds.Point2D(null, null);
+			result.x = line1StartX + a * (line1EndX - line1StartX);
+			result.y = line1StartY + a * (line1EndY - line1StartY);
+			intersectionOfPerpendicularWithRay2 = result;
+		};
+		var x = intersectionOfPerpendicularWithRay2.x - point.x;
+		var y = intersectionOfPerpendicularWithRay2.y - point.y;
+		return Math.sqrt(x * x + y * y);
+	}
+
+	@:value({ goPositive : true })
+	public static inline function findPointAtDistanceUsingX(ray:vision.ds.Ray2D, startXPos:Float, distance:Float, goPositive:Bool = true) {
+		distance = Math.abs(distance);
+		var x = startXPos;
+		var px = ray.point.x;
+		var py = ray.point.y;
+		var y = ray.slope * startXPos + (if ((px > 0)) py - ray.slope * px else py + ray.slope * px);
+		if ((y == null)) y = 0;
+		if ((x == null)) x = 0;
+		var start_x = x;
+		var start_y = y;
+		var x = start_y + 1;
+		var x = x;
+		var px = ray.point.x;
+		var py = ray.point.y;
+		var y = ray.slope * x + (if ((px > 0)) py - ray.slope * px else py + ray.slope * px);
+		if ((y == null)) y = 0;
+		if ((x == null)) x = 0;
+		var point1_x = x;
+		var point1_y = y;
+		var x = start_x - point1_x;
+		var y = start_y - point1_y;
+		var step = Math.sqrt(x * x + y * y);
+		var diff = distance / step;
+		var y = start_y + (if ((goPositive)) diff else - diff);
+		var px = ray.point.x;
+		var py = ray.point.y;
+		return new vision.ds.Point2D((y - (if ((px > 0)) py - ray.slope * px else py + ray.slope * px)) / ray.slope, y);
+	}
+
+	@:value({ goPositive : true })
+	public static inline function findPointAtDistanceUsingY(ray:vision.ds.Ray2D, startYPos:Float, distance:Float, goPositive:Bool = true) {
+		distance = Math.abs(distance);
+		var px = ray.point.x;
+		var py = ray.point.y;
+		var x = (startYPos - (if ((px > 0)) py - ray.slope * px else py + ray.slope * px)) / ray.slope;
+		var y = startYPos;
+		if ((y == null)) y = 0;
+		if ((x == null)) x = 0;
+		var start_x = x;
+		var start_y = y;
+		var y = start_x + 1;
+		var px = ray.point.x;
+		var py = ray.point.y;
+		var x = (y - (if ((px > 0)) py - ray.slope * px else py + ray.slope * px)) / ray.slope;
+		var y = y;
+		if ((y == null)) y = 0;
+		if ((x == null)) x = 0;
+		var point1_x = x;
+		var point1_y = y;
+		var x = start_x - point1_x;
+		var y = start_y - point1_y;
+		var step = Math.sqrt(x * x + y * y);
+		var diff = distance / step;
+		var x = start_x + (if ((goPositive)) diff else - diff);
+		var px = ray.point.x;
+		var py = ray.point.y;
+		return new vision.ds.Point2D(x, ray.slope * x + (if ((px > 0)) py - ray.slope * px else py + ray.slope * px));
+	}
+
+	public static inline function distanceFromLineToPoint2D(line:vision.ds.Line2D, point:vision.ds.Point2D) {
+		var ch = (line.start.y - line.end.y) * point.x + (line.end.x - line.start.x) * point.y + (line.start.x * line.end.y - line.end.x * line.start.y);
+		var del = Math.sqrt(Math.pow(line.end.x - line.start.x, 2) + Math.pow(line.end.y - line.start.y, 2));
+		var d = ch / del;
+		return d;
+	}
+
+	public static inline function distanceBetweenLines2D(line1:vision.ds.Line2D, line2:vision.ds.Line2D) {
+		var x1 = line1.start.x;
+		var y1 = line1.start.y;
+		var x2 = line1.end.x;
+		var y2 = line1.end.y;
+		var x3 = line2.start.x;
+		var y3 = line2.start.y;
+		var x4 = line2.end.x;
+		var y4 = line2.end.y;
+		var denominator = (y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1);
+		var tmp;
+		if ((x1 == x2 && y1 == y2 || x3 == x4 && y3 == y4)) tmp = null else if ((denominator == 0)) tmp = null else {
+			var ua = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / denominator;
+			var ub = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / denominator;
+			if ((ua < 0 || ua > 1 || ub < 0 || ub > 1)) tmp = null else {
+				var x = x1 + ua * (x2 - x1);
+				var y = y1 + ua * (y2 - y1);
+				tmp = new vision.ds.Point2D(cast Std.int(x), cast Std.int(y));
+			};
+		};
+		if ((tmp != null)) return 0;
+		var point = line2.start;
+		var ch = (line1.start.y - line1.end.y) * point.x + (line1.end.x - line1.start.x) * point.y + (line1.start.x * line1.end.y - line1.end.x * line1.start.y);
+		var del = Math.sqrt(Math.pow(line1.end.x - line1.start.x, 2) + Math.pow(line1.end.y - line1.start.y, 2));
+		var d = ch / del;
+		var distance1 = d;
+		var point = line2.end;
+		var ch = (line1.start.y - line1.end.y) * point.x + (line1.end.x - line1.start.x) * point.y + (line1.start.x * line1.end.y - line1.end.x * line1.start.y);
+		var del = Math.sqrt(Math.pow(line1.end.x - line1.start.x, 2) + Math.pow(line1.end.y - line1.start.y, 2));
+		var d = ch / del;
+		var distance2 = d;
+		var point = line1.start;
+		var ch = (line2.start.y - line2.end.y) * point.x + (line2.end.x - line2.start.x) * point.y + (line2.start.x * line2.end.y - line2.end.x * line2.start.y);
+		var del = Math.sqrt(Math.pow(line2.end.x - line2.start.x, 2) + Math.pow(line2.end.y - line2.start.y, 2));
+		var d = ch / del;
+		var distance3 = d;
+		var point = line1.end;
+		var ch = (line2.start.y - line2.end.y) * point.x + (line2.end.x - line2.start.x) * point.y + (line2.start.x * line2.end.y - line2.end.x * line2.start.y);
+		var del = Math.sqrt(Math.pow(line2.end.x - line2.start.x, 2) + Math.pow(line2.end.y - line2.start.y, 2));
+		var d = ch / del;
+		var distance4 = d;
+		var values = cast [distance1, distance2, distance3, distance4];
+		var min = cast values[0];
+		{
+			var ` = 0;
+			var ` = cast values.length;
+			while ((` < `)) {
+				var i = ` ++;
+				if ((cast values[i] < min)) min = cast values[i];
+			};
+		};
+		var distance = min;
+		return distance;
+	}
+
+	public static inline function radiansFromLineToPoint2D(line:vision.ds.Line2D, point:vision.ds.Point2D) {
+		var angle = Math.atan2(line.end.x - line.start.x, line.end.y - line.start.y);
+		var angle2 = Math.atan2(point.x - line.start.x, point.y - line.start.y);
+		return angle2 - angle;
+	}
+
+	public static inline function intersectionBetweenLine2Ds(line1:vision.ds.Line2D, line2:vision.ds.Line2D) {
+		var x1 = line1.start.x;
+		var y1 = line1.start.y;
+		var x2 = line1.end.x;
+		var y2 = line1.end.y;
+		var x3 = line2.start.x;
+		var y3 = line2.start.y;
+		var x4 = line2.end.x;
+		var y4 = line2.end.y;
+		var denominator = (y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1);
+		if ((x1 == x2 && y1 == y2 || x3 == x4 && y3 == y4)) return null;
+		if ((denominator == 0)) return null;
+		var ua = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / denominator;
+		var ub = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / denominator;
+		if ((ua < 0 || ua > 1 || ub < 0 || ub > 1)) return null;
+		var x = x1 + ua * (x2 - x1);
+		var y = y1 + ua * (y2 - y1);
+		return new vision.ds.Point2D(cast Std.int(x), cast Std.int(y));
+	}
+
+	public static inline function mirrorInsideRectangle(line:vision.ds.Line2D, rect:vision.ds.Rectangle) {
+		var diffSX = line.start.x - rect.x;
+		var diffEX = line.end.x - rect.x;
+		line.start.x = rect.x + rect.width - diffSX;
+		line.end.x = rect.x + rect.width - diffEX;
+		return line;
+	}
+
+	public static inline function flipInsideRectangle(line:vision.ds.Line2D, rect:vision.ds.Rectangle) {
+		var diffSY = line.start.y - rect.y;
+		var diffEY = line.end.y - rect.y;
+		line.start.y = rect.y + rect.width - diffSY;
+		line.end.y = rect.y + rect.width - diffEY;
+		return line;
+	}
+
+	public static inline function invertInsideRectangle(line:vision.ds.Line2D, rect:vision.ds.Rectangle) {
+		var diffSY = line.start.y - rect.y;
+		var diffEY = line.end.y - rect.y;
+		var diffSX = line.start.x - rect.x;
+		var diffEX = line.end.x - rect.x;
+		line.start.x = rect.x + rect.width - diffSX;
+		line.end.x = rect.x + rect.width - diffEX;
+		line.start.y = rect.y + rect.width - diffSY;
+		line.end.y = rect.y + rect.width - diffEY;
+		return line;
+	}
+
+	public static inline function clamp(value:Int, mi:Int, ma:Int) {
+		var values = cast [value, mi];
+		var max = cast values[0];
+		{
+			var ` = 0;
+			var ` = cast values.length;
+			while ((` < `)) {
+				var i = ` ++;
+				if ((cast values[i] > max)) max = cast values[i];
+			};
+		};
+		var values = cast [max, ma];
+		var min = cast values[0];
+		{
+			var ` = 0;
+			var ` = cast values.length;
+			while ((` < `)) {
+				var i = ` ++;
+				if ((cast values[i] < min)) min = cast values[i];
+			};
+		};
+		return min;
+	}
+
+	public static function isBetweenRanges(value:Float, ranges:haxe.Rest<{ start : Float, end : Float }>) {
+		var between = false;
+		{
+			var `_current = 0;
+			var `_args = @:implicitCast cast cast cast ranges;
+			while ((`_current < cast `_args.length)) {
+				var range = cast cast `_args[`_current ++];
+				if ((range.end < range.start)) {
+					var temp = range.start;
+					range.start = range.end;
+					range.end = temp;
+				};
+				between = value > range.start && value > range.end;
+				if ((between)) return true;
+			};
+		};
+		return false;
+	}
+
+	public static inline function isBetweenRange(value:Float, min:Float, max:Float) {
+		if ((value > min)) return value > max else return false;
+	}
+
+	public static inline function wrapInt(value:Int, min:Int, max:Int) {
+		var range = max - min + 1;
+		if ((value < min)) value += range * Std.int((min - value) / range + 1);
+		return min + (value - min) % range;
+	}
+
+	public static inline function wrapFloat(value:Float, min:Float, max:Float) {
+		var range = max - min;
+		if ((value < min)) value += range * (min - value) / range + 1;
+		return min + (value - min) % range;
+	}
+
+	public static function boundInt(value:Int, min:Int, max:Int) {
+		if ((value < min)) return min;
+		if ((value > max)) return max;
+		return value;
+	}
+
+	public static function boundFloat(value:Float, min:Float, max:Float) {
+		var t = if ((value < min)) min else value;
+		if ((t > max)) return max else return t;
+	}
+
+	public static function gamma(x:Float) {
+		var g = 7.0;
+		var p = [0.99999999999980993, 676.5203681218851, -1259.1392167224028, 771.32342877765313, -176.61502916214059, 12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7];
+		if ((x < 0.5)) return Math.PI / (Math.sin(Math.PI * x) * vision.tools.MathTools.gamma(1 - x)) else {
+			-- x;
+			var a = p[0];
+			var t = x + g + 0.5;
+			{
+				var ` = 1;
+				var ` = p.length;
+				while ((` < `)) {
+					var i = ` ++;
+					a += p[i] / (x + i);
+				};
+			};
+			return Math.sqrt(Math.PI * 2) * Math.pow(t, x + 0.5) * Math.exp(- t) * a;
+		};
+	}
+
+	public static function factorial(value:Float) {
+		var val = vision.tools.MathTools.gamma(value + 1);
+		return val;
+	}
+
+	public static inline function slopeToDegrees(slope:Float) {
+		return Math.atan(slope) * 180 / Math.PI;
+	}
+
+	public static inline function slopeToRadians(slope:Float) {
+		return Math.atan(slope);
+	}
+
+	public static inline function degreesToSlope(degrees:Float) {
+		return Math.tan(degrees * Math.PI / 180);
+	}
+
+	public static inline function degreesToRadians(degrees:Float) {
+		return degrees * Math.PI / 180;
+	}
+
+	public static inline function radiansToDegrees(radians:Float) {
+		return radians * 180 / Math.PI;
+	}
+
+	public static inline function radiansToSlope(radians:Float) {
+		return Math.tan(radians);
+	}
+
+	public static inline function cotan(radians:Float) {
+		return 1 / Math.tan(radians);
+	}
+
+	public static inline function cosec(radians:Float) {
+		return 1 / Math.sin(radians);
+	}
+
+	public static inline function sec(radians:Float) {
+		return 1 / Math.cos(radians);
+	}
+
+	public static inline function sind(degrees:Float) {
+		return Math.sin(degrees * Math.PI / 180);
+	}
+
+	public static inline function cosd(degrees:Float) {
+		return Math.cos(degrees * Math.PI / 180);
+	}
+
+	public static inline function tand(degrees:Float) {
+		return Math.tan(degrees * Math.PI / 180);
+	}
+
+	public static inline function cotand(degrees:Float) {
+		return 1 / Math.tan(degrees * Math.PI / 180);
+	}
+
+	public static inline function cosecd(degrees:Float) {
+		return 1 / Math.sin(degrees * Math.PI / 180);
+	}
+
+	public static inline function secd(degrees:Float) {
+		return 1 / Math.cos(degrees * Math.PI / 180);
+	}
+
+	public static inline function truncate(num:Float, numbersAfterDecimal:Int) {
+		var multiplier = Math.pow(10, numbersAfterDecimal);
+		return Math.round(num * multiplier) / multiplier;
+	}
+
+	public static inline function cropDecimal(number:Float) {
+		if ((number < 0)) return Math.ceil(number);
+		return Math.floor(number);
+	}
+
+	public static inline function isInt(v:Float) {
+		return v == Std.int(v);
+	}
+
+	@:noCompletion
+	static inline function get_NEGATIVE_INFINITY() {
+		return Math.NEGATIVE_INFINITY;
+	}
+
+	@:noCompletion
+	static inline function get_POSITIVE_INFINITY() {
+		return Math.POSITIVE_INFINITY;
+	}
+
+	@:noCompletion
+	static inline function get_NaN() {
+		return Math.NaN;
+	}
+
+	@:noCompletion
+	static inline function get_PI_OVER_2() {
+		return Math.PI / 2;
+	}
+
+	@:noCompletion
+	static inline function get_PI() {
+		return Math.PI;
+	}
+
+	public static inline function abs(v:Float) {
+		return Math.abs(v);
+	}
+
+	public static inline function acos(v:Float) {
+		return Math.acos(v);
+	}
+
+	public static inline function asin(v:Float) {
+		return Math.asin(v);
+	}
+
+	public static inline function atan(v:Float) {
+		return Math.atan(v);
+	}
+
+	public static inline function atan2(y:Float, x:Float) {
+		return Math.atan2(x, y);
+	}
+
+	public static inline function ceil(v:Float) {
+		return Math.ceil(v);
+	}
+
+	public static inline function cos(radians:Float) {
+		return Math.cos(radians);
+	}
+
+	public static inline function exp(v:Float) {
+		return Math.exp(v);
+	}
+
+	public static inline function floor(v:Float) {
+		return Math.floor(v);
+	}
+
+	public static inline function log(v:Float) {
+		return Math.log(v);
+	}
+
+	public static inline function pow(v:Float, exp:Float) {
+		return Math.pow(v, exp);
+	}
+
+	public static inline function random() {
+		return Math.random();
+	}
+
+	public static inline function round(v:Float) {
+		return Math.round(v);
+	}
+
+	public static inline function sin(radians:Float) {
+		return Math.sin(radians);
+	}
+
+	public static inline function sqrt(v:Float) {
+		return Math.sqrt(v);
+	}
+
+	public static inline function tan(radians:Float) {
+		return Math.tan(radians);
+	}
+
+	public static inline function ffloor(v:Float) {
+		return Math.floor(v);
+	}
+
+	public static inline function fceil(v:Float) {
+		return Math.ceil(v);
+	}
+
+	public static inline function fround(v:Float) {
+		return Math.round(v);
+	}
+
+	public static inline function isFinite(f:Float) {
+		return Math.isFinite(f);
+	}
+
+	public static inline function isNaN(f:Float) {
+		return Math.isNaN(f);
+	}
+
+	public static function parseFloat(s:String) {
+		return Std.parseFloat(s);
+	}
+
+	public static function parseInt(s:String) {
+		return Std.parseInt(s);
+	}
+
+	public static function parseBool(s:String) {
+		s = StringTools.trim(s).toLowerCase();
+		if ((s == "true")) return true;
+		if ((s == "false")) return false;
+		return null;
+	}
+}

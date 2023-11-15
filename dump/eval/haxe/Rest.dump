@@ -1,0 +1,2 @@
+@:used @:coreApi
+abstract haxe.Rest<T> {}

@@ -1,0 +1,12 @@
+@:directlyUsed @:used @:structInit
+private class vision.ds._IntPoint2D.Impl {
+
+	public inline function new(x:Int, y:Int) {
+		this.x = x;
+		this.y = y;
+	}
+
+	public var x:Int;
+
+	public var y:Int;
+}

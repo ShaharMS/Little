@@ -1,0 +1,389 @@
+@:directlyUsed @:used @:access(little.Little) @:access(little.interpreter.Runtime)
+class little.tools.Plugins {
+
+	public static function registerHaxeClass(stats:Array<little.tools.ItemInfo>, littleClassName:Null<String> = null) {
+		if ((stats.length == 0)) return;
+		if ((littleClassName == null)) littleClassName = stats[0].className;
+		var fieldValues = new haxe.ds.StringMap();
+		var fieldFunctions = new haxe.ds.StringMap();
+		var cls = Type.resolveClass(stats[0].className);
+		{
+			var ` = 0;
+			while ((` < stats.length)) {
+				var s = stats[`];
+				++ `;
+				if ((s.isStatic)) {
+					var field = s.name;
+					var value = Reflect.field(cls, field);
+					if ((Reflect.isFunction(value))) fieldFunctions.set(field, value) else fieldValues.set(field, value);
+				} else {
+					var field = s.name;
+					var value = Reflect.field(Type.createEmptyInstance(cls), field);
+					if ((Reflect.isFunction(value))) fieldFunctions.set(field, cast function(obj:little.parser.ParserTokens, paramsArray:Array<Dynamic>) {
+						return Reflect.callMethod(little.tools.Conversion.toHaxeValue(obj), Reflect.field(little.tools.Conversion.toHaxeValue(obj), field), paramsArray);
+					}) else fieldValues.set(field, cast function(obj:little.parser.ParserTokens) {
+						return Reflect.field(little.tools.Conversion.toHaxeValue(obj), field);
+					});
+				};
+			};
+		};
+		var motherObj = new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.Module(littleClassName), @:implicitCast little.interpreter.memory._MemoryTree.MemoryTree_Impl_._new(new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, null, null, null, null, null, null, null, null)), null, little.parser.ParserTokens.Module(little.Keywords.TYPE_MODULE), true, null, null, null, null);
+		{
+			var ` = 0;
+			while ((` < stats.length)) {
+				var instance = stats[`];
+				++ `;
+				switch ((instance.fieldType)) {
+					case "function": if ((instance.isStatic)) {
+						var value = little.parser.ParserTokens.External(function(args:Array<little.parser.ParserTokens>) {
+							var value = fieldFunctions.get(instance.name);
+							var ` = [];
+							{
+								var ` = 0;
+								while ((` < args.length)) {
+									var arg = args[`];
+									++ `;
+									`.push(little.tools.Conversion.toHaxeValue(arg));
+								};
+							};
+							return little.tools.Conversion.toLittleValue(Reflect.callMethod(null, value, `));
+						});
+						var type = little.parser.ParserTokens.Identifier(little.tools.Conversion.toLittleType(instance.returnType));
+						var params = [];
+						{
+							var ` = 0;
+							var ` = instance.parameters;
+							while ((` < `.length)) {
+								var param = `[`];
+								++ `;
+								params.push(little.parser.ParserTokens.Variable(little.parser.ParserTokens.Identifier(param.name), little.parser.ParserTokens.Identifier(param.type), null));
+							};
+						};
+						little.interpreter.memory._MemoryTree.MemoryTree_Impl_.set(motherObj.props, instance.name, new little.interpreter.memory.MemoryObject(value, @:implicitCast little.interpreter.memory._MemoryTree.MemoryTree_Impl_._new(new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, null, null, null, null, null, null, null, null)), params, type, true, null, null, motherObj, null));
+					} else {
+						var value = little.parser.ParserTokens.External(function(args:Array<little.parser.ParserTokens>) {
+							var obj = args.shift();
+							var ` = [];
+							{
+								var ` = 0;
+								while ((` < args.length)) {
+									var a = args[`];
+									++ `;
+									`.push(little.tools.Conversion.toHaxeValue(a));
+								};
+							};
+							var params = `;
+							return little.tools.Conversion.toLittleValue(cast fieldFunctions.get(instance.name)(obj, params));
+						});
+						var type = little.parser.ParserTokens.Identifier(little.tools.Conversion.toLittleType(instance.returnType));
+						var params = [];
+						{
+							var ` = 0;
+							var ` = instance.parameters;
+							while ((` < `.length)) {
+								var param = `[`];
+								++ `;
+								params.push(little.parser.ParserTokens.Variable(little.parser.ParserTokens.Identifier(param.name), little.parser.ParserTokens.Identifier(param.type), null));
+							};
+						};
+						params.unshift(little.parser.ParserTokens.Variable(little.parser.ParserTokens.Identifier("value"), little.parser.ParserTokens.Identifier(littleClassName), null));
+						little.interpreter.memory._MemoryTree.MemoryTree_Impl_.set(motherObj.props, instance.name, new little.interpreter.memory.MemoryObject(value, @:implicitCast little.interpreter.memory._MemoryTree.MemoryTree_Impl_._new(new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, null, null, null, null, null, null, null, null)), params, type, true, false, true, motherObj, null));
+					};
+					case "var": if ((instance.isStatic)) {
+						var value = little.tools.Conversion.toLittleValue(cast fieldValues.get(instance.name));
+						var type = little.parser.ParserTokens.Identifier(little.tools.Conversion.toLittleType(instance.returnType));
+						little.interpreter.memory._MemoryTree.MemoryTree_Impl_.set(motherObj.props, instance.name, new little.interpreter.memory.MemoryObject(value, @:implicitCast little.interpreter.memory._MemoryTree.MemoryTree_Impl_._new(new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, null, null, null, null, null, null, null, null)), null, type, true, null, null, motherObj, null));
+					} else {
+						var value = little.parser.ParserTokens.External(function(params:Array<little.parser.ParserTokens>) {
+							return little.tools.Conversion.toLittleValue(cast fieldValues.get(instance.name)(params[0]));
+						});
+						var type = little.parser.ParserTokens.Identifier(little.tools.Conversion.toLittleType(instance.returnType));
+						little.interpreter.memory._MemoryTree.MemoryTree_Impl_.set(motherObj.props, instance.name, new little.interpreter.memory.MemoryObject(value, @:implicitCast little.interpreter.memory._MemoryTree.MemoryTree_Impl_._new(new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, null, null, null, null, null, null, null, null)), [little.parser.ParserTokens.Variable(little.parser.ParserTokens.Identifier("value "), little.parser.ParserTokens.Identifier(littleClassName), null)], type, true, false, true, motherObj, null));
+					};
+				};
+			};
+		};
+		little.interpreter.memory._MemoryTree.MemoryTree_Impl_.set(little.interpreter.Interpreter.memory, littleClassName, motherObj);
+	}
+
+	@:value({ allowWriting : false })
+	public static function registerVariable(variableName:String, variableModuleName:Null<String> = null, allowWriting:Bool = false, staticValue:Null<little.parser.ParserTokens> = null, valueGetter:Null<() -> little.parser.ParserTokens> = null, valueSetter:Null<little.parser.ParserTokens -> little.parser.ParserTokens> = null) {
+		var tmp = little.parser.ParserTokens.External(function(params:Array<little.parser.ParserTokens>) {
+			var currentModuleName = little.Little.runtime.currentModule;
+			if ((variableModuleName != null)) little.Little.runtime.currentModule = variableModuleName;
+			try {
+				var val = if ((staticValue != null)) staticValue else valueGetter();
+				little.Little.runtime.currentModule = currentModuleName;
+				return val;
+			} catch (`:Dynamic) {
+				var e = haxe.Exception.caught(`);
+				little.Little.runtime.currentModule = currentModuleName;
+				return little.parser.ParserTokens.ErrorMessage("External Variable Error: " + e.details());
+			};
+		});
+		little.interpreter.memory._MemoryTree.MemoryTree_Impl_.set(little.interpreter.Interpreter.memory, variableName, new little.interpreter.memory.MemoryObject(tmp, @:implicitCast little.interpreter.memory._MemoryTree.MemoryTree_Impl_._new(new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, null, null, null, null, null, null, null, null)), null, null, true, null, null, little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get_object(little.interpreter.Interpreter.memory), null));
+		if ((valueSetter != null)) little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(little.interpreter.Interpreter.memory, variableName).valueSetter = function(v:little.parser.ParserTokens) {
+			return little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(little.interpreter.Interpreter.memory, variableName).set_value(valueSetter(v));
+		};
+		if ((allowWriting == false)) little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(little.interpreter.Interpreter.memory, variableName).valueSetter = function(v:little.parser.ParserTokens) {
+			little.interpreter.Runtime.warn(little.parser.ParserTokens.ErrorMessage("Editing the variable " + variableName + " is disallowed. New value is ignored, returning original value."), null);
+			var currentModuleName = little.Little.runtime.currentModule;
+			if ((variableModuleName != null)) little.Little.runtime.currentModule = variableModuleName;
+			try {
+				var val = if ((staticValue != null)) staticValue else valueGetter();
+				little.Little.runtime.currentModule = currentModuleName;
+				return val;
+			} catch (`:Dynamic) {
+				var e = haxe.Exception.caught(`);
+				little.Little.runtime.currentModule = currentModuleName;
+				return little.parser.ParserTokens.ErrorMessage("External Variable Error: " + e.details());
+			};
+		};
+	}
+
+	public static function registerFunction(actionName:String, actionModuleName:Null<String> = null, expectedParameters:haxe.extern.EitherType<String, Array<little.parser.ParserTokens>>, callback:Array<little.parser.ParserTokens> -> little.parser.ParserTokens) {
+		var params = if ((Std.isOfType(expectedParameters, String))) little.parser.Parser.parse(little.lexer.Lexer.lex(expectedParameters)) else expectedParameters;
+		var memObject = new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.External(function(params:Array<little.parser.ParserTokens>) {
+			var currentModuleName = little.Little.runtime.currentModule;
+			if ((actionModuleName != null)) little.Little.runtime.currentModule = actionModuleName;
+			try {
+				var val = callback(params);
+				little.Little.runtime.currentModule = currentModuleName;
+				return val;
+			} catch (`:Dynamic) {
+				var e = haxe.Exception.caught(`);
+				little.Little.runtime.currentModule = currentModuleName;
+				return little.parser.ParserTokens.ErrorMessage("External Function Error: " + e.details());
+			};
+		}), @:implicitCast little.interpreter.memory._MemoryTree.MemoryTree_Impl_._new(new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, null, null, null, null, null, null, null, null)), params, null, true, null, null, null, null);
+		if ((actionModuleName != null)) {
+			little.interpreter.memory._MemoryTree.MemoryTree_Impl_.set(little.interpreter.Interpreter.memory, actionModuleName, new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.Module(actionModuleName), @:implicitCast little.interpreter.memory._MemoryTree.MemoryTree_Impl_._new(new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, null, null, null, null, null, null, null, null)), null, little.parser.ParserTokens.Module(little.Keywords.TYPE_MODULE), true, null, null, little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get_object(little.interpreter.Interpreter.memory), null));
+			memObject.parent = little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(little.interpreter.Interpreter.memory, actionModuleName);
+			little.interpreter.memory._MemoryTree.MemoryTree_Impl_.set(little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(little.interpreter.Interpreter.memory, actionModuleName).props, actionName, memObject);
+		} else little.interpreter.memory._MemoryTree.MemoryTree_Impl_.set(little.interpreter.Interpreter.memory, actionName, memObject);
+	}
+
+	public static function registerCondition(conditionName:String, expectedConditionPattern:Null<haxe.extern.EitherType<String, Array<little.parser.ParserTokens>>> = null, callback:(Array<little.parser.ParserTokens>, Array<little.parser.ParserTokens>) -> little.parser.ParserTokens) {
+		little.Keywords.CONDITION_TYPES.push(conditionName);
+		var params = if ((Std.isOfType(expectedConditionPattern, String))) little.parser.Parser.parse(little.lexer.Lexer.lex(expectedConditionPattern)) else expectedConditionPattern;
+		var tmp = little.parser.ParserTokens.ExternalCondition(function(con:Array<little.parser.ParserTokens>, body:Array<little.parser.ParserTokens>) {
+			try {
+				return callback(con, body);
+			} catch (`:Dynamic) {
+				var e = haxe.Exception.caught(`);
+				return little.parser.ParserTokens.ErrorMessage("External Condition Error: " + e.details());
+			};
+		});
+		little.interpreter.memory._MemoryTree.MemoryTree_Impl_.set(little.interpreter.Interpreter.memory, conditionName, new little.interpreter.memory.MemoryObject(tmp, @:implicitCast little.interpreter.memory._MemoryTree.MemoryTree_Impl_._new(new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, null, null, null, null, null, null, null, null)), params, null, true, true, null, little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get_object(little.interpreter.Interpreter.memory), null));
+	}
+
+	public static function registerProperty(propertyName:String, onObject:String, isType:Bool, valueOption1:Null<little.tools.FunctionInfo> = null, valueOption2:Null<little.tools.VariableInfo> = null) {
+		if ((isType)) {
+			if ((! cast cast cast little.interpreter.Interpreter.memory.map.exists(onObject) || Type.enumConstructor(cast cast cast cast little.interpreter.Interpreter.memory.map.get(onObject).value) != "Module")) little.interpreter.memory._MemoryTree.MemoryTree_Impl_.set(little.interpreter.Interpreter.memory, onObject, new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.Module(onObject), @:implicitCast little.interpreter.memory._MemoryTree.MemoryTree_Impl_._new(new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, null, null, null, null, null, null, null, null)), null, little.parser.ParserTokens.Module(little.Keywords.TYPE_MODULE), true, null, null, null, null));
+		} else if ((! cast cast cast little.interpreter.Interpreter.memory.map.exists(onObject))) little.interpreter.memory._MemoryTree.MemoryTree_Impl_.set(little.interpreter.Interpreter.memory, onObject, new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, @:implicitCast little.interpreter.memory._MemoryTree.MemoryTree_Impl_._new(new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, null, null, null, null, null, null, null, null)), null, little.parser.ParserTokens.Module(little.Keywords.TYPE_DYNAMIC), true, null, null, null, null));
+		var memObject = [new little.interpreter.memory.MemoryObject(null, null, null, null, null, null, null, null, null)];
+		var parent = cast cast cast little.interpreter.Interpreter.memory.map.get(onObject);
+		if ((valueOption2 != null)) {
+			var info = valueOption2;
+			var tmp = little.parser.ParserTokens.External(function(params:Array<little.parser.ParserTokens>) {
+				try {
+					var val = if ((info.staticValue != null)) info.staticValue else info.valueGetter(memObject[0].parent);
+					return val;
+				} catch (`:Dynamic) {
+					var e = haxe.Exception.caught(`);
+					return little.parser.ParserTokens.ErrorMessage("External Variable Error: " + e.details());
+				};
+			});
+			memObject[0] = new little.interpreter.memory.MemoryObject(tmp, @:implicitCast little.interpreter.memory._MemoryTree.MemoryTree_Impl_._new(new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, null, null, null, null, null, null, null, null)), if ((! isType)) null else [little.parser.ParserTokens.Variable(little.parser.ParserTokens.Identifier("value "), little.parser.ParserTokens.Identifier(onObject), null)], little.parser.ParserTokens.Identifier(info.type), true, false, isType, parent, null);
+			if ((info.valueSetter != null)) memObject[0].valueSetter = function(v:little.parser.ParserTokens) {
+				return memObject[0].set_value(info.valueSetter(memObject[0].parent, v));
+			};
+			if ((info.allowWriting == false)) memObject[0].valueSetter = function(v:little.parser.ParserTokens) {
+				little.interpreter.Runtime.throwError(little.parser.ParserTokens.ErrorMessage("Directly editing the property " + onObject + little.Keywords.PROPERTY_ACCESS_SIGN + propertyName + " is disallowed. New value is ignored, returning original value."), null);
+				try {
+					var val = if ((info.staticValue != null)) info.staticValue else info.valueGetter(memObject[0].parent);
+					return val;
+				} catch (`:Dynamic) {
+					var e = haxe.Exception.caught(`);
+					return little.parser.ParserTokens.ErrorMessage("External Variable Error: " + e.details());
+				};
+			};
+		} else {
+			var info = valueOption1;
+			var params = if ((Std.isOfType(info.expectedParameters, String))) little.parser.Parser.parse(little.lexer.Lexer.lex(info.expectedParameters)) else info.expectedParameters;
+			if ((isType)) params.unshift(little.parser.ParserTokens.Variable(little.parser.ParserTokens.Identifier("value"), little.parser.ParserTokens.Identifier(onObject), null));
+			var tmp = little.parser.ParserTokens.External(function(params:Array<little.parser.ParserTokens>) {
+				try {
+					var val = info.callback(memObject[0].parent, params);
+					return val;
+				} catch (`:Dynamic) {
+					var e = haxe.Exception.caught(`);
+					return little.parser.ParserTokens.ErrorMessage("External Function Error: " + e.details());
+				};
+			});
+			memObject[0] = new little.interpreter.memory.MemoryObject(tmp, @:implicitCast little.interpreter.memory._MemoryTree.MemoryTree_Impl_._new(new little.interpreter.memory.MemoryObject(little.parser.ParserTokens.NullValue, null, null, null, null, null, null, null, null)), params, little.parser.ParserTokens.Identifier(info.type), true, false, isType, parent, null);
+			if ((info.allowWriting == false)) memObject[0].valueSetter = function(v:little.parser.ParserTokens) {
+				little.interpreter.Runtime.throwError(little.parser.ParserTokens.ErrorMessage("Directly editing the property " + onObject + little.Keywords.PROPERTY_ACCESS_SIGN + propertyName + " is disallowed. New value is ignored, returning original value."), null);
+				try {
+					var val = info.callback(memObject[0].parent, params);
+					return val;
+				} catch (`:Dynamic) {
+					var e = haxe.Exception.caught(`);
+					return little.parser.ParserTokens.ErrorMessage("External Function Error: " + e.details());
+				};
+			};
+		};
+		little.interpreter.memory._MemoryTree.MemoryTree_Impl_.set(parent.props, propertyName, memObject[0]);
+	}
+
+	static function combosHas(combos:Array<{ rhs : String, lhs : String }>, lhs:String, rhs:String) {
+		{
+			var ` = 0;
+			while ((` < combos.length)) {
+				var c = combos[`];
+				++ `;
+				if ((c.rhs == rhs && c.lhs == lhs)) return true;
+			};
+		};
+		return false;
+	}
+
+	public static function registerSign(symbol:String, info:little.tools.SignInfo) {
+		if ((info.operatorType == null || info.operatorType == little.interpreter.OperatorType.LHS_RHS)) {
+			if ((info.callback == null && info.singleSidedOperatorCallback != null)) {
+				var tmp = info.operatorType;
+				throw new haxe.exceptions.ArgumentException("callback", "Incorrect callback given for operator type " + Std.string(@:mergeBlock if ((tmp != null)) tmp else little.interpreter.OperatorType.LHS_RHS) + " - `singleSidedOperatorCallback` was given, when `callback` was expected", null, {fileName : "src/little/tools/Plugins.hx", lineNumber : 411, className : "little.tools.Plugins", methodName : "registerSign"});
+			} else if ((info.callback == null)) {
+				var tmp = info.operatorType;
+				throw new haxe.exceptions.ArgumentException("callback", "No callback given for operator type " + Std.string(@:mergeBlock if ((tmp != null)) tmp else little.interpreter.OperatorType.LHS_RHS) + " (`callback` is null)", null, {fileName : "src/little/tools/Plugins.hx", lineNumber : 413, className : "little.tools.Plugins", methodName : "registerSign"});
+			};
+			var callbackFunc;
+			if ((info.lhsAllowedTypes != null && info.rhsAllowedTypes == null && info.allowedTypeCombos == null)) callbackFunc = function(lhs:little.parser.ParserTokens, rhs:little.parser.ParserTokens) {
+				if ((! info.lhsAllowedTypes.contains(Type.enumParameters(cast little.interpreter.Interpreter.getValueType(lhs))[0]))) {
+					var t = Type.enumParameters(cast little.interpreter.Interpreter.getValueType(lhs))[0];
+					return little.Little.runtime.throwError(little.parser.ParserTokens.ErrorMessage("Cannot preform " + t + "(" + little.interpreter.Interpreter.stringifyTokenIdentifier(lhs, null, null) + ") " + symbol + " " + Std.string(Type.enumParameters(cast little.interpreter.Interpreter.getValueType(rhs))[0]) + "(" + little.interpreter.Interpreter.stringifyTokenIdentifier(rhs, null, null) + ") - Left operand cannot be of type " + t + " (accepted types: " + Std.string(info.lhsAllowedTypes) + ")"), null);
+				};
+				return info.callback(lhs, rhs);
+			} else if ((info.lhsAllowedTypes == null && info.rhsAllowedTypes != null && info.allowedTypeCombos == null)) callbackFunc = function(lhs:little.parser.ParserTokens, rhs:little.parser.ParserTokens) {
+				if ((! info.rhsAllowedTypes.contains(Type.enumParameters(cast little.interpreter.Interpreter.getValueType(rhs))[0]))) {
+					var t = Type.enumParameters(cast little.interpreter.Interpreter.getValueType(rhs))[0];
+					return little.Little.runtime.throwError(little.parser.ParserTokens.ErrorMessage("Cannot preform " + Std.string(Type.enumParameters(cast little.interpreter.Interpreter.getValueType(lhs))[0]) + "(" + little.interpreter.Interpreter.stringifyTokenIdentifier(lhs, null, null) + ") " + symbol + " " + t + "(" + little.interpreter.Interpreter.stringifyTokenIdentifier(rhs, null, null) + ") - Right operand cannot be of type " + t + " (accepted types: " + Std.string(info.rhsAllowedTypes) + ")"), null);
+				};
+				return info.callback(lhs, rhs);
+			} else if ((info.lhsAllowedTypes != null && info.rhsAllowedTypes != null && info.allowedTypeCombos == null)) callbackFunc = function(lhs:little.parser.ParserTokens, rhs:little.parser.ParserTokens) {
+				var rhsType = Type.enumParameters(cast little.interpreter.Interpreter.getValueType(rhs))[0];
+				var lhsType = Type.enumParameters(cast little.interpreter.Interpreter.getValueType(lhs))[0];
+				if ((! info.rhsAllowedTypes.contains(Type.enumParameters(cast little.interpreter.Interpreter.getValueType(rhs))[0]))) {
+					var t = Type.enumParameters(cast little.interpreter.Interpreter.getValueType(rhs))[0];
+					return little.Little.runtime.throwError(little.parser.ParserTokens.ErrorMessage("Cannot preform " + Std.string(Type.enumParameters(cast little.interpreter.Interpreter.getValueType(lhs))[0]) + "(" + little.interpreter.Interpreter.stringifyTokenIdentifier(lhs, null, null) + ") " + symbol + " " + t + "(" + little.interpreter.Interpreter.stringifyTokenIdentifier(rhs, null, null) + ") - Right operand cannot be of type " + t + " (accepted types: " + Std.string(info.rhsAllowedTypes) + ")"), null);
+				};
+				if ((! info.rhsAllowedTypes.contains(Type.enumParameters(cast little.interpreter.Interpreter.getValueType(lhs))[0]))) {
+					var t = Type.enumParameters(cast little.interpreter.Interpreter.getValueType(lhs))[0];
+					return little.Little.runtime.throwError(little.parser.ParserTokens.ErrorMessage("Cannot preform " + Std.string(Type.enumParameters(cast little.interpreter.Interpreter.getValueType(lhs))[0]) + "(" + little.interpreter.Interpreter.stringifyTokenIdentifier(lhs, null, null) + ") " + symbol + " " + t + "(" + little.interpreter.Interpreter.stringifyTokenIdentifier(rhs, null, null) + ") - Left operand cannot be of type " + t + " (accepted types: " + Std.string(info.lhsAllowedTypes) + ")"), null);
+				};
+				return info.callback(lhs, rhs);
+			} else if ((info.lhsAllowedTypes != null && info.rhsAllowedTypes == null && info.allowedTypeCombos != null)) callbackFunc = function(lhs:little.parser.ParserTokens, rhs:little.parser.ParserTokens) {
+				var r = Type.enumParameters(cast little.interpreter.Interpreter.getValueType(rhs))[0];
+				var l = Type.enumParameters(cast little.interpreter.Interpreter.getValueType(lhs))[0];
+				if ((! info.lhsAllowedTypes.contains(l) && ! little.tools.Plugins.containsCombo(info.allowedTypeCombos, l, r))) {
+					var callbackFunc = little.Little.runtime;
+					var callbackFunc = "Cannot preform " + l + "(" + little.interpreter.Interpreter.stringifyTokenIdentifier(lhs, null, null) + ") " + symbol + " " + r + "(" + little.interpreter.Interpreter.stringifyTokenIdentifier(rhs, null, null) + ") - Right operand cannot be of type " + r + " while left operand is of type " + l + " (accepted types for left operand: " + Std.string(info.lhsAllowedTypes) + ", accepted type combinations: ";
+					var ` = [];
+					{
+						var ` = 0;
+						var ` = info.allowedTypeCombos;
+						while ((` < `.length)) {
+							var v = `[`];
+							++ `;
+							`.push("" + v.rhs + " " + symbol + " " + v.lhs);
+						};
+					};
+					return callbackFunc.throwError(little.parser.ParserTokens.ErrorMessage(callbackFunc + Std.string(`) + ")"), null);
+				};
+				return info.callback(lhs, rhs);
+			} else if ((info.lhsAllowedTypes == null && info.rhsAllowedTypes != null && info.allowedTypeCombos != null)) callbackFunc = function(lhs:little.parser.ParserTokens, rhs:little.parser.ParserTokens) {
+				var r = Type.enumParameters(cast little.interpreter.Interpreter.getValueType(rhs))[0];
+				var l = Type.enumParameters(cast little.interpreter.Interpreter.getValueType(lhs))[0];
+				if ((! info.rhsAllowedTypes.contains(r) && ! little.tools.Plugins.containsCombo(info.allowedTypeCombos, l, r))) {
+					var callbackFunc = little.Little.runtime;
+					var callbackFunc = "Cannot preform " + l + "(" + little.interpreter.Interpreter.stringifyTokenIdentifier(lhs, null, null) + ") " + symbol + " " + r + "(" + little.interpreter.Interpreter.stringifyTokenIdentifier(rhs, null, null) + ") - Right operand cannot be of type " + r + " while left operand is of type " + l + " (accepted types for right operand: " + Std.string(info.rhsAllowedTypes) + ", accepted type combinations: ";
+					var ` = [];
+					{
+						var ` = 0;
+						var ` = info.allowedTypeCombos;
+						while ((` < `.length)) {
+							var v = `[`];
+							++ `;
+							`.push("" + v.rhs + " " + symbol + " " + v.lhs);
+						};
+					};
+					return callbackFunc.throwError(little.parser.ParserTokens.ErrorMessage(callbackFunc + Std.string(`) + ")"), null);
+				};
+				return info.callback(lhs, rhs);
+			} else if ((info.lhsAllowedTypes != null && info.rhsAllowedTypes != null && info.allowedTypeCombos != null)) callbackFunc = function(lhs:little.parser.ParserTokens, rhs:little.parser.ParserTokens) {
+				var rhsType = Type.enumParameters(cast little.interpreter.Interpreter.getValueType(rhs))[0];
+				var lhsType = Type.enumParameters(cast little.interpreter.Interpreter.getValueType(lhs))[0];
+				if ((! info.rhsAllowedTypes.contains(rhsType) && ! little.tools.Plugins.containsCombo(info.allowedTypeCombos, lhsType, rhsType))) {
+					var callbackFunc = little.Little.runtime;
+					var callbackFunc = "Cannot preform " + lhsType + "(" + little.interpreter.Interpreter.stringifyTokenIdentifier(lhs, null, null) + ") " + symbol + " " + rhsType + "(" + little.interpreter.Interpreter.stringifyTokenIdentifier(rhs, null, null) + ") - Right operand cannot be of type " + rhsType + " (accepted types: " + Std.string(info.rhsAllowedTypes) + ", accepted type combinations: ";
+					var ` = [];
+					{
+						var ` = 0;
+						var ` = info.allowedTypeCombos;
+						while ((` < `.length)) {
+							var v = `[`];
+							++ `;
+							`.push("" + v.rhs + " " + symbol + " " + v.lhs);
+						};
+					};
+					return callbackFunc.throwError(little.parser.ParserTokens.ErrorMessage(callbackFunc + Std.string(`) + ")"), null);
+				};
+				if ((! info.rhsAllowedTypes.contains(lhsType) && ! little.tools.Plugins.containsCombo(info.allowedTypeCombos, lhsType, rhsType))) {
+					var callbackFunc = little.Little.runtime;
+					var callbackFunc = "Cannot preform " + lhsType + "(" + little.interpreter.Interpreter.stringifyTokenIdentifier(lhs, null, null) + ") " + symbol + " " + rhsType + "(" + little.interpreter.Interpreter.stringifyTokenIdentifier(rhs, null, null) + ") - Left operand cannot be of type " + lhsType + " (accepted types: " + Std.string(info.lhsAllowedTypes) + ", accepted type combinations: ";
+					var ` = [];
+					{
+						var ` = 0;
+						var ` = info.allowedTypeCombos;
+						while ((` < `.length)) {
+							var v = `[`];
+							++ `;
+							`.push("" + v.rhs + " " + symbol + " " + v.lhs);
+						};
+					};
+					return callbackFunc.throwError(little.parser.ParserTokens.ErrorMessage(callbackFunc + Std.string(`) + ")"), null);
+				};
+				return info.callback(lhs, rhs);
+			} else callbackFunc = info.callback;
+			little.Little.operators.add(symbol, little.interpreter.OperatorType.LHS_RHS, info.priority, callbackFunc);
+		} else {
+			if ((info.singleSidedOperatorCallback == null && info.callback != null)) throw new haxe.exceptions.ArgumentException("singleSidedOperatorCallback", "Incorrect callback given for operator type " + Std.string(info.operatorType) + " - `callback` was given, when `singleSidedOperatorCallback` was expected", null, {fileName : "src/little/tools/Plugins.hx", lineNumber : 491, className : "little.tools.Plugins", methodName : "registerSign"}) else if ((info.singleSidedOperatorCallback == null)) {
+				var tmp = info.operatorType;
+				throw new haxe.exceptions.ArgumentException("singleSidedOperatorCallback", "No callback given for operator type " + Std.string(@:mergeBlock if ((tmp != null)) tmp else little.interpreter.OperatorType.LHS_RHS) + " (`singleSidedOperatorCallback` is null)", null, {fileName : "src/little/tools/Plugins.hx", lineNumber : 493, className : "little.tools.Plugins", methodName : "registerSign"});
+			};
+			var callbackFunc;
+			if ((info.operatorType == little.interpreter.OperatorType.LHS_ONLY)) callbackFunc = function(lhs:little.parser.ParserTokens) {
+				var l = Type.enumParameters(cast little.interpreter.Interpreter.getValueType(lhs))[0];
+				if ((! info.lhsAllowedTypes.contains(l))) return little.Little.runtime.throwError(little.parser.ParserTokens.ErrorMessage("Cannot perform " + l + "(" + little.interpreter.Interpreter.stringifyTokenIdentifier(lhs, null, null) + ")" + symbol + " - Operand cannot be of type " + l + " (accepted types: " + Std.string(info.lhsAllowedTypes) + ")"), null);
+				return info.singleSidedOperatorCallback(lhs);
+			} else callbackFunc = function(rhs:little.parser.ParserTokens) {
+				var r = Type.enumParameters(cast little.interpreter.Interpreter.getValueType(rhs))[0];
+				if ((! info.rhsAllowedTypes.contains(r))) return little.Little.runtime.throwError(little.parser.ParserTokens.ErrorMessage("Cannot perform " + symbol + r + "(" + little.interpreter.Interpreter.stringifyTokenIdentifier(rhs, null, null) + ") - Operand cannot be of type " + r + " (accepted types: " + Std.string(info.rhsAllowedTypes) + ")"), null);
+				return info.singleSidedOperatorCallback(rhs);
+			};
+			little.Little.operators.add(symbol, info.operatorType, info.priority, callbackFunc);
+		};
+	}
+
+	static function containsCombo(array:Array<{ rhs : String, lhs : String }>, lhs:String, rhs:String) {
+		{
+			var ` = 0;
+			while ((` < array.length)) {
+				var a = array[`];
+				++ `;
+				if ((a.lhs == lhs && a.rhs == rhs)) return true;
+			};
+		};
+		return false;
+	}
+}

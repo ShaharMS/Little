@@ -1,0 +1,39 @@
+@:directlyUsed @:used @:structInit
+class vision.ds.Point2D {
+
+	@:value({ y : 0, x : 0 })
+	public inline function new(x:Float = 0, y:Float = 0) {
+		this.x = x;
+		this.y = y;
+	}
+
+	public var x:Float;
+
+	public var y:Float;
+
+	public inline function toString() {
+		return "(" + this.x + ", " + this.y + ")";
+	}
+
+	public inline function copy() {
+		return new vision.ds.Point2D(this.x, this.y);
+	}
+
+	public inline function distanceTo(point:vision.ds.Point2D) {
+		var x = point.x - this.x;
+		var y = point.y - this.y;
+		return Math.sqrt(x * x + y * y);
+	}
+
+	public inline function degreesTo(point:vision.ds.Point2D) {
+		var x = point.x - this.x;
+		var y = point.y - this.y;
+		return Math.atan2(x, y) * 180 / Math.PI;
+	}
+
+	public inline function radiansTo(point:vision.ds.Point2D) {
+		var x = point.x - this.x;
+		var y = point.y - this.y;
+		return Math.atan2(x, y) * 180 / Math.PI;
+	}
+}

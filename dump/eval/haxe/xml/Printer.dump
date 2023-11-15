@@ -1,0 +1,141 @@
+@:keep @:directlyUsed @:used
+class haxe.xml.Printer {
+
+	function new(pretty:Bool) {
+		this.output = new StringBuf();
+		this.pretty = pretty;
+	}
+
+	var output:StringBuf;
+
+	var pretty:Bool;
+
+	function writeNode(value:Xml, tabs:String) {
+		switch ((@:exhaustive value.nodeType)) {
+			case 0: {
+				this.output.add(tabs + "<");
+				{
+					if ((value.nodeType != Xml.Element)) throw "Bad node type, expected Element but found " + (if ((value.nodeType == null)) "null" else _Xml.XmlType_Impl_.toString(value.nodeType));
+					this.output.add(value.nodeName);
+				};
+				{
+					var attribute = value.attributes();
+					while ((attribute.hasNext())) {
+						var attribute = attribute.next();
+						this.output.add(" " + attribute + "=\"");
+						{
+							var input = StringTools.htmlEscape(value.get(attribute), true);
+							this.output.add(input);
+						};
+						this.output.add("\"");
+					};
+				};
+				if ((this.hasChildren(value))) {
+					this.output.add(">");
+					if ((this.pretty)) this.output.add("\n");
+					{
+						if ((value.nodeType != Xml.Document && value.nodeType != Xml.Element)) throw "Bad node type, expected Element or Document but found " + (if ((value.nodeType == null)) "null" else _Xml.XmlType_Impl_.toString(value.nodeType));
+						var `_current = 0;
+						var `_array = value.children;
+						while ((`_current < `_array.length)) {
+							var child = `_array[`_current ++];
+							this.writeNode(child, if ((this.pretty)) tabs + "\t" else tabs);
+						};
+					};
+					this.output.add(tabs + "</");
+					{
+						if ((value.nodeType != Xml.Element)) throw "Bad node type, expected Element but found " + (if ((value.nodeType == null)) "null" else _Xml.XmlType_Impl_.toString(value.nodeType));
+						this.output.add(value.nodeName);
+					};
+					this.output.add(">");
+					if ((this.pretty)) this.output.add("\n");
+				} else {
+					this.output.add("/>");
+					if ((this.pretty)) this.output.add("\n");
+				};
+			};
+			case 1: {
+				if ((value.nodeType == Xml.Document || value.nodeType == Xml.Element)) throw "Bad node type, unexpected " + (if ((value.nodeType == null)) "null" else _Xml.XmlType_Impl_.toString(value.nodeType));
+				var nodeValue = value.nodeValue;
+				if ((nodeValue.length != 0)) {
+					{
+						var input = tabs + StringTools.htmlEscape(nodeValue, null);
+						this.output.add(input);
+					};
+					if ((this.pretty)) this.output.add("\n");
+				};
+			};
+			case 2: {
+				this.output.add(tabs + "<![CDATA[");
+				{
+					if ((value.nodeType == Xml.Document || value.nodeType == Xml.Element)) throw "Bad node type, unexpected " + (if ((value.nodeType == null)) "null" else _Xml.XmlType_Impl_.toString(value.nodeType));
+					this.output.add(value.nodeValue);
+				};
+				this.output.add("]]>");
+				if ((this.pretty)) this.output.add("\n");
+			};
+			case 3: {
+				if ((value.nodeType == Xml.Document || value.nodeType == Xml.Element)) throw "Bad node type, unexpected " + (if ((value.nodeType == null)) "null" else _Xml.XmlType_Impl_.toString(value.nodeType));
+				var commentContent = value.nodeValue;
+				commentContent = new EReg("[\n\r\t]+", "g").replace(commentContent, "");
+				commentContent = "<!--" + commentContent + "-->";
+				this.output.add(tabs);
+				{
+					var input = StringTools.trim(commentContent);
+					this.output.add(input);
+				};
+				if ((this.pretty)) this.output.add("\n");
+			};
+			case 4: {
+				{
+					if ((value.nodeType == Xml.Document || value.nodeType == Xml.Element)) throw "Bad node type, unexpected " + (if ((value.nodeType == null)) "null" else _Xml.XmlType_Impl_.toString(value.nodeType));
+					this.output.add("<!DOCTYPE " + value.nodeValue + ">");
+				};
+				if ((this.pretty)) this.output.add("\n");
+			};
+			case 5: {
+				{
+					if ((value.nodeType == Xml.Document || value.nodeType == Xml.Element)) throw "Bad node type, unexpected " + (if ((value.nodeType == null)) "null" else _Xml.XmlType_Impl_.toString(value.nodeType));
+					this.output.add("<?" + value.nodeValue + "?>");
+				};
+				if ((this.pretty)) this.output.add("\n");
+			};
+			case 6: {
+				if ((value.nodeType != Xml.Document && value.nodeType != Xml.Element)) throw "Bad node type, expected Element or Document but found " + (if ((value.nodeType == null)) "null" else _Xml.XmlType_Impl_.toString(value.nodeType));
+				var `_current = 0;
+				var `_array = value.children;
+				while ((`_current < `_array.length)) {
+					var child = `_array[`_current ++];
+					this.writeNode(child, tabs);
+				};
+			};
+		};
+	}
+
+	function hasChildren(value:Xml) {
+		{
+			if ((value.nodeType != Xml.Document && value.nodeType != Xml.Element)) throw "Bad node type, expected Element or Document but found " + (if ((value.nodeType == null)) "null" else _Xml.XmlType_Impl_.toString(value.nodeType));
+			var `_current = 0;
+			var `_array = value.children;
+			while ((`_current < `_array.length)) {
+				var child = `_array[`_current ++];
+				switch ((child.nodeType)) {
+					case 0, 1: return true;
+					case 2, 3: {
+						if ((child.nodeType == Xml.Document || child.nodeType == Xml.Element)) throw "Bad node type, unexpected " + (if ((child.nodeType == null)) "null" else _Xml.XmlType_Impl_.toString(child.nodeType));
+						if ((StringTools.ltrim(child.nodeValue).length != 0)) return true;
+					};
+					default: {}
+				};
+			};
+		};
+		return false;
+	}
+
+	@:value({ pretty : false })
+	public static function print(xml:Xml, pretty:Null<Bool> = false) {
+		var printer = new haxe.xml.Printer(pretty);
+		printer.writeNode(xml, "");
+		return printer.output.toString();
+	}
+}

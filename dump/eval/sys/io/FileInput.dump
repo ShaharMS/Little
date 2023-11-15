@@ -1,0 +1,9 @@
+@:keep @:used @:coreApi
+class sys.io.FileInput extends haxe.io.Input {
+
+	public function close
+
+	public function readByte
+
+	public function readBytes
+}

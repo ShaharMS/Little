@@ -1,0 +1,91 @@
+@:keep @:directlyUsed @:used @:coreApi
+class sys.thread.EventLoop {
+
+	public function new() {
+		this.started = false;
+		this.pending = [];
+		this.promisedEventsCount = 0;
+		this.mutex = new sys.thread.Mutex();
+		this.isMainThread = ! sys.thread.EventLoop.CREATED;
+		sys.thread.EventLoop.CREATED = true;
+		var result = eval.luv._Loop.Loop_Impl_.init();
+		var tmp;
+		switch ((@:exhaustive enumIndex result)) {
+			case 0: {
+				var v = result[0];
+				tmp = v;
+			};
+			case 1: {
+				var e = result[0];
+				throw new eval.luv.LuvException(e, null, null);
+			};
+		};
+		this.handle = tmp;
+		var result = eval.luv._Async.Async_Impl_.init(this.handle, this.consumePending);
+		var tmp;
+		switch ((@:exhaustive enumIndex result)) {
+			case 0: {
+				var v = result[0];
+				tmp = v;
+			};
+			case 1: {
+				var e = result[0];
+				throw new eval.luv.LuvException(e, null, null);
+			};
+		};
+		this.wakeup = tmp;
+		eval.luv._Handle.Handle_Impl_.unref(this.wakeup);
+	}
+
+	@:allow(eval.luv.Loop)
+	var handle(default,ctor):eval.luv.Loop;
+
+	@:value(new Mutex())
+	var mutex(default,ctor):sys.thread.Mutex;
+
+	var wakeup(default,ctor):eval.luv.Async;
+
+	@:value(0)
+	var promisedEventsCount:Int;
+
+	@:value([])
+	var pending:Array<() -> Void>;
+
+	@:value(false)
+	var started:Bool;
+
+	var isMainThread:Bool;
+
+	function refUnref() {
+		if ((this.promisedEventsCount > 0 || this.isMainThread && haxe.MainLoop.hasEvents())) eval.luv._Handle.Handle_Impl_.ref(this.wakeup) else eval.luv._Handle.Handle_Impl_.unref(this.wakeup);
+	}
+
+	public function loop() {
+		if ((this.started)) throw "Event loop already started";
+		this.started = true;
+		this.consumePending(null);
+		eval.luv._Loop.Loop_Impl_.run(this.handle, cast 0);
+	}
+
+	function consumePending(_:Null<eval.luv.Async> = null) {
+		this.mutex.acquire();
+		var p = this.pending;
+		this.pending = [];
+		this.mutex.release();
+		{
+			var ` = 0;
+			while ((` < p.length)) {
+				var fn = p[`];
+				++ `;
+				fn();
+			};
+		};
+		if ((this.started && this.isMainThread)) {
+			var next = haxe.MainLoop.tick();
+			if ((haxe.MainLoop.hasEvents())) eval.luv._Async.Async_Impl_.send(this.wakeup);
+			this.refUnref();
+		};
+	}
+
+	static var CREATED:Bool;
+}

@@ -1,0 +1,2 @@
+@:used @:enum
+abstract vision.exceptions.MatrixError {}

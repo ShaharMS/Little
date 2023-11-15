@@ -1,0 +1,62 @@
+@:used
+class vision.algorithms.Radix {
+
+	static function getMax<T:Int, Uint, Int64>(array:Array<getMax.T>, endIndex:Null<Int> = null) {
+		if ((endIndex == null)) endIndex = array.length;
+		var potential = array[0];
+		{
+			var ` = 1;
+			var ` = endIndex;
+			while ((` < `)) {
+				var i = ` ++;
+				if ((array[i] > potential)) potential = array[i];
+			};
+		};
+		return potential;
+	}
+
+	static function countingSort<T:Int, Uint, Int64>(array:Array<countingSort.T>, exp:Int, endIndex:Null<Int> = null) {
+		if ((endIndex == null)) endIndex = array.length;
+		var output = [];
+		var i = -1;
+		var ` = [];
+		{
+			`.push(0);
+			`.push(0);
+			`.push(0);
+			`.push(0);
+			`.push(0);
+			`.push(0);
+			`.push(0);
+			`.push(0);
+			`.push(0);
+			`.push(0);
+		};
+		var count = `;
+		while ((++ i < endIndex)) {
+			var tmp = Std.int(array[i] / exp) % 10;
+			count[tmp] ++;
+		};
+		i = 0;
+		while ((++ i < 10)) count[i] += count[i - 1];
+		i = endIndex;
+		while ((-- i >= 0)) {
+			output[count[Std.int(array[i] / exp) % 10] - 1] = array[i];
+			var tmp = Std.int(array[i] / exp) % 10;
+			count[tmp] --;
+		};
+		i = -1;
+		while ((++ i < endIndex)) array[i] = output[i];
+		return output;
+	}
+
+	public static function sort<T:Int, Uint, Int64>(array:Array<sort.T>) {
+		var max = vision.algorithms.Radix.getMax(array, array.length);
+		var exp = 1;
+		while ((max / exp > 0)) {
+			array = vision.algorithms.Radix.countingSort(array, exp, array.length);
+			exp *= 10;
+		};
+		return array;
+	}
+}

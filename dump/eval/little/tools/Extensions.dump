@@ -1,0 +1,43 @@
+@:directlyUsed @:used
+class little.tools.Extensions {
+
+	public static function identifier(token:little.parser.ParserTokens) {
+		return little.interpreter.Interpreter.stringifyTokenIdentifier(token, null, null);
+	}
+
+	public static function value(token:little.parser.ParserTokens) {
+		return little.interpreter.Interpreter.stringifyTokenValue(token, null);
+	}
+
+	public static function is(token:little.parser.ParserTokens, tokens:haxe.Rest<little.tools.ParserTokensSimple>) {
+		var ` = [];
+		{
+			var ` = 0;
+			var ` = cast tokens.copy();
+			while ((` < `.length)) {
+				var v = `[`];
+				++ `;
+				`.push(little.tools.TextTools.remove(Type.enumConstructor(v), "_").toLowerCase());
+			};
+		};
+		return `.contains(Type.enumConstructor(token).toLowerCase());
+	}
+
+	public static function parameter(token:little.parser.ParserTokens, index:Int) {
+		return Type.enumParameters(token)[index];
+	}
+
+	public static function containsAny<T>(array:Array<containsAny.T>, func:containsAny.T -> Bool) {
+		var ` = [];
+		{
+			var ` = 0;
+			var ` = array;
+			while ((` < `.length)) {
+				var v = `[`];
+				++ `;
+				if ((func(v))) `.push(v);
+			};
+		};
+		return `.length > 0;
+	}
+}

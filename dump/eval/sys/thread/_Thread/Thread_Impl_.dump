@@ -1,0 +1,10 @@
+@:keep @:used
+private class sys.thread._Thread.Thread_Impl_ {
+
+	@:keep
+	static function processEvents() {
+		eval.vm.NativeThread.self().get_events().loop();
+	}
+
+	static function __init__() eval.vm.NativeThread.self().set_events(new sys.thread.EventLoop())
+}

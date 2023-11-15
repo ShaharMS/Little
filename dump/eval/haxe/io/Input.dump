@@ -1,0 +1,37 @@
+@:keep @:used
+class haxe.io.Input {
+
+	public function readByte() {
+		throw new haxe.exceptions.NotImplementedException(null, null, {fileName : "haxe/io/Input.hx", lineNumber : 53, className : "haxe.io.Input", methodName : "readByte"});
+	}
+
+	public function readLine() {
+		var buf = new haxe.io.BytesBuffer();
+		var last;
+		var s;
+		try {
+			while ((true)) {
+				last = this.readByte();
+				if ((! (last != 10))) break;
+				buf.addByte(last);
+			};
+			s = buf.getBytes().toString();
+			if ((s.charCodeAt(s.length - 1) == 13)) s = s.substr(0, -1);
+		} catch (e:haxe.io.Eof) {
+			s = buf.getBytes().toString();
+			if ((s.length == 0)) throw e;
+		},  catch (`:haxe.ValueException) {
+			{
+				null;
+			};
+			if ((Std.isOfType(`.value, haxe.io.Eof))) {
+				var e = cast `.value;
+				{
+					s = buf.getBytes().toString();
+					if ((s.length == 0)) throw e;
+				};
+			} else throw `;
+		};
+		return s;
+	}
+}

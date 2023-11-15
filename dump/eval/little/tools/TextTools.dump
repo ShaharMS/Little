@@ -1,0 +1,223 @@
+@:directlyUsed @:used
+class little.tools.TextTools {
+
+	@:value(@:privateAccess new MultilangFonts())
+	public static var fonts(default,null):little.tools._TextTools.MultilangFonts = new little.tools._TextTools.MultilangFonts();
+
+	public static function replaceLast(string:String, replace:String, by:String) {
+		var place = string.lastIndexOf(replace, null);
+		var result = string.substring(0, place) + by + string.substring(place + replace.length, null);
+		return result;
+	}
+
+	public static function replaceFirst(string:String, replace:String, by:String) {
+		var place = string.indexOf(replace, null);
+		var result = string.substring(0, place) + by + string.substring(place + replace.length, null);
+		return result;
+	}
+
+	public static function splitOnFirst(string:String, delimiter:String) {
+		var place = string.indexOf(delimiter, null);
+		var result = new Array();
+		result.push(string.substring(0, place));
+		result.push(string.substring(place + delimiter.length, null));
+		return result;
+	}
+
+	public static function splitOnLast(string:String, delimiter:String) {
+		var place = string.lastIndexOf(delimiter, null);
+		var result = new Array();
+		result.push(string.substring(0, place));
+		result.push(string.substring(place + delimiter.length, null));
+		return result;
+	}
+
+	public static inline function splitOnParagraph(text:String) {
+		return new EReg("<p>|</p>|\n\n|\r\n\r\n", "g").split(text);
+	}
+
+	public static function filter(text:String, filter:Dynamic) {
+		if ((Std.isOfType(filter, EReg))) {
+			var pattern = cast filter;
+			text = pattern.replace(text, "");
+			return text;
+		};
+		var patternType = cast filter;
+		if ((little.tools.TextTools.replaceFirst(text, "/", "") != patternType)) {
+			var regexDetector = new EReg("^~?/(.*)/(.*)$", "s");
+			regexDetector.match(patternType);
+			return filter(text, new EReg(regexDetector.matched(1), regexDetector.matched(2)));
+		};
+		switch ((patternType.toLowerCase())) {
+			case "alpha": return filter(text, new EReg("[^a-zA-Z]", "g"));
+			case "alphanumeric": return filter(text, new EReg("[^a-zA-Z0-9]", "g"));
+			case "numeric": return filter(text, new EReg("[^0-9]", "g"));
+		};
+		return text;
+	}
+
+	public static function indexesOf(string:String, sub:String) {
+		var indexArray = [];
+		var removedLength = 0;
+		var index = string.indexOf(sub, null);
+		while ((index != -1)) {
+			indexArray.push({startIndex : index + removedLength, endIndex : index + sub.length + removedLength - 1});
+			removedLength += sub.length;
+			string = string.substring(0, index) + string.substring(index + sub.length, string.length);
+			index = string.indexOf(sub, null);
+		};
+		return indexArray;
+	}
+
+	public static function indexesOfSubs(string:String, subs:Array<String>) {
+		var indexArray = [];
+		var orgString = string;
+		{
+			var ` = 0;
+			while ((` < subs.length)) {
+				var sub = subs[`];
+				++ `;
+				var removedLength = 0;
+				var index = string.indexOf(sub, null);
+				while ((index != -1)) {
+					indexArray.push({startIndex : index + removedLength, endIndex : index + sub.length + removedLength});
+					removedLength += sub.length;
+					string = string.substring(0, index) + string.substring(index + sub.length, string.length);
+					index = string.indexOf(sub, null);
+				};
+				string = orgString;
+			};
+		};
+		return indexArray;
+	}
+
+	@:deprecated("TextTools.indexesFromArray is deprecated. Use TextTools.indexesOfSubs() instead")
+	public static function indexesFromArray(string:String, subs:Array<String>) {
+		return little.tools.TextTools.indexesOfSubs(string, subs);
+	}
+
+	public static function indexesFromEReg(string:String, ereg:EReg) {
+		var indexArray = [];
+		while ((ereg.match(string))) {
+			var info = ereg.matchedPos();
+			string = ereg.replace(string, little.tools.TextTools.multiply("⨔", info.len));
+			indexArray.push({startIndex : info.pos, endIndex : info.pos + info.len});
+		};
+		return indexArray;
+	}
+
+	public static function multiply(string:String, times:Int) {
+		var stringcopy = string;
+		if ((times <= 0)) return "";
+		while ((-- times > 0)) string += stringcopy;
+		return string;
+	}
+
+	public static inline function subtract(string:String, by:String) {
+		return little.tools.TextTools.replaceLast(string, by, "");
+	}
+
+	@:value({ length : -1, paragraphs : 1 })
+	public static inline function loremIpsum(paragraphs:Int = 1, length:Int = -1) {
+		var text = StringTools.replace(little.tools.TextTools.loremIpsumText, "\t", "");
+		var loremArray = new EReg("<p>|</p>|\n\n|\r\n\r\n", "g").split(text);
+		var loremText = loremArray.join("\n\n");
+		if ((paragraphs > loremArray.length)) {
+			var multiplier = Math.ceil(paragraphs / loremArray.length);
+			loremText = little.tools.TextTools.multiply(little.tools.TextTools.loremIpsumText, multiplier);
+			loremArray = new EReg("<p>|</p>|\n\n|\r\n\r\n", "g").split(loremText);
+		};
+		while ((loremArray.length > paragraphs)) loremArray.pop();
+		var loremString = loremArray.join("\n\n");
+		if ((length != -1)) return loremString.substring(0, length);
+		return loremString;
+	}
+
+	public static function sortByLength(array:Array<String>) {
+		array.sort(function(a:String, b:String) {
+			return a.length - b.length;
+		});
+		return array;
+	}
+
+	@:deprecated
+	public static function sortByValue(array:Array<Float>) {
+		array.sort(function(a:Float, b:Float) {
+			return Std.int(a - b);
+		});
+		return array;
+	}
+
+	@:deprecated
+	public static function sortByIntValue(array:Array<Int>) {
+		array.sort(function(a:Int, b:Int) {
+			return a - b;
+		});
+		return array;
+	}
+
+	public static function getLineIndexOfChar(string:String, index:Int) {
+		var lines = string.split("\n");
+		var lineIndex = 0;
+		{
+			var ` = 0;
+			var ` = lines.length;
+			while ((` < `)) {
+				var i = ` ++;
+				if ((index < lines[i].length)) {
+					lineIndex = i;
+					break;
+				};
+				index -= lines[i].length;
+			};
+		};
+		return lineIndex;
+	}
+
+	public static function countOccurrencesOf(string:String, sub:String) {
+		var count = 0;
+		while ((little.tools.TextTools.contains(string, sub))) {
+			++ count;
+			string = little.tools.TextTools.replaceFirst(string, sub, "");
+		};
+		return count;
+	}
+
+	public static function contains(string:String, contains:String) {
+		if ((string == null)) return false;
+		return string.indexOf(contains, null) != -1;
+	}
+
+	public static function remove(string:String, sub:String) {
+		return little.tools.TextTools.replace(string, sub, "");
+	}
+
+	public static function replace(string:String, replace:String, with:String) {
+		if ((replace == null || with == null)) return string;
+		return StringTools.replace(string, replace, with);
+	}
+
+	public static function reverse(string:String) {
+		var returnedString = "";
+		{
+			var ` = 1;
+			var ` = string.length + 1;
+			while ((` < `)) {
+				var i = ` ++;
+				returnedString += string.charAt(string.length - 1);
+			};
+		};
+		return returnedString;
+	}
+
+	public static function insert(string:String, substring:String, at:Int) {
+		return string.substring(0, at + 1) + substring + string.substring(at + 1, null);
+	}
+
+	public static function parseBool(string:String) {
+		if ((string == "true" || Std.parseFloat(string) != null && Std.parseFloat(string) != 0)) return true else if ((string == "false")) return false else return null;
+	}
+
+	@:value("\r\n\t\tLorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque finibus condimentum magna, eget porttitor libero aliquam non. Praesent commodo, augue nec hendrerit tincidunt, urna felis lobortis mi, non cursus libero tellus quis tellus. Vivamus ornare convallis tristique. Integer nec ornare libero. Phasellus feugiat facilisis faucibus. Vivamus porta id neque id placerat. Proin convallis vel felis et pharetra. Quisque magna justo, ullamcorper quis scelerisque eu, tincidunt vitae lectus. Nunc sed turpis justo. Aliquam porttitor, purus sit amet faucibus bibendum, ligula elit molestie purus, eu volutpat turpis sapien ac tellus. Fusce mauris arcu, volutpat ut aliquam ut, ultrices id ante. Morbi quis consectetur turpis. Integer semper lacinia urna id laoreet.\r\n\r\n\t\tUt mollis eget eros eu tempor. Phasellus nulla velit, sollicitudin eget massa a, tristique rutrum turpis. Vestibulum in dolor at elit pellentesque finibus. Nulla pharetra felis a varius molestie. Nam magna lectus, eleifend ac sagittis id, ornare id nibh. Praesent congue est non iaculis consectetur. Nullam dictum augue sit amet dignissim fringilla. Aenean semper justo velit. Sed nec lectus facilisis, sodales diam eget, imperdiet nunc. Quisque elementum nulla non orci interdum pharetra id quis arcu. Phasellus eu nunc lectus. Nam tellus tortor, pellentesque eget faucibus eu, laoreet quis odio. Pellentesque posuere in enim a blandit.\r\n\r\n\t\tDuis dignissim neque et ex iaculis, ac consequat diam gravida. In mi ex, blandit eget velit non, euismod feugiat arcu. Nulla nec fermentum neque, eget elementum mauris. Vivamus urna ligula, faucibus at facilisis sed, commodo sit amet urna. Sed porttitor feugiat purus ac tincidunt. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aliquam sollicitudin lacinia turpis quis placerat. Donec eget velit nibh. Duis vehicula orci lectus, eget rutrum arcu tincidunt et. Vestibulum ut pharetra lectus. Quisque lacinia nunc rhoncus neque venenatis consequat. Nulla rutrum ultricies sapien, sed semper lectus accumsan nec. Phasellus commodo faucibus lacinia. Donec auctor condimentum ligula. Sed quis viverra mauris.\r\n\r\n\t\tQuisque maximus justo dui, eget pretium lorem accumsan ac. Praesent eleifend faucibus orci et varius. Ut et molestie turpis, eu porta neque. Quisque vehicula, libero in tincidunt facilisis, purus eros pulvinar leo, sit amet eleifend justo ligula tempor lectus. Donec ac tortor sed ipsum tincidunt pulvinar id nec eros. In luctus purus cursus est dictum, ac sollicitudin turpis maximus. Maecenas a nisl velit. Nulla gravida lectus vel ultricies gravida. Proin vel bibendum magna. Donec aliquam ultricies quam, quis tempor nunc pharetra ut.\r\n\r\n\t\tPellentesque sit amet dui est. Aliquam erat volutpat. Integer vitae ullamcorper est, ut eleifend augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Quisque congue velit felis, vitae elementum nulla faucibus id. Donec lectus nibh, commodo eget nunc id, feugiat sagittis massa. In hac habitasse platea dictumst. Pellentesque volutpat molestie ultrices.\r\n\t")
+	public static var loremIpsumText(default,null):String = "\r\n\t\tLorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque finibus condimentum magna, eget porttitor libero aliquam non. Praesent commodo, augue nec hendrerit tincidunt, urna felis lobortis mi, non cursus libero tellus quis tellus. Vivamus ornare convallis tristique. Integer nec ornare libero. Phasellus feugiat facilisis faucibus. Vivamus porta id neque id placerat. Proin convallis vel felis et pharetra. Quisque magna justo, ullamcorper quis scelerisque eu, tincidunt vitae lectus. Nunc sed turpis justo. Aliquam porttitor, purus sit amet faucibus bibendum, ligula elit molestie purus, eu volutpat turpis sapien ac tellus. Fusce mauris arcu, volutpat ut aliquam ut, ultrices id ante. Morbi quis consectetur turpis. Integer semper lacinia urna id laoreet.\r\n\r\n\t\tUt mollis eget eros eu tempor. Phasellus nulla velit, sollicitudin eget massa a, tristique rutrum turpis. Vestibulum in dolor at elit pellentesque finibus. Nulla pharetra felis a varius molestie. Nam magna lectus, eleifend ac sagittis id, ornare id nibh. Praesent congue est non iaculis consectetur. Nullam dictum augue sit amet dignissim fringilla. Aenean semper justo velit. Sed nec lectus facilisis, sodales diam eget, imperdiet nunc. Quisque elementum nulla non orci interdum pharetra id quis arcu. Phasellus eu nunc lectus. Nam tellus tortor, pellentesque eget faucibus eu, laoreet quis odio. Pellentesque posuere in enim a blandit.\r\n\r\n\t\tDuis dignissim neque et ex iaculis, ac consequat diam gravida. In mi ex, blandit eget velit non, euismod feugiat arcu. Nulla nec fermentum neque, eget elementum mauris. Vivamus urna ligula, faucibus at facilisis sed, commodo sit amet urna. Sed porttitor feugiat purus ac tincidunt. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aliquam sollicitudin lacinia turpis quis placerat. Donec eget velit nibh. Duis vehicula orci lectus, eget rutrum arcu tincidunt et. Vestibulum ut pharetra lectus. Quisque lacinia nunc rhoncus neque venenatis consequat. Nulla rutrum ultricies sapien, sed semper lectus accumsan nec. Phasellus commodo faucibus lacinia. Donec auctor condimentum ligula. Sed quis viverra mauris.\r\n\r\n\t\tQuisque maximus justo dui, eget pretium lorem accumsan ac. Praesent eleifend faucibus orci et varius. Ut et molestie turpis, eu porta neque. Quisque vehicula, libero in tincidunt facilisis, purus eros pulvinar leo, sit amet eleifend justo ligula tempor lectus. Donec ac tortor sed ipsum tincidunt pulvinar id nec eros. In luctus purus cursus est dictum, ac sollicitudin turpis maximus. Maecenas a nisl velit. Nulla gravida lectus vel ultricies gravida. Proin vel bibendum magna. Donec aliquam ultricies quam, quis tempor nunc pharetra ut.\r\n\r\n\t\tPellentesque sit amet dui est. Aliquam erat volutpat. Integer vitae ullamcorper est, ut eleifend augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Quisque congue velit felis, vitae elementum nulla faucibus id. Donec lectus nibh, commodo eget nunc id, feugiat sagittis massa. In hac habitasse platea dictumst. Pellentesque volutpat molestie ultrices.\r\n\t";
+}

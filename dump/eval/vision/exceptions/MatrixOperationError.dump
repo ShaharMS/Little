@@ -1,0 +1,585 @@
+@:directlyUsed @:used
+class vision.exceptions.MatrixOperationError extends vision.exceptions.VisionException {
+
+	public function new(op:String, matrices:Array<vision.ds.Matrix2D>, offense:vision.exceptions.MatrixError) {
+		{
+			super(vision.exceptions.MatrixOperationError.errorByType(op, matrices, offense), "Matrix " + (op.charAt(0).toUpperCase() + op.substr(1, null)) + " Error");
+		};
+		{
+			this.__skipStack ++;
+		};
+	}
+
+	public static function errorByType(type:String, mats:Array<vision.ds.Matrix2D>, off:vision.exceptions.MatrixError) {
+		var sign = "";
+		switch ((type)) {
+			case "Add", "Addition", "add", "addition": sign = "+";
+			case "Div", "Division", "div", "division": sign = "÷";
+			case "Mult", "Multiplication", "mult", "multiplication": sign = "×";
+			case "Sub", "Subtraction", "sub", "subtraction": sign = "-";
+		};
+		var msg = "Cannot calculate:\n\n";
+		var ` = [];
+		{
+			var ` = 0;
+			var this = mats[0];
+			var maxLen = 1;
+			{
+				var ` = 0;
+				var ` = cast this.inner;
+				while ((` < `.length)) {
+					var item = `[`];
+					++ `;
+					var multiplier = Math.pow(10, 3);
+					var len = Std.string(Math.round(item * multiplier) / multiplier).length;
+					if ((len > maxLen)) maxLen = len;
+				};
+			};
+			++ maxLen;
+			var st = "";
+			{
+				var ` = 0;
+				var ` = maxLen * cast this.height + 2 * (cast this.height - 1);
+				while ((` < `)) {
+					var i = ` ++;
+					st += " ";
+				};
+			};
+			var top = "\n┌ " + st + " ┐";
+			var st = "";
+			{
+				var ` = 0;
+				var ` = maxLen * cast this.height + 2 * (cast this.height - 1);
+				while ((` < `)) {
+					var i = ` ++;
+					st += " ";
+				};
+			};
+			var bottom = "└ " + st + " ┘";
+			var rows = [""];
+			var counter = 0;
+			var floor = 0;
+			{
+				var ` = 0;
+				var ` = cast this.inner;
+				while ((` < `.length)) {
+					var item = `[`];
+					++ `;
+					if ((counter < cast this.height)) {
+						var multiplier = Math.pow(10, 3);
+						var itemString = Std.string(Math.round(item * multiplier) / multiplier);
+						var multiplier = Math.pow(10, 3);
+						if ((item != Math.round(item * multiplier) / multiplier)) itemString += "…";
+						if ((itemString.length < maxLen)) {
+							var st = "";
+							{
+								var ` = 0;
+								var ` = Math.floor((maxLen - itemString.length) / 2);
+								while ((` < `)) {
+									var i = ` ++;
+									st += " ";
+								};
+							};
+							var itemString = st + itemString;
+							var st = "";
+							{
+								var ` = 0;
+								var ` = Math.ceil((maxLen - itemString.length) / 2);
+								while ((` < `)) {
+									var i = ` ++;
+									st += " ";
+								};
+							};
+							itemString = itemString + st;
+						};
+						var add = ", " + itemString;
+						if ((counter == 0)) add = add.substr(2, null);
+						rows[floor] += add;
+						++ counter;
+					} else {
+						counter = 0;
+						++ floor;
+						rows[floor] = "";
+						var multiplier = Math.pow(10, 3);
+						var itemString = Std.string(Math.round(item * multiplier) / multiplier);
+						var multiplier = Math.pow(10, 3);
+						if ((item != Math.round(item * multiplier) / multiplier)) itemString += "…";
+						if ((itemString.length < maxLen)) {
+							var st = "";
+							{
+								var ` = 0;
+								var ` = Math.floor((maxLen - itemString.length) / 2);
+								while ((` < `)) {
+									var i = ` ++;
+									st += " ";
+								};
+							};
+							var itemString = st + itemString;
+							var st = "";
+							{
+								var ` = 0;
+								var ` = Math.ceil((maxLen - itemString.length) / 2);
+								while ((` < `)) {
+									var i = ` ++;
+									st += " ";
+								};
+							};
+							itemString = itemString + st;
+						};
+						var add = "" + itemString;
+						rows[floor] += add;
+						++ counter;
+					};
+				};
+			};
+			var string = top + "\n";
+			{
+				var ` = 0;
+				while ((` < rows.length)) {
+					var r = rows[`];
+					++ `;
+					string += "│ " + r + " │\n";
+				};
+			};
+			var array = (string += bottom).split("\n").length;
+			var this = mats[1];
+			var maxLen = 1;
+			{
+				var ` = 0;
+				var ` = cast this.inner;
+				while ((` < `.length)) {
+					var item = `[`];
+					++ `;
+					var multiplier = Math.pow(10, 3);
+					var len = Std.string(Math.round(item * multiplier) / multiplier).length;
+					if ((len > maxLen)) maxLen = len;
+				};
+			};
+			++ maxLen;
+			var st = "";
+			{
+				var ` = 0;
+				var ` = maxLen * cast this.height + 2 * (cast this.height - 1);
+				while ((` < `)) {
+					var i = ` ++;
+					st += " ";
+				};
+			};
+			var top = "\n┌ " + st + " ┐";
+			var st = "";
+			{
+				var ` = 0;
+				var ` = maxLen * cast this.height + 2 * (cast this.height - 1);
+				while ((` < `)) {
+					var i = ` ++;
+					st += " ";
+				};
+			};
+			var bottom = "└ " + st + " ┘";
+			var rows = [""];
+			var counter = 0;
+			var floor = 0;
+			{
+				var ` = 0;
+				var ` = cast this.inner;
+				while ((` < `.length)) {
+					var item = `[`];
+					++ `;
+					if ((counter < cast this.height)) {
+						var multiplier = Math.pow(10, 3);
+						var itemString = Std.string(Math.round(item * multiplier) / multiplier);
+						var multiplier = Math.pow(10, 3);
+						if ((item != Math.round(item * multiplier) / multiplier)) itemString += "…";
+						if ((itemString.length < maxLen)) {
+							var st = "";
+							{
+								var ` = 0;
+								var ` = Math.floor((maxLen - itemString.length) / 2);
+								while ((` < `)) {
+									var i = ` ++;
+									st += " ";
+								};
+							};
+							var itemString = st + itemString;
+							var st = "";
+							{
+								var ` = 0;
+								var ` = Math.ceil((maxLen - itemString.length) / 2);
+								while ((` < `)) {
+									var i = ` ++;
+									st += " ";
+								};
+							};
+							itemString = itemString + st;
+						};
+						var add = ", " + itemString;
+						if ((counter == 0)) add = add.substr(2, null);
+						rows[floor] += add;
+						++ counter;
+					} else {
+						counter = 0;
+						++ floor;
+						rows[floor] = "";
+						var multiplier = Math.pow(10, 3);
+						var itemString = Std.string(Math.round(item * multiplier) / multiplier);
+						var multiplier = Math.pow(10, 3);
+						if ((item != Math.round(item * multiplier) / multiplier)) itemString += "…";
+						if ((itemString.length < maxLen)) {
+							var st = "";
+							{
+								var ` = 0;
+								var ` = Math.floor((maxLen - itemString.length) / 2);
+								while ((` < `)) {
+									var i = ` ++;
+									st += " ";
+								};
+							};
+							var itemString = st + itemString;
+							var st = "";
+							{
+								var ` = 0;
+								var ` = Math.ceil((maxLen - itemString.length) / 2);
+								while ((` < `)) {
+									var i = ` ++;
+									st += " ";
+								};
+							};
+							itemString = itemString + st;
+						};
+						var add = "" + itemString;
+						rows[floor] += add;
+						++ counter;
+					};
+				};
+			};
+			var string = top + "\n";
+			{
+				var ` = 0;
+				while ((` < rows.length)) {
+					var r = rows[`];
+					++ `;
+					string += "│ " + r + " │\n";
+				};
+			};
+			var values = cast [array, (string += bottom).split("\n").length];
+			var max = cast values[0];
+			{
+				var ` = 0;
+				var ` = cast values.length;
+				while ((` < `)) {
+					var i = ` ++;
+					if ((cast values[i] > max)) max = cast values[i];
+				};
+			};
+			var ` = max;
+			while ((` < `)) {
+				var i = ` ++;
+				var tmp;
+				if ((cast mats[0].width + 3 > i)) {
+					var this = mats[0];
+					var maxLen = 1;
+					{
+						var ` = 0;
+						var ` = cast this.inner;
+						while ((` < `.length)) {
+							var item = `[`];
+							++ `;
+							var multiplier = Math.pow(10, 3);
+							var len = Std.string(Math.round(item * multiplier) / multiplier).length;
+							if ((len > maxLen)) maxLen = len;
+						};
+					};
+					++ maxLen;
+					var st = "";
+					{
+						var ` = 0;
+						var ` = maxLen * cast this.height + 2 * (cast this.height - 1);
+						while ((` < `)) {
+							var i = ` ++;
+							st += " ";
+						};
+					};
+					var top = "\n┌ " + st + " ┐";
+					var st = "";
+					{
+						var ` = 0;
+						var ` = maxLen * cast this.height + 2 * (cast this.height - 1);
+						while ((` < `)) {
+							var i = ` ++;
+							st += " ";
+						};
+					};
+					var bottom = "└ " + st + " ┘";
+					var rows = [""];
+					var counter = 0;
+					var floor = 0;
+					{
+						var ` = 0;
+						var ` = cast this.inner;
+						while ((` < `.length)) {
+							var item = `[`];
+							++ `;
+							if ((counter < cast this.height)) {
+								var multiplier = Math.pow(10, 3);
+								var itemString = Std.string(Math.round(item * multiplier) / multiplier);
+								var multiplier = Math.pow(10, 3);
+								if ((item != Math.round(item * multiplier) / multiplier)) itemString += "…";
+								if ((itemString.length < maxLen)) {
+									var st = "";
+									{
+										var ` = 0;
+										var ` = Math.floor((maxLen - itemString.length) / 2);
+										while ((` < `)) {
+											var i = ` ++;
+											st += " ";
+										};
+									};
+									var itemString = st + itemString;
+									var st = "";
+									{
+										var ` = 0;
+										var ` = Math.ceil((maxLen - itemString.length) / 2);
+										while ((` < `)) {
+											var i = ` ++;
+											st += " ";
+										};
+									};
+									itemString = itemString + st;
+								};
+								var add = ", " + itemString;
+								if ((counter == 0)) add = add.substr(2, null);
+								rows[floor] += add;
+								++ counter;
+							} else {
+								counter = 0;
+								++ floor;
+								rows[floor] = "";
+								var multiplier = Math.pow(10, 3);
+								var itemString = Std.string(Math.round(item * multiplier) / multiplier);
+								var multiplier = Math.pow(10, 3);
+								if ((item != Math.round(item * multiplier) / multiplier)) itemString += "…";
+								if ((itemString.length < maxLen)) {
+									var st = "";
+									{
+										var ` = 0;
+										var ` = Math.floor((maxLen - itemString.length) / 2);
+										while ((` < `)) {
+											var i = ` ++;
+											st += " ";
+										};
+									};
+									var itemString = st + itemString;
+									var st = "";
+									{
+										var ` = 0;
+										var ` = Math.ceil((maxLen - itemString.length) / 2);
+										while ((` < `)) {
+											var i = ` ++;
+											st += " ";
+										};
+									};
+									itemString = itemString + st;
+								};
+								var add = "" + itemString;
+								rows[floor] += add;
+								++ counter;
+							};
+						};
+					};
+					var string = top + "\n";
+					{
+						var ` = 0;
+						while ((` < rows.length)) {
+							var r = rows[`];
+							++ `;
+							string += "│ " + r + " │\n";
+						};
+					};
+					tmp = (string += bottom).split("\n")[i];
+				} else tmp = "";
+				var tmp;
+				if ((cast mats[1].width + 3 > i)) {
+					var this = mats[1];
+					var maxLen = 1;
+					{
+						var ` = 0;
+						var ` = cast this.inner;
+						while ((` < `.length)) {
+							var item = `[`];
+							++ `;
+							var multiplier = Math.pow(10, 3);
+							var len = Std.string(Math.round(item * multiplier) / multiplier).length;
+							if ((len > maxLen)) maxLen = len;
+						};
+					};
+					++ maxLen;
+					var st = "";
+					{
+						var ` = 0;
+						var ` = maxLen * cast this.height + 2 * (cast this.height - 1);
+						while ((` < `)) {
+							var i = ` ++;
+							st += " ";
+						};
+					};
+					var top = "\n┌ " + st + " ┐";
+					var st = "";
+					{
+						var ` = 0;
+						var ` = maxLen * cast this.height + 2 * (cast this.height - 1);
+						while ((` < `)) {
+							var i = ` ++;
+							st += " ";
+						};
+					};
+					var bottom = "└ " + st + " ┘";
+					var rows = [""];
+					var counter = 0;
+					var floor = 0;
+					{
+						var ` = 0;
+						var ` = cast this.inner;
+						while ((` < `.length)) {
+							var item = `[`];
+							++ `;
+							if ((counter < cast this.height)) {
+								var multiplier = Math.pow(10, 3);
+								var itemString = Std.string(Math.round(item * multiplier) / multiplier);
+								var multiplier = Math.pow(10, 3);
+								if ((item != Math.round(item * multiplier) / multiplier)) itemString += "…";
+								if ((itemString.length < maxLen)) {
+									var st = "";
+									{
+										var ` = 0;
+										var ` = Math.floor((maxLen - itemString.length) / 2);
+										while ((` < `)) {
+											var i = ` ++;
+											st += " ";
+										};
+									};
+									var itemString = st + itemString;
+									var st = "";
+									{
+										var ` = 0;
+										var ` = Math.ceil((maxLen - itemString.length) / 2);
+										while ((` < `)) {
+											var i = ` ++;
+											st += " ";
+										};
+									};
+									itemString = itemString + st;
+								};
+								var add = ", " + itemString;
+								if ((counter == 0)) add = add.substr(2, null);
+								rows[floor] += add;
+								++ counter;
+							} else {
+								counter = 0;
+								++ floor;
+								rows[floor] = "";
+								var multiplier = Math.pow(10, 3);
+								var itemString = Std.string(Math.round(item * multiplier) / multiplier);
+								var multiplier = Math.pow(10, 3);
+								if ((item != Math.round(item * multiplier) / multiplier)) itemString += "…";
+								if ((itemString.length < maxLen)) {
+									var st = "";
+									{
+										var ` = 0;
+										var ` = Math.floor((maxLen - itemString.length) / 2);
+										while ((` < `)) {
+											var i = ` ++;
+											st += " ";
+										};
+									};
+									var itemString = st + itemString;
+									var st = "";
+									{
+										var ` = 0;
+										var ` = Math.ceil((maxLen - itemString.length) / 2);
+										while ((` < `)) {
+											var i = ` ++;
+											st += " ";
+										};
+									};
+									itemString = itemString + st;
+								};
+								var add = "" + itemString;
+								rows[floor] += add;
+								++ counter;
+							};
+						};
+					};
+					var string = top + "\n";
+					{
+						var ` = 0;
+						while ((` < rows.length)) {
+							var r = rows[`];
+							++ `;
+							string += "│ " + r + " │\n";
+						};
+					};
+					tmp = (string += bottom).split("\n")[i];
+				} else tmp = "";
+				`.push([tmp, tmp]);
+			};
+		};
+		var rows = `;
+		var values = cast [cast mats[0].width + 2, cast mats[1].width + 2];
+		var max = cast values[0];
+		{
+			var ` = 0;
+			var ` = cast values.length;
+			while ((` < `)) {
+				var i = ` ++;
+				if ((cast values[i] > max)) max = cast values[i];
+			};
+		};
+		var signRow = Math.ceil(max / 2);
+		var currentRow = 0;
+		{
+			var ` = 0;
+			while ((` < rows.length)) {
+				var r = rows[`];
+				++ `;
+				haxe.Log.trace(r, {fileName : "vision/exceptions/MatrixOperationError.hx", lineNumber : 32, className : "vision.exceptions.MatrixOperationError", methodName : "errorByType"});
+				if ((r[0].length == 0)) {
+					var ` = [];
+					{
+						var ` = 0;
+						var ` = r[1].length;
+						while ((` < `)) {
+							var i = ` ++;
+							`.push(" ");
+						};
+					};
+					r[0] = `.join("");
+				};
+				if ((r[1].length == 0)) {
+					var ` = [];
+					{
+						var ` = 0;
+						var ` = r[0].length;
+						while ((` < `)) {
+							var i = ` ++;
+							`.push(" ");
+						};
+					};
+					r[1] = `.join("");
+				};
+				msg += "\t" + r[0] + "  ";
+				if ((currentRow == signRow)) msg += sign else msg += " ";
+				msg += "  " + r[1];
+				++ currentRow;
+				msg += "\n";
+			};
+		};
+		msg += "\n\t";
+		switch ((@:exhaustive off)) {
+			case 0: msg += "Width of first matrix (" + cast mats[0].height + ") is different from the height of the second (" + cast mats[1].width + ")";
+			case 1: msg += "Width & height of first matrix (" + cast mats[0].height + "×" + cast mats[0].width + ") are different from those of the second matrix (" + cast mats[1].height + "×" + cast mats[1].width + ")";
+			case 2: msg += "Width & height of first matrix (" + cast mats[0].height + "×" + cast mats[0].width + ") are different from those of the second matrix (" + cast mats[1].height + "×" + cast mats[1].width + ")";
+			case 3: msg += "Width of first matrix (" + cast mats[0].height + ") is different from the height of the second (" + cast mats[1].width + ")";
+		};
+		return msg;
+	}
+}

@@ -1,0 +1,225 @@
+@:directlyUsed @:used @:structInit
+class little.interpreter.memory.MemoryObject {
+
+	@:value({ type : NullValue, value : NullValue })
+	public function new(value:Null<little.parser.ParserTokens> = little.parser.ParserTokens.NullValue, props:Null<little.interpreter.memory.MemoryTree> = null, params:Null<Array<little.parser.ParserTokens>> = null, type:Null<little.parser.ParserTokens> = little.parser.ParserTokens.NullValue, external:Null<Bool> = null, condition:Null<Bool> = null, nonStatic:Null<Bool> = null, parent:Null<little.interpreter.memory.MemoryObject> = null, doc:Null<String> = null) {
+		this.nonStatic = true;
+		this.condition = false;
+		this.external = false;
+		this.type = little.parser.ParserTokens.NullValue;
+		this.params = null;
+		this.setterListeners = [];
+		this.value = little.parser.ParserTokens.NullValue;
+		if ((Type.enumEq(this.value, little.parser.ParserTokens.NullValue) && Type.enumEq(type, little.parser.ParserTokens.NullValue))) this.typeOnNextAssign = true;
+		this.set_value(value);
+		this.set_params(params);
+		this.type = if ((Type.enumEq(type, little.parser.ParserTokens.NullValue) && ! Type.enumEq(value, little.parser.ParserTokens.NullValue))) little.interpreter.Interpreter.getValueType(this.value) else type;
+		this.external = if ((external == null)) false else external;
+		this.condition = if ((condition == null)) false else condition;
+		this.nonStatic = if ((nonStatic == null)) true else nonStatic;
+		this.props = little.interpreter.memory._MemoryTree.MemoryTree_Impl_._new(this);
+		this.parent = if ((parent != null)) parent else this;
+		this.documentation = if ((doc != null)) doc else "";
+	}
+
+	@:optional
+	public var parent:little.interpreter.memory.MemoryObject;
+
+	@:value(NullValue) @:optional
+	public var value(default,set):little.parser.ParserTokens;
+
+	function set_value(val:little.parser.ParserTokens) {
+		if ((this.params == null)) {
+			var t = little.interpreter.Interpreter.getValueType(val);
+			if ((this.type != little.parser.ParserTokens.NullValue)) val = little.interpreter.Actions.type(val, this.type) else if ((this.typeOnNextAssign)) {
+				this.type = t;
+				if ((little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get_underlying(this.props) != null)) little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get_underlying(this.props).objType = little.interpreter.Interpreter.stringifyTokenValue(t, null);
+				this.typeOnNextAssign = false;
+			};
+		};
+		this.value = this.valueSetter(val);
+		{
+			var ` = 0;
+			var ` = this.setterListeners.copy();
+			while ((` < `.length)) {
+				var setter = `[`];
+				++ `;
+				setter(this.value);
+			};
+		};
+		return this.value;
+	}
+
+	@:optional
+	public dynamic function valueSetter(val:little.parser.ParserTokens) {
+		return val;
+	}
+
+	@:value([]) @:optional
+	public var setterListeners:Array<little.parser.ParserTokens -> Void>;
+
+	@:optional
+	public var props:little.interpreter.memory.MemoryTree;
+
+	@:value(null) @:optional
+	public var params(default,set):Array<little.parser.ParserTokens>;
+
+	@:value(NullValue) @:optional
+	public var type:little.parser.ParserTokens;
+
+	@:value(false) @:optional
+	public var external:Bool;
+
+	@:value(false) @:optional
+	public var condition:Bool;
+
+	@:optional
+	public var documentation:String;
+
+	@:value(true) @:optional
+	public var nonStatic:Bool;
+
+	function set_params(parameters:Array<little.parser.ParserTokens>) {
+		if ((parameters == null)) return this.params = null;
+		var ` = [];
+		{
+			var ` = 0;
+			var ` = parameters;
+			while ((` < `.length)) {
+				var v = `[`];
+				++ `;
+				var tmp;
+				switch ((enumIndex v)) {
+					case 0: {
+						var ` = v[0];
+						tmp = false;
+					};
+					case 1: tmp = false;
+					default: tmp = true
+				};
+				if ((tmp)) `.push(v);
+			};
+		};
+		return this.params = `;
+	}
+
+	var typeOnNextAssign:Bool;
+
+	public function use(parameters:little.parser.ParserTokens) {
+		if ((this.condition)) {
+			if ((Type.enumConstructor(cast this.value) != "ExternalCondition")) return little.parser.ParserTokens.ErrorMessage("Undefined external condition");
+			if ((Type.enumConstructor(parameters) != "PartArray")) return little.parser.ParserTokens.ErrorMessage("Incorrect parameter group format, given group format: " + Type.enumConstructor(parameters) + ", expected Format: `PartArray`");
+			var con = Type.enumParameters(cast Type.enumParameters(parameters)[0][0])[0];
+			var body = [Type.enumParameters(parameters)[0][1]];
+			if ((this.params != null)) {
+				var given = [];
+				if ((con.length != 0)) {
+					var currentParam = [];
+					var _params = con;
+					{
+						var ` = 0;
+						while ((` < _params.length)) {
+							var value = _params[`];
+							++ `;
+							switch ((enumIndex value)) {
+								case 0: {
+									var ` = value[0];
+									{
+										given.push(little.parser.ParserTokens.Expression(currentParam.copy(), null));
+										currentParam = [];
+									};
+								};
+								case 1: {
+									given.push(little.parser.ParserTokens.Expression(currentParam.copy(), null));
+									currentParam = [];
+								};
+								default: currentParam.push(value)
+							};
+						};
+					};
+					if ((currentParam.length != 0)) given.push(little.parser.ParserTokens.Expression(currentParam.copy(), null));
+				};
+				if ((given.length != this.params.length)) return little.parser.ParserTokens.ErrorMessage("Incorrect number of expressions in condition, expected: " + this.params.length + " (" + little.tools.PrettyPrinter.parseParamsString(this.params, null) + "), given: " + given.length + " (" + little.tools.PrettyPrinter.parseParamsString(given, false) + ")");
+				con = given;
+				var ` = this.value;
+				if ((enumIndex ` == 22)) {
+					var use = `[0];
+					return use(con, body);
+				} else return little.parser.ParserTokens.ErrorMessage("Incorrect external condition value format, expected: ExternalCondition, given: " + Std.string(this.value));
+			} else {
+				var ` = this.value;
+				if ((enumIndex ` == 22)) {
+					var use = `[0];
+					return use(con, body);
+				} else return little.parser.ParserTokens.ErrorMessage("Incorrect external condition value format, expected: ExternalCondition, given: " + Std.string(this.value));
+			};
+		};
+		if ((this.params == null)) return little.parser.ParserTokens.ErrorMessage("Cannot call definition");
+		if ((Type.enumConstructor(parameters) != "PartArray")) return little.parser.ParserTokens.ErrorMessage("Incorrect parameter group format, given group format: " + Type.enumConstructor(parameters) + ", expected Format: `PartArray`");
+		var given = [];
+		if ((Type.enumParameters(parameters)[0].length != 0)) {
+			var currentParam = [];
+			var _params = Type.enumParameters(parameters)[0];
+			{
+				var ` = 0;
+				while ((` < _params.length)) {
+					var value = _params[`];
+					++ `;
+					switch ((enumIndex value)) {
+						case 0: {
+							var ` = value[0];
+							{
+								given.push(little.parser.ParserTokens.Expression(currentParam.copy(), null));
+								currentParam = [];
+							};
+						};
+						case 1: {
+							given.push(little.parser.ParserTokens.Expression(currentParam.copy(), null));
+							currentParam = [];
+						};
+						default: currentParam.push(value)
+					};
+				};
+			};
+			if ((currentParam.length != 0)) given.push(little.parser.ParserTokens.Expression(currentParam.copy(), null));
+		};
+		if ((given.length != this.params.length)) return little.parser.ParserTokens.ErrorMessage("Incorrect number of parameters, expected: " + this.params.length + " (" + little.tools.PrettyPrinter.parseParamsString(this.params, null) + "), given: " + given.length + " (" + little.tools.PrettyPrinter.parseParamsString(given, false) + ")");
+		if ((this.external)) {
+			if ((Type.enumConstructor(cast this.value) != "External")) return little.parser.ParserTokens.ErrorMessage("Undefined external function");
+			return cast Type.enumParameters(cast this.value)[0](given);
+		} else {
+			var paramsDecl = [];
+			{
+				var ` = 0;
+				var ` = given.length;
+				while ((` < `)) {
+					var i = ` ++;
+					paramsDecl.push(little.parser.ParserTokens.Write([this.params[i]], given[i]));
+				};
+			};
+			paramsDecl.push(little.parser.ParserTokens.SplitLine);
+			var body = null;
+			if ((Type.enumConstructor(cast this.value) == "Block")) {
+				body = Type.enumParameters(cast this.value)[0];
+				body = paramsDecl.concat(body);
+			} else {
+				paramsDecl.push(this.value);
+				body = paramsDecl;
+			};
+			return little.interpreter.Actions.run(body);
+		};
+	}
+
+	public inline function get(propName:String) {
+		return little.interpreter.memory._MemoryTree.MemoryTree_Impl_.get(this.props, propName);
+	}
+
+	public inline function set(propName:String, object:little.interpreter.memory.MemoryObject) {
+		little.interpreter.memory._MemoryTree.MemoryTree_Impl_.set(this.props, propName, object);
+	}
+
+	public function getType() {
+		if ((this.type != little.parser.ParserTokens.NullValue)) return this.type;
+		return little.interpreter.Interpreter.getValueType(this.value);
+	}
+}

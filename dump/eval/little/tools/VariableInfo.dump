@@ -1,0 +1,1 @@
+typedef little.tools.VariableInfo = { ?valueSetter : Null<(little.interpreter.memory.MemoryObject, little.parser.ParserTokens) -> little.parser.ParserTokens>, ?valueGetter : Null<little.interpreter.memory.MemoryObject -> little.parser.ParserTokens>, ?type : Null<String>, ?staticValue : Null<little.parser.ParserTokens>, ?allowWriting : Null<Bool> }

@@ -1,0 +1,1 @@
+typedef little.tools.ItemInfo = { returnType : String, parameters : Array<{ type : String, optional : Bool, name : String }>, name : String, isStatic : Bool, fieldType : String, doc : String, className : String, allowWrite : Bool }

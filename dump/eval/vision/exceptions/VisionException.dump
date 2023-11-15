@@ -1,0 +1,12 @@
+@:used
+class vision.exceptions.VisionException extends haxe.Exception {
+
+	public function new(message:String, type:String) {
+		{
+			super("" + type + ": " + message, null, null);
+		};
+		{
+			this.__skipStack ++;
+		};
+	}
+}

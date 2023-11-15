@@ -1,0 +1,126 @@
+@:directlyUsed @:used
+class vision.algorithms.GaussJordan {
+
+	public static function invert(matrix:vision.ds.Matrix2D) {
+		var n = matrix.height;
+		var identity = vision.algorithms.GaussJordan.createIdentityMatrix(n);
+		var augmentedMatrix = vision.algorithms.GaussJordan.augmentMatrix(@:implicitCast vision.ds._Matrix2D.Matrix2D_Impl_.to_array_array_float(matrix), @:implicitCast vision.ds._Matrix2D.Matrix2D_Impl_.to_array_array_float(identity));
+		{
+			var ` = 0;
+			var ` = n;
+			while ((` < `)) {
+				var i = ` ++;
+				var pivotRow = i;
+				{
+					var ` = i + 1;
+					var ` = n;
+					while ((` < `)) {
+						var j = ` ++;
+						if ((Math.abs(augmentedMatrix.inner[i * augmentedMatrix.height + j]) > Math.abs(augmentedMatrix.inner[i * augmentedMatrix.height + pivotRow]))) pivotRow = j;
+					};
+				};
+				if ((Math.abs(augmentedMatrix.inner[i * augmentedMatrix.height + pivotRow]) < 1e-12)) throw "Matrix is not invertible";
+				if ((pivotRow != i)) vision.algorithms.GaussJordan.swapRows(@:implicitCast vision.ds._Matrix2D.Matrix2D_Impl_.to_array_array_float(augmentedMatrix), i, pivotRow);
+				var pivot = augmentedMatrix.inner[i * augmentedMatrix.height + i];
+				{
+					var ` = 0;
+					var ` = 2 * n;
+					while ((` < `)) {
+						var j = ` ++;
+						augmentedMatrix.inner[i + j * augmentedMatrix.height] = pivot;
+					};
+				};
+				{
+					var ` = 0;
+					var ` = n;
+					while ((` < `)) {
+						var j = ` ++;
+						if ((j != i)) {
+							var factor = augmentedMatrix.inner[i * augmentedMatrix.height + j];
+							{
+								var ` = 0;
+								var ` = 2 * n;
+								while ((` < `)) {
+									var k = ` ++;
+									augmentedMatrix.inner[j + k * augmentedMatrix.height] = factor * augmentedMatrix.inner[k * augmentedMatrix.height + i];
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+		var ` = [];
+		{
+			var ` = n + 1;
+			var ` = 2 * n;
+			while ((` < `)) {
+				var l = ` ++;
+				`.push(l);
+			};
+		};
+		var invertedMatrix = vision.algorithms.GaussJordan.extractMatrix(augmentedMatrix, n, `);
+		return invertedMatrix;
+	}
+
+	static function createIdentityMatrix(size:Int) {
+		var matrix = [];
+		{
+			var ` = 0;
+			var ` = size;
+			while ((` < `)) {
+				var i = ` ++;
+				matrix.push(new Array());
+				{
+					var ` = 0;
+					var ` = size;
+					while ((` < `)) {
+						var j = ` ++;
+						if ((i == j)) matrix[i].push(1.0) else matrix[i].push(0.0);
+					};
+				};
+			};
+		};
+		return @:implicitCast vision.ds._Matrix2D.Matrix2D_Impl_.from_array_array_float(matrix);
+	}
+
+	static function augmentMatrix(matrix:Array<Array<Float>>, augmentation:Array<Array<Float>>) {
+		var augmentedMatrix = [];
+		{
+			var ` = 0;
+			var ` = matrix.length;
+			while ((` < `)) {
+				var i = ` ++;
+				augmentedMatrix.push(matrix[i].concat(augmentation[i]));
+			};
+		};
+		return @:implicitCast vision.ds._Matrix2D.Matrix2D_Impl_.from_array_array_float(augmentedMatrix);
+	}
+
+	static function swapRows(matrix:Array<Array<Float>>, row1:Int, row2:Int) {
+		var temp = matrix[row1];
+		matrix[row1] = matrix[row2];
+		matrix[row2] = temp;
+	}
+
+	static function extractMatrix(matrix:vision.ds.Matrix2D, rows:Int, columns:Array<Int>) {
+		var extractedMatrix = [];
+		{
+			var ` = 0;
+			var ` = rows;
+			while ((` < `)) {
+				var i = ` ++;
+				extractedMatrix.push(new Array());
+				{
+					var ` = 0;
+					while ((` < columns.length)) {
+						var j = columns[`];
+						++ `;
+						extractedMatrix[i].push(matrix.inner[j * matrix.height + i]);
+					};
+				};
+			};
+		};
+		return @:implicitCast vision.ds._Matrix2D.Matrix2D_Impl_.from_array_array_float(extractedMatrix);
+	}
+}

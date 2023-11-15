@@ -1,0 +1,146 @@
+@:directlyUsed @:used
+class UnitTests {
+
+	@:value("\x1B[31m")
+	static var RED:String = "\x1B[31m";
+
+	@:value("\x1B[32m")
+	static var GREEN:String = "\x1B[32m";
+
+	@:value("\x1B[33m")
+	static var YELLOW:String = "\x1B[33m";
+
+	@:value("\x1B[34m")
+	static var BLUE:String = "\x1B[34m";
+
+	@:value("\x1B[35m")
+	static var MAGENTA:String = "\x1B[35m";
+
+	@:value("\x1B[36m")
+	static var CYAN:String = "\x1B[36m";
+
+	@:value("\x1B[37m")
+	static var WHITE:String = "\x1B[37m";
+
+	@:value("\x1B[0m")
+	static var RESET:String = "\x1B[0m";
+
+	@:value("\x1B[1m")
+	static var BOLD:String = "\x1B[1m";
+
+	@:value("\x1B[3m")
+	static var ITALIC:String = "\x1B[3m";
+
+	@:value("\x1B[4m")
+	static var UNDERLINE:String = "\x1B[4m";
+
+	public static function run() {
+		var testFunctions = [UnitTests.test1, UnitTests.test2, UnitTests.test3, UnitTests.test4, UnitTests.test5, UnitTests.test6, UnitTests.test7, UnitTests.test8];
+		var i = 1;
+		{
+			var ` = 0;
+			while ((` < testFunctions.length)) {
+				var func = testFunctions[`];
+				++ `;
+				var result = func();
+				Sys.println("" + UnitTests.CYAN + UnitTests.BOLD + " Unit Test " + i + ":" + UnitTests.RESET + " " + UnitTests.BOLD + UnitTests.ITALIC + (if ((result.success)) UnitTests.GREEN else UnitTests.RED) + result.testName + UnitTests.RESET);
+				Sys.println("    - " + UnitTests.RESET + UnitTests.BOLD + UnitTests.WHITE + " Result: " + UnitTests.ITALIC + (if ((result.success)) UnitTests.GREEN else UnitTests.RED) + (if ((result.success)) "Success" else "Failure") + UnitTests.RESET);
+				if ((! result.success)) {
+					Sys.println("        - " + UnitTests.RESET + UnitTests.BOLD + UnitTests.WHITE + " Expected:" + UnitTests.RESET + " " + UnitTests.ITALIC + UnitTests.GREEN + Std.string(result.expected) + UnitTests.RESET);
+					Sys.println("        - " + UnitTests.RESET + UnitTests.BOLD + UnitTests.WHITE + " Returned:" + UnitTests.RESET + " " + UnitTests.ITALIC + UnitTests.RED + Std.string(result.returned) + UnitTests.RESET);
+					Sys.print("        - " + UnitTests.RESET + UnitTests.BOLD + UnitTests.WHITE + " Code:" + UnitTests.RESET + " \n            " + little.tools.TextTools.replace(result.code, "\n", "\n            ") + UnitTests.RESET + "\n");
+					Sys.print("        - " + UnitTests.RESET + UnitTests.BOLD + UnitTests.WHITE + " Abstract Syntax Tree:" + UnitTests.RESET + "\n            " + little.tools.TextTools.replace(little.tools.PrettyPrinter.printParserAst(little.parser.Parser.parse(little.lexer.Lexer.lex(result.code)), null), "\n", "\n            ") + UnitTests.RESET + "\n");
+					Sys.print("        - " + UnitTests.RESET + UnitTests.BOLD + UnitTests.WHITE + " Stdout:" + UnitTests.RESET + "\n            " + little.tools.TextTools.replace(little.interpreter.Runtime.stdout.output, "\n", "\n            ") + UnitTests.RESET + "\n");
+				};
+				if ((! result.success)) Sys.exit(1);
+				Sys.sleep(0.2);
+				++ i;
+			};
+		};
+	}
+
+	public static function test1() {
+		var code = "print((5 + (3 - 2)) * 5^2 + 3 * 4 / 4 + 4! + 8 + -2)";
+		little.Little.run(code, null);
+		var result = little.interpreter.Runtime.stdout.stdoutTokens.pop();
+		return {testName : "Basic Math", success : Type.enumEq(result, little.parser.ParserTokens.Decimal("183")), returned : result, expected : little.parser.ParserTokens.Decimal("183"), code : code};
+	}
+
+	public static function test2() {
+		var code = "define x as Number = 3, define y as Decimal, define z\nprint(x + \", \" + y.type + \", \" + z.type + \", \" + z)";
+		little.Little.run(code, null);
+		var result = little.interpreter.Runtime.stdout.stdoutTokens.pop();
+		return {testName : "Variable declaration", success : Type.enumEq(result, little.parser.ParserTokens.Characters("3, Decimal, Anything, nothing")), returned : result, expected : little.parser.ParserTokens.Characters("3, Decimal, Anything, nothing"), code : code};
+	}
+
+	public static function test3() {
+		var code = "action x1() = { print(1) }\naction x2(define x as Number) = { print(x) }\naction x21(define x as Number) = { return x }\naction x3() = { print(1 + x21(5)) }\n\nx1(), x2(5), x3()";
+		little.Little.run(code, null);
+		var result = little.parser.ParserTokens.PartArray(little.interpreter.Runtime.stdout.stdoutTokens);
+		var exp = little.parser.ParserTokens.PartArray([little.parser.ParserTokens.Number("1"), little.parser.ParserTokens.Number("5"), little.parser.ParserTokens.Number("6")]);
+		var ` = [];
+		{
+			`.push(Type.enumEq(Type.enumParameters(result)[0][0], Type.enumParameters(exp)[0][0]));
+			`.push(Type.enumEq(Type.enumParameters(result)[0][1], Type.enumParameters(exp)[0][1]));
+			`.push(Type.enumEq(Type.enumParameters(result)[0][2], Type.enumParameters(exp)[0][2]));
+		};
+		return {testName : "Function declaration", success : ! Lambda.has(`, false), returned : result, expected : little.parser.ParserTokens.Characters("1, 5, 6"), code : code};
+	}
+
+	public static function test4() {
+		var code = "define x as Number = 3\ndefine x.y = 5\ndefine x.y.z as Decimal = x.y\nprint(x.y.z + x.y + x)";
+		little.Little.run(code, null);
+		var result = little.interpreter.Runtime.stdout.stdoutTokens.pop();
+		return {testName : "Property access", success : Type.enumEq(result, little.parser.ParserTokens.Decimal("13")), returned : result, expected : little.parser.ParserTokens.Decimal("13"), code : code};
+	}
+
+	public static function test5() {
+		var code = "define i = 0\nwhile (i <= 5) { print (i); i = i + 1}\nfor (define j from 0 to 10 jump 3) print(j)";
+		little.Little.run(code, null);
+		var result = little.parser.ParserTokens.PartArray(little.interpreter.Runtime.stdout.stdoutTokens);
+		var exp = little.parser.ParserTokens.PartArray([little.parser.ParserTokens.Number("0"), little.parser.ParserTokens.Number("1"), little.parser.ParserTokens.Number("2"), little.parser.ParserTokens.Number("3"), little.parser.ParserTokens.Number("4"), little.parser.ParserTokens.Number("5"), little.parser.ParserTokens.Number("0"), little.parser.ParserTokens.Number("3"), little.parser.ParserTokens.Number("6"), little.parser.ParserTokens.Number("9")]);
+		var ` = [];
+		{
+			`.push(Type.enumEq(Type.enumParameters(exp)[0][0], Type.enumParameters(result)[0][0]));
+			`.push(Type.enumEq(Type.enumParameters(exp)[0][1], Type.enumParameters(result)[0][1]));
+			`.push(Type.enumEq(Type.enumParameters(exp)[0][2], Type.enumParameters(result)[0][2]));
+			`.push(Type.enumEq(Type.enumParameters(exp)[0][3], Type.enumParameters(result)[0][3]));
+			`.push(Type.enumEq(Type.enumParameters(exp)[0][4], Type.enumParameters(result)[0][4]));
+			`.push(Type.enumEq(Type.enumParameters(exp)[0][5], Type.enumParameters(result)[0][5]));
+			`.push(Type.enumEq(Type.enumParameters(exp)[0][6], Type.enumParameters(result)[0][6]));
+			`.push(Type.enumEq(Type.enumParameters(exp)[0][7], Type.enumParameters(result)[0][7]));
+			`.push(Type.enumEq(Type.enumParameters(exp)[0][8], Type.enumParameters(result)[0][8]));
+			`.push(Type.enumEq(Type.enumParameters(exp)[0][9], Type.enumParameters(result)[0][9]));
+		};
+		return {testName : "Loops", success : ! Lambda.has(`, false), returned : result, expected : exp, code : code};
+	}
+
+	public static function test6() {
+		var code = "define i = 4, if (i != 0) print(true)\nafter (i == 6) print(\"i is 6\"), whenever (i == i) print(\"i has changed\")\ni = i + 1, i = i + 1";
+		little.Little.run(code, null);
+		var result = little.parser.ParserTokens.PartArray(little.interpreter.Runtime.stdout.stdoutTokens);
+		var exp = little.parser.ParserTokens.PartArray([little.parser.ParserTokens.TrueValue, little.parser.ParserTokens.Characters("i has changed"), little.parser.ParserTokens.Characters("i is 6"), little.parser.ParserTokens.Characters("i has changed")]);
+		var ` = [];
+		{
+			`.push(Type.enumEq(Type.enumParameters(exp)[0][0], Type.enumParameters(result)[0][0]));
+			`.push(Type.enumEq(Type.enumParameters(exp)[0][1], Type.enumParameters(result)[0][1]));
+			`.push(Type.enumEq(Type.enumParameters(exp)[0][2], Type.enumParameters(result)[0][2]));
+			`.push(Type.enumEq(Type.enumParameters(exp)[0][3], Type.enumParameters(result)[0][3]));
+		};
+		return {testName : "Events and conditionals", success : ! Lambda.has(`, false), returned : result, expected : exp, code : code};
+	}
+
+	public static function test7() {
+		var code = "define x = {define y = 0; y = y + 5; (6^2 * y)}, print(x)";
+		little.Little.run(code, null);
+		var result = little.interpreter.Runtime.stdout.stdoutTokens.pop();
+		return {testName : "Code blocks", success : Type.enumEq(result, little.parser.ParserTokens.Number("180")), returned : result, expected : little.parser.ParserTokens.Number("180"), code : code};
+	}
+
+	public static function test8() {
+		var code = "\"\"\" defines a new definition \"\"\"\ndefine x = nothing\nprint(x.documentation)";
+		little.Little.run(code, null);
+		var result = little.interpreter.Actions.evaluate(little.interpreter.Runtime.stdout.stdoutTokens.pop(), null);
+		return {testName : "Documentation", success : Type.enumEq(result, little.parser.ParserTokens.Characters("defines a new definition")), returned : result, expected : little.parser.ParserTokens.Characters("defines a new definition"), code : code};
+	}
+}

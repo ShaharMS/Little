@@ -1,0 +1,37 @@
+@:directlyUsed @:used @:enum
+private class little.tools._Layer.Layer_Impl_ {
+
+	@:value(cast "Lexer") @:impl @:enum
+	public static inline var LEXER:little.tools.Layer = cast "Lexer";
+
+	@:value(cast "Parser") @:impl @:enum
+	public static inline var PARSER:little.tools.Layer = cast "Parser";
+
+	@:value(cast "Interpreter") @:impl @:enum
+	public static inline var INTERPRETER:little.tools.Layer = cast "Interpreter";
+
+	@:value(cast "Interpreter, Token Value Stringifier") @:impl @:enum
+	public static inline var INTERPRETER_TOKEN_VALUE_STRINGIFIER:little.tools.Layer = cast "Interpreter, Token Value Stringifier";
+
+	@:value(cast "Interpreter, Token Identifier Stringifier") @:impl @:enum
+	public static inline var INTERPRETER_TOKEN_IDENTIFIER_STRINGIFIER:little.tools.Layer = cast "Interpreter, Token Identifier Stringifier";
+
+	@:value(cast "Interpreter, Value Evaluator") @:impl @:enum
+	public static inline var INTERPRETER_VALUE_EVALUATOR:little.tools.Layer = cast "Interpreter, Value Evaluator";
+
+	@:value(cast "Interpreter, Expression Evaluator") @:impl @:enum
+	public static inline var INTERPRETER_EXPRESSION_EVALUATOR:little.tools.Layer = cast "Interpreter, Expression Evaluator";
+
+	public static function getIndexOf(layer:String) {
+		switch ((layer)) {
+			case "Interpreter": return 3;
+			case "Interpreter, Expression Evaluator": return 5;
+			case "Interpreter, Token Identifier Stringifier": return 6;
+			case "Interpreter, Token Value Stringifier": return 6;
+			case "Interpreter, Value Evaluator": return 4;
+			case "Lexer": return 1;
+			case "Parser": return 2;
+			default: return 999999999
+		};
+	}
+}

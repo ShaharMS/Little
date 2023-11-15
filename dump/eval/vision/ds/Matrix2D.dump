@@ -1,0 +1,2 @@
+@:used @:forward(get, set, fill, width, height)
+abstract vision.ds.Matrix2D from vision.ds.Array2D<Float> to vision.ds.Array2D<Float> {}

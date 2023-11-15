@@ -16,6 +16,7 @@ class Keywords {
     public static var TYPE_FLOAT:String = "Decimal";
     public static var TYPE_BOOLEAN:String = "Boolean";
     public static var TYPE_STRING:String = "Characters";
+
     /**
         represent the "type" type:
         for example: `5` is of type `Number`, and `Number` is of type `Type`

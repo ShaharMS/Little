@@ -1,0 +1,2 @@
+@:used @:transitive
+abstract haxe.extern.EitherType<T1, T2> from haxe.extern.EitherType.T1  from haxe.extern.EitherType.T2 to haxe.extern.EitherType.T1  to haxe.extern.EitherType.T2 {}

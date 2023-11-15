@@ -1,0 +1,11 @@
+@:keep @:used @:coreApi
+class sys.io.FileOutput extends haxe.io.Output {
+
+	public function close
+
+	public function flush
+
+	public function writeByte
+
+	public function writeBytes
+}

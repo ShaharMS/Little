@@ -1,0 +1,2 @@
+@:coreType
+abstract eval.luv.Stream to eval.luv.Handle {}
