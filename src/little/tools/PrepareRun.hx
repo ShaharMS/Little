@@ -1,5 +1,6 @@
 package little.tools;
 
+import haxe.xml.Access;
 import little.interpreter.Actions;
 import vision.tools.MathTools;
 import little.interpreter.memory.MemoryTree;
@@ -23,7 +24,9 @@ class PrepareRun {
 	public static var prepared:Bool = false;
 
 	public static function addTypes() {
-		Little.plugin.registerHaxeClass(Data.getClassInfo("Math"), "Math");
+		var xml = new Access(Xml.createDocument());
+		Little.plugin.registerHaxeClass(Data.getClassInfo("vision.tools.MathTools"), "Math");
+		Little.plugin.registerHaxeClass(Data.getClassInfo("haxe.xml.Access"), "Xml");
 		Little.plugin.registerHaxeClass(Data.getClassInfo("String"), TYPE_STRING);
 		Little.plugin.registerHaxeClass(Data.getClassInfo("Array"), "Array"); // Experimental
 		Interpreter.memory.set(TYPE_DYNAMIC, new MemoryObject(Module(TYPE_DYNAMIC), [], null, Module(TYPE_MODULE), true));

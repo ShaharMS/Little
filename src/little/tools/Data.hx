@@ -1,9 +1,6 @@
 package little.tools;
 
-import haxe.macro.Type.TypedExprDef;
 import haxe.Json;
-import haxe.macro.Context;
-import haxe.macro.ExprTools;
 import haxe.macro.Expr;
 
 class Data {
@@ -40,8 +37,11 @@ class Data {
 						case AccCtor: false;
 					}
 				}
-				case FMethod(k): {
-					false;
+				case FMethod(kind): {
+					switch kind {
+						case MethDynamic: true;
+						case _: false;
+					}
 				}
 			}
 		}
@@ -67,6 +67,7 @@ class Data {
 										stats.push(macro {
 											className: $v{path},
 											name: $v{field.name},
+											doc: $v{field.doc},
 											parameters: $a{
 												args.map(param -> macro {
 													name: $v{param.name},
@@ -84,6 +85,7 @@ class Data {
 										stats.push(macro {
 											className: $v{path},
 											name: $v{field.name},
+											doc: $v{field.doc},
 											fieldType: "var",
 											parameters: [],
 											returnType: $v{getTypeString(field.type)},
@@ -96,10 +98,8 @@ class Data {
 							processingStatics = true;
 						}
 						
-						return macro ($a{stats} : Array<{className:String, name:String, parameters:Array<{name:String, type:String, optional:Bool}>, returnType:String, fieldType:String, allowWrite:Bool, isStatic:Bool}>);
+						return macro ($a{stats} : Array<{className:String, name:String, doc:String, parameters:Array<{name:String, type:String, optional:Bool}>, returnType:String, fieldType:String, allowWrite:Bool, isStatic:Bool}>);
 					}
-						// var statics = inst.get().statics.get();
-						// return macro $v{statics.map(s -> s.name)};
 					case _: haxe.macro.Context.error(e + 'Is not a class. Did you misspell the type/package?', e.pos);
 				}
 			case _:

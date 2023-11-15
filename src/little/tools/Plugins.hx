@@ -548,6 +548,7 @@ class Plugins {
 typedef ItemInfo = {
 	className:String,
 	name:String,
+    doc:String,
 	parameters:Array<{name:String, type:String, optional:Bool}>,
 	returnType:String,
 	fieldType:String,
