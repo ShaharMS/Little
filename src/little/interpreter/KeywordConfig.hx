@@ -41,14 +41,18 @@ class KeywordConfig {
     @:optional public var TYPE_UNKNOWN:String = "Unknown";
 
     @:optional public var CONDITION_TYPES:Array<String> = [];
-    @:optional public var SPECIAL_OR_MULTICHAR_SIGNS:Array<String> = ["++", "--", "**", "+=", "-=", ">=", "<=", "==", "&&", "||", "^^", "!="];
+    public var RECOGNIZED_SIGNS:Array<String> = [];
 
     /**
-    	When changing this to a multi-char sign (such as "->"), remember to also push that sign to `SPECIAL_OR_MULTICHAR_SIGNS`, so it would be parsed correctly.
+    	When changing this to a multi-char sign (such as "->"), remember to also push that sign to `RECOGNIZED_SIGNS`, so it would be parsed correctly.
     **/
     @:optional public var PROPERTY_ACCESS_SIGN:String = ".";
     @:optional public var EQUALS_SIGN:String = "==";
     @:optional public var NOT_EQUALS_SIGN:String = "!=";
+	@:optional public var LARGER_SIGN:String = ">";
+	@:optional public var SMALLER_SIGN:String = "<";
+	@:optional public var LARGER_EQUALS_SIGN:String = ">=";
+	@:optional public var SMALLER_EQUALS_SIGN:String = "<=";
     @:optional public var XOR_SIGN:String = "^^";
     @:optional public var OR_SIGN:String = "||";
     @:optional public var AND_SIGN:String = "&&";

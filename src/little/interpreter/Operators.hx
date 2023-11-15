@@ -214,7 +214,7 @@ class Operators {
 		for (i in 0...op.length)
 			if (!Lexer.signs.contains(op.charAt(i)))
 				Lexer.signs.push(op.charAt(i));
-		Keywords.SPECIAL_OR_MULTICHAR_SIGNS.push(op);
+		Keywords.RECOGNIZED_SIGNS.push(op);
 		switch operatorType {
 			case LHS_RHS:
 				{

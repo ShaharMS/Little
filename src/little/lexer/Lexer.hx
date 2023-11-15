@@ -104,13 +104,13 @@ class Lexer {
             switch token {
                 case Sign(char): {
                     // First: reorder the keyword array by length
-                    SPECIAL_OR_MULTICHAR_SIGNS = TextTools.sortByLength(SPECIAL_OR_MULTICHAR_SIGNS);
-                    SPECIAL_OR_MULTICHAR_SIGNS.reverse();
+                    var recognizedSigns = TextTools.sortByLength(RECOGNIZED_SIGNS.concat([PROPERTY_ACCESS_SIGN]));
+                    recognizedSigns.reverse();
 
                     var shouldContinue = false;
                     while (char.length > 0) {
                         shouldContinue = false;
-                        for (sign in SPECIAL_OR_MULTICHAR_SIGNS) {
+                        for (sign in recognizedSigns) {
                             if (char.startsWith(sign)) {
                                 char = char.substring(sign.length);
                                 post.push(Sign(sign));

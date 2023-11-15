@@ -44,14 +44,18 @@ class Keywords {
 
     public static var CONDITION_TYPES:Array<String> = [];
     public static var ELSE:String = "else";
-    public static var SPECIAL_OR_MULTICHAR_SIGNS:Array<String> = ["++", "--", "**", "+=", "-=", ">=", "<=", "==", "&&", "||", "^^", "!="];
+    public static var RECOGNIZED_SIGNS:Array<String> = [];
 
     /**
-    	When changing this to a multi-char sign (such as "->"), remember to also push that sign to `SPECIAL_OR_MULTICHAR_SIGNS`, so it would be parsed correctly.
+    	When changing this to a multi-char sign (such as "->"), remember to also push that sign to `RECOGNIZED_SIGNS`, so it would be parsed correctly.
     **/
     public static var PROPERTY_ACCESS_SIGN:String = ".";
     public static var EQUALS_SIGN:String = "==";
     public static var NOT_EQUALS_SIGN:String = "!=";
+	public static var LARGER_SIGN:String = ">";
+	public static var SMALLER_SIGN:String = "<";
+	public static var LARGER_EQUALS_SIGN:String = ">=";
+	public static var SMALLER_EQUALS_SIGN:String = "<=";
     public static var XOR_SIGN:String = "^^";
     public static var OR_SIGN:String = "||";
     public static var AND_SIGN:String = "&&";
@@ -90,10 +94,14 @@ class Keywords {
         READ_FUNCTION_NAME: "read",
         RUN_CODE_FUNCTION_NAME: "run",
         TYPE_UNKNOWN: "Unknown",
-        SPECIAL_OR_MULTICHAR_SIGNS: ["++", "--", "**", "+=", "-=", ">=", "<=", "==", "&&", "||", "^^", "!="],
+        RECOGNIZED_SIGNS: [],
         PROPERTY_ACCESS_SIGN: ".",
         EQUALS_SIGN: "==",
         NOT_EQUALS_SIGN: "!=",
+		LARGER_SIGN: ">",
+		SMALLER_SIGN: "<",
+		LARGER_EQUALS_SIGN: ">=",
+		SMALLER_EQUALS_SIGN: "<=",
         XOR_SIGN: "^^",
         OR_SIGN: "||",
         AND_SIGN: "&&",
@@ -126,10 +134,14 @@ class Keywords {
         READ_FUNCTION_NAME = set.READ_FUNCTION_NAME;
         RUN_CODE_FUNCTION_NAME = set.RAISE_ERROR_FUNCTION_NAME;
         TYPE_UNKNOWN = set.TYPE_UNKNOWN;
-        SPECIAL_OR_MULTICHAR_SIGNS = set.SPECIAL_OR_MULTICHAR_SIGNS;
+        RECOGNIZED_SIGNS = set.RECOGNIZED_SIGNS;
         PROPERTY_ACCESS_SIGN = set.PROPERTY_ACCESS_SIGN;
         EQUALS_SIGN = set.EQUALS_SIGN;
         NOT_EQUALS_SIGN = set.NOT_EQUALS_SIGN;
+		LARGER_SIGN = set.LARGER_SIGN;
+		SMALLER_SIGN = set.SMALLER_SIGN;
+		LARGER_EQUALS_SIGN = set.LARGER_EQUALS_SIGN;
+		SMALLER_EQUALS_SIGN = set.SMALLER_EQUALS_SIGN;
         XOR_SIGN = set.XOR_SIGN;
         OR_SIGN = set.OR_SIGN;
         AND_SIGN = set.AND_SIGN;

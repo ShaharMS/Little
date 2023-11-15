@@ -1,6 +1,5 @@
 package little.interpreter;
 
-import eval.luv.Stream;
 import little.lexer.Lexer;
 import little.interpreter.memory.MemoryObject;
 import haxe.EnumTools;
@@ -27,7 +26,7 @@ class Runtime {
     /**
         The next token to be interpreted
     **/
-    public static var currentToken(default, null):ParserTokens;
+    public static var currentToken(default, null):ParserTokens = Module(Little.keywords.MAIN_MODULE_NAME);
 
     /**
     	The module in which tokens are currently interpreted.
