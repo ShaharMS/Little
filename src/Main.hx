@@ -47,13 +47,14 @@ class Main {
 		// output.innerHTML = little.tools.PrettyPrinter.printParserAst(little.parser.Parser.parse(little.lexer.Lexer.lex(untyped text.value)));
 		// text.innerHTML = code;
 		new JsExample();
-		#elseif !unit
+		#elseif unit
 		UnitTests.run();
 		#elseif sys
 		while (true) {
 			Sys.print("  >> ");
 			var input = Sys.stdin().readLine();
 			if (input == "ml!") {
+				Sys.command("cls");
 				Sys.print("---------MULTI-LINE MODE---------\n");
 				var code = "";
 				while (true) {
@@ -73,11 +74,18 @@ class Main {
 						}
 						Sys.print(code.replaceFirst("\n", "  >> ").replace("\n", "\n  >> ") + "\n");
 					} else if (input == "default!") {
+						Sys.command("cls");
 						Sys.println("---------SINGLE-LINE MODE---------");
 						break;
 					} else if (input == "clear!") {
 						code = "";
+						Sys.command("cls");
 						Sys.println("---------MULTI-LINE MODE---------");
+					} else if (input == "clearLine!") {
+						Sys.command("cls");
+						Sys.println("---------MULTI-LINE MODE---------");
+						Sys.print(code.replaceFirst("\n", "  >> ").replace("\n", "\n  >> ") + "\n");
+						code = code.split("\n").slice(0, -1).join("\n");
 					} else {
 						code += "\n" + input;
 					}

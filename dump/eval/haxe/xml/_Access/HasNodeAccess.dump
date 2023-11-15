@@ -1,1 +1,0 @@
-private abstract haxe.xml._Access.HasNodeAccess from Xml {}

@@ -1,5 +1,6 @@
 package little.tools;
 
+import little.interpreter.Actions;
 import little.interpreter.Operators;
 import haxe.exceptions.ArgumentException;
 import little.interpreter.Operators.OperatorType;
@@ -25,7 +26,7 @@ class Plugins {
 			Little.plugin.registerHaxeClass(Data.getClassInfo("Math"));
 
 		Will let you access all of Math's static fields & methods through little:
-		```cpp
+		```haxe
 		print(Math.sqrt(4) + Math.max(2, {define i = 3, i}))
 		```
 
@@ -41,8 +42,8 @@ class Plugins {
 		var fieldValues = new Map<String, Dynamic>();
 		var fieldFunctions = new Map<String, Dynamic>();
 		var cls = Type.resolveClass(stats[0].className);
-		// trace(cls, Type.getClassFields(cls));
-		// Iterate over the fields of the Math class
+
+		// Iterate over the fields of the class
 		for (s in stats) {
             if (s.isStatic) {
                 var field = s.name;
@@ -134,6 +135,45 @@ class Plugins {
 		}
 
 		Interpreter.memory.set(littleClassName, motherObj);
+	}
+
+	/**
+		Registers a haxe function inside Little code.
+		@param stats Data about the function, obtained using `Data.getFunctionInfo("functionName", "moduleName")`.
+		@param littleName When provided, remaps the function name in Little code. This name allows property access, such as `SomeType.functionName`
+	**/
+	public static function registerHaxeFunction(stats:ItemInfo, ?littleName:String) {
+		var cls = Type.resolveClass(stats.className);
+		var func = Reflect.field(cls, stats.name);
+
+		var motherObj = new MemoryObject(Module(stats.className), [], null, Module(TYPE_MODULE), true);
+		if (littleName != null) {
+			motherObj = Actions.memory.object;
+			var objects = littleName.split(Little.keywords.PROPERTY_ACCESS_SIGN);
+			stats.name = objects.pop();
+			for (name in objects) {
+				if (motherObj.get(name) != null) {
+					motherObj = motherObj.get(name);
+				} else {
+					var child = new MemoryObject(NullValue, [], null, Module(TYPE_DYNAMIC), true); // No reason to create a type, it's not used as one.
+					motherObj.set(name, child);
+					motherObj = child;
+				}
+			}
+		}
+
+		if (stats.isStatic) {
+			var value:ParserTokens = External((args) -> {
+				return Conversion.toLittleValue(Reflect.callMethod(null, func, [for (arg in args) Conversion.toHaxeValue(arg)]));
+			});
+
+			var type:ParserTokens = Identifier(Conversion.toLittleType(stats.returnType));
+			var params = [];
+			for (param in stats.parameters) 
+				params.push(Variable(Identifier(param.name), Identifier(param.type)));
+
+			motherObj.props.set(stats.name, new MemoryObject(value, [] /*Should this be implemented?*/, params, type, true, motherObj));
+		}
 	}
 
 

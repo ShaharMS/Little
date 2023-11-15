@@ -1,1 +1,0 @@
-private typedef haxe._Rest.NativeRest<T> = Array<haxe._Rest.NativeRest.T>

@@ -1,1 +1,0 @@
-abstract vision.tools.Number from Float  from Int  from UInt to Float  to Int  to UInt {}

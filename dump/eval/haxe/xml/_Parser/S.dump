@@ -1,2 +1,0 @@
-@:enum
-private abstract haxe.xml._Parser.S {}

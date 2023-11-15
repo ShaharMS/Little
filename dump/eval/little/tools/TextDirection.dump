@@ -1,6 +1,0 @@
-@:used @:flatEnum
-enum little.tools.TextDirection {
-	RTL;
-	LTR;
-	UNDETERMINED;
-}

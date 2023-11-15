@@ -1,2 +1,0 @@
-@:transitive
-abstract UInt from Int to Int {}

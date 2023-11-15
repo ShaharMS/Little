@@ -31,7 +31,7 @@ class PrepareRun {
 		Interpreter.memory.set(TYPE_DYNAMIC, new MemoryObject(Module(TYPE_DYNAMIC), [], null, Module(TYPE_MODULE), true));
 		Interpreter.memory.set(TYPE_INT, new MemoryObject(Module(TYPE_INT), [], null, Module(TYPE_MODULE), true));
 		Interpreter.memory.set(TYPE_FLOAT, new MemoryObject(Module(TYPE_FLOAT), [], null, Module(TYPE_MODULE), true));
-		Interpreter.memory.set(TYPE_BOOLEAN, new MemoryObject(Module(TYPE_INT), [], null, Module(TYPE_BOOLEAN), true));
+		Interpreter.memory.set(TYPE_BOOLEAN, new MemoryObject(Module(TYPE_BOOLEAN), [], null, Module(TYPE_MODULE), true));
 	}
 
 	public static function addProps() {

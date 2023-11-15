@@ -303,13 +303,17 @@ class Actions {
                     returnVal = write(assignees, value);
                 }
                 case FunctionCall(name, params): {
+					var currentLine = Runtime.line;
                     returnVal = call(name, params);
+					setLine(currentLine);
                 }
                 case Return(value, type): {
                     return evaluate(value);
                 }
                 case Block(body, type): {
+					var currentLine = Runtime.line;
                     returnVal = run(body);
+					setLine(currentLine);
                 }
                 case PropertyAccess(name, property): {
                     returnVal = evaluate(token);
@@ -358,10 +362,17 @@ class Actions {
                 return calculate(parts);
             }
             case Block(body, t): {
+				var currentLine = Runtime.line;
                 var returnVal = run(body);
+				setLine(currentLine);
                 if (t == null) return evaluate(returnVal, dontThrow);
 				return evaluate(type(returnVal, t), dontThrow);
             }
+            case FunctionCall(name, params): {
+				var currentLine = Runtime.line;
+				return call(name, params);
+				setLine(currentLine);
+			}
             case PartArray(parts): {
                 return PartArray([for (p in parts) evaluate(p, dontThrow)]);
             }
@@ -371,7 +382,6 @@ class Actions {
             case TypeDeclaration(value, t): return type(value, t);
             case Write(assignees, value): return write(assignees, value);
             case Read(name): return read(name);
-            case FunctionCall(name, params): return call(name, params);
             case Condition(name, exp, body): return condition(name, exp, body);
             case Variable(name, type, doc): return declareVariable(name, type, doc);
             case Function(name, params, type, doc): return declareFunction(name, params, type, doc);

@@ -1,1 +1,0 @@
-typedef little.tools.FunctionInfo = { ?type : Null<String>, expectedParameters : haxe.extern.EitherType<String, Array<little.parser.ParserTokens>>, callback : (little.interpreter.memory.MemoryObject, Array<little.parser.ParserTokens>) -> little.parser.ParserTokens, ?allowWriting : Null<Bool> }

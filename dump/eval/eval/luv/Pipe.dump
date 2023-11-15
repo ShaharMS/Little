@@ -1,2 +1,0 @@
-@:using(eval.luv.Handle) @:using(eval.luv.Stream) @:coreType
-abstract eval.luv.Pipe to eval.luv.Handle  to eval.luv.Stream  to eval.luv.TStream<eval.luv.Pipe>  to eval.luv.SocketHandle {}

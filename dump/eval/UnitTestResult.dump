@@ -1,1 +1,0 @@
-typedef UnitTestResult = { testName : String, success : Bool, returned : little.parser.ParserTokens, expected : little.parser.ParserTokens, code : String }

@@ -1,9 +1,0 @@
-@:keep @:directlyUsed @:used
-private class eval.luv._Handle.Handle_Impl_ {
-
-	@:noExpr
-	public static function ref
-
-	@:noExpr
-	public static function unref
-}

@@ -1,6 +1,0 @@
-@:keep @:used
-class haxe.EntryPoint {
-
-	@:keep
-	public static function run() {}
-}
