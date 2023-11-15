@@ -6,6 +6,7 @@ import little.parser.Tokens.ParserTokens;
 using little.tools.TextTools;
 
 class Extensions {
+
 	public static function identifier(token:ParserTokens):String {
 		return Interpreter.stringifyTokenIdentifier(token);
 	}
@@ -20,6 +21,10 @@ class Extensions {
 
 	public static function parameter(token:ParserTokens, index:Int):Dynamic {
 		return token.getParameters()[index];
+	}
+
+	public static function containsAny<T>(array:Array<T>, func:T -> Bool):Bool {
+		return array.filter(func).length > 0;
 	}
 }
 

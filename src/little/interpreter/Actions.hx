@@ -5,7 +5,6 @@ import haxe.macro.Context.Message;
 import haxe.xml.Parser;
 import haxe.xml.Access;
 import little.tools.Layer;
-import little.Keywords.*;
 import little.interpreter.memory.*;
 import little.interpreter.Runtime;
 import little.parser.Tokens.ParserTokens;
@@ -88,11 +87,11 @@ class Actions {
         function access(onObject:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
             switch prop {
                 case PropertyAccess(_, property): {
-                    objName += '$PROPERTY_ACCESS_SIGN${prop.value()}';
+                    objName += '${Little.keywords.PROPERTY_ACCESS_SIGN}${prop.value()}';
                     // trace(object, prop.value(), property);
                     if (onObject.get(prop.value()) == null) {
                         // We can already know that object.name.property is null
-                        error('Unable to create `$objName$PROPERTY_ACCESS_SIGN${property.identifier()}`: `$objName` Does not contain property `${property.identifier()}`.');
+                        error('Unable to create `$objName${Little.keywords.PROPERTY_ACCESS_SIGN}${property.identifier()}`: `$objName` Does not contain property `${property.identifier()}`.');
                         return null;
                     }
                     return access(onObject.get(prop.value()), property, objName);
@@ -132,11 +131,11 @@ class Actions {
         function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
             switch prop {
                 case PropertyAccess(_, nestedProperty): {
-                    objName += '$PROPERTY_ACCESS_SIGN${prop.value()}';
+                    objName += '${Little.keywords.PROPERTY_ACCESS_SIGN}${prop.value()}';
                     // trace(object, prop.value(), property);
                     if (object.get(prop.value()) == null) {
                         // We can already know that object.name.property is null
-                        error('Unable to create `$objName$PROPERTY_ACCESS_SIGN${nestedProperty.identifier()}`: `$objName` Does not contain property `${nestedProperty.identifier()}`.');
+                        error('Unable to create `$objName${Little.keywords.PROPERTY_ACCESS_SIGN}${nestedProperty.identifier()}`: `$objName` Does not contain property `${nestedProperty.identifier()}`.');
                         return null;
                     }
                     return access(object.get(prop.value()), nestedProperty, objName);
@@ -177,9 +176,7 @@ class Actions {
             return error('No Such Condition:  `${name.value()}`');
         } 
         else {
-			trace(name.value(), memory.get(name.value()));
             var o = memory.get(name.value()).use(PartArray([conditionParams, body]));
-			trace(o);
 			if (o.equals(NullValue)) return o;
             if (o.getName() == "ErrorMessage") return error(o.value());
             return o;
@@ -196,17 +193,17 @@ class Actions {
     	@return The value given, evaluated using `Actions.evaluate(value)`
     **/
     public static function write(assignees:Array<ParserTokens>, value:ParserTokens):ParserTokens {
-        var v = evaluate(value);
+        var v = null;
+        if (assignees.containsAny(x -> x.is(FUNCTION))) v = value;
+        else v = evaluate(value);
         for (a in assignees) {
             var assignee = Interpreter.accessObject(a, memory);
             if (assignee == null) continue;
             if (assignee.params != null)
                 assignee.value = value;
             else {
-                trace(value, v, Interpreter.getValueType(v));
                 if (v.getName() != "ErrorMessage") {
                     assignee.value = v;
-                    trace(assignee.value, assignee.type);
                 }
             }
         }
@@ -222,7 +219,6 @@ class Actions {
 		@param params The parameters of the function. Should be a `ParserTokens.PartArray(parts:Array<ParserTokens>)`
 	**/
     public static function call(name:ParserTokens, params:ParserTokens):ParserTokens {
-		trace(params);
         if (memory.get(name.value()) == null) {
             return error('No Such Function: `${name.value()}`');
         } 
@@ -257,11 +253,18 @@ class Actions {
         var valT = Interpreter.getValueType(val);
         var t = evaluate(type);
 
+        if (!t.is(MODULE) || !valT.is(MODULE)) {
+            trace(val, valT, t);
+        }
         if (t.equals(valT)) {
             return val;
         } else {
-            warn('Mismatch at type declaration: the value $value has been declared as being of type $t, while its type is $valT. This might cause issues.', INTERPRETER_VALUE_EVALUATOR);
-            return val;
+            var castFunc = Interpreter.accessObject(value).get(Little.keywords.TYPE_CAST_FUNCTION_PREFIX + t.value());
+            if (castFunc == null) {
+                warn('Mismatch at type declaration: the value $value has been declared as being of type $t, while its type is $valT. This might cause issues.', INTERPRETER_VALUE_EVALUATOR);
+                return val;
+            }
+            return castFunc.use(PartArray([]));
         }
     }
 

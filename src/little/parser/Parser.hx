@@ -795,7 +795,7 @@ class Parser {
                         return null;
                     }
                     var exp:ParserTokens = post[post.length - 1].getParameters()[1]; //Condition(name:ParserTokens, ->exp:ParserTokens<-, body:ParserTokens, type:ParserTokens)
-                    exp = Expression([exp, Sign("!="), TrueValue], Identifier(TYPE_BOOLEAN));
+                    exp = Expression([exp, Sign("!="), TrueValue], Module(TYPE_BOOLEAN));
                     i++;
                     var body:ParserTokens = pre[i];
                     switch body {

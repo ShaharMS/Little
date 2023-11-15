@@ -21,7 +21,9 @@ class MemoryObject {
             // Allow side-effect free code running
         if (params == null) {
             var t = Interpreter.getValueType(val);
-            if (typeOnNextAssign) {
+            if (type != NullValue) {
+                val = Actions.type(val, type);
+            } else if (typeOnNextAssign) {
                 type = t;
                 if (props.underlying != null) props.underlying.objType = Interpreter.stringifyTokenValue(t);
 				typeOnNextAssign = false;
@@ -195,11 +197,22 @@ class MemoryObject {
     }
 
     /**
-    	Set object propery
+    	Set object property
     	@param propName property name as string
     	@param object a `MemoryObject`
     **/
     public inline function set(propName:String, object:MemoryObject) {
         return props.set(propName, object);       
+    }
+
+
+    /**
+        Returns the type of this object:
+         - if `object.type` is `NullValue`, `Interpreter.getValueType()` is returned
+         - if `object.type` is not `NullValue`, `object.type` is returned
+    **/
+    public function getType() {
+        if (this.type != NullValue) return this.type;
+        return Interpreter.getValueType(this.value);
     }
 }

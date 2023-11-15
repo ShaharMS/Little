@@ -1,5 +1,6 @@
 package;
 
+import little.interpreter.Actions;
 import sys.io.File;
 import sys.FileSystem;
 import little.tools.PrettyPrinter;
@@ -47,13 +48,13 @@ class UnitTests {
 		for (func in testFunctions) {
 			var result = func();
 			Sys.println('$CYAN$BOLD Unit Test $i:$RESET $BOLD$ITALIC${if (result.success) GREEN else RED}${result.testName}$RESET');
-			Sys.println('    - $RESET$WHITE Result: $ITALIC${if (result.success) GREEN else RED}${if (result.success) "Success" else "Failure"}$RESET');
+			Sys.println('    - $RESET$BOLD$WHITE Result: $ITALIC${if (result.success) GREEN else RED}${if (result.success) "Success" else "Failure"}$RESET');
 			if (!result.success) {
-				Sys.println('        - $RESET$WHITE Expected: $ITALIC$GREEN${result.expected}$RESET');
-				Sys.println('        - $RESET$WHITE Returned: $ITALIC$RED${result.returned}$RESET');
-				Sys.print('        - $RESET$WHITE Code: \n            ${result.code.replace("\n", "\n            ")}$RESET\n');
-				Sys.print('        - $RESET$WHITE Abstract Syntax Tree:\n            ${PrettyPrinter.printParserAst(Parser.parse(Lexer.lex(result.code))).replace("\n", "\n            ")}$RESET\n');
-				Sys.print('        - $RESET$WHITE Stdout:\n            ${Runtime.stdout.output.replace("\n", "\n            ")}$RESET\n');
+				Sys.println('        - $RESET$BOLD$WHITE Expected:$RESET $ITALIC$GREEN${result.expected}$RESET');
+				Sys.println('        - $RESET$BOLD$WHITE Returned:$RESET $ITALIC$RED${result.returned}$RESET');
+				Sys.print('        - $RESET$BOLD$WHITE Code:$RESET \n            ${result.code.replace("\n", "\n            ")}$RESET\n');
+				Sys.print('        - $RESET$BOLD$WHITE Abstract Syntax Tree:$RESET\n            ${PrettyPrinter.printParserAst(Parser.parse(Lexer.lex(result.code))).replace("\n", "\n            ")}$RESET\n');
+				Sys.print('        - $RESET$BOLD$WHITE Stdout:$RESET\n            ${Runtime.stdout.output.replace("\n", "\n            ")}$RESET\n');
 			}
 
 			if (!result.success) {
@@ -137,7 +138,7 @@ class UnitTests {
 	}
 
 	public static function test6():UnitTestResult {
-		var code = 'define i = 4, if (i.toBoolean()) print(true)\nafter (i == 6) print("i is 6"), whenever (i == i) print("i has changed")\ni = i + 1, i = i + 1';
+		var code = 'define i = 4, if (i != 0) print(true)\nafter (i == 6) print("i is 6"), whenever (i == i) print("i has changed")\ni = i + 1, i = i + 1';
 		Little.run(code);
 		var result = PartArray(Runtime.stdout.stdoutTokens);
 		var exp = PartArray([TrueValue, Characters("i has changed"), Characters("i is 6"), Characters("i has changed")]);
@@ -166,7 +167,7 @@ class UnitTests {
 	public static function test8():UnitTestResult {
 		var code = '""" defines a new definition """\ndefine x = nothing\nprint(x.documentation)';
 		Little.run(code);
-		var result = Runtime.stdout.stdoutTokens.pop();
+		var result = Actions.evaluate(Runtime.stdout.stdoutTokens.pop());
 		return {
 			testName: "Documentation",
 			success: result.equals(Characters("defines a new definition")),

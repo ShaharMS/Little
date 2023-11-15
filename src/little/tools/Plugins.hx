@@ -79,7 +79,7 @@ class Plugins {
 		// trace(fieldValues);
 		// trace(fieldFunctions);
 
-		var motherObj = new MemoryObject(Module(littleClassName), [], null, Identifier(TYPE_MODULE), true); 
+		var motherObj = new MemoryObject(Module(littleClassName), [], null, Module(TYPE_MODULE), true); 
 
 		for (instance in stats) {
 			//trace(instance.fieldType, instance.allowWrite, instance.name, instance.parameters, instance.returnType);
@@ -269,7 +269,7 @@ class Plugins {
         );
 
         if (actionModuleName != null) {
-            Interpreter.memory.set(actionModuleName, new MemoryObject(Module(actionModuleName), [], null, Identifier(TYPE_MODULE), true, Interpreter.memory.object));
+            Interpreter.memory.set(actionModuleName, new MemoryObject(Module(actionModuleName), [], null, Module(TYPE_MODULE), true, Interpreter.memory.object));
             memObject.parent = Interpreter.memory.get(actionModuleName);
             Interpreter.memory.get(actionModuleName).props.set(actionName, memObject);
         } else Interpreter.memory.set(actionName, memObject);
@@ -302,11 +302,11 @@ class Plugins {
     public static function registerProperty(propertyName:String, onObject:String, isType:Bool, ?valueOption1:FunctionInfo, ?valueOption2:VariableInfo) {
         if (isType) {
             if (!Interpreter.memory.exists(onObject) || Interpreter.memory.silentGet(onObject).value.getName() != "Module") {
-                Interpreter.memory.set(onObject, new MemoryObject(Module(onObject), [], null, Identifier(TYPE_MODULE), true));
+                Interpreter.memory.set(onObject, new MemoryObject(Module(onObject), [], null, Module(TYPE_MODULE), true));
             }
         } else {
             if (!Interpreter.memory.exists(onObject)) {
-                Interpreter.memory.set(onObject, new MemoryObject(NullValue, [], null, Identifier(TYPE_DYNAMIC), true));
+                Interpreter.memory.set(onObject, new MemoryObject(NullValue, [], null, Module(TYPE_DYNAMIC), true));
             }
         }
 

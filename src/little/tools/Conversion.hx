@@ -27,6 +27,7 @@ class Conversion {
     }
 
     public static function toLittleValue(val:Dynamic):ParserTokens {
+        if (val == null) return NullValue;
         var type = toLittleType(extractHaxeType(Type.typeof(val)));
         return switch type {
             case (_ == TYPE_BOOLEAN => true): {
@@ -41,7 +42,10 @@ class Conversion {
             case (_ == TYPE_STRING => true): {
                 Characters(Std.string(val));
             }
-            case _: NullValue;
+            case _: {
+                trace("WARNING: Unparsable value: " + val + ". Returning NullValue");
+                NullValue;
+            }
         }
     }
 
