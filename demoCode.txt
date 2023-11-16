@@ -1,0 +1,34 @@
+
+"""
+    My Custom Class
+"""
+class Foo = {
+
+    define self.public = 5
+    define Foo.static = 5.6
+
+    """
+        Constructor
+    """
+    action self.create() = {
+        
+    }
+
+    action self.somePublicAction(define someParameter, define param as Number = 2) = {
+        print(self + " Called for " + someParameter + " and " param)
+    }
+
+    action Foo.someStaticFunction() = {
+        print(Foo.documentation)
+    }
+}
+
+action someRandomAction() = {
+
+}
+
+for (define x from 0 to -100 jump 10) print(x)
+
+while (true != false) print({define z = 3, z})
+
+print((5 + (3 - 2)) * 5^2 + 3 * 4 / 4 + 4! + 8 + -2)

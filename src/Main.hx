@@ -30,22 +30,6 @@ class Main {
 
 	static function main() {
 		#if js
-		// var text = Browser.document.getElementById("input");
-		// var output = Browser.document.getElementById("output-parser");
-		// var stdout = Browser.document.getElementById("output");
-		// trace(text, output);
-		// text.addEventListener("keyup", (_) -> {
-		// 	try {
-		// 		output.innerHTML = little.tools.PrettyPrinter.printParserAst(little.parser.Parser.parse(little.lexer.Lexer.lex(untyped text.value)));
-		// 	} catch (e) {}
-
-		// 	try {
-		// 		Little.run(untyped text.value, true);
-		// 		stdout.innerHTML = Runtime.stdout;
-		// 	} catch (e) {}
-		// });
-		// output.innerHTML = little.tools.PrettyPrinter.printParserAst(little.parser.Parser.parse(little.lexer.Lexer.lex(untyped text.value)));
-		// text.innerHTML = code;
 		new JsExample();
 		#elseif unit
 		UnitTests.run();
