@@ -439,6 +439,20 @@ class Plugins {
         
     }
 
+	public static function registerStaticField(fieldName:String, type:String, ?valueOption1:StaticFunctionInfo, ?valueOption2:VariableInfo) {
+		var type = Interpreter.memory.get(type);
+
+		if (valueOption1 != null) {
+			var value = External(params -> {
+				
+			});
+		}
+	}
+
+	public static function registerInstanceField(fieldName:String, type:String, ?valueOption1:FunctionInfo, ?valueOption2:VariableInfo) {
+		
+	}
+
     static function combosHas(combos:Array<{lhs:String, rhs:String}>, lhs:String, rhs:String) {
         for (c in combos) if (c.rhs == rhs && c.lhs == lhs) return true;
         return false;
@@ -598,13 +612,23 @@ typedef ItemInfo = {
 
 typedef FunctionInfo = {
     expectedParameters:EitherType<String, Array<ParserTokens>>,
-    /**
-    	@param MemoryObject the object
-    **/
     callback:(MemoryObject, Array<ParserTokens>) -> ParserTokens, //parent, params to value
     ?allowWriting:Bool,
     ?type:String
 }
+typedef StaticFunctionInfo = {
+    expectedParameters:EitherType<String, Array<ParserTokens>>,
+    callback:(Array<ParserTokens>) -> ParserTokens, //parent, params to value
+    ?allowWriting:Bool,
+    ?type:String
+}
+typedef InstanceFunctionInfo = {
+    expectedParameters:EitherType<String, Array<ParserTokens>>,
+    callback:(thisObject:MemoryObject, Array<ParserTokens>) -> ParserTokens, //parent, params to value
+    ?allowWriting:Bool,
+    ?type:String
+}
+
 typedef VariableInfo = {
     ?staticValue:ParserTokens, 
     ?valueGetter:MemoryObject -> ParserTokens, //parent to value
