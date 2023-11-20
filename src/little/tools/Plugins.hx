@@ -384,7 +384,7 @@ class Plugins {
 
             if (info.allowWriting == false) {// null defaults to true here, so cant use !info.allowWriting
                 memObject.valueSetter = function (v) {
-                    Runtime.throwError(ErrorMessage('Directly editing the property $onObject$PROPERTY_ACCESS_SIGN$propertyName is disallowed. New value is ignored, returning original value.'));
+                    Runtime.warn(ErrorMessage('Directly editing the property $onObject$PROPERTY_ACCESS_SIGN$propertyName is disallowed. New value is ignored, returning original value.'));
                     return try {
                         var val = if (info.staticValue != null) info.staticValue;
                         else info.valueGetter(memObject.parent);
@@ -439,19 +439,6 @@ class Plugins {
         
     }
 
-	public static function registerStaticField(fieldName:String, type:String, ?valueOption1:StaticFunctionInfo, ?valueOption2:VariableInfo) {
-		var type = Interpreter.memory.get(type);
-
-		if (valueOption1 != null) {
-			var value = External(params -> {
-				
-			});
-		}
-	}
-
-	public static function registerInstanceField(fieldName:String, type:String, ?valueOption1:FunctionInfo, ?valueOption2:VariableInfo) {
-		
-	}
 
     static function combosHas(combos:Array<{lhs:String, rhs:String}>, lhs:String, rhs:String) {
         for (c in combos) if (c.rhs == rhs && c.lhs == lhs) return true;
@@ -620,7 +607,7 @@ typedef StaticFunctionInfo = {
     expectedParameters:EitherType<String, Array<ParserTokens>>,
     callback:(Array<ParserTokens>) -> ParserTokens, //parent, params to value
     ?allowWriting:Bool,
-    ?type:String
+	?valueType:String
 }
 typedef InstanceFunctionInfo = {
     expectedParameters:EitherType<String, Array<ParserTokens>>,
