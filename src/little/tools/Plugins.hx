@@ -439,6 +439,163 @@ class Plugins {
         
     }
 
+	
+	public static function registerStaticField(fieldName:String, type:String, ?valueOption1:StaticFunctionInfo, ?valueOption2:StaticVariableInfo) {
+		var typeObject = Interpreter.memory.get(type);
+
+		if (valueOption1 != null) {
+			var value = External(params -> {
+				var prevModule = Runtime.currentModule;
+				Actions.setModule(type);
+				return try {
+					var val = valueOption1.callback(params);
+					Actions.setModule(prevModule);
+					val;
+				} catch (e) {
+					ErrorMessage('External Function Error: ' + e.details());
+				}
+			});
+			var params = if (valueOption1.expectedParameters is String) {
+                Parser.parse(Lexer.lex(valueOption1.expectedParameters));
+            } else valueOption1.expectedParameters;
+			
+			var obj = new MemoryObject(
+				value, 
+				[], 
+				params, 
+				Module(valueOption1.valueType) ?? Interpreter.getValueType(value), 
+				true, false, false, 
+				typeObject, 
+				valueOption1.doc
+			);
+			if (!valueOption1.allowWriting) {
+				obj.valueSetter = function (v) {
+					Runtime.warn(ErrorMessage('Directly editing the property $type$PROPERTY_ACCESS_SIGN$fieldName is disallowed. New value is ignored, returning original value.'));
+					return v;
+				}
+			}
+
+			typeObject.set(fieldName, obj);
+		} else {
+			var value:ParserTokens, obj:MemoryObject;
+			if (valueOption2.staticValue != null) value = valueOption2.staticValue;
+			else {
+				value = External(params -> {
+					var prevModule = Runtime.currentModule;
+					return try {
+						Actions.setModule(type);
+						var val = valueOption2.valueGetter(obj);
+						Actions.setModule(prevModule);
+						val;
+					} catch (e) {
+						ErrorMessage('External Variable Error: ' + e.details());
+					}
+				});
+				
+				obj = new MemoryObject(
+					value,
+					[],
+					[],
+					Module(valueOption2.valueType) ?? Interpreter.getValueType(value),
+					true,
+					false,
+					false,
+					typeObject,
+					valueOption2.doc
+				);
+
+				
+				if (!valueOption1.allowWriting) {
+					obj.valueSetter = function (v) {
+						Runtime.warn(ErrorMessage('Directly editing the property $type$PROPERTY_ACCESS_SIGN$fieldName is disallowed. New value is ignored, returning original value.'));
+						return v;
+					}
+				}
+
+				typeObject.set(fieldName, obj);
+			}
+		}
+	}
+
+	public static function registerInstanceField(fieldName:String, type:String, ?valueOption1:InstanceFunctionInfo, ?valueOption2:InstanceVariableInfo) {
+		var typeObject = Interpreter.memory.get(type);
+
+		var obj:MemoryObject;
+		if (valueOption1 != null) {
+			var value = External(params -> {
+				var prevModule = Runtime.currentModule;
+				Actions.setModule(type);
+				return try {
+					var val = valueOption1.callback(obj, params);
+					Actions.setModule(prevModule);
+					val;
+				} catch (e) {
+					ErrorMessage('External Function Error: ' + e.details());
+				}
+			});
+			var params = if (valueOption1.expectedParameters is String) {
+				Parser.parse(Lexer.lex(valueOption1.expectedParameters));
+			} else valueOption1.expectedParameters;
+
+			obj = new MemoryObject(
+				value,
+				[],
+				params,
+				Module(valueOption1.valueType) ?? Interpreter.getValueType(value),
+				true,
+				false,
+				true,
+				typeObject,
+				valueOption1.doc
+			);
+
+			if (!valueOption1.allowWriting) {
+				obj.valueSetter = function (v) {
+					Runtime.warn(ErrorMessage('Directly editing the property $type$PROPERTY_ACCESS_SIGN$fieldName is disallowed. New value is ignored, returning original value.'));
+					return v;
+				}
+			}
+
+			typeObject.set(fieldName, obj);
+		} else {
+			var value:ParserTokens;
+			if (valueOption2.staticValue != null) value = valueOption2.staticValue;
+			else {
+				value = External(params -> {
+					var prevModule = Runtime.currentModule;
+					Actions.setModule(type);
+					return try {
+						var val = valueOption2.valueGetter(obj);
+						Actions.setModule(prevModule);
+						val;
+					} catch (e) {
+						ErrorMessage('External Variable Error: ' + e.details());
+					}
+				});
+				
+				obj = new MemoryObject(
+					value,
+					[],
+					[],
+					Module(valueOption2.valueType) ?? Interpreter.getValueType(value),
+					true,
+					false,
+					true,
+					typeObject,
+					valueOption2.doc
+				);
+
+				if (!valueOption1.allowWriting) {
+					obj.valueSetter = function (v) {
+						Runtime.warn(ErrorMessage('Directly editing the property $type$PROPERTY_ACCESS_SIGN$fieldName is disallowed. New value is ignored, returning original value.'));
+						return v;
+					}
+				}
+
+				typeObject.set(fieldName, obj);
+			}
+		}
+	}
 
     static function combosHas(combos:Array<{lhs:String, rhs:String}>, lhs:String, rhs:String) {
         for (c in combos) if (c.rhs == rhs && c.lhs == lhs) return true;
@@ -607,14 +764,37 @@ typedef StaticFunctionInfo = {
     expectedParameters:EitherType<String, Array<ParserTokens>>,
     callback:(Array<ParserTokens>) -> ParserTokens, //parent, params to value
     ?allowWriting:Bool,
-	?valueType:String
+	?valueType:String,
+	?doc:String
 }
+
+typedef StaticVariableInfo = {
+	?staticValue:ParserTokens,
+	?valueType:String,
+	?valueGetter:MemoryObject -> ParserTokens, // this to value
+	?valueSetter:(MemoryObject, ParserTokens) -> ParserTokens, // parent, provided value to value
+	?allowWriting:Bool,
+	?doc:String
+}
+
 typedef InstanceFunctionInfo = {
     expectedParameters:EitherType<String, Array<ParserTokens>>,
     callback:(thisObject:MemoryObject, Array<ParserTokens>) -> ParserTokens, //parent, params to value
+	?valueType:String,
     ?allowWriting:Bool,
-    ?type:String
+    ?type:String,
+	?doc:String
 }
+
+typedef InstanceVariableInfo = {
+	?staticValue:ParserTokens,
+	?valueType:String,
+	?valueGetter:MemoryObject -> ParserTokens, // this to value
+	?valueSetter:(MemoryObject, ParserTokens) -> ParserTokens, // parent, provided value to value
+	?allowWriting:Bool,
+	?doc:String
+}
+
 
 typedef VariableInfo = {
     ?staticValue:ParserTokens, 
