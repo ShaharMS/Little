@@ -38,7 +38,7 @@ enum ParserTokens {
     /**
     	Used for multi-module coding & better error reporting.
     **/
-    Module(name:String);
+    Module(name:ParserTokens);
 
     /**
     	Used for denoting an external var/func in the interpreter.

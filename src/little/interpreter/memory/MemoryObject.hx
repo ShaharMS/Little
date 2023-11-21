@@ -277,4 +277,5 @@ class MemoryObject {
 
 		this.valueType = type;
 	}
+
 }

@@ -29,52 +29,7 @@ abstract MemoryTree(MemoryTreeBase) {
     }
 
     public function get(name:String):MemoryObject {
-        if (this.map.exists(name)) return this.map[name];
-        else {
-            if (!Interpreter.memory.exists(this.objType)) {
-                Runtime.throwError(ErrorMessage('Type ${this.objType} does not exist.'));
-                return null;
-            }
-			//trace(this.objType);
-            if (!Interpreter.memory.silentGet(this.objType).props.exists(name) && !Interpreter.memory.silentGet(TYPE_DYNAMIC).props.exists(name)) return null; // Throws non existent prop on Interpreter.accessObject().
-
-            var field = Interpreter.memory.silentGet(TYPE_DYNAMIC).props.silentGet(name);
-            var master = Interpreter.memory.silentGet(this.objType).props.silentGet(name);
-			if (master != null) field = master;
-            if (!field.isInstanceField) {
-                Runtime.throwError(ErrorMessage('Property $name belongs to the actual type ${this.objType}, not to an object of type (${this.objType}). Try using ${this.objType}$PROPERTY_ACCESS_SIGN$name instead.'));
-                return null;
-            }
-			var valField:ParserTokens = field.parameters[0];
-			var fieldNameIdentifier:ParserTokens = valField.getParameters()[0];
-			var fieldName:String = fieldNameIdentifier.getParameters()[0];
-			if (fieldName.charAt(fieldName.length - 1) == " ") {
-				field.parent = object;
-				var value = field.use(PartArray([this.obj.value]));
-				field.parent = field;
-				//trace(value);
-				return Interpreter.createObject(value);
-			} else { // non-static function, here we start maneuvering...
-                var value = External(params -> {
-					params = {
-						var p = [this.obj.value, SplitLine];
-						for (a in params) {
-							p.push(a);
-							p.push(SplitLine);
-						}
-						p.pop();
-						p;
-					}
-					field.parent = object; // First, make the action use the actual value instead of the class
-					var v = field.use(PartArray(params)); // Call the function
-					field.parent = field; // Now, reset the parent for correct parent-child connection :)
-                    return v;
-                });
-                return new MemoryObject(value, null, {var copy = field.parameters != null ? field.parameters.copy() : [null]; copy.shift(); copy;}, null, true, false, false);
-            }
-        }
-		trace("cant find property " + name + 'on val ${object.value}');
-        return null;
+        return this.map[name];
     }
 
     public function set(name:String, value:MemoryObject) {
