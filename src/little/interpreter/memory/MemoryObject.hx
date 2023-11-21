@@ -1,9 +1,11 @@
 package little.interpreter.memory;
 
+import little.parser.Parser;
 import little.tools.PrettyPrinter;
 import little.tools.Layer;
 import little.parser.Tokens.ParserTokens;
 
+using little.tools.Extensions;
 
 @:structInit
 /**
@@ -17,18 +19,17 @@ class MemoryObject {
 
     function set_value(val:ParserTokens) {
         // Todo: fix body eval not working for function, possible solutions including:
-            // Sepratate code checker for errors
+            // Separate code checker for errors
             // Allow side-effect free code running
-        if (params == null) {
+        if (parameters == null) {
             var t = Interpreter.getValueType(val);
-            if (type != NullValue) {
-                val = Actions.type(val, type);
-            } else if (typeOnNextAssign) {
-                type = t;
-                if (props.underlying != null) props.underlying.objType = Interpreter.stringifyTokenValue(t);
+            val = Actions.type(val, valueType);
+            if (typeOnNextAssign && !t.is(NULL_VALUE)) {
+                switchType(t);
 				typeOnNextAssign = false;
             }
         }
+
         value = valueSetter(val);
         for (setter in setterListeners.copy()) {
             setter(value);
@@ -36,9 +37,7 @@ class MemoryObject {
         return value;
     }
 
-    @:optional public dynamic function valueSetter(val:ParserTokens) {
-        return val;
-    }
+    @:optional public dynamic function valueSetter(val:ParserTokens) return val;
 
     /**
         Setter listeners can retrieve the new value right after its set, but they're unable to directly edit it.  
@@ -46,11 +45,10 @@ class MemoryObject {
     **/
     @:optional public var setterListeners:Array<ParserTokens -> Void> = [];
 
-    @:optional public var props:MemoryTree;
-    @:optional public var params(default, set):Array<ParserTokens> = null;
-    @:optional public var type:ParserTokens = NullValue;
-    @:optional public var external:Bool = false;
-    @:optional public var condition:Bool = false;
+    @:optional public var parameters(default, set):Array<ParserTokens> = null;
+    @:optional public var valueType:ParserTokens = NullValue;
+    @:optional public var isExternal:Bool = false;
+    @:optional public var isCondition:Bool = false;
 
     /**
     	documentation for this variable/function/condition
@@ -60,12 +58,13 @@ class MemoryObject {
     /**
     	When under a memory object, suppose, `T`, of type `"Type"`, it acts as a property of every object of type `Type`.
     **/
-    @:optional public var nonStatic:Bool = true;
+    @:optional public var isInstanceField:Bool = true;
 	
+	@:optional public var props:MemoryTree;
 
-    function set_params(parameters:Array<ParserTokens>) {
-        if (parameters == null) return params = null;
-        return params = parameters.filter(p -> switch p {case SplitLine | SetLine(_): false; case _: true;});
+    function set_parameters(params:Array<ParserTokens>) {
+        if (params == null) return parameters = null;
+        return parameters = params.filter(p -> switch p {case SplitLine | SetLine(_): false; case _: true;});
     }
 
 	/**
@@ -77,11 +76,11 @@ class MemoryObject {
         if (this.value.equals(NullValue) && type.equals(NullValue)) typeOnNextAssign = true;
 		
 		this.value = value;
-        this.params = params;
-        this.type = (type.equals(NullValue) && !value.equals(NullValue)) ? Interpreter.getValueType(this.value) : type;
-        this.external = external == null ? false : external;
-        this.condition = condition == null ? false : condition;
-        this.nonStatic = nonStatic == null ? true : nonStatic;
+        this.parameters = params;
+        this.valueType = (type.equals(NullValue) && !value.equals(NullValue)) ? Interpreter.getValueType(this.value) : type;
+        this.isExternal = external == null ? false : external;
+        this.isCondition = condition == null ? false : condition;
+        this.isInstanceField = nonStatic == null ? true : nonStatic;
         this.props = new MemoryTree(this);
         this.parent = parent != null ? parent : this; //Interesting solution
 		this.documentation = doc != null ? doc : "";
@@ -97,7 +96,7 @@ class MemoryObject {
     **/
     public function use(parameters:ParserTokens):ParserTokens {
 
-        if (condition) {
+        if (isCondition) {
             // trace("condition");
             if (value.getName() != "ExternalCondition") return ErrorMessage('Undefined external condition');
             if (parameters.getName() != "PartArray") return ErrorMessage('Incorrect parameter group format, given group format: ${parameters.getName()}, expected Format: `PartArray`');
@@ -106,7 +105,7 @@ class MemoryObject {
             var con = (parameters.getParameters()[0][0] : ParserTokens).getParameters()[0];
             var body = [(parameters.getParameters()[0][1] : ParserTokens)];
 
-            if (params != null) { // Used to "strongly type" the condition
+            if (parameters != null) { // Used to "strongly type" the condition
                 var given:Array<ParserTokens> = [];
                 if (con.length != 0) {
                     var currentParam:Array<ParserTokens> = [];
@@ -123,7 +122,7 @@ class MemoryObject {
                     if (currentParam.length != 0) given.push(Expression(currentParam.copy(), null));
                 }
             
-                if (given.length != params.length) return ErrorMessage('Incorrect number of expressions in condition, expected: ${params.length} (${PrettyPrinter.parseParamsString(params)}), given: ${given.length} (${PrettyPrinter.parseParamsString(given, false)})');
+                if (given.length != this.parameters.length) return ErrorMessage('Incorrect number of expressions in condition, expected: ${this.parameters.length} (${PrettyPrinter.parseParamsString(this.parameters)}), given: ${given.length} (${PrettyPrinter.parseParamsString(given, false)})');
                 
                 con = given;
                 // trace("now, eval");
@@ -141,7 +140,7 @@ class MemoryObject {
             }
         }
 
-        if (params == null) return ErrorMessage('Cannot call definition');
+        if (parameters == null) return ErrorMessage('Cannot call definition');
         if (parameters.getName() != "PartArray") return ErrorMessage('Incorrect parameter group format, given group format: ${parameters.getName()}, expected Format: `PartArray`');
 
 
@@ -161,17 +160,17 @@ class MemoryObject {
             if (currentParam.length != 0) given.push(Expression(currentParam.copy(), null));
         }
 
-        if (given.length != params.length) return ErrorMessage('Incorrect number of parameters, expected: ${params.length} (${PrettyPrinter.parseParamsString(params)}), given: ${given.length} (${PrettyPrinter.parseParamsString(given, false)})');
+        if (given.length != this.parameters.length) return ErrorMessage('Incorrect number of parameters, expected: ${this.parameters.length} (${PrettyPrinter.stringify(this.parameters)}), given: ${given.length} (${PrettyPrinter.stringify(given)})');
 
         //given = [for (element in given) Interpreter.evaluate(element)];
 
-        if (external) {
+        if (isExternal) {
             if (value.getName() != "External") return ErrorMessage('Undefined external function');
             return (value.getParameters()[0] : Array<ParserTokens> -> ParserTokens)(given);
         } else {
             var paramsDecl = [];
             for (i in 0...given.length) {
-                paramsDecl.push(Write([params[i]], given[i]));
+                paramsDecl.push(Write([this.parameters[i]], given[i]));
             }
             paramsDecl.push(SplitLine);
 
@@ -187,6 +186,23 @@ class MemoryObject {
             return Actions.run(body);
         }
     }
+
+	/**
+		Copies this object
+	**/
+	public inline function copy() {
+		return new MemoryObject(
+			this.value, 
+			this.props, 
+			this.parameters, 
+			this.valueType, 
+			this.isExternal, 
+			this.isCondition, 
+			this.isInstanceField, 
+			this.parent, 
+			this.documentation
+		);
+	}
     
     /**
     	Get object property
@@ -205,14 +221,60 @@ class MemoryObject {
         return props.set(propName, object);       
     }
 
+	/**
+		Remove object property
+		@param propName property name as string
+	**/
+	public inline function remove(propName:String) {
+		return props.remove(propName);       
+	}
+
+
 
     /**
         Returns the type of this object:
          - if `object.type` is `NullValue`, `Interpreter.getValueType()` is returned
          - if `object.type` is not `NullValue`, `object.type` is returned
     **/
-    public function getType() {
-        if (this.type != NullValue) return this.type;
+    public inline function getType() {
+        if (this.valueType != NullValue) return this.valueType;
         return Interpreter.getValueType(this.value);
     }
+	
+
+	/**
+		Switches the type of this object, usually called at object creation/after the first value is assigned.
+
+		If you wish, you can also call this function with a type of your own.
+		
+		@param type A new type for this object
+		@param deleteOld Whether to delete old type-related properties
+	**/
+	public inline function switchType(type:ParserTokens, ?deleteOld:Bool = false) {
+		var ot = type;
+		if (!type.is(MODULE)) type = Actions.evaluate(type);
+		if (!type.is(IDENTIFIER)) Runtime.throwError(ErrorMessage('Cannot use ${PrettyPrinter.stringify(ot)} as type' + (type.is(CHARACTERS) ? '(For accessing a type using a ${Little.keywords.TYPE_STRING} instance, use ${Little.keywords.READ_FUNCTION_NAME}(${type}))' : '')));
+	
+		var typeObject = Interpreter.accessObject(type, Actions.memory);
+
+		if (deleteOld) {
+			var oldTypeObject = Interpreter.accessObject(this.valueType, Actions.memory);
+			if (valueType.parameter(0) != Little.keywords.TYPE_DYNAMIC) {
+				// Iterate instance fields, remove them from this object
+				for (field => obj in oldTypeObject.props) {
+					if (!obj.isInstanceField) continue;
+					this.remove(field);
+				}
+			}
+		}
+
+		for (field => obj in typeObject.props) {
+			if (!obj.isInstanceField) continue;
+			var c = obj.copy();
+			c.parent = this;
+			this.set(field, c);
+		}
+
+		this.valueType = type;
+	}
 }

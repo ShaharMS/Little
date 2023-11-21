@@ -11,7 +11,7 @@ class MemoryTreeBase {
 
     public function new(m:MemoryObject) {
 		if (m == null) m = new MemoryObject(NullValue, m);
-        objType = m.type != null && !m.type.equals(NullValue) ? Interpreter.stringifyTokenValue(m.type) : m.value != null && !m.value.equals(NullValue) ? Interpreter.stringifyTokenValue(Interpreter.getValueType(m.value)) : TYPE_DYNAMIC;
+        objType = m.valueType != null && !m.valueType.equals(NullValue) ? Interpreter.stringifyTokenValue(m.valueType) : m.value != null && !m.value.equals(NullValue) ? Interpreter.stringifyTokenValue(Interpreter.getValueType(m.value)) : TYPE_DYNAMIC;
         obj = m;
     }
 }
@@ -41,11 +41,11 @@ abstract MemoryTree(MemoryTreeBase) {
             var field = Interpreter.memory.silentGet(TYPE_DYNAMIC).props.silentGet(name);
             var master = Interpreter.memory.silentGet(this.objType).props.silentGet(name);
 			if (master != null) field = master;
-            if (!field.nonStatic) {
+            if (!field.isInstanceField) {
                 Runtime.throwError(ErrorMessage('Property $name belongs to the actual type ${this.objType}, not to an object of type (${this.objType}). Try using ${this.objType}$PROPERTY_ACCESS_SIGN$name instead.'));
                 return null;
             }
-			var valField:ParserTokens = field.params[0];
+			var valField:ParserTokens = field.parameters[0];
 			var fieldNameIdentifier:ParserTokens = valField.getParameters()[0];
 			var fieldName:String = fieldNameIdentifier.getParameters()[0];
 			if (fieldName.charAt(fieldName.length - 1) == " ") {
@@ -70,7 +70,7 @@ abstract MemoryTree(MemoryTreeBase) {
 					field.parent = field; // Now, reset the parent for correct parent-child connection :)
                     return v;
                 });
-                return new MemoryObject(value, null, {var copy = field.params != null ? field.params.copy() : [null]; copy.shift(); copy;}, null, true, false, false);
+                return new MemoryObject(value, null, {var copy = field.parameters != null ? field.parameters.copy() : [null]; copy.shift(); copy;}, null, true, false, false);
             }
         }
 		trace("cant find property " + name + 'on val ${object.value}');

@@ -136,7 +136,7 @@ class Interpreter {
                     for (a in assignees) {
                         var assignee = accessObject(a);
                         if (assignee == null) continue;
-                        if (assignee.params != null) {
+                        if (assignee.parameters != null) {
                             assignee.value = value;
                         }
                         else {
@@ -243,7 +243,7 @@ class Interpreter {
                 for (a in assignees) {
                     var assignee = accessObject(a);
                     if (assignee == null) continue;
-                    if (assignee.params != null) {
+                    if (assignee.parameters != null) {
                         assignee.value = value;
                     }
                     else {
@@ -387,7 +387,8 @@ class Interpreter {
 
         switch exp {
             case SetLine(line): Runtime.line = line;
-            case Module(name): Runtime.currentModule = name;
+            case Module(name): 
+				return memory.get(name);
             case Expression(parts, _): {
                 return accessObject(evaluateExpressionParts(parts));
             }

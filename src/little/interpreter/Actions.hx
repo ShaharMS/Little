@@ -199,7 +199,7 @@ class Actions {
         for (a in assignees) {
             var assignee = Interpreter.accessObject(a, memory);
             if (assignee == null) continue;
-            if (assignee.params != null)
+            if (assignee.parameters != null)
                 assignee.value = value;
             else {
                 if (v.getName() != "ErrorMessage") {
