@@ -91,15 +91,15 @@ class MemoryObject {
         If `this` is a function, `use` calls it with the given parameters.  
         If its a condition, it executes the body 0 to n times, according to `parameters`.  
         if its a variable, it throws an error.  
-        @param parameters 
-        @return ParserTokens
+        @param parameters an instance of `ParserTokens` of type `PartArray`. 
+        @return The resulting value after usage of this `MemoryObject`.
     **/
     public function use(parameters:ParserTokens):ParserTokens {
 
         if (isCondition) {
             // trace("condition");
-            if (value.getName() != "ExternalCondition") return ErrorMessage('Undefined external condition');
-            if (parameters.getName() != "PartArray") return ErrorMessage('Incorrect parameter group format, given group format: ${parameters.getName()}, expected Format: `PartArray`');
+            if (value.is(EXTERNAL_CONDITION)) return ErrorMessage('Undefined external condition');
+            if (!parameters.is(PART_ARRAY)) return ErrorMessage('Incorrect parameter group format, given group format: ${parameters.getName()}, expected Format: `PartArray`');
             // trace("checks passed");
             // trace(parameters.getParameters()[0][0]);
             var con = (parameters.getParameters()[0][0] : ParserTokens).getParameters()[0];
@@ -141,7 +141,7 @@ class MemoryObject {
         }
 
         if (parameters == null) return ErrorMessage('Cannot call definition');
-        if (parameters.getName() != "PartArray") return ErrorMessage('Incorrect parameter group format, given group format: ${parameters.getName()}, expected Format: `PartArray`');
+        if (!parameters.is(PART_ARRAY)) return ErrorMessage('Incorrect parameter group format, given group format: ${parameters.getName()}, expected Format: `PartArray`');
 
 
         var given:Array<ParserTokens> = [];
@@ -191,7 +191,7 @@ class MemoryObject {
 		Copies this object
 	**/
 	public inline function copy() {
-		return new MemoryObject(
+		var obj = new MemoryObject(
 			this.value, 
 			this.props, 
 			this.parameters, 
@@ -202,6 +202,10 @@ class MemoryObject {
 			this.parent, 
 			this.documentation
 		);
+		obj.typeOnNextAssign = this.typeOnNextAssign;
+		obj.setterListeners = this.setterListeners;
+		obj.valueSetter = this.valueSetter;
+		return obj;
 	}
     
     /**

@@ -1,5 +1,6 @@
 package little.interpreter;
 
+import js.lib.webassembly.Memory;
 import little.tools.PrettyPrinter;
 import haxe.macro.Context.Message;
 import haxe.xml.Parser;
@@ -17,7 +18,8 @@ using little.tools.TextTools;
 @:access(little.interpreter.Interpreter)
 class Actions {
     
-    public static var memory:MemoryTree = Interpreter.memory;
+
+	static var memory:Memory = Runtime.memory;
 
     /**
     	Switch Current Working Memory

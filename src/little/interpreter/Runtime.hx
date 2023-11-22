@@ -24,6 +24,11 @@ class Runtime {
     public static var line(default, null):Int = 0;
 
     /**
+    	The program's memory tree
+    **/
+    public static var memory:MemoryTree = Interpreter.memory;
+
+    /**
         The next token to be interpreted
     **/
     public static var currentToken(default, null):ParserTokens = Module(Little.keywords.MAIN_MODULE_NAME);

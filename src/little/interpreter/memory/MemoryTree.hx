@@ -28,10 +28,22 @@ abstract MemoryTree(MemoryTreeBase) {
         this = new MemoryTreeBase(obj);
     }
 
+	/**
+		Returns a property
+		@param name The string name this property associates with
+		@return The requested property
+	**/
+	@:arrayAccess
     public function get(name:String):MemoryObject {
         return this.map[name];
     }
 
+    /**
+		Sets a property
+    	@param name The string name this property associates with
+    	@param value The value of the property
+    **/
+	@:arrayAccess
     public function set(name:String, value:MemoryObject) {
         this.map[name] = value;
     }

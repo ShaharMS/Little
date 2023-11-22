@@ -4,18 +4,19 @@
         "haxe": true
     },
     "cSpell.words": [
-        "callstack",
-        "concat",
-        "dont",
-        "Funcs",
-        "keyup",
-        "MULTICHAR",
-        "STRINGIFIER",
-        "stringifiyable",
-        "struct",
-        "texter",
-        "unreferenceable",
-        "unshift",
-        "whitespaces"
-    ]
+		"callstack",
+		"concat",
+		"dont",
+		"Funcs",
+		"Interp",
+		"keyup",
+		"MULTICHAR",
+		"STRINGIFIER",
+		"stringifiyable",
+		"struct",
+		"texter",
+		"unreferenceable",
+		"unshift",
+		"whitespaces"
+	]
 }

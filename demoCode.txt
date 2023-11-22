@@ -23,9 +23,33 @@ class Foo = {
     }
 }
 
+define someVar as Decimal = 3
+
 action someRandomAction() = {
 
 }
+
+"""
+	doTwiceIf (3 > 5) {
+		print(i)
+	}
+"""
+condition doTwiceIf(define condition as Characters, define body) = {
+	if (run(condition)) {
+		runWith(body, "define i = 1")
+		runWith(body, "define i = 2")
+	}
+}
+
+condition repeat(define iterationCounter, define body as Characters) = {
+	define times = run(iterationCounter).toNumber()
+	while(times > 0) {
+		run(body)
+		times = times - 1
+	}
+} 
+
+
 
 for (define x from 0 to -100 jump 10) print(x)
 
