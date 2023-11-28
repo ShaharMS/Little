@@ -1,6 +1,5 @@
 package little.interpreter;
 
-import js.lib.webassembly.Memory;
 import little.tools.PrettyPrinter;
 import haxe.macro.Context.Message;
 import haxe.xml.Parser;

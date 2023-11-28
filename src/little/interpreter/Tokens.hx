@@ -1,5 +1,7 @@
 package little.interpreter;
 
+import little.interpreter.memory.MemoryPointer;
+
 enum InterpTokens {
 	
     SetLine(line:Int);
@@ -36,12 +38,17 @@ enum InterpTokens {
 	Identifier(word:String);
 
 	/**
-		If `value` is `Block`, this `Object` is a function.
-		If `value` is `ClassFields`, this `Object` is a type.
-		If `value` is `ConditionEvaluator`, this `Object` is a condition.
+
+		- `baseValue` must be of type `Value`
+		- `props`' values may either be of type `Value` or `Structure`.
+
+		If `baseValue.value` is `Block`, this `Object` is a function.
+		If `baseValue.value` is `ClassFields`, this `Object` is a type.
+		If `baseValue.value` is `ConditionEvaluator`, this `Object` is a condition.
 		in any other case, this `Object` is a normal value. 
 	**/
-	Object(value:InterpTokens, type:InterpTokens, props:Map<String, InterpTokens>, ?doc:InterpTokens);
+	Structure(baseValue:InterpTokens, props:Map<String, InterpTokens>);
+	Value(value:InterpTokens, type:InterpTokens, pointer:MemoryPointer, ?doc:InterpTokens);
 	
     /**
     	Used for denoting an external var/func in the interpreter.
