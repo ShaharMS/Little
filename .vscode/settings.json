@@ -4,6 +4,7 @@
         "haxe": true
     },
     "cSpell.words": [
+		"alloc",
 		"callstack",
 		"concat",
 		"dont",

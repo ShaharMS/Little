@@ -48,7 +48,7 @@ enum InterpTokens {
 		in any other case, this `Object` is a normal value. 
 	**/
 	Structure(baseValue:InterpTokens, props:Map<String, InterpTokens>);
-	Value(value:InterpTokens, type:InterpTokens, pointer:MemoryPointer, ?doc:InterpTokens);
+	Value(value:InterpTokens, type:InterpTokens, ?doc:InterpTokens);
 	
     /**
     	Used for denoting an external var/func in the interpreter.

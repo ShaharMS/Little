@@ -11,7 +11,7 @@ class Memory {
 	public var memory:ByteArray;
 	public var reserved:ByteArray;
 
-    public var stack:Stack;
+    public var stack:Heap;
     public var constants:ConstantPool;
 
 	public var memoryChunkSize:Int = 128; // 128 bytes, 512 bits
@@ -21,7 +21,7 @@ class Memory {
 		reserved = new ByteArray(memoryChunkSize);
 		reserved.fill(0, memoryChunkSize, 0);
 
-		stack = new Stack(this);
+		stack = new Heap(this);
 		constants = new ConstantPool(this);
 		
 	}
