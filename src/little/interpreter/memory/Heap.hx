@@ -173,11 +173,11 @@ class Heap {
         }
     }
 
-    public function storeStructure(struct:InterpTokens):{} {
+    public function storeStructure(struct:InterpTokens):Map<String, MemoryPointer> {
         if (!struct.is(STRUCTURE)) throw new ArgumentException("struct", '${struct} is not a structure');
         // We will take the java approach - values are stored with types, functions are stored elsewhere
 
-        var value, props, doc;
+        var value:InterpTokens, props:Map<String, InterpTokens>, doc:InterpTokens;
 
         switch struct {
             case Structure(base, props): {
@@ -191,7 +191,9 @@ class Heap {
             }
             case _:
         }
+        props[""] = value;
 
+        // THis map will consist of all references to 
         var map = new Map<String, MemoryPointer>();
         // Assign base value, use key "".
         map[""] = store(value);
@@ -199,13 +201,12 @@ class Heap {
         return null;
     }
 
-	public function store(token:InterpTokens):Either<MemoryPointer, Map<String, MemoryPointer>> {
+	public function storeStatic(token:InterpTokens):MemoryPointer {
 		switch token {
-			case NullValue | TrueValue | FalseValue: return Left(parent.constants.get(token));
-			case Number(num): return Left(storeInt32(num));
-			case Decimal(num): return Left(storeDouble(num));
-			case Structure(_, _): return Right(storeStructure(token));
-            case _: throw new ArgumentException("token", '${token} cannot be storeed to the heap');
+			case NullValue | TrueValue | FalseValue: return parent.constants.get(token);
+			case Number(num): return storeInt32(num);
+			case Decimal(num): return storeDouble(num);
+            case _: throw new ArgumentException("token", '${token} cannot be statically stored to the heap');
 		}
 	}
 }
