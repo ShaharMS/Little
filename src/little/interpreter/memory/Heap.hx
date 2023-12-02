@@ -1,5 +1,6 @@
 package little.interpreter.memory;
 
+import little.tools.Tree;
 import haxe.ds.Either;
 import haxe.exceptions.ArgumentException;
 import little.interpreter.Tokens.InterpTokens;
@@ -19,7 +20,7 @@ class Heap {
 
 
     /**
-        storees a byte to the heap
+        stores a byte to the heap
         @param b an 8-bit number
         @return A pointer to its address on the heap. The size of this "object" is `1`.
     **/
@@ -174,6 +175,7 @@ class Heap {
     }
 
     public function storeStructure(struct:InterpTokens):Map<String, MemoryPointer> {
+		if (struct.is(NULL_VALUE)) return ["" => parent.constants.NULL]; // This is a "special" case - unassigned structure.
         if (!struct.is(STRUCTURE)) throw new ArgumentException("struct", '${struct} is not a structure');
         // We will take the java approach - values are stored with types, functions are stored elsewhere
 
@@ -194,7 +196,7 @@ class Heap {
         props[""] = value;
 
         // THis map will consist of all references to 
-        var map = new Map<String, MemoryPointer>();
+        var map = new Tree<String, MemoryPointer>();
         // Assign base value, use key "".
         map[""] = store(value);
 
