@@ -174,8 +174,60 @@ class Heap {
         }
     }
 
-    public function storeStructure(struct:InterpTokens):Map<String, MemoryPointer> {
-		if (struct.is(NULL_VALUE)) return ["" => parent.constants.NULL]; // This is a "special" case - unassigned structure.
+
+
+	public function storeString(b:String):MemoryPointer {
+		if (b == "") return parent.constants.ZERO;
+		#if !static if (b == null) return parent.constants.NULL; #end
+
+		b += String.fromCharCode(0); // Null-terminate the string
+
+		var bytes = Bytes.ofString(b, UTF8);
+
+		// Find a free spot. Keep in mind that string's characters in this context are UTF-8 encoded, so each character is 1 byte
+		var i = 0;
+		var fit = true;
+		while (i < parent.reserved.length - bytes.length) {
+			for (j in 0...bytes.length) {
+				if (parent.reserved[i + j] != 0) {
+					fit = false;
+					break;
+				}
+			}
+			if (fit) break;
+			i++;
+		}
+		if (i >= parent.reserved.length - bytes.length) parent.increaseBuffer();
+		
+
+		// Each character in this string should be UTF-8 encoded
+		for (j in 0...bytes.length - 1) {
+			parent.memory[i + j] = bytes.get(j);
+			parent.reserved[i + j] = 1;
+		}
+
+		return '$i';
+	}
+
+	public function readString(address:MemoryPointer):String {
+		var length = 0;
+		while (parent.reserved[address.rawLocation + length] != 0) length++;
+
+		return parent.memory.getString(address.rawLocation, length, UTF8);
+	}
+
+	public function freeString(address:MemoryPointer) {
+		var len = 0;
+		while (parent.memory.get(address.rawLocation + len) != 0) len++; // until we get to the null terminator
+		for (j in 0...len) {
+			parent.memory[address.rawLocation + j] = 0;
+			parent.reserved[address.rawLocation + j] = 0;
+		}
+	}
+
+
+    public function storeStructure(struct:InterpTokens):Tree<{key:String, address:MemoryPointer}> {
+		if (struct.is(NULL_VALUE)) return new Tree<{key:String, address:MemoryPointer}>({key: "", address: parent.constants.NULL}); // This is a "special" case - unassigned structure.
         if (!struct.is(STRUCTURE)) throw new ArgumentException("struct", '${struct} is not a structure');
         // We will take the java approach - values are stored with types, functions are stored elsewhere
 
@@ -195,12 +247,31 @@ class Heap {
         }
         props[""] = value;
 
-        // THis map will consist of all references to 
-        var map = new Tree<String, MemoryPointer>();
+        // This tree will consist of all references to objects/values in the structure 
+        var tree = new Tree<{key:String, address:MemoryPointer}>(null);
         // Assign base value, use key "".
-        map[""] = store(value);
+        tree.value = {key: "", address: value.staticallyStorable() ? storeStatic(value) : {Runtime.throwError(ErrorMessage("A Type's base value cannot be a non-static value.")); parent.constants.NULL;}};
 
-        return null;
+		function assignPropertiesTo(tree:Tree<{key:String, address:MemoryPointer}>, properties:Map<String, InterpTokens>) {
+			tree.children = [];
+			for (key in properties.keys()) {
+				var childTree = new Tree<{key:String, address:MemoryPointer}>(null);
+				childTree.value = {key: key, address: parent.constants.NULL};	
+				if (properties[key].staticallyStorable()) childTree.value.address = storeStatic(properties[key]);
+				else {
+					var t = storeStructure(properties[key]);
+					childTree.value.address = t.value.address;
+					childTree.children = t.children;
+				}
+			}
+			
+		}
+
+		// Now, recursively assign properties
+		assignPropertiesTo(tree, props);
+
+		// And return the result
+        return tree;
     }
 
 	public function storeStatic(token:InterpTokens):MemoryPointer {
@@ -208,6 +279,7 @@ class Heap {
 			case NullValue | TrueValue | FalseValue: return parent.constants.get(token);
 			case Number(num): return storeInt32(num);
 			case Decimal(num): return storeDouble(num);
+			case Characters(string): return storeString(string);
             case _: throw new ArgumentException("token", '${token} cannot be statically stored to the heap');
 		}
 	}

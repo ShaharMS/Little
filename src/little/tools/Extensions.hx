@@ -36,9 +36,12 @@ class Extensions {
 		return !is(token, TRUE_VALUE, FALSE_VALUE, NULL_VALUE, NUMBER, DECIMAL, SIGN);
 	}
 
-	public static function passedByReference(token:InterpTokens):Bool {
+	public static inline function passedByReference(token:InterpTokens):Bool {
 		return !passedByValue(token);
-		
+	}
+
+	public static inline function staticallyStorable(token:InterpTokens):Bool {
+		return passedByValue(token) || is(token, CHARACTERS);
 	}
 
 	public static function containsAny<T>(array:Array<T>, func:T -> Bool):Bool {

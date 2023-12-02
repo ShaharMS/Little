@@ -12,6 +12,7 @@ enum abstract Layer(String) from String to String {
 	var MEMORY = "Memory";
 	var MEMORY_STACK = "Memory, Stack";
 	var MEMORY_HEAP = "Memory, Heap";
+	var MEMORY_SIZE_EVALUATOR = "Memory, Size Evaluator";
 	var MEMORY_GARBAGE_COLLECTOR = "Memory, Garbage Collector";
 
     public static function getIndexOf(layer:String) {
@@ -27,7 +28,8 @@ enum abstract Layer(String) from String to String {
 			case MEMORY: 9;
 			case MEMORY_STACK: 10;
 			case MEMORY_HEAP: 11;
-			case MEMORY_GARBAGE_COLLECTOR: 12;
+			case MEMORY_SIZE_EVALUATOR: 12;
+			case MEMORY_GARBAGE_COLLECTOR: 13;
             case _: 999999999;
         }
     }

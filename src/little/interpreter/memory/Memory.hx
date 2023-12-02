@@ -1,5 +1,6 @@
 package little.interpreter.memory;
 
+import little.tools.Tree;
 import haxe.ds.Either;
 import little.interpreter.Tokens.InterpTokens;
 import vision.ds.ByteArray;
@@ -11,7 +12,8 @@ class Memory {
 	public var memory:ByteArray;
 	public var reserved:ByteArray;
 
-    public var stack:Heap;
+    public var heap:Heap;
+	public var stack:Stack;
     public var constants:ConstantPool;
 
 	public var memoryChunkSize:Int = 128; // 128 bytes, 512 bits
@@ -21,7 +23,8 @@ class Memory {
 		reserved = new ByteArray(memoryChunkSize);
 		reserved.fill(0, memoryChunkSize, 0);
 
-		stack = new Heap(this);
+		heap = new Heap(this);
+		stack = new Stack(this);
 		constants = new ConstantPool(this);
 		
 	}
@@ -41,13 +44,13 @@ class Memory {
 			case Block(body, type): // Todo: block condensing
 			case Number(num): return 4;
 			case Decimal(num): return 8;
-			case Characters(string) | Sign(string): return string.length * 2; // 16 bit
+			case Characters(string) | Sign(string): return string.length; // 8 bit
 			case NullValue | FalseValue | TrueValue: return 1;
 			case ErrorMessage(msg): return msg.length * 2;
 			case _: 
 		}
 
-		Runtime.throwError(ErrorMessage('Unable to get size of token `$token`'), INTERPRETER_VALUE_EVALUATOR);
+		Runtime.throwError(ErrorMessage('Unable to get size of token `$token`'), MEMORY_SIZE_EVALUATOR);
 		return -1;
 	}
 
@@ -58,15 +61,17 @@ class Memory {
 		- if `token` is a string, a number, a sign or a decimal, it pulls a pointer from the stack.
 		- if `token` is a structure, it returns an allocated structure, with pointers marked.
 	**/
-	public function allocate(token:InterpTokens):Either<MemoryPointer, InterpTokens> {
+	public function allocate(token:InterpTokens):Either<MemoryPointer, Tree<{key:String, address:MemoryPointer}>> {
 		if (token.is(TRUE_VALUE, FALSE_VALUE, NULL_VALUE)) {
 			return Left(constants.get(token));
-		} else if (token.is(NUMBER, DECIMAL, SIGN, CHARACTERS)) {
-			return Left(stack.push(token));
+		} else if (token.staticallyStorable()) {
+			return Left(heap.storeStatic(token));
 		} else if (token.is(STRUCTURE)) {
-			return Right(null); // TODO: implement object allocation;
+			return Right(heap.storeStructure(token));
 		}
 
-		return null;
+		Runtime.throwError(ErrorMessage('Unable to allocate memory for token `$token`.'), MEMORY_HEAP);
+
+		return Left(constants.NULL);
 	}
 }
