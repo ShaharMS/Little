@@ -14,6 +14,7 @@ class Memory {
 
     public var heap:Heap;
 	public var stack:Stack;
+	public var externs:ExternalInterfacing;
     public var constants:ConstantPool;
 
 	public var memoryChunkSize:Int = 128; // 128 bytes, 512 bits

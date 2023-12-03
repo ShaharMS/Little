@@ -40,4 +40,8 @@ class Stack {
 
 		// Todo: Garbage collection
 	}
+
+	public function getCurrentBlock():StackBlock {
+		return blocks[blocks.length - 1];
+	}
 }
