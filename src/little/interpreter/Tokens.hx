@@ -32,6 +32,7 @@ enum InterpTokens {
     Characters(string:String);
 	Sign(sign:String);
     NullValue;
+	VoidValue;
     TrueValue;
     FalseValue;
 

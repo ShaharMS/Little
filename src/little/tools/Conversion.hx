@@ -1,5 +1,6 @@
 package little.tools;
 
+import little.interpreter.Tokens.InterpTokens;
 import Type.ValueType;
 import little.interpreter.Interpreter;
 import haxe.Log;
@@ -26,27 +27,28 @@ class Conversion {
         }
     }
 
-    public static function toLittleValue(val:Dynamic):ParserTokens {
+    public static function toLittleValue(val:Dynamic):InterpTokens {
         if (val == null) return NullValue;
-        var type = toLittleType(extractHaxeType(Type.typeof(val)));
-        return switch type {
-            case (_ == TYPE_BOOLEAN => true): {
-                if (val) TrueValue else FalseValue;
-            }
-            case (_ == TYPE_FLOAT => true): {
-                Decimal(Std.string(val));
-            }
-            case (_ == TYPE_INT => true): {
-                Number(Std.string(val));
-            }
-            case (_ == TYPE_STRING => true): {
-                Characters(Std.string(val));
-            }
-            case _: {
-                trace("WARNING: Unparsable value: " + val + ". Returning NullValue");
-                NullValue;
-            }
-        }
+        var type = Type.typeof(val);
+		return switch type {
+			case TNull: NullValue;
+			case TInt: Number(val);
+			case TFloat: Decimal(val);
+			case TBool: if (val) TrueValue else FalseValue;
+			case TObject: {
+				NullValue; // Todo: Structures
+			}
+			case TFunction: {
+				NullValue; // Todo: Functions (or maybe intended behavior?)
+			}
+			case TClass(c): {
+				NullValue; // Todo: Classes
+			}
+			case TEnum(e): {
+				NullValue; // Todo: Enums
+			}
+			case TUnknown: NullValue;
+		}
     }
 
     public static function toHaxeValue(val:ParserTokens):Dynamic {
