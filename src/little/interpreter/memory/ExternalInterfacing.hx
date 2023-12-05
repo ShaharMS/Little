@@ -71,14 +71,23 @@ class ExternalInterfacing {
 		return NullValue;
 	}
 
+	/**
+	    Notice - this function does not store the value in little's memory. This is for extern registration only. 
+		Make sure the paths here don't intersect with other paths accessible via little's memory.
+		Otherwise, the values here will shadow the little values, and would make all other values under the root
+		defined via little code inaccessible.
+	    @param value The external value 
+	    @param path The path to the external variable. for example: MyClass, utils, myValue
+	**/
 	public function register(value:ExternData, ...path:String) {
 		var finalTree = pool;
-		var currentPath = "";
 		for (key in path) {
+			if (finalTree.children.filter(child -> child.value.key == key).length == 0) {
+				finalTree.children.push(new Tree<{key:String, data:ExternData}>({key: key, data: {haxeValue: null}}));
+			}
 			finalTree = finalTree.children.filter(child -> child.value.key == key)[0];
-			currentPath += Little.keywords.PROPERTY_ACCESS_SIGN + key;
 		}
-		
+		finalTree.value.data = value;	
 	}
 }
 

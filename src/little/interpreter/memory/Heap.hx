@@ -57,6 +57,47 @@ class Heap {
     }
 
 
+    public function storeBytes(size:Int, ?b:ByteArray):MemoryPointer {
+        // Find a free spot
+        var i = 0;
+		var fit = true;
+		while (i < parent.reserved.length - size) {
+			for (j in 0...size) {
+				if (parent.reserved[i + j] != 0) {
+					fit = false;
+					break;
+				}
+			}
+			if (fit) break;
+			i++;
+		}
+		if (i >= parent.reserved.length - bytes.length) parent.increaseBuffer();
+
+        for (j in 0...size - 1) {
+            parent.memory[i + j] = j > b.length ? 0 : b[j];
+            parent.reserved[i + j] = 1;
+        }
+
+        return '$i';
+    }
+
+    public function readBytes(address:MemoryPointer, size:Int):ByteArray {
+        var bytes = new ByteArray(size);
+        for (j in 0...size - 1) {
+            bytes[j] = parent.memory[address.rawLocation + j];
+        }
+
+        return bytes;
+    }
+
+    public function freeBytes(address:MemoryPointer, size:Int) {
+        for (j in 0...size - 1) {
+            parent.memory[address.rawLocation + j] = 0;
+            parent.reserved[address.rawLocation + j] = 0;
+        }
+    }
+
+
     public function storeInt16(b:Int):MemoryPointer {
         if (b == 0) return parent.constants.ZERO;
         #if !static if (b == null) return parent.constants.NULL; #end
@@ -211,7 +252,7 @@ class Heap {
 
 	public function readString(address:MemoryPointer):String {
 		var length = 0;
-		while (parent.reserved[address.rawLocation + length] != 0) length++;
+		while (parent.memory[address.rawLocation + length] != 0) length++;
 
 		return parent.memory.getString(address.rawLocation, length, UTF8);
 	}

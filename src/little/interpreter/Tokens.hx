@@ -43,7 +43,7 @@ enum InterpTokens {
 		- `baseValue` must be of type `Value`
 		- `props`' values may either be of type `Value` or `Structure`.
 
-		If `baseValue.value` is `Block`, this `Object` is a function.
+		If `baseValue.value` is `FunctionCaller`, this `Object` is a function.
 		If `baseValue.value` is `ClassFields`, this `Object` is a type.
 		If `baseValue.value` is `ConditionEvaluator`, this `Object` is a condition.
 		in any other case, this `Object` is a normal value. 
@@ -51,6 +51,11 @@ enum InterpTokens {
 	Structure(baseValue:InterpTokens, props:Map<String, InterpTokens>);
 	Value(value:InterpTokens, type:InterpTokens, ?doc:InterpTokens);
 	
+	/**
+		`params` should be of type PartArray, and `body` should be of type Block.
+	**/
+	FunctionCaller(params:InterpTokens, body:InterpTokens, type:InterpTokens);
+
     /**
     	Used for denoting an external var/func in the interpreter.
     **/

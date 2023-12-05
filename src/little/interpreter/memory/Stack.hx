@@ -20,7 +20,7 @@ class Stack {
 		this.parent = parent;
 	}
 
-	public function pushBlock(withPreviousReferences:Bool) {
+	public function pushBlock(withPreviousReferences:Bool = true) {
 		if (blocks.length >= maxStackSize) {
 			Runtime.throwError(ErrorMessage('Too much recursion - ${PrettyPrinter.stringify(Runtime.callStack[Runtime.callStack.length - 1])} Called itself too many times (~${maxStackSize})'));
 		}
