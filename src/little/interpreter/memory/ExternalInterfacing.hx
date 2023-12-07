@@ -88,6 +88,7 @@ class ExternalInterfacing {
 			finalTree = finalTree.children.filter(child -> child.value.key == key)[0];
 		}
 		finalTree.value.data = value;	
+	
 	}
 }
 

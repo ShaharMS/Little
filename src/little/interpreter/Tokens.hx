@@ -7,35 +7,107 @@ enum InterpTokens {
     SetLine(line:Int);
     SplitLine;
 
+    /**
+    	Usage:
+		@param name `Identifier`, `PropertyAccess`
+		@param type `Identifier`, `PropertyAccess`
+		@param doc `String`, `null`
+    **/
     VariableDeclaration(name:InterpTokens, type:InterpTokens, ?doc:String);
+
+	/**
+		Usage:
+		@param name `Identifier`, `PropertyAccess`
+		@param params `PartArray([*, SplitLine, *])`, `PartArray([*, SetLine, *])`, `PartArray([*, SetLine, *, SplitLine, *])`, `PartArray([*])`, `PartArray([])` 
+		@param type `Identifier`, `PropertyAccess`
+		@param doc `String`, `null`
+	**/
     FunctionDeclaration(name:InterpTokens, params:InterpTokens, type:InterpTokens, ?doc:String);
 
+    /**
+		Usage:
+		@param name `Identifier`, `PropertyAccess`
+		@param exp `PartArray`
+		@param body `Block`
+    **/
     Condition(name:InterpTokens, exp:InterpTokens, body:InterpTokens);
 
-    Read(name:InterpTokens);
+	/**
+		Usage:
+		@param name `Identifier`, `PropertyAccess`
+		@param params `PartArray([*, SplitLine, *])`, `PartArray([*, SetLine, *])`, `PartArray([*, SetLine, *, SplitLine, *])`, `PartArray([*])`, `PartArray([])`
+	**/
 	FunctionCall(name:InterpTokens, params:InterpTokens);    
+
+	/**
+		Usage:
+		@param name `Identifier`, `PropertyAccess`
+		@param type `Identifier`, `PropertyAccess`
+	**/
 	FunctionReturn(value:InterpTokens, type:InterpTokens);
 
+	/**
+		Usage:
+		@param name `Array<InterpTokens.Identifier>`
+		@param value `*`
+	**/
     Write(assignees:Array<InterpTokens>, value:InterpTokens);
 
-
+	/**
+		Usage:
+		@param value `*`
+		@param type `Identifier`, `PropertyAccess`
+	**/
     TypeCast(value:InterpTokens, type:InterpTokens);
 
+	/**
+		Usage:
+		@param parts `Array<InterpTokens.*>`
+		@param type `Identifier`, `PropertyAccess`
+	**/
     Expression(parts:Array<InterpTokens>, type:InterpTokens);
+
+    /**
+		Usage:
+		@param body `Array<InterpTokens.*>`
+		@param type `Identifier`, `PropertyAccess`
+    **/
     Block(body:Array<InterpTokens>, type:InterpTokens);
+
+	/**
+		Usage:
+		@param parts `Array<InterpTokens.*>`
+	**/
     PartArray(parts:Array<InterpTokens>);
 
+	/**
+		Usage:
+		@param name `Identifier`, `PropertyAccess`
+		@param property `Identifier`, `Number`, `Decimal`, `Characters`, `Sign`, `NullValue`, `TrueValue`, `FalseValue`
+	**/
     PropertyAccess(name:InterpTokens, property:InterpTokens);
 
+	/**Int32**/
     Number(num:Int);
+	/**Float64**/
     Decimal(num:Float);
+    /**String UTF8**/
     Characters(string:String);
+	/**String UTF8**/
 	Sign(sign:String);
+	/**`null`**/
     NullValue;
+	/**Void**/
 	VoidValue;
+	/**`true`**/
     TrueValue;
+	/**`false`**/
     FalseValue;
 
+	/**
+		Usage:
+		@param word `String`
+	**/
 	Identifier(word:String);
 
 	/**
@@ -49,10 +121,20 @@ enum InterpTokens {
 		in any other case, this `Object` is a normal value. 
 	**/
 	Structure(baseValue:InterpTokens, props:Map<String, InterpTokens>);
+
+	/**
+		Usage:
+		@param value `FunctionCaller`, `ClassFields`, `ConditionEvaluator`, `*`
+		@param type `Identifier`, `PropertyAccess`
+		@param doc `String`, `null`
+	**/
 	Value(value:InterpTokens, type:InterpTokens, ?doc:InterpTokens);
 	
 	/**
-		`params` should be of type PartArray, and `body` should be of type Block.
+		Usage:
+		@param params `PartArray([*, SplitLine, *])`, `PartArray([*, SetLine, *])`, `PartArray([*, SetLine, *, SplitLine, *])`, `PartArray([*])`, `PartArray([])`
+		@param body `Block`
+		@param type `Identifier`, `PropertyAccess`
 	**/
 	FunctionCaller(params:InterpTokens, body:InterpTokens, type:InterpTokens);
 
@@ -85,8 +167,8 @@ enum InterpTokens {
 	/**
 		This should only be used as the "value" of a class.
 
-		`superClass` has to be of type `Read`.
+		`superClass` has to be of type ~`Read`~.
 	**/
-	ClassFields(staticFields:Map<String, InterpTokens>, instanceFields:Map<String, InterpTokens>, ?superClass:InterpTokens);
+	ClassFields(staticFields:Array<String>, instanceFields:Array<String>, ?superClass:InterpTokens);
 
 }

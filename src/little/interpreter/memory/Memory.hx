@@ -66,7 +66,7 @@ class Memory {
 
 	public function sizeOf(token:InterpTokens):Int {
 		switch token {
-			case Condition(_, _, _) | Read(_) | FunctionCall(_, _) | Expression(_, _) | PropertyAccess(_, _) | Identifier(_): return sizeOf(Actions.evaluate(token));
+			case Condition(_, _, _) | FunctionCall(_, _) | Expression(_, _) | PropertyAccess(_, _) | Identifier(_): return sizeOf(Actions.evaluate(token));
 			case Write(_, v): return sizeOf(v);
 			case TypeCast(v, _): return sizeOf(v);
 			case Block(body, _): return sizeOf(Characters(ByteCode.compile(...body)));
@@ -152,7 +152,7 @@ class Memory {
 		Values are retrieved using the stack to get the references, then the heap to get the actual values.  
 		For externas, this process is bypassed, and we use external interfacing.
 			
-		@param identifier The identifier to get. Should be of type `InterpTokens.PropertyAccess`, `InterpTokens.Identifier`, or `InterpTokens.Read`. 
+		@param identifier The identifier to get. Should be of type `InterpTokens.PropertyAccess(!PropertyAccess, *)`, `InterpTokens.Identifier`, or `InterpTokens.Read`. 
 		Any other type will throw an error.
 		@return The value associated with `identifier`.
 		@see `little.interpreter.memory.ExternalInterfacing`
@@ -166,32 +166,50 @@ class Memory {
 					Runtime.throwError(ErrorMessage('Variable `$word` does not exist'));
 					return NullValue;
 				}
-				if (![Little.keywords.TYPE_INT, Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_BOOLEAN, Little.keywords.TYPE_STRING].contains(data.type)) {
-					return Characters(heap.readString(data.address)); // Todo: actually figure out whats the base type of a class
-				} else return read(data.address, data.type);
+				return read(data.address, data.type);
 			}
-			case Read(name): {
-				return get(Actions.evaluate(name));
-			}
-			case PropertyAccess(object, property): {
-				var resultPath = null;
-				var resultStructure = null, resultValue = null, resultStackData = null;
-				function access(name:InterpTokens, path:String = ""):String {
-					switch name {
-						case Identifier(word): {
-							return path + word;
+			case PropertyAccess(object, property) if (!object.is(PROPERTY_ACCESS)): {
+				switch object {
+					case Number(_) | Decimal(_) | Characters(_) | TrueValue | FalseValue | NullValue | Sign(_) | VoidValue: {
+						switch property {
+							case Identifier(word): {
+								var addressAndType = stack.getCurrentBlock().get(Interpreter.getValueType(object) + Little.keywords.PROPERTY_ACCESS_SIGN + word);
+								if (addressAndType == null) {
+									Runtime.throwError(ErrorMessage('Variable `$word` does not exist'));
+								}
+								return read(addressAndType.address, addressAndType.type);
+							}
+							case _: {
+								throw 'Incorrect usage of token `PropertyAccess(Value, *)` (Given: PropertyAccess(Value, $property))';
+							}
 						}
-						case PropertyAccess(name2, property): {
-							if (!property.is(IDENTIFIER)) throw "Parsing incorrect";
-							return access(name2, path) + Little.keywords.PROPERTY_ACCESS_SIGN + property.parameter(0);
+					}
+					case Identifier(word): {
+						var addressAndType = stack.getCurrentBlock().get(word);
+						if (addressAndType == null) {
+							Runtime.throwError(ErrorMessage('Variable `$word` does not exist'));
+							return NullValue;
 						}
-						case FunctionCall(name2, params): {
-							
+						var objectToken = read(addressAndType.address, addressAndType.type);
+
+						return get(PropertyAccess(objectToken, property));
+					}
+					case Structure(baseValue, props): {
+						switch property {
+							case Identifier(word): {
+								return props.get(word);
+							}
+							case _: {
+								throw 'Incorrect usage of token `PropertyAccess(Structure, *)` (Given: PropertyAccess(Structure, $property))';
+							}
 						}
-						case _:
+					}
+					case _: {
+						throw 'Incorrect usage of token `PropertyAccess` (Given: PropertyAccess($object, *))';
 					}
 				}
 			}
+			case _:
 		}
 
 		return null;
