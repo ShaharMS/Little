@@ -209,6 +209,7 @@ class Memory {
 					}
 				}
 			}
+			case PropertyAccess(name, property): throw 'Incorrect usage of token `PropertyAccess(PropertyAccess, *)` (Given: PropertyAccess($name, $property))';
 			case _:
 		}
 
