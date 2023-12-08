@@ -11,6 +11,15 @@ class ExternalInterfacing {
 	public var pool:Tree<{key:String, data:ExternData}> = new Tree({key: "", data: {haxeValue: null}});
 
 
+	public function hasValue(...path:String):Bool {
+		var finalTree = pool;
+		for (key in path) {
+			finalTree = finalTree.children.filter(child -> child.value.key == key)[0];
+			if (finalTree == null) return false;
+		}
+		return true;
+	}
+
 	/**
 		@param path The path to the external variable. for example: MyClass, utils, myValue 
 	**/

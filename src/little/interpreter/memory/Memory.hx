@@ -150,7 +150,7 @@ class Memory {
 		This function abstracts away pointers, and handles externs.
 
 		Values are retrieved using the stack to get the references, then the heap to get the actual values.  
-		For externas, this process is bypassed, and we use external interfacing.
+		For externals, this process is bypassed, and we use external interfacing.
 			
 		@param identifier The identifier to get. Should be of type `InterpTokens.PropertyAccess(!PropertyAccess, *)`, `InterpTokens.Identifier`, or `InterpTokens.Read`. 
 		Any other type will throw an error.
@@ -161,6 +161,7 @@ class Memory {
 		
 		switch identifier {
 			case Identifier(word): {
+				if (externs.hasValue(word)) return externs.getValue(word);
 				var data = stack.getCurrentBlock().get(word);
 				if (data == null) {
 					Runtime.throwError(ErrorMessage('Variable `$word` does not exist'));
@@ -169,6 +170,9 @@ class Memory {
 				return read(data.address, data.type);
 			}
 			case PropertyAccess(object, property) if (!object.is(PROPERTY_ACCESS)): {
+				if (externs.hasValue(object.parameter(0), property.parameter(0))) {
+					return externs.getValue(object.parameter(0), property.parameter(0)); // Todo: handle this better.
+				}
 				switch object {
 					case Number(_) | Decimal(_) | Characters(_) | TrueValue | FalseValue | NullValue | Sign(_) | VoidValue: {
 						switch property {
