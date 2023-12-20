@@ -1,5 +1,7 @@
 package little.interpreter.memory;
 
+import haxe.Int64;
+
 abstract MemoryPointer(String) {
     public var rawLocation(get, set):Int;
 
@@ -14,6 +16,10 @@ abstract MemoryPointer(String) {
     @:from public static function fromString(s:String) {
         return new MemoryPointer(s);
     }
+
+	@:from public static function fromInt(i:Int) {
+		return new MemoryPointer(i + "");
+	}
 
     @:to public function toString() {
         return this;

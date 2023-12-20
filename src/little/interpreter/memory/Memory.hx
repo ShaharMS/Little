@@ -89,18 +89,18 @@ class Memory {
 		- if `token` is a string, a number, a sign or a decimal, it pulls a pointer from the stack.
 		- if `token` is a structure, it returns a tree of keys, with pointers marked.
 	**/
-	public function store(token:InterpTokens):Either<MemoryPointer, Tree<{key:String, address:MemoryPointer}>> {
+	public function store(token:InterpTokens):MemoryPointer {
 		if (token.is(TRUE_VALUE, FALSE_VALUE, NULL_VALUE)) {
-			return Left(constants.get(token));
+			return constants.get(token);
 		} else if (token.staticallyStorable()) {
-			return Left(heap.storeStatic(token));
+			return heap.storeStatic(token);
 		} else if (token.is(STRUCTURE)) {
-			return Right(heap.storeStructure(token));
+			return heap.storeStructure(token);
 		}
 
 		Runtime.throwError(ErrorMessage('Unable to allocate memory for token `$token`.'), MEMORY_HEAP);
 
-		return Left(constants.NULL);
+		return constants.NULL;
 	}
 
 	/**

@@ -118,7 +118,7 @@ enum InterpTokens {
 		If `baseValue.value` is `FunctionCaller`, this `Object` is a function.
 		If `baseValue.value` is `ClassFields`, this `Object` is a type.
 		If `baseValue.value` is `ConditionEvaluator`, this `Object` is a condition.
-		in any other case, this `Object` is a normal value. 
+		If `baseValue.value` is `NullValue`, this `Object` is a normal structure. 
 	**/
 	Structure(baseValue:InterpTokens, props:Map<String, InterpTokens>);
 
@@ -133,10 +133,10 @@ enum InterpTokens {
 	/**
 		Usage:
 		@param params `PartArray([*, SplitLine, *])`, `PartArray([*, SetLine, *])`, `PartArray([*, SetLine, *, SplitLine, *])`, `PartArray([*])`, `PartArray([])`
-		@param body `Block`
+		@param body `Block(*, type)`
 		@param type `Identifier`, `PropertyAccess`
 	**/
-	FunctionCaller(params:InterpTokens, body:InterpTokens, type:InterpTokens);
+	FunctionCaller(params:InterpTokens, body:InterpTokens);
 
     /**
     	Used for denoting an external var/func in the interpreter.

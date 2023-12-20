@@ -24,6 +24,12 @@ class Little {
 
     public static var keywords(default, null) = Keywords.defaultKeywordSet;
 
+    /**
+    	When enabled:
+
+		 - `print`, `error` and `warn` calls will contain the part of the lexer/parser/interpreter hat called them (see `little.tools.Layer`)
+		 - All documentation will be stored in memory, and can be accessed via property `documentation` (for example `someObject.documentation`, `Class.documentation`).
+    **/
     public static var debug:Bool = false;
 
     /**

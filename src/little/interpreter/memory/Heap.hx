@@ -71,7 +71,7 @@ class Heap {
 			if (fit) break;
 			i++;
 		}
-		if (i >= parent.reserved.length - bytes.length) parent.increaseBuffer();
+		if (i >= parent.reserved.length - parent.memory.length) parent.increaseBuffer();
 
         for (j in 0...size - 1) {
             parent.memory[i + j] = j > b.length ? 0 : b[j];
@@ -216,6 +216,18 @@ class Heap {
     }
 
 
+	public function storePointer(p:MemoryPointer):MemoryPointer {
+		return storeInt32(p.rawLocation); // Currently, only 32-bit pointers are supported because of the memory buffer
+	}
+
+	public function readPointer(address:MemoryPointer):MemoryPointer {
+		return readInt32(address);
+	}
+
+	public function freePointer(address:MemoryPointer) {
+		freeInt32(address);
+	}
+
 
 	public function storeString(b:String):MemoryPointer {
 		if (b == "") return parent.constants.ZERO;
@@ -267,52 +279,53 @@ class Heap {
 	}
 
 
-    public function storeStructure(struct:InterpTokens):Tree<{key:String, address:MemoryPointer}> {
-		if (struct.is(NULL_VALUE)) return new Tree<{key:String, address:MemoryPointer}>({key: "", address: parent.constants.NULL}); // This is a "special" case - unassigned structure.
+    public function storeStructure(struct:InterpTokens):MemoryPointer {
+		if (struct.is(NULL_VALUE)) return parent.constants.NULL;
         if (!struct.is(STRUCTURE)) throw new ArgumentException("struct", '${struct} is not a structure');
-        // We will take the java approach - values are stored with types, functions are stored elsewhere
+        
+		/*
+			We will take this approach:
+			try and store everything thats statically storable one right after the other. 
+			If the property is not statically storable, we will store a pointer to it.
 
-        var value:InterpTokens, props:Map<String, InterpTokens>, doc:InterpTokens;
+			That makes reading it much easier, since positional information about the position of each field can be stored
+			elsewhere, probably in a separate structure containing the object's type info.
+		*/
+		var potentialBytes:Array<Int>;
 
-        switch struct {
-            case Structure(base, props): {
-                switch base {
-                    case Value(v, _, d): {
-                        value = v;
-                        doc = d;
-                    }
-                    case _:
-                }
-            }
-            case _:
-        }
-        props[""] = value;
+		switch struct {
 
-        // This tree will consist of all references to objects/values in the structure 
-        var tree = new Tree<{key:String, address:MemoryPointer}>(null);
-        // Assign base value, use key "".
-        tree.value = {key: "", address: value.staticallyStorable() ? storeStatic(value) : {Runtime.throwError(ErrorMessage("A Type's base value cannot be a non-static value.")); parent.constants.NULL;}};
+			case Structure(baseValue, props): {
 
-		function assignPropertiesTo(tree:Tree<{key:String, address:MemoryPointer}>, properties:Map<String, InterpTokens>) {
-			tree.children = [];
-			for (key in properties.keys()) {
-				var childTree = new Tree<{key:String, address:MemoryPointer}>(null);
-				childTree.value = {key: key, address: parent.constants.NULL};	
-				if (properties[key].staticallyStorable()) childTree.value.address = storeStatic(properties[key]);
-				else {
-					var t = storeStructure(properties[key]);
-					childTree.value.address = t.value.address;
-					childTree.children = t.children;
+				switch baseValue {
+
+					case Value(value, type, doc): {
+
+						switch value {
+
+							case FunctionCaller(params, body): {
+								return storeString(ByteCode.compile(value));
+							}
+							case ClassFields(staticFields, instanceFields, superClass): {
+								// TODO, class declaration
+							}
+							case ConditionEvaluator(conditionFieldName, bodyFieldName, caller): {
+								// TODO, condition declaration
+							}
+							case NullValue: {
+								
+							}
+							case _:
+						}
+					}
+					case _:
 				}
 			}
-			
+
+			case _:
 		}
 
-		// Now, recursively assign properties
-		assignPropertiesTo(tree, props);
-
-		// And return the result
-        return tree;
+		return null;
     }
 
 	public function storeStatic(token:InterpTokens):MemoryPointer {
@@ -323,5 +336,46 @@ class Heap {
 			case Characters(string): return storeString(string);
             case _: throw new ArgumentException("token", '${token} cannot be statically stored to the heap');
 		}
+	}
+
+	public function storeType(properties:InterpTokens):MemoryPointer {
+		switch properties {
+			case ClassFields(staticFields, instanceFields, superClass): {
+				/*
+					This will be done as such:
+					 - Bytes 0-7 are reserved for a pointer to the type's super class, or `0 0 0 0 0 0 0 0` if there is no super class
+					 - Next, bytes 8-15 represent the amount of bytes consumed by non-static fields
+					 - The Next 16-23 bytes represent the amount of bytes consumed by static fields
+					 - From byte 16 until the value of bytes 8-15 + 16 are the public fields, so, for each field:
+					   - 1 bytes to represent the size in memory of it, in bytes (max is 8, for double and pointer values)
+					   - if debug mode: The string containing documentation for each field, then a null terminator
+					 - after storing the non-static fields, we store the static fields, the same way as above
+				*/
+			}
+
+			case _: throw new ArgumentException("properties", '${properties} must be of type ClassFields');
+		}
+		
+		return null;
+	}
+
+	public function readType(pointer:MemoryPointer):{ /* TODO */} {
+		var handle = pointer.rawLocation;
+		var superClass = readPointer(handle);
+		handle += 8;
+		var sizeOfInstanceFields = readInt32(handle); // Memory buffer limitation: byte array on accepts indices of type Int32
+		handle += 8;
+		var sizeOfStaticFields = readInt32(handle); // Memory buffer limitation: byte array on accepts indices of type Int32
+		handle += 8;
+
+		for (i in handle...handle + sizeOfInstanceFields) {
+			// TODO
+		}
+		handle += sizeOfInstanceFields;
+		for (i in handle...handle + sizeOfStaticFields) {
+			// TODO
+		}
+
+		return null;
 	}
 }
