@@ -1,5 +1,6 @@
 package little.interpreter.memory;
 
+import haxe.Int64;
 import little.tools.Tree;
 import haxe.ds.Either;
 import haxe.exceptions.ArgumentException;
@@ -233,14 +234,12 @@ class Heap {
 		if (b == "") return parent.constants.ZERO;
 		#if !static if (b == null) return parent.constants.NULL; #end
 
-		b += String.fromCharCode(0); // Null-terminate the string
-
 		var bytes = Bytes.ofString(b, UTF8);
 
 		// Find a free spot. Keep in mind that string's characters in this context are UTF-8 encoded, so each character is 1 byte
 		var i = 0;
 		var fit = true;
-		while (i < parent.reserved.length - bytes.length) {
+		while (i < parent.reserved.length - (bytes.length + 1)) {
 			for (j in 0...bytes.length) {
 				if (parent.reserved[i + j] != 0) {
 					fit = false;
@@ -258,6 +257,8 @@ class Heap {
 			parent.memory[i + j] = bytes.get(j);
 			parent.reserved[i + j] = 1;
 		}
+        parent.memory[i + bytes.length] = 0; // Null terminator
+        parent.reserved[i + bytes.length] = 1;
 
 		return '$i';
 	}
@@ -339,19 +340,54 @@ class Heap {
 	}
 
 	public function storeType(properties:InterpTokens):MemoryPointer {
+        var bytes = [];
 		switch properties {
 			case ClassFields(staticFields, instanceFields, superClass): {
 				/*
 					This will be done as such:
 					 - Bytes 0-7 are reserved for a pointer to the type's super class, or `0 0 0 0 0 0 0 0` if there is no super class
-					 - Next, bytes 8-15 represent the amount of bytes consumed by non-static fields
+					 - Next, bytes 8-15 represent the amount of bytes consumed by instance fields
 					 - The Next 16-23 bytes represent the amount of bytes consumed by static fields
-					 - From byte 16 until the value of bytes 8-15 + 16 are the public fields, so, for each field:
+					 - From byte 16 until the value of bytes 8-15 + 16 are the instance fields, so, for each field:
 					   - 1 bytes to represent the size in memory of it, in bytes (max is 8, for double and pointer values)
 					   - if debug mode: The string containing documentation for each field, then a null terminator
 					 - after storing the non-static fields, we store the static fields, the same way as above
 				*/
-			}
+                if (superClass == null) bytes.concat([for (_ in 0...8) 0]);
+                else bytes.concat(storeType(superClass).toArray()); // TODO: dont immediately store the superclass, find out if its stored already, and get its pointer.
+			
+                // Now count the amount of bytes consumed by instance & static fields
+                var instanceBytes = [], staticBytes = [];
+
+                var byteArrays = [instanceBytes, staticBytes];
+                var fieldArrays = [instanceFields, staticFields];
+                
+                for (t in 0...2) {
+
+                    for (field in fieldArrays[t]) {
+                        switch field {
+                            case VariableDeclaration(_, type, doc): {
+                                // TODO: retrieve the type of the variable. Right now unimplemented.
+                                byteArrays[t].push(0); // TODO
+                                if (Little.debug && doc != null) {
+                                    var docBytes = Bytes.ofString(doc);
+                                    for (i in 0...docBytes.length) {
+                                        byteArrays[t].push(docBytes.get(i));
+                                    }
+                                    byteArrays[t].push(0);
+                                }
+                            }
+    
+                            case _: throw new ArgumentException("field", 'members of instanceFields must be of type VariableDeclaration (got ${field})');
+                        }
+                    }
+                }
+
+                var instanceLength = Int64.make(0, instanceBytes.length);
+                var staticLength = Int64.make(0, staticBytes.length);
+                
+                
+            }   
 
 			case _: throw new ArgumentException("properties", '${properties} must be of type ClassFields');
 		}

@@ -1,5 +1,6 @@
 package little.interpreter.memory;
 
+import haxe.io.Bytes;
 import haxe.Int64;
 
 abstract MemoryPointer(String) {
@@ -23,5 +24,19 @@ abstract MemoryPointer(String) {
 
     @:to public function toString() {
         return this;
+    }
+    public function toArray():Array<Int> {
+        var bytes = [];
+        var i = rawLocation;
+
+        for (_ in 0...4) {
+            bytes.unshift(i & 0xFF);
+            i = i >> 8;
+        }
+        for (_ in 0...4) {
+            bytes.unshift(0);
+        }
+
+        return bytes;
     }
 }

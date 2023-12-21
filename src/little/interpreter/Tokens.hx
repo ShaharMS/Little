@@ -168,7 +168,8 @@ enum InterpTokens {
 		This should only be used as the "value" of a class.
 
 		`superClass` has to be of type ~`Read`~.
+		both `staticFields` and `instanceFields` must be of type an array containing `InterpToken.VariableDeclaration`s
 	**/
-	ClassFields(staticFields:Array<String>, instanceFields:Array<String>, ?superClass:InterpTokens);
+	ClassFields(staticFields:Array<InterpTokens>, instanceFields:Array<InterpTokens>, ?superClass:InterpTokens);
 
 }
