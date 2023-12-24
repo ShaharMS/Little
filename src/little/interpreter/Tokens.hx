@@ -113,14 +113,16 @@ enum InterpTokens {
 	/**
 
 		- `baseValue` must be of type `Value`
-		- `props`' values may either be of type `Value` or `Structure`.
+		- `props`' elements may either be a `Structure`, or a **statically storable** object.
+			- `props`'s entries are unnamed, since they're retrieved using their type information only. Type is retrieved from `baseValue`
+			- Order is **highly** relevant
 
 		If `baseValue.value` is `FunctionCaller`, this `Object` is a function.
 		If `baseValue.value` is `ClassFields`, this `Object` is a type.
 		If `baseValue.value` is `ConditionEvaluator`, this `Object` is a condition.
 		If `baseValue.value` is `NullValue`, this `Object` is a normal structure. 
 	**/
-	Structure(baseValue:InterpTokens, props:Map<String, InterpTokens>);
+	Structure(baseValue:InterpTokens, props:Array<InterpTokens>);
 
 	/**
 		Usage:

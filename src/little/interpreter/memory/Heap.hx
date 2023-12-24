@@ -286,8 +286,9 @@ class Heap {
         
 		/*
 			We will take this approach:
-			try and store everything thats statically storable one right after the other. 
-			If the property is not statically storable, we will store a pointer to it.
+			First, store information about the structure's type.
+			Then, try and store everything thats statically storable one right after the other. 
+			If the property is not statically storable, we will store it elsewhere, and within the structure's memory, a pointer to it.
 
 			That makes reading it much easier, since positional information about the position of each field can be stored
 			elsewhere, probably in a separate structure containing the object's type info.
@@ -308,25 +309,43 @@ class Heap {
 								return storeString(ByteCode.compile(value));
 							}
 							case ClassFields(staticFields, instanceFields, superClass): {
-								// TODO, class declaration
+								// TODO, type declaration
 							}
 							case ConditionEvaluator(conditionFieldName, bodyFieldName, caller): {
 								// TODO, condition declaration
 							}
-							case NullValue: {
-								
-							}
-							case _:
+							case _: throw '`$value` is not a valid parameter for Structure(Value(...)) (expected FunctionCaller, ClassFields, ConditionEvaluator or NullValue)';
 						}
+
+						var typeInfo = parent.getTypeInformation(type);
+						potentialBytes = potentialBytes.concat(typeInfo.pointer.toArray());
 					}
 					case _:
+				}
+
+				for (value in props) {
+					if (value.is(STRUCTURE)) {
+						var pointer = storeStructure(value);
+						potentialBytes = potentialBytes.concat(pointer.toArray());
+					} else if (value.is(CHARACTERS)) {
+						potentialBytes = potentialBytes.concat(storeString(value.parameter(0)).toArray());
+					} else if (value.staticallyStorable()) {
+						potentialBytes = potentialBytes.concat(storeStatic(value).toArray());
+					} else {
+						throw 'entry $value in structure\'s properties is not statically storable, and not a structure';
+					}
 				}
 			}
 
 			case _:
 		}
 
-		return null;
+		var byteArray = new ByteArray(potentialBytes.length);
+		for (i in 0...potentialBytes.length - 1) {
+			byteArray[i] = potentialBytes[i] & 0xFF;
+		}
+
+		return storeBytes(potentialBytes.length, byteArray);
     }
 
 	public function storeStatic(token:InterpTokens):MemoryPointer {
@@ -340,7 +359,6 @@ class Heap {
 	}
 
 	public function storeType(properties:InterpTokens):MemoryPointer {
-        var bytes = [];
 		switch properties {
 			case ClassFields(staticFields, instanceFields, superClass): {
 				/*
@@ -348,13 +366,14 @@ class Heap {
 					 - Bytes 0-7 are reserved for a pointer to the type's super class, or `0 0 0 0 0 0 0 0` if there is no super class
 					 - Next, bytes 8-15 represent the amount of bytes consumed by instance fields
 					 - The Next 16-23 bytes represent the amount of bytes consumed by static fields
-					 - From byte 16 until the value of bytes 8-15 + 16 are the instance fields, so, for each field:
+					 - From byte 24 until the value of bytes 8-15 + 24 are the instance fields, so, for each field:
 					   - 1 bytes to represent the size in memory of it, in bytes (max is 8, for double and pointer values)
 					   - if debug mode: The string containing documentation for each field, then a null terminator
 					 - after storing the non-static fields, we store the static fields, the same way as above
 				*/
-                if (superClass == null) bytes.concat([for (_ in 0...8) 0]);
-                else bytes.concat(storeType(superClass).toArray()); // TODO: dont immediately store the superclass, find out if its stored already, and get its pointer.
+				var cbytes = new ByteArray(8);
+                if (superClass == null) cbytes.fill(0, 8, 0);
+                else cbytes = cbytes.concat(parent.getTypeInformation(superClass).pointer.toBytes());
 			
                 // Now count the amount of bytes consumed by instance & static fields
                 var instanceBytes = [], staticBytes = [];
@@ -367,8 +386,13 @@ class Heap {
                     for (field in fieldArrays[t]) {
                         switch field {
                             case VariableDeclaration(_, type, doc): {
-                                // TODO: retrieve the type of the variable. Right now unimplemented.
-                                byteArrays[t].push(0); // TODO
+
+								// store the type's size
+								var typeInfo = parent.getTypeInformation(type);
+								if (typeInfo.isStatic && typeInfo.typeName != Little.keywords.TYPE_STRING) byteArrays[t].push(typeInfo.instanceByteSize);
+								else byteArrays[t].push(8);
+
+								// store the documentation, if any/needed
                                 if (Little.debug && doc != null) {
                                     var docBytes = Bytes.ofString(doc);
                                     for (i in 0...docBytes.length) {
@@ -384,8 +408,17 @@ class Heap {
                 }
 
                 var instanceLength = Int64.make(0, instanceBytes.length);
+				var ibytes = new ByteArray(8); ibytes.setInt64(0, instanceLength);
                 var staticLength = Int64.make(0, staticBytes.length);
-                
+                var sbytes = new ByteArray(8); sbytes.setInt64(0, staticLength);
+
+				var bytes = cbytes.concat(ibytes).concat(sbytes);
+				for (i in 0...instanceBytes.length - 1) 
+					bytes.set(i + 24, instanceBytes[i] & 0xFF);
+				for (i in 0...staticBytes.length - 1) 
+					bytes.set(i + 24 + instanceBytes.length, staticBytes[i] & 0xFF);
+
+				return storeBytes(bytes.length, bytes);
                 
             }   
 

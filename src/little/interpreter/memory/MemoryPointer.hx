@@ -39,4 +39,12 @@ abstract MemoryPointer(String) {
 
         return bytes;
     }
+
+	public function toBytes():Bytes {
+		var bytes = Bytes.alloc(4);
+		for (i in 0...3) {
+			bytes.set(i, (rawLocation >> (i * 8)) & 0xFF);
+		}
+		return bytes;
+	}
 }

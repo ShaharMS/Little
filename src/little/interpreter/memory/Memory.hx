@@ -87,7 +87,7 @@ class Memory {
 
 		- if `token` is `true`, `false`, `0`, or `null`, it pulls a pointer from the constant pool
 		- if `token` is a string, a number, a sign or a decimal, it pulls a pointer from the stack.
-		- if `token` is a structure, it returns a tree of keys, with pointers marked.
+		- if `token` is a structure, it stores it on the heap, and returns a pointer to it.
 	**/
 	public function store(token:InterpTokens):MemoryPointer {
 		if (token.is(TRUE_VALUE, FALSE_VALUE, NULL_VALUE)) {
@@ -219,4 +219,17 @@ class Memory {
 
 		return null;
 	}
+
+	public function getTypeInformation(name:InterpTokens):TypeInfo {
+		return null;
+	}
+}
+
+typedef TypeInfo = {
+	pointer:MemoryPointer,
+	isStatic:Bool,
+	typeName:String,
+	instanceByteSize:Int,
+	staticByteSize:Int,
+	classByteSize:Int,
 }
