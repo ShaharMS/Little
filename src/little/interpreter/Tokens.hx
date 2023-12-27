@@ -24,13 +24,28 @@ enum InterpTokens {
 	**/
     FunctionDeclaration(name:InterpTokens, params:InterpTokens, type:InterpTokens, ?doc:String);
 
+	/**
+		Usage:
+		@param name `Identifier`, `PropertyAccess`
+		@param conditionType `Identifier`, `PropertyAccess`
+		@param doc `String`, `null`
+	**/
+	ConditionDeclaration(name:InterpTokens, conditionType:InterpTokens, ?doc:String);
+	
+	/**
+		Usage:
+		@param name `Identifier`, `PropertyAccess`
+		@param doc `String`, `null`
+	**/
+	ClassDeclaration(name:InterpTokens, ?doc:String);
+
     /**
 		Usage:
 		@param name `Identifier`, `PropertyAccess`
 		@param exp `PartArray`
 		@param body `Block`
     **/
-    Condition(name:InterpTokens, exp:InterpTokens, body:InterpTokens);
+    ConditionCall(name:InterpTokens, exp:InterpTokens, body:InterpTokens);
 
 	/**
 		Usage:
@@ -113,32 +128,15 @@ enum InterpTokens {
 	/**
 
 		- `baseValue` must be of type `Value`
-		- `props`' elements may either be a `Structure`, or a **statically storable** object.
+		- `props`' elements may either be a `Object`, or a **statically storable** object.
 			- `props`'s entries are unnamed, since they're retrieved using their type information only. Type is retrieved from `baseValue`
 			- Order is **highly** relevant
 
-		If `baseValue.value` is `FunctionCaller`, this `Object` is a function.
 		If `baseValue.value` is `ClassFields`, this `Object` is a type.
 		If `baseValue.value` is `ConditionEvaluator`, this `Object` is a condition.
 		If `baseValue.value` is `NullValue`, this `Object` is a normal structure. 
 	**/
-	Structure(baseValue:InterpTokens, props:Array<InterpTokens>);
-
-	/**
-		Usage:
-		@param value `FunctionCaller`, `ClassFields`, `ConditionEvaluator`, `*`
-		@param type `Identifier`, `PropertyAccess`
-		@param doc `String`, `null`
-	**/
-	Value(value:InterpTokens, type:InterpTokens, ?doc:InterpTokens);
-	
-	/**
-		Usage:
-		@param params `PartArray([*, SplitLine, *])`, `PartArray([*, SetLine, *])`, `PartArray([*, SetLine, *, SplitLine, *])`, `PartArray([*])`, `PartArray([])`
-		@param body `Block(*, type)`
-		@param type `Identifier`, `PropertyAccess`
-	**/
-	FunctionCaller(params:InterpTokens, body:InterpTokens);
+	Object(baseValue:String, props:Array<InterpTokens>);
 
     /**
     	Used for denoting an external var/func in the interpreter.
@@ -153,25 +151,5 @@ enum InterpTokens {
     	Used for errors & warnings
     **/
     ErrorMessage(msg:String);
-
-	//------------------------------------------------------------------
-	// Unimplemented
-	//------------------------------------------------------------------
-
-	ConditionDeclaration(name:InterpTokens, type:InterpTokens, ?doc:String);
-	/**
-		`caller` should be of type `Block`. When it is run, Two values should be pre-attached:
-
-		 - A variable named `conditionFieldName`, for the original conditon expression
-		 - A variable named `bodyFieldName`, for the body of the condition. Should be able to attach usable variables via Actions.runWith, or an externally registered runWith function
-	**/
-	ConditionEvaluator(conditionFieldName:String, bodyFieldName:String, caller:InterpTokens);
-	/**
-		This should only be used as the "value" of a class.
-
-		`superClass` has to be of type ~`Read`~.
-		both `staticFields` and `instanceFields` must be of type an array containing `InterpToken.VariableDeclaration`s
-	**/
-	ClassFields(staticFields:Array<InterpTokens>, instanceFields:Array<InterpTokens>, ?superClass:InterpTokens);
 
 }

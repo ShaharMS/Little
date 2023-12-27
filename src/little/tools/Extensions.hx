@@ -86,9 +86,10 @@ enum InterpTokensSimple {
 	SPLIT_LINE;
 	VARIABLE_DECLARATION;
 	FUNCTION_DECLARATION;
-	CONDITION;
+	CONDITION_DECLARATION;
+	CLASS_DECLARATION;
 
-    READ;
+	CONDITION_CALL;
 	FUNCTION_CALL;    
 	FUNCTION_RETURN;
 
@@ -112,18 +113,9 @@ enum InterpTokensSimple {
 
 	IDENTIFIER;
 	
-	STRUCTURE;
+	OBJECT;
 	VALUE;
 	EXTERNAL;
 	EXTERNAL_CONDITION;
 	ERROR_MESSAGE;
-
-	//------------------------------------------------------------------
-	// Unimplemented
-	//------------------------------------------------------------------
-
-	CONDITION_DECLARATION;
-	CONDITION_EVALUATOR;
-	CLASS_FIELDS;
-
 }

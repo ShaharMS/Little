@@ -234,7 +234,10 @@ class Heap {
 		if (b == "") return parent.constants.ZERO;
 		#if !static if (b == null) return parent.constants.NULL; #end
 
-		var bytes = Bytes.ofString(b, UTF8);
+		var stringBytes = Bytes.ofString(b, UTF8);
+		// In order to accurately keep track of the string, the first 4 bytes will be used to store the length
+		var bytes = new ByteArray(4).concat(stringBytes);
+		bytes.setInt32(0, stringBytes.length);
 
 		// Find a free spot. Keep in mind that string's characters in this context are UTF-8 encoded, so each character is 1 byte
 		var i = 0;
@@ -264,89 +267,18 @@ class Heap {
 	}
 
 	public function readString(address:MemoryPointer):String {
-		var length = 0;
-		while (parent.memory[address.rawLocation + length] != 0) length++;
-
+		var length = parent.memory.getInt32(address.rawLocation);
 		return parent.memory.getString(address.rawLocation, length, UTF8);
 	}
 
 	public function freeString(address:MemoryPointer) {
-		var len = 0;
-		while (parent.memory.get(address.rawLocation + len) != 0) len++; // until we get to the null terminator
+		var len = parent.memory.getInt32(address.rawLocation);
 		for (j in 0...len) {
 			parent.memory[address.rawLocation + j] = 0;
 			parent.reserved[address.rawLocation + j] = 0;
 		}
 	}
 
-
-    public function storeStructure(struct:InterpTokens):MemoryPointer {
-		if (struct.is(NULL_VALUE)) return parent.constants.NULL;
-        if (!struct.is(STRUCTURE)) throw new ArgumentException("struct", '${struct} is not a structure');
-        
-		/*
-			We will take this approach:
-			First, store information about the structure's type.
-			Then, try and store everything thats statically storable one right after the other. 
-			If the property is not statically storable, we will store it elsewhere, and within the structure's memory, a pointer to it.
-
-			That makes reading it much easier, since positional information about the position of each field can be stored
-			elsewhere, probably in a separate structure containing the object's type info.
-		*/
-		var potentialBytes:Array<Int>;
-
-		switch struct {
-
-			case Structure(baseValue, props): {
-
-				switch baseValue {
-
-					case Value(value, type, doc): {
-
-						switch value {
-
-							case FunctionCaller(params, body): {
-								return storeString(ByteCode.compile(value));
-							}
-							case ClassFields(staticFields, instanceFields, superClass): {
-								// TODO, type declaration
-							}
-							case ConditionEvaluator(conditionFieldName, bodyFieldName, caller): {
-								// TODO, condition declaration
-							}
-							case _: throw '`$value` is not a valid parameter for Structure(Value(...)) (expected FunctionCaller, ClassFields, ConditionEvaluator or NullValue)';
-						}
-
-						var typeInfo = parent.getTypeInformation(type);
-						potentialBytes = potentialBytes.concat(typeInfo.pointer.toArray());
-					}
-					case _:
-				}
-
-				for (value in props) {
-					if (value.is(STRUCTURE)) {
-						var pointer = storeStructure(value);
-						potentialBytes = potentialBytes.concat(pointer.toArray());
-					} else if (value.is(CHARACTERS)) {
-						potentialBytes = potentialBytes.concat(storeString(value.parameter(0)).toArray());
-					} else if (value.staticallyStorable()) {
-						potentialBytes = potentialBytes.concat(storeStatic(value).toArray());
-					} else {
-						throw 'entry $value in structure\'s properties is not statically storable, and not a structure';
-					}
-				}
-			}
-
-			case _:
-		}
-
-		var byteArray = new ByteArray(potentialBytes.length);
-		for (i in 0...potentialBytes.length - 1) {
-			byteArray[i] = potentialBytes[i] & 0xFF;
-		}
-
-		return storeBytes(potentialBytes.length, byteArray);
-    }
 
 	public function storeStatic(token:InterpTokens):MemoryPointer {
 		switch token {
@@ -358,77 +290,134 @@ class Heap {
 		}
 	}
 
-	public function storeType(properties:InterpTokens):MemoryPointer {
-		switch properties {
-			case ClassFields(staticFields, instanceFields, superClass): {
-				/*
-					This will be done as such:
-					 - Bytes 0-7 are reserved for a pointer to the type's super class, or `0 0 0 0 0 0 0 0` if there is no super class
-					 - Next, bytes 8-15 represent the amount of bytes consumed by instance fields
-					 - The Next 16-23 bytes represent the amount of bytes consumed by static fields
-					 - From byte 24 until the value of bytes 8-15 + 24 are the instance fields, so, for each field:
-					   - 1 bytes to represent the size in memory of it, in bytes (max is 8, for double and pointer values)
-					   - if debug mode: The string containing documentation for each field, then a null terminator
-					 - after storing the non-static fields, we store the static fields, the same way as above
-				*/
-				var cbytes = new ByteArray(8);
-                if (superClass == null) cbytes.fill(0, 8, 0);
-                else cbytes = cbytes.concat(parent.getTypeInformation(superClass).pointer.toBytes());
-			
-                // Now count the amount of bytes consumed by instance & static fields
-                var instanceBytes = [], staticBytes = [];
 
-                var byteArrays = [instanceBytes, staticBytes];
-                var fieldArrays = [instanceFields, staticFields];
-                
-                for (t in 0...2) {
+    public function storeObject(object:InterpTokens):MemoryPointer {
+		if (object.is(NULL_VALUE)) return parent.constants.NULL;
+        if (!object.is(OBJECT)) throw new ArgumentException("object", '${object} is not a structure');
+        
+		/*
+			We will take this approach:
+			First, store information about the structure's type.
+			Then, try and store everything thats statically storable one right after the other. 
+			If the property is not statically storable, we will store it elsewhere, and within the structure's memory, a pointer to it.
 
-                    for (field in fieldArrays[t]) {
-                        switch field {
-                            case VariableDeclaration(_, type, doc): {
+			That makes reading it much easier, since positional information about the position of each field can be stored
+			elsewhere, probably in a separate structure containing the object's type info.
+		*/
+		var potentialBytes:ByteArray = new ByteArray(0);
 
-								// store the type's size
-								var typeInfo = parent.getTypeInformation(type);
-								if (typeInfo.isStatic && typeInfo.typeName != Little.keywords.TYPE_STRING) byteArrays[t].push(typeInfo.instanceByteSize);
-								else byteArrays[t].push(8);
+		switch object {
 
-								// store the documentation, if any/needed
-                                if (Little.debug && doc != null) {
-                                    var docBytes = Bytes.ofString(doc);
-                                    for (i in 0...docBytes.length) {
-                                        byteArrays[t].push(docBytes.get(i));
-                                    }
-                                    byteArrays[t].push(0);
-                                }
-                            }
-    
-                            case _: throw new ArgumentException("field", 'members of instanceFields must be of type VariableDeclaration (got ${field})');
-                        }
-                    }
-                }
+			case Object(baseValue, props): {
 
-                var instanceLength = Int64.make(0, instanceBytes.length);
-				var ibytes = new ByteArray(8); ibytes.setInt64(0, instanceLength);
-                var staticLength = Int64.make(0, staticBytes.length);
-                var sbytes = new ByteArray(8); sbytes.setInt64(0, staticLength);
+				potentialBytes.concat(storeString(baseValue).toBytes());
 
-				var bytes = cbytes.concat(ibytes).concat(sbytes);
-				for (i in 0...instanceBytes.length - 1) 
-					bytes.set(i + 24, instanceBytes[i] & 0xFF);
-				for (i in 0...staticBytes.length - 1) 
-					bytes.set(i + 24 + instanceBytes.length, staticBytes[i] & 0xFF);
+				for (value in props) {
+					if (value.is(OBJECT)) {
+						var pointer = storeObject(value);
+						potentialBytes = potentialBytes.concat(pointer.toBytes());
+					} else if (value.is(CHARACTERS)) {
+						potentialBytes = potentialBytes.concat(storeString(value.parameter(0)).toBytes());
+					} else if (value.staticallyStorable()) {
+						potentialBytes = potentialBytes.concat(storeStatic(value).toBytes());
+					} else {
+						throw 'entry $value in structure\'s properties is not statically storable, and not an object';
+					}
+				}
+			}
 
-				return storeBytes(bytes.length, bytes);
-                
-            }   
-
-			case _: throw new ArgumentException("properties", '${properties} must be of type ClassFields');
+			case _:
 		}
-		
+
+		return storeBytes(potentialBytes.length, potentialBytes);
+    }
+
+	public function readObject(pointer:MemoryPointer, objectType:MemoryPointer):InterpTokens {
 		return null;
 	}
 
-	public function readType(pointer:MemoryPointer):{ /* TODO */} {
+	public function freeObject(pointer:MemoryPointer, objectType:MemoryPointer) {
+		return null;
+	}
+
+	public function storeType(staticFields:Array<InterpTokens>, instanceFields:Array<InterpTokens>, superClass:InterpTokens):MemoryPointer {
+		/*
+			NOTE FOR LATER: type parameter support isn't implemented, will be considered in the future.
+
+			This will be done as such:
+			 - Bytes 0-7 are reserved for a pointer to the type's super class, or `0 0 0 0 0 0 0 0` if there is no super class
+			 - Next, bytes 8-15 represent the amount of bytes consumed by instance fields
+			 - The Next 16-23 bytes represent the amount of bytes consumed by static fields
+			 - From byte 24 until the value of bytes 8-15 + 24 are the instance fields, so, for each field:
+			   - 1 bytes to represent the size in memory of it, in bytes (max is 8, for double and pointer values)
+			   - if debug mode: The string containing documentation for each field, then a null terminator
+			 - after storing the non-static fields, we store the static fields, the same way as above
+		*/
+		var cbytes = new ByteArray(8);
+        if (superClass == null) cbytes.fill(0, 8, 0);
+        else cbytes = cbytes.concat(parent.getTypeInformation(superClass).pointer.toBytes());
+		
+        // Now count the amount of bytes consumed by instance & static fields
+        var instanceBytes = [], staticBytes = [];
+
+        var byteArrays = [instanceBytes, staticBytes];
+        var fieldArrays = [instanceFields, staticFields];
+        
+        for (t in 0...2) {
+
+            for (field in fieldArrays[t]) {
+                switch field {
+                    case VariableDeclaration(_, type, doc): {
+
+						// store the type's size
+						var typeInfo = parent.getTypeInformation(type);
+						if (typeInfo.isStatic && typeInfo.typeName != Little.keywords.TYPE_STRING) byteArrays[t].push(typeInfo.instanceByteSize);
+						else byteArrays[t].push(8);
+
+						// store the documentation, if any/needed
+                        if (Little.debug && doc != null) {
+                            var docBytes = Bytes.ofString(doc);
+							docBytes = new ByteArray(4).concat(docBytes);
+							docBytes.setInt32(0, docBytes.length);
+                            for (i in 0...docBytes.length) {
+                                byteArrays[t].push(docBytes.get(i));
+                            }
+                        }
+                    }
+					case FunctionDeclaration(_, _, _, doc) | ConditionDeclaration(_, _, doc): {
+						// Functions/conditions are always stored as strings, so we don't need to do anything type related. 8 bytes shall be reserved.
+						byteArrays[t].push(8);
+
+						// store the documentation, if any/needed
+                        if (Little.debug && doc != null) {
+                            var docBytes = Bytes.ofString(doc);
+							docBytes = new ByteArray(4).concat(docBytes);
+							docBytes.setInt32(0, docBytes.length);
+                            for (i in 0...docBytes.length) {
+                                byteArrays[t].push(docBytes.get(i));
+                            }
+                        }
+					}
+                    case _: throw new ArgumentException("field", 'members of instanceFields must be of type VariableDeclaration, FunctionDeclaration, or ConditionDeclaration (got ${field})');
+                }
+            }
+        }
+
+        var instanceLength = Int64.make(0, instanceBytes.length);
+		var ibytes = new ByteArray(8); ibytes.setInt64(0, instanceLength);
+        var staticLength = Int64.make(0, staticBytes.length);
+        var sbytes = new ByteArray(8); sbytes.setInt64(0, staticLength);
+
+		var bytes = cbytes.concat(ibytes).concat(sbytes);
+		for (i in 0...instanceBytes.length - 1) 
+			bytes.set(i + 24, instanceBytes[i] & 0xFF);
+		for (i in 0...staticBytes.length - 1) 
+			bytes.set(i + 24 + instanceBytes.length, staticBytes[i] & 0xFF);
+
+		return storeBytes(bytes.length, bytes);
+	}
+
+	public function readType(pointer:MemoryPointer):TypeBlocks {
 		var handle = pointer.rawLocation;
 		var superClass = readPointer(handle);
 		handle += 8;
@@ -437,14 +426,31 @@ class Heap {
 		var sizeOfStaticFields = readInt32(handle); // Memory buffer limitation: byte array on accepts indices of type Int32
 		handle += 8;
 
-		for (i in handle...handle + sizeOfInstanceFields) {
-			// TODO
+		return {
+			superClass: superClass,
+			sizeOfInstanceFields: sizeOfInstanceFields,
+			sizeOfStaticFields: sizeOfStaticFields,
+			instanceFieldsBytes: readBytes(handle, sizeOfInstanceFields),
+			staticFieldsBytes: readBytes(handle + sizeOfInstanceFields, sizeOfStaticFields)
 		}
-		handle += sizeOfInstanceFields;
-		for (i in handle...handle + sizeOfStaticFields) {
-			// TODO
-		}
-
-		return null;
 	}
+
+	public function freeType(pointer:MemoryPointer) {
+		var handle = pointer.rawLocation + 8;
+		var totalSize = 8; // The superclass for now, we skipped it because its always 8 bytes.
+
+		totalSize += 16; // Size of instance & static fields in bytes
+		totalSize += readInt32(handle + 8); // Instance fields
+		totalSize += readInt32(handle + 8 + 8); // Static fields
+
+		freeBytes(pointer, totalSize);
+	}
+}
+
+typedef TypeBlocks = {
+	superClass:MemoryPointer,
+	sizeOfInstanceFields:Int,
+	sizeOfStaticFields:Int,
+	instanceFieldsBytes:ByteArray,
+	staticFieldsBytes:ByteArray
 }

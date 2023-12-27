@@ -66,7 +66,7 @@ class Memory {
 
 	public function sizeOf(token:InterpTokens):Int {
 		switch token {
-			case Condition(_, _, _) | FunctionCall(_, _) | Expression(_, _) | PropertyAccess(_, _) | Identifier(_): return sizeOf(Actions.evaluate(token));
+			case ConditionCall(_, _, _) | FunctionCall(_, _) | Expression(_, _) | PropertyAccess(_, _) | Identifier(_): return sizeOf(Actions.evaluate(token));
 			case Write(_, v): return sizeOf(v);
 			case TypeCast(v, _): return sizeOf(v);
 			case Block(body, _): return sizeOf(Characters(ByteCode.compile(...body)));
@@ -95,7 +95,7 @@ class Memory {
 		} else if (token.staticallyStorable()) {
 			return heap.storeStatic(token);
 		} else if (token.is(STRUCTURE)) {
-			return heap.storeStructure(token);
+			return heap.storeObject(token);
 		}
 
 		Runtime.throwError(ErrorMessage('Unable to allocate memory for token `$token`.'), MEMORY_HEAP);
