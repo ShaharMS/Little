@@ -1,5 +1,6 @@
 package little.interpreter.memory;
 
+import little.interpreter.memory.MemoryPointer;
 import haxe.Int64;
 import little.tools.Tree;
 import haxe.ds.Either;
@@ -268,11 +269,11 @@ class Heap {
 
 	public function readString(address:MemoryPointer):String {
 		var length = parent.memory.getInt32(address.rawLocation);
-		return parent.memory.getString(address.rawLocation, length, UTF8);
+		return parent.memory.getString(address.rawLocation + 4, length, UTF8);
 	}
 
 	public function freeString(address:MemoryPointer) {
-		var len = parent.memory.getInt32(address.rawLocation);
+		var len = parent.memory.getInt32(address.rawLocation) + 4;
 		for (j in 0...len) {
 			parent.memory[address.rawLocation + j] = 0;
 			parent.reserved[address.rawLocation + j] = 0;
@@ -334,6 +335,7 @@ class Heap {
 
 	public function readObject(pointer:MemoryPointer, objectType:MemoryPointer):InterpTokens {
 		return null;
+
 	}
 
 	public function freeObject(pointer:MemoryPointer, objectType:MemoryPointer) {
@@ -349,7 +351,7 @@ class Heap {
 			 - Next, bytes 8-15 represent the amount of bytes consumed by instance fields
 			 - The Next 16-23 bytes represent the amount of bytes consumed by static fields
 			 - From byte 24 until the value of bytes 8-15 + 24 are the instance fields, so, for each field:
-			   - 1 bytes to represent the size in memory of it, in bytes (max is 8, for double and pointer values)
+			   - 8 bytes to represent the type of the value, using a pointer to the type.
 			   - if debug mode: The string containing documentation for each field, then a null terminator
 			 - after storing the non-static fields, we store the static fields, the same way as above
 		*/
@@ -369,10 +371,9 @@ class Heap {
                 switch field {
                     case VariableDeclaration(_, type, doc): {
 
-						// store the type's size
-						var typeInfo = parent.getTypeInformation(type);
-						if (typeInfo.isStatic && typeInfo.typeName != Little.keywords.TYPE_STRING) byteArrays[t].push(typeInfo.instanceByteSize);
-						else byteArrays[t].push(8);
+						// store the type's pointer
+						var typePointer = parent.getTypeInformation(type).pointer;
+                        byteArrays[t] = byteArrays[t].concat(typePointer.toArray());
 
 						// store the documentation, if any/needed
                         if (Little.debug && doc != null) {
@@ -386,7 +387,8 @@ class Heap {
                     }
 					case FunctionDeclaration(_, _, _, doc) | ConditionDeclaration(_, _, doc): {
 						// Functions/conditions are always stored as strings, so we don't need to do anything type related. 8 bytes shall be reserved.
-						byteArrays[t].push(8);
+						var typePointer = parent.getTypeInformation(Identifier(Little.keywords.TYPE_STRING)).pointer;
+                        byteArrays[t] = byteArrays[t].concat(typePointer.toArray());
 
 						// store the documentation, if any/needed
                         if (Little.debug && doc != null) {
@@ -426,12 +428,36 @@ class Heap {
 		var sizeOfStaticFields = readInt32(handle); // Memory buffer limitation: byte array on accepts indices of type Int32
 		handle += 8;
 
+        var instanceFieldBytes = readBytes(handle, sizeOfInstanceFields);
+        var staticFieldBytes = readBytes(handle + sizeOfInstanceFields, sizeOfStaticFields);
+        
+        var instanceFields:Array<{type:MemoryPointer, doc:Null<String>}> = [], staticFields:Array<{type:MemoryPointer, doc:Null<String>}> = [];
+
+        var handle = 0;
+        for(fieldCollector in [instanceFields, staticFields]) {
+            while (true) {
+                var type = readPointer(handle);
+                var doc:String = null;
+                handle += 8;
+                if (Little.debug) {
+                    var bytesLength = readInt32(handle) + 4; // String length
+                    doc = readString(handle);
+                    handle += bytesLength;
+                }
+    
+                fieldCollector.push({type: type, doc: doc});
+            }
+        }
+        
+
 		return {
 			superClass: superClass,
 			sizeOfInstanceFields: sizeOfInstanceFields,
 			sizeOfStaticFields: sizeOfStaticFields,
-			instanceFieldsBytes: readBytes(handle, sizeOfInstanceFields),
-			staticFieldsBytes: readBytes(handle + sizeOfInstanceFields, sizeOfStaticFields)
+			instanceFieldsBytes: instanceFieldBytes,
+			staticFieldsBytes: staticFieldBytes,
+            instanceFields: instanceFields,
+            staticFields: staticFields
 		}
 	}
 
@@ -452,5 +478,7 @@ typedef TypeBlocks = {
 	sizeOfInstanceFields:Int,
 	sizeOfStaticFields:Int,
 	instanceFieldsBytes:ByteArray,
-	staticFieldsBytes:ByteArray
+	staticFieldsBytes:ByteArray,
+    instanceFields:Array<{type:MemoryPointer, doc:Null<String>}>,
+    staticFields:Array<{type:MemoryPointer, doc:Null<String>}>
 }
