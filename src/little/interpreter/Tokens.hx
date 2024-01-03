@@ -127,16 +127,12 @@ enum InterpTokens {
 
 	/**
 
-		- `baseValue` must be of type `Value`
+		- `baseValue` must be a `Block`, representing a function with 0 parameters returning a string.
 		- `props`' elements may either be a `Object`, or a **statically storable** object.
 			- `props`'s entries are unnamed, since they're retrieved using their type information only. Type is retrieved from `baseValue`
 			- Order is **highly** relevant
-
-		If `baseValue.value` is `ClassFields`, this `Object` is a type.
-		If `baseValue.value` is `ConditionEvaluator`, this `Object` is a condition.
-		If `baseValue.value` is `NullValue`, this `Object` is a normal structure. 
 	**/
-	Object(baseValue:String, props:Array<InterpTokens>);
+	Object(toString:InterpTokens, props:Array<InterpTokens>);
 
     /**
     	Used for denoting an external var/func in the interpreter.

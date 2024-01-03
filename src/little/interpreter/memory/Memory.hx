@@ -223,6 +223,10 @@ class Memory {
 	public function getTypeInformation(name:InterpTokens):TypeInfo {
 		return null;
 	}
+
+	public function getTypeName(pointer:MemoryPointer):String {
+		return null;
+	}
 }
 
 typedef TypeInfo = {

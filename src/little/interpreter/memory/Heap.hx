@@ -280,6 +280,21 @@ class Heap {
 		}
 	}
 
+    public function storeCodeBlock(block:InterpTokens):MemoryPointer {
+        switch block {
+            case Block(body, _): return storeString(ByteCode.compile(...body));
+            case _: throw new ArgumentException("block", '${block} must be a code block');
+        }
+    }
+
+    public function readCodeBlock(address:MemoryPointer):InterpTokens {
+        return Block(ByteCode.decompile(parent.memory.getString(address.rawLocation, parent.memory.getInt32(address.rawLocation), UTF8)), null);
+    }
+
+
+    public function freeCodeBlock(address:MemoryPointer) {
+        freeString(address);
+    }
 
 	public function storeStatic(token:InterpTokens):MemoryPointer {
 		switch token {
@@ -298,7 +313,7 @@ class Heap {
         
 		/*
 			We will take this approach:
-			First, store information about the structure's type.
+			First, store the object's toString method as a code block, and keep a pointer to it.
 			Then, try and store everything thats statically storable one right after the other. 
 			If the property is not statically storable, we will store it elsewhere, and within the structure's memory, a pointer to it.
 
@@ -309,9 +324,9 @@ class Heap {
 
 		switch object {
 
-			case Object(baseValue, props): {
+			case Object(toString, props): {
 
-				potentialBytes.concat(storeString(baseValue).toBytes());
+				potentialBytes.concat(storeCodeBlock(toString).toBytes());
 
 				for (value in props) {
 					if (value.is(OBJECT)) {
@@ -334,12 +349,35 @@ class Heap {
     }
 
 	public function readObject(pointer:MemoryPointer, objectType:MemoryPointer):InterpTokens {
-		return null;
+		var typeInfo = readType(objectType);
+        var handle = pointer.rawLocation;
 
+        var toStringMethod = readCodeBlock(readPointer(handle));
+        handle += 8;
+        var props = new Array<InterpTokens>();
+
+        for (field in typeInfo.instanceFields) {
+            var fieldType = parent.getTypeName(field.type);
+
+            switch fieldType {
+                case (_ == Little.keywords.TYPE_STRING => true): props.push(Characters(readString(readPointer(handle)))); handle += 8;
+                case (_ == Little.keywords.TYPE_INT => true): props.push(Number(readInt32(readPointer(handle)))); handle += 8;
+                case (_ == Little.keywords.TYPE_FLOAT => true): props.push(Decimal(readDouble(readPointer(handle)))); handle += 8;
+                case (_ == Little.keywords.TYPE_BOOLEAN => true): props.push(readPointer(handle) == constants.TRUE ? TrueValue : FalseValue); handle += 8;
+                case (_ == Little.keywords.TYPE_SIGN => true): props.push(Sign(readString(readPointer(handle)))); handle += 8;
+                case (_ == Little.keywords.TYPE_MODULE => true): // Todo
+                case _: props.push(readObject(readPointer(handle), field.type)); handle += 8;
+            }
+        }
+
+        return Object(toStringMethod, props);
 	}
 
 	public function freeObject(pointer:MemoryPointer, objectType:MemoryPointer) {
-		return null;
+		// Grab the object type, and basically free sizeOfInstanceFields + 8 for the toString method
+
+        var typeInfo = readType(objectType);
+        freeBytes(pointer, typeInfo.sizeOfInstanceFields + 8);
 	}
 
 	public function storeType(staticFields:Array<InterpTokens>, instanceFields:Array<InterpTokens>, superClass:InterpTokens):MemoryPointer {
@@ -480,5 +518,5 @@ typedef TypeBlocks = {
 	instanceFieldsBytes:ByteArray,
 	staticFieldsBytes:ByteArray,
     instanceFields:Array<{type:MemoryPointer, doc:Null<String>}>,
-    staticFields:Array<{type:MemoryPointer, doc:Null<String>}>
+    staticFields:Array<{type:MemoryPointer, doc:Null<String>}>,
 }
