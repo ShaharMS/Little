@@ -1,5 +1,6 @@
 package little.interpreter.memory;
 
+import haxe.display.Display.Module;
 import little.interpreter.memory.MemoryPointer;
 import haxe.Int64;
 import little.tools.Tree;
@@ -332,7 +333,10 @@ class Heap {
 					if (value.is(OBJECT)) {
 						var pointer = storeObject(value);
 						potentialBytes = potentialBytes.concat(pointer.toBytes());
-					} else if (value.is(CHARACTERS)) {
+					} else if (value.is(TYPE_REFERENCE)) { 
+                        // The code below is kind of a hack, doesn't need redoing right now though.
+                        potentialBytes = potentialBytes.concat(storeString(ByteCode.compile(value)).toBytes());
+                    } else if (value.is(CHARACTERS)) {
 						potentialBytes = potentialBytes.concat(storeString(value.parameter(0)).toBytes());
 					} else if (value.staticallyStorable()) {
 						potentialBytes = potentialBytes.concat(storeStatic(value).toBytes());
@@ -360,14 +364,16 @@ class Heap {
             var fieldType = parent.getTypeName(field.type);
 
             switch fieldType {
-                case (_ == Little.keywords.TYPE_STRING => true): props.push(Characters(readString(readPointer(handle)))); handle += 8;
-                case (_ == Little.keywords.TYPE_INT => true): props.push(Number(readInt32(readPointer(handle)))); handle += 8;
-                case (_ == Little.keywords.TYPE_FLOAT => true): props.push(Decimal(readDouble(readPointer(handle)))); handle += 8;
-                case (_ == Little.keywords.TYPE_BOOLEAN => true): props.push(readPointer(handle) == constants.TRUE ? TrueValue : FalseValue); handle += 8;
-                case (_ == Little.keywords.TYPE_SIGN => true): props.push(Sign(readString(readPointer(handle)))); handle += 8;
-                case (_ == Little.keywords.TYPE_MODULE => true): // Todo
-                case _: props.push(readObject(readPointer(handle), field.type)); handle += 8;
+                case (_ == Little.keywords.TYPE_STRING => true): props.push(Characters(readString(readPointer(handle))));
+                case (_ == Little.keywords.TYPE_INT => true): props.push(Number(readInt32(readPointer(handle))));
+                case (_ == Little.keywords.TYPE_FLOAT => true): props.push(Decimal(readDouble(readPointer(handle))));
+                case (_ == Little.keywords.TYPE_BOOLEAN => true): props.push(readPointer(handle) == parent.constants.TRUE ? TrueValue : FalseValue);
+                case (_ == Little.keywords.TYPE_SIGN => true): props.push(Sign(readString(readPointer(handle))));
+                case (_ == Little.keywords.TYPE_MODULE => true): props.push(ByteCode.decompile(readString(readPointer(handle)))[0]);
+                case _: props.push(readObject(readPointer(handle), field.type));
             }
+
+            handle += 8;
         }
 
         return Object(toStringMethod, props);

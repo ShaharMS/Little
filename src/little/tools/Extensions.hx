@@ -112,6 +112,7 @@ enum InterpTokensSimple {
 	FALSE_VALUE;
 
 	IDENTIFIER;
+	TYPE_REFERENCE;
 	
 	OBJECT;
 	VALUE;
