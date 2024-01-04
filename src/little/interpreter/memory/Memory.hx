@@ -94,7 +94,7 @@ class Memory {
 			return constants.get(token);
 		} else if (token.staticallyStorable()) {
 			return heap.storeStatic(token);
-		} else if (token.is(STRUCTURE)) {
+		} else if (token.is(OBJECT)) {
 			return heap.storeObject(token);
 		}
 
@@ -144,81 +144,6 @@ class Memory {
 		}
 	}
 
-	/**
-		Gets the value associated with `identifier`.
-
-		This function abstracts away pointers, and handles externs.
-
-		Values are retrieved using the stack to get the references, then the heap to get the actual values.  
-		For externals, this process is bypassed, and we use external interfacing.
-			
-		@param identifier The identifier to get. Should be of type `InterpTokens.PropertyAccess(!PropertyAccess, *)`, `InterpTokens.Identifier`, or `InterpTokens.Read`. 
-		Any other type will throw an error.
-		@return The value associated with `identifier`.
-		@see `little.interpreter.memory.ExternalInterfacing`
-	**/
-	public function get(identifier:InterpTokens):InterpTokens {
-		
-		switch identifier {
-			case Identifier(word): {
-				if (externs.hasValue(word)) return externs.getValue(word);
-				var data = stack.getCurrentBlock().get(word);
-				if (data == null) {
-					Runtime.throwError(ErrorMessage('Variable `$word` does not exist'));
-					return NullValue;
-				}
-				return read(data.address, data.type);
-			}
-			case PropertyAccess(object, property) if (!object.is(PROPERTY_ACCESS)): {
-				if (externs.hasValue(object.parameter(0), property.parameter(0))) {
-					return externs.getValue(object.parameter(0), property.parameter(0)); // Todo: handle this better.
-				}
-				switch object {
-					case Number(_) | Decimal(_) | Characters(_) | TrueValue | FalseValue | NullValue | Sign(_) | VoidValue: {
-						switch property {
-							case Identifier(word): {
-								var addressAndType = stack.getCurrentBlock().get(Interpreter.getValueType(object) + Little.keywords.PROPERTY_ACCESS_SIGN + word);
-								if (addressAndType == null) {
-									Runtime.throwError(ErrorMessage('Variable `$word` does not exist'));
-								}
-								return read(addressAndType.address, addressAndType.type);
-							}
-							case _: {
-								throw 'Incorrect usage of token `PropertyAccess(Value, *)` (Given: PropertyAccess(Value, $property))';
-							}
-						}
-					}
-					case Identifier(word): {
-						var addressAndType = stack.getCurrentBlock().get(word);
-						if (addressAndType == null) {
-							Runtime.throwError(ErrorMessage('Variable `$word` does not exist'));
-							return NullValue;
-						}
-						var objectToken = read(addressAndType.address, addressAndType.type);
-
-						return get(PropertyAccess(objectToken, property));
-					}
-					case Structure(baseValue, props): {
-						switch property {
-							case Identifier(word): {
-								return props.get(word);
-							}
-							case _: {
-								throw 'Incorrect usage of token `PropertyAccess(Structure, *)` (Given: PropertyAccess(Structure, $property))';
-							}
-						}
-					}
-					case _: {
-						throw 'Incorrect usage of token `PropertyAccess` (Given: PropertyAccess($object, *))';
-					}
-				}
-			}
-			case PropertyAccess(name, property): throw 'Incorrect usage of token `PropertyAccess(PropertyAccess, *)` (Given: PropertyAccess($name, $property))';
-			case _:
-		}
-
-		return null;
-	}
 
 	public function getTypeInformation(name:InterpTokens):TypeInfo {
 		return null;
