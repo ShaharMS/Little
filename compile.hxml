@@ -1,8 +1,10 @@
 --class-path src
 --main Main
 --library vision
+--library no-warnings
 #--js interp.js
 --interp
+--define memory_tests
 --define unit
 --debug
 # --dce full

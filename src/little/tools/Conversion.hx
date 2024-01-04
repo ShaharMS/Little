@@ -27,7 +27,7 @@ class Conversion {
         }
     }
 
-    public static function toLittleValue(val:Dynamic):InterpTokens {
+    public static function toLittleValue(val:Dynamic):ParserTokens {
         if (val == null) return NullValue;
         var type = Type.typeof(val);
 		return switch type {

@@ -3,7 +3,9 @@ package little.interpreter.memory;
 @:forward(iterator, clear, keyValueIterator, keys)
 abstract StackBlock(Map<String, {address:MemoryPointer, type:String}>) {
 	
-	public function new() {}
+	public function new() {
+		this = new Map<String, {address:MemoryPointer, type:String}>();
+	}
 
 	public function reference(key:String, address:MemoryPointer, type:String) {
 		this[key] = {address: address, type: type};

@@ -24,4 +24,14 @@ class ConstantPool {
 			case _: throw new ArgumentException("token", '${token} does not exist in the constant pool');
 		}
 	}
+
+	public function getFromPointer(pointer:MemoryPointer) {
+		return switch pointer.rawLocation {
+			case 0x00: NullValue;
+			case 0x01: FalseValue;
+			case 0x02: TrueValue;
+			case 0x03: Number(0);
+			case _: throw "not in constant pool";
+		}
+	}
 }

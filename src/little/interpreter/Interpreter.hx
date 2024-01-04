@@ -28,7 +28,7 @@ class Interpreter {
         currentConfig = runConfig;
         if (tokens == null || tokens.length == 0) return NullValue;
         if (tokens[0].getName() != "Module") {
-            tokens.unshift(Module(runConfig.defaultModuleName));
+            tokens.unshift(Module(Identifier(runConfig.defaultModuleName)));
         }
         return runTokens(tokens, runConfig.prioritizeVariableDeclarations, runConfig.prioritizeFunctionDeclarations, runConfig.strictTyping);
     }

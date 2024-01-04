@@ -28,10 +28,10 @@ class PrepareRun {
 		Little.plugin.registerHaxeClass(Data.getClassInfo("Math"), "Math");
 		Little.plugin.registerHaxeClass(Data.getClassInfo("String"), TYPE_STRING);
 		Little.plugin.registerHaxeClass(Data.getClassInfo("Array"), "Array"); // Experimental
-		Interpreter.memory.set(TYPE_DYNAMIC, new MemoryObject(Module(TYPE_DYNAMIC), [], null, Module(TYPE_MODULE), true));
-		Interpreter.memory.set(TYPE_INT, new MemoryObject(Module(TYPE_INT), [], null, Module(TYPE_MODULE), true));
-		Interpreter.memory.set(TYPE_FLOAT, new MemoryObject(Module(TYPE_FLOAT), [], null, Module(TYPE_MODULE), true));
-		Interpreter.memory.set(TYPE_BOOLEAN, new MemoryObject(Module(TYPE_BOOLEAN), [], null, Module(TYPE_MODULE), true));
+		Interpreter.memory.set(TYPE_DYNAMIC, new MemoryObject(Module(Identifier(TYPE_DYNAMIC)), [], null, Module(Identifier(TYPE_MODULE)), true));
+		Interpreter.memory.set(TYPE_INT, new MemoryObject(Module(Identifier(TYPE_INT)), [], null, Module(Identifier(TYPE_MODULE)), true));
+		Interpreter.memory.set(TYPE_FLOAT, new MemoryObject(Module(Identifier(TYPE_FLOAT)), [], null, Module(Identifier(TYPE_MODULE)), true));
+		Interpreter.memory.set(TYPE_BOOLEAN, new MemoryObject(Module(Identifier(TYPE_BOOLEAN)), [], null, Module(Identifier(TYPE_MODULE)), true));
 	}
 
 	public static function addProps() {
@@ -57,7 +57,7 @@ class PrepareRun {
 			callback: (parent, params) -> {
 				var val = parent.value;
 				switch val {
-					case NullValue: TypeDeclaration(NullValue, Module(TYPE_FLOAT));
+					case NullValue: TypeDeclaration(NullValue, Module(Identifier(TYPE_FLOAT)));
 					case _: Decimal(val.getParameters()[0]);
 				}
 			}
@@ -78,7 +78,7 @@ class PrepareRun {
 				var val = parent.value;
 				trace(val);
 				switch val {
-					case NullValue: TypeDeclaration(NullValue, Module(TYPE_STRING));
+					case NullValue: TypeDeclaration(NullValue, Module(Identifier(TYPE_STRING)));
 					case _: Characters(val.getParameters()[0]);
 				}
 			}
@@ -95,10 +95,10 @@ class PrepareRun {
 			Runtime.throwError(Actions.evaluate(params[0]));
 			return NullValue;
 		});
-		Little.plugin.registerFunction(READ_FUNCTION_NAME, null, [Variable(Identifier("string"), Module(TYPE_STRING))], (params) -> {
+		Little.plugin.registerFunction(READ_FUNCTION_NAME, null, [Variable(Identifier("string"), Module(Identifier(TYPE_STRING)))], (params) -> {
 			return Read(Identifier(Interpreter.stringifyTokenValue(params[0])));
 		});
-		Little.plugin.registerFunction(RUN_CODE_FUNCTION_NAME, null, [Variable(Identifier("code"), Module(TYPE_STRING))], (params) -> {
+		Little.plugin.registerFunction(RUN_CODE_FUNCTION_NAME, null, [Variable(Identifier("code"), Module(Identifier(TYPE_STRING)))], (params) -> {
 			return Actions.run(Parser.parse(Lexer.lex(params[0].getParameters()[0])));
 		});
 	}
@@ -185,7 +185,7 @@ class PrepareRun {
 					r = Conversion.toHaxeValue(rhs);
 				if (l is String || r is String)
 					return Characters("" + lhs.value() + rhs.value());
-				if (Interpreter.getValueType(lhs).equals(Module(TYPE_INT)) && Interpreter.getValueType(rhs).equals(Module(TYPE_INT)))
+				if (Interpreter.getValueType(lhs).equals(Module(Identifier(TYPE_INT))) && Interpreter.getValueType(rhs).equals(Module(Identifier(TYPE_INT))))
 					return Number(l + r + "");
 				return Decimal(l + r + "");
 			}
@@ -201,7 +201,7 @@ class PrepareRun {
 					r:Dynamic = Conversion.toHaxeValue(rhs);
 				if (l is String)
 					return Characters(TextTools.subtract(l, r));
-				if (Interpreter.getValueType(lhs).equals(Module(TYPE_INT)) && Interpreter.getValueType(rhs).equals(Module(TYPE_INT)))
+				if (Interpreter.getValueType(lhs).equals(Module(Identifier(TYPE_INT))) && Interpreter.getValueType(rhs).equals(Module(Identifier(TYPE_INT))))
 					return Number(l - r + "");
 				return Decimal(l - r + "");
 			}
@@ -217,7 +217,7 @@ class PrepareRun {
 					r:Dynamic = Conversion.toHaxeValue(rhs);
 				if (l is String)
 					return Characters(TextTools.multiply(l, r));
-				if (Interpreter.getValueType(lhs).equals(Module(TYPE_INT)) && Interpreter.getValueType(rhs).equals(Module(TYPE_INT)))
+				if (Interpreter.getValueType(lhs).equals(Module(Identifier(TYPE_INT))) && Interpreter.getValueType(rhs).equals(Module(Identifier(TYPE_INT))))
 					return Number(l * r + "");
 				return Decimal(l * r + "");
 			}
@@ -243,7 +243,7 @@ class PrepareRun {
 			callback: (lhs, rhs) -> {
 				var l = Conversion.toHaxeValue(lhs),
 					r = Conversion.toHaxeValue(rhs);
-				if (Interpreter.getValueType(lhs).equals(Module(TYPE_INT)) && Interpreter.getValueType(rhs).equals(Module(TYPE_INT)))
+				if (Interpreter.getValueType(lhs).equals(Module(Identifier(TYPE_INT))) && Interpreter.getValueType(rhs).equals(Module(Identifier(TYPE_INT))))
 					return Number(Math.pow(l, r) + "");
 				return Decimal(Math.pow(l, r) + "");
 			}
@@ -499,7 +499,7 @@ class PrepareRun {
 			return val;
 		});
 
-		Little.plugin.registerCondition("after", [Variable(Identifier("rule"), Module(TYPE_BOOLEAN))], (params, body) -> {
+		Little.plugin.registerCondition("after", [Variable(Identifier("rule"), Module(Identifier(TYPE_BOOLEAN)))], (params, body) -> {
 			var val = NullValue;
 
 			var handle = Interpreter.accessObject(params[0].getParameters()[0][0]);
@@ -519,7 +519,7 @@ class PrepareRun {
 			return val;
 		});
 
-		Little.plugin.registerCondition("whenever", [Variable(Identifier("rule"), Module(TYPE_BOOLEAN))], (params, body) -> {
+		Little.plugin.registerCondition("whenever", [Variable(Identifier("rule"), Module(Identifier(TYPE_BOOLEAN)))], (params, body) -> {
 			var val = NullValue;
 
 			var handle = Interpreter.accessObject(params[0].getParameters()[0][0]);

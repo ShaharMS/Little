@@ -155,7 +155,7 @@ class Heap {
         while (i < parent.reserved.length - 3 && parent.reserved[i] + parent.reserved[i + 1] + parent.reserved[i + 2] + parent.reserved[i + 3] != 0) i++;
         if (i >= parent.reserved.length - 3) parent.increaseBuffer();
 
-        for (j in 0...3) {
+        for (j in 0...4) {
             parent.memory[i + j] = b & 0xFF;
             b = b >> 8;
             parent.reserved[i + j] = 1;
@@ -169,7 +169,7 @@ class Heap {
     }
 
     public function freeInt32(address:MemoryPointer) {
-        for (j in 0...3) {
+        for (j in 0...4) {
             parent.memory[address.rawLocation + j] = 0;
 			parent.reserved[address.rawLocation + j] = 0;
         }
@@ -200,7 +200,7 @@ class Heap {
 
         var bytes = Bytes.alloc(8);
 		bytes.setDouble(0, b);
-        for (j in 0...7) {
+        for (j in 0...8) {
             parent.memory[i + j] = bytes.get(j);
         }
 
@@ -212,7 +212,7 @@ class Heap {
     }
 
     public function freeDouble(address:MemoryPointer) {
-        for (j in 0...7) {
+        for (j in 0...8) {
             parent.memory[address.rawLocation + j] = 0;
 			parent.reserved[address.rawLocation + j] = 0;
         }
@@ -236,6 +236,7 @@ class Heap {
 		if (b == "") return parent.constants.ZERO;
 		#if !static if (b == null) return parent.constants.NULL; #end
 
+        // Convert the string into bytes
 		var stringBytes = Bytes.ofString(b, UTF8);
 		// In order to accurately keep track of the string, the first 4 bytes will be used to store the length
 		var bytes = new ByteArray(4).concat(stringBytes);
@@ -258,12 +259,10 @@ class Heap {
 		
 
 		// Each character in this string should be UTF-8 encoded
-		for (j in 0...bytes.length - 1) {
+		for (j in 0...bytes.length) {
 			parent.memory[i + j] = bytes.get(j);
 			parent.reserved[i + j] = 1;
 		}
-        parent.memory[i + bytes.length] = 0; // Null terminator
-        parent.reserved[i + bytes.length] = 1;
 
 		return '$i';
 	}

@@ -32,7 +32,7 @@ class Runtime {
     /**
         The next token to be interpreted
     **/
-    public static var currentToken(default, null):ParserTokens = Module(Identifier(Little.keywords.MAIN_MODULE_NAME));
+    public static var currentToken(default, null):ParserTokens = /*Module(Identifier(Little.keywords.MAIN_MODULE_NAME))*/ null; //todo
 
     /**
     	The module in which tokens are currently interpreted.

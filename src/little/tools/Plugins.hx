@@ -80,7 +80,7 @@ class Plugins {
 		// trace(fieldValues);
 		// trace(fieldFunctions);
 
-		var motherObj = new MemoryObject(Module(littleClassName), [], null, Module(TYPE_MODULE), true); 
+		var motherObj = new MemoryObject(Module(Identifier(littleClassName)), [], null, Module(Identifier(TYPE_MODULE)), true); 
 
 		for (instance in stats) {
 			//trace(instance.fieldType, instance.allowWrite, instance.name, instance.parameters, instance.returnType);
@@ -146,16 +146,16 @@ class Plugins {
 		var cls = Type.resolveClass(stats.className);
 		var func = Reflect.field(cls, stats.name);
 
-		var motherObj = new MemoryObject(Module(stats.className), [], null, Module(TYPE_MODULE), true);
+		var motherObj = new MemoryObject(Module(Identifier(stats.className)), [], null, Module(Identifier(TYPE_MODULE)), true);
 		if (littleName != null) {
-			motherObj = Actions.memory.object;
+			motherObj = @:privateAccess Actions.memory.object;
 			var objects = littleName.split(Little.keywords.PROPERTY_ACCESS_SIGN);
 			stats.name = objects.pop();
 			for (name in objects) {
 				if (motherObj.get(name) != null) {
 					motherObj = motherObj.get(name);
 				} else {
-					var child = new MemoryObject(NullValue, [], null, Module(TYPE_DYNAMIC), true); // No reason to create a type, it's not used as one.
+					var child = new MemoryObject(NullValue, [], null, Module(Identifier(TYPE_DYNAMIC)), true); // No reason to create a type, it's not used as one.
 					motherObj.set(name, child);
 					motherObj = child;
 				}
@@ -309,7 +309,7 @@ class Plugins {
         );
 
         if (actionModuleName != null) {
-            Interpreter.memory.set(actionModuleName, new MemoryObject(Module(actionModuleName), [], null, Module(TYPE_MODULE), true, Interpreter.memory.object));
+            Interpreter.memory.set(actionModuleName, new MemoryObject(Module(Identifier(actionModuleName)), [], null, Module(Identifier(TYPE_MODULE)), true, Interpreter.memory.object));
             memObject.parent = Interpreter.memory.get(actionModuleName);
             Interpreter.memory.get(actionModuleName).props.set(actionName, memObject);
         } else Interpreter.memory.set(actionName, memObject);
@@ -342,11 +342,11 @@ class Plugins {
     public static function registerProperty(propertyName:String, onObject:String, isType:Bool, ?valueOption1:FunctionInfo, ?valueOption2:VariableInfo) {
         if (isType) {
             if (!Interpreter.memory.exists(onObject) || Interpreter.memory.silentGet(onObject).value.getName() != "Module") {
-                Interpreter.memory.set(onObject, new MemoryObject(Module(onObject), [], null, Module(TYPE_MODULE), true));
+                Interpreter.memory.set(onObject, new MemoryObject(Module(Identifier(onObject)), [], null, Module(Identifier(TYPE_MODULE)), true));
             }
         } else {
             if (!Interpreter.memory.exists(onObject)) {
-                Interpreter.memory.set(onObject, new MemoryObject(NullValue, [], null, Module(TYPE_DYNAMIC), true));
+                Interpreter.memory.set(onObject, new MemoryObject(NullValue, [], null, Module(Identifier(TYPE_DYNAMIC)), true));
             }
         }
 
@@ -463,7 +463,7 @@ class Plugins {
 				value, 
 				[], 
 				params, 
-				Module(valueOption1.valueType) ?? Interpreter.getValueType(value), 
+				Module(Identifier(valueOption1.valueType)) ?? Interpreter.getValueType(value), 
 				true, false, false, 
 				typeObject, 
 				valueOption1.doc
@@ -477,7 +477,7 @@ class Plugins {
 
 			typeObject.set(fieldName, obj);
 		} else {
-			var value:ParserTokens, obj:MemoryObject;
+			var value:ParserTokens, obj:MemoryObject = null;
 			if (valueOption2.staticValue != null) value = valueOption2.staticValue;
 			else {
 				value = External(params -> {
@@ -496,7 +496,7 @@ class Plugins {
 					value,
 					[],
 					[],
-					Module(valueOption2.valueType) ?? Interpreter.getValueType(value),
+					Module(Identifier(valueOption2.valueType)) ?? Interpreter.getValueType(value),
 					true,
 					false,
 					false,
@@ -520,7 +520,7 @@ class Plugins {
 	public static function registerInstanceField(fieldName:String, type:String, ?valueOption1:InstanceFunctionInfo, ?valueOption2:InstanceVariableInfo) {
 		var typeObject = Interpreter.memory.get(type);
 
-		var obj:MemoryObject;
+		var obj:MemoryObject = null;
 		if (valueOption1 != null) {
 			var value = External(params -> {
 				var prevModule = Runtime.currentModule;
@@ -541,7 +541,7 @@ class Plugins {
 				value,
 				[],
 				params,
-				Module(valueOption1.valueType) ?? Interpreter.getValueType(value),
+				Module(Identifier(valueOption1.valueType)) ?? Interpreter.getValueType(value),
 				true,
 				false,
 				true,
@@ -577,7 +577,7 @@ class Plugins {
 					value,
 					[],
 					[],
-					Module(valueOption2.valueType) ?? Interpreter.getValueType(value),
+					Module(Identifier(valueOption2.valueType)) ?? Interpreter.getValueType(value),
 					true,
 					false,
 					true,

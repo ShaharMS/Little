@@ -21,7 +21,7 @@ class MemoryObject {
         // Todo: fix body eval not working for function, possible solutions including:
             // Separate code checker for errors
             // Allow side-effect free code running
-        if (parameters == null) {
+        if (parameters == null && val != NullValue) {
             var t = Interpreter.getValueType(val);
             val = Actions.type(val, valueType);
             if (typeOnNextAssign && !t.is(NULL_VALUE)) {
@@ -259,10 +259,10 @@ class MemoryObject {
 		if (!type.is(MODULE)) type = Actions.evaluate(type);
 		if (!type.is(IDENTIFIER)) Runtime.throwError(ErrorMessage('Cannot use ${PrettyPrinter.stringify(ot)} as type' + (type.is(CHARACTERS) ? '(For accessing a type using a ${Little.keywords.TYPE_STRING} instance, use ${Little.keywords.READ_FUNCTION_NAME}(${type}))' : '')));
 	
-		var typeObject = Interpreter.accessObject(type, Actions.memory);
+		var typeObject = Interpreter.accessObject(type, @:privateAccess Actions.memory);
 
 		if (deleteOld) {
-			var oldTypeObject = Interpreter.accessObject(this.valueType, Actions.memory);
+			var oldTypeObject = Interpreter.accessObject(this.valueType, @:privateAccess Actions.memory);
 			if (valueType.parameter(0) != Little.keywords.TYPE_DYNAMIC) {
 				// Iterate instance fields, remove them from this object
 				for (field => obj in oldTypeObject.props) {

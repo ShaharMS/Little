@@ -18,7 +18,7 @@ using little.tools.TextTools;
 class Actions {
     
 
-	static var memory:Memory = Runtime.memory;
+	static var memory:MemoryTree = Runtime.memory;
 
     /**
     	Switch Current Working Memory
@@ -286,7 +286,7 @@ class Actions {
                     setLine(line);
                 }
                 case Module(name): {
-                    setModule(name);
+                    setModule(name.identifier());
                 }
                 case SplitLine: splitLine();
                 case Variable(name, type, doc): {

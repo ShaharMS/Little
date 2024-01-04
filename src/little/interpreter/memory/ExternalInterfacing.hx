@@ -37,8 +37,8 @@ class ExternalInterfacing {
 
 		if (data == null) Runtime.throwError(ErrorMessage('External variable `${path.toArray().join(Little.keywords.PROPERTY_ACCESS_SIGN)}` does not exist'), MEMORY_EXTERNAL_INTERFACING);
 
-		if (data.haxeValueSetter != null) return Conversion.toLittleValue(data.haxeValueGetter());
-		if (data.haxeValue != null) return Conversion.toLittleValue(data.haxeValue);
+		if (data.haxeValueSetter != null) return /*Conversion.toLittleValue(data.haxeValueGetter())*/ null;
+		if (data.haxeValue != null) return /*Conversion.toLittleValue(data.haxeValue) */ null; // Todo
 
 		Runtime.throwError(ErrorMessage('External variable `${path.toArray().join(Little.keywords.PROPERTY_ACCESS_SIGN)}` is valueless'), MEMORY_EXTERNAL_INTERFACING);
 		return NullValue;
@@ -69,7 +69,7 @@ class ExternalInterfacing {
 				try {
 					var result = func(parameters);
 					if (!result is InterpTokens) ErrorMessage('External function `${path.toArray().join(Little.keywords.PROPERTY_ACCESS_SIGN)}` is registered incorrectly: The function should return an `InterpTokens`.');
-					return Conversion.toLittleValue(result);
+					return /*Conversion.toLittleValue(result)*/ null; // Todo
 				} catch (e:Exception) {
 					Runtime.throwError(ErrorMessage('External function `${path.toArray().join(Little.keywords.PROPERTY_ACCESS_SIGN)}` is registered incorrectly: It must have one parameter of type `Array<InterpTokens>`'), MEMORY_EXTERNAL_INTERFACING);
 				}

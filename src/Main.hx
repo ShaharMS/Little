@@ -30,7 +30,24 @@ using little.tools.TextTools;
 class Main {
 
 	static function main() {
-		#if js
+		#if memory_tests
+
+		
+		var memory = new Memory();
+		var intPointer = memory.heap.storeInt32(-456);
+		trace("int read/write", memory.heap.readInt32(intPointer));
+		var floatPointer = memory.heap.storeDouble(123.456);
+		trace("float read/write", memory.heap.readDouble(floatPointer));
+		var stringPointer = memory.heap.storeString("hello world");
+		trace("string read/write", memory.heap.readString(stringPointer));
+		var boolPointer = memory.store(TrueValue);
+		trace("bool read/write", memory.constants.getFromPointer(boolPointer));
+		var nullPointer = memory.heap.storeStatic(NullValue);
+		trace("null read/write", memory.constants.getFromPointer(nullPointer));
+		
+
+		trace("hey");
+		#elseif js
 		new JsExample();
 		#elseif unit
 		UnitTests.run();

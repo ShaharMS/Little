@@ -66,7 +66,7 @@ class Memory {
 
 	public function sizeOf(token:InterpTokens):Int {
 		switch token {
-			case ConditionCall(_, _, _) | FunctionCall(_, _) | Expression(_, _) | PropertyAccess(_, _) | Identifier(_): return sizeOf(Actions.evaluate(token));
+			case ConditionCall(_, _, _) | FunctionCall(_, _) | Expression(_, _) | PropertyAccess(_, _) | Identifier(_): return sizeOf(/* Actions.evaluate(token) */ null /**will change after im done testing memory**/);
 			case Write(_, v): return sizeOf(v);
 			case TypeCast(v, _): return sizeOf(v);
 			case Block(body, _): return sizeOf(Characters(ByteCode.compile(...body)));
