@@ -34,6 +34,11 @@ class Main {
 
 		
 		var memory = new Memory();
+		
+		trace("memory:");
+		trace(memory.stringifyMemoryBytes());
+		trace(memory.stringifyReservedBytes());
+		
 		var intPointer = memory.heap.storeInt32(-456);
 		trace("int read/write", memory.heap.readInt32(intPointer));
 		var floatPointer = memory.heap.storeDouble(123.456);
@@ -44,9 +49,14 @@ class Main {
 		trace("bool read/write", memory.constants.getFromPointer(boolPointer));
 		var nullPointer = memory.heap.storeStatic(NullValue);
 		trace("null read/write", memory.constants.getFromPointer(nullPointer));
+		var signPointer = memory.heap.storeSign("^&");
+		trace("sign read/write", memory.heap.readSign(signPointer));
 		
 
-		trace("hey");
+		trace("memory:");
+		trace(memory.stringifyMemoryBytes());
+		trace(memory.stringifyReservedBytes());
+
 		#elseif js
 		new JsExample();
 		#elseif unit

@@ -202,6 +202,7 @@ class Heap {
 		bytes.setDouble(0, b);
         for (j in 0...8) {
             parent.memory[i + j] = bytes.get(j);
+            parent.reserved[i + j] = 1;
         }
 
         return '$i';
@@ -244,17 +245,8 @@ class Heap {
 
 		// Find a free spot. Keep in mind that string's characters in this context are UTF-8 encoded, so each character is 1 byte
 		var i = 0;
-		var fit = true;
-		while (i < parent.reserved.length - (bytes.length + 1)) {
-			for (j in 0...bytes.length) {
-				if (parent.reserved[i + j] != 0) {
-					fit = false;
-					break;
-				}
-			}
-			if (fit) break;
-			i++;
-		}
+		
+        while (i < parent.reserved.length && parent.reserved.getBytes(i, bytes.length).toArray().contains(1)) i++;
 		if (i >= parent.reserved.length - bytes.length) parent.increaseBuffer();
 		
 
@@ -295,6 +287,20 @@ class Heap {
     public function freeCodeBlock(address:MemoryPointer) {
         freeString(address);
     }
+
+
+    public function storeSign(sign:String) {
+        return storeString(sign);
+    }
+
+    public function readSign(address:MemoryPointer):InterpTokens {
+        return Sign(readString(address));
+    }
+
+    public function freeSign(address:MemoryPointer) {
+        freeString(address);
+    }
+
 
 	public function storeStatic(token:InterpTokens):MemoryPointer {
 		switch token {

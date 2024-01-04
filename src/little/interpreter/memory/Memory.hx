@@ -1,5 +1,7 @@
 package little.interpreter.memory;
 
+import little.tools.TextTools;
+import vision.ds.Color;
 import little.tools.Tree;
 import haxe.ds.Either;
 import little.interpreter.Tokens.InterpTokens;
@@ -151,6 +153,22 @@ class Memory {
 
 	public function getTypeName(pointer:MemoryPointer):String {
 		return null;
+	}
+
+	public function stringifyMemoryBytes():String {
+		var s = "\n";
+		for (i in 0...memory.length) {
+			s += StringTools.hex(memory[i], 2) + " ";
+		}
+
+		return s;
+	}
+	public function stringifyReservedBytes():String {
+		var s = "\n";
+		for (i in 0...reserved.length) {
+			s += TextTools.multiply(reserved[i] + "", 2) + " ";
+		}
+		return s;
 	}
 }
 
