@@ -51,6 +51,15 @@ class Main {
 		trace("null read/write", memory.constants.getFromPointer(nullPointer));
 		var signPointer = memory.heap.storeSign("^&");
 		trace("sign read/write", memory.heap.readSign(signPointer));
+
+		var classPointer = memory.heap.storeType(
+			[VariableDeclaration(Identifier("n"), TypeReference([Little.keywords.TYPE_INT])),
+			VariableDeclaration(Identifier("s"), TypeReference([Little.keywords.TYPE_STRING]))],
+			[],
+			null
+		);
+
+		trace("class read/write", memory.heap.readType(classPointer));
 		
 
 		trace("memory:");
