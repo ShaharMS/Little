@@ -151,14 +151,16 @@ class Memory {
 
 		var block = stack.getCurrentBlock();
 		var reference = block.get(name);
-		var typeInfo:Heap.TypeBlocks = heap.readType(reference);
+		var typeInfo:Heap.TypeBlocks = heap.readType(reference.address);
 
 		return {
 			pointer: reference.address,
 			typeName: name,
-			instanceByteSize: typeInfo.instanceByteSize,
-			staticByteSize: typeInfo.staticByteSize,
-			classByteSize: typeInfo.classByteSize,
+			instanceByteSize: typeInfo.sizeOfInstanceFields,
+			staticByteSize: typeInfo.sizeOfStaticFields,
+			instanceFields: typeInfo.instanceFields,
+			staticFields: typeInfo.staticFields,
+			classByteSize: 8 /**indicator of instance field size**/ + 8 /**same for statics**/ + typeInfo.sizeOfInstanceFields + typeInfo.sizeOfStaticFields /**total size of object**/,
 		}
 	}
 
@@ -196,5 +198,7 @@ typedef TypeInfo = {
 	typeName:String,
 	instanceByteSize:Int,
 	staticByteSize:Int,
+	instanceFields:Array<{type:MemoryPointer, doc:Null<String>}>,
+	staticFields:Array<{type:MemoryPointer, doc:Null<String>}>,
 	classByteSize:Int,
 }

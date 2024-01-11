@@ -467,8 +467,6 @@ class Heap {
 
 	public function readType(pointer:MemoryPointer):TypeBlocks {
 		var handle = pointer.rawLocation;
-		var superClass = readPointer(handle);
-		handle += 8;
 		var sizeOfInstanceFields = readInt32(handle); // Memory buffer limitation: byte array on accepts indices of type Int32
 		handle += 8;
 		var sizeOfStaticFields = readInt32(handle); // Memory buffer limitation: byte array on accepts indices of type Int32
@@ -497,7 +495,6 @@ class Heap {
         
 
 		return {
-			superClass: superClass,
 			sizeOfInstanceFields: sizeOfInstanceFields,
 			sizeOfStaticFields: sizeOfStaticFields,
 			instanceFieldsBytes: instanceFieldBytes,
@@ -508,19 +505,17 @@ class Heap {
 	}
 
 	public function freeType(pointer:MemoryPointer) {
-		var handle = pointer.rawLocation + 8;
-		var totalSize = 8; // The superclass for now, we skipped it because its always 8 bytes.
+		var totalSize = 0;
 
 		totalSize += 16; // Size of instance & static fields in bytes
-		totalSize += readInt32(handle + 8); // Instance fields
-		totalSize += readInt32(handle + 8 + 8); // Static fields
+		totalSize += readInt32(pointer.rawLocation + 8); // Instance fields
+		totalSize += readInt32(pointer.rawLocation + 8 + 8); // Static fields
 
 		freeBytes(pointer, totalSize);
 	}
 }
 
 typedef TypeBlocks = {
-	superClass:MemoryPointer,
 	sizeOfInstanceFields:Int,
 	sizeOfStaticFields:Int,
 	instanceFieldsBytes:ByteArray,
