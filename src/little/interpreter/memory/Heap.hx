@@ -391,22 +391,19 @@ class Heap {
         freeBytes(pointer, typeInfo.sizeOfInstanceFields + 8);
 	}
 
-	public function storeType(staticFields:Array<InterpTokens>, instanceFields:Array<InterpTokens>, superClass:InterpTokens):MemoryPointer {
+	public function storeType(staticFields:Array<InterpTokens>, instanceFields:Array<InterpTokens>):MemoryPointer {
 		/*
 			NOTE FOR LATER: type parameter support isn't implemented, will be considered in the future.
 
 			This will be done as such:
-			 - Bytes 0-7 are reserved for a pointer to the type's super class, or `0 0 0 0 0 0 0 0` if there is no super class
-			 - Next, bytes 8-15 represent the amount of bytes consumed by instance fields
-			 - The Next 16-23 bytes represent the amount of bytes consumed by static fields
-			 - From byte 24 until the value of bytes 8-15 + 24 are the instance fields, so, for each field:
+			 - Bytes 0-7 represent the amount of bytes consumed by instance fields
+			 - The Next 8-15 bytes represent the amount of bytes consumed by static fields
+			 - From byte 16 until the value of bytes 0-7 + 24 are the instance fields, so, for each field:
 			   - 8 bytes to represent the type of the value, using a pointer to the type.
 			   - if debug mode: The string containing documentation for each field, then a null terminator
 			 - after storing the non-static fields, we store the static fields, the same way as above
 		*/
-		var cbytes = new ByteArray(8);
-        if (superClass == null) cbytes.fill(0, 8, 0);
-        else cbytes = cbytes.concat(parent.getTypeInformation(superClass).pointer.toBytes());
+		var cbytes = new ByteArray(0);
 		
         // Now count the amount of bytes consumed by instance & static fields
         var instanceBytes = [], staticBytes = [];
@@ -421,7 +418,7 @@ class Heap {
                     case VariableDeclaration(_, type, doc): {
 
 						// store the type's pointer
-						var typePointer = parent.getTypeInformation(type).pointer;
+						var typePointer = parent.getTypeInformation(type.parameter(0) /**todo**/).pointer;
                         byteArrays[t] = byteArrays[t].concat(typePointer.toArray());
 
 						// store the documentation, if any/needed
@@ -436,7 +433,7 @@ class Heap {
                     }
 					case FunctionDeclaration(_, _, _, doc) | ConditionDeclaration(_, _, doc): {
 						// Functions/conditions are always stored as strings, so we don't need to do anything type related. 8 bytes shall be reserved.
-						var typePointer = parent.getTypeInformation(Identifier(Little.keywords.TYPE_STRING)).pointer;
+						var typePointer = parent.getTypeInformation(Little.keywords.TYPE_STRING).pointer;
                         byteArrays[t] = byteArrays[t].concat(typePointer.toArray());
 
 						// store the documentation, if any/needed

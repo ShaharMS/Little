@@ -57,7 +57,7 @@ class Memory {
 
 	public function increaseBuffer() {
 		if (memory.length > maxMemorySize) {
-			Runtime.throwError(ErrorMessage('Out of memory'));
+			Runtime.throwError(ErrorMessage('Out of memory'), MEMORY);
 		}
 		var size = MathTools.min(memory.length + memoryChunkSize, maxMemorySize);
 		var delta = size - memory.length;
@@ -147,12 +147,31 @@ class Memory {
 	}
 
 
-	public function getTypeInformation(name:InterpTokens):TypeInfo {
-		return null;
+	public function getTypeInformation(name:String):TypeInfo {
+
+		var block = stack.getCurrentBlock();
+		var reference = block.get(name);
+		var typeInfo:Heap.TypeBlocks = heap.readType(reference);
+
+		return {
+			pointer: reference.address,
+			typeName: name,
+			instanceByteSize: typeInfo.instanceByteSize,
+			staticByteSize: typeInfo.staticByteSize,
+			classByteSize: typeInfo.classByteSize,
+		}
 	}
 
 	public function getTypeName(pointer:MemoryPointer):String {
-		return null;
+		var block = stack.getCurrentBlock();
+
+		for (key => value in block) {
+			if (value.address == pointer) {
+				return key;
+			}
+		}
+
+		throw 'Cannot retrieve name of type at $pointer';
 	}
 
 	public function stringifyMemoryBytes():String {
@@ -174,7 +193,6 @@ class Memory {
 
 typedef TypeInfo = {
 	pointer:MemoryPointer,
-	isStatic:Bool,
 	typeName:String,
 	instanceByteSize:Int,
 	staticByteSize:Int,
