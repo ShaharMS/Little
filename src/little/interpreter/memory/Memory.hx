@@ -65,30 +65,11 @@ class Memory {
 		reserved.resize(size);
 		reserved.fill(memory.length - delta, memory.length, 0);
 	}
-
-	public function sizeOf(token:InterpTokens):Int {
-		switch token {
-			case ConditionCall(_, _, _) | FunctionCall(_, _) | Expression(_, _) | PropertyAccess(_, _) | Identifier(_): return sizeOf(/* Actions.evaluate(token) */ null /**will change after im done testing memory**/);
-			case Write(_, v): return sizeOf(v);
-			case TypeCast(v, _): return sizeOf(v);
-			case Block(body, _): return sizeOf(Characters(ByteCode.compile(...body)));
-			case Number(num): return 4;
-			case Decimal(num): return 8;
-			case Characters(string) | Sign(string): return string.length; // 8 bit
-			case NullValue | FalseValue | TrueValue: return 1;
-			case ErrorMessage(msg): return msg.length * 2;
-			case _: 
-		}
-
-		Runtime.throwError(ErrorMessage('Unable to get size of token `$token`'), MEMORY_SIZE_EVALUATOR);
-		return -1;
-	}
-
 	/**
 		General-purpose memory allocation for objects:
 
 		- if `token` is `true`, `false`, `0`, or `null`, it pulls a pointer from the constant pool
-		- if `token` is a string, a number, a sign or a decimal, it pulls a pointer from the stack.
+		- if `token` is a string, a number, a sign or a decimal, it stores & pulls a pointer from the heap.
 		- if `token` is a structure, it stores it on the heap, and returns a pointer to it.
 	**/
 	public function store(token:InterpTokens):MemoryPointer {
@@ -106,6 +87,28 @@ class Memory {
 	}
 
 	/**
+		Reads an object, a value, or a property of an object from memory.
+		Since property names are not kept when storing the object, we need to know the indices of the properties we want to read.
+
+		This data is accessible via the object's type information.
+		@param initial the name of the value/object
+		@param fieldIndices the indices of the properties we want to read, multiple indices means reading properties of properties.
+	**/
+	public function read(initial:String, ...fieldIndices:Int):{address:MemoryPointer, type:String} {
+		var block = stack.getCurrentBlock();
+		var obj = block.get(initial);
+		if (fieldIndices.length == 0) return obj;
+
+		var currentIndex = fieldIndices[0];
+		var currentObject = heap.readObject(obj.address, getTypeInformation(obj.type).pointer);
+		while (fieldIndices.length > 0) {
+			switch currentObject {
+				case _:
+			}
+		}
+	}
+
+	/**
 		Allocate `size` bytes of memory.
 	    @param size The number of bytes to allocate
 	    @return A pointer to the allocated memory
@@ -113,37 +116,6 @@ class Memory {
 	public function allocate(size:Int):MemoryPointer {
 		if (size <= 0) Runtime.throwError(ErrorMessage('Cannot allocate ${size} bytes'));
 		return heap.storeBytes(size);
-	}
-
-	/**
-	    Reads a value of type `type` from `pointer`. Only "static" values can be read.
-	    @param pointer The pointer to read from.
-	    @param type The type of value to read.
-	    @return A token representing the value.
-	**/
-	public function read(pointer:MemoryPointer, type:String):InterpTokens {
-		switch type {
-			case (_ == Little.keywords.TYPE_BOOLEAN => true): 
-				return pointer.rawLocation == constants.TRUE.rawLocation ? TrueValue : FalseValue;
-			case (_ == Little.keywords.TYPE_INT => true): {
-				if (pointer == constants.NULL) return NullValue;
-				if (pointer == constants.ZERO) return Number(0);
-				return Number(heap.readInt32(pointer));
-			}
-			case (_ == Little.keywords.TYPE_FLOAT => true): {
-				if (pointer == constants.NULL) return NullValue;
-				if (pointer == constants.ZERO) return Decimal(0);
-				return Decimal(heap.readDouble(pointer));
-			}
-			case (_ == Little.keywords.TYPE_STRING => true): {
-				if (pointer == constants.NULL) return NullValue;
-				return Characters(heap.readString(pointer));
-			}
-			case _: {
-				Runtime.throwError(ErrorMessage('Cannot statically read object of type `$type`.'));
-				return NullValue;
-			}
-		}
 	}
 
 
