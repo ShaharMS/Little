@@ -357,31 +357,25 @@ class Heap {
 		return storeBytes(potentialBytes.length, potentialBytes);
     }
 
-	public function readObject(pointer:MemoryPointer, objectType:MemoryPointer):InterpTokens {
+	public function readObject(pointer:MemoryPointer, objectType:MemoryPointer):ObjectInfo {
 		var typeInfo = readType(objectType);
         var handle = pointer.rawLocation;
 
-        var toStringMethod = readCodeBlock(readPointer(handle));
+        var toStringMethod = readPointer(handle);
         handle += 8;
-        var props = new Array<InterpTokens>();
+        var props = new Array<{type:MemoryPointer, address:MemoryPointer}>();
 
         for (field in typeInfo.instanceFields) {
-            var fieldType = parent.getTypeName(field.type);
 
-            switch fieldType {
-                case (_ == Little.keywords.TYPE_STRING => true): props.push(Characters(readString(readPointer(handle))));
-                case (_ == Little.keywords.TYPE_INT => true): props.push(Number(readInt32(readPointer(handle))));
-                case (_ == Little.keywords.TYPE_FLOAT => true): props.push(Decimal(readDouble(readPointer(handle))));
-                case (_ == Little.keywords.TYPE_BOOLEAN => true): props.push(readPointer(handle) == parent.constants.TRUE ? TrueValue : FalseValue);
-                case (_ == Little.keywords.TYPE_SIGN => true): props.push(Sign(readString(readPointer(handle))));
-                case (_ == Little.keywords.TYPE_MODULE => true): props.push(ByteCode.decompile(readString(readPointer(handle)))[0]);
-                case _: props.push(readObject(readPointer(handle), field.type));
-            }
-
+            // Maybe unintuitive, but every single property of an object is stored with a pointer to it. 
+            props.push({type:field.type, address:readPointer(handle)});
             handle += 8;
         }
 
-        return Object(toStringMethod, props);
+        return {
+            toString: toStringMethod,
+            fields: props
+        }
 	}
 
 	public function freeObject(pointer:MemoryPointer, objectType:MemoryPointer) {
@@ -522,4 +516,9 @@ typedef TypeBlocks = {
 	staticFieldsBytes:ByteArray,
     instanceFields:Array<{type:MemoryPointer, doc:Null<String>}>,
     staticFields:Array<{type:MemoryPointer, doc:Null<String>}>,
+}
+
+typedef ObjectInfo = {
+    toString:MemoryPointer, 
+    fields:Array<{type:MemoryPointer, address:MemoryPointer}>
 }

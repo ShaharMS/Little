@@ -102,10 +102,14 @@ class Memory {
 		var currentIndex = fieldIndices[0];
 		var currentObject = heap.readObject(obj.address, getTypeInformation(obj.type).pointer);
 		while (fieldIndices.length > 0) {
-			switch currentObject {
-				case _:
+			var type = getTypeInformation(getTypeName(currentObject.fields[fieldIndices[0]].type));
+			if (type.isStaticType) {
+				// Todo
 			}
+
 		}
+
+		return currentObject;
 	}
 
 	/**
@@ -128,6 +132,7 @@ class Memory {
 		return {
 			pointer: reference.address,
 			typeName: name,
+			isStaticType: [Little.keywords.TYPE_BOOLEAN, Little.keywords.TYPE_INT, Little.keywords.TYPE_FLOAT].contains(name), // massive TODO, what about post-defined static types? maybe a developer defines a special static type...
 			instanceByteSize: typeInfo.sizeOfInstanceFields,
 			staticByteSize: typeInfo.sizeOfStaticFields,
 			instanceFields: typeInfo.instanceFields,
@@ -168,6 +173,7 @@ class Memory {
 typedef TypeInfo = {
 	pointer:MemoryPointer,
 	typeName:String,
+	isStaticType:Bool,
 	instanceByteSize:Int,
 	staticByteSize:Int,
 	instanceFields:Array<{type:MemoryPointer, doc:Null<String>}>,
