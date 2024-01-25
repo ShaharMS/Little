@@ -272,15 +272,16 @@ class Heap {
 		}
 	}
 
-    public function storeCodeBlock(block:InterpTokens):MemoryPointer {
-        switch block {
-            case Block(body, _): return storeString(ByteCode.compile(...body));
-            case _: throw new ArgumentException("block", '${block} must be a code block');
+    public function storeCodeBlock(caller:InterpTokens):MemoryPointer {
+        switch caller {
+            case Block(body, _): return storeString(ByteCode.compile(FunctionCode([], caller)));
+            case FunctionCode(requiredParams, body): return storeString(ByteCode.compile(caller));
+            case _: throw new ArgumentException("caller", '${caller} must be a code block');
         }
     }
 
     public function readCodeBlock(address:MemoryPointer):InterpTokens {
-        return Block(ByteCode.decompile(parent.memory.getString(address.rawLocation, parent.memory.getInt32(address.rawLocation), UTF8)), null);
+        return ByteCode.decompile(readString(address.rawLocation))[0];
     }
 
 
@@ -318,71 +319,95 @@ class Heap {
         if (!object.is(OBJECT)) throw new ArgumentException("object", '${object} is not a structure');
         
 		/*
-			We will take this approach:
-			First, store the object's toString method as a code block, and keep a pointer to it.
-			Then, try and store everything thats statically storable one right after the other. 
-			If the property is not statically storable, we will store it elsewhere, and within the structure's memory, a pointer to it.
-
-			That makes reading it much easier, since positional information about the position of each field can be stored
-			elsewhere, probably in a separate structure containing the object's type info.
+			We will do the same thing that python does, but simpler.
+            
+            Simply put, store everything in a hashtable that containes all object properties.
+            that hash table will be stored as a pointer, for easy replacement when needed.
 		*/
-		var potentialBytes:ByteArray = new ByteArray(0);
 
 		switch object {
 
-			case Object(toString, props): {
+			case Object(toString, props, typeName): {
+                var quadruplets = new Array<{key:String, keyPointer:MemoryPointer, value:MemoryPointer, type:MemoryPointer}>();
 
-				potentialBytes.concat(storeCodeBlock(toString).toBytes());
+                for (k => v in props) {
+                    var key = k;
+                    var keyPointer = storeString(key);
+                    var value = switch v {
+                        case Object(_, _, _): storeObject(v);
+                        case FunctionCode(_, _): storeCodeBlock(v);
+                        case _: storeStatic(v);
+                    }
+                    var type = switch v {
+                        case Number(_): parent.getTypeInformation(Little.keywords.TYPE_INT).pointer;
+                        case Decimal(_): parent.getTypeInformation(Little.keywords.TYPE_FLOAT).pointer;
+                        case Characters(_): parent.getTypeInformation(Little.keywords.TYPE_STRING).pointer;
+                        case TrueValue | FalseValue: parent.getTypeInformation(Little.keywords.TYPE_BOOLEAN).pointer;
+                        case NullValue: parent.getTypeInformation(Little.keywords.TYPE_DYNAMIC).pointer;
+                        case FunctionCode(_, _): parent.getTypeInformation(Little.keywords.TYPE_FUNCTION).pointer;
+                        case Object(_, _, t): parent.getTypeInformation(t).pointer;
+                        case _: throw "Property value must be a static value, a code block or an object (given: `" + v + "`)";
+                    }
 
-				for (value in props) {
-					if (value.is(OBJECT)) {
-						var pointer = storeObject(value);
-						potentialBytes = potentialBytes.concat(pointer.toBytes());
-					} else if (value.is(TYPE_REFERENCE)) { 
-                        // The code below is kind of a hack, doesn't need redoing right now though.
-                        potentialBytes = potentialBytes.concat(storeString(ByteCode.compile(value)).toBytes());
-                    } else if (value.is(CHARACTERS)) {
-						potentialBytes = potentialBytes.concat(storeString(value.parameter(0)).toBytes());
-					} else if (value.staticallyStorable()) {
-						potentialBytes = potentialBytes.concat(storeStatic(value).toBytes());
-					} else {
-						throw 'entry $value in structure\'s properties is not statically storable, and not an object';
-					}
-				}
-			}
+                    quadruplets.push({key: key, keyPointer: keyPointer, value: value, type: type});
+                }
 
+                quadruplets.push({
+                    key: Little.keywords.TO_STRING_PROPERTY_NAME,
+                    keyPointer: storeString(Little.keywords.TO_STRING_PROPERTY_NAME), // Todo: optimize later on, storing toString as a string over and over again cant be good.
+                    value: storeCodeBlock(toString),
+                    type: parent.getTypeInformation(Little.keywords.TYPE_FUNCTION).pointer
+                });
+
+                quadruplets.push({
+                    key: Little.keywords.OBJECT_TYPE_PROPERTY_NAME,
+                    keyPointer: storeString(Little.keywords.OBJECT_TYPE_PROPERTY_NAME),
+                    value: parent.getTypeInformation(typeName).pointer,
+                    type: parent.getTypeInformation(Little.keywords.TYPE_STRING).pointer, //The type's name is returned as a string
+                });
+
+                var bytes = ObjectHashing.generateObjectHashTable(quadruplets);
+                var bytesLength = ByteArray.from(bytes.length);
+
+                return storeBytes(bytesLength.length + bytes.length, bytesLength.concat(bytes));
+            }
 			case _:
+                throw new ArgumentException("object", '${object} must be an `Interpreter.Object`');
 		}
 
-		return storeBytes(potentialBytes.length, potentialBytes);
+        throw "How did you get here?";
     }
 
-	public function readObject(pointer:MemoryPointer, objectType:MemoryPointer):ObjectInfo {
-		var typeInfo = readType(objectType);
-        var handle = pointer.rawLocation;
-
-        var toStringMethod = readPointer(handle);
-        handle += 8;
-        var props = new Array<{type:MemoryPointer, address:MemoryPointer}>();
-
-        for (field in typeInfo.instanceFields) {
-
-            // Maybe unintuitive, but every single property of an object is stored with a pointer to it. 
-            props.push({type:field.type, address:readPointer(handle)});
-            handle += 8;
+	public function readObject(pointer:MemoryPointer):InterpTokens {
+        var hashTableBytes = readBytes(pointer.rawLocation + 4, readInt32(pointer));
+        var table = ObjectHashing.readObjectHashTable(hashTableBytes, this);
+        var map = new Map<String, InterpTokens>();
+        for (entry in table) {
+            map[entry.key] = switch parent.getTypeName(entry.type) {
+                case (_ == Little.keywords.TYPE_STRING => true): Characters(readString(entry.value));
+                case (_ == Little.keywords.TYPE_INT => true): Number(readInt32(entry.value));
+                case (_ == Little.keywords.TYPE_FLOAT => true): Decimal(readDouble(entry.value));
+                case (_ == Little.keywords.TYPE_BOOLEAN => true): readByte(entry.value) == 1 ? TrueValue : FalseValue;
+                case (_ == Little.keywords.TYPE_FUNCTION => true): readCodeBlock(entry.value);
+                // Because of the way we store lone nulls (as type dynamic), 
+                // they might get confused with objects of type dynamic, so we need to do this:
+                case (_ == Little.keywords.TYPE_DYNAMIC && parent.constants.getFromPointer(entry.value).equals(NullValue)=> true): NullValue;
+                case _: readObject(entry.value);
+            }
         }
 
-        return {
-            toString: toStringMethod,
-            fields: props
-        }
+        return Object(
+            map[Little.keywords.TO_STRING_PROPERTY_NAME], 
+            map, 
+            map[Little.keywords.OBJECT_TYPE_PROPERTY_NAME].parameter(0) /* This value is a `Characters`, so it first param is a `String`.*/
+        );
 	}
 
-	public function freeObject(pointer:MemoryPointer, objectType:MemoryPointer) {
-		// Grab the object type, and basically free sizeOfInstanceFields + 8 for the toString method
+	public function freeObject(pointer:MemoryPointer) {
+		// Just free hashTableSize + 4
 
-        var typeInfo = readType(objectType);
-        freeBytes(pointer, typeInfo.sizeOfInstanceFields + 8);
+        var hashTableSize = readInt32(pointer);
+        freeBytes(pointer, hashTableSize + 4);
 	}
 
 	public function storeType(staticFields:Array<InterpTokens>, instanceFields:Array<InterpTokens>):MemoryPointer {
@@ -519,6 +544,6 @@ typedef TypeBlocks = {
 }
 
 typedef ObjectInfo = {
-    toString:MemoryPointer, 
-    fields:Array<{type:MemoryPointer, address:MemoryPointer}>
+    pointer:MemoryPointer,
+    fields:Map<String, {keyPointer:MemoryPointer, value:MemoryPointer, type:MemoryPointer}>
 }

@@ -2,6 +2,7 @@
 --main Main
 --library vision
 --library no-warnings
+--library hash
 #--js interp.js
 --interp
 --define memory_tests

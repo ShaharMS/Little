@@ -20,7 +20,7 @@ class Memory {
 	public var externs:ExternalInterfacing;
     public var constants:ConstantPool;
 
-	@:noCompletion public var memoryChunkSize:Int = 128; // 128 bytes, 512 bits
+	@:noCompletion public var memoryChunkSize:Int = 512; // 512 bytes
 
 	/**
 		The maximum amount of memory that can be allocated, by bytes.
@@ -88,28 +88,22 @@ class Memory {
 
 	/**
 		Reads an object, a value, or a property of an object from memory.
-		Since property names are not kept when storing the object, we need to know the indices of the properties we want to read.
+		
+		This is done by building a string from the initial object, using its scope, object name and accessed properties.
 
+		 - When accessing static fields, the scope is already provided (SomeClass.field), and the extraction is easier
+		   (Stored as `SomeClass_field`)
+		 - When accessing instance fields it gets a little more complicated, as the scope is not provided, and recursion capabilities
+		   Makes everything complicated.
 		This data is accessible via the object's type information.
-		@param initial the name of the value/object
-		@param fieldIndices the indices of the properties we want to read, multiple indices means reading properties of properties.
+		@param initial the value/object
 	**/
-	public function read(initial:String, ...fieldIndices:Int):{address:MemoryPointer, type:String} {
-		var block = stack.getCurrentBlock();
-		var obj = block.get(initial);
-		if (fieldIndices.length == 0) return obj;
+	public function read(path:Array<String>):InterpTokens {
+		var stackBlock = stack.getCurrentBlock();
+		var data = stackBlock.get(path[0]);
+		
 
-		var currentIndex = fieldIndices[0];
-		var currentObject = heap.readObject(obj.address, getTypeInformation(obj.type).pointer);
-		while (fieldIndices.length > 0) {
-			var type = getTypeInformation(getTypeName(currentObject.fields[fieldIndices[0]].type));
-			if (type.isStaticType) {
-				// Todo
-			}
-
-		}
-
-		return currentObject;
+		return null;
 	}
 
 	/**

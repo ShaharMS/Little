@@ -18,6 +18,12 @@ class Keywords {
     public static var TYPE_STRING:String = "Characters";
 
     /**
+        Represents the main function type.
+        The underlying type is `TYPE_STRING`.
+    **/
+    public static var TYPE_FUNCTION:String = "Action";
+
+    /**
         represent the "type" type:
         for example: `5` is of type `Number`, and `Number` is of type `Type`
     **/
@@ -32,6 +38,8 @@ class Keywords {
     public static var MAIN_MODULE_NAME:String = "Main";
     public static var REGISTERED_MODULE_NAME:String = "Registered";
 
+    public static var OBJECT_TYPE_PROPERTY_NAME:String = "type";
+    public static var TO_STRING_PROPERTY_NAME:String = "toString";
     public static var PRINT_FUNCTION_NAME:String = "print";
     public static var RAISE_ERROR_FUNCTION_NAME:String = "error";
     public static var READ_FUNCTION_NAME:String = "read";
@@ -85,10 +93,13 @@ class Keywords {
         TYPE_FLOAT: "Decimal",
         TYPE_BOOLEAN: "Boolean",
         TYPE_STRING: "Characters",
+        TYPE_FUNCTION: "Action",
         TYPE_MODULE: "Type",
         TYPE_SIGN: "Sign",
         MAIN_MODULE_NAME: "Main",
         REGISTERED_MODULE_NAME: "Registered",
+        OBJECT_TYPE_PROPERTY_NAME: "type",
+        TO_STRING_PROPERTY_NAME: "toString",
         PRINT_FUNCTION_NAME: "print",
         RAISE_ERROR_FUNCTION_NAME: "error",
         READ_FUNCTION_NAME: "read",
@@ -125,10 +136,13 @@ class Keywords {
         TYPE_FLOAT = set.TYPE_FLOAT;
         TYPE_BOOLEAN = set.TYPE_BOOLEAN;
         TYPE_STRING = set.TYPE_STRING;
+        TYPE_FUNCTION = set.TYPE_FUNCTION;
         TYPE_MODULE = set.TYPE_MODULE;
         TYPE_SIGN = set.TYPE_SIGN;
         MAIN_MODULE_NAME = set.MAIN_MODULE_NAME;
         REGISTERED_MODULE_NAME = set.REGISTERED_MODULE_NAME;
+        OBJECT_TYPE_PROPERTY_NAME = set.OBJECT_TYPE_PROPERTY_NAME;
+        TO_STRING_PROPERTY_NAME = set.TO_STRING_PROPERTY_NAME;
         PRINT_FUNCTION_NAME = set.PRINT_FUNCTION_NAME;
         RAISE_ERROR_FUNCTION_NAME = set.RAISE_ERROR_FUNCTION_NAME;
         READ_FUNCTION_NAME = set.READ_FUNCTION_NAME;

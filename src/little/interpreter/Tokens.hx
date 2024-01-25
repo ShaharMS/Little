@@ -48,6 +48,13 @@ enum InterpTokens {
     ConditionCall(name:InterpTokens, exp:InterpTokens, body:InterpTokens);
 
 	/**
+	    Usage:
+		@param requiredParams `Map<String, InterpTokens.Identifier>`
+		@param body `Block`
+	**/
+	FunctionCode(requiredParams:Map<String, InterpTokens>, body:InterpTokens);
+
+	/**
 		Usage:
 		@param name `Identifier`, `PropertyAccess`
 		@param params `PartArray([*, SplitLine, *])`, `PartArray([*, SetLine, *])`, `PartArray([*, SetLine, *, SplitLine, *])`, `PartArray([*])`, `PartArray([])`
@@ -56,14 +63,14 @@ enum InterpTokens {
 
 	/**
 		Usage:
-		@param name `Identifier`, `PropertyAccess`
+		@param value `Identifier`, `PropertyAccess`
 		@param type `Identifier`, `PropertyAccess`
 	**/
 	FunctionReturn(value:InterpTokens, type:InterpTokens);
 
 	/**
 		Usage:
-		@param name `Array<InterpTokens.Identifier>`
+		@param assignees `Array<InterpTokens.Identifier>`
 		@param value `*`
 	**/
     Write(assignees:Array<InterpTokens>, value:InterpTokens);
@@ -134,11 +141,10 @@ enum InterpTokens {
 	/**
 
 		- `baseValue` must be a `Block`, representing a function with 0 parameters returning a string.
-		- `props`' elements may either be a `Object`, or a **statically storable** object.
-			- `props`'s entries are unnamed, since they're retrieved using their type information only. Type is retrieved from `baseValue`
-			- Order is **highly** relevant
+		- `props`' elements may either be a `Object`, a `FunctionBody`, or a **statically storable** object.
+			
 	**/
-	Object(toString:InterpTokens, props:Array<InterpTokens>);
+	Object(toString:InterpTokens, props:Map<String, InterpTokens>, typeName:String);
 
     /**
     	Used for denoting an external var/func in the interpreter.

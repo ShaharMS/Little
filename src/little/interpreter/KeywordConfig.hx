@@ -15,6 +15,13 @@ class KeywordConfig {
     @:optional public var TYPE_FLOAT:String = "Decimal";
     @:optional public var TYPE_BOOLEAN:String = "Boolean";
     @:optional public var TYPE_STRING:String = "Characters";
+    
+    /**
+        Represents the main function type.
+        The underlying type is `TYPE_STRING`.
+    **/
+    @:optional public var TYPE_FUNCTION:String = "Action";
+
     /**
         represent the "type" type:
         for example: `5` is of type `Number`, and `Number` is of type `Type`
@@ -30,6 +37,8 @@ class KeywordConfig {
     @:optional public var MAIN_MODULE_NAME:String = "Main";
     @:optional public var REGISTERED_MODULE_NAME:String = "Registered";
 
+    @:optional public var OBJECT_TYPE_PROPERTY_NAME:String = "type";
+    @:optional public var TO_STRING_PROPERTY_NAME:String = "toString";
     @:optional public var PRINT_FUNCTION_NAME:String = "print";
     @:optional public var RAISE_ERROR_FUNCTION_NAME:String = "error";
     @:optional public var READ_FUNCTION_NAME:String = "read";
