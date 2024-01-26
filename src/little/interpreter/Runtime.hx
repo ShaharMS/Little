@@ -107,6 +107,7 @@ class Runtime {
         **/
     public static function throwError(token:ParserTokens, ?layer:Layer = INTERPRETER):ParserTokens {
 
+        trace('Thrown: $token');
         callStack.push(token);
         
         var module:String = currentModule, title:String = "", reason:String;

@@ -1,5 +1,6 @@
 --class-path src
 --main Main
+-w -WStaticInitOrder
 --library vision
 --library no-warnings
 --library hash

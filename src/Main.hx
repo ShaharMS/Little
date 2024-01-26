@@ -52,14 +52,26 @@ class Main {
 		var signPointer = memory.heap.storeSign("^&");
 		trace("sign read/write", memory.heap.readSign(signPointer));
 
-		var classPointer = memory.heap.storeType(
-			[VariableDeclaration(Identifier("n"), TypeReference([Little.keywords.TYPE_INT])),
-			VariableDeclaration(Identifier("s"), TypeReference([Little.keywords.TYPE_STRING]))],
-			[],
-			null
+		var objectPointer = memory.heap.storeObject(
+			Object(
+				Block([FunctionReturn(Characters("hello"), TypeReference([Little.keywords.TYPE_STRING]))], TypeReference([Little.keywords.TYPE_STRING])),
+				[
+					"x" => Decimal(123.456),
+					"y" => Number(456),
+				],
+				"Dynamic"
+			)
 		);
 
-		trace("class read/write", memory.heap.readType(classPointer));
+		trace("object read/write", memory.heap.readObject(objectPointer));
+
+		//var classPointer = memory.heap.storeType(
+		//	[VariableDeclaration(Identifier("n"), TypeReference([Little.keywords.TYPE_INT])),
+		//	VariableDeclaration(Identifier("s"), TypeReference([Little.keywords.TYPE_BOOLEAN]))],
+		//	[]
+		//);
+//
+		//trace("class read/write", memory.heap.readType(classPointer));
 		
 
 		trace("memory:");

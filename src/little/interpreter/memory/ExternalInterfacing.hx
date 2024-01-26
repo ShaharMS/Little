@@ -11,6 +11,11 @@ class ExternalInterfacing {
 	public var parent:Memory;
 	
 	/**
+	    For each type registered, a pointer to the type must be provided
+	**/
+	public var typeToPointer:Map<String, MemoryPointer> = new Map<String, MemoryPointer>();
+
+	/**
 	    Properties of instances of a certain type.
 		for example, one may want to define a `length` property on an array
 	**/
@@ -84,13 +89,13 @@ class ExtTree {
 
 	public var properties:Map<String, ExtTree>;
 
-	public function new() {
-		getter = (objectValue, objectAddress) -> {
+	public function new(?getter:(objectValue:InterpTokens, objectAddress:MemoryPointer) -> {objectValue:InterpTokens, objectAddress:MemoryPointer}, ?properties:Map<String, ExtTree>) {
+		this.getter = getter ?? (objectValue, objectAddress) -> {
 			return {
 				objectValue: Characters('Externally registered, attached to $objectAddress'),
 				objectAddress: objectAddress
 			}
 		}
-		properties = new Map();
+		this.properties = properties ?? new Map<String, ExtTree>();
 	}
 }

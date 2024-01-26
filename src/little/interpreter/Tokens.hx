@@ -147,15 +147,6 @@ enum InterpTokens {
 	Object(toString:InterpTokens, props:Map<String, InterpTokens>, typeName:String);
 
     /**
-    	Used for denoting an external var/func in the interpreter.
-    **/
-    External(get:Array<InterpTokens> -> InterpTokens);
-    /**
-    	Used for denoting external conditions in the interpreter
-    **/
-    ExternalCondition(use:(con:Array<InterpTokens>, body:Array<InterpTokens>) -> InterpTokens);
-
-    /**
     	Used for errors & warnings
     **/
     ErrorMessage(msg:String);

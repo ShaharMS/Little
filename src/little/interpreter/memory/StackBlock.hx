@@ -16,6 +16,8 @@ abstract StackBlock(Map<String, {address:MemoryPointer, type:String}>) {
 	}
 
 	public function get(key:String):{address:MemoryPointer, type:String} {
+		trace('StackBlock.get: ${key}');
+		trace(this);
 		if (!this.exists(key)) 
 			Runtime.throwError(ErrorMessage('Variable/function ${key} does not exist'));
 		return this[key];

@@ -11,6 +11,7 @@ class Stack {
 
 	public function new(parent:Memory) {
 		this.parent = parent;
+		blocks.push(new StackBlock()); // Kick off with an empty block
 	}
 
 	public function pushBlock(withPreviousReferences:Bool = true) {

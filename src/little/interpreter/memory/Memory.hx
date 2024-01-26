@@ -227,6 +227,52 @@ class Memory {
 
 	public function getTypeInformation(name:String):TypeInfo {
 
+		// First, check for primitive types which are pre-allocated
+		// in the constant pool
+		var p = switch name {
+			case (_ == Little.keywords.TYPE_INT => true): constants.INT;
+			case (_ == Little.keywords.TYPE_FLOAT => true): constants.FLOAT;
+			case (_ == Little.keywords.TYPE_BOOLEAN => true): constants.BOOL;
+			case (_ == Little.keywords.TYPE_DYNAMIC => true): constants.DYNAMIC;
+			case _: MemoryPointer.fromInt(0);
+		}
+		if (p.rawLocation != 0) {
+			return {
+				pointer: p,
+				typeName: switch p.rawLocation {
+					case 11 /* int */: Little.keywords.TYPE_INT;
+					case 12 /* float */: Little.keywords.TYPE_FLOAT;
+					case 13 /* bool */: Little.keywords.TYPE_BOOLEAN;
+					case 14 /* dynamic */: Little.keywords.TYPE_DYNAMIC;
+					case _: throw "How did we get here? 5";
+				},
+				isStaticType: true,
+				instanceByteSize: 0,
+				staticByteSize: 0,
+				instanceFields: [],
+				staticFields: [],
+				classByteSize: 0
+			}
+		}
+
+		// If it's not a primitive type, the next priority is external types.
+		// The easiest way to get a valid type is to check the typeToPointer map
+		if (externs.typeToPointer.exists(name)) {
+			// Notice that everything is 0ed out, thats because technically this
+			// type doesnt take memory, its only on memory that the current platform's
+			// runtime itself allocates.
+			return {
+				pointer: externs.typeToPointer[name],
+				typeName: name,
+				isStaticType: false,
+				instanceByteSize: 0,
+				staticByteSize: 0,
+				instanceFields: [],
+				staticFields: [],
+				classByteSize: 0
+			}
+		}
+		
 		var block = stack.getCurrentBlock();
 		var reference = block.get(name);
 		var typeInfo:Heap.TypeBlocks = heap.readType(reference.address);
@@ -234,7 +280,7 @@ class Memory {
 		return {
 			pointer: reference.address,
 			typeName: name,
-			isStaticType: [Little.keywords.TYPE_BOOLEAN, Little.keywords.TYPE_INT, Little.keywords.TYPE_FLOAT].contains(name), // massive TODO, what about post-defined static types? maybe a developer defines a special static type...
+			isStaticType: true, // massive TODO, what about post-defined static types? maybe a developer defines a special static type...
 			instanceByteSize: typeInfo.sizeOfInstanceFields,
 			staticByteSize: typeInfo.sizeOfStaticFields,
 			instanceFields: typeInfo.instanceFields,
