@@ -87,23 +87,131 @@ class Memory {
 	}
 
 	/**
-		Reads an object, a value, or a property of an object from memory.
-		
-		This is done by building a string from the initial object, using its scope, object name and accessed properties.
-
-		 - When accessing static fields, the scope is already provided (SomeClass.field), and the extraction is easier
-		   (Stored as `SomeClass_field`)
-		 - When accessing instance fields it gets a little more complicated, as the scope is not provided, and recursion capabilities
-		   Makes everything complicated.
-		This data is accessible via the object's type information.
-		@param initial the value/object
 	**/
-	public function read(path:Array<String>):InterpTokens {
+	public function read(...path:String):{objectValue:InterpTokens, objectTypeName:String, objectAddress:MemoryPointer} {
+
+		// Before anything, global external values are prioritized
+		if (externs.hasGlobal(...path)) {
+			var object = externs.getGlobal(...path);
+			var typeName = switch object.objectValue {
+				case Object(_, _, type): type;
+				case Number(_): Little.keywords.TYPE_INT;
+				case Decimal(_): Little.keywords.TYPE_FLOAT;
+				case Characters(_): Little.keywords.TYPE_STRING;
+				case TrueValue | FalseValue: Little.keywords.TYPE_BOOLEAN;
+				case NullValue: Little.keywords.TYPE_DYNAMIC;
+				case FunctionCode(_, _): Little.keywords.TYPE_FUNCTION;
+				case _: throw "How did we get here? 3";
+			}
+			return {
+				objectValue: object.objectValue,
+				objectTypeName: typeName,
+				objectAddress: object.objectAddress
+			}
+		}
+
+		// If we didnt find anything on the externs, we look in the stack.
+		// We don't care if the field is found or not, since its supposed
+		// To throw a runtime error that a variable was not found.
 		var stackBlock = stack.getCurrentBlock();
 		var data = stackBlock.get(path[0]);
+		var current:InterpTokens = switch getTypeName(data.type) {
+			case (_ == Little.keywords.TYPE_STRING => true): Characters(heap.readString(data.address));
+			case (_ == Little.keywords.TYPE_INT => true): Number(heap.readInt32(data.address));
+			case (_ == Little.keywords.TYPE_FLOAT => true): Decimal(heap.readDouble(data.address));
+			case (_ == Little.keywords.TYPE_BOOLEAN => true): heap.readByte(data.address) == 1 ? TrueValue : FalseValue;
+			case (_ == Little.keywords.TYPE_FUNCTION => true): heap.readCodeBlock(data.address);
+            // Because of the way we store lone nulls (as type dynamic), 
+            // they might get confused with objects of type dynamic, so we need to do this:
+            case (_ == Little.keywords.TYPE_DYNAMIC && constants.getFromPointer(data.address).equals(NullValue) => true): NullValue;
+            case _: heap.readObject(data.address);
+		}
+		var currentAddress:MemoryPointer = data.address;
+		var currentType:String = data.type;
 		
+		var processed = path.toArray();
+		var wentThroughPath = [];
+		wentThroughPath.push(processed.shift()); // We already went through with it in the code above
+		while (processed.length > 0) {
+			// Get the current field, and the type of that field as well
+			var identifier = processed.shift();
+			wentThroughPath.push(identifier);
+			var typeName = switch current {
+				case Object(_, _, type): type;
+				case Number(_): Little.keywords.TYPE_INT;
+				case Decimal(_): Little.keywords.TYPE_FLOAT;
+				case Characters(_): Little.keywords.TYPE_STRING;
+				case TrueValue | FalseValue: Little.keywords.TYPE_BOOLEAN;
+				case NullValue: Little.keywords.TYPE_DYNAMIC;
+				case FunctionCode(_, _): Little.keywords.TYPE_FUNCTION;
+				case _: throw "How did we get here? 3";
+			}
+			// By design, the only other way properties are accessible on non-object
+			// values is through externs. So, after the object checks, we only need to look there.
+			// We should notice that, like before, externs are prioritized, so externs are evaluated first.
+		
+			// Property check:
+			if (externs.instanceProperties.properties.exists(typeName)) {
+				var classProperties = externs.instanceProperties.properties.get(typeName);
+				if (classProperties.properties.exists(identifier)) {
+					var newCurrent = classProperties.properties.get(identifier).getter(current, currentAddress);
+					current = newCurrent.objectValue;
+					currentAddress = newCurrent.objectAddress;
+				}
+			}
+			// Method check:
+			// Also note that external properties & methods can't overlap, so using an `else` is valid
+			else if (externs.instanceMethods.properties.exists(typeName)) {
+				var classMethods = externs.instanceMethods.properties.get(typeName);
+				if (classMethods.properties.exists(identifier)) {
+					var newCurrent = classMethods.properties.get(identifier).getter(current, currentAddress);
+					current = newCurrent.objectValue;
+					currentAddress = newCurrent.objectAddress;
+				}
+			}
+			
+			// Then, we check the object's hash table for that field
+			if (current.is(OBJECT)) {
+				var objectHashTableBytesLength = heap.readInt32(currentAddress);
+				var objectHashTableBytes = heap.readBytes(currentAddress.rawLocation + 4, objectHashTableBytesLength);
+				
+				if (ObjectHashing.hashTableHasKey(objectHashTableBytes, identifier, heap)) {
+					var keyData = ObjectHashing.hashTableGetKey(objectHashTableBytes, identifier, heap);
+					
+					switch getTypeName(keyData.type) {
+						case (_ == Little.keywords.TYPE_STRING => true): current = Characters(heap.readString(keyData.value));
+						case (_ == Little.keywords.TYPE_INT => true): current = Number(heap.readInt32(keyData.value));
+						case (_ == Little.keywords.TYPE_FLOAT => true): current = Decimal(heap.readDouble(keyData.value));
+						case (_ == Little.keywords.TYPE_BOOLEAN => true): current = heap.readByte(keyData.value) == 1 ? TrueValue : FalseValue;
+						case (_ == Little.keywords.TYPE_FUNCTION => true): current = heap.readCodeBlock(keyData.value);
+						case (keyData.value == constants.NULL => true): current = NullValue;
+						case _: current = heap.readObject(keyData.value);
+					}
 
-		return null;
+					currentAddress = keyData.value;
+					
+				}
+			}
+
+			// If we still don't have a value, we throw an error, cause that means that field doesnt exist.
+			Runtime.throwError(ErrorMessage('Field $identifier does not exist on ${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)}'));
+		}
+
+
+		return {
+			objectValue: current,
+			objectAddress: currentAddress,
+			objectTypeName: switch current {
+				case Object(_, _, type): type;
+				case Number(_): Little.keywords.TYPE_INT;
+				case Decimal(_): Little.keywords.TYPE_FLOAT;
+				case Characters(_): Little.keywords.TYPE_STRING;
+				case TrueValue | FalseValue: Little.keywords.TYPE_BOOLEAN;
+				case NullValue: Little.keywords.TYPE_DYNAMIC;
+				case FunctionCode(_, _): Little.keywords.TYPE_FUNCTION;
+				case _: throw "How did we get here? 3";
+			}
+		}
 	}
 
 	/**

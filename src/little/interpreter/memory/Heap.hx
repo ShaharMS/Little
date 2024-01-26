@@ -391,7 +391,7 @@ class Heap {
                 case (_ == Little.keywords.TYPE_FUNCTION => true): readCodeBlock(entry.value);
                 // Because of the way we store lone nulls (as type dynamic), 
                 // they might get confused with objects of type dynamic, so we need to do this:
-                case (_ == Little.keywords.TYPE_DYNAMIC && parent.constants.getFromPointer(entry.value).equals(NullValue)=> true): NullValue;
+                case (_ == Little.keywords.TYPE_DYNAMIC && parent.constants.getFromPointer(entry.value).equals(NullValue) => true): NullValue;
                 case _: readObject(entry.value);
             }
         }

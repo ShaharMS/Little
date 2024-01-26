@@ -38,14 +38,15 @@ class ObjectHashing {
                 // To handle collisions, we will basically move on until we find an empty slot
                 // Then, fill it with the new key-value-type triplet
 
-                var originalKeyIndex = keyIndex;
+                var incrementation = 24;
                 var i = keyIndex + 24;
                 while (array.getDouble(i) != 0) {
                     i += 24;
+                    incrementation += 24;
                     if (i >= array.length) {
                         i = 0;
                     }
-                    if (i == originalKeyIndex) {
+                    if (incrementation >= array.length) {
                         throw 'Object hash table did not generate. This should never happen. Initial length may be incorrect.';
                     }
                 }
@@ -83,5 +84,57 @@ class ObjectHashing {
         }
 
         return arr;
+    }
+
+    public static function hashTableHasKey(hashTable:ByteArray, key:String, heap:Heap):Bool {
+        var keyHash = Murmur1.hash(Bytes.ofString(key));
+
+        var keyIndex = (Int64.mul(keyHash, 24) % hashTable.length).low;
+        var incrementation = 0;
+        while (true) {
+            var currentKey = heap.readString(keyIndex);
+            if (currentKey == key) {
+                return true;
+            }
+            keyIndex += 24;
+            incrementation++;
+            if (keyIndex >= hashTable.length) {
+                keyIndex = 0;
+            }
+            if (incrementation >= hashTable.length) {
+                return false;
+            }
+        } 
+    }
+
+    public static function hashTableGetKey(hashTable:ByteArray, key:String, heap:Heap):{key:String, keyPointer:MemoryPointer, value:MemoryPointer, type:MemoryPointer} {
+        var keyHash = Murmur1.hash(Bytes.ofString(key));
+
+        var keyIndex = (Int64.mul(keyHash, 24) % hashTable.length).low;
+
+        var incrementation = 0;
+        while (true) {
+            var currentKey = heap.readString(keyIndex);
+            if (currentKey == key) {
+                return {
+                    key: key,
+                    keyPointer: MemoryPointer.fromInt(keyIndex),
+                    value: MemoryPointer.fromInt(keyIndex + 8),
+                    type: MemoryPointer.fromInt(keyIndex + 16)
+                }
+            }
+
+            keyIndex += 24;
+            incrementation += 24;
+            if (keyIndex >= hashTable.length) {
+                keyIndex = 0;
+            }
+            if (incrementation >= hashTable.length) {
+                throw 'Key $key not found in hash table';
+            }
+
+        }
+
+        throw 'How did you get here? 4';
     }
 }

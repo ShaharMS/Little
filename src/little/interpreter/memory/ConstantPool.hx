@@ -13,6 +13,7 @@ class ConstantPool {
 
     public function new(memory:Memory) {
         for (i in 0...11) memory.reserved[i] = 1; // Contains "Core" values
+		memory.memory[2] = 1; // TRUE
     }
 
 	public function get(token:InterpTokens) {

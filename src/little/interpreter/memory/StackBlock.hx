@@ -12,10 +12,12 @@ abstract StackBlock(Map<String, {address:MemoryPointer, type:String}>) {
 	}
 		
 	public function dereference(key:String) {
-		this[key] = null;
+		this.remove(key);
 	}
 
 	public function get(key:String):{address:MemoryPointer, type:String} {
+		if (!this.exists(key)) 
+			Runtime.throwError(ErrorMessage('Variable/function ${key} does not exist'));
 		return this[key];
 	}
 }
