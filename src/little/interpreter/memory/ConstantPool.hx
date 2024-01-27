@@ -27,10 +27,10 @@ class ConstantPool {
 			case FalseValue: return FALSE;
 			case TrueValue: return TRUE;
 			case Number(0) | Decimal(0.): return ZERO;
-			case (_.equals(TypeReference([Little.keywords.TYPE_INT])) => true): return INT;
-			case (_.equals(TypeReference([Little.keywords.TYPE_FLOAT])) => true): return FLOAT;
-			case (_.equals(TypeReference([Little.keywords.TYPE_BOOLEAN])) => true): return BOOL;
-			case (_.equals(TypeReference([Little.keywords.TYPE_DYNAMIC])) => true): return DYNAMIC;
+			case (_.equals(Identifier(Little.keywords.TYPE_INT)) => true): return INT;
+			case (_.equals(Identifier(Little.keywords.TYPE_FLOAT)) => true): return FLOAT;
+			case (_.equals(Identifier(Little.keywords.TYPE_BOOLEAN)) => true): return BOOL;
+			case (_.equals(Identifier(Little.keywords.TYPE_DYNAMIC)) => true): return DYNAMIC;
 			case _: throw new ArgumentException("token", '${token} does not exist in the constant pool');
 		}
 	}
@@ -41,10 +41,10 @@ class ConstantPool {
 			case 0x01: FalseValue;
 			case 0x02: TrueValue;
 			case 0x03: Number(0);
-			case 0x11: TypeReference([Little.keywords.TYPE_INT]);
-			case 0x12: TypeReference([Little.keywords.TYPE_FLOAT]);
-			case 0x13: TypeReference([Little.keywords.TYPE_BOOLEAN]);
-			case 0x14: TypeReference([Little.keywords.TYPE_DYNAMIC]);
+			case 0x11: Identifier(Little.keywords.TYPE_INT);
+			case 0x12: Identifier(Little.keywords.TYPE_FLOAT);
+			case 0x13: Identifier(Little.keywords.TYPE_BOOLEAN);
+			case 0x14: Identifier(Little.keywords.TYPE_DYNAMIC);
 			case _: throw "not in constant pool";
 		}
 	}

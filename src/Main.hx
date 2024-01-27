@@ -54,7 +54,7 @@ class Main {
 
 		var objectPointer = memory.heap.storeObject(
 			Object(
-				Block([FunctionReturn(Characters("hello"), TypeReference([Little.keywords.TYPE_STRING]))], TypeReference([Little.keywords.TYPE_STRING])),
+				Block([FunctionReturn(Characters("hello"), Identifier(Little.keywords.TYPE_STRING))], Identifier(Little.keywords.TYPE_STRING)),
 				[
 					"x" => Decimal(123.456),
 					"y" => Number(456),

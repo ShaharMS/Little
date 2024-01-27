@@ -321,7 +321,7 @@ class Heap {
 		/*
 			We will do the same thing that python does, but simpler.
             
-            Simply put, store everything in a hashtable that containes all object properties.
+            Simply put, store everything in a hash-table that contains all object properties.
             that hash table will be stored as a pointer, for easy replacement when needed.
 		*/
 

@@ -21,14 +21,14 @@ class ObjectHashing {
     public static function generateObjectHashTable(pairs:Array<{key:String, keyPointer:MemoryPointer, value:MemoryPointer, type:MemoryPointer}>) {
         var initialLength = pairs.length * 3 * 8 * 2; 
         // a memory pointer is 8 bytes, 3 pointers is 24 bytes
-        // We double the memory for a reasonal size-to-store ratio (0.5)
+        // We double the memory for a reasonable size-to-store ratio (0.5)
 
         var array = new ByteArray(initialLength);
 
         for (pair in pairs) {
             var keyHash = Murmur1.hash(Bytes.ofString(pair.key));
             // Since the array is 24 bytes per entry, We need to assure that keyIndex is divisible by 24
-            // What the following line does is assure the value doesnt overflow and wrap arounf to the negative.
+            // What the following line does is assure the value doesn't overflow and wrap around to the negative.
             // Basically, increase the ceiling, multiply by 24, take the remainder, and re-reduce the ceiling.
             // Also, we need to make sure that the keyIndex is not negative, since the hash may very well be.
             // THis is done by just adding the 32bit signed int limit, so -1 becomes 2.147b + 1.

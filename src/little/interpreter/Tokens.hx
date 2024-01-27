@@ -133,12 +133,6 @@ enum InterpTokens {
 	Identifier(word:String);
 
 	/**
-	    Usage:
-		@param path `Array<String>`, `[<a single String>]`
-	**/
-	TypeReference(path:Array<String>);
-
-	/**
 
 		- `baseValue` must be a `Block`, representing a function with 0 parameters returning a string.
 		- `props`' elements may either be a `Object`, a `FunctionBody`, or a **statically storable** object.

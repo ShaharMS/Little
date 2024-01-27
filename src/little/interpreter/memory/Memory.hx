@@ -109,7 +109,7 @@ class Memory {
 			}
 		}
 
-		// If we didnt find anything on the externs, we look in the stack.
+		// If we didn't find anything on the externs, we look in the stack.
 		// We don't care if the field is found or not, since its supposed
 		// To throw a runtime error that a variable was not found.
 		var stackBlock = stack.getCurrentBlock();
@@ -192,7 +192,7 @@ class Memory {
 				}
 			}
 
-			// If we still don't have a value, we throw an error, cause that means that field doesnt exist.
+			// If we still don't have a value, we throw an error, cause that means that field doesn't exist.
 			Runtime.throwError(ErrorMessage('Field $identifier does not exist on ${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)}'));
 		}
 
@@ -258,7 +258,7 @@ class Memory {
 		// The easiest way to get a valid type is to check the typeToPointer map
 		if (externs.typeToPointer.exists(name)) {
 			// Notice that everything is 0ed out, thats because technically this
-			// type doesnt take memory, its only on memory that the current platform's
+			// type doesn't take memory, its only on memory that the current platform's
 			// runtime itself allocates.
 			return {
 				pointer: externs.typeToPointer[name],
