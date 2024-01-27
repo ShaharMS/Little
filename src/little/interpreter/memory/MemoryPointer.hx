@@ -22,6 +22,10 @@ abstract MemoryPointer(String) {
 		return new MemoryPointer(i + "");
 	}
 
+    @:from public static function fromInt64(i:Int64) {
+        return new MemoryPointer(i.low + "");
+    }
+
     @:to public function toString() {
         return this;
     }

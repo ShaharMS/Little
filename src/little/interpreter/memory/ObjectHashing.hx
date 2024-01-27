@@ -28,19 +28,28 @@ class ObjectHashing {
         for (pair in pairs) {
             var keyHash = Murmur1.hash(Bytes.ofString(pair.key));
             // Since the array is 24 bytes per entry, We need to assure that keyIndex is divisible by 24
-            var keyIndex = (Int64.mul(keyHash, 24) % array.length).low;
+            // What the following line does is assure the value doesnt overflow and wrap arounf to the negative.
+            // Basically, increase the ceiling, multiply by 24, take the remainder, and re-reduce the ceiling.
+            // Also, we need to make sure that the keyIndex is not negative, since the hash may very well be.
+            // THis is done by just adding the 32bit signed int limit, so -1 becomes 2.147b + 1.
+            var khI64 = Int64.make(0, keyHash);
+            if (keyHash < 0) {
+                khI64 += 2_147_483_647; // 32bit signed int limit
+            }
+            var keyIndex = ((khI64 * 24) % array.length).low;
+            //trace(keyHash, khI64, keyIndex, array.length);
 
-            if (array.getDouble(keyIndex) == 0) {
-                array.setDouble(keyIndex, pair.keyPointer.rawLocation);
-                array.setDouble(keyIndex + 8, pair.value.rawLocation);
-                array.setDouble(keyIndex + 16, pair.type.rawLocation);
+            if (array.getInt32(keyIndex) == 0) {
+                array.setInt32(keyIndex, pair.keyPointer.rawLocation);
+                array.setInt32(keyIndex + 8, pair.value.rawLocation);
+                array.setInt32(keyIndex + 16, pair.type.rawLocation);
             } else {
                 // To handle collisions, we will basically move on until we find an empty slot
                 // Then, fill it with the new key-value-type triplet
 
                 var incrementation = 24;
                 var i = keyIndex + 24;
-                while (array.getDouble(i) != 0) {
+                while (array.getInt32(i) != 0) {
                     i += 24;
                     incrementation += 24;
                     if (i >= array.length) {
@@ -65,6 +74,7 @@ class ObjectHashing {
     **/
     public static function readObjectHashTable(bytes:ByteArray, ?heap:Heap):Array<{key:Null<String>, keyPointer:MemoryPointer, value:MemoryPointer, type:MemoryPointer}> {
         var arr = [];
+        trace(bytes.length);
 
         var i = 0;
         while (i < bytes.length) {
@@ -72,15 +82,23 @@ class ObjectHashing {
             var value = MemoryPointer.fromInt(bytes.getInt32(i + 8));
             var type = MemoryPointer.fromInt(bytes.getInt32(i + 16));
             var key = null;
-            if (heap != null) {
-                var key = heap.readString(keyPointer);
+
+            if (keyPointer.rawLocation == 0) {
+                i += 24;
+                continue; // Nothing to do here
             }
+            if (heap != null) {
+                key = heap.readString(keyPointer);
+            }
+
             arr.push({
                 key: key,
                 keyPointer: keyPointer, 
                 value: value, 
                 type: type
             });
+
+            i += 24;
         }
 
         return arr;

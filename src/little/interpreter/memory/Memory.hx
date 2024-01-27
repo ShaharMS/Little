@@ -51,7 +51,7 @@ class Memory {
 		heap = new Heap(this);
 		stack = new Stack(this);
 		constants = new ConstantPool(this);
-		
+		externs = new ExternalInterfacing(this);
 	}
 
 
@@ -63,7 +63,6 @@ class Memory {
 		var delta = size - memory.length;
 		memory.resize(size);
 		reserved.resize(size);
-		reserved.fill(memory.length - delta, memory.length, 0);
 	}
 	/**
 		General-purpose memory allocation for objects:
@@ -290,6 +289,18 @@ class Memory {
 	}
 
 	public function getTypeName(pointer:MemoryPointer):String {
+		// Externs prioritized:
+		if (externs.pointerToType.exists(pointer)) {
+			return externs.pointerToType[pointer];
+			
+		}
+		// Then, constants:
+		switch pointer.rawLocation {
+			case 11 /* int */: return Little.keywords.TYPE_INT;
+			case 12 /* float */: return Little.keywords.TYPE_FLOAT;
+			case 13 /* bool */: return Little.keywords.TYPE_BOOLEAN;
+			case 14 /* dynamic */: return Little.keywords.TYPE_DYNAMIC;
+		}
 		var block = stack.getCurrentBlock();
 
 		for (key => value in block) {

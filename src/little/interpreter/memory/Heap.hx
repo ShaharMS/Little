@@ -239,9 +239,9 @@ class Heap {
 
         // Convert the string into bytes
 		var stringBytes = Bytes.ofString(b, UTF8);
-		// In order to accurately keep track of the string, the first 4 bytes will be used to store the length
+		// In order to accurately keep track of the string, the first 4 bytes will be used to store the length *of the string*
 		var bytes = new ByteArray(4).concat(stringBytes);
-		bytes.setInt32(0, stringBytes.length);
+		bytes.setInt32(0, b.length);
 
 		// Find a free spot. Keep in mind that string's characters in this context are UTF-8 encoded, so each character is 1 byte
 		var i = 0;
@@ -362,7 +362,7 @@ class Heap {
                 quadruplets.push({
                     key: Little.keywords.OBJECT_TYPE_PROPERTY_NAME,
                     keyPointer: storeString(Little.keywords.OBJECT_TYPE_PROPERTY_NAME),
-                    value: parent.getTypeInformation(typeName).pointer,
+                    value: storeString(typeName),
                     type: parent.getTypeInformation(Little.keywords.TYPE_STRING).pointer, //The type's name is returned as a string
                 });
 

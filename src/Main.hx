@@ -59,7 +59,7 @@ class Main {
 					"x" => Decimal(123.456),
 					"y" => Number(456),
 				],
-				"Dynamic"
+				Little.keywords.TYPE_DYNAMIC
 			)
 		);
 

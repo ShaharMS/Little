@@ -4,7 +4,6 @@ import haxe.Exception;
 import little.tools.Conversion;
 import little.tools.Tree;
 import little.interpreter.Tokens.InterpTokens;
-import haxe.Constraints.Function;
 
 class ExternalInterfacing {
 	
@@ -13,7 +12,20 @@ class ExternalInterfacing {
 	/**
 	    For each type registered, a pointer to the type must be provided
 	**/
-	public var typeToPointer:Map<String, MemoryPointer> = new Map<String, MemoryPointer>();
+	public var typeToPointer:Map<String, MemoryPointer>;
+
+	/**
+	    Inverse of `typeToPointer`, not performance efficient
+	**/
+	public var pointerToType(get ,null):Map<MemoryPointer, String>;
+	@:noCompletion function get_pointerToType() {
+		var pointerToType = new Map<MemoryPointer, String>();
+		for (type => pointer in typeToPointer) {
+			pointerToType[pointer] = type;
+		}
+
+		return pointerToType;
+	}
 
 	/**
 	    Properties of instances of a certain type.
@@ -39,6 +51,8 @@ class ExternalInterfacing {
 
 	public function new(memory:Memory) {
 		parent = memory;
+		typeToPointer = new Map<String, MemoryPointer>();
+		CoreTypes.addFor(this);
 	}
 
 	public function createPathFor(extType:ExtTree, ...path:String) {
