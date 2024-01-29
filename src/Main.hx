@@ -70,7 +70,7 @@ class Main {
 			)
 		);
 
-		trace("object read/write", memory.heap.readObject(objectPointer));
+		trace("object read/write","\n" + PrettyPrinter.printInterpreterAst([memory.heap.readObject(objectPointer)]));
 
 		//var classPointer = memory.heap.storeType(
 		//	[VariableDeclaration(Identifier("n"), TypeReference([Little.keywords.TYPE_INT])),
