@@ -41,6 +41,11 @@ class Heap {
         return '$i';
     }
 
+    public function setByte(address:MemoryPointer, b:Int) {
+        parent.memory[address.rawLocation] = b;
+        parent.reserved[address.rawLocation] = 1;
+    }
+
     /**
         Reads a byte from the heap
         @param address The address of the byte to read
@@ -61,20 +66,13 @@ class Heap {
 
 
     public function storeBytes(size:Int, ?b:ByteArray):MemoryPointer {
-        // Find a free spot
         var i = 0;
-		var fit = true;
-		while (i < parent.reserved.length - size) {
-			for (j in 0...size) {
-				if (parent.reserved[i + j] != 0) {
-					fit = false;
-					break;
-				}
-			}
-			if (fit) break;
-			i++;
-		}
-		if (i >= parent.reserved.length - parent.memory.length) parent.increaseBuffer();
+		
+        while (i < parent.reserved.length - size && !parent.reserved.getBytes(i, size).isEmpty()) i++;
+		if (i >= parent.reserved.length - size) {
+            parent.increaseBuffer();
+            i += size; // Will leave some empty space, Todo.
+        }
 
         for (j in 0...size - 1) {
             parent.memory[i + j] = j > b.length ? 0 : b[j];
@@ -82,6 +80,13 @@ class Heap {
         }
 
         return '$i';
+    }
+
+    public function setBytes(address:MemoryPointer, bytes:ByteArray) {
+        for (j in 0...bytes.length - 1) {
+            parent.memory[address.rawLocation + j] = bytes[j];
+            parent.reserved[address.rawLocation + j] = 1;
+        }
     }
 
     public function readBytes(address:MemoryPointer, size:Int):ByteArray {
@@ -108,7 +113,10 @@ class Heap {
         // Find a free spot
         var i = 0;
         while (i < parent.reserved.length - 1 && parent.reserved[i] != 0 && parent.reserved[i + 1] != 0) i++;
-        if (i >= parent.reserved.length - 1) parent.increaseBuffer();
+        if (i >= parent.reserved.length - 1) {
+            parent.increaseBuffer();
+            i += 2; // leaves empty byte Todo.
+        }
 
         for (j in 0...1) {
             parent.memory[i + j] = b & 0xFF;
@@ -117,6 +125,13 @@ class Heap {
         }
 
         return '$i';
+    }
+
+    public function setInt16(address:MemoryPointer, b:Int) {
+        parent.memory[address.rawLocation] = b & 0xFF;
+        parent.memory[address.rawLocation + 1] = (b >> 8) & 0xFF;
+        parent.reserved[address.rawLocation] = 1;
+        parent.reserved[address.rawLocation + 1] = 1;
     }
 
     public function readInt16(address:MemoryPointer):Int {
@@ -137,6 +152,10 @@ class Heap {
         return storeInt16(b < 0 ? b + 32767 : b);
     }
 
+    public function setUInt16(address:MemoryPointer, b:Int) {
+        setInt16(address, b < 0 ? b + 32767 : b);
+    }
+
     public function readUInt16(address:MemoryPointer) {
 
         return (parent.memory[address.rawLocation] + (parent.memory[address.rawLocation + 1] << 8));
@@ -153,7 +172,10 @@ class Heap {
         // Find a free spot
         var i = 0;
         while (i < parent.reserved.length - 3 && parent.reserved[i] + parent.reserved[i + 1] + parent.reserved[i + 2] + parent.reserved[i + 3] != 0) i++;
-        if (i >= parent.reserved.length - 3) parent.increaseBuffer();
+        if (i >= parent.reserved.length - 3) {
+            parent.increaseBuffer();
+            i += 4; // leaves empty bytes Todo.
+        }
 
         for (j in 0...4) {
             parent.memory[i + j] = b & 0xFF;
@@ -162,6 +184,17 @@ class Heap {
         }
 
 		return '$i';
+    }
+
+    public function setInt32(address:MemoryPointer, b:Int) {
+        parent.memory[address.rawLocation] = b & 0xFF;
+        parent.memory[address.rawLocation + 1] = (b >> 8) & 0xFF;
+        parent.memory[address.rawLocation + 2] = (b >> 16) & 0xFF;
+        parent.memory[address.rawLocation + 3] = (b >> 24) & 0xFF;
+        parent.reserved[address.rawLocation] = 1;
+        parent.reserved[address.rawLocation + 1] = 1;
+        parent.reserved[address.rawLocation + 2] = 1;
+        parent.reserved[address.rawLocation + 3] = 1;
     }
 
     public function readInt32(address:MemoryPointer):Int {
@@ -177,6 +210,10 @@ class Heap {
 
     public function storeUInt32(b:UInt):MemoryPointer {
         return storeInt32(b);
+    }
+
+    public function setUInt32(address:MemoryPointer, b:UInt) {
+        setInt32(address, b);
     }
 
     public function readUInt32(address:MemoryPointer):UInt {
@@ -196,7 +233,10 @@ class Heap {
         while (i < parent.reserved.length - 7 && 
             parent.reserved[i] + parent.reserved[i + 1] + parent.reserved[i + 2] + parent.reserved[i + 3] + 
             parent.reserved[i + 4] + parent.reserved[i + 5] + parent.reserved[i + 6] + parent.reserved[i + 7] != 0) i++;
-        if (i >= parent.reserved.length - 7) parent.increaseBuffer();
+        if (i >= parent.reserved.length - 7) {
+            parent.increaseBuffer();
+            i += 8; // leaves empty bytes Todo.
+        }
 
         var bytes = Bytes.alloc(8);
 		bytes.setDouble(0, b);
@@ -206,6 +246,13 @@ class Heap {
         }
 
         return '$i';
+    }
+
+    public function setDouble(address:MemoryPointer, b:Float) {
+        parent.memory.setDouble(address.rawLocation, b);
+        for (j in 0...8) {
+            parent.reserved[address.rawLocation + j] = 1;
+        }
     }
 
     public function readDouble(address:MemoryPointer):Float {
@@ -224,6 +271,10 @@ class Heap {
 		return storeInt32(p.rawLocation); // Currently, only 32-bit pointers are supported because of the memory buffer
 	}
 
+    public function setPointer(address:MemoryPointer, p:MemoryPointer) {
+        setInt32(address, p.rawLocation);
+    }
+
 	public function readPointer(address:MemoryPointer):MemoryPointer {
 		return readInt32(address);
 	}
@@ -239,28 +290,40 @@ class Heap {
 
         // Convert the string into bytes
 		var stringBytes = Bytes.ofString(b, UTF8);
-		// In order to accurately keep track of the string, the first 4 bytes will be used to store the length *of the string*
-		var bytes = new ByteArray(4).concat(stringBytes);
-		bytes.setInt32(0, b.length);
+        trace(stringBytes.toHex());
+		// In order to accurately keep track of the string, the first 4 bytes will be used to store the length *of the bytes*
+		var bytes = ByteArray.from(stringBytes.length).concat(stringBytes);
+        trace(bytes.toHex());
 
 		// Find a free spot. Keep in mind that string's characters in this context are UTF-8 encoded, so each character is 1 byte
 		var i = 0;
 		
-        while (i < parent.reserved.length && parent.reserved.getBytes(i, bytes.length).toArray().contains(1)) i++;
-		if (i >= parent.reserved.length - bytes.length) parent.increaseBuffer();
-		
+        while (i < parent.reserved.length && !parent.reserved.getBytes(i, bytes.length).isEmpty()) i++;
+		if (i >= parent.reserved.length - bytes.length) {
+            parent.increaseBuffer();
+            i += bytes.length; // leaves empty bytes Todo.
+        }
 
 		// Each character in this string should be UTF-8 encoded
-		for (j in 0...bytes.length) {
-			parent.memory[i + j] = bytes.get(j);
-			parent.reserved[i + j] = 1;
-		}
+		parent.memory.setBytes(i, bytes);
+        parent.reserved.setBytes(i, new ByteArray(bytes.length, 1));
 
 		return '$i';
 	}
 
+    public function setString(address:MemoryPointer, b:String) {
+        // Gets a bit tricky, we need to change the string length too
+        var stringBytes = Bytes.ofString(b, UTF8);
+        var bytes = ByteArray.from(stringBytes.length).concat(stringBytes);
+        for (j in 0...bytes.length) {
+            parent.memory[address.rawLocation + j] = bytes.get(j);
+            parent.reserved[address.rawLocation + j] = 1;
+        }
+    }
+
 	public function readString(address:MemoryPointer):String {
-		var length = parent.memory.getInt32(address.rawLocation);
+		var length = readInt32(address.rawLocation);
+        trace(readBytes(address.rawLocation + 4, length).toHex());
 		return parent.memory.getString(address.rawLocation + 4, length, UTF8);
 	}
 
@@ -280,7 +343,20 @@ class Heap {
         }
     }
 
+    public function setCodeBlock(address:MemoryPointer, caller:InterpTokens) {
+        switch caller {
+            case Block(body, _): 
+                setString(address, ByteCode.compile(FunctionCode([], caller)));
+                trace(ByteCode.compile(FunctionCode([], caller)));
+            case FunctionCode(requiredParams, body): 
+                setString(address, ByteCode.compile(caller));
+                trace(ByteCode.compile(caller));
+            case _: throw new ArgumentException("caller", '${caller} must be a code block');
+        }
+    }
+
     public function readCodeBlock(address:MemoryPointer):InterpTokens {
+        trace(readString(address.rawLocation));
         return ByteCode.decompile(readString(address.rawLocation))[0];
     }
 
@@ -292,6 +368,10 @@ class Heap {
 
     public function storeSign(sign:String) {
         return storeString(sign);
+    }
+
+    public function setSign(address:MemoryPointer, sign:String) {
+        setString(address, sign);
     }
 
     public function readSign(address:MemoryPointer):InterpTokens {
@@ -330,7 +410,12 @@ class Heap {
 			case Object(toString, props, typeName): {
                 var quadruplets = new Array<{key:String, keyPointer:MemoryPointer, value:MemoryPointer, type:MemoryPointer}>();
 
-                for (k => v in props) {
+                var propsC = props.copy();
+
+                propsC[Little.keywords.OBJECT_TYPE_PROPERTY_NAME] = Characters(typeName);
+                propsC[Little.keywords.TO_STRING_PROPERTY_NAME] = FunctionCode([], toString);
+
+                for (k => v in propsC) {
                     var key = k;
                     var keyPointer = storeString(key);
                     var value = switch v {
@@ -352,24 +437,11 @@ class Heap {
                     quadruplets.push({key: key, keyPointer: keyPointer, value: value, type: type});
                 }
 
-                quadruplets.push({
-                    key: Little.keywords.TO_STRING_PROPERTY_NAME,
-                    keyPointer: storeString(Little.keywords.TO_STRING_PROPERTY_NAME), // Todo: optimize later on, storing toString as a string over and over again cant be good.
-                    value: storeCodeBlock(toString),
-                    type: parent.getTypeInformation(Little.keywords.TYPE_FUNCTION).pointer
-                });
-
-                quadruplets.push({
-                    key: Little.keywords.OBJECT_TYPE_PROPERTY_NAME,
-                    keyPointer: storeString(Little.keywords.OBJECT_TYPE_PROPERTY_NAME),
-                    value: storeString(typeName),
-                    type: parent.getTypeInformation(Little.keywords.TYPE_STRING).pointer, //The type's name is returned as a string
-                });
-
                 var bytes = ObjectHashing.generateObjectHashTable(quadruplets);
                 var bytesLength = ByteArray.from(bytes.length);
+                var bytesPointer = storeBytes(bytes.length, bytes);
 
-                return storeBytes(bytesLength.length + bytes.length, bytesLength.concat(bytes));
+                return storeBytes(4 + 4 /**currently pointers are ints**/, ByteArray.from(bytes.length).concat(ByteArray.from(bytesPointer.rawLocation)));
             }
 			case _:
                 throw new ArgumentException("object", '${object} must be an `Interpreter.Object`');
@@ -379,8 +451,9 @@ class Heap {
     }
 
 	public function readObject(pointer:MemoryPointer):InterpTokens {
-        var hashTableBytes = readBytes(pointer.rawLocation + 4, readInt32(pointer));
+        var hashTableBytes = readBytes(readPointer(pointer.rawLocation + 4), readInt32(pointer));
         var table = ObjectHashing.readObjectHashTable(hashTableBytes, this);
+        trace(table);
         var map = new Map<String, InterpTokens>();
         for (entry in table) {
             map[entry.key] = switch parent.getTypeName(entry.type) {
@@ -404,10 +477,12 @@ class Heap {
 	}
 
 	public function freeObject(pointer:MemoryPointer) {
-		// Just free hashTableSize + 4
+		// Just free pointer size (4) + int32 size (4)
 
         var hashTableSize = readInt32(pointer);
-        freeBytes(pointer, hashTableSize + 4);
+        var hashTablePointer = readPointer(pointer.rawLocation + 4);
+        freeBytes(hashTablePointer, hashTableSize);
+        freeBytes(pointer, 4 + 4);
 	}
 
 	public function storeType(staticFields:Array<InterpTokens>, instanceFields:Array<InterpTokens>):MemoryPointer {

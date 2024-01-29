@@ -43,8 +43,14 @@ class Main {
 		trace("int read/write", memory.heap.readInt32(intPointer));
 		var floatPointer = memory.heap.storeDouble(123.456);
 		trace("float read/write", memory.heap.readDouble(floatPointer));
-		var stringPointer = memory.heap.storeString("hello world");
+		var stringPointer = memory.heap.storeString("hello");
 		trace("string read/write", memory.heap.readString(stringPointer));
+		var codePointer = memory.heap.storeCodeBlock(
+			Block([
+				VariableDeclaration(Identifier("z"), Identifier(Little.keywords.TYPE_INT)),
+			], Identifier(Little.keywords.TYPE_INT))
+		);
+		trace("code read/write", memory.heap.readCodeBlock(codePointer));
 		var boolPointer = memory.store(TrueValue);
 		trace("bool read/write", memory.constants.getFromPointer(boolPointer));
 		var nullPointer = memory.heap.storeStatic(NullValue);
@@ -58,6 +64,7 @@ class Main {
 				[
 					"x" => Decimal(123.456),
 					"y" => Number(456),
+					"Z" => Characters("hello world")
 				],
 				Little.keywords.TYPE_DYNAMIC
 			)
