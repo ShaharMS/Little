@@ -141,6 +141,12 @@ enum InterpTokens {
 	**/
 	Object(toString:InterpTokens, props:Map<String, InterpTokens>, typeName:String);
 
+	/**
+	    - `name` must be a `String` representing the class' name
+		- both field maps must have elements of types `Obj
+	**/
+	Class(name:String, instanceFields:Map<String, {documentation:String, type:String}>, staticFields:Map<String, {documentation:String, type:String}>);
+
     /**
     	Used for errors & warnings
     **/

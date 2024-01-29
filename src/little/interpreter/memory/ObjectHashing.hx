@@ -7,6 +7,8 @@ import vision.ds.ByteArray;
 
 class ObjectHashing {
     
+    public static final CELL_SIZE:Int = 24; 
+
     /**
         Returns a hash table for the given key-value-type pairs.
 
@@ -19,39 +21,40 @@ class ObjectHashing {
         @param pairs an array of key-value-type triples 
     **/
     public static function generateObjectHashTable(pairs:Array<{key:String, keyPointer:MemoryPointer, value:MemoryPointer, type:MemoryPointer}>) {
-        var initialLength = pairs.length * 3 * 8 * 2; 
-        // a memory pointer is 8 bytes, 3 pointers is 24 bytes
+        var initialLength = pairs.length * CELL_SIZE * 3; 
+        // a memory pointer is 8 bytes, 3 pointers is `CELL_SIZE` bytes
         // We double the memory for a nice size-to-store ratio (0.5)
 
         var array = new ByteArray(initialLength);
 
         for (pair in pairs) {
             var keyHash = Murmur1.hash(Bytes.ofString(pair.key));
-            // Since the array is 24 bytes per entry, We need to assure that keyIndex is divisible by 24
+            // Since the array is `CELL_SIZE` bytes per entry, We need to assure that keyIndex is divisible by `CELL_SIZE`
             // What the following line does is assure the value doesn't overflow and wrap around to the negative.
-            // Basically, increase the ceiling, multiply by 24, take the remainder, and re-reduce the ceiling.
+            // Basically, increase the ceiling, multiply by `CELL_SIZE`, take the remainder, and re-reduce the ceiling.
             // Also, we need to make sure that the keyIndex is not negative, since the hash may very well be.
             // THis is done by just adding the 32bit signed int limit, so -1 becomes 2.147b + 1.
             var khI64 = Int64.make(0, keyHash);
             if (keyHash < 0) {
-                khI64 += 2_147_483_647; // 32bit signed int limit
+                khI64 = 2_147_483_647; // 32bit signed int limit
+                khI64 += -keyHash;
             }
-            var keyIndex = ((khI64 * 24) % array.length).low;
-            //trace(keyHash, khI64, keyIndex, array.length);
+            var keyIndex = ((khI64 * CELL_SIZE) % array.length).low;
 
             if (array.getInt32(keyIndex) == 0) {
                 array.setInt32(keyIndex, pair.keyPointer.rawLocation);
                 array.setInt32(keyIndex + 8, pair.value.rawLocation);
                 array.setInt32(keyIndex + 16, pair.type.rawLocation);
+                // trace('key ${pair.key} stored at ${keyIndex}');
             } else {
                 // To handle collisions, we will basically move on until we find an empty slot
                 // Then, fill it with the new key-value-type triplet
-
+                // trace ('key ${pair.key} collided at ${keyIndex}');
                 var incrementation = 0; // Todo - revisit
                 var i = keyIndex;
                 while (array.getInt32(i) != 0) {
-                    i += 24;
-                    incrementation += 24;
+                    i += CELL_SIZE;
+                    incrementation += CELL_SIZE;
                     if (i >= array.length) {
                         i = 0;
                     }
@@ -59,6 +62,10 @@ class ObjectHashing {
                         throw 'Object hash table did not generate. This should never happen. Initial length may be incorrect.';
                     }
                 }
+                array.setInt32(i, pair.keyPointer.rawLocation);
+                array.setInt32(i + 8, pair.value.rawLocation);
+                array.setInt32(i + 16, pair.type.rawLocation);
+                // trace ('key ${pair.key} stored at ${i}');
             }
         }
 
@@ -80,11 +87,10 @@ class ObjectHashing {
             var keyPointer = MemoryPointer.fromInt(bytes.getInt32(i));
             var value = MemoryPointer.fromInt(bytes.getInt32(i + 8));
             var type = MemoryPointer.fromInt(bytes.getInt32(i + 16));
-            trace(keyPointer, value, type, );
             var key = null;
 
             if (keyPointer.rawLocation == 0) {
-                i += 24;
+                i += CELL_SIZE;
                 continue; // Nothing to do here
             }
             if (heap != null) {
@@ -98,7 +104,7 @@ class ObjectHashing {
                 type: type
             });
 
-            i += 24;
+            i += CELL_SIZE;
         }
 
         return arr;
@@ -107,14 +113,20 @@ class ObjectHashing {
     public static function hashTableHasKey(hashTable:ByteArray, key:String, heap:Heap):Bool {
         var keyHash = Murmur1.hash(Bytes.ofString(key));
 
-        var keyIndex = (Int64.mul(keyHash, 24) % hashTable.length).low;
+        var khI64 = Int64.make(0, keyHash);
+        if (keyHash < 0) {
+            khI64 = 2_147_483_647; // 32bit signed int limit
+            khI64 += -keyHash;
+        }
+
+        var keyIndex = (khI64 * CELL_SIZE % hashTable.length).low;
         var incrementation = 0;
         while (true) {
             var currentKey = heap.readString(keyIndex);
             if (currentKey == key) {
                 return true;
             }
-            keyIndex += 24;
+            keyIndex += CELL_SIZE;
             incrementation++;
             if (keyIndex >= hashTable.length) {
                 keyIndex = 0;
@@ -128,7 +140,7 @@ class ObjectHashing {
     public static function hashTableGetKey(hashTable:ByteArray, key:String, heap:Heap):{key:String, keyPointer:MemoryPointer, value:MemoryPointer, type:MemoryPointer} {
         var keyHash = Murmur1.hash(Bytes.ofString(key));
 
-        var keyIndex = (Int64.mul(keyHash, 24) % hashTable.length).low;
+        var keyIndex = (Int64.mul(keyHash, CELL_SIZE) % hashTable.length).low;
 
         var incrementation = 0;
         while (true) {
@@ -142,8 +154,8 @@ class ObjectHashing {
                 }
             }
 
-            keyIndex += 24;
-            incrementation += 24;
+            keyIndex += CELL_SIZE;
+            incrementation += CELL_SIZE;
             if (keyIndex >= hashTable.length) {
                 keyIndex = 0;
             }
@@ -164,7 +176,7 @@ class ObjectHashing {
         // In case the size-to-fill ration is grater that 0,7, we will need to rehash everything and add the key
 
         var tableSize = hashTableBytes.length;
-        var occupied = table.length * 24;
+        var occupied = table.length * CELL_SIZE;
 
         if (occupied / tableSize >= 0.7) {
             // Rehash with the the key:
@@ -189,8 +201,12 @@ class ObjectHashing {
         var hashTablePosition = heap.readPointer(object.rawLocation + 4);
 
         var keyHash = Murmur1.hash(Bytes.ofString(key));
-        var khI64 = Int64.make(keyHash, 0);
-        var keyIndex = (Int64.mul(khI64, 24) % tableSize).low;
+        var khI64 = Int64.make(0, keyHash);
+        if (keyHash < 0) {
+            khI64 = 2_147_483_647;
+            khI64 += -keyHash;
+        }
+        var keyIndex = (Int64.mul(khI64, CELL_SIZE) % tableSize).low;
 
         var incrementation = 0;
 
@@ -201,8 +217,8 @@ class ObjectHashing {
                 heap.setInt32(hashTablePosition.rawLocation + keyIndex + 16, type.rawLocation);
                 return;
             }
-            keyIndex += 24;
-            incrementation += 24;
+            keyIndex += CELL_SIZE;
+            incrementation += CELL_SIZE;
             if (keyIndex >= tableSize) {
                 keyIndex = 0;
             }
@@ -217,8 +233,12 @@ class ObjectHashing {
         var hashTableBytes = heap.readBytes(heap.readPointer(object.rawLocation + 4), heap.readInt32(object.rawLocation));
         var hashTablePosition = heap.readPointer(object.rawLocation + 4);
         var keyHash = Murmur1.hash(Bytes.ofString(key));
-        var khI64 = Int64.make(keyHash, 0);
-        var keyIndex = (Int64.mul(khI64, 24) % hashTableBytes.length).low;
+        var khI64 = Int64.make(0, keyHash);
+        if (keyHash < 0) {
+            khI64 = 2_147_483_647;
+            khI64 += -keyHash;
+        }
+        var keyIndex = (Int64.mul(khI64, CELL_SIZE) % hashTableBytes.length).low;
 
         var incrementation = 0;
         while (true) {
@@ -230,8 +250,8 @@ class ObjectHashing {
                     heap.setInt32(hashTablePosition.rawLocation + keyIndex + 16, pair.type.rawLocation);
             }
 
-            keyIndex += 24;
-            incrementation += 24;
+            keyIndex += CELL_SIZE;
+            incrementation += CELL_SIZE;
             if (keyIndex >= hashTableBytes.length) {
                 keyIndex = 0;
             }

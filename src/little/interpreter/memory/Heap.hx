@@ -290,10 +290,8 @@ class Heap {
 
         // Convert the string into bytes
 		var stringBytes = Bytes.ofString(b, UTF8);
-        trace(stringBytes.toHex());
 		// In order to accurately keep track of the string, the first 4 bytes will be used to store the length *of the bytes*
 		var bytes = ByteArray.from(stringBytes.length).concat(stringBytes);
-        trace(bytes.toHex());
 
 		// Find a free spot. Keep in mind that string's characters in this context are UTF-8 encoded, so each character is 1 byte
 		var i = 0;
@@ -323,7 +321,6 @@ class Heap {
 
 	public function readString(address:MemoryPointer):String {
 		var length = readInt32(address.rawLocation);
-        trace(readBytes(address.rawLocation + 4, length).toHex());
 		return parent.memory.getString(address.rawLocation + 4, length, UTF8);
 	}
 
@@ -347,16 +344,13 @@ class Heap {
         switch caller {
             case Block(body, _): 
                 setString(address, ByteCode.compile(FunctionCode([], caller)));
-                trace(ByteCode.compile(FunctionCode([], caller)));
             case FunctionCode(requiredParams, body): 
                 setString(address, ByteCode.compile(caller));
-                trace(ByteCode.compile(caller));
             case _: throw new ArgumentException("caller", '${caller} must be a code block');
         }
     }
 
     public function readCodeBlock(address:MemoryPointer):InterpTokens {
-        trace(readString(address.rawLocation));
         return ByteCode.decompile(readString(address.rawLocation))[0];
     }
 
@@ -453,7 +447,6 @@ class Heap {
 	public function readObject(pointer:MemoryPointer):InterpTokens {
         var hashTableBytes = readBytes(readPointer(pointer.rawLocation + 4), readInt32(pointer));
         var table = ObjectHashing.readObjectHashTable(hashTableBytes, this);
-        trace(table);
         var map = new Map<String, InterpTokens>();
         for (entry in table) {
             map[entry.key] = switch parent.getTypeName(entry.type) {
@@ -607,6 +600,14 @@ class Heap {
 
 		freeBytes(pointer, totalSize);
 	}
+
+    public function storeType_NEW(type:InterpTokens) {
+        /*
+            - First bytes will be reserved for the name of the type
+            - Then, we will store the instance fields & the static fields as two hashtables,
+              With each one having its length in bytes right before it.
+        */
+    }
 }
 
 typedef TypeBlocks = {
