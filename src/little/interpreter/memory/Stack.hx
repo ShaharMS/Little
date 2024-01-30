@@ -14,14 +14,9 @@ class Stack {
 		blocks.push(new StackBlock()); // Kick off with an empty block
 	}
 
-	public function pushBlock(withPreviousReferences:Bool = true) {
+	public function pushBlock(allowLookbehind:Bool = true) {
 		var block = new StackBlock();
-		if (withPreviousReferences) {
-			for (key => value in blocks[blocks.length - 1]) {
-				block.reference(key, value.address, value.type);
-			}
-		}
-
+		if (allowLookbehind) block.previous = blocks[blocks.length - 1];
 		blocks.push(block);
 	}
 

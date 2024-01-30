@@ -1,25 +1,32 @@
 package little.interpreter.memory;
 
+import haxe.ds.StringMap;
+
 @:forward(iterator, clear, keyValueIterator, keys)
-abstract StackBlock(Map<String, {address:MemoryPointer, type:String}>) {
+class StackBlock extends StringMap<{address:MemoryPointer, type:String}>{
 	
+	public var previous:Null<StackBlock>;
+
 	public function new() {
-		this = new Map<String, {address:MemoryPointer, type:String}>();
+		super();
 	}
 
 	public function reference(key:String, address:MemoryPointer, type:String) {
-		this[key] = {address: address, type: type};
+		this.set(key, {address: address, type: type});
 	}
 		
 	public function dereference(key:String) {
 		this.remove(key);
 	}
 
-	public function get(key:String):{address:MemoryPointer, type:String} {
-		trace('StackBlock.get: ${key}');
-		trace(this);
-		if (!this.exists(key)) 
-			Runtime.throwError(ErrorMessage('Variable/function ${key} does not exist'));
-		return this[key];
+	override public function get(key:String):{address:MemoryPointer, type:String} {
+		// Do lookbehind until we find something
+		var current = this;
+		while (current != null) {
+			if (current.exists(key)) return current.get(key);
+			current = current.previous;
+		}
+		Runtime.throwError(ErrorMessage('Variable/function ${key} does not exist'));
+		return { address: MemoryPointer.fromInt(0), type: Little.keywords.TYPE_DYNAMIC };
 	}
 }

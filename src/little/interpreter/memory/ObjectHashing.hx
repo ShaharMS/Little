@@ -7,7 +7,7 @@ import vision.ds.ByteArray;
 
 class ObjectHashing {
     
-    public static final CELL_SIZE:Int = 24; 
+    public static final CELL_SIZE:Int = 32; 
 
     /**
         Returns a hash table for the given key-value-type pairs.
@@ -20,7 +20,7 @@ class ObjectHashing {
 
         @param pairs an array of key-value-type triples 
     **/
-    public static function generateObjectHashTable(pairs:Array<{key:String, keyPointer:MemoryPointer, value:MemoryPointer, type:MemoryPointer}>) {
+    public static function generateObjectHashTable(pairs:Array<{key:String, keyPointer:MemoryPointer, value:MemoryPointer, type:MemoryPointer, doc:MemoryPointer}>) {
         var initialLength = pairs.length * CELL_SIZE * 3; 
         // a memory pointer is 8 bytes, 3 pointers is `CELL_SIZE` bytes
         // We double the memory for a nice size-to-store ratio (0.5)
@@ -45,6 +45,7 @@ class ObjectHashing {
                 array.setInt32(keyIndex, pair.keyPointer.rawLocation);
                 array.setInt32(keyIndex + 8, pair.value.rawLocation);
                 array.setInt32(keyIndex + 16, pair.type.rawLocation);
+                array.setInt32(keyIndex + 24, pair.doc.rawLocation);
                 // trace('key ${pair.key} stored at ${keyIndex}');
             } else {
                 // To handle collisions, we will basically move on until we find an empty slot
@@ -65,6 +66,7 @@ class ObjectHashing {
                 array.setInt32(i, pair.keyPointer.rawLocation);
                 array.setInt32(i + 8, pair.value.rawLocation);
                 array.setInt32(i + 16, pair.type.rawLocation);
+                array.setInt32(i + 24, pair.doc.rawLocation);
                 // trace ('key ${pair.key} stored at ${i}');
             }
         }
@@ -79,7 +81,7 @@ class ObjectHashing {
         @param heap the heap, if key names are needed. When not provided, key names are `null`.
         @return the hash table as an array.
     **/
-    public static function readObjectHashTable(bytes:ByteArray, ?heap:Heap):Array<{key:Null<String>, keyPointer:MemoryPointer, value:MemoryPointer, type:MemoryPointer}> {
+    public static function readObjectHashTable(bytes:ByteArray, ?heap:Heap):Array<{key:Null<String>, keyPointer:MemoryPointer, value:MemoryPointer, type:MemoryPointer, doc:MemoryPointer}> {
         var arr = [];
 
         var i = 0;
@@ -87,6 +89,7 @@ class ObjectHashing {
             var keyPointer = MemoryPointer.fromInt(bytes.getInt32(i));
             var value = MemoryPointer.fromInt(bytes.getInt32(i + 8));
             var type = MemoryPointer.fromInt(bytes.getInt32(i + 16));
+            var doc = MemoryPointer.fromInt(bytes.getInt32(i + 24));
             var key = null;
 
             if (keyPointer.rawLocation == 0) {
@@ -101,7 +104,8 @@ class ObjectHashing {
                 key: key,
                 keyPointer: keyPointer, 
                 value: value, 
-                type: type
+                type: type,
+                doc: doc
             });
 
             i += CELL_SIZE;
@@ -137,7 +141,7 @@ class ObjectHashing {
         } 
     }
 
-    public static function hashTableGetKey(hashTable:ByteArray, key:String, heap:Heap):{key:String, keyPointer:MemoryPointer, value:MemoryPointer, type:MemoryPointer} {
+    public static function hashTableGetKey(hashTable:ByteArray, key:String, heap:Heap):{key:String, keyPointer:MemoryPointer, value:MemoryPointer, type:MemoryPointer, doc:MemoryPointer} {
         var keyHash = Murmur1.hash(Bytes.ofString(key));
 
         var keyIndex = (Int64.mul(keyHash, CELL_SIZE) % hashTable.length).low;
@@ -150,7 +154,8 @@ class ObjectHashing {
                     key: key,
                     keyPointer: MemoryPointer.fromInt(keyIndex),
                     value: MemoryPointer.fromInt(keyIndex + 8),
-                    type: MemoryPointer.fromInt(keyIndex + 16)
+                    type: MemoryPointer.fromInt(keyIndex + 16),
+                    doc: MemoryPointer.fromInt(keyIndex + 24)
                 }
             }
 
@@ -168,7 +173,7 @@ class ObjectHashing {
         throw 'How did you get here? 4';
     }
 
-    public static function objectAddKey(object:MemoryPointer, key:String, value:MemoryPointer, type:MemoryPointer, heap:Heap) {
+    public static function objectAddKey(object:MemoryPointer, key:String, value:MemoryPointer, type:MemoryPointer, doc:MemoryPointer, heap:Heap) {
         var hashTableBytes = heap.readBytes(heap.readPointer(object.rawLocation + 4), heap.readInt32(object.rawLocation));
         var table = ObjectHashing.readObjectHashTable(hashTableBytes, heap);
 
@@ -184,7 +189,8 @@ class ObjectHashing {
                 key: key,
                 keyPointer: heap.storeString(key),
                 value: value,
-                type: type
+                type: type,
+                doc: doc
             });
             var newHashTable = ObjectHashing.generateObjectHashTable(table);
             // Free the old hash table:
@@ -215,6 +221,7 @@ class ObjectHashing {
                 heap.setInt32(hashTablePosition.rawLocation + keyIndex, heap.storeString(key).rawLocation);
                 heap.setInt32(hashTablePosition.rawLocation + keyIndex + 8, value.rawLocation);
                 heap.setInt32(hashTablePosition.rawLocation + keyIndex + 16, type.rawLocation);
+                heap.setInt32(hashTablePosition.rawLocation + keyIndex + 24, doc.rawLocation);
                 return;
             }
             keyIndex += CELL_SIZE;
@@ -229,7 +236,7 @@ class ObjectHashing {
         
     }
 
-    public static function objectSetKey(object:MemoryPointer, key:String, pair:{value:MemoryPointer, type:MemoryPointer}, heap:Heap) {
+    public static function objectSetKey(object:MemoryPointer, key:String, pair:{value:MemoryPointer, type:MemoryPointer, doc:MemoryPointer}, heap:Heap) {
         var hashTableBytes = heap.readBytes(heap.readPointer(object.rawLocation + 4), heap.readInt32(object.rawLocation));
         var hashTablePosition = heap.readPointer(object.rawLocation + 4);
         var keyHash = Murmur1.hash(Bytes.ofString(key));
@@ -248,6 +255,8 @@ class ObjectHashing {
                     heap.setInt32(hashTablePosition.rawLocation + keyIndex + 8, pair.value.rawLocation);
                 if (pair.type != null)
                     heap.setInt32(hashTablePosition.rawLocation + keyIndex + 16, pair.type.rawLocation);
+                if (pair.doc != null)
+                    heap.setInt32(hashTablePosition.rawLocation + keyIndex + 24, pair.doc.rawLocation);
             }
 
             keyIndex += CELL_SIZE;

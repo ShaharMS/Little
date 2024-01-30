@@ -390,7 +390,7 @@ class Heap {
 
     public function storeObject(object:InterpTokens):MemoryPointer {
 		if (object.is(NULL_VALUE)) return parent.constants.NULL;
-        if (!object.is(OBJECT)) throw new ArgumentException("object", '${object} is not a structure');
+        if (!object.is(OBJECT)) throw new ArgumentException("object", '${object} is not a dynamic object');
         
 		/*
 			We will do the same thing that python does, but simpler.
@@ -402,7 +402,7 @@ class Heap {
 		switch object {
 
 			case Object(toString, props, typeName): {
-                var quadruplets = new Array<{key:String, keyPointer:MemoryPointer, value:MemoryPointer, type:MemoryPointer}>();
+                var quintuples = new Array<{key:String, keyPointer:MemoryPointer, value:MemoryPointer, type:MemoryPointer, doc:MemoryPointer}>();
 
                 var propsC = props.copy();
 
@@ -428,10 +428,10 @@ class Heap {
                         case _: throw "Property value must be a static value, a code block or an object (given: `" + v + "`)";
                     }
 
-                    quadruplets.push({key: key, keyPointer: keyPointer, value: value, type: type});
+                    quintuples.push({key: key, keyPointer: keyPointer, value: value, type: type, doc: 0});
                 }
 
-                var bytes = ObjectHashing.generateObjectHashTable(quadruplets);
+                var bytes = ObjectHashing.generateObjectHashTable(quintuples);
                 var bytesLength = ByteArray.from(bytes.length);
                 var bytesPointer = storeBytes(bytes.length, bytes);
 
@@ -601,12 +601,23 @@ class Heap {
 		freeBytes(pointer, totalSize);
 	}
 
-    public function storeType_NEW(type:InterpTokens) {
+    public function storeType_NEW(clazz:InterpTokens) {
+        if (clazz.is(NULL_VALUE)) return parent.constants.NULL;
+        if (!clazz.is(CLASS)) throw new ArgumentException("object", '${clazz} is not a class');
         /*
             - First bytes will be reserved for the name of the type
             - Then, we will store the instance fields & the static fields as two hashtables,
               With each one having its length in bytes right before it.
         */
+        switch clazz {
+            case Class(name, instanceFields, staticFields): {
+                var bytes = ByteArray.from(name);
+                var instance;
+            }
+            case _:
+        }
+        
+        return null;
     }
 }
 
