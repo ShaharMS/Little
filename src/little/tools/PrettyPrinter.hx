@@ -276,12 +276,13 @@ class PrettyPrinter {
 			
 			case Object(toString, props, _): 
 				var title = '${prefixFA(prefix)}$t$d Object\n';
-				props["toString"] = toString;
+				
 				var i = 0;
 				for (key => value in props) {
 					i++;
 					title += getTree_INTERP(Identifier(key), prefix.copy(), level + 1, i == [for (x in props.keys()) x].length);
-					title += getTree_INTERP(value, i == [for (x in props.keys()) x].length ? prefix.copy() : pushIndex(prefix, level), level + 2, true);
+					title += getTree_INTERP(Characters(value.documentation), i == [for (x in props.keys()) x].length ? prefix.copy() : pushIndex(prefix, level), level + 2, i == [for (x in props.keys()) x].length);
+					title += getTree_INTERP(value.value, i == [for (x in props.keys()) x].length ? prefix.copy() : pushIndex(prefix, level), level + 2, true);
 				}
 				return title;
 			case Class(name, instanceFields, staticFields):

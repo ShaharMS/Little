@@ -296,7 +296,7 @@ class Heap {
 		// Find a free spot. Keep in mind that string's characters in this context are UTF-8 encoded, so each character is 1 byte
 		var i = 0;
 		
-        while (i < parent.reserved.length && !parent.reserved.getBytes(i, bytes.length).isEmpty()) i++;
+        while (i < parent.reserved.length - bytes.length && !parent.reserved.getBytes(i, bytes.length).isEmpty()) i++;
 		if (i >= parent.reserved.length - bytes.length) {
             parent.increaseBuffer();
             i += bytes.length; // leaves empty bytes Todo.
@@ -406,18 +406,24 @@ class Heap {
 
                 var propsC = props.copy();
 
-                propsC[Little.keywords.OBJECT_TYPE_PROPERTY_NAME] = Characters(typeName);
-                propsC[Little.keywords.TO_STRING_PROPERTY_NAME] = FunctionCode([], toString);
+                propsC[Little.keywords.OBJECT_TYPE_PROPERTY_NAME] = {
+                    value: Characters(typeName),
+                    documentation: 'The type of this object, as a ${Little.keywords.TYPE_STRING}.',
+                }
+                propsC[Little.keywords.TO_STRING_PROPERTY_NAME] = {
+                    value: FunctionCode([], toString),
+                    documentation: 'The function that will be used to convert this object to a string.',
+                }
 
                 for (k => v in propsC) {
                     var key = k;
                     var keyPointer = storeString(key);
-                    var value = switch v {
-                        case Object(_, _, _): storeObject(v);
-                        case FunctionCode(_, _): storeCodeBlock(v);
-                        case _: storeStatic(v);
+                    var value = switch v.value {
+                        case Object(_, _, _): storeObject(v.value);
+                        case FunctionCode(_, _): storeCodeBlock(v.value);
+                        case _: storeStatic(v.value);
                     }
-                    var type = switch v {
+                    var type = switch v.value {
                         case Number(_): parent.getTypeInformation(Little.keywords.TYPE_INT).pointer;
                         case Decimal(_): parent.getTypeInformation(Little.keywords.TYPE_FLOAT).pointer;
                         case Characters(_): parent.getTypeInformation(Little.keywords.TYPE_STRING).pointer;
@@ -428,7 +434,7 @@ class Heap {
                         case _: throw "Property value must be a static value, a code block or an object (given: `" + v + "`)";
                     }
 
-                    quintuples.push({key: key, keyPointer: keyPointer, value: value, type: type, doc: 0});
+                    quintuples.push({key: key, keyPointer: keyPointer, value: value, type: type, doc: storeString(v.documentation) /*Todo, not a good solution, docs will some out of classes most of the time.*/});
                 }
 
                 var bytes = ObjectHashing.generateObjectHashTable(quintuples);
@@ -447,25 +453,28 @@ class Heap {
 	public function readObject(pointer:MemoryPointer):InterpTokens {
         var hashTableBytes = readBytes(readPointer(pointer.rawLocation + 4), readInt32(pointer));
         var table = ObjectHashing.readObjectHashTable(hashTableBytes, this);
-        var map = new Map<String, InterpTokens>();
+        var map = new Map<String, {value:InterpTokens, documentation:String}>();
         for (entry in table) {
-            map[entry.key] = switch parent.getTypeName(entry.type) {
-                case (_ == Little.keywords.TYPE_STRING => true): Characters(readString(entry.value));
-                case (_ == Little.keywords.TYPE_INT => true): Number(readInt32(entry.value));
-                case (_ == Little.keywords.TYPE_FLOAT => true): Decimal(readDouble(entry.value));
-                case (_ == Little.keywords.TYPE_BOOLEAN => true): readByte(entry.value) == 1 ? TrueValue : FalseValue;
-                case (_ == Little.keywords.TYPE_FUNCTION => true): readCodeBlock(entry.value);
-                // Because of the way we store lone nulls (as type dynamic), 
-                // they might get confused with objects of type dynamic, so we need to do this:
-                case (_ == Little.keywords.TYPE_DYNAMIC && parent.constants.getFromPointer(entry.value).equals(NullValue) => true): NullValue;
-                case _: readObject(entry.value);
+            map[entry.key] = {
+                value: switch parent.getTypeName(entry.type) {
+                        case (_ == Little.keywords.TYPE_STRING => true): Characters(readString(entry.value));
+                        case (_ == Little.keywords.TYPE_INT => true): Number(readInt32(entry.value));
+                        case (_ == Little.keywords.TYPE_FLOAT => true): Decimal(readDouble(entry.value));
+                        case (_ == Little.keywords.TYPE_BOOLEAN => true): readByte(entry.value) == 1 ? TrueValue : FalseValue;
+                        case (_ == Little.keywords.TYPE_FUNCTION => true): readCodeBlock(entry.value);
+                        // Because of the way we store lone nulls (as type dynamic), 
+                        // they might get confused with objects of type dynamic, so we need to do this:
+                        case (_ == Little.keywords.TYPE_DYNAMIC && parent.constants.getFromPointer(entry.value).equals(NullValue) => true): NullValue;
+                        case _: readObject(entry.value);
+                        },
+                documentation: readString(entry.doc) 
             }
         }
 
         return Object(
-            map[Little.keywords.TO_STRING_PROPERTY_NAME], 
+            map[Little.keywords.TO_STRING_PROPERTY_NAME].value, 
             map, 
-            map[Little.keywords.OBJECT_TYPE_PROPERTY_NAME].parameter(0) /* This value is a `Characters`, so it first param is a `String`.*/
+            map[Little.keywords.OBJECT_TYPE_PROPERTY_NAME].value.parameter(0) /* This value is a `Characters`, so it first param is a `String`.*/
         );
 	}
 

@@ -62,9 +62,9 @@ class Main {
 			Object(
 				Block([FunctionReturn(Characters("hello"), Identifier(Little.keywords.TYPE_STRING))], Identifier(Little.keywords.TYPE_STRING)),
 				[
-					"x" => Decimal(123.456),
-					"y" => Number(456),
-					"Z" => Characters("hello world")
+					"x" => {value: Decimal(123.456), documentation: ""},
+					"y" => {value: Number(456), documentation: ""},
+					"Z" => {value: Characters("hello world"), documentation: ""}
 				],
 				Little.keywords.TYPE_DYNAMIC
 			)

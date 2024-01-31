@@ -139,7 +139,7 @@ enum InterpTokens {
 		- `typeName` must be a `String`, containing a proper, accessible type.
 			
 	**/
-	Object(toString:InterpTokens, props:Map<String, InterpTokens>, typeName:String);
+	Object(toString:InterpTokens, props:Map<String, {documentation:String, value:InterpTokens}>, typeName:String);
 
 	/**
 	    - `name` must be a `String` representing the class' name
