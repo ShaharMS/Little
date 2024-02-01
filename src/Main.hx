@@ -84,6 +84,8 @@ class Main {
 		trace("memory:");
 		trace(memory.stringifyMemoryBytes());
 		trace(memory.stringifyReservedBytes());
+		trace(memory.memory.length);
+		trace(memory.reserved.toArray().filter(x -> x == 1).length);
 
 		#elseif js
 		new JsExample();

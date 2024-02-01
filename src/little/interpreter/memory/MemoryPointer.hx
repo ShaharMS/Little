@@ -3,7 +3,12 @@ package little.interpreter.memory;
 import haxe.io.Bytes;
 import haxe.Int64;
 
+inline var POINTER_SIZE = MemoryPointer.POINTER_SIZE;
+
 abstract MemoryPointer(String) {
+
+    public static inline var POINTER_SIZE:Int = 4; //Currently, since byte array indices are 32bit.
+    
     public var rawLocation(get, set):Int;
 
     inline function get_rawLocation() return Std.parseInt(this);
