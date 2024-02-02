@@ -24,32 +24,32 @@ class Interpreter {
 			post.push(switch item {
 				case SetLine(line): SetLine(line);
 				case SplitLine: SplitLine;
-				case Variable(name, type, doc): VariableDeclaration(name, type, doc);
-				case Function(name, params, type, doc):
-				case Condition(name, exp, body):
-				case Read(name):
-				case Write(assignees, value):
-				case Identifier(word):
-				case TypeDeclaration(value, type):
-				case FunctionCall(name, params):
-				case Return(value, type):
-				case Expression(parts, type):
-				case Block(body, type):
-				case PartArray(parts):
-				case PropertyAccess(name, property):
-				case Sign(sign):
-				case Number(num):
-				case Decimal(num):
-				case Characters(string):
-				case Documentation(doc):
-				case Module(name):
-				case External(get):
-				case ExternalCondition(use):
-				case ErrorMessage(msg):
-				case NullValue:
-				case TrueValue:
-				case FalseValue:
-				case NoBody:
+				case Variable(name, type, doc): VariableDeclaration(convert([name])[0], convert([type])[0], convert([doc])[0]);
+				case Function(name, params, type, doc): FunctionDeclaration(convert([name])[0], convert([params])[0], convert([type])[0], convert([doc])[0]);
+				case Condition(name, exp, body): ConditionCall(convert([name])[0], convert([exp])[0], convert([body])[0]);
+				case Read(name): null;
+				case Write(assignees, value): Write(convert(assignees), convert([value])[0]);
+				case Identifier(word): Identifier(word);
+				case TypeDeclaration(value, type): TypeCast(convert([value])[0], convert([type])[0]);
+				case FunctionCall(name, params): FunctionCall(convert([name])[0], convert([params])[0]);
+				case Return(value, type): FunctionReturn(convert([value])[0], convert([type])[0]);
+				case Expression(parts, type): Expression(convert(parts), convert([type])[0]);
+				case Block(body, type): Block(convert(body), convert([type])[0]);
+				case PartArray(parts): PartArray(convert(parts));
+				case PropertyAccess(name, property): PropertyAccess(convert([name])[0], convert([property])[0]);
+				case Sign(sign): Sign(sign);
+				case Number(num): Number(Std.parseInt(num));
+				case Decimal(num): Decimal(Std.parseFloat(num));
+				case Characters(string): Characters(string);
+				case Documentation(doc): null;
+				case Module(name): null;
+				case External(get): null;
+				case ExternalCondition(use): null;
+				case ErrorMessage(msg): ErrorMessage(msg);
+				case NullValue: NullValue;
+				case TrueValue: TrueValue;
+				case FalseValue: FalseValue;
+				case NoBody: null;
 			});
 		}
 
