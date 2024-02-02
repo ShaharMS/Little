@@ -11,33 +11,33 @@ enum InterpTokens {
     	Usage:
 		@param name `Identifier`, `PropertyAccess`
 		@param type `Identifier`, `PropertyAccess`
-		@param doc `String`, `null`
+		@param doc `Characters`
     **/
-    VariableDeclaration(name:InterpTokens, type:InterpTokens, ?doc:String);
+    VariableDeclaration(name:InterpTokens, type:InterpTokens, ?doc:InterpTokens);
 
 	/**
 		Usage:
 		@param name `Identifier`, `PropertyAccess`
 		@param params `PartArray([*, SplitLine, *])`, `PartArray([*, SetLine, *])`, `PartArray([*, SetLine, *, SplitLine, *])`, `PartArray([*])`, `PartArray([])` 
 		@param type `Identifier`, `PropertyAccess`
-		@param doc `String`, `null`
+		@param doc `Characters`
 	**/
-    FunctionDeclaration(name:InterpTokens, params:InterpTokens, type:InterpTokens, ?doc:String);
+    FunctionDeclaration(name:InterpTokens, params:InterpTokens, type:InterpTokens, ?doc:InterpTokens);
 
 	/**
 		Usage:
 		@param name `Identifier`, `PropertyAccess`
 		@param conditionType `Identifier`, `PropertyAccess`
-		@param doc `String`, `null`
+		@param doc `Characters`
 	**/
-	ConditionDeclaration(name:InterpTokens, conditionType:InterpTokens, ?doc:String);
+	ConditionDeclaration(name:InterpTokens, conditionType:InterpTokens, ?doc:InterpTokens);
 	
 	/**
 		Usage:
 		@param name `Identifier`, `PropertyAccess`
-		@param doc `String`, `null`
+		@param doc `Characters`
 	**/
-	ClassDeclaration(name:InterpTokens, ?doc:String);
+	ClassDeclaration(name:InterpTokens, ?doc:InterpTokens);
 
     /**
 		Usage:

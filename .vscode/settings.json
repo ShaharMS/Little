@@ -4,11 +4,13 @@
         "haxe": true
     },
     "cSpell.words": [
+		"'s",
 		"alloc",
 		"callstack",
 		"clazz",
 		"concat",
 		"decompile",
+		"definiton",
 		"dont",
 		"Funcs",
 		"incrementation",

@@ -1,5 +1,6 @@
 package little.interpreter;
 
+import little.interpreter.Tokens.InterpTokens;
 import haxe.CallStack;
 import little.tools.Layer;
 import little.tools.PrettyPrinter;
@@ -15,6 +16,47 @@ using little.tools.TextTools;
 @:access(little.interpreter.Runtime)
 class Interpreter {
     
+
+	public static function convert(pre:Array<ParserTokens>):Array<InterpTokens> {
+		var post:Array<InterpTokens> = [];
+
+		for (item in pre) {
+			post.push(switch item {
+				case SetLine(line): SetLine(line);
+				case SplitLine: SplitLine;
+				case Variable(name, type, doc): VariableDeclaration(name, type, doc);
+				case Function(name, params, type, doc):
+				case Condition(name, exp, body):
+				case Read(name):
+				case Write(assignees, value):
+				case Identifier(word):
+				case TypeDeclaration(value, type):
+				case FunctionCall(name, params):
+				case Return(value, type):
+				case Expression(parts, type):
+				case Block(body, type):
+				case PartArray(parts):
+				case PropertyAccess(name, property):
+				case Sign(sign):
+				case Number(num):
+				case Decimal(num):
+				case Characters(string):
+				case Documentation(doc):
+				case Module(name):
+				case External(get):
+				case ExternalCondition(use):
+				case ErrorMessage(msg):
+				case NullValue:
+				case TrueValue:
+				case FalseValue:
+				case NoBody:
+			});
+		}
+
+		return post;
+	}
+
+
     public static var errorThrown = false;
 
     public static var memory:MemoryTree = new MemoryTree(mother);
@@ -836,3 +878,4 @@ class Interpreter {
         return post;
     }
 }
+
