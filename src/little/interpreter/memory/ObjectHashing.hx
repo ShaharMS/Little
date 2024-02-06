@@ -271,4 +271,11 @@ class ObjectHashing {
         }
         
     }
+
+	public static function getHashTableOf(objectPointer:MemoryPointer, heap:Heap) {
+		var byteLength = heap.readInt32(objectPointer.rawLocation);
+		var bytesPointer = heap.readPointer(objectPointer.rawLocation + 4);
+
+		return heap.readBytes(bytesPointer, byteLength);
+	}
 }

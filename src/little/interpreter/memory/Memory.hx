@@ -1,5 +1,6 @@
 package little.interpreter.memory;
 
+import vision.ds.Queue;
 import little.tools.TextTools;
 import vision.ds.Color;
 import little.tools.Tree;
@@ -54,6 +55,19 @@ class Memory {
 		externs = new ExternalInterfacing(this);
 	}
 
+	public function reset() {
+		memory.resize(memoryChunkSize);
+		reserved.resize(memoryChunkSize);
+		memory.fill(0, memoryChunkSize, 0);
+		reserved.fill(0, memoryChunkSize, 0);
+
+		while (stack.getCurrentBlock() != null) {
+			stack.popBlock();
+		}
+
+		externs = new ExternalInterfacing(this);
+		// Constants don't need to be reset
+	}
 
 	public function increaseBuffer() {
 		if (memory.length > maxMemorySize) {
@@ -87,7 +101,16 @@ class Memory {
 
 	/**
 	**/
-	public function read(...path:String):{objectValue:InterpTokens, objectTypeName:String, objectAddress:MemoryPointer} {
+	public function read(...path:String):{objectValue:InterpTokens, objectTypeName:String, objectAddress:MemoryPointer, objectDoc:String} {
+		// If the path is empty, we just return null
+		if (path.length == 0) {
+			return {
+				objectValue: null,
+				objectTypeName: null,
+				objectAddress: null,
+				objectDoc: null
+			}
+		}
 
 		// Before anything, global external values are prioritized
 		if (externs.hasGlobal(...path)) {
@@ -105,7 +128,8 @@ class Memory {
 			return {
 				objectValue: object.objectValue,
 				objectTypeName: typeName,
-				objectAddress: object.objectAddress
+				objectAddress: object.objectAddress,
+				objectDoc: object.objectDoc
 			}
 		}
 
@@ -127,6 +151,7 @@ class Memory {
 		}
 		var currentAddress:MemoryPointer = data.address;
 		var currentType:String = data.type;
+		var currentDoc:String = data.doc;
 		
 		var processed = path.toArray();
 		var wentThroughPath = [];
@@ -156,6 +181,7 @@ class Memory {
 					var newCurrent = classProperties.properties.get(identifier).getter(current, currentAddress);
 					current = newCurrent.objectValue;
 					currentAddress = newCurrent.objectAddress;
+					currentDoc = newCurrent.objectDoc;
 				}
 			}
 			// Method check:
@@ -166,6 +192,7 @@ class Memory {
 					var newCurrent = classMethods.properties.get(identifier).getter(current, currentAddress);
 					current = newCurrent.objectValue;
 					currentAddress = newCurrent.objectAddress;
+					currentDoc = newCurrent.objectDoc;
 				}
 			}
 			
@@ -188,7 +215,7 @@ class Memory {
 					}
 
 					currentAddress = keyData.value;
-					
+					currentDoc = keyData.doc;
 				}
 			}
 
@@ -209,7 +236,55 @@ class Memory {
 				case NullValue: Little.keywords.TYPE_DYNAMIC;
 				case FunctionCode(_, _): Little.keywords.TYPE_FUNCTION;
 				case _: throw "How did we get here? 3";
+			},
+			objectDoc: currentDoc
+		}
+	}
+
+	public function write(path:Array<String>, value:InterpTokens, type:String, doc:String) {
+		// A couple notices:
+		/*
+			- The first n-1 elements of the path must exist beforehand, and must be objects
+			- The last element will be a field of the last object
+		*/
+
+		if (path.length == 0) {
+			Runtime.throwError(ErrorMessage('Cannot write to an empty path'));
+			// Does not make sense to have a path of length 0, but still more useful than a quiet return/crash.
+		}
+
+		if (path.length == 1) {
+			if (stack.getCurrentBlock().exists(path[0])) {
+				Runtime.throwError(ErrorMessage('Cannot redefine an already existing variable/function (for variable ${path[0]})'));
 			}
+			stack.getCurrentBlock().reference(path[0], store(value), type, doc);
+		} else {
+			var pathCopy = path.slice(1);
+			var wentThroughPath = path.slice(0, path.length - 1);
+			var current = stack.getCurrentBlock().get(pathCopy[0]);
+			while (pathCopy.length > 1) {
+				if (getTypeInformation(current.type).isStaticType) {
+					Runtime.throwError(ErrorMessage('Cannot write to a static type. Only objects can have dynamic properties (${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)} is `${current.type}`)'));
+				}
+				if (!ObjectHashing.hashTableHasKey(ObjectHashing.getHashTableOf(current.address, heap), pathCopy[0], heap)) {
+					var a = wentThroughPath.concat([pathCopy[0]]).join(Little.keywords.PROPERTY_ACCESS_SIGN);
+					Runtime.throwError(ErrorMessage('Cannot write a property to ${a}, since ${pathCopy[0]} does not exist (did you forget to define ${a}?)'));
+				}
+				var hashTableKey = ObjectHashing.hashTableGetKey(ObjectHashing.getHashTableOf(current.address, heap), pathCopy[0], heap);
+				current = {
+					address: hashTableKey.value,
+					type: getTypeName(hashTableKey.type),
+					doc: heap.readString(hashTableKey.doc),
+				}
+				wentThroughPath.push(pathCopy[0]);
+				pathCopy.shift();
+			}
+
+			if (getTypeInformation(current.type).isStaticType) {
+				Runtime.throwError(ErrorMessage('Cannot write to a static type. Only objects can have dynamic properties (${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)} is `${current.type}`)'));
+			}
+
+			ObjectHashing.objectAddKey(current.address, pathCopy[0], store(value), getTypeInformation(type).pointer, heap.storeString(doc), heap);
 		}
 	}
 

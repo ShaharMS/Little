@@ -116,6 +116,8 @@ enum InterpTokens {
     /**String UTF8**/
     Characters(string:String);
 	/**String UTF8**/
+	Documentation(doc:String);
+	/**String UTF8**/
 	Sign(sign:String);
 	/**`null`**/
     NullValue;

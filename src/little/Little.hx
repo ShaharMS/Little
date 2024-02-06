@@ -1,5 +1,6 @@
 package little;
 
+import little.interpreter.memory.Memory;
 import little.interpreter.Actions;
 import little.interpreter.Operators;
 import little.tools.Plugins;
@@ -82,11 +83,6 @@ class Little {
         @param debug specifically specify whether or not to print more debugging information. Overrides default `Little.debug`.
     **/
     public static function run(code:String, ?debug:Bool) {
-        Interpreter.errorThrown = false;
-        Runtime.line = 0;
-        Runtime.callStack = [];
-        Runtime.stdout.reset();
-        Runtime.currentModule = Keywords.MAIN_MODULE_NAME;
         final previous = Little.debug;
         if (debug != null) Little.debug = debug;
         Interpreter.memory.underlying.map = [];
@@ -100,5 +96,14 @@ class Little {
         Actions.run(Parser.parse(Lexer.lex(code)));
         if (debug != null) Little.debug = previous;
     }
+
+	public static function reset() {
+		Interpreter.errorThrown = false;
+        Runtime.line = 0;
+        Runtime.callStack = [];
+        Runtime.stdout.reset();
+        Runtime.currentModule = Keywords.MAIN_MODULE_NAME;
+		Runtime.memory.reset();
+	}
 
 }

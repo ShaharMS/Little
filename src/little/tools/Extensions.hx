@@ -1,5 +1,6 @@
 package little.tools;
 
+import little.interpreter.Actions;
 import little.interpreter.Tokens.InterpTokens;
 import little.interpreter.Interpreter;
 import little.parser.Tokens.ParserTokens;
@@ -42,6 +43,10 @@ class Extensions {
 
 	public static inline function staticallyStorable(token:InterpTokens):Bool {
 		return passedByValue(token) || is(token, CHARACTERS);
+	}
+
+	public static inline function extractIdentifier(token:InterpTokens):String {
+		return is(token, IDENTIFIER, CHARACTERS) ? parameter(token, 0) : parameter(Actions.run([token]), 0);
 	}
 
 	public static function containsAny<T>(array:Array<T>, func:T -> Bool):Bool {
@@ -106,6 +111,7 @@ enum InterpTokensSimple {
 	NUMBER;
 	DECIMAL;
 	CHARACTERS;
+	DOCUMENTATION;
 	SIGN;
 	NULL_VALUE;
 	TRUE_VALUE;

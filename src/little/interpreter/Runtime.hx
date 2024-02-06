@@ -1,5 +1,6 @@
 package little.interpreter;
 
+import little.interpreter.memory.Memory;
 import little.lexer.Lexer;
 import little.interpreter.memory.MemoryObject;
 import little.interpreter.memory.MemoryTree;
@@ -25,10 +26,9 @@ class Runtime {
     public static var line(default, null):Int = 0;
 
     /**
-    	The program's memory tree
+    	The program's memory manager.
     **/
-    public static var memory:MemoryTree = Interpreter.memory;
-
+    public static var memory:Memory;
     /**
         The next token to be interpreted
     **/
@@ -58,11 +58,18 @@ class Runtime {
     public static var errorToken(default, null):ParserTokens;
 
     /**
-    	Dispatches every time the interpreter finishes running a line of code.
+    	Dispatches right before the interpreter starts running a line of code.
 
         @param line The line the interpreter just finished running.
     **/
     public static var onLineChanged:Array<Int -> Void> = [];
+	
+	/**
+		Dispatches every time the interpreter finds a line splitter (`,` or `;`)
+
+		@param line The line the interpreter just finished running.
+	**/
+	public static var onLineSplit:Array<Void -> Void> = [];
 
     /**
     	Dispatches after finishing interpreting a token.

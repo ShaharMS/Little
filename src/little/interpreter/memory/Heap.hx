@@ -441,7 +441,7 @@ class Heap {
                 var bytesLength = ByteArray.from(bytes.length);
                 var bytesPointer = storeBytes(bytes.length, bytes);
 
-                return storeBytes(4 + 4 /**currently pointers are ints**/, ByteArray.from(bytes.length).concat(ByteArray.from(bytesPointer.rawLocation)));
+                return storeBytes(POINTER_SIZE + 4 , ByteArray.from(bytes.length).concat(ByteArray.from(bytesPointer.rawLocation)));
             }
 			case _:
                 throw new ArgumentException("object", '${object} must be an `Interpreter.Object`');

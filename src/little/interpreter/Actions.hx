@@ -1,5 +1,6 @@
 package little.interpreter;
 
+import little.interpreter.Tokens.InterpTokens;
 import little.tools.PrettyPrinter;
 import haxe.macro.Context.Message;
 import haxe.xml.Parser;
@@ -18,14 +19,7 @@ using little.tools.TextTools;
 class Actions {
     
 
-	static var memory:MemoryTree = Runtime.memory;
-
-    /**
-    	Switch Current Working Memory
-    **/
-    public static function scwm(memory:MemoryTree) {
-        Actions.memory = memory;
-    }
+	static var memory:Memory = Runtime.memory;
     
     /**
         Raise an error in the program, with the given message.
@@ -51,6 +45,12 @@ class Actions {
         return ErrorMessage(message);
     }
 
+	public static function assert(token:InterpTokens, isType:InterpTokensSimple, ?errorMessage:String = null) {
+		if (!token.is(isType)) {
+			Runtime.throwError(errorMessage != null ? ErrorMessage(errorMessage) : ErrorMessage('Assertion failed, token $token is not of type $isType'), INTERPRETER);
+		}
+	}
+
     /**
         Set the current line of the program
     **/
@@ -75,95 +75,84 @@ class Actions {
         Split the current line. In other words, create a new line, but keep the old line number.
     **/
     public static function splitLine() {
-        // Listeners
+        for (listener in Runtime.onLineSplit) listener();
     }
 
     /**
-        Declare a new variable. That variable will be added to the current working memory. Switch the working memory using `scwm`
-        @param name The name of the variable. Can be any token stringifiyable via `token.value()`.
-        @param type The type of the variable. Can be any token stringifiyable via `token.value()`.
-        @param doc The documentation of the variable. Should be a `ParserTokens.Documentation(doc:String)`
+        Declare a new variable. That variable will be added to the current stack block.
+        @param name The name of the variable. Can be any token stringifiyable via `token.extractIdentifier()`.
+        @param type The type of the variable. Can be any token stringifiyable via `token.extractIdentifier()`.
+        @param doc The documentation of the variable. Should be a `InterpTokens.Documentation(doc:String)`
     **/
-    public static function declareVariable(name:ParserTokens, type:ParserTokens, doc:ParserTokens) {
-        function access(onObject:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
-            switch prop {
-                case PropertyAccess(_, property): {
-                    objName += '${Little.keywords.PROPERTY_ACCESS_SIGN}${prop.value()}';
-                    // trace(object, prop.value(), property);
-                    if (onObject.get(prop.value()) == null) {
-                        // We can already know that object.name.property is null
-                        error('Unable to create `$objName${Little.keywords.PROPERTY_ACCESS_SIGN}${property.identifier()}`: `$objName` Does not contain property `${property.identifier()}`.');
-                        return null;
-                    }
-                    return access(onObject.get(prop.value()), property, objName);
-                }
-                case _: {
-                    if (onObject.get(prop.identifier()) == null) {
-                        onObject.set(prop.identifier(), new MemoryObject(NullValue, type, onObject, doc.value()));
-                    }
-                    return onObject.get(prop.identifier());
-                }
-            }
-        }
-        switch name {
-            case PropertyAccess(name, property): {
-                access(memory.get(name.value()), property, name.value());
-            }
-            case _: {
-                if (memory.exists(name.value())) {
-                    warn('Variable ${name.value()} already exists. New declaration ignored.');
-                } else memory.set(name.value(), new MemoryObject(NullValue, type != null ? evaluate(type) : NullValue, memory.object, doc.value())); 
-            }
-        }
-        
-        // Listeners
+    public static function declareVariable(name:InterpTokens, type:InterpTokens, doc:InterpTokens) {
+		var path = [];
+		var current = name;
+		while (current != null) {
+			switch current {
+				case PropertyAccess(source, property): {
+					path.unshift(property.extractIdentifier());
+					current = source;
+				}
+				case Identifier(word) | Characters(word): {
+					path.unshift(word);
+					current = null;
+				}
+				default: {
+					path.unshift(current.extractIdentifier());
+					current = null;
+				}		
+			}
+		}
 
-        return read(name);
+		memory.write(path, NullValue, type.extractIdentifier(), doc.extractIdentifier());
     }
 
     /**
-        Declare a new function. That function will be added to the current working memory. Switch the working memory using `scwm`
-        @param name The name of the function. Can be any token stringifiyable via `token.value()`.
-        @param params The parameters of the function. Should be a `ParserTokens.PartArray(parts:Array<ParserTokens>)`
-        @param type The type of the function. Can be any token stringifiyable via `token.value()`.
-        @param doc The documentation of the function. Should be a `ParserTokens.Documentation(doc:String)`
+        Declare a new function. That function will be added to the current stack block.
+        @param name The name of the function. Can be any token stringifiyable via `token.extractIdentifier()`.
+        @param params The parameters of the function. Should be a `InterpTokens.PartArray(parts:Array<ParserTokens>)`
+        @param doc The documentation of the function. Should be a `InterpTokens.Documentation(doc:String)`
     **/
-    public static function declareFunction(name:ParserTokens, params:ParserTokens, type:ParserTokens, doc:ParserTokens) {
-        function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
-            switch prop {
-                case PropertyAccess(_, nestedProperty): {
-                    objName += '${Little.keywords.PROPERTY_ACCESS_SIGN}${prop.value()}';
-                    // trace(object, prop.value(), property);
-                    if (object.get(prop.value()) == null) {
-                        // We can already know that object.name.property is null
-                        error('Unable to create `$objName${Little.keywords.PROPERTY_ACCESS_SIGN}${nestedProperty.identifier()}`: `$objName` Does not contain property `${nestedProperty.identifier()}`.');
-                        return null;
-                    }
-                    return access(object.get(prop.value()), nestedProperty, objName);
-                }
-                case _: {
-                    if (object.get(prop.identifier()) == null) {
-                        object.set(prop.identifier(), new MemoryObject(NullValue, null, params.getParameters()[0], type != null ? type : NullValue, object, doc.value()));
-                    }
-                    return object.get(prop.identifier());
-                }
-            }
-        }
-        switch name {
-            case PropertyAccess(name, property): {
-                access(memory.get(name.value()), property, name.value());
-            }
-            case _: {
-                
-                if (memory.exists(name.value())) {
-                    warn('Function ${name.value()} already exists. New declaration ignored.');
-                } else memory.set(name.value(), new MemoryObject(NullValue, null, params.getParameters()[0], type != null ? evaluate(type) : NullValue, memory.object, doc.value())); 
-            }
-        }
+    public static function declareFunction(name:InterpTokens, params:InterpTokens, doc:InterpTokens) {
+        var path = [];
+		var current = name;
+		while (current != null) {
+			switch current {
+				case PropertyAccess(source, property): {
+					path.unshift(property.extractIdentifier());
+					current = source;
+				}
+				case Identifier(word) | Characters(word): {
+					path.unshift(word);
+					current = null;
+				}
+				default: {
+					path.unshift(current.extractIdentifier());
+					current = null;
+				}		
+			}
+		}
 
-        // Listeners
+		var paramMap = new Map<String, InterpTokens>();
+		// Because values are allowed as well as types, were gonna abuse TypeCasts:
+		var array = (params.parameter(0) : Array<InterpTokens>); 
+		for (entry in array) {
+			if (entry.is(SPLIT_LINE, SET_LINE)) continue;
+			switch entry {
+				case VariableDeclaration(name, null, _): paramMap[name.extractIdentifier()] = TypeCast(NullValue, Identifier(Little.keywords.TYPE_DYNAMIC));
+				case VariableDeclaration(name, type, _): paramMap[name.extractIdentifier()] = TypeCast(NullValue, type);
+				case Write(assignees, value): {
+					switch assignees[0] {
+						case VariableDeclaration(name, null, _): paramMap[name.extractIdentifier()] = TypeCast(value, Identifier(Little.keywords.TYPE_DYNAMIC));
+						case VariableDeclaration(name, type, _): paramMap[name.extractIdentifier()] = TypeCast(value, type);
+						default:
+					}
+				}
+				default:
+			}
+		}
 
-        return read(name);
+		memory.write(path, FunctionCode(paramMap, Block([], Identifier(Little.keywords.TYPE_VOID))), Little.keywords.TYPE_FUNCTION, doc.extractIdentifier());
     }
 
 	/**
