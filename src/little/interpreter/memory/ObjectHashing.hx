@@ -237,7 +237,7 @@ class ObjectHashing {
         
     }
 
-    public static function objectSetKey(object:MemoryPointer, key:String, pair:{value:MemoryPointer, type:MemoryPointer, doc:MemoryPointer}, heap:Heap) {
+    public static function objectSetKey(object:MemoryPointer, key:String, pair:{?value:MemoryPointer, ?type:MemoryPointer, ?doc:MemoryPointer}, heap:Heap) {
         var hashTableBytes = heap.readBytes(heap.readPointer(object.rawLocation + 4), heap.readInt32(object.rawLocation));
         var hashTablePosition = heap.readPointer(object.rawLocation + 4);
         var keyHash = Murmur1.hash(Bytes.ofString(key));

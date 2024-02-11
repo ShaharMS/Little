@@ -49,10 +49,10 @@ enum InterpTokens {
 
 	/**
 	    Usage:
-		@param requiredParams `Map<String, InterpTokens.Identifier>`
+		@param requiredParams `OrderedMap<String, InterpTokens.Identifier>`
 		@param body `Block`
 	**/
-	FunctionCode(requiredParams:Map<String, InterpTokens>, body:InterpTokens);
+	FunctionCode(requiredParams:OrderedMap<String, InterpTokens>, body:InterpTokens);
 
 	/**
 		Usage:

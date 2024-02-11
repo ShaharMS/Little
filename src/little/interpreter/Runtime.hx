@@ -1,5 +1,6 @@
 package little.interpreter;
 
+import little.interpreter.Tokens.InterpTokens;
 import little.interpreter.memory.Memory;
 import little.lexer.Lexer;
 import little.interpreter.memory.MemoryObject;
@@ -112,7 +113,7 @@ class Runtime {
         @param layer the "stage" from which the error was called
         @return the token that caused the error (the first parameter of this function)
         **/
-    public static function throwError(token:ParserTokens, ?layer:Layer = INTERPRETER):ParserTokens {
+    public static function throwError(token:InterpTokens, ?layer:Layer = INTERPRETER):ParserTokens {
 
         trace('Thrown: $token');
         callStack.push(token);

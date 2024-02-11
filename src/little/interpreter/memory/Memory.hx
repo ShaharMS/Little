@@ -241,7 +241,7 @@ class Memory {
 		}
 	}
 
-	public function write(path:Array<String>, value:InterpTokens, type:String, doc:String) {
+	public function write(path:Array<String>, ?value:InterpTokens, ?type:String, ?doc:String) {
 		// A couple notices:
 		/*
 			- The first n-1 elements of the path must exist beforehand, and must be objects
@@ -255,9 +255,10 @@ class Memory {
 
 		if (path.length == 1) {
 			if (stack.getCurrentBlock().exists(path[0])) {
-				Runtime.throwError(ErrorMessage('Cannot redefine an already existing variable/function (for variable ${path[0]})'));
+				stack.getCurrentBlock().set(path[0], { address: value != null ? store(value) : null, type: type != null ? type : null, doc: doc != null ? doc : null });
+			} else {
+				stack.getCurrentBlock().reference(path[0], store(value), type, doc);
 			}
-			stack.getCurrentBlock().reference(path[0], store(value), type, doc);
 		} else {
 			var pathCopy = path.slice(1);
 			var wentThroughPath = path.slice(0, path.length - 1);
@@ -281,10 +282,13 @@ class Memory {
 			}
 
 			if (getTypeInformation(current.type).isStaticType) {
-				Runtime.throwError(ErrorMessage('Cannot write to a static type. Only objects can have dynamic properties (${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)} is `${current.type}`)'));
+				Runtime.throwError(ErrorMessage('Cannot write to a property to values of a static type. Only objects can have dynamic properties (${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)} is `${current.type}`)'));
 			}
-
-			ObjectHashing.objectAddKey(current.address, pathCopy[0], store(value), getTypeInformation(type).pointer, heap.storeString(doc), heap);
+			if (ObjectHashing.hashTableHasKey(ObjectHashing.getHashTableOf(current.address, heap), pathCopy[0], heap)) {
+				ObjectHashing.objectSetKey(current.address, pathCopy[0], {value: value != null ? store(value) : null, type: type != null ? getTypeInformation(type).pointer : null, doc: doc != null ? heap.storeString(doc) : null}, heap);
+			} else {
+				ObjectHashing.objectAddKey(current.address, pathCopy[0], store(value), getTypeInformation(type).pointer, heap.storeString(doc), heap);
+			}
 		}
 	}
 
@@ -297,6 +301,7 @@ class Memory {
 		if (size <= 0) Runtime.throwError(ErrorMessage('Cannot allocate ${size} bytes'));
 		return heap.storeBytes(size);
 	}
+	
 
 
 	public function getTypeInformation(name:String):TypeInfo {
@@ -321,6 +326,7 @@ class Memory {
 					case _: throw "How did we get here? 5";
 				},
 				isStaticType: true,
+				isExternal: false,
 				instanceByteSize: 0,
 				staticByteSize: 0,
 				instanceFields: [],
@@ -339,6 +345,7 @@ class Memory {
 				pointer: externs.typeToPointer[name],
 				typeName: name,
 				isStaticType: false,
+				isExternal: true,
 				instanceByteSize: 0,
 				staticByteSize: 0,
 				instanceFields: [],
@@ -355,6 +362,7 @@ class Memory {
 			pointer: reference.address,
 			typeName: name,
 			isStaticType: true, // massive TODO, what about post-defined static types? maybe a developer defines a special static type...
+			isExternal: false,
 			instanceByteSize: typeInfo.sizeOfInstanceFields,
 			staticByteSize: typeInfo.sizeOfStaticFields,
 			instanceFields: typeInfo.instanceFields,
@@ -408,6 +416,7 @@ typedef TypeInfo = {
 	pointer:MemoryPointer,
 	typeName:String,
 	isStaticType:Bool,
+	isExternal:Bool,
 	instanceByteSize:Int,
 	staticByteSize:Int,
 	instanceFields:Array<{type:MemoryPointer, doc:Null<String>}>,

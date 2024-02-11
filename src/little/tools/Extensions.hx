@@ -49,6 +49,43 @@ class Extensions {
 		return is(token, IDENTIFIER, CHARACTERS) ? parameter(token, 0) : parameter(Actions.run([token]), 0);
 	}
 
+	public static function asStringPath(token:InterpTokens):Array<String> {
+		var path = [];
+		var current = token;
+		while (current != null) {
+			switch current {
+				case PropertyAccess(source, property): {
+					path.unshift(extractIdentifier(property));
+					current = source;
+				}
+				case Identifier(word) | Characters(word): {
+					path.unshift(word);
+					current = null;
+				}
+				default: {
+					path.unshift(extractIdentifier(current));
+					current = null;
+				}		
+			}
+		}
+		
+		return path;
+	}
+
+	public static function type(token:InterpTokens):String {
+		switch token {
+			case Characters(string): return Little.keywords.TYPE_STRING;
+			case Number(number): return Little.keywords.TYPE_INT;
+			case Decimal(number): return Little.keywords.TYPE_FLOAT;
+			case TrueValue | FalseValue: return Little.keywords.TYPE_BOOL;
+			case NullValue: return Little.keywords.TYPE_DYNAMIC;
+			case FunctionCode(requiredParams, body): return Little.keywords.TYPE_FUNCTION;
+			case Sign(sign): return Little.keywords.TYPE_SIGN;
+			case Object(toString, props, typeName): return props[Little.keywords.OBJECT_TYPE_PROPERTY_NAME].value.getParameters()[0];
+			case _: throw '$token is not a simple token (given $token)';
+		}
+	}
+
 	public static function containsAny<T>(array:Array<T>, func:T -> Bool):Bool {
 		return array.filter(func).length > 0;
 	}
