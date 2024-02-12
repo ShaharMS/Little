@@ -39,6 +39,7 @@ enum InterpTokens {
 	**/
 	ClassDeclaration(name:InterpTokens, ?doc:InterpTokens);
 
+	ConditionCode(pattern:Array<InterpTokens>, caller:InterpTokens)
     /**
 		Usage:
 		@param name `Identifier`, `PropertyAccess`
