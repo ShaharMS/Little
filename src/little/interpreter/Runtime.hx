@@ -2,14 +2,6 @@ package little.interpreter;
 
 import little.interpreter.Tokens.InterpTokens;
 import little.interpreter.memory.Memory;
-import little.lexer.Lexer;
-import little.interpreter.memory.MemoryObject;
-import little.interpreter.memory.MemoryTree;
-import haxe.EnumTools;
-import little.parser.Tokens.ParserTokens;
-import little.parser.Parser;
-import haxe.extern.EitherType;
-import little.parser.Tokens.ParserTokens;
 import little.tools.Layer;
 
 using StringTools;
@@ -33,7 +25,7 @@ class Runtime {
     /**
         The next token to be interpreted
     **/
-    public static var currentToken(default, null):ParserTokens = /*Module(Identifier(Little.keywords.MAIN_MODULE_NAME))*/ null; //todo
+    public static var currentToken(default, null):InterpTokens = null;
 
     /**
     	The module in which tokens are currently interpreted.
@@ -43,7 +35,7 @@ class Runtime {
     /**
         The token that has just been interpreted
     **/
-    public static var previousToken(default, null):ParserTokens;
+    public static var previousToken(default, null):InterpTokens;
 
     /**
         | Code | Description |
@@ -52,11 +44,16 @@ class Runtime {
         | **1** | An error was thrown, and terminated the program. The error is printed to stdout, and its token is kept after the fact in `Runtime.errorToken`. |
     **/
     public static var exitCode(default, null):Int = 0;
+
+	/**
+		This is set to `true` if an error was thrown. Execution should stop.
+	**/
+	public static var errorThrown(default, null):Bool = false;
     
     /**
         The last error that was thrown. On normal settings, gets set at the same time the program terminates.
     **/
-    public static var errorToken(default, null):ParserTokens;
+    public static var errorToken(default, null):InterpTokens;
 
     /**
     	Dispatches right before the interpreter starts running a line of code.
@@ -85,7 +82,7 @@ class Runtime {
 
         After each iteration, this method gets called, passing the token we've just parsed as an argument.
     **/
-    public static var onTokenInterpreted:Array<ParserTokens -> Void> = [];
+    public static var onTokenInterpreted:Array<InterpTokens -> Void> = [];
 
     /**
     	Dispatches right after an error is thrown, and printed to the console.
@@ -105,7 +102,7 @@ class Runtime {
     /**
     	Contains every function call interpreted during the program's runtime.
     **/
-    public static var callStack:Array<ParserTokens> = [];
+    public static var callStack:Array<InterpTokens> = [];
 
     /**
     	Stops the execution of the program, and prints an error message to the console. Dispatches `onErrorThrown`.
@@ -113,7 +110,7 @@ class Runtime {
         @param layer the "stage" from which the error was called
         @return the token that caused the error (the first parameter of this function)
         **/
-    public static function throwError(token:InterpTokens, ?layer:Layer = INTERPRETER):ParserTokens {
+    public static function throwError(token:InterpTokens, ?layer:Layer = INTERPRETER):InterpTokens {
 
         trace('Thrown: $token');
         callStack.push(token);
@@ -129,7 +126,7 @@ class Runtime {
 		stdout.stdoutTokens.push(token);
         exitCode = Layer.getIndexOf(layer);
         errorToken = token;
-        Interpreter.errorThrown = true;        
+        errorThrown = true;        
         for (func in onErrorThrown) func(module, line, title, reason);
 
         return token;
@@ -140,7 +137,7 @@ class Runtime {
         @param token some token which is the error, usually `ErrorMessage`
         @param layer the "stage" from which the error was called
     **/
-    public static function warn(token:ParserTokens, ?layer:Layer = INTERPRETER) {
+    public static function warn(token:InterpTokens, ?layer:Layer = INTERPRETER) {
         callStack.push(token);
         
         var reason:String;
@@ -168,20 +165,8 @@ class Runtime {
         stdout.output += '\n${if (Little.debug) "BROADCAST: " else ""}${item}';		
 	}
 
-	static function __print(item:String, representativeToken:ParserTokens) {
+	static function __print(item:String, representativeToken:InterpTokens) {
 		stdout.output += '\n${if (Little.debug) (INTERPRETER : String).toUpperCase() + ": " else ""}Module $currentModule, Line $line:  $item';
 		stdout.stdoutTokens.push(representativeToken);
 	}
-
-    /**
-        Tries to access the value stored on an object denoted by `obj`.  
-        usage of property access (`thing.other`, `SomeClass.property`) is allowed.
-        When a multi-item expression is given (`"something" + 1`), only the first 
-        item of the expression will get taken into account (in this case, `"something"`.)
-        @param obj the name of the variable
-        @return MemoryObject, or null if it wasn't found
-    **/
-    public static function access(obj:String):MemoryObject {
-        return Interpreter.accessObject(Parser.parse(Lexer.lex(obj))[0]);
-    }
 }

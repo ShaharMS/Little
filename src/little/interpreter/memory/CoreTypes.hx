@@ -1,6 +1,6 @@
 package little.interpreter.memory;
 
-import little.interpreter.memory.ExternalInterfacing.VarExtTree;
+import little.interpreter.memory.ExternalInterfacing.ExtTree;
 import little.interpreter.Tokens.InterpTokens;
 using little.tools.Extensions;
 
@@ -17,7 +17,7 @@ class CoreTypes {
         trace(externs.typeToPointer[Little.keywords.TYPE_STRING]);
         // STRING properties:
         externs.instanceProperties.properties[Little.keywords.TYPE_STRING].properties = [
-            "length" => new VarExtTree((value, _) -> {
+            "length" => new ExtTree((value, _) -> {
                 var length = value.parameter(0).length;
                 return { objectValue: Number(length), objectAddress: externs.parent.heap.storeInt32(length), objectDoc: "the length of the string" }
             })
@@ -34,7 +34,7 @@ class CoreTypes {
         externs.typeToPointer[Little.keywords.TYPE_FUNCTION] = externs.parent.heap.storeByte(1);
 
         externs.instanceProperties.properties[Little.keywords.TYPE_FUNCTION].properties = [
-            "token" => new VarExtTree((value, _) -> {
+            "token" => new ExtTree((value, _) -> {
                 return { objectValue: Characters(Std.string(value)), objectAddress: externs.parent.heap.storeString(Std.string(value)), objectDoc: "the token of the function, as a String" }
             })
         ];
@@ -48,7 +48,7 @@ class CoreTypes {
 		externs.typeToPointer[Little.keywords.TYPE_CONDITION] = externs.parent.heap.storeByte(1);
 
 		externs.instanceProperties.properties[Little.keywords.TYPE_CONDITION].properties = [
-			"token" => new VarExtTree((value, _) -> {
+			"token" => new ExtTree((value, _) -> {
 				return { objectValue: Characters(Std.string(value)), objectAddress: externs.parent.heap.storeString(Std.string(value)), objectDoc: "the token of the condition, as a String" }
 			})
 		];

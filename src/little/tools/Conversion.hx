@@ -1,5 +1,6 @@
 package little.tools;
 
+import little.interpreter.Actions;
 import little.interpreter.Tokens.InterpTokens;
 import Type.ValueType;
 import little.interpreter.Interpreter;
@@ -27,7 +28,7 @@ class Conversion {
         }
     }
 
-    public static function toLittleValue(val:Dynamic):ParserTokens {
+    public static function toLittleValue(val:Dynamic):InterpTokens {
         if (val == null) return NullValue;
         var type = Type.typeof(val);
 		return switch type {
@@ -51,8 +52,8 @@ class Conversion {
 		}
     }
 
-    public static function toHaxeValue(val:ParserTokens):Dynamic {
-        val = Interpreter.evaluate(val);
+    public static function toHaxeValue(val:InterpTokens):Dynamic {
+        val = Actions.evaluate(val);
         return switch val {
             case ErrorMessage(msg): {
                 trace("WARNING: " + msg + ". Returning null");
@@ -61,8 +62,8 @@ class Conversion {
             case TrueValue: true;
             case FalseValue: false;
             case NullValue: null;
-            case Decimal(num): num.parseFloat();
-            case Number(num): num.parseInt();
+            case Decimal(num): num;
+            case Number(num): num;
             case Characters(string): string;
             case _: {
                 trace("WARNING: Unparsable token: " + val + ". Returning null");

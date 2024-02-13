@@ -1,6 +1,6 @@
 package little.interpreter;
 
-import little.parser.Tokens.ParserTokens;
+import little.interpreter.Tokens.InterpTokens;
 
 class StdOut {
 	
@@ -13,7 +13,7 @@ class StdOut {
     /**
     	An array of tokens consisting of all tokens that were printed-out.
     **/
-	public static var stdoutTokens = new Array<ParserTokens>();
+	public static var stdoutTokens = new Array<InterpTokens>();
 
 
 	/**
@@ -21,6 +21,6 @@ class StdOut {
 	**/
 	public static function reset() {
 		output = "";
-		stdoutTokens = new Array<ParserTokens>();
+		stdoutTokens = new Array<InterpTokens>();
 	}
 }

@@ -9,14 +9,6 @@ using little.tools.TextTools;
 
 class Extensions {
 
-	public static function identifier(token:ParserTokens):String {
-		return Interpreter.stringifyTokenIdentifier(token);
-	}
-
-	public static function value(token:ParserTokens):String {
-		return Interpreter.stringifyTokenValue(token);
-	}
-
 	overload extern inline public static function is(token:ParserTokens, ...tokens:ParserTokensSimple) {
 		return tokens.toArray().map(x -> x.getName().remove("_").toLowerCase()).contains(token.getName().toLowerCase());
 	}
@@ -77,7 +69,7 @@ class Extensions {
 			case Characters(string): return Little.keywords.TYPE_STRING;
 			case Number(number): return Little.keywords.TYPE_INT;
 			case Decimal(number): return Little.keywords.TYPE_FLOAT;
-			case TrueValue | FalseValue: return Little.keywords.TYPE_BOOL;
+			case TrueValue | FalseValue: return Little.keywords.TYPE_BOOLEAN;
 			case NullValue: return Little.keywords.TYPE_DYNAMIC;
 			case FunctionCode(requiredParams, body): return Little.keywords.TYPE_FUNCTION;
 			case Sign(sign): return Little.keywords.TYPE_SIGN;
@@ -88,6 +80,10 @@ class Extensions {
 
 	public static function containsAny<T>(array:Array<T>, func:T -> Bool):Bool {
 		return array.filter(func).length > 0;
+	}
+
+	public static function toArray<T>(iter:Iterator<T>):Array<T> {
+		return [for (i in iter) i];
 	}
 }
 

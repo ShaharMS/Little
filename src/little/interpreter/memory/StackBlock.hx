@@ -1,8 +1,9 @@
 package little.interpreter.memory;
 
 import haxe.ds.StringMap;
+using little.tools.Extensions;
 
-@:forward(iterator, clear, keys, keyValueIterator)
+@:forward(iterator, clear, keys)
 class StackBlock extends StringMap<{?address:MemoryPointer, ?type:String, ?doc:String}>{
 	
 	public var previous:Null<StackBlock>;
@@ -44,19 +45,19 @@ class StackBlock extends StringMap<{?address:MemoryPointer, ?type:String, ?doc:S
 	}
 
 
-	override public function keyValueIterator():KeyValueIterator<String, {?address:Null<MemoryPointer>, ?type:Null<String>, ?doc:Null<String>}> {
+	public function iterate():KeyValueIterator<String, {?address:Null<MemoryPointer>, ?type:Null<String>, ?doc:Null<String>}> {
 		var collection = this.copy();
 		var current = this;
 		return {
 			hasNext: function() {
-				return current != null || collection.keys().length > 0;
+				return current != null || collection.keys().toArray().length > 0;
 			},
 			next: function() {
-				if (collection.keys().length == 0) {
+				if (collection.keys().toArray().length == 0) {
 					current = current.previous;
 					collection = current.copy();
 				}
-				var key = collection.keys()[0], value = collection.get(key);
+				var key = collection.keys().toArray()[0], value = collection.get(key);
 				collection.remove(key);
 				return {key: key, value: value};
 			}
