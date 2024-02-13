@@ -1,5 +1,6 @@
 package little.tools;
 
+import haxe.exceptions.NotImplementedException;
 import little.interpreter.Tokens.InterpTokens;
 import haxe.ds.ArraySort;
 import vision.algorithms.Radix;
@@ -190,28 +191,29 @@ class PrettyPrinter {
 			case TrueValue: return '${prefixFA(prefix)}$t$d ${TrueValue}\n';
 			case FalseValue: return '${prefixFA(prefix)}$t$d ${FalseValue}\n';
 			case Identifier(word): return '${prefixFA(prefix)}$t$d ${word}\n';
+			case Documentation(doc): return '${prefixFA(prefix)}$t$d """${doc}"""\n';
 			case VariableDeclaration(name, type, doc):
 				var title = '${prefixFA(prefix)}$t$d Variable Declaration\n';
-				if (doc != null) title += getTree_INTERP(Characters(doc), prefix.copy(), level + 1, false);
+				if (doc != null) title += getTree_INTERP(doc, prefix.copy(), level + 1, false);
 				title += getTree_INTERP(name, prefix.copy(), level + 1, type == null);
 				if (type != null) title += getTree_INTERP(type, prefix.copy(), level + 1, true);
 				return title;
 			case FunctionDeclaration(name, params, type, doc):
 				var title = '${prefixFA(prefix)}$t$d Function Declaration\n';
-				if (doc != null) title += getTree_INTERP(Characters(doc), prefix.copy(), level + 1, false);
+				if (doc != null) title += getTree_INTERP(doc, prefix.copy(), level + 1, false);
 				title += getTree_INTERP(name, prefix.copy(), level + 1, false);
 				title += getTree_INTERP(params, prefix.copy(), level + 1, type == null);
 				if (type != null) title += getTree_INTERP(type, prefix.copy(), level + 1, true);
 				return title;
 			case ConditionDeclaration(name, conditionType, doc):
 				var title = '${prefixFA(prefix)}$t$d Condition Declaration\n';
-				if (doc != null) title += getTree_INTERP(Characters(doc), prefix.copy(), level + 1, false);
+				if (doc != null) title += getTree_INTERP(doc, prefix.copy(), level + 1, false);
 				title += getTree_INTERP(name, prefix.copy(), level + 1, false);
 				title += getTree_INTERP(conditionType, prefix.copy(), level + 1, true);
 				return title;
 			case ClassDeclaration(name, doc):
 				var title = '${prefixFA(prefix)}$t$d Class Declaration\n';
-				if (doc != null) title += getTree_INTERP(Characters(doc), prefix.copy(), level + 1, false);
+				if (doc != null) title += getTree_INTERP(doc, prefix.copy(), level + 1, false);
 				title += getTree_INTERP(name, prefix.copy(), level + 1, true);
 				return title;
 			case ConditionCall(name, exp, body):
@@ -224,6 +226,10 @@ class PrettyPrinter {
 				var title = '${prefixFA(prefix)}$t$d Function Code\n';
 				title += getTree_INTERP(Identifier(requiredParams.toString()), prefix.copy(), level + 1, false);
 				title += getTree_INTERP(body, prefix.copy(), level + 1, true);
+				return title;
+			case ConditionCode(callers):
+				var title = '${prefixFA(prefix)}$t$d Condition Code\n';
+				title += getTree_INTERP(Characters(callers.toString()), prefix.copy(), level + 1, true);
 				return title;
 			case FunctionCall(name, params):
 				var title = '${prefixFA(prefix)}$t$d Function Call\n';
@@ -329,7 +335,7 @@ class PrettyPrinter {
 
 	static var indent = "";
 
-	public static  function stringify(?code:Array<ParserTokens>, ?token:ParserTokens) {
+	public static function stringifyParser(?code:Array<ParserTokens>, ?token:ParserTokens) {
 		if (token != null) code = [token];
 		var s = "";
 
@@ -337,25 +343,25 @@ class PrettyPrinter {
 			switch token {
 				case SetLine(line):s += '\n$indent';
 				case SplitLine: s += ", ";
-				case Variable(name, type): s += '$VARIABLE_DECLARATION $name ${if (type != null) '$TYPE_DECL_OR_CAST ${stringify(type)}' else ''}';
-				case Function(name, params, type): s += '$FUNCTION_DECLARATION ${stringify(name)}(${stringify(params)}) ${if (type != null) '$TYPE_DECL_OR_CAST ${stringify(type)}' else ''}';
+				case Variable(name, type): s += '$VARIABLE_DECLARATION $name ${if (type != null) '$TYPE_DECL_OR_CAST ${stringifyParser(type)}' else ''}';
+				case Function(name, params, type): s += '$FUNCTION_DECLARATION ${stringifyParser(name)}(${stringifyParser(params)}) ${if (type != null) '$TYPE_DECL_OR_CAST ${stringifyParser(type)}' else ''}';
 				case Condition(name, exp, body): 
 					indent += "	";
-					s += '${stringify(name)} (${stringify(exp)}) \n${stringify(body)}';
+					s += '${stringifyParser(name)} (${stringifyParser(exp)}) \n${stringifyParser(body)}';
 					indent = indent.subtract("	");
-				case Read(name): s += stringify(name);
-				case Write(assignees, value): s += [assignees.concat([value]).map(t -> stringify(t)).join(" = ")];
+				case Read(name): s += stringifyParser(name);
+				case Write(assignees, value): s += [assignees.concat([value]).map(t -> stringifyParser(t)).join(" = ")];
 				case Identifier(word): s += word;
-				case TypeDeclaration(value, type): s += '$TYPE_DECL_OR_CAST ${stringify(type)}';
-				case FunctionCall(name, params): s += '${stringify(name)}(${stringify(params)})';
-				case Return(value, type): s += '$FUNCTION_RETURN ${stringify(value)}';
-				case Expression(parts, type): s += stringify(parts);
+				case TypeDeclaration(value, type): s += '${stringifyParser(value)} $TYPE_DECL_OR_CAST ${stringifyParser(type)}';
+				case FunctionCall(name, params): s += '${stringifyParser(name)}(${stringifyParser(params)})';
+				case Return(value, type): s += '$FUNCTION_RETURN ${stringifyParser(value)}';
+				case Expression(parts, type): s += stringifyParser(parts);
 				case Block(body, type): 
 					indent += "	";
-					s += '{${stringify(body)}} ${if (type != null) '$TYPE_DECL_OR_CAST ${stringify(type)}' else ''}';
+					s += '{${stringifyParser(body)}} ${if (type != null) '$TYPE_DECL_OR_CAST ${stringifyParser(type)}' else ''}';
 					indent = indent.subtract("	");
-				case PartArray(parts): s += stringify(parts);
-				case PropertyAccess(name, property): s += '${stringify(name)}$PROPERTY_ACCESS_SIGN${stringify(property)}';
+				case PartArray(parts): s += stringifyParser(parts);
+				case PropertyAccess(name, property): s += '${stringifyParser(name)}$PROPERTY_ACCESS_SIGN${stringifyParser(property)}';
 				case Sign(sign): s += " " + sign + " ";
 				case Number(num): s += num;
 				case Decimal(num): s += num;
@@ -369,6 +375,48 @@ class PrettyPrinter {
 				case TrueValue: s += TRUE_VALUE;
 				case FalseValue: s += FALSE_VALUE;
 				case NoBody:
+			}
+		}
+
+		return s;
+	}
+
+	public static function stringifyInterpreter(?code:Array<InterpTokens>, ?token:InterpTokens) {
+		if (token != null) code = [token];
+		var s = "";
+		
+		for (token in code) {
+			switch token {
+				case SetLine(line): s += '\n$indent';
+				case SplitLine: s += ", ";
+				case VariableDeclaration(name, type, doc): s += '$VARIABLE_DECLARATION $name ${if (type != null) '$TYPE_DECL_OR_CAST ${stringifyInterpreter(type)}' else ''}';
+				case FunctionDeclaration(name, params, type, doc): s += '$FUNCTION_DECLARATION ${stringifyInterpreter(name)}(${stringifyInterpreter(params)}) ${if (type != null) '$TYPE_DECL_OR_CAST ${stringifyInterpreter(type)}' else ''}';
+				case ConditionDeclaration(name, conditionType, doc): throw new NotImplementedException();
+				case ClassDeclaration(name, doc): throw new NotImplementedException();
+				case Write(assignees, value): s += [assignees.concat([value]).map(t -> stringifyInterpreter(t)).join(" = ")];
+				case Identifier(word): s += word;
+				case TypeCast(value, type): s += '${stringifyInterpreter(value)} $TYPE_DECL_OR_CAST ${stringifyInterpreter(type)}';
+				case FunctionCall(name, params): s += '${stringifyInterpreter(name)}(${stringifyInterpreter(params)})';
+				case ConditionCall(name, exp, body): s += '${stringifyInterpreter(name)} (${stringifyInterpreter(exp)}) \n${stringifyInterpreter(body)}';
+				case FunctionReturn(value, type): s += '$FUNCTION_RETURN ${stringifyInterpreter(value)}';
+				case Expression(parts, type): s += stringifyInterpreter(parts);
+				case Block(body, type): 
+					indent += "	";
+					s += '{${stringifyInterpreter(body)}} ${if (type != null) '$TYPE_DECL_OR_CAST ${stringifyInterpreter(type)}' else ''}';
+					indent = indent.subtract("	");
+				case PartArray(parts): s += stringifyInterpreter(parts);
+				case PropertyAccess(name, property): s += '${stringifyInterpreter(name)}$PROPERTY_ACCESS_SIGN${stringifyInterpreter(property)}';
+				case Sign(sign): s += " " + sign + " ";
+				case Number(num): s += num;
+				case Decimal(num): s += num;
+				case Characters(string): s += '"' + string + '"';
+				case Documentation(doc): s += '"""' + doc + '"""';
+				case ErrorMessage(msg):
+				case NullValue: s += NULL_VALUE;
+				case TrueValue: s += TRUE_VALUE;
+				case FalseValue: s += FALSE_VALUE;
+				case VoidValue: throw new NotImplementedException();
+				case _: throw 'Stringifying token $token does not make sense, as it is represented by other tokens on parse time, and thus cannot appear in a non-manipulated InterpTokens AST';
 			}
 		}
 

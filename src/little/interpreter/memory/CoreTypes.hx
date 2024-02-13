@@ -1,7 +1,7 @@
 package little.interpreter.memory;
 
+import little.interpreter.memory.ExternalInterfacing.VarExtTree;
 import little.interpreter.Tokens.InterpTokens;
-import little.interpreter.memory.ExternalInterfacing.ExtTree;
 using little.tools.Extensions;
 
 class CoreTypes {
@@ -17,7 +17,7 @@ class CoreTypes {
         trace(externs.typeToPointer[Little.keywords.TYPE_STRING]);
         // STRING properties:
         externs.instanceProperties.properties[Little.keywords.TYPE_STRING].properties = [
-            "length" => new ExtTree((value, _) -> {
+            "length" => new VarExtTree((value, _) -> {
                 var length = value.parameter(0).length;
                 return { objectValue: Number(length), objectAddress: externs.parent.heap.storeInt32(length), objectDoc: "the length of the string" }
             })
@@ -34,7 +34,7 @@ class CoreTypes {
         externs.typeToPointer[Little.keywords.TYPE_FUNCTION] = externs.parent.heap.storeByte(1);
 
         externs.instanceProperties.properties[Little.keywords.TYPE_FUNCTION].properties = [
-            "token" => new ExtTree((value, _) -> {
+            "token" => new VarExtTree((value, _) -> {
                 return { objectValue: Characters(Std.string(value)), objectAddress: externs.parent.heap.storeString(Std.string(value)), objectDoc: "the token of the function, as a String" }
             })
         ];
@@ -48,18 +48,9 @@ class CoreTypes {
 		externs.typeToPointer[Little.keywords.TYPE_CONDITION] = externs.parent.heap.storeByte(1);
 
 		externs.instanceProperties.properties[Little.keywords.TYPE_CONDITION].properties = [
-			"token" => new ExtTree((value, _) -> {
+			"token" => new VarExtTree((value, _) -> {
 				return { objectValue: Characters(Std.string(value)), objectAddress: externs.parent.heap.storeString(Std.string(value)), objectDoc: "the token of the condition, as a String" }
 			})
 		];
-		externs.instanceMethods.properties[Little.keywords.TYPE_CONDITION].properties = [
-			"addOption" => new ExtTree(((value, address) -> {
-				var func = FunctionCode(["pattern" => Identifier(Little.keywords.TYPE_DYNAMIC), "callback" => Identifier(Little.keywords.TYPE_DYNAMIC)], 
-					Interpreter.convert(Parser.parse(Lexer.lex(
-						""
-					)))
-				);
-			}))
-		]
     }
 }

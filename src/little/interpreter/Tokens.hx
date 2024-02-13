@@ -50,6 +50,9 @@ enum InterpTokens {
 
 		Ideally, to validate the "`null`" tokens (the wildcard ones) one will use the macro-ish tools the language provide (extracting type, extracting identifiers...)
 
+		The actual `Block` that decides how an if to run the code associated with the condition should expect two defined parameters of `InterpTokens.Characters`'s type,
+		one named `Little.keywords.CONDITION_PATTERN_PARAMETER_NAME` and one named `Little.keywords.CONDITION_BODY_PARAMETER_NAME`.
+
 		@param callers `Map<Array<InterpTokens.*>, InterpTokens.Block>`
 	**/
 	ConditionCode(callers:Map<Array<InterpTokens>, InterpTokens>);
@@ -162,7 +165,7 @@ enum InterpTokens {
 	    - `name` must be a `String` representing the class' name
 		- both field maps must have elements of types `Obj
 	**/
-	Class(name:String, instanceFields:Map<String, {documentation:String, type:String}>, staticFields:Map<String, {documentation:String, type:String}>);
+	@:deprecated Class(name:String, instanceFields:Map<String, {documentation:String, type:String}>, staticFields:Map<String, {documentation:String, type:String}>);
 
     /**
     	Used for errors & warnings

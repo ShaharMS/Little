@@ -1,5 +1,6 @@
 package little.interpreter;
 
+import little.lexer.Lexer;
 import haxe.exceptions.NotImplementedException;
 import little.interpreter.Tokens.InterpTokens;
 import little.tools.PrettyPrinter;
@@ -15,7 +16,6 @@ using little.tools.Extensions;
 using little.tools.TextTools;
 
 @:access(little.interpreter.Runtime)
-@:access(little.interpreter.Interpreter)
 class Actions {
     
 	static var memory:Memory = Runtime.memory;
@@ -47,7 +47,9 @@ class Actions {
 	public static function assert(token:InterpTokens, isType:InterpTokensSimple, ?errorMessage:String = null) {
 		if (!token.is(isType)) {
 			Runtime.throwError(errorMessage != null ? ErrorMessage(errorMessage) : ErrorMessage('Assertion failed, token $token is not of type $isType'), INTERPRETER);
+			return NullValue;
 		}
+		return token;
 	}
 
     /**
@@ -121,12 +123,68 @@ class Actions {
 
 	/**
 		Calls a condition. The condition's `body` is repeated `0` to `n` times, depending on the condition's `conditionParams`.
-		@param name The name of the condition. Can be any token stringifiyable via `token.value()`.
-		@param conditionParams The parameters of the condition. Should be either a `InterpTokens.PartArray(parts:Array<InterpTokens>)`. **Note** - any `InterpTokens` with a single, `Array<InterpTokens>` parameter should work too (`Expression`, `Block`)
-		@param body The body of the condition. Should be a `Block(body:Array<InterpTokens>, type:InterpTokens);`
+		@param pattern The pattern of the condition. Should be a `InterpTokens.PartArray(parts:Array<InterpTokens>)`
+		@param body The body of the condition. Should be a `InterpTokens.Block(body:Array<InterpTokens>)`
 	**/
-    public static function condition(name:InterpTokens, conditionParams:InterpTokens, body:InterpTokens):InterpTokens {
-        throw new NotImplementedException(); // TODO, conditions are not fully implemented
+    public static function condition(name:InterpTokens, pattern:InterpTokens, body:InterpTokens):InterpTokens {
+        var conditionToken = memory.read(...name.asStringPath());
+		assert(conditionToken.objectValue, CONDITION_CODE, '${name.asStringPath()} is not a condition.');
+
+		var patterns:Map<Array<InterpTokens>, InterpTokens> = conditionToken.objectValue.parameter(0);
+		var givenPattern = pattern.parameter(0);
+		function fit(given:Array<InterpTokens>, pattern:Array<InterpTokens>, currentlyFits:Bool = true):Bool {
+			for (i in 0...given.length) {
+				if (pattern[i] == null) continue;
+				if (given[i].equals(pattern[i])) continue;
+				if (given[i].getName() != pattern[i].getName()) return false;
+				switch given[i] {
+					case SetLine(_) | Number(_) | Decimal(_) | Characters(_) | Documentation(_) | Sign(_) | Identifier(_) | ErrorMessage(_): if (pattern[i].parameter(0) != null) return false; 
+					case VariableDeclaration(_, _, _) | FunctionDeclaration(_, _, _, _) | ClassDeclaration(_, _) | ConditionDeclaration(_, _, _): currentlyFits = currentlyFits && fit(cast given[i].getParameters(), cast pattern[i].getParameters(), currentlyFits);
+					case ConditionCode(_): return false; // Cant be matched with, only valid in the context of a condition definition. Represented by other tokens in other cases
+					case FunctionCode(_, _): return false; // same as above
+					case ConditionCall(_, _, _) | FunctionCall(_, _): currentlyFits = currentlyFits && fit(cast given[i].getParameters(), cast pattern[i].getParameters(), currentlyFits);
+					case FunctionReturn(_, _) | TypeCast(_, _): currentlyFits = currentlyFits && fit(cast given[i].getParameters(), cast pattern[i].getParameters(), currentlyFits);
+					case Write(assignees, value): {
+						var patternAssignees:Array<InterpTokens> = pattern[i].parameter(0);
+						if (patternAssignees != null) currentlyFits = currentlyFits && fit(assignees, patternAssignees, currentlyFits);
+						if (pattern[i].parameter(1) != null) currentlyFits = currentlyFits && fit(cast value.getParameters(), cast pattern[i].parameter(1).getParameters(), currentlyFits);
+					}
+					case Expression(parts, type) | Block(parts, type): {
+						var patternParts:Array<InterpTokens> = pattern[i].parameter(0).copy();
+						if (patternParts != null) currentlyFits = currentlyFits && fit(parts, patternParts, currentlyFits);
+						if (pattern[i].parameter(1) != null) currentlyFits = currentlyFits && fit(cast type.getParameters(), cast pattern[i].parameter(1).getParameters(), currentlyFits);
+					}
+					case PartArray(parts): {
+						var patternParts:Array<InterpTokens> = pattern[i].parameter(0);
+						if (patternParts != null) currentlyFits = currentlyFits && fit(parts, patternParts, currentlyFits);
+					}
+					case PropertyAccess(name, property): currentlyFits = currentlyFits && fit(cast given[i].getParameters(), cast pattern[i].getParameters(), currentlyFits);
+					case Object(toString, props, typeName): return false; // Cant be matched with, only valid in the context of object instantiation. Represented by FunctionCall in most cases.
+					case Class(name, instanceFields, staticFields): return false; // Deprecated. Will be replaced in the future
+					case _: continue;
+				}
+
+				if (!currentlyFits) return false;
+			}
+
+			return currentlyFits;
+		}
+
+		var patternString = PrettyPrinter.stringifyInterpreter(pattern);
+		// We might want to attach stuff to the body, so we need to make it so it doesn't create a new stack scope & strip type info from it
+		var bodyString = PrettyPrinter.stringifyInterpreter(body.parameter(0)); 
+		for (pattern => caller in patterns) {
+			if (fit(givenPattern, pattern)) {
+				var conditionRunner = (caller.parameter(0) : Array<InterpTokens>);
+				var params = [
+					Write([VariableDeclaration(Identifier(Little.keywords.CONDITION_PATTERN_PARAMETER_NAME), Identifier(Little.keywords.TYPE_STRING), null)], Characters(patternString)),
+					Write([VariableDeclaration(Identifier(Little.keywords.CONDITION_BODY_PARAMETER_NAME), Identifier(Little.keywords.TYPE_STRING), null)], Characters(bodyString))
+				];
+				return run(params.concat(conditionRunner));
+			}
+		}
+
+		return error('Pattern $patternString is not supported in condition ${name.asStringPath()} (patterns (`*` means any value): \n\t(${[for (pattern in patterns.keys()) pattern].map(x -> PrettyPrinter.stringifyInterpreter(x).replace("null", "*")).join('),\n\t(')})\n)');
 
         // Listeners
 
@@ -401,7 +459,7 @@ class Actions {
                     if (tokens[tokens.length - 1].equals(token)) calculated = Operators.call(calculated, sign); //LHS operator
                 }
                 case Expression(parts, t): {
-                    var val = t != null ? type(calculate(parts), t) : calculate(parts);
+                    var val = t != null ? typeCast(calculate(parts), t) : calculate(parts);
                     if (sign != "" && calculated == null) calculated = Operators.call(sign, val); // RHS operator
                     else if (calculated == null) calculated = val;
                     else if (sign == null) error("Two values cannot come one after the other. At least one of them should be an operator, or, put an operator in between.");

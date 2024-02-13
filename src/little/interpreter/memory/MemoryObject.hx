@@ -160,7 +160,7 @@ class MemoryObject {
             if (currentParam.length != 0) given.push(Expression(currentParam.copy(), null));
         }
 
-        if (given.length != this.parameters.length) return ErrorMessage('Incorrect number of parameters, expected: ${this.parameters.length} (${PrettyPrinter.stringify(this.parameters)}), given: ${given.length} (${PrettyPrinter.stringify(given)})');
+        if (given.length != this.parameters.length) return ErrorMessage('Incorrect number of parameters, expected: ${this.parameters.length} (${PrettyPrinter.stringifyParserthis.parameters)}), given: ${given.length} (${PrettyPrinter.stringifyParsergiven)})');
 
         //given = [for (element in given) Interpreter.evaluate(element)];
 
@@ -257,7 +257,7 @@ class MemoryObject {
 	public inline function switchType(type:ParserTokens, ?deleteOld:Bool = false) {
 		var ot = type;
 		if (!type.is(MODULE)) type = Actions.evaluate(type);
-		if (!type.is(IDENTIFIER)) Runtime.throwError(ErrorMessage('Cannot use ${PrettyPrinter.stringify(ot)} as type' + (type.is(CHARACTERS) ? '(For accessing a type using a ${Little.keywords.TYPE_STRING} instance, use ${Little.keywords.READ_FUNCTION_NAME}(${type}))' : '')));
+		if (!type.is(IDENTIFIER)) Runtime.throwError(ErrorMessage('Cannot use ${PrettyPrinter.stringifyParserot)} as type' + (type.is(CHARACTERS) ? '(For accessing a type using a ${Little.keywords.TYPE_STRING} instance, use ${Little.keywords.READ_FUNCTION_NAME}(${type}))' : '')));
 	
 		var typeObject = Interpreter.accessObject(type, @:privateAccess Actions.memory);
 

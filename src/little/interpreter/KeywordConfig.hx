@@ -49,6 +49,8 @@ class KeywordConfig {
     @:optional public var RAISE_ERROR_FUNCTION_NAME:String = "error";
     @:optional public var READ_FUNCTION_NAME:String = "read";
     @:optional public var RUN_CODE_FUNCTION_NAME:String = "run";
+	@:optional public var CONDITION_PATTERN_PARAMETER_NAME:String = "pattern";
+	@:optional public var CONDITION_BODY_PARAMETER_NAME:String = "code";
 
     /**
     	No need to ever change this, this is a parser-only feature

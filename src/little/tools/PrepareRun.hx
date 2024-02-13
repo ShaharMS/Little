@@ -231,7 +231,7 @@ class PrepareRun {
 				var l = Conversion.toHaxeValue(lhs),
 					r = Conversion.toHaxeValue(rhs);
 				if (r == 0)
-					Runtime.throwError(ErrorMessage('Cannot divide by 0 ${if (rhs.getName() == "Number" || rhs.getName() == "Decimal") "" else '(${PrettyPrinter.stringify(rhs)} is 0)'}'));
+					Runtime.throwError(ErrorMessage('Cannot divide by 0 ${if (rhs.getName() == "Number" || rhs.getName() == "Decimal") "" else '(${PrettyPrinter.stringifyParserrhs)} is 0)'}'));
 				return Decimal(l / r + "");
 			}
 		});
@@ -361,7 +361,7 @@ class PrepareRun {
 				safetyNet++;
 			}
 			if (safetyNet >= 500000) {
-				Runtime.throwError(ErrorMessage('Too much iteration (is `${PrettyPrinter.stringify(params)}` forever `$TRUE_VALUE`?)'), INTERPRETER);
+				Runtime.throwError(ErrorMessage('Too much iteration (is `${PrettyPrinter.stringifyParserparams)}` forever `$TRUE_VALUE`?)'), INTERPRETER);
 			}
 			return val;
 		});
@@ -403,7 +403,7 @@ class PrepareRun {
 
 			var handle = Interpreter.accessObject(params[0]);
 			if (handle == null) {
-				Runtime.throwError(ErrorMessage('`for` loop must start with a variable to count on (expected definition/block, found: `${PrettyPrinter.stringify(params[0])}`)'));
+				Runtime.throwError(ErrorMessage('`for` loop must start with a variable to count on (expected definition/block, found: `${PrettyPrinter.stringifyParserparams[0])}`)'));
 				return val;
 			}
 
@@ -504,7 +504,7 @@ class PrepareRun {
 
 			var handle = Interpreter.accessObject(params[0].getParameters()[0][0]);
 			if (handle == null) {
-				Runtime.throwError(ErrorMessage('`after` condition must start with a variable to watch (expected definition, found: `${PrettyPrinter.stringify(params[0].getParameters()[0][0])}`)'));
+				Runtime.throwError(ErrorMessage('`after` condition must start with a variable to watch (expected definition, found: `${PrettyPrinter.stringifyParserparams[0].getParameters()[0][0])}`)'));
 				return val;
 			}
 
@@ -524,7 +524,7 @@ class PrepareRun {
 
 			var handle = Interpreter.accessObject(params[0].getParameters()[0][0]);
 			if (handle == null) {
-				Runtime.throwError(ErrorMessage('`whenever` condition must start with a variable to watch (expected definition, found: `${PrettyPrinter.stringify(params[0].getParameters()[0][0])}`)'));
+				Runtime.throwError(ErrorMessage('`whenever` condition must start with a variable to watch (expected definition, found: `${PrettyPrinter.stringifyParserparams[0].getParameters()[0][0])}`)'));
 				return val;
 			}
 

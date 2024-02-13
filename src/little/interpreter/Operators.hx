@@ -5,7 +5,7 @@ import vision.algorithms.Radix;
 import little.tools.PrettyPrinter;
 import little.lexer.Lexer;
 import haxe.extern.EitherType;
-import little.parser.Tokens.ParserTokens;
+import little.interpreter.Tokens.InterpTokens;
 
 using little.tools.TextTools;
 using StringTools;
@@ -35,7 +35,7 @@ class Operators {
 		| Exponentiation | `5^2` |
 		| "Non-Standard" Square Root  | `3√5` |
 	**/
-	public static var standard:Map<String, (lhs:ParserTokens, rhs:ParserTokens) -> ParserTokens> = new Map();
+	public static var standard:Map<String, (lhs:InterpTokens, rhs:InterpTokens) -> InterpTokens> = new Map();
 
 	/**
 		Operators that require just the right side of the equations, for example:
@@ -46,7 +46,7 @@ class Operators {
 		| Decrement | `--5` |
 		| "Standard" Square Root  | `√5` |
 	**/
-	public static var rhsOnly:Map<String, (ParserTokens) -> ParserTokens> = new Map();
+	public static var rhsOnly:Map<String, (InterpTokens) -> InterpTokens> = new Map();
 
 	/**
 		Operators that require just the left side of the equations, for example:
@@ -56,7 +56,7 @@ class Operators {
 		| Post Decrement | `5--` |
 		| Factorial | `5!` |
 	**/
-	public static var lhsOnly:Map<String, (ParserTokens) -> ParserTokens> = new Map();
+	public static var lhsOnly:Map<String, (InterpTokens) -> InterpTokens> = new Map();
 
 	/**
 		Format of parameter `opPriority`:
@@ -210,7 +210,7 @@ class Operators {
 		@param callback depending on the operatorType, either a function that takes two arguments (lhs, rhs) or a function that takes one argument (lhs) or (rhs).
 	**/
 	public static function add(op:String, operatorType:OperatorType, priority:String,
-			callback:EitherType<(ParserTokens) -> ParserTokens, (ParserTokens, ParserTokens) -> ParserTokens>) {
+			callback:EitherType<(InterpTokens) -> InterpTokens, (InterpTokens, InterpTokens) -> InterpTokens>) {
 		for (i in 0...op.length)
 			if (!Lexer.signs.contains(op.charAt(i)))
 				Lexer.signs.push(op.charAt(i));
@@ -233,39 +233,39 @@ class Operators {
 		setPriority(op, operatorType, priority);
 	}
 
-	overload extern inline public static function call(lhs:ParserTokens, op:String) {
+	overload extern inline public static function call(lhs:InterpTokens, op:String) {
 		if (lhsOnly.exists(op))
 			return lhsOnly[op](lhs);
 		else if (rhsOnly.exists(op))
 			return
-				ErrorMessage('Operator $op is used incorrectly - should appear after the sign ($op${PrettyPrinter.stringify(lhs)} instead of ${PrettyPrinter.stringify(lhs)}$op)');
+				ErrorMessage('Operator $op is used incorrectly - should appear after the sign ($op${PrettyPrinter.stringifyInterpreter(lhs)} instead of ${PrettyPrinter.stringifyInterpreter(lhs)}$op)');
 		else if (standard.exists(op))
-			return ErrorMessage('Operator $op is used incorrectly - should appear between two values (${PrettyPrinter.stringify(lhs)} $op <some value>)');
+			return ErrorMessage('Operator $op is used incorrectly - should appear between two values (${PrettyPrinter.stringifyInterpreter(lhs)} $op <some value>)');
 		else
 			return ErrorMessage('Operator $op does not exist. did you make a typo?');
 	}
 
-	overload extern inline public static function call(op:String, rhs:ParserTokens) {
+	overload extern inline public static function call(op:String, rhs:InterpTokens) {
 		if (rhsOnly.exists(op))
 			return rhsOnly[op](rhs);
 		else if (lhsOnly.exists(op))
 			return
-				ErrorMessage('Operator $op is used incorrectly - should appear before the sign (${PrettyPrinter.stringify(rhs)}$op instead of $op${PrettyPrinter.stringify(rhs)})');
+				ErrorMessage('Operator $op is used incorrectly - should appear before the sign (${PrettyPrinter.stringifyInterpreter(rhs)}$op instead of $op${PrettyPrinter.stringifyInterpreter(rhs)})');
 		else if (standard.exists(op))
-			return ErrorMessage('Operator $op is used incorrectly - should appear between two values (${PrettyPrinter.stringify(rhs)} $op <some value>)');
+			return ErrorMessage('Operator $op is used incorrectly - should appear between two values (${PrettyPrinter.stringifyInterpreter(rhs)} $op <some value>)');
 		else
 			return ErrorMessage('Operator $op does not exist. did you make a typo?');
 	}
 
-	overload extern inline public static function call(?lhs:ParserTokens = null, op:String, ?rhs:ParserTokens = null):ParserTokens {
+	overload extern inline public static function call(?lhs:InterpTokens = null, op:String, ?rhs:InterpTokens = null):InterpTokens {
 		if (standard.exists(op))
 			return standard[op](lhs, rhs);
 		else if (lhsOnly.exists(op))
 			return
-				ErrorMessage('Operator $op is used incorrectly - should not appear between two values, only to the right of one of them (${PrettyPrinter.stringify(rhs)}$op or ${PrettyPrinter.stringify(lhs)}$op)');
+				ErrorMessage('Operator $op is used incorrectly - should not appear between two values, only to the right of one of them (${PrettyPrinter.stringifyInterpreter(rhs)}$op or ${PrettyPrinter.stringifyInterpreter(lhs)}$op)');
 		else if (rhsOnly.exists(op))
 			return
-				ErrorMessage('Operator $op is used incorrectly - should not appear between two values, only to the left of one of them ($op${PrettyPrinter.stringify(rhs)} or $op${PrettyPrinter.stringify(lhs)})');
+				ErrorMessage('Operator $op is used incorrectly - should not appear between two values, only to the left of one of them ($op${PrettyPrinter.stringifyInterpreter(rhs)} or $op${PrettyPrinter.stringifyInterpreter(lhs)})');
 		else
 			return ErrorMessage('Operator $op does not exist. did you make a typo?');
 	}

@@ -32,23 +32,23 @@ class ExternalInterfacing {
 	    Properties of instances of a certain type.
 		for example, one may want to define a `length` property on an array
 	**/
-	public var instanceProperties:VarExtTree = new VarExtTree();
+	public var instanceProperties:ExtTree = new ExtTree();
 
 	/**
 	    Methods of instances of a certain type.
 		for example, one may want to define a `push` method on an array
 	**/
-	public var instanceMethods:FunExtTree = new FunExtTree();
+	public var instanceMethods:ExtTree = new ExtTree();
 
 	/**
 	    Global static variables, defined using a path to the property.
 	**/
-	public var globalProperties:VarExtTree = new VarExtTree();
+	public var globalProperties:ExtTree = new ExtTree();
 
 	/**
 	    Global static functions, defined using a path to the property.
 	**/
-	public var globalMethods:FunExtTree = new FunExtTree();
+	public var globalMethods:ExtTree = new ExtTree();
 
 	public function new(memory:Memory) {
 		parent = memory;
@@ -56,7 +56,7 @@ class ExternalInterfacing {
 		CoreTypes.addFor(this);
 	}
 
-	public function createPathFor(extType:EitherType<VarExtTree, FunExtTree>, ...path:String) {
+	public function createPathFor(extType:ExtTree, ...path:String) {
 		var identifiers = path.toArray();
 
 		var handle = extType;
@@ -66,7 +66,7 @@ class ExternalInterfacing {
 				handle = untyped handle.properties[identifier];
 			} else {
 				untyped {
-					handle.properties[identifier] = extType is VarExtTree ? new VarExtTree() : new FunExtTree();
+					handle.properties[identifier] = new ExtTree();
 					handle = handle.properties[identifier];
 				}
 			}
@@ -100,13 +100,13 @@ class ExternalInterfacing {
 	}
 }
 
-class VarExtTree {
+class ExtTree {
 
 	public var getter:(objectValue:InterpTokens, objectAddress:MemoryPointer) -> {objectValue:InterpTokens, objectAddress:MemoryPointer, objectDoc:String};
 
-	public var properties:Map<String, VarExtTree>;
+	public var properties:Map<String, ExtTree>;
 
-	public function new(?getter:(objectValue:InterpTokens, objectAddress:MemoryPointer) -> {objectValue:InterpTokens, objectAddress:MemoryPointer, objectDoc:String}, ?properties:Map<String, VarExtTree>) {
+	public function new(?getter:(objectValue:InterpTokens, objectAddress:MemoryPointer) -> {objectValue:InterpTokens, objectAddress:MemoryPointer, objectDoc:String}, ?properties:Map<String, ExtTree>) {
 		this.getter = getter ?? (objectValue, objectAddress) -> {
 			return {
 				objectValue: Characters('Externally registered, attached to $objectAddress'),
@@ -114,25 +114,6 @@ class VarExtTree {
 				objectDoc: ""
 			}
 		}
-		this.properties = properties ?? new Map<String, VarExtTree>();
-	}
-}
-
-class FunExtTree {
-
-	public var doc:String;
-	public var caller:(objectValue:InterpTokens, objectAddress:MemoryPointer, params:Array<{objectValue:InterpTokens, objectAddress:MemoryPointer}>) -> {objectValue:InterpTokens, objectAddress:MemoryPointer};
-
-	public var properties:Map<String, FunExtTree>;
-
-	public function new(?caller:(objectValue:InterpTokens, objectAddress:MemoryPointer, params:Array<{objectValue:InterpTokens, objectAddress:MemoryPointer}>) -> {objectValue:InterpTokens, objectAddress:MemoryPointer}, ?properties:Map<String, FunExtTree>, ?doc:String) {
-		this.caller = caller ?? (objectValue, objectAddress, params) -> {
-			return {
-				objectValue: Characters('Externally registered, attached to $objectAddress'),
-				objectAddress: objectAddress,
-			}
-		}
-		this.properties = properties ?? new Map<String, FunExtTree>();
-		this.doc = doc ?? "";
+		this.properties = properties ?? new Map<String, ExtTree>();
 	}
 }

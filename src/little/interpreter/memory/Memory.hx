@@ -144,6 +144,7 @@ class Memory {
 			case (_ == Little.keywords.TYPE_FLOAT => true): Decimal(heap.readDouble(data.address));
 			case (_ == Little.keywords.TYPE_BOOLEAN => true): heap.readByte(data.address) == 1 ? TrueValue : FalseValue;
 			case (_ == Little.keywords.TYPE_FUNCTION => true): heap.readCodeBlock(data.address);
+			case (_ == Little.keywords.TYPE_CONDITION => true): heap.readCondition(data.address);
             // Because of the way we store lone nulls (as type dynamic), 
             // they might get confused with objects of type dynamic, so we need to do this:
             case (_ == Little.keywords.TYPE_DYNAMIC && constants.getFromPointer(data.address).equals(NullValue) => true): NullValue;
@@ -168,6 +169,7 @@ class Memory {
 				case TrueValue | FalseValue: Little.keywords.TYPE_BOOLEAN;
 				case NullValue: Little.keywords.TYPE_DYNAMIC;
 				case FunctionCode(_, _): Little.keywords.TYPE_FUNCTION;
+				case ConditionCode(_): Little.keywords.TYPE_CONDITION;
 				case _: throw "How did we get here? 3";
 			}
 			// By design, the only other way properties are accessible on non-object
@@ -210,6 +212,7 @@ class Memory {
 						case (_ == Little.keywords.TYPE_FLOAT => true): current = Decimal(heap.readDouble(keyData.value));
 						case (_ == Little.keywords.TYPE_BOOLEAN => true): current = heap.readByte(keyData.value) == 1 ? TrueValue : FalseValue;
 						case (_ == Little.keywords.TYPE_FUNCTION => true): current = heap.readCodeBlock(keyData.value);
+						case (_ == Little.keywords.TYPE_CONDITION => true): current = heap.readCondition(keyData.value);
 						case (keyData.value == constants.NULL => true): current = NullValue;
 						case _: current = heap.readObject(keyData.value);
 					}
@@ -235,6 +238,7 @@ class Memory {
 				case TrueValue | FalseValue: Little.keywords.TYPE_BOOLEAN;
 				case NullValue: Little.keywords.TYPE_DYNAMIC;
 				case FunctionCode(_, _): Little.keywords.TYPE_FUNCTION;
+				case ConditionCode(_): Little.keywords.TYPE_CONDITION;
 				case _: throw "How did we get here? 3";
 			},
 			objectDoc: currentDoc

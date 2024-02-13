@@ -334,7 +334,7 @@ class Heap {
 
     public function storeCodeBlock(caller:InterpTokens):MemoryPointer {
         switch caller {
-            case Block(body, _): return storeString(ByteCode.compile(FunctionCode([], caller)));
+            case Block(body, _): return storeString(ByteCode.compile(FunctionCode(new OrderedMap(), caller)));
             case FunctionCode(requiredParams, body): return storeString(ByteCode.compile(caller));
             case _: throw new ArgumentException("caller", '${caller} must be a code block');
         }
@@ -343,7 +343,7 @@ class Heap {
     public function setCodeBlock(address:MemoryPointer, caller:InterpTokens) {
         switch caller {
             case Block(body, _): 
-                setString(address, ByteCode.compile(FunctionCode([], caller)));
+                setString(address, ByteCode.compile(FunctionCode(new OrderedMap(), caller)));
             case FunctionCode(requiredParams, body): 
                 setString(address, ByteCode.compile(caller));
             case _: throw new ArgumentException("caller", '${caller} must be a code block');
@@ -356,16 +356,16 @@ class Heap {
 
 	public function storeCondition(caller:InterpTokens):MemoryPointer {
         switch caller {
-            case ConditionCode(_, _): return storeString(ByteCode.compile(caller));
-            case _: throw new ArgumentException("caller", '${caller} must be a token of type ${ConditionCode(null, null).getName()}');
+            case ConditionCode(_): return storeString(ByteCode.compile(caller));
+            case _: throw new ArgumentException("caller", '${caller} must be a token of type ${ConditionCode(null).getName()}');
         }
     }
 
     public function setCondition(address:MemoryPointer, caller:InterpTokens) {
         switch caller {
-            case ConditionCode(_, _):
+            case ConditionCode(_):
                 setString(address, ByteCode.compile(caller));
-            case _: throw new ArgumentException("caller", '${caller} must be a token of type ${ConditionCode(null, null).getName()}');
+            case _: throw new ArgumentException("caller", '${caller} must be a token of type ${ConditionCode(null).getName()}');
         }
     }
 
@@ -430,7 +430,7 @@ class Heap {
                     documentation: 'The type of this object, as a ${Little.keywords.TYPE_STRING}.',
                 }
                 propsC[Little.keywords.TO_STRING_PROPERTY_NAME] = {
-                    value: FunctionCode([], toString),
+                    value: FunctionCode(new OrderedMap(), toString),
                     documentation: 'The function that will be used to convert this object to a string.',
                 }
 
@@ -538,7 +538,7 @@ class Heap {
 
 						// store the documentation, if any/needed
                         if (Little.debug && doc != null) {
-                            var docBytes = Bytes.ofString(doc);
+                            var docBytes = Bytes.ofString(Actions.assert(Actions.evaluate(doc), CHARACTERS).parameter(0));
 							docBytes = new ByteArray(4).concat(docBytes);
 							docBytes.setInt32(0, docBytes.length);
                             for (i in 0...docBytes.length) {
@@ -553,7 +553,7 @@ class Heap {
 
 						// store the documentation, if any/needed
                         if (Little.debug && doc != null) {
-                            var docBytes = Bytes.ofString(doc);
+                            var docBytes = Bytes.ofString(Actions.assert(Actions.evaluate(doc), CHARACTERS).parameter(0));
 							docBytes = new ByteArray(4).concat(docBytes);
 							docBytes.setInt32(0, docBytes.length);
                             for (i in 0...docBytes.length) {

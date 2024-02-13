@@ -50,6 +50,8 @@ class Keywords {
     public static var RAISE_ERROR_FUNCTION_NAME:String = "error";
     public static var READ_FUNCTION_NAME:String = "read";
     public static var RUN_CODE_FUNCTION_NAME:String = "run";
+	public static var CONDITION_PATTERN_PARAMETER_NAME:String = "pattern";
+	public static var CONDITION_BODY_PARAMETER_NAME:String = "code";
 
     /**
     	No need to ever change this, this is a parser-only feature
@@ -111,6 +113,8 @@ class Keywords {
         RAISE_ERROR_FUNCTION_NAME: "error",
         READ_FUNCTION_NAME: "read",
         RUN_CODE_FUNCTION_NAME: "run",
+		CONDITION_PATTERN_PARAMETER_NAME: "pattern",
+		CONDITION_BODY_PARAMETER_NAME: "code",
         TYPE_UNKNOWN: "Unknown",
         RECOGNIZED_SIGNS: [],
         PROPERTY_ACCESS_SIGN: ".",
@@ -155,6 +159,8 @@ class Keywords {
         RAISE_ERROR_FUNCTION_NAME = set.RAISE_ERROR_FUNCTION_NAME;
         READ_FUNCTION_NAME = set.READ_FUNCTION_NAME;
         RUN_CODE_FUNCTION_NAME = set.RAISE_ERROR_FUNCTION_NAME;
+		CONDITION_PATTERN_PARAMETER_NAME = set.CONDITION_PATTERN_PARAMETER_NAME;
+		CONDITION_BODY_PARAMETER_NAME = set.CONDITION_BODY_PARAMETER_NAME;
         TYPE_UNKNOWN = set.TYPE_UNKNOWN;
         RECOGNIZED_SIGNS = set.RECOGNIZED_SIGNS;
         PROPERTY_ACCESS_SIGN = set.PROPERTY_ACCESS_SIGN;
