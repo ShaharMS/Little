@@ -354,8 +354,27 @@ class Heap {
         return ByteCode.decompile(readString(address.rawLocation))[0];
     }
 
+	public function storeCondition(caller:InterpTokens):MemoryPointer {
+        switch caller {
+            case ConditionCode(_, _): return storeString(ByteCode.compile(caller));
+            case _: throw new ArgumentException("caller", '${caller} must be a token of type ${ConditionCode(null, null).getName()}');
+        }
+    }
 
-    public function freeCodeBlock(address:MemoryPointer) {
+    public function setCondition(address:MemoryPointer, caller:InterpTokens) {
+        switch caller {
+            case ConditionCode(_, _):
+                setString(address, ByteCode.compile(caller));
+            case _: throw new ArgumentException("caller", '${caller} must be a token of type ${ConditionCode(null, null).getName()}');
+        }
+    }
+
+    public function readCondition(address:MemoryPointer):InterpTokens {
+        return ByteCode.decompile(readString(address.rawLocation))[0];
+    }
+
+
+    public function freeCondition(address:MemoryPointer) {
         freeString(address);
     }
 

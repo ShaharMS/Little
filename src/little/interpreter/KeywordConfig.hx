@@ -22,6 +22,12 @@ class KeywordConfig {
     **/
     @:optional public var TYPE_FUNCTION:String = "Action";
 
+	/**
+		Represents the general type of a condition.
+		The underlying type is `TYPE_STRING`.
+	**/
+	@:optional public var TYPE_CONDITION:String = "Condition";
+
     /**
         represent the "type" type:
         for example: `5` is of type `Number`, and `Number` is of type `Type`

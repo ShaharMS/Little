@@ -438,7 +438,7 @@ class Actions {
 
 			var i = 0;
 			while (i < pre.length) {
-				var token = pre[i].is(READ, IDENTIFIER, BLOCK) ? evaluate(pre[i]) : pre[i];
+				var token = pre[i].is(IDENTIFIER, BLOCK) ? evaluate(pre[i]) : pre[i];
 
                 switch token {
                     case Sign(operatorGroup.filter(x -> x.sign == _).length > 0 => true): {
@@ -453,7 +453,7 @@ class Actions {
                         }
 
                         var lookbehind = post.length > 0 ? post[post.length - 1] /* Post has only evaluated tokens */ : Sign("_"); // Just an arbitrary "sign" to not have null here
-                        var lookahead = pre[i + 1].is(READ, IDENTIFIER, BLOCK) ? evaluate(pre[i + 1]) : pre[i + 1];
+                        var lookahead = pre[i + 1].is(IDENTIFIER, BLOCK) ? evaluate(pre[i + 1]) : pre[i + 1];
 
                         if (lookbehind.is(SIGN) && operatorGroup.filter(x -> x.sign == lookbehind.parameter(1)).length > 0) { // Because of our check above, valid for the start of an expression too.
                             if (lookahead.is(SIGN)) {
@@ -461,13 +461,13 @@ class Actions {
                                 // Look ahead until we run out of signs. Then, group the iterated signs and the final operand into an array,
                                 // and pass it onto "group()". Pay attention - this only groups signs with the current priority level.
                                 if (i + 1 >= pre.length) error("Expression ended with an operator, when an operand was expected.");
-                                var lookahead2 = pre[i + 1].is(READ, IDENTIFIER, BLOCK) ? evaluate(pre[i + 1]) : pre[i + 1];
+                                var lookahead2 = pre[i + 1].is(IDENTIFIER, BLOCK) ? evaluate(pre[i + 1]) : pre[i + 1];
                                 var g = [];
                                 while (lookahead2.is(SIGN) && operatorGroup.filter(x -> x.sign == lookahead2.parameter(1) && x.side == RHS_ONLY).length > 0) {
                                     g.push(lookahead2);
                                     i++;
                                     if (i + 1 >= pre.length) error("Expression ended with an operator, when an operand was expected.");
-                                    lookahead2 = pre[i + 1].is(READ, IDENTIFIER, BLOCK) ? evaluate(pre[i + 1]) : pre[i + 1];
+                                    lookahead2 = pre[i + 1].is(IDENTIFIER, BLOCK) ? evaluate(pre[i + 1]) : pre[i + 1];
                                 } 
                                 // Last token is an operand
                                 g.push(lookahead2);
@@ -497,7 +497,7 @@ class Actions {
                                 var op = lookahead;
                                 // We have to repeat the check in RHS_ONLY, since RHS can also start with a sign
                                 if (i + 2 >= pre.length) error("Expression ended with an operator, when an operand was expected.");
-                                var lookahead2 = pre[i + 2].is(READ, IDENTIFIER, BLOCK) ? evaluate(pre[i + 2]) : pre[i + 2];
+                                var lookahead2 = pre[i + 2].is(IDENTIFIER, BLOCK) ? evaluate(pre[i + 2]) : pre[i + 2];
                                 
                                 if (!lookahead2.is(SIGN)) {
                                     post.push(PartArray([operand1, token, PartArray([lookahead, lookahead2])]));
@@ -508,7 +508,7 @@ class Actions {
                                         g.push(lookahead2);
                                         i++;
                                         if (i + 2 >= pre.length) error("Expression ended with an operator, when an operand was expected.");
-                                        lookahead2 = pre[i + 2].is(READ, IDENTIFIER, BLOCK) ? evaluate(pre[i + 2]) : pre[i + 2];
+                                        lookahead2 = pre[i + 2].is(IDENTIFIER, BLOCK) ? evaluate(pre[i + 2]) : pre[i + 2];
                                     } 
 									// Last token is an operand
 									g.push(lookahead2);

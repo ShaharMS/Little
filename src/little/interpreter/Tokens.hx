@@ -39,7 +39,21 @@ enum InterpTokens {
 	**/
 	ClassDeclaration(name:InterpTokens, ?doc:InterpTokens);
 
-	ConditionCode(pattern:Array<InterpTokens>, caller:InterpTokens)
+	/**
+		`callers` is a map of `InterpTokens` configs representing the structure of the condition itself, in correlation to the conditions outcome. Use haxe `null` to denote a wildcard - a free value decided by the user,. 
+		for example, Little's for loop would be:
+
+			[
+				[VariableDeclaration(null, null, null), Identifier("from"), null, Identifier("to"), null, Identifier("jump"), null] => ...,
+				[VariableDeclaration(null, null, null), Identifier("from"), null, Identifier("to"), null] => ...
+			]	
+
+		Ideally, to validate the "`null`" tokens (the wildcard ones) one will use the macro-ish tools the language provide (extracting type, extracting identifiers...)
+
+		@param callers `Map<Array<InterpTokens.*>, InterpTokens.Block>`
+	**/
+	ConditionCode(callers:Map<Array<InterpTokens>, InterpTokens>);
+
     /**
 		Usage:
 		@param name `Identifier`, `PropertyAccess`

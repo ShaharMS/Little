@@ -23,6 +23,12 @@ class Keywords {
     **/
     public static var TYPE_FUNCTION:String = "Action";
 
+	/**
+		Represents the general type of a condition.
+		The underlying type is `TYPE_STRING`.
+	**/
+	public static var TYPE_CONDITION:String = "Condition";
+
     /**
         represent the "type" type:
         for example: `5` is of type `Number`, and `Number` is of type `Type`
@@ -94,6 +100,7 @@ class Keywords {
         TYPE_BOOLEAN: "Boolean",
         TYPE_STRING: "Characters",
         TYPE_FUNCTION: "Action",
+		TYPE_CONDITION: "Condition",
         TYPE_MODULE: "Type",
         TYPE_SIGN: "Sign",
         MAIN_MODULE_NAME: "Main",
@@ -137,6 +144,7 @@ class Keywords {
         TYPE_BOOLEAN = set.TYPE_BOOLEAN;
         TYPE_STRING = set.TYPE_STRING;
         TYPE_FUNCTION = set.TYPE_FUNCTION;
+		TYPE_CONDITION = set.TYPE_CONDITION;
         TYPE_MODULE = set.TYPE_MODULE;
         TYPE_SIGN = set.TYPE_SIGN;
         MAIN_MODULE_NAME = set.MAIN_MODULE_NAME;

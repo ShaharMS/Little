@@ -19,7 +19,7 @@ class CoreTypes {
         externs.instanceProperties.properties[Little.keywords.TYPE_STRING].properties = [
             "length" => new ExtTree((value, _) -> {
                 var length = value.parameter(0).length;
-                return { objectValue: Number(length), objectAddress: externs.parent.heap.storeInt32(length) }
+                return { objectValue: Number(length), objectAddress: externs.parent.heap.storeInt32(length), objectDoc: "the length of the string" }
             })
         ];
         externs.instanceProperties.properties[Little.keywords.TYPE_STRING].properties = [
@@ -35,9 +35,31 @@ class CoreTypes {
 
         externs.instanceProperties.properties[Little.keywords.TYPE_FUNCTION].properties = [
             "token" => new ExtTree((value, _) -> {
-                return { objectValue: Characters(Std.string(value)), objectAddress: externs.parent.heap.storeString(Std.string(value)) }
+                return { objectValue: Characters(Std.string(value)), objectAddress: externs.parent.heap.storeString(Std.string(value)), objectDoc: "the token of the function, as a String" }
             })
         ];
 
+
+		// With FUNCTION, we also need CONDITION
+
+		externs.createPathFor(externs.instanceProperties, Little.keywords.TYPE_CONDITION);
+		externs.createPathFor(externs.instanceMethods, Little.keywords.TYPE_CONDITION);
+
+		externs.typeToPointer[Little.keywords.TYPE_CONDITION] = externs.parent.heap.storeByte(1);
+
+		externs.instanceProperties.properties[Little.keywords.TYPE_CONDITION].properties = [
+			"token" => new ExtTree((value, _) -> {
+				return { objectValue: Characters(Std.string(value)), objectAddress: externs.parent.heap.storeString(Std.string(value)), objectDoc: "the token of the condition, as a String" }
+			})
+		];
+		externs.instanceMethods.properties[Little.keywords.TYPE_CONDITION].properties = [
+			"addOption" => new ExtTree(((value, address) -> {
+				var func = FunctionCode(["pattern" => Identifier(Little.keywords.TYPE_DYNAMIC), "callback" => Identifier(Little.keywords.TYPE_DYNAMIC)], 
+					Interpreter.convert(Parser.parse(Lexer.lex(
+						""
+					)))
+				);
+			}))
+		]
     }
 }
