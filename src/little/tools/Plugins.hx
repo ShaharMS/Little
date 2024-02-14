@@ -1,5 +1,7 @@
 package little.tools;
 
+import little.interpreter.memory.ExternalInterfacing.ExtTree;
+import little.interpreter.memory.Memory;
 import little.interpreter.Actions;
 import little.interpreter.Operators;
 import haxe.exceptions.ArgumentException;
@@ -9,285 +11,107 @@ import haxe.extern.EitherType;
 import little.lexer.Lexer;
 import little.parser.Parser;
 import little.interpreter.Interpreter;
-import little.parser.Tokens.ParserTokens;
-import little.interpreter.memory.MemoryObject;
+import little.interpreter.Tokens.InterpTokens;
 import little.Little.*;
 import little.Keywords.*;
 
 using little.tools.Plugins;
+using little.tools.Extensions;
 @:access(little.Little)
 @:access(little.interpreter.Runtime)
 class Plugins {
-	/**
-		Registers an entire Haxe class's static fields & methods, to allow accessing them through Little. for example:
 
-		doing:  
+    private var memory:Memory;
 
-			Little.plugin.registerHaxeClass(Data.getClassInfo("Math"));
-
-		Will let you access all of Math's static fields & methods through little:
-		```haxe
-		print(Math.sqrt(4) + Math.max(2, {define i = 3, i}))
-		```
-
-		@param stats Data about the class, obtained by using `Data.getClassInfo("YourClassName")`
-		@param littleClassName When provided, remaps the class in little, placing the properties inside the value of `littleClassName` instead of the class name given previously.
-	**/
-	public static function registerHaxeClass(stats:Array<ItemInfo>, ?littleClassName:String) {
-
-		if (stats.length == 0) {
-			return;
-		}
-        littleClassName = littleClassName != null ? littleClassName : stats[0].className;
-		var fieldValues = new Map<String, Dynamic>();
-		var fieldFunctions = new Map<String, Dynamic>();
-		var cls = Type.resolveClass(stats[0].className);
-
-		// Iterate over the fields of the class
-		for (s in stats) {
-            if (s.isStatic) {
-                var field = s.name;
-			    // Check if the field is a static field
-			    // Get the field value and store it in the fieldValues map
-			    var value = Reflect.field(cls, field);
-			    // Check if the field is a function (i.e., a method)
-			    if (Reflect.isFunction(value)) {
-			    	// Store the function in the fieldFunctions map
-                    
-			    	fieldFunctions.set(field, value);
-			    } else {
-                    fieldValues.set(field, value);
-                } 
-            } else {
-                var field = s.name;
-                var value = Reflect.field(Type.createEmptyInstance(cls), field);
-                if (Reflect.isFunction(value)) {
-                    fieldFunctions.set(field, (obj:ParserTokens, paramsArray) -> {
-                        
-                        return Reflect.callMethod(Conversion.toHaxeValue(obj), Reflect.field(Conversion.toHaxeValue(obj), field), paramsArray);
-                    });
-                } else {
-                    fieldValues.set(field, (obj:ParserTokens) -> {
-                        return Reflect.field(Conversion.toHaxeValue(obj), field);
-                    });
-                }
-            }
-           
-
-		}
-
-		//// Test the maps by printing the values of Math.PI and Math.sqrt()
-		// trace(fieldValues);
-		// trace(fieldFunctions);
-
-		var motherObj = new MemoryObject(Module(Identifier(littleClassName)), [], null, Module(Identifier(TYPE_MODULE)), true); 
-
-		for (instance in stats) {
-			//trace(instance.fieldType, instance.allowWrite, instance.name, instance.parameters, instance.returnType);
-			switch (instance.fieldType) {
-				case "var":
-					{
-                        if (instance.isStatic) {
-                            var value:ParserTokens = Conversion.toLittleValue(fieldValues[instance.name]);
-						    var type:ParserTokens = Identifier(Conversion.toLittleType(instance.returnType));
-						    motherObj.props.set(instance.name, new MemoryObject(value, [] /*Should this be implemented?*/, null, type, true, motherObj));
-                        } else {
-                            var value:ParserTokens = External(params -> {
-                                return Conversion.toLittleValue(fieldValues[instance.name](params[0])); // params[0] should be the current var's value when using the function
-                            });
-                            var type:ParserTokens = Identifier(Conversion.toLittleType(instance.returnType));
-                            motherObj.props.set(instance.name, new MemoryObject(value, [] /*Should this be implemented?*/, [
-                                Variable(Identifier("value " /* That extra space is used to differentiate between non-static fields and functions. Todo: Pretty bad solution */), Identifier(littleClassName))
-                            ], type, true, false, true, motherObj));
-                        }
-						
-					}
-				case "function": {
-                    if (instance.isStatic) {
-                        var value:ParserTokens = External((args) -> {
-					    	return Conversion.toLittleValue(Reflect.callMethod(null, fieldFunctions[instance.name], [for (arg in args) Conversion.toHaxeValue(arg)]));
-					    });
-
-					    var type:ParserTokens = Identifier(Conversion.toLittleType(instance.returnType));
-					    var params = [];
-					    for (param in instance.parameters) 
-					    	params.push(Variable(Identifier(param.name), Identifier(param.type)));
-
-					    motherObj.props.set(instance.name, new MemoryObject(value, [] /*Should this be implemented?*/, params, type, true, motherObj));
-                    } else {
-                        var value:ParserTokens = External((args) -> {
-                            var obj = args.shift();
-                            var params = [for (a in args) Conversion.toHaxeValue(a)];
-                            return Conversion.toLittleValue(fieldFunctions[instance.name](obj, params));
-					    });
-
-					    var type:ParserTokens = Identifier(Conversion.toLittleType(instance.returnType));
-					    var params = [];
-					    for (param in instance.parameters) 
-					    	params.push(Variable(Identifier(param.name), Identifier(param.type)));
-                        params.unshift(Variable(Identifier("value"), Identifier(littleClassName)));
-					    motherObj.props.set(instance.name, new MemoryObject(value, [] /*Should this be implemented?*/, params, type, true, false, true, motherObj));
-                    }
-
-                    
-				}
-			}
-		}
-
-		Interpreter.memory.set(littleClassName, motherObj);
-	}
-
-	/**
-		Registers a haxe function inside Little code.
-		@param stats Data about the function, obtained using `Data.getFunctionInfo("functionName", "moduleName")`.
-		@param littleName When provided, remaps the function name in Little code. This name allows property access, such as `SomeType.functionName`
-	**/
-	public static function registerHaxeFunction(stats:ItemInfo, ?littleName:String) {
-		var cls = Type.resolveClass(stats.className);
-		var func = Reflect.field(cls, stats.name);
-
-		var motherObj = new MemoryObject(Module(Identifier(stats.className)), [], null, Module(Identifier(TYPE_MODULE)), true);
-		if (littleName != null) {
-			motherObj = @:privateAccess Actions.memory.object;
-			var objects = littleName.split(Little.keywords.PROPERTY_ACCESS_SIGN);
-			stats.name = objects.pop();
-			for (name in objects) {
-				if (motherObj.get(name) != null) {
-					motherObj = motherObj.get(name);
-				} else {
-					var child = new MemoryObject(NullValue, [], null, Module(Identifier(TYPE_DYNAMIC)), true); // No reason to create a type, it's not used as one.
-					motherObj.set(name, child);
-					motherObj = child;
-				}
-			}
-		}
-
-		if (stats.isStatic) {
-			var value:ParserTokens = External((args) -> {
-				return Conversion.toLittleValue(Reflect.callMethod(null, func, [for (arg in args) Conversion.toHaxeValue(arg)]));
-			});
-
-			var type:ParserTokens = Identifier(Conversion.toLittleType(stats.returnType));
-			var params = [];
-			for (param in stats.parameters) 
-				params.push(Variable(Identifier(param.name), Identifier(param.type)));
-
-			motherObj.props.set(stats.name, new MemoryObject(value, [] /*Should this be implemented?*/, params, type, true, motherObj));
-		}
-	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    public function new(memory:Memory) {
+        this.memory = memory;
+    }
 
     /**
         registers a haxe value/property inside Little code.
 
-        @param variableName the name of the variable, for usage in Little code.
-        @param variableModuleName the module at which the variable "is declared". errors & logs point to this module.
+        @param variableName the name of the variable, for usage in Little code. If you want it nested in some kind of path, use `.` (e.g. `mother.varName`)
+        @param documentation documentation for this variable.
         @param allowWriting Whether writing to this variable is allowed or not.
         @param staticValue **Option 1** - a static value to assign to this variable
         @param valueGetter **Option 2** - a function that returns a value that this variable gives when accessed.
         @param valueSetter a function that dispatches whenever this value is assigned to. Takes effect when `allowWriting == true`.
     **/
-    public static function registerVariable(variableName:String, ?variableModuleName:String, allowWriting:Bool = false, ?staticValue:ParserTokens, ?valueGetter:Void -> ParserTokens, ?valueSetter:ParserTokens -> ParserTokens) {
-        Interpreter.memory.set(variableName, new MemoryObject(
-            External(params -> {
-                var currentModuleName = Little.runtime.currentModule;
-                if (variableModuleName != null) Little.runtime.currentModule = variableModuleName;
-                return try {
-                    var val = if (staticValue != null) staticValue;
-                    else valueGetter();
-                    Little.runtime.currentModule = currentModuleName;
-                    val;
-                } catch (e) {
-                    Little.runtime.currentModule = currentModuleName;
-                    ErrorMessage('External Variable Error: ' + e.details());
+    public function registerVariable(variableName:String, ?documentation:String, allowWriting:Bool = false, ?staticValue:InterpTokens, ?valueGetter:Void -> InterpTokens, ?setterCallback:Void -> Void) {
+        var varPath = variableName.split(".");
+        var object = memory.externs.createPathFor(memory.externs.globalProperties, ...varPath);
+        object.getter = (_, _) -> {
+            return try {
+                var value = staticValue == null ? valueGetter() : staticValue;
+                {
+                    objectValue: value,
+                    objectAddress: memory.store(value),
+                    objectDoc: documentation ?? ""
                 }
-            }), 
-            [], 
-            null,
-            null, 
-            true, 
-            Interpreter.memory.object
-        ));
-
-        if (valueSetter != null) {
-            Interpreter.memory.get(variableName).valueSetter = function (v) {
-                return Interpreter.memory.get(variableName).value = valueSetter(v);
+            } catch (e) {
+                {
+                    objectValue: ErrorMessage('External Variable Error: ' + e.details()),
+                    objectAddress: memory.constants.ERROR,
+                    objectDoc: ""
+                }
             }
         }
-        if (allowWriting == false) { //syntax here explained later on 
-            Interpreter.memory.get(variableName).valueSetter = function (v) {
-                Runtime.warn(ErrorMessage('Editing the variable $variableName is disallowed. New value is ignored, returning original value.'));
-                var currentModuleName = Little.runtime.currentModule;
-                if (variableModuleName != null) Little.runtime.currentModule = variableModuleName;
-                return try {
-                    var val = if (staticValue != null) staticValue;
-                    else valueGetter();
-                    Little.runtime.currentModule = currentModuleName;
-                    val;
-                } catch (e) {
-                    Little.runtime.currentModule = currentModuleName;
-                    ErrorMessage('External Variable Error: ' + e.details());
-                }
-            }
+        object.settable = allowWriting;
+        if (allowWriting && setterCallback != null) {
+            object.onSet = setterCallback;
         }
     }
 
     /**
     	Allows usage of a function written in haxe inside Little code.
 
-    	@param actionName The name by which to identify the function
-    	@param actionModuleName The module from which access to this function is granted. Also, when & if this function ever throws an error/prints to standard output, the name provided here will be present in the error message as the responsible module.
-    	@param expectedParameters an `Array<ParserTokens>` consisting of `ParserTokens.Variable`s which contain the names & types of the parameters that should be passed on to the function. For example:
+    	@param actionName The name by which to identify the function. If you want this nested in some kind of path, use `.` (e.g. `mother.funcName`)
+    	@param documentation documentation for this function.
+    	@param expectedParameters an `Array<InterpTokens>` consisting of `InterpTokens.Variable`s which contain the names & types of the parameters that should be passed on to the function. For example:
             ```
-            [Variable(Identifier(x), Identifier("String"))]
+            [VariableDeclaration(Identifier(x), Identifier("Characters"))]
             ```
             **alternatively** - can be normal parameter "list" written in little: 
             ``` 
-            define value, define index as Number
+            define x as Characters, define index = 3, define y
             ```
+            **Important** - if variables appear in the end and have assigned values, they are optional.
     	@param callback The actual function, which gets an array of the given parameters as little tokens (specifically of type `Expression`, 0 or more of them), and returns a value based on them
     **/
-    public static function registerFunction(actionName:String, ?actionModuleName:String, expectedParameters:EitherType<String, Array<ParserTokens>>, callback:Array<ParserTokens> -> ParserTokens) {
+    public function registerFunction(functionName:String, ?documentation:String, expectedParameters:EitherType<String, Array<InterpTokens>>, callback:Array<InterpTokens> -> InterpTokens) {
         var params = if (expectedParameters is String) {
-            Parser.parse(Lexer.lex(expectedParameters));
-        } else expectedParameters;
+            Interpreter.convert(...Parser.parse(Lexer.lex(expectedParameters)));
+        } else (expectedParameters : Array<InterpTokens>);
+
+        var functionPath = functionName.split(".");
+        
+        var paramMap = new OrderedMap<String, InterpTokens>();
+		for (entry in params) {
+			if (entry.is(SPLIT_LINE, SET_LINE)) continue;
+			switch entry {
+				case VariableDeclaration(name, null, _): paramMap[name.extractIdentifier()] = TypeCast(NullValue, Identifier(Little.keywords.TYPE_DYNAMIC));
+				case VariableDeclaration(name, type, _): paramMap[name.extractIdentifier()] = TypeCast(NullValue, type);
+				case Write(assignees, value): {
+					switch assignees[0] {
+						case VariableDeclaration(name, null, _): paramMap[name.extractIdentifier()] = TypeCast(value, Identifier(Little.keywords.TYPE_DYNAMIC));
+						case VariableDeclaration(name, type, _): paramMap[name.extractIdentifier()] = TypeCast(value, type);
+						default:
+					}
+				}
+				default:
+			}
+		}
+
+        var token:InterpTokens = FunctionCode(paramMap, Block([
+            
+        ]));
+        
+        var object = memory.externs.createPathFor(memory.externs.globalProperties, ...functionPath);
+
+        object.getter = (_, _) -> {
+
+        }
+
 
         var memObject = new MemoryObject(
             External(params -> {
@@ -315,7 +139,7 @@ class Plugins {
         } else Interpreter.memory.set(actionName, memObject);
     }
 
-    public static function registerCondition(conditionName:String, ?expectedConditionPattern:EitherType<String, Array<ParserTokens>> ,callback:(Array<ParserTokens>, Array<ParserTokens>) -> ParserTokens) {
+    public function registerCondition(conditionName:String, ?expectedConditionPattern:EitherType<String, Array<InterpTokens>> ,callback:(Array<InterpTokens>, Array<InterpTokens>) -> InterpTokens) {
         CONDITION_TYPES.push(conditionName);
 
 		var params = if (expectedConditionPattern is String) {
@@ -339,7 +163,7 @@ class Plugins {
         ));
     }
 
-    public static function registerProperty(propertyName:String, onObject:String, isType:Bool, ?valueOption1:FunctionInfo, ?valueOption2:VariableInfo) {
+    public function registerProperty(propertyName:String, onObject:String, isType:Bool, ?valueOption1:FunctionInfo, ?valueOption2:VariableInfo) {
         if (isType) {
             if (!Interpreter.memory.exists(onObject) || Interpreter.memory.silentGet(onObject).value.getName() != "Module") {
                 Interpreter.memory.set(onObject, new MemoryObject(Module(Identifier(onObject)), [], null, Module(Identifier(TYPE_MODULE)), true));
@@ -440,7 +264,7 @@ class Plugins {
     }
 
 	
-	public static function registerStaticField(fieldName:String, type:String, ?valueOption1:StaticFunctionInfo, ?valueOption2:StaticVariableInfo) {
+	public function registerStaticField(fieldName:String, type:String, ?valueOption1:StaticFunctionInfo, ?valueOption2:StaticVariableInfo) {
 		var typeObject = Interpreter.memory.get(type);
 
 		if (valueOption1 != null) {
@@ -477,7 +301,7 @@ class Plugins {
 
 			typeObject.set(fieldName, obj);
 		} else {
-			var value:ParserTokens, obj:MemoryObject = null;
+			var value:InterpTokens, obj:MemoryObject = null;
 			if (valueOption2.staticValue != null) value = valueOption2.staticValue;
 			else {
 				value = External(params -> {
@@ -517,7 +341,7 @@ class Plugins {
 		}
 	}
 
-	public static function registerInstanceField(fieldName:String, type:String, ?valueOption1:InstanceFunctionInfo, ?valueOption2:InstanceVariableInfo) {
+	public function registerInstanceField(fieldName:String, type:String, ?valueOption1:InstanceFunctionInfo, ?valueOption2:InstanceVariableInfo) {
 		var typeObject = Interpreter.memory.get(type);
 
 		var obj:MemoryObject = null;
@@ -558,7 +382,7 @@ class Plugins {
 
 			typeObject.set(fieldName, obj);
 		} else {
-			var value:ParserTokens;
+			var value:InterpTokens;
 			if (valueOption2.staticValue != null) value = valueOption2.staticValue;
 			else {
 				value = External(params -> {
@@ -602,7 +426,7 @@ class Plugins {
         return false;
     }
 
-    public static function registerSign(symbol:String, info:SignInfo) {
+    public function registerSign(symbol:String, info:SignInfo) {
 
         if (info.operatorType == null || info.operatorType == LHS_RHS) {
             if (info.callback == null && info.singleSidedOperatorCallback != null) 
@@ -610,7 +434,7 @@ class Plugins {
             else if (info.callback == null)
                 throw new ArgumentException("callback", 'No callback given for operator type ${info.operatorType ?? LHS_RHS} (`callback` is null)');
             
-            var callbackFunc:(ParserTokens, ParserTokens) -> ParserTokens;
+            var callbackFunc:(InterpTokens, InterpTokens) -> InterpTokens;
 
 			// A bunch of ifs in order to shorten the final callback function, improves performance a bit
             if (info.lhsAllowedTypes != null && info.rhsAllowedTypes == null && info.allowedTypeCombos == null) {
@@ -690,7 +514,7 @@ class Plugins {
             else if (info.singleSidedOperatorCallback == null)
                 throw new ArgumentException("singleSidedOperatorCallback", 'No callback given for operator type ${info.operatorType ?? LHS_RHS} (`singleSidedOperatorCallback` is null)');
             
-			var callbackFunc:ParserTokens -> ParserTokens;
+			var callbackFunc:InterpTokens -> InterpTokens;
 
 			if (info.operatorType == LHS_ONLY) {
 				callbackFunc = (lhs) -> {
@@ -755,31 +579,31 @@ typedef ItemInfo = {
 }
 
 typedef FunctionInfo = {
-    expectedParameters:EitherType<String, Array<ParserTokens>>,
-    callback:(MemoryObject, Array<ParserTokens>) -> ParserTokens, //parent, params to value
+    expectedParameters:EitherType<String, Array<InterpTokens>>,
+    callback:(MemoryObject, Array<InterpTokens>) -> InterpTokens, //parent, params to value
     ?allowWriting:Bool,
     ?type:String
 }
 typedef StaticFunctionInfo = {
-    expectedParameters:EitherType<String, Array<ParserTokens>>,
-    callback:(Array<ParserTokens>) -> ParserTokens, //parent, params to value
+    expectedParameters:EitherType<String, Array<InterpTokens>>,
+    callback:(Array<InterpTokens>) -> InterpTokens, //parent, params to value
     ?allowWriting:Bool,
 	?valueType:String,
 	?doc:String
 }
 
 typedef StaticVariableInfo = {
-	?staticValue:ParserTokens,
+	?staticValue:InterpTokens,
 	?valueType:String,
-	?valueGetter:MemoryObject -> ParserTokens, // this to value
-	?valueSetter:(MemoryObject, ParserTokens) -> ParserTokens, // parent, provided value to value
+	?valueGetter:MemoryObject -> InterpTokens, // this to value
+	?valueSetter:(MemoryObject, InterpTokens) -> InterpTokens, // parent, provided value to value
 	?allowWriting:Bool,
 	?doc:String
 }
 
 typedef InstanceFunctionInfo = {
-    expectedParameters:EitherType<String, Array<ParserTokens>>,
-    callback:(thisObject:MemoryObject, Array<ParserTokens>) -> ParserTokens, //parent, params to value
+    expectedParameters:EitherType<String, Array<InterpTokens>>,
+    callback:(thisObject:MemoryObject, Array<InterpTokens>) -> InterpTokens, //parent, params to value
 	?valueType:String,
     ?allowWriting:Bool,
     ?type:String,
@@ -787,19 +611,19 @@ typedef InstanceFunctionInfo = {
 }
 
 typedef InstanceVariableInfo = {
-	?staticValue:ParserTokens,
+	?staticValue:InterpTokens,
 	?valueType:String,
-	?valueGetter:MemoryObject -> ParserTokens, // this to value
-	?valueSetter:(MemoryObject, ParserTokens) -> ParserTokens, // parent, provided value to value
+	?valueGetter:MemoryObject -> InterpTokens, // this to value
+	?valueSetter:(MemoryObject, InterpTokens) -> InterpTokens, // parent, provided value to value
 	?allowWriting:Bool,
 	?doc:String
 }
 
 
 typedef VariableInfo = {
-    ?staticValue:ParserTokens, 
-    ?valueGetter:MemoryObject -> ParserTokens, //parent to value
-    ?valueSetter:(MemoryObject, ParserTokens) -> ParserTokens, //parent, provided value to value
+    ?staticValue:InterpTokens, 
+    ?valueGetter:MemoryObject -> InterpTokens, //parent to value
+    ?valueSetter:(MemoryObject, InterpTokens) -> InterpTokens, //parent, provided value to value
     ?allowWriting:Bool,
     ?type:String
 }
@@ -808,8 +632,8 @@ typedef SignInfo = {
     ?lhsAllowedTypes:Array<String>,
     ?rhsAllowedTypes:Array<String>,
     ?allowedTypeCombos:Array<{lhs:String, rhs:String}>,
-    ?callback:(ParserTokens, ParserTokens) -> ParserTokens,
-    ?singleSidedOperatorCallback:ParserTokens -> ParserTokens,
+    ?callback:(InterpTokens, InterpTokens) -> InterpTokens,
+    ?singleSidedOperatorCallback:InterpTokens -> InterpTokens,
     ?operatorType:OperatorType,
 	/**
 		@see Operators.setPriority

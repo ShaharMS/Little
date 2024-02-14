@@ -172,4 +172,8 @@ enum InterpTokens {
     **/
     ErrorMessage(msg:String);
 
+	/**
+	    DO NOT USE. Necessary for very specific cases (extern function calls when params are required)
+	**/
+	HaxeExtern(func:Void -> Void);
 }

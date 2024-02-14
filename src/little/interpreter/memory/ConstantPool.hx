@@ -15,9 +15,10 @@ class ConstantPool {
 	public var FLOAT:MemoryPointer = "12"; // Float primitive type
 	public var BOOL:MemoryPointer = "13"; // Bool primitive type
 	public var DYNAMIC:MemoryPointer = "14"; // Dynamic type
+	public var ERROR:MemoryPointer = "15"; // A thrown error has this pointer
 
     public function new(memory:Memory) {
-        for (i in 0...15) memory.reserved[i] = 1; // Contains "Core" values
+        for (i in 0...16) memory.reserved[i] = 1; // Contains "Core" values
 		memory.memory[2] = 1; // TRUE
     }
 
@@ -31,6 +32,7 @@ class ConstantPool {
 			case (_.equals(Identifier(Little.keywords.TYPE_FLOAT)) => true): return FLOAT;
 			case (_.equals(Identifier(Little.keywords.TYPE_BOOLEAN)) => true): return BOOL;
 			case (_.equals(Identifier(Little.keywords.TYPE_DYNAMIC)) => true): return DYNAMIC;
+			case ErrorMessage(_): return ERROR;
 			case _: throw new ArgumentException("token", '${token} does not exist in the constant pool');
 		}
 	}
@@ -45,6 +47,7 @@ class ConstantPool {
 			case 0x12: Identifier(Little.keywords.TYPE_FLOAT);
 			case 0x13: Identifier(Little.keywords.TYPE_BOOLEAN);
 			case 0x14: Identifier(Little.keywords.TYPE_DYNAMIC);
+			case 0x15: ErrorMessage("Default value for error message");
 			case _: throw "not in constant pool";
 		}
 	}

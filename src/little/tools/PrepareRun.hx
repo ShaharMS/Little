@@ -26,29 +26,10 @@ class PrepareRun {
 	public static function addTypes() {
 		var xml = new Access(Xml.createDocument());
 		Little.plugin.registerHaxeClass(Data.getClassInfo("Math"), "Math");
-		Little.plugin.registerHaxeClass(Data.getClassInfo("String"), TYPE_STRING);
 		Little.plugin.registerHaxeClass(Data.getClassInfo("Array"), "Array"); // Experimental
-		Interpreter.memory.set(TYPE_DYNAMIC, new MemoryObject(Module(Identifier(TYPE_DYNAMIC)), [], null, Module(Identifier(TYPE_MODULE)), true));
-		Interpreter.memory.set(TYPE_INT, new MemoryObject(Module(Identifier(TYPE_INT)), [], null, Module(Identifier(TYPE_MODULE)), true));
-		Interpreter.memory.set(TYPE_FLOAT, new MemoryObject(Module(Identifier(TYPE_FLOAT)), [], null, Module(Identifier(TYPE_MODULE)), true));
-		Interpreter.memory.set(TYPE_BOOLEAN, new MemoryObject(Module(Identifier(TYPE_BOOLEAN)), [], null, Module(Identifier(TYPE_MODULE)), true));
 	}
 
 	public static function addProps() {
-		Little.plugin.registerProperty("type", TYPE_DYNAMIC, true, null, {
-			valueGetter: parent -> {
-				return Characters((parent.getType().value()));
-			},
-			allowWriting: false
-		});
-
-		Little.plugin.registerProperty("documentation", TYPE_DYNAMIC, true, null, {
-			valueGetter: parent -> {
-				return Characters(parent.documentation);
-			},
-			allowWriting: false
-		});
-
 		// Froms & Tos:
 
 		// Int

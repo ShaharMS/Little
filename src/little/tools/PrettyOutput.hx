@@ -1,5 +1,6 @@
 package little.tools;
 
+import little.parser.Tokens.ParserTokens;
 import little.lexer.Lexer;
 import little.parser.Parser;
 
@@ -13,7 +14,8 @@ class PrettyOutput {
         
         var lexical = Parser.convert(Lexer.lex(code));
 
-        var map = [
+        var map:OrderedMap<String, Array<ParserTokens> -> Array<ParserTokens>> = new OrderedMap();
+        for (k => v in [
             "Merge Blocks" => Parser.mergeBlocks, 
             "Merge Expressions" => Parser.mergeExpressions, 
             "Merge Property Operations" => Parser.mergePropertyOperations, 
@@ -24,7 +26,7 @@ class PrettyOutput {
             "Marge Values With Type Decl" => Parser.mergeValuesWithTypeDeclarations,
             "Merge Non-Block Bodies" => Parser.mergeNonBlockBodies,
             "Merge Elses" => Parser.mergeElses
-        ];
+        ]) map.set(k, v);
 
         for (key => func in map) {
             htmlFile += '<tr><th>$key</th>';

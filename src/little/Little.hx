@@ -1,13 +1,9 @@
 package little;
 
-import little.interpreter.memory.Memory;
 import little.interpreter.Actions;
 import little.interpreter.Operators;
 import little.tools.Plugins;
-import haxe.extern.EitherType;
-import little.interpreter.memory.MemoryObject;
 import little.tools.PrepareRun;
-import little.parser.Tokens.ParserTokens;
 import little.lexer.Lexer;
 import little.parser.Parser;
 import little.interpreter.Interpreter;
@@ -20,7 +16,7 @@ import little.Keywords.*;
 class Little {
     
     public static var runtime(default, null) = Runtime;
-    public static var plugin(default, null) = Plugins;
+    public static var plugin(default, null) = new Plugins(Runtime.memory);
     public static var operators(default, null) = Operators;
 
     public static var keywords(default, null) = Keywords.defaultKeywordSet;
@@ -45,7 +41,7 @@ class Little {
             we wait for `Little.run()` to get called, and then we parse and run this module right before the main module. Defaults to false.
     **/
     public static function loadModule(code:String, name:String, debug:Bool = false, runRightBeforeMain:Bool = false) {
-        Interpreter.errorThrown = false;
+        Runtime.errorThrown = false;
         Runtime.line = 0;
         Runtime.currentModule = name;
         if (runRightBeforeMain) {
@@ -60,7 +56,7 @@ class Little {
                 PrepareRun.addConditions();
                 PrepareRun.addProps();
             }
-            Interpreter.interpret(Parser.parse(Lexer.lex(code)), {});
+            Actions.run(Interpreter.convert(...Parser.parse(Lexer.lex(code))));
             if (debug != null) Little.debug = previous;
         }
     }
@@ -85,7 +81,6 @@ class Little {
     public static function run(code:String, ?debug:Bool) {
         final previous = Little.debug;
         if (debug != null) Little.debug = debug;
-        Interpreter.memory.underlying.map = [];
         if (!PrepareRun.prepared) {
             PrepareRun.addTypes();
 			PrepareRun.addSigns();
@@ -93,12 +88,12 @@ class Little {
             PrepareRun.addConditions();
             PrepareRun.addProps();
         }
-        Actions.run(Parser.parse(Lexer.lex(code)));
+        Actions.run(Interpreter.convert(...Parser.parse(Lexer.lex(code))));
         if (debug != null) Little.debug = previous;
     }
 
 	public static function reset() {
-		Interpreter.errorThrown = false;
+		Runtime.errorThrown = false;
         Runtime.line = 0;
         Runtime.callStack = [];
         Runtime.stdout.reset();

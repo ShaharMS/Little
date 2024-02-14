@@ -4,7 +4,7 @@
 --library vision
 --library no-warnings
 --library hash
---library hxOrderedMap
+--library hxOrderedMaps
 #--js interp.js
 --interp
 --define memory_tests

@@ -9,7 +9,6 @@ class CoreTypes {
         
         // STRING is defined first, depending only on INT
         externs.createPathFor(externs.instanceProperties, Little.keywords.TYPE_STRING);
-        externs.createPathFor(externs.instanceMethods, Little.keywords.TYPE_STRING);
         // We need to provide a pointer, but the value is not used, so we take as 
         // little (he he) as we can, which is a byte
         trace(externs.parent.reserved.getBytes(0, 15).toArray());
@@ -29,7 +28,6 @@ class CoreTypes {
         // Then, the FUNCTION type is defined, as it relies on STRING
 
         externs.createPathFor(externs.instanceProperties, Little.keywords.TYPE_FUNCTION);
-        externs.createPathFor(externs.instanceMethods, Little.keywords.TYPE_FUNCTION);
 
         externs.typeToPointer[Little.keywords.TYPE_FUNCTION] = externs.parent.heap.storeByte(1);
 
@@ -43,7 +41,6 @@ class CoreTypes {
 		// With FUNCTION, we also need CONDITION
 
 		externs.createPathFor(externs.instanceProperties, Little.keywords.TYPE_CONDITION);
-		externs.createPathFor(externs.instanceMethods, Little.keywords.TYPE_CONDITION);
 
 		externs.typeToPointer[Little.keywords.TYPE_CONDITION] = externs.parent.heap.storeByte(1);
 
