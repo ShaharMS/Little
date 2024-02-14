@@ -342,7 +342,7 @@ class PrepareRun {
 				safetyNet++;
 			}
 			if (safetyNet >= 500000) {
-				Runtime.throwError(ErrorMessage('Too much iteration (is `${PrettyPrinter.stringifyParserparams)}` forever `$TRUE_VALUE`?)'), INTERPRETER);
+				Runtime.throwError(ErrorMessage('Too much iteration (is `${PrettyPrinter.stringifyParser(params)}` forever `$TRUE_VALUE`?)'), INTERPRETER);
 			}
 			return val;
 		});

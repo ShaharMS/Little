@@ -58,7 +58,6 @@ class Keywords {
     **/
     public static var TYPE_UNKNOWN:String = "Unknown";
 
-    public static var CONDITION_TYPES:Array<String> = [];
     public static var ELSE:String = "else";
     public static var RECOGNIZED_SIGNS:Array<String> = [];
 

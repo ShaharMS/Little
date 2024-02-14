@@ -40,7 +40,8 @@ enum InterpTokens {
 	ClassDeclaration(name:InterpTokens, ?doc:InterpTokens);
 
 	/**
-		`callers` is a map of `InterpTokens` configs representing the structure of the condition itself, in correlation to the conditions outcome. Use haxe `null` to denote a wildcard - a free value decided by the user,. 
+		`callers` is a map of `InterpTokens` configs representing the structure of the condition itself, in correlation to the conditions outcome. 
+		Use haxe `null` to denote a wildcard - a free value decided by the user.  
 		for example, Little's for loop would be:
 
 			[
@@ -49,6 +50,8 @@ enum InterpTokens {
 			]	
 
 		Ideally, to validate the "`null`" tokens (the wildcard ones) one will use the macro-ish tools the language provide (extracting type, extracting identifiers...)
+
+		**Important** - to define a "dynamic" condition (that accepts any number of parameters) you provide a `null` pattern key.
 
 		The actual `Block` that decides how an if to run the code associated with the condition should expect two defined parameters of `InterpTokens.Characters`'s type,
 		one named `Little.keywords.CONDITION_PATTERN_PARAMETER_NAME` and one named `Little.keywords.CONDITION_BODY_PARAMETER_NAME`.
@@ -175,5 +178,5 @@ enum InterpTokens {
 	/**
 	    DO NOT USE. Necessary for very specific cases (extern function calls when params are required)
 	**/
-	HaxeExtern(func:Void -> Void);
+	HaxeExtern(func:Void -> InterpTokens);
 }

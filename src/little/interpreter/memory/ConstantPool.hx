@@ -4,6 +4,8 @@ import haxe.exceptions.ArgumentException;
 import little.interpreter.Tokens;
 import vision.ds.ByteArray;
 
+using little.tools.Extensions;
+
 class ConstantPool {
 
     public var NULL:MemoryPointer = "0";
@@ -16,9 +18,10 @@ class ConstantPool {
 	public var BOOL:MemoryPointer = "13"; // Bool primitive type
 	public var DYNAMIC:MemoryPointer = "14"; // Dynamic type
 	public var ERROR:MemoryPointer = "15"; // A thrown error has this pointer
+	public var EXTERN:MemoryPointer = "16"; // An extern function pointer, uses a haxeExtern token and thus cant be stored normally.
 
     public function new(memory:Memory) {
-        for (i in 0...16) memory.reserved[i] = 1; // Contains "Core" values
+        for (i in 0...17) memory.reserved[i] = 1; // Contains "Core" values
 		memory.memory[2] = 1; // TRUE
     }
 
@@ -33,6 +36,7 @@ class ConstantPool {
 			case (_.equals(Identifier(Little.keywords.TYPE_BOOLEAN)) => true): return BOOL;
 			case (_.equals(Identifier(Little.keywords.TYPE_DYNAMIC)) => true): return DYNAMIC;
 			case ErrorMessage(_): return ERROR;
+			case FunctionCode(p, _.parameter(0).filter(x -> x.is(HAXE_EXTERN)) => true): return EXTERN;
 			case _: throw new ArgumentException("token", '${token} does not exist in the constant pool');
 		}
 	}

@@ -158,4 +158,6 @@ enum InterpTokensSimple {
 	OBJECT;
 	CLASS;
 	ERROR_MESSAGE;
+
+	HAXE_EXTERN;
 }

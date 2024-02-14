@@ -173,8 +173,9 @@ class Actions {
 		var patternString = PrettyPrinter.stringifyInterpreter(pattern);
 		// We might want to attach stuff to the body, so we need to make it so it doesn't create a new stack scope & strip type info from it
 		var bodyString = PrettyPrinter.stringifyInterpreter(body.parameter(0)); 
+
 		for (pattern => caller in patterns) {
-			if (fit(givenPattern, pattern)) {
+			if (pattern == null || fit(givenPattern, pattern)) { // As per the docs, a null pattern means any pattern
 				var conditionRunner = (caller.parameter(0) : Array<InterpTokens>);
 				var params = [
 					Write([VariableDeclaration(Identifier(Little.keywords.CONDITION_PATTERN_PARAMETER_NAME), Identifier(Little.keywords.TYPE_STRING), null)], Characters(patternString)),

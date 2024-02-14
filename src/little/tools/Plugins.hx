@@ -1,5 +1,6 @@
 package little.tools;
 
+import little.interpreter.memory.MemoryPointer;
 import little.interpreter.memory.ExternalInterfacing.ExtTree;
 import little.interpreter.memory.Memory;
 import little.interpreter.Actions;
@@ -32,12 +33,10 @@ class Plugins {
 
         @param variableName the name of the variable, for usage in Little code. If you want it nested in some kind of path, use `.` (e.g. `mother.varName`)
         @param documentation documentation for this variable.
-        @param allowWriting Whether writing to this variable is allowed or not.
         @param staticValue **Option 1** - a static value to assign to this variable
         @param valueGetter **Option 2** - a function that returns a value that this variable gives when accessed.
-        @param valueSetter a function that dispatches whenever this value is assigned to. Takes effect when `allowWriting == true`.
     **/
-    public function registerVariable(variableName:String, ?documentation:String, allowWriting:Bool = false, ?staticValue:InterpTokens, ?valueGetter:Void -> InterpTokens, ?setterCallback:Void -> Void) {
+    public function registerVariable(variableName:String, ?documentation:String, ?staticValue:InterpTokens, ?valueGetter:Void -> InterpTokens) {
         var varPath = variableName.split(".");
         var object = memory.externs.createPathFor(memory.externs.globalProperties, ...varPath);
         object.getter = (_, _) -> {
@@ -56,10 +55,6 @@ class Plugins {
                 }
             }
         }
-        object.settable = allowWriting;
-        if (allowWriting && setterCallback != null) {
-            object.onSet = setterCallback;
-        }
     }
 
     /**
@@ -76,9 +71,10 @@ class Plugins {
             define x as Characters, define index = 3, define y
             ```
             **Important** - if variables appear in the end and have assigned values, they are optional.
-    	@param callback The actual function, which gets an array of the given parameters as little tokens (specifically of type `Expression`, 0 or more of them), and returns a value based on them
+    	@param callback The actual function, which gets an array of the given parameters as reduced little tokens (basic types and `Object`), and returns a value based on them
+		@param returnType The type of the returned value. This exists due to implementation limitations. You can use the `Conversion` class to know which types to put here.
     **/
-    public function registerFunction(functionName:String, ?documentation:String, expectedParameters:EitherType<String, Array<InterpTokens>>, callback:Array<InterpTokens> -> InterpTokens) {
+    public function registerFunction(functionName:String, ?documentation:String, expectedParameters:EitherType<String, Array<InterpTokens>>, callback:Array<InterpTokens> -> InterpTokens, returnType:String) {
         var params = if (expectedParameters is String) {
             Interpreter.convert(...Parser.parse(Lexer.lex(expectedParameters)));
         } else (expectedParameters : Array<InterpTokens>);
@@ -102,324 +98,148 @@ class Plugins {
 			}
 		}
 
+		var returnTypeToken = Interpreter.convert(...Parser.parse(Lexer.lex(returnType)))[0]; // May be a PropertyAccess or an Identifier
         var token:InterpTokens = FunctionCode(paramMap, Block([
-            
-        ]));
+            FunctionReturn(HaxeExtern(() -> callback(paramMap.keys().toArray().map(key -> Actions.evaluate(memory.read(key).objectValue)))), returnTypeToken)
+        ], returnTypeToken));
         
         var object = memory.externs.createPathFor(memory.externs.globalProperties, ...functionPath);
 
         object.getter = (_, _) -> {
-
+			objectValue: token,
+			objectAddress: memory.constants.EXTERN,
+			objectDoc: documentation ?? ""
         }
-
-
-        var memObject = new MemoryObject(
-            External(params -> {
-                var currentModuleName = Little.runtime.currentModule;
-                if (actionModuleName != null) Little.runtime.currentModule = actionModuleName;
-                return try {
-                    var val = callback(params);
-                    Little.runtime.currentModule = currentModuleName;
-                    val;
-                } catch (e) {
-                    Little.runtime.currentModule = currentModuleName;
-                    ErrorMessage('External Function Error: ' + e.details());
-                }
-            }), 
-            [], 
-            params, 
-            null, 
-            true
-        );
-
-        if (actionModuleName != null) {
-            Interpreter.memory.set(actionModuleName, new MemoryObject(Module(Identifier(actionModuleName)), [], null, Module(Identifier(TYPE_MODULE)), true, Interpreter.memory.object));
-            memObject.parent = Interpreter.memory.get(actionModuleName);
-            Interpreter.memory.get(actionModuleName).props.set(actionName, memObject);
-        } else Interpreter.memory.set(actionName, memObject);
     }
 
-    public function registerCondition(conditionName:String, ?expectedConditionPattern:EitherType<String, Array<InterpTokens>> ,callback:(Array<InterpTokens>, Array<InterpTokens>) -> InterpTokens) {
-        CONDITION_TYPES.push(conditionName);
+    /**
+		Adds a condition to be used in Little.
 
-		var params = if (expectedConditionPattern is String) {
-            Parser.parse(Lexer.lex(expectedConditionPattern));
-        } else expectedConditionPattern;
+		Conditions are can be described as a special function, that decides how many time another given function is run, and with which parameters.
+		Their syntax:
 
-        Interpreter.memory.set(conditionName, new MemoryObject(
-            ExternalCondition((con, body) -> {
-                return try {
-                    callback(con, body);
-                } catch (e) {
-                    ErrorMessage('External Condition Error: ' + e.details());
-                }
-            }), 
-            [], 
-            params, 
-            null, 
-            true,
-			true,
-            Interpreter.memory.object
-        ));
+			<condition_name> (<params>) {
+				<body>
+			}
+		
+		@param conditionName The name by which to identify the condition. If you want this nested in some kind of path, use `.` (e.g. `mother.conditionName`)
+		@param documentation documentation for this condition.
+		@param callback The actual function, which gets an array of the given parameters, exactly as given (which means they might require further evaluation), 
+			and another array representing the block of code right after the condition, and return an outcome token of the condition. 
+			The outcome is usually expected to be the last value in the last iteration of the condition (for example, the same as haxe `if` statements)
+    **/
+    public function registerCondition(conditionName:String, ?documentation:String ,callback:(params:Array<InterpTokens>, body:Array<InterpTokens>) -> InterpTokens) {
+		var conditionPath = conditionName.split(".");
+		var object = memory.externs.createPathFor(memory.externs.globalProperties, ...conditionPath);
+
+		object.getter = (_, _) -> {
+			objectValue: ConditionCode([
+				null => Block([
+					FunctionReturn(HaxeExtern(() -> callback(
+						Interpreter.convert(...Parser.parse(Lexer.lex(memory.read(Little.keywords.CONDITION_PATTERN_PARAMETER_NAME).objectValue.parameter(0)))), 
+						Interpreter.convert(...Parser.parse(Lexer.lex(memory.read(Little.keywords.CONDITION_BODY_PARAMETER_NAME).objectValue.parameter(0))))))
+					, null /**forces type inference**/)
+				], null)
+			]),
+			objectAddress: memory.constants.EXTERN,
+			objectDoc: documentation ?? ""
+		}
     }
 
-    public function registerProperty(propertyName:String, onObject:String, isType:Bool, ?valueOption1:FunctionInfo, ?valueOption2:VariableInfo) {
-        if (isType) {
-            if (!Interpreter.memory.exists(onObject) || Interpreter.memory.silentGet(onObject).value.getName() != "Module") {
-                Interpreter.memory.set(onObject, new MemoryObject(Module(Identifier(onObject)), [], null, Module(Identifier(TYPE_MODULE)), true));
-            }
-        } else {
-            if (!Interpreter.memory.exists(onObject)) {
-                Interpreter.memory.set(onObject, new MemoryObject(NullValue, [], null, Module(Identifier(TYPE_DYNAMIC)), true));
-            }
-        }
+	/**
+		Registers a haxe-property-like variable on a little class found at `onType`.
 
-        var memObject:MemoryObject = new MemoryObject();
-        var parent = Interpreter.memory.silentGet(onObject);
-        if (valueOption2 != null) {
-            // Variable
-            var info:VariableInfo = valueOption2;
-            memObject = new MemoryObject(
-                External(params -> {
-                    return try {
-                        var val = if (info.staticValue != null) info.staticValue;
-                        else info.valueGetter(memObject.parent);
-                        val;
-                    } catch (e) {
-                        ErrorMessage('External Variable Error: ' + e.details());
-                    }
-                }), 
-                [], 
-                if (!isType) null else [
-                    Variable(Identifier("value " /* That extra space is used to differentiate between non-static fields and functions. Todo: Pretty bad solution */), Identifier(onObject))
-                ],
-                Identifier(info.type), 
-                true,
-                false,
-                isType,
-                parent
-            );
 
-            if (info.valueSetter != null) {
-                memObject.valueSetter = function (v) {
-                    return memObject.value = info.valueSetter(memObject.parent, v);
-                }
-            }
+		@param propertyName The name of the property, must not include property access sign.
+		@param onType The type of the object the property is on. Must be a little class, and if the class is nested within an object, a full path must be specified.
+		@param documentation The documentation of the property
+		@param staticValue **Option 1**. A static value this property always returns.
+		@param valueGetter **Option 2**. A function that returns the value of the property. It takes in the value of the parent object, and it's address in memory.
+	**/
+	public function registerInstanceVariable(propertyName:String, onType:String, ?documentation:String, ?staticValue:InterpTokens, ?valueGetter:(objectValue:InterpTokens, objectAddress:MemoryPointer) -> InterpTokens) {
+		var classPath = onType.split(".");
+		var object = memory.externs.createPathFor(memory.externs.instanceProperties, ...classPath);
 
-            if (info.allowWriting == false) {// null defaults to true here, so cant use !info.allowWriting
-                memObject.valueSetter = function (v) {
-                    Runtime.warn(ErrorMessage('Directly editing the property $onObject$PROPERTY_ACCESS_SIGN$propertyName is disallowed. New value is ignored, returning original value.'));
-                    return try {
-                        var val = if (info.staticValue != null) info.staticValue;
-                        else info.valueGetter(memObject.parent);
-                        val;
-                    } catch (e) {
-                        ErrorMessage('External Variable Error: ' + e.details());
-                    }
-                }
-            }
-        } else {
-            // Function
-            var info:FunctionInfo = valueOption1;
+		object.getter = (v, a) -> {
+			return try {
+				var value = staticValue == null ? valueGetter(v, a) : staticValue;
+				{
+					objectValue: value,
+					objectAddress: memory.store(value),
+					objectDoc: documentation ?? ""
+				}
+			} catch (e) {
+				{
+					objectValue: ErrorMessage('External Function Error: ' + e.details()),
+					objectAddress: memory.constants.ERROR,
+					objectDoc: ""
+				}
+			}
+		}
+	}
 
-            var params = if (info.expectedParameters is String) {
-                Parser.parse(Lexer.lex(info.expectedParameters));
-            } else info.expectedParameters;
-            if (isType) params.unshift(Variable(Identifier("value"), Identifier(onObject)));
+	/**
+		Registers a method on every object of the given type, that can be called from Little.
 
-            memObject = new MemoryObject(
-                External(params -> {
-                    return try {
-                        var val = info.callback(memObject.parent, params);
-                        val;
-                    } catch (e) {
-                        ErrorMessage('External Function Error: ' + e.details());
-                    }
-                }), 
-                [], 
-                params, 
-                Identifier(info.type), 
-                true,
-                false,
-                isType,
-                parent
-            );
-
-            if (info.allowWriting == false) {// null defaults to true here, so cant use !info.allowWriting
-                memObject.valueSetter = function (v) {
-                    Runtime.throwError(ErrorMessage('Directly editing the property $onObject$PROPERTY_ACCESS_SIGN$propertyName is disallowed. New value is ignored, returning original value.'));
-                    return try {
-                        var val = info.callback(memObject.parent, params);
-                        val;
-                    } catch (e) {
-                        ErrorMessage('External Function Error: ' + e.details());
-                    }
-                }
-            }
-        }
-       
-        // trace('Adding $propertyName to $onObject');
-        parent.props.set(propertyName, memObject);
+		@param propertyName The name of the property, must not include property access sign.
+		@param onType The type of the object the property is on. Must be a little class, and if the class is nested within an object, a full path must be specified.
+		@param documentation The documentation of the property
+		@param expectedParameters an `Array<InterpTokens>` consisting of `InterpTokens.Variable`s which contain the names & types of the parameters that should be passed on to the function. For example:
+            ```
+            [VariableDeclaration(Identifier(x), Identifier("Characters"))]
+            ```
+            **alternatively** - can be normal parameter "list" written in little: 
+            ``` 
+            define x as Characters, define index = 3, define y
+            ```
+            **Important** - if variables appear in the end and have assigned values, they are optional.
+		@param callback The actual function, which gets 3 parameters: the value of the object, the address of the object in memory, and an array of the given parameters, exactly as the user gave them (which means they might require further evaluation). The function should return something at the end, or a `VoidValue`.
+		@param returnType The type of the returned value. This exists due to implementation limitations. You can use the `Conversion` class to know which types to put here.
+	**/
+	public function registerInstanceFunction(propertyName:String, onType:String, ?documentation:String, expectedParameters:EitherType<String, Array<InterpTokens>>, callback:(objectValue:InterpTokens, objectAddress:MemoryPointer, params:Array<InterpTokens>) -> InterpTokens, returnType:String) {
+		var params = if (expectedParameters is String) {
+            Interpreter.convert(...Parser.parse(Lexer.lex(expectedParameters)));
+        } else (expectedParameters : Array<InterpTokens>);
         
-    }
-
-	
-	public function registerStaticField(fieldName:String, type:String, ?valueOption1:StaticFunctionInfo, ?valueOption2:StaticVariableInfo) {
-		var typeObject = Interpreter.memory.get(type);
-
-		if (valueOption1 != null) {
-			var value = External(params -> {
-				var prevModule = Runtime.currentModule;
-				Actions.setModule(type);
-				return try {
-					var val = valueOption1.callback(params);
-					Actions.setModule(prevModule);
-					val;
-				} catch (e) {
-					ErrorMessage('External Function Error: ' + e.details());
+        var paramMap = new OrderedMap<String, InterpTokens>();
+		for (entry in params) {
+			if (entry.is(SPLIT_LINE, SET_LINE)) continue;
+			switch entry {
+				case VariableDeclaration(name, null, _): paramMap[name.extractIdentifier()] = TypeCast(NullValue, Identifier(Little.keywords.TYPE_DYNAMIC));
+				case VariableDeclaration(name, type, _): paramMap[name.extractIdentifier()] = TypeCast(NullValue, type);
+				case Write(assignees, value): {
+					switch assignees[0] {
+						case VariableDeclaration(name, null, _): paramMap[name.extractIdentifier()] = TypeCast(value, Identifier(Little.keywords.TYPE_DYNAMIC));
+						case VariableDeclaration(name, type, _): paramMap[name.extractIdentifier()] = TypeCast(value, type);
+						default:
+					}
 				}
-			});
-			var params = if (valueOption1.expectedParameters is String) {
-                Parser.parse(Lexer.lex(valueOption1.expectedParameters));
-            } else valueOption1.expectedParameters;
-			
-			var obj = new MemoryObject(
-				value, 
-				[], 
-				params, 
-				Module(Identifier(valueOption1.valueType)) ?? Interpreter.getValueType(value), 
-				true, false, false, 
-				typeObject, 
-				valueOption1.doc
-			);
-			if (!valueOption1.allowWriting) {
-				obj.valueSetter = function (v) {
-					Runtime.warn(ErrorMessage('Directly editing the property $type$PROPERTY_ACCESS_SIGN$fieldName is disallowed. New value is ignored, returning original value.'));
-					return v;
-				}
+				default:
 			}
+		}
 
-			typeObject.set(fieldName, obj);
-		} else {
-			var value:InterpTokens, obj:MemoryObject = null;
-			if (valueOption2.staticValue != null) value = valueOption2.staticValue;
-			else {
-				value = External(params -> {
-					var prevModule = Runtime.currentModule;
-					return try {
-						Actions.setModule(type);
-						var val = valueOption2.valueGetter(obj);
-						Actions.setModule(prevModule);
-						val;
-					} catch (e) {
-						ErrorMessage('External Variable Error: ' + e.details());
-					}
-				});
-				
-				obj = new MemoryObject(
-					value,
-					[],
-					[],
-					Module(Identifier(valueOption2.valueType)) ?? Interpreter.getValueType(value),
-					true,
-					false,
-					false,
-					typeObject,
-					valueOption2.doc
-				);
-
-				
-				if (!valueOption1.allowWriting) {
-					obj.valueSetter = function (v) {
-						Runtime.warn(ErrorMessage('Directly editing the property $type$PROPERTY_ACCESS_SIGN$fieldName is disallowed. New value is ignored, returning original value.'));
-						return v;
-					}
+		var classPath = onType.split(".");
+		var object = memory.externs.createPathFor(memory.externs.instanceProperties, ...classPath);
+		var returnTypeToken = Interpreter.convert(...Parser.parse(Lexer.lex(returnType)))[0]; // May be a PropertyAccess or an Identifier
+		object.getter = (v, a) -> {
+			return try {
+				{
+					objectValue: FunctionCode(paramMap, Block([
+						FunctionReturn(HaxeExtern(() -> callback(v, a, paramMap.keys().toArray().map(key -> Actions.evaluate(memory.read(key).objectValue)))), returnTypeToken)
+					], returnTypeToken)),
+					objectAddress: memory.constants.EXTERN,
+					objectDoc: documentation ?? ""
 				}
-
-				typeObject.set(fieldName, obj);
+			} catch (e) {
+				{
+					objectValue: ErrorMessage('External Function Error: ' + e.details()),
+					objectAddress: memory.constants.ERROR,
+					objectDoc: ""
+				}
 			}
 		}
 	}
 
-	public function registerInstanceField(fieldName:String, type:String, ?valueOption1:InstanceFunctionInfo, ?valueOption2:InstanceVariableInfo) {
-		var typeObject = Interpreter.memory.get(type);
-
-		var obj:MemoryObject = null;
-		if (valueOption1 != null) {
-			var value = External(params -> {
-				var prevModule = Runtime.currentModule;
-				Actions.setModule(type);
-				return try {
-					var val = valueOption1.callback(obj, params);
-					Actions.setModule(prevModule);
-					val;
-				} catch (e) {
-					ErrorMessage('External Function Error: ' + e.details());
-				}
-			});
-			var params = if (valueOption1.expectedParameters is String) {
-				Parser.parse(Lexer.lex(valueOption1.expectedParameters));
-			} else valueOption1.expectedParameters;
-
-			obj = new MemoryObject(
-				value,
-				[],
-				params,
-				Module(Identifier(valueOption1.valueType)) ?? Interpreter.getValueType(value),
-				true,
-				false,
-				true,
-				typeObject,
-				valueOption1.doc
-			);
-
-			if (!valueOption1.allowWriting) {
-				obj.valueSetter = function (v) {
-					Runtime.warn(ErrorMessage('Directly editing the property $type$PROPERTY_ACCESS_SIGN$fieldName is disallowed. New value is ignored, returning original value.'));
-					return v;
-				}
-			}
-
-			typeObject.set(fieldName, obj);
-		} else {
-			var value:InterpTokens;
-			if (valueOption2.staticValue != null) value = valueOption2.staticValue;
-			else {
-				value = External(params -> {
-					var prevModule = Runtime.currentModule;
-					Actions.setModule(type);
-					return try {
-						var val = valueOption2.valueGetter(obj);
-						Actions.setModule(prevModule);
-						val;
-					} catch (e) {
-						ErrorMessage('External Variable Error: ' + e.details());
-					}
-				});
-				
-				obj = new MemoryObject(
-					value,
-					[],
-					[],
-					Module(Identifier(valueOption2.valueType)) ?? Interpreter.getValueType(value),
-					true,
-					false,
-					true,
-					typeObject,
-					valueOption2.doc
-				);
-
-				if (!valueOption1.allowWriting) {
-					obj.valueSetter = function (v) {
-						Runtime.warn(ErrorMessage('Directly editing the property $type$PROPERTY_ACCESS_SIGN$fieldName is disallowed. New value is ignored, returning original value.'));
-						return v;
-					}
-				}
-
-				typeObject.set(fieldName, obj);
-			}
-		}
-	}
 
     static function combosHas(combos:Array<{lhs:String, rhs:String}>, lhs:String, rhs:String) {
         for (c in combos) if (c.rhs == rhs && c.lhs == lhs) return true;

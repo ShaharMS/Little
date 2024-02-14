@@ -101,18 +101,11 @@ class ExtTree {
 	    A getter for the extern value.
 		The returned token has its parent's address in memory and value, if you want to modify it.
 	**/
-	public var getter(default, set):(objectValue:InterpTokens, objectAddress:MemoryPointer) -> {objectValue:InterpTokens, objectAddress:MemoryPointer, objectDoc:String};
-	@:noCompletion function set_getter(value) {
-		this.getter = value;
-		onSet();
-		return value;
-	}
-	public var onSet:Void -> Void;
-	public var settable:Bool = true;
+	public var getter:(objectValue:InterpTokens, objectAddress:MemoryPointer) -> {objectValue:InterpTokens, objectAddress:MemoryPointer, objectDoc:String};
 
 	public var properties:Map<String, ExtTree>;
 
-	public function new(?getter:(objectValue:InterpTokens, objectAddress:MemoryPointer) -> {objectValue:InterpTokens, objectAddress:MemoryPointer, objectDoc:String}, ?properties:Map<String, ExtTree>, ?settable:Bool) {
+	public function new(?getter:(objectValue:InterpTokens, objectAddress:MemoryPointer) -> {objectValue:InterpTokens, objectAddress:MemoryPointer, objectDoc:String}, ?properties:Map<String, ExtTree>) {
 		this.getter = getter ?? (objectValue, objectAddress) -> {
 			return {
 				objectValue: Characters('Externally registered, attached to $objectAddress'),
@@ -121,11 +114,5 @@ class ExtTree {
 			}
 		}
 		this.properties = properties ?? new Map<String, ExtTree>();
-		this.onSet = () -> {};
-	}
-
-	public function addSetter(setter:(newValue:InterpTokens, newAddress:MemoryPointer) -> {objectValue:InterpTokens, objectAddress:MemoryPointer, objectDoc:String}) {
-		this.setter = setter;
-		return this;
 	}
 }

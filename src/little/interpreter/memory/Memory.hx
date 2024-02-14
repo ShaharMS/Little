@@ -186,18 +186,6 @@ class Memory {
 					currentDoc = newCurrent.objectDoc;
 				}
 			}
-			// Method check:
-			// Also note that external properties & methods can't overlap, so using an `else` is valid
-			else if (externs.instanceMethods.properties.exists(typeName)) {
-				var classMethods = externs.instanceMethods.properties.get(typeName);
-				if (classMethods.properties.exists(identifier)) {
-					var newCurrent = classMethods.properties.get(identifier).getter(current, currentAddress);
-					current = newCurrent.objectValue;
-					currentAddress = newCurrent.objectAddress;
-					currentDoc = newCurrent.objectDoc;
-				}
-			}
-			
 			// Then, we check the object's hash table for that field
 			if (current.is(OBJECT)) {
 				var objectHashTableBytesLength = heap.readInt32(currentAddress);
@@ -290,6 +278,8 @@ class Memory {
 			}
 			if (ObjectHashing.hashTableHasKey(ObjectHashing.getHashTableOf(current.address, heap), pathCopy[0], heap)) {
 				ObjectHashing.objectSetKey(current.address, pathCopy[0], {value: value != null ? store(value) : null, type: type != null ? getTypeInformation(type).pointer : null, doc: doc != null ? heap.storeString(doc) : null}, heap);
+			} else if (externs.instanceProperties.properties.exists(pathCopy[0])) {
+				Runtime.throwError(ErrorMessage('Cannot write to an extern property (${pathCopy[0]})'));
 			} else {
 				ObjectHashing.objectAddKey(current.address, pathCopy[0], store(value), getTypeInformation(type).pointer, heap.storeString(doc), heap);
 			}
