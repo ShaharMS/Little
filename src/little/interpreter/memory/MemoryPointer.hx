@@ -19,10 +19,6 @@ abstract MemoryPointer(String) {
         this = address;
     }
 
-    @:from public static function fromString(s:String) {
-        return new MemoryPointer(s);
-    }
-
 	@:from public static function fromInt(i:Int) {
 		return new MemoryPointer(i + "");
 	}

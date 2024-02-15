@@ -10,7 +10,6 @@ class KeywordConfig {
     @:optional public var TRUE_VALUE:String = "true";
     @:optional public var FALSE_VALUE:String = "false";
     @:optional public var TYPE_DYNAMIC:String = "Anything";
-    @:optional public var TYPE_VOID:String = "Void";
     @:optional public var TYPE_INT:String = "Number";
     @:optional public var TYPE_FLOAT:String = "Decimal";
     @:optional public var TYPE_BOOLEAN:String = "Boolean";

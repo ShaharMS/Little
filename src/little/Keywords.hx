@@ -11,7 +11,6 @@ class Keywords {
     public static var TRUE_VALUE:String = "true";
     public static var FALSE_VALUE:String = "false";
     public static var TYPE_DYNAMIC:String = "Anything";
-    public static var TYPE_VOID:String = "Void";
     public static var TYPE_INT:String = "Number";
     public static var TYPE_FLOAT:String = "Decimal";
     public static var TYPE_BOOLEAN:String = "Boolean";
@@ -95,7 +94,6 @@ class Keywords {
         TRUE_VALUE: "true",
         FALSE_VALUE: "false",
         TYPE_DYNAMIC: "Anything",
-        TYPE_VOID: "Void",
         TYPE_INT: "Number",
         TYPE_FLOAT: "Decimal",
         TYPE_BOOLEAN: "Boolean",
@@ -141,7 +139,6 @@ class Keywords {
         TRUE_VALUE = set.TRUE_VALUE;
         FALSE_VALUE = set.FALSE_VALUE;
         TYPE_DYNAMIC = set.TYPE_DYNAMIC;
-        TYPE_VOID = set.TYPE_VOID;
         TYPE_INT = set.TYPE_INT;
         TYPE_FLOAT = set.TYPE_FLOAT;
         TYPE_BOOLEAN = set.TYPE_BOOLEAN;

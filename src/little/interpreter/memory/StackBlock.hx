@@ -24,11 +24,15 @@ class StackBlock extends StringMap<{?address:MemoryPointer, ?type:String, ?doc:S
 		// Do lookbehind until we find something
 		var current = this;
 		while (current != null) {
-			if (current.exists(key)) return current.get(key);
+			if (current.exists(key)) return current.directGet(key);
 			current = current.previous;
 		}
 		Runtime.throwError(ErrorMessage('Variable/function ${key} does not exist'));
 		return { address: MemoryPointer.fromInt(0), type: Little.keywords.TYPE_DYNAMIC, doc: ''};
+	}
+
+	public function directGet(key:String):{address:MemoryPointer, type:String, doc:String} {
+		return super.get(key);
 	}
 
 	override public function set(key:String, value:{?address:Null<MemoryPointer>, ?type:Null<String>, ?doc:Null<String>}) {
@@ -40,6 +44,7 @@ class StackBlock extends StringMap<{?address:MemoryPointer, ?type:String, ?doc:S
 				if (value.type != null) current.get(key).type = value.type;
 				if (value.doc != null) current.get(key).doc = value.doc;
 			}
+			current = current.previous;
 		}
 		super.set(key, value);
 	}

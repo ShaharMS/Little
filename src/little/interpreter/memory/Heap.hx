@@ -38,7 +38,7 @@ class Heap {
         parent.memory[i] = b;
         parent.reserved[i] = 1;
 
-        return '$i';
+        return i;
     }
 
     public function setByte(address:MemoryPointer, b:Int) {
@@ -79,7 +79,7 @@ class Heap {
             parent.reserved[i + j] = 1;
         }
 
-        return '$i';
+        return i;
     }
 
     public function setBytes(address:MemoryPointer, bytes:ByteArray) {
@@ -124,7 +124,7 @@ class Heap {
             parent.reserved[i + j] = 1;
         }
 
-        return '$i';
+        return i;
     }
 
     public function setInt16(address:MemoryPointer, b:Int) {
@@ -183,7 +183,7 @@ class Heap {
             parent.reserved[i + j] = 1;
         }
 
-		return '$i';
+		return i;
     }
 
     public function setInt32(address:MemoryPointer, b:Int) {
@@ -245,7 +245,7 @@ class Heap {
             parent.reserved[i + j] = 1;
         }
 
-        return '$i';
+        return i;
     }
 
     public function setDouble(address:MemoryPointer, b:Float) {
@@ -306,7 +306,7 @@ class Heap {
 		parent.memory.setBytes(i, bytes);
         parent.reserved.setBytes(i, new ByteArray(bytes.length, 1));
 
-		return '$i';
+		return i;
 	}
 
     public function setString(address:MemoryPointer, b:String) {

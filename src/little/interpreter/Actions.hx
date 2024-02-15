@@ -76,8 +76,9 @@ class Actions {
         @param doc The documentation of the variable. Should be a `InterpTokens.Documentation(doc:String)`
     **/
     public static function declareVariable(name:InterpTokens, type:InterpTokens, doc:InterpTokens) {
+        trace(name, type, doc);
 		var path = name.asStringPath();
-		memory.write(path, NullValue, type.extractIdentifier(), doc.extractIdentifier());
+		memory.write(path, NullValue, type.extractIdentifier(), doc != null ? evaluate(doc).extractIdentifier() : "");
 
         // Listeners
     }
@@ -110,7 +111,7 @@ class Actions {
 			}
 		}
 
-		memory.write(path, FunctionCode(paramMap, Block([], Identifier(Little.keywords.TYPE_VOID))), Little.keywords.TYPE_FUNCTION, doc.extractIdentifier());
+		memory.write(path, FunctionCode(paramMap, Block([], Identifier(Little.keywords.TYPE_DYNAMIC))), Little.keywords.TYPE_FUNCTION, doc != null ? evaluate(doc).extractIdentifier() : "");
     
         // Listeners
     }
@@ -232,15 +233,27 @@ class Actions {
 		@param params The parameters of the function. Should be a `InterpTokens.PartArray(parts:Array<InterpTokens>)`
 	**/
     public static function call(name:InterpTokens, params:InterpTokens):InterpTokens {
-        trace(memory);
-        trace(memory.read(...name.asStringPath()));
         var functionCode = memory.read(...name.asStringPath()).objectValue;
+
+        var processedParams = [];
+        var current = [];
+        for (p in (params.parameter(0) : Array<InterpTokens>)) {
+            switch p {
+                case SplitLine: {
+                    processedParams.push(calculate(current));
+                    current = [];
+                }
+                case SetLine(l): setLine(l);
+                case _: current.push(p);
+            }
+        }
+        if (current.length > 0) processedParams.push(calculate(current));
+
+        trace(processedParams);
 
 		switch functionCode {
 			case FunctionCode(requiredParams, body): {
-                trace(params.parameter(0));
-                trace(params.parameter(0)[0]);
-				var given = params.parameter(0).filter(x -> !x.is(SPLIT_LINE, SET_LINE));
+				var given = processedParams;
 				
 				var attachment = [];
 				for (key => typeCast in requiredParams.keyValueIterator()) {
@@ -251,8 +264,10 @@ class Actions {
 						case TypeCast(v, t): type = t; value = v;
 						case _:
 					}
-					attachment.push(VariableDeclaration(Identifier(name), type, null));
+                    if (processedParams.length > 0) value = processedParams.shift(); // Todo, handle mid-function optional arguments.
+					attachment.push(Write([VariableDeclaration(Identifier(name), type, null)], value));
 				}
+                trace(PrettyPrinter.printInterpreterAst(attachment.concat(body.parameter(0))));
 				return run(attachment.concat(body.parameter(0)));
 			}
 			case _: return null;
@@ -304,6 +319,7 @@ class Actions {
         var i = 0;
         while (i < body.length) {
             var token = body[i];
+            trace('Running: $token. $i');
             if (token == null) {i++; continue;}
             switch token {
                 case SetLine(line): {
@@ -311,11 +327,11 @@ class Actions {
                 }
                 case SplitLine: splitLine();
                 case VariableDeclaration(name, type, doc): {
-                    declareVariable(name.is(BLOCK) ? evaluate(name) : name, type.is(BLOCK) ? evaluate(type) : type, evaluate(doc));
+                    declareVariable(name.is(BLOCK) ? evaluate(name) : name, type.is(BLOCK) ? evaluate(type) : type, doc != null ? evaluate(doc) : Characters(""));
                     returnVal = NullValue;
                 }
                 case FunctionDeclaration(name, params, type, doc): {
-					declareFunction(name.is(BLOCK) ? evaluate(name) : name, params, evaluate(doc)); // TODO: type is not used
+					declareFunction(name.is(BLOCK) ? evaluate(name) : name, params, doc != null ? evaluate(doc) : Characters("")); // TODO: type is not used
                     returnVal = NullValue;
                 }
                 case ConditionCall(name, exp, body): {
@@ -338,6 +354,9 @@ class Actions {
                 }
                 case Identifier(name): {
                     returnVal =  read(token);
+                }
+                case HaxeExtern(func): {
+                    returnVal = evaluate(func());
                 }
                 case _: returnVal = evaluate(token);
             }
@@ -405,6 +424,7 @@ class Actions {
                 return read(exp);
             }
             case FunctionReturn(value, t): return evaluate(typeCast(value, t));
+            case HaxeExtern(func): return evaluate(func());
             case _: return evaluate(ErrorMessage('Unable to evaluate token `$exp`'), dontThrow);
         }
 

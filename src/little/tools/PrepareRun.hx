@@ -27,14 +27,15 @@ class PrepareRun {
 		
 	public static function addFunctions() {
 		Little.plugin.registerFunction(PRINT_FUNCTION_NAME, null, [VariableDeclaration(Identifier("item"), null)], (params) -> {
+			trace(params);
 			var eval = Actions.evaluate(params[0]);
-			Runtime.__print(Conversion.toHaxeValue(eval), eval);
-			return VoidValue;
-		}, Little.keywords.TYPE_VOID);
+			Runtime.__print(PrettyPrinter.stringifyInterpreter(eval), eval);
+			return NullValue;
+		}, Little.keywords.TYPE_DYNAMIC);
 		Little.plugin.registerFunction(RAISE_ERROR_FUNCTION_NAME, null, [VariableDeclaration(Identifier("message"), null)], (params) -> {
 			Runtime.throwError(params[0]);
-			return VoidValue;
-		}, Little.keywords.TYPE_VOID);
+			return NullValue;
+		}, Little.keywords.TYPE_DYNAMIC);
 		Little.plugin.registerFunction(READ_FUNCTION_NAME, null, [VariableDeclaration(Identifier("identifier"), Identifier(TYPE_STRING))], (params) -> {
 			return Identifier(Conversion.toHaxeValue(params[0]));
 		}, Little.keywords.TYPE_DYNAMIC);

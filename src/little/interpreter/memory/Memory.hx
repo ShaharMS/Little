@@ -138,7 +138,7 @@ class Memory {
 		// To throw a runtime error that a variable was not found.
 		var stackBlock = stack.getCurrentBlock();
 		var data = stackBlock.get(path[0]);
-		var current:InterpTokens = switch getTypeName(data.type) {
+		var current:InterpTokens = switch data.type {
 			case (_ == Little.keywords.TYPE_STRING => true): Characters(heap.readString(data.address));
 			case (_ == Little.keywords.TYPE_INT => true): Number(heap.readInt32(data.address));
 			case (_ == Little.keywords.TYPE_FLOAT => true): Decimal(heap.readDouble(data.address));
@@ -246,6 +246,7 @@ class Memory {
 		}
 
 		if (path.length == 1) {
+			trace("SimpleVarName: " + path[0]);
 			if (stack.getCurrentBlock().exists(path[0])) {
 				stack.getCurrentBlock().set(path[0], { address: value != null ? store(value) : null, type: type != null ? type : null, doc: doc != null ? doc : null });
 			} else {
@@ -366,17 +367,15 @@ class Memory {
 	}
 
 	public function getTypeName(pointer:MemoryPointer):String {
+		trace(pointer);
 		// Externs prioritized:
 		if (externs.pointerToType.exists(pointer)) {
 			return externs.pointerToType[pointer];
 			
 		}
 		// Then, constants:
-		switch pointer.rawLocation {
-			case 11 /* int */: return Little.keywords.TYPE_INT;
-			case 12 /* float */: return Little.keywords.TYPE_FLOAT;
-			case 13 /* bool */: return Little.keywords.TYPE_BOOLEAN;
-			case 14 /* dynamic */: return Little.keywords.TYPE_DYNAMIC;
+		if (constants.hasPointer(pointer)) {
+			return constants.getFromPointer(pointer).extractIdentifier();
 		}
 		var block = stack.getCurrentBlock();
 

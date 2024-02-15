@@ -26,7 +26,7 @@ class Extensions {
 	}
 
 	public static inline function passedByValue(token:InterpTokens):Bool {
-		return !is(token, TRUE_VALUE, FALSE_VALUE, NULL_VALUE, NUMBER, DECIMAL, SIGN);
+		return is(token, TRUE_VALUE, FALSE_VALUE, NULL_VALUE, NUMBER, DECIMAL, SIGN);
 	}
 
 	public static inline function passedByReference(token:InterpTokens):Bool {

@@ -187,7 +187,6 @@ class PrettyPrinter {
 			case Characters(string): return '${prefixFA(prefix)}$t$d "${string}"\n';
 			case Sign(sign): return '${prefixFA(prefix)}$t$d ${sign}\n';
 			case NullValue: return '${prefixFA(prefix)}$t$d ${NullValue}\n';
-			case VoidValue: return '${prefixFA(prefix)}$t$d ${VoidValue}\n';
 			case TrueValue: return '${prefixFA(prefix)}$t$d ${TrueValue}\n';
 			case FalseValue: return '${prefixFA(prefix)}$t$d ${FalseValue}\n';
 			case Identifier(word): return '${prefixFA(prefix)}$t$d ${word}\n';
@@ -392,7 +391,6 @@ class PrettyPrinter {
 				case NullValue: s += NULL_VALUE;
 				case TrueValue: s += TRUE_VALUE;
 				case FalseValue: s += FALSE_VALUE;
-				case VoidValue: throw new NotImplementedException();
 				case _: throw 'Stringifying token $token does not make sense, as it is represented by other tokens on parse time, and thus cannot appear in a non-manipulated InterpTokens AST';
 			}
 		}

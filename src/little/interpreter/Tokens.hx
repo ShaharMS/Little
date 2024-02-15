@@ -142,8 +142,6 @@ enum InterpTokens {
 	Sign(sign:String);
 	/**`null`**/
     NullValue;
-	/**Void**/
-	VoidValue;
 	/**`true`**/
     TrueValue;
 	/**`false`**/
