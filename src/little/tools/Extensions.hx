@@ -78,6 +78,12 @@ class Extensions {
 		}
 	}
 
+	public static function asTokenPath(string:String):InterpTokens {
+		var path = string.split(Little.keywords.PROPERTY_ACCESS_SIGN);
+		if (path.length == 1) return Identifier(path[0]);
+		else return PropertyAccess(asTokenPath(path.slice(0, path.length - 1).join(Little.keywords.PROPERTY_ACCESS_SIGN)), Identifier(path.pop()));
+	}
+
 	public static function containsAny<T>(array:Array<T>, func:T -> Bool):Bool {
 		return array.filter(func).length > 0;
 	}

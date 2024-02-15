@@ -18,7 +18,7 @@ using little.tools.TextTools;
 @:access(little.interpreter.Runtime)
 class Actions {
     
-	static var memory:Memory = Runtime.memory;
+	static var memory:Memory = Little.memory;
     
     /**
         Raise an error in the program, with the given message.
@@ -63,16 +63,6 @@ class Actions {
     }
 
     /**
-        Set the current module
-    **/
-    public static function setModule(name:String) {
-        var o = Runtime.currentModule;
-        Runtime.currentModule = name;
-
-        // Listeners
-    }
-
-    /**
         Split the current line. In other words, create a new line, but keep the old line number.
     **/
     public static function splitLine() {
@@ -88,6 +78,8 @@ class Actions {
     public static function declareVariable(name:InterpTokens, type:InterpTokens, doc:InterpTokens) {
 		var path = name.asStringPath();
 		memory.write(path, NullValue, type.extractIdentifier(), doc.extractIdentifier());
+
+        // Listeners
     }
 
     /**
@@ -119,6 +111,8 @@ class Actions {
 		}
 
 		memory.write(path, FunctionCode(paramMap, Block([], Identifier(Little.keywords.TYPE_VOID))), Little.keywords.TYPE_FUNCTION, doc.extractIdentifier());
+    
+        // Listeners
     }
 
 	/**
@@ -205,7 +199,7 @@ class Actions {
 			switch assignee {
 				case VariableDeclaration(name, type, doc): declareVariable(name, type, doc); vars.push(name); containsVariable = true;
 				case FunctionDeclaration(name, params, type, doc): declareFunction(name, params, doc); funcs.push(name); containsFunction = true;
-				case ConditionDeclaration(name, conditionType, doc): // TODO: Condition declaration is not implemented yet.
+				case ConditionDeclaration(name, ct, doc): // TODO: Condition declaration is not implemented yet.
 				case _: vars.push(assignee);
 			}
 		}
@@ -225,6 +219,10 @@ class Actions {
         
 		// Listeners
 
+        for (listener in Runtime.onWriteValue) {
+            listener(vars.map(x -> x.extractIdentifier()).concat(funcs.map(x -> x.extractIdentifier())));
+        }
+
         return value;
     }
 
@@ -234,10 +232,14 @@ class Actions {
 		@param params The parameters of the function. Should be a `InterpTokens.PartArray(parts:Array<InterpTokens>)`
 	**/
     public static function call(name:InterpTokens, params:InterpTokens):InterpTokens {
+        trace(memory);
+        trace(memory.read(...name.asStringPath()));
         var functionCode = memory.read(...name.asStringPath()).objectValue;
 
 		switch functionCode {
 			case FunctionCode(requiredParams, body): {
+                trace(params.parameter(0));
+                trace(params.parameter(0)[0]);
 				var given = params.parameter(0).filter(x -> !x.is(SPLIT_LINE, SET_LINE));
 				
 				var attachment = [];

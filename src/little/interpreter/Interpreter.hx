@@ -9,8 +9,6 @@ import little.tools.Layer;
 import little.tools.PrettyPrinter;
 import little.parser.Tokens.ParserTokens;
 import little.Keywords.*;
-import little.interpreter.memory.MemoryTree;
-import little.interpreter.memory.MemoryObject;
 
 using StringTools;
 using Std;
@@ -19,6 +17,7 @@ using little.tools.TextTools;
 @:access(little.interpreter.Runtime)
 class Interpreter {
 	public static function convert(pre:Rest<ParserTokens>):Array<InterpTokens> {
+		if (pre.length == 1 && pre[0] == null) return [null];
 		var post:Array<InterpTokens> = [];
 
 		for (item in pre) {

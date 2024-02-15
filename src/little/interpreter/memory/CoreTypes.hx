@@ -1,19 +1,17 @@
 package little.interpreter.memory;
 
+import haxe.Json;
 import little.interpreter.memory.ExternalInterfacing.ExtTree;
 import little.interpreter.Tokens.InterpTokens;
 using little.tools.Extensions;
 
 class CoreTypes {
     public static function addFor(externs:ExternalInterfacing) {
-        
         // STRING is defined first, depending only on INT
         externs.createPathFor(externs.instanceProperties, Little.keywords.TYPE_STRING);
         // We need to provide a pointer, but the value is not used, so we take as 
         // little (he he) as we can, which is a byte
-        trace(externs.parent.reserved.getBytes(0, 15).toArray());
         externs.typeToPointer[Little.keywords.TYPE_STRING] = externs.parent.heap.storeByte(1);
-        trace(externs.typeToPointer[Little.keywords.TYPE_STRING]);
         // STRING properties:
         externs.instanceProperties.properties[Little.keywords.TYPE_STRING].properties = [
             "length" => new ExtTree((value, _) -> {

@@ -1,5 +1,7 @@
 package little;
 
+import little.interpreter.memory.Memory;
+import little.interpreter.KeywordConfig;
 import little.interpreter.Actions;
 import little.interpreter.Operators;
 import little.tools.Plugins;
@@ -15,11 +17,13 @@ import little.Keywords.*;
 @:expose
 class Little {
     
-    public static var runtime(default, null) = Runtime;
-    public static var plugin(default, null) = new Plugins(Runtime.memory);
-    public static var operators(default, null) = Operators;
+    public static var keywords(default, null):KeywordConfig = Keywords.defaultKeywordSet;
 
-    public static var keywords(default, null) = Keywords.defaultKeywordSet;
+    public static var runtime(default, null) = Runtime;
+    public static var operators(default, null) = Operators;
+    public static var memory(default, null):Memory = new Memory();
+    public static var plugin(default, null):Plugins = new Plugins(Little.memory);
+
 
     /**
     	When enabled:
@@ -98,7 +102,7 @@ class Little {
         Runtime.callStack = [];
         Runtime.stdout.reset();
         Runtime.currentModule = Keywords.MAIN_MODULE_NAME;
-		Runtime.memory.reset();
+		Little.memory.reset();
 	}
 
 }

@@ -21,7 +21,7 @@ class Runtime {
     /**
     	The program's memory manager.
     **/
-    public static var memory:Memory;
+    public static var memory:Memory = Little.memory;
     /**
         The next token to be interpreted
     **/
@@ -94,6 +94,12 @@ class Runtime {
     **/
     public static var onErrorThrown:Array<(String, Int, String, String) -> Void> = [];
 
+    /**
+    	Dispatches right after the program has written something to a variable/multiple variables.
+    
+        @param variables The variables that were written to. Value can be retrieved using `memory.read()`.
+    **/
+    public static var onWriteValue:Array<Array<String> -> Void> = [];
     /**
     	The program's standard output.
     **/

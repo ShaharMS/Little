@@ -436,9 +436,9 @@ class Parser {
                 }
 				case Identifier(_): { // Condition are definable, we need to look for the syntax: Identifier -> Expression -> Block. 
                     i++;
-                    if (i >= pre.length) {
-                        Runtime.throwError(ErrorMessage("Missing condition name, condition is cut off by the end of the file, block or expression."), Layer.PARSER);
-                        return null;
+                    if (i + 1>= pre.length) {
+                        post.push(token);
+                        continue;
                     }
 
                     var name:ParserTokens = Identifier(token.getParameters()[0]);

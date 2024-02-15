@@ -17,11 +17,12 @@ class ConstantPool {
 	public var FLOAT:MemoryPointer = "12"; // Float primitive type
 	public var BOOL:MemoryPointer = "13"; // Bool primitive type
 	public var DYNAMIC:MemoryPointer = "14"; // Dynamic type
-	public var ERROR:MemoryPointer = "15"; // A thrown error has this pointer
-	public var EXTERN:MemoryPointer = "16"; // An extern function pointer, uses a haxeExtern token and thus cant be stored normally.
+	public var VOID:MemoryPointer = "15"; // Void type
+	public var ERROR:MemoryPointer = "16"; // A thrown error has this pointer
+	public var EXTERN:MemoryPointer = "17"; // An extern function pointer, uses a haxeExtern token and thus cant be stored normally.
 
     public function new(memory:Memory) {
-        for (i in 0...17) memory.reserved[i] = 1; // Contains "Core" values
+        for (i in 0...18) memory.reserved[i] = 1; // Contains "Core" values
 		memory.memory[2] = 1; // TRUE
     }
 
@@ -35,6 +36,7 @@ class ConstantPool {
 			case (_.equals(Identifier(Little.keywords.TYPE_FLOAT)) => true): return FLOAT;
 			case (_.equals(Identifier(Little.keywords.TYPE_BOOLEAN)) => true): return BOOL;
 			case (_.equals(Identifier(Little.keywords.TYPE_DYNAMIC)) => true): return DYNAMIC;
+			case (_.equals(Identifier(Little.keywords.TYPE_VOID)) => true): return VOID;
 			case ErrorMessage(_): return ERROR;
 			case FunctionCode(p, _.parameter(0).filter(x -> x.is(HAXE_EXTERN)) => true): return EXTERN;
 			case _: throw new ArgumentException("token", '${token} does not exist in the constant pool');
@@ -51,7 +53,9 @@ class ConstantPool {
 			case 0x12: Identifier(Little.keywords.TYPE_FLOAT);
 			case 0x13: Identifier(Little.keywords.TYPE_BOOLEAN);
 			case 0x14: Identifier(Little.keywords.TYPE_DYNAMIC);
-			case 0x15: ErrorMessage("Default value for error message");
+			case 0x15: Identifier(Little.keywords.TYPE_VOID);
+			case 0x16: ErrorMessage("Default value for error message");
+			case 0x17: HaxeExtern(() -> Characters("Default value for external haxe code"));
 			case _: throw "not in constant pool";
 		}
 	}

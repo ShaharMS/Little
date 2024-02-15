@@ -192,6 +192,7 @@ class PrettyPrinter {
 			case FalseValue: return '${prefixFA(prefix)}$t$d ${FalseValue}\n';
 			case Identifier(word): return '${prefixFA(prefix)}$t$d ${word}\n';
 			case Documentation(doc): return '${prefixFA(prefix)}$t$d """${doc}"""\n';
+			case HaxeExtern(func): return '${prefixFA(prefix)}$t$d <Haxe Extern>\n';
 			case VariableDeclaration(name, type, doc):
 				var title = '${prefixFA(prefix)}$t$d Variable Declaration\n';
 				if (doc != null) title += getTree_INTERP(doc, prefix.copy(), level + 1, false);
@@ -205,11 +206,11 @@ class PrettyPrinter {
 				title += getTree_INTERP(params, prefix.copy(), level + 1, type == null);
 				if (type != null) title += getTree_INTERP(type, prefix.copy(), level + 1, true);
 				return title;
-			case ConditionDeclaration(name, conditionType, doc):
+			case ConditionDeclaration(name, ct, doc):
 				var title = '${prefixFA(prefix)}$t$d Condition Declaration\n';
 				if (doc != null) title += getTree_INTERP(doc, prefix.copy(), level + 1, false);
 				title += getTree_INTERP(name, prefix.copy(), level + 1, false);
-				title += getTree_INTERP(conditionType, prefix.copy(), level + 1, true);
+				title += getTree_INTERP(ct, prefix.copy(), level + 1, true);
 				return title;
 			case ClassDeclaration(name, doc):
 				var title = '${prefixFA(prefix)}$t$d Class Declaration\n';
@@ -309,30 +310,6 @@ class PrettyPrinter {
 
 
 
-	public static function parseParamsString(params:Array<ParserTokens>, isExpected:Bool = true) {
-		if (isExpected) {
-			var str = [];
-			for (param in params) {
-				switch param {
-					case Variable(name, type): {
-						str.push('${Interpreter.stringifyTokenValue(name)} ${Keywords.TYPE_DECL_OR_CAST} ${Interpreter.stringifyTokenValue(type != null ? type : Identifier(Keywords.TYPE_DYNAMIC))}');
-					}
-					case _:
-				}
-			}
-			if (str.length == 0) return "no parameters";
-			return str.join(", ");
-		} else {
-			var str = [];
-			for (param in params) {
-				str.push(Interpreter.stringifyTokenIdentifier(param));
-			}
-			if (str.length == 0) return "no parameters";
-			return str.join(", ");
-		}
-	}
-
-
 	static var indent = "";
 
 	public static function stringifyParser(?code:Array<ParserTokens>, ?token:ParserTokens) {
@@ -391,7 +368,7 @@ class PrettyPrinter {
 				case SplitLine: s += ", ";
 				case VariableDeclaration(name, type, doc): s += '$VARIABLE_DECLARATION $name ${if (type != null) '$TYPE_DECL_OR_CAST ${stringifyInterpreter(type)}' else ''}';
 				case FunctionDeclaration(name, params, type, doc): s += '$FUNCTION_DECLARATION ${stringifyInterpreter(name)}(${stringifyInterpreter(params)}) ${if (type != null) '$TYPE_DECL_OR_CAST ${stringifyInterpreter(type)}' else ''}';
-				case ConditionDeclaration(name, conditionType, doc): throw new NotImplementedException();
+				case ConditionDeclaration(name, ct, doc): throw new NotImplementedException();
 				case ClassDeclaration(name, doc): throw new NotImplementedException();
 				case Write(assignees, value): s += [assignees.concat([value]).map(t -> stringifyInterpreter(t)).join(" = ")];
 				case Identifier(word): s += word;

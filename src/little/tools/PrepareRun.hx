@@ -3,13 +3,11 @@ package little.tools;
 import haxe.xml.Access;
 import little.interpreter.Actions;
 import vision.tools.MathTools;
-import little.interpreter.memory.MemoryTree;
 import little.lexer.Lexer;
 import little.parser.Parser;
 import little.interpreter.Interpreter;
 import little.interpreter.Runtime;
-import little.parser.Tokens;
-import little.interpreter.memory.MemoryObject;
+import little.interpreter.Tokens;
 
 using Std;
 using little.tools.TextTools;
@@ -23,65 +21,26 @@ import little.Keywords.*;
 class PrepareRun {
 	public static var prepared:Bool = false;
 
-	public static function addTypes() {
-		var xml = new Access(Xml.createDocument());
-		Little.plugin.registerHaxeClass(Data.getClassInfo("Math"), "Math");
-		Little.plugin.registerHaxeClass(Data.getClassInfo("Array"), "Array"); // Experimental
-	}
+	public static function addTypes() {}
 
-	public static function addProps() {
-		// Froms & Tos:
-
-		// Int
-		Little.plugin.registerProperty('$TYPE_CAST_FUNCTION_PREFIX$TYPE_FLOAT', TYPE_INT, true, {
-			expectedParameters: [],
-			callback: (parent, params) -> {
-				var val = parent.value;
-				switch val {
-					case NullValue: TypeDeclaration(NullValue, Module(Identifier(TYPE_FLOAT)));
-					case _: Decimal(val.getParameters()[0]);
-				}
-			}
-		});
-		Little.plugin.registerProperty('$TYPE_CAST_FUNCTION_PREFIX$TYPE_BOOLEAN', TYPE_INT, true, {
-			expectedParameters: [],
-			callback: (parent, params) -> {
-				var val = parent.value;
-				switch val {
-					case NullValue | Number(_.parseInt() == 0 => true): FalseValue;
-					case _: TrueValue;
-				}
-			}
-		});
-		Little.plugin.registerProperty('$TYPE_CAST_FUNCTION_PREFIX$TYPE_STRING', TYPE_INT, true, {
-			expectedParameters: [],
-			callback: (parent, params) -> {
-				var val = parent.value;
-				trace(val);
-				switch val {
-					case NullValue: TypeDeclaration(NullValue, Module(Identifier(TYPE_STRING)));
-					case _: Characters(val.getParameters()[0]);
-				}
-			}
-		});
-	}
-
+	public static function addProps() {}
+		
 	public static function addFunctions() {
-		Little.plugin.registerFunction(PRINT_FUNCTION_NAME, null, [Variable(Identifier("item"), null)], (params) -> {
+		Little.plugin.registerFunction(PRINT_FUNCTION_NAME, null, [VariableDeclaration(Identifier("item"), null)], (params) -> {
 			var eval = Actions.evaluate(params[0]);
-			Runtime.__print(Interpreter.stringifyTokenValue(eval), eval);
-			return NullValue;
-		});
-		Little.plugin.registerFunction(RAISE_ERROR_FUNCTION_NAME, null, [Variable(Identifier("message"), null)], (params) -> {
-			Runtime.throwError(Actions.evaluate(params[0]));
-			return NullValue;
-		});
-		Little.plugin.registerFunction(READ_FUNCTION_NAME, null, [Variable(Identifier("string"), Module(Identifier(TYPE_STRING)))], (params) -> {
-			return Read(Identifier(Interpreter.stringifyTokenValue(params[0])));
-		});
-		Little.plugin.registerFunction(RUN_CODE_FUNCTION_NAME, null, [Variable(Identifier("code"), Module(Identifier(TYPE_STRING)))], (params) -> {
-			return Actions.run(Parser.parse(Lexer.lex(params[0].getParameters()[0])));
-		});
+			Runtime.__print(Conversion.toHaxeValue(eval), eval);
+			return VoidValue;
+		}, Little.keywords.TYPE_VOID);
+		Little.plugin.registerFunction(RAISE_ERROR_FUNCTION_NAME, null, [VariableDeclaration(Identifier("message"), null)], (params) -> {
+			Runtime.throwError(params[0]);
+			return VoidValue;
+		}, Little.keywords.TYPE_VOID);
+		Little.plugin.registerFunction(READ_FUNCTION_NAME, null, [VariableDeclaration(Identifier("identifier"), Identifier(TYPE_STRING))], (params) -> {
+			return Identifier(Conversion.toHaxeValue(params[0]));
+		}, Little.keywords.TYPE_DYNAMIC);
+		Little.plugin.registerFunction(RUN_CODE_FUNCTION_NAME, null, [VariableDeclaration(Identifier("code"), Identifier(TYPE_STRING))], (params) -> {
+			return Actions.run(Interpreter.convert(...Parser.parse(Lexer.lex(Conversion.toHaxeValue(params[0])))));
+		}, Little.keywords.TYPE_DYNAMIC);
 	}
 
 	public static function addSigns() {
@@ -97,8 +56,8 @@ class PrepareRun {
 			singleSidedOperatorCallback: (rhs) -> {
 				var r = Conversion.toHaxeValue(rhs);
 				if (r is Int)
-					return Number(r + "");
-				return Decimal(r + "");
+					return Number(r);
+				return Decimal(r);
 			}
 		});
 
@@ -109,8 +68,8 @@ class PrepareRun {
 			singleSidedOperatorCallback: (rhs) -> {
 				var r = Conversion.toHaxeValue(rhs);
 				if (r is Int)
-					return Number(-r + "");
-				return Decimal(-r + "");
+					return Number(-r);
+				return Decimal(-r);
 			}
 		});
 
@@ -121,7 +80,7 @@ class PrepareRun {
 			singleSidedOperatorCallback: (rhs) -> {
 				var r:Float = Conversion.toHaxeValue(rhs);
 
-				return Decimal(Math.sqrt(r) + "");
+				return Decimal(Math.sqrt(r));
 			}
 		});
 
@@ -147,8 +106,8 @@ class PrepareRun {
 			singleSidedOperatorCallback: (lhs) -> {
 				var l = Conversion.toHaxeValue(lhs);
 				var shifted = Math.pow(10, 10) * l;
-				if (shifted != Math.floor(shifted)) return Number(Math.round(MathTools.factorial(l)) + "");
-				return Decimal(MathTools.factorial(l) + "");
+				if (shifted != Math.floor(shifted)) return Number(Math.round(MathTools.factorial(l)));
+				return Decimal(MathTools.factorial(l));
 			}
 		});
 
@@ -165,10 +124,10 @@ class PrepareRun {
 				var l = Conversion.toHaxeValue(lhs),
 					r = Conversion.toHaxeValue(rhs);
 				if (l is String || r is String)
-					return Characters("" + lhs.value() + rhs.value());
-				if (Interpreter.getValueType(lhs).equals(Module(Identifier(TYPE_INT))) && Interpreter.getValueType(rhs).equals(Module(Identifier(TYPE_INT))))
-					return Number(l + r + "");
-				return Decimal(l + r + "");
+					return Characters("" + l + r);
+				if (lhs.type() == TYPE_INT && rhs.type() == TYPE_INT)
+					return Number(cast l + r);
+				return Decimal(cast l + r);
 			}
 		});
 
@@ -182,9 +141,9 @@ class PrepareRun {
 					r:Dynamic = Conversion.toHaxeValue(rhs);
 				if (l is String)
 					return Characters(TextTools.subtract(l, r));
-				if (Interpreter.getValueType(lhs).equals(Module(Identifier(TYPE_INT))) && Interpreter.getValueType(rhs).equals(Module(Identifier(TYPE_INT))))
-					return Number(l - r + "");
-				return Decimal(l - r + "");
+				if (lhs.type() == TYPE_INT && rhs.type() == TYPE_INT)
+					return Number(cast l - r);
+				return Decimal(cast l - r);
 			}
 		});
 
@@ -198,9 +157,9 @@ class PrepareRun {
 					r:Dynamic = Conversion.toHaxeValue(rhs);
 				if (l is String)
 					return Characters(TextTools.multiply(l, r));
-				if (Interpreter.getValueType(lhs).equals(Module(Identifier(TYPE_INT))) && Interpreter.getValueType(rhs).equals(Module(Identifier(TYPE_INT))))
-					return Number(l * r + "");
-				return Decimal(l * r + "");
+				if (lhs.type() == TYPE_INT && rhs.type() == TYPE_INT)
+					return Number(cast l * r);
+				return Decimal(l * r);
 			}
 		});
 
@@ -212,8 +171,8 @@ class PrepareRun {
 				var l = Conversion.toHaxeValue(lhs),
 					r = Conversion.toHaxeValue(rhs);
 				if (r == 0)
-					Runtime.throwError(ErrorMessage('Cannot divide by 0 ${if (rhs.getName() == "Number" || rhs.getName() == "Decimal") "" else '(${PrettyPrinter.stringifyParserrhs)} is 0)'}'));
-				return Decimal(l / r + "");
+					Runtime.throwError(ErrorMessage('Cannot divide by 0'));
+				return Decimal(l / r);
 			}
 		});
 
@@ -224,9 +183,9 @@ class PrepareRun {
 			callback: (lhs, rhs) -> {
 				var l = Conversion.toHaxeValue(lhs),
 					r = Conversion.toHaxeValue(rhs);
-				if (Interpreter.getValueType(lhs).equals(Module(Identifier(TYPE_INT))) && Interpreter.getValueType(rhs).equals(Module(Identifier(TYPE_INT))))
-					return Number(Math.pow(l, r) + "");
-				return Decimal(Math.pow(l, r) + "");
+				if (lhs.type() == TYPE_INT && rhs.type() == TYPE_INT)
+					return Number(Math.pow(l, r).int());
+				return Decimal(Math.pow(l, r));
 			}
 		});
 
@@ -241,7 +200,7 @@ class PrepareRun {
 				var oddN = r % 2 == 1;
 				if (!lPositive)
 					l = -l;
-				return Decimal(Math.pow(l * ((!lPositive && oddN) ? -1 : 1), 1 / r) + "");
+				return Decimal(Math.pow(l * ((!lPositive && oddN) ? -1 : 1), 1 / r));
 			}
 		});
 
@@ -334,29 +293,45 @@ class PrepareRun {
 	}
 
 	public static function addConditions() {
-		Little.plugin.registerCondition("while", [Variable(Identifier("rule"), Identifier(Keywords.TYPE_BOOLEAN))], (params, body) -> {
+		Little.plugin.registerCondition("while", "A loop that executes code until the condition is not met", (params, body) -> {
 			var val = NullValue;
 			var safetyNet = 0;
-			while (Conversion.toHaxeValue(Interpreter.evaluateExpressionParts(params)) && safetyNet < 500000) {
-				val = Actions.run(body);
-				safetyNet++;
+
+			while (safetyNet < 500000) {
+				var condition:Dynamic = Conversion.toHaxeValue(Actions.calculate(params));
+				if (condition is Bool && condition) {
+					val = Actions.run(body);
+					safetyNet++;
+				}
+				else if (condition is Bool && !condition) {
+					return val;
+				} 
+				else {
+					Runtime.throwError(ErrorMessage('While condition must be a ${Little.keywords.TYPE_BOOLEAN} or ${Little.keywords.FALSE_VALUE}'), INTERPRETER);
+					return val;
+				}
 			}
 			if (safetyNet >= 500000) {
-				Runtime.throwError(ErrorMessage('Too much iteration (is `${PrettyPrinter.stringifyParser(params)}` forever `$TRUE_VALUE`?)'), INTERPRETER);
+				Runtime.throwError(ErrorMessage('Too much iteration (is `${PrettyPrinter.stringifyInterpreter(params)}` forever `${Little.keywords.TRUE_VALUE}`?)'), INTERPRETER);
 			}
+
 			return val;
 		});
 
-		Little.plugin.registerCondition("if", [Variable(Identifier("rule"), Identifier(Keywords.TYPE_BOOLEAN))], (params, body) -> {
+		Little.plugin.registerCondition("if", "Executes the following block of code if the given condition is true.", (params, body) -> {
 			var val = NullValue;
-			if (Conversion.toHaxeValue(Interpreter.evaluateExpressionParts(params))) {
+			var cond = Conversion.toHaxeValue(Actions.calculate(params));
+			if (cond is Bool && cond) {
 				val = Actions.run(body);
 			}
+			else if (!cond is Bool) {
+				Runtime.throwError(ErrorMessage('If condition must be a ${Little.keywords.TYPE_BOOLEAN}'), INTERPRETER);
+			}
 
 			return val;
 		});
 
-		Little.plugin.registerCondition("for", (params:Array<ParserTokens>, body) -> {
+		Little.plugin.registerCondition("for", "A loop that executes code while changing a variable, until it meets a condition", (params:Array<InterpTokens>, body) -> {
 			var val = NullValue;
 
 			var fp = [];
@@ -364,157 +339,157 @@ class PrepareRun {
 			// Incase one does `from (4 + 2)` and it accidentally parses a function
 			for (p in params) {
 				switch p {
-					case FunctionCall(_.getParameters()[0] == FOR_LOOP_FROM => true, params): {
-							fp.push(Identifier(FOR_LOOP_FROM));
-							fp.push(Expression(params.getParameters()[0], null));
-						}
-					case FunctionCall(_.getParameters()[0] == FOR_LOOP_TO => true, params): {
-							fp.push(Identifier(FOR_LOOP_TO));
-							fp.push(Expression(params.getParameters()[0], null));
-						}
-					case FunctionCall(_.getParameters()[0] == FOR_LOOP_JUMP => true, params): {
-							fp.push(Identifier(FOR_LOOP_JUMP));
-							fp.push(Expression(params.getParameters()[0], null));
-						}
+					case FunctionCall(_.parameter(0) == FOR_LOOP_FROM => true, params): {
+						fp.push(Identifier(FOR_LOOP_FROM));
+						fp.push(Expression(params.parameter(0), null));
+					}
+					case FunctionCall(_.parameter(0) == FOR_LOOP_TO => true, params): {
+						fp.push(Identifier(FOR_LOOP_TO));
+						fp.push(Expression(params.parameter(0), null));
+					}
+					case FunctionCall(_.parameter(0) == FOR_LOOP_JUMP => true, params): {
+						fp.push(Identifier(FOR_LOOP_JUMP));
+						fp.push(Expression(params.parameter(0), null));
+					}
+					case FunctionCall(_.is(BLOCK) && [FOR_LOOP_FROM, FOR_LOOP_TO, FOR_LOOP_JUMP].contains(Actions.evaluate(_).parameter(0)) => true, params): {
+						fp.push(Identifier(Actions.evaluate(p.parameter(0) /*The Block*/).parameter(0)));
+						fp.push(Expression(params.parameter(0), null));
+					}
 					case _: fp.push(p);
 				}
 			}
 
 			params = fp;
 
-			var handle = Interpreter.accessObject(params[0]);
-			if (handle == null) {
-				Runtime.throwError(ErrorMessage('`for` loop must start with a variable to count on (expected definition/block, found: `${PrettyPrinter.stringifyParserparams[0])}`)'));
+			if (!params[0].is(VARIABLE_DECLARATION)) {
+				Runtime.throwError(ErrorMessage('`for` loop must start with a variable to count on (expected definition/block, found: `${PrettyPrinter.stringifyInterpreter(params[0])}`)'));
 				return val;
+			}
+			var handle = Little.memory.read(...params[0].parameter(0).asStringPath());
+			if (![Little.keywords.TYPE_INT, Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_DYNAMIC].contains(handle.objectTypeName)) {
+				Runtime.throwError(ErrorMessage('`for` loop\'s variable must be of type ${Little.keywords.TYPE_INT}, ${Little.keywords.TYPE_FLOAT} or ${Little.keywords.TYPE_DYNAMIC} (given: ${handle.objectTypeName})'));
 			}
 
 			var from:Null<Float> = null, to:Null<Float> = null, jump:Float = 1;
 
-			function parserForLoop(token:ParserTokens, next:ParserTokens) {
-				switch token {
-					case Identifier(_ == FOR_LOOP_FROM => true):
-						{
-							var val = Conversion.toHaxeValue(Interpreter.evaluate(next));
-							if (val is Float || val is Int) {
-								from = val;
-							} else {
-								Runtime.throwError(ErrorMessage('`for` loop\'s `${FOR_LOOP_FROM}` argument must be of type $TYPE_INT/$TYPE_FLOAT (given: ${Interpreter.stringifyTokenValue(next)} as ${Interpreter.evaluate(next).getName()})'));
+			var currentExpression = [];
+			var currentlySet:Int = -1; // 0 for FROM, 1 for TO, 2 for JUMP
+			for (i in 1...params.length) {
+				switch params[i] {
+					case Identifier(_ == FOR_LOOP_FROM => true): {
+						if (currentExpression.length > 0) {
+							switch currentlySet {
+								case -1: Runtime.throwError(ErrorMessage('Invalid `for` loop syntax: expected a `${Little.keywords.FOR_LOOP_TO}`, `${Little.keywords.FOR_LOOP_FROM}` or `${Little.keywords.FOR_LOOP_JUMP}` after the variable'));
+								case 0: Runtime.throwError(ErrorMessage('Cannot repeat `$FOR_LOOP_FROM` tag twice in `for` loop.'));
+								case 1: to = Conversion.toHaxeValue(Actions.calculate(currentExpression));
+								case 2: jump = Conversion.toHaxeValue(Actions.calculate(currentExpression));
 							}
 						}
-					case Identifier(_ == FOR_LOOP_TO => true):
-						{
-							var val = Conversion.toHaxeValue(Interpreter.evaluate(next));
-							if (val is Float || val is Int) {
-								to = val;
-							} else {
-								Runtime.throwError(ErrorMessage('`for` loop\'s `${FOR_LOOP_TO}` argument must be of type $TYPE_INT/$TYPE_FLOAT (given: ${Interpreter.stringifyTokenValue(next)} as ${Interpreter.evaluate(next).getName()})'));
+						currentExpression = [];
+						currentlySet = 0;
+					}
+					case Identifier(_ == FOR_LOOP_TO => true): {
+						if (currentExpression.length > 0) {
+							switch currentlySet {
+								case -1: Runtime.throwError(ErrorMessage('Invalid `for` loop syntax: expected a `${Little.keywords.FOR_LOOP_TO}`, `${Little.keywords.FOR_LOOP_FROM}` or `${Little.keywords.FOR_LOOP_JUMP}` after the variable'));
+								case 0: from = Conversion.toHaxeValue(Actions.calculate(currentExpression));
+								case 1: Runtime.throwError(ErrorMessage('Cannot repeat `$FOR_LOOP_TO` tag twice in `for` loop.'));
+								case 2: jump = Conversion.toHaxeValue(Actions.calculate(currentExpression));
 							}
 						}
-					case Identifier(_ == FOR_LOOP_JUMP => true):
-						{
-							var val = Conversion.toHaxeValue(Interpreter.evaluate(next));
-							if (val is Float || val is Int) {
-								if (val < 0) {
-									Runtime.throwError(ErrorMessage('`for` loop\'s `${FOR_LOOP_JUMP}` argument must be positive (given: ${Interpreter.stringifyTokenValue(next)}). Notice - the usage of the `${FOR_LOOP_JUMP}` argument switches from increasing to decreasing the value of `${params[0].getParameters()[0]}` if `${FOR_LOOP_FROM}` is larger than `${FOR_LOOP_TO}`. Defaulting to 1'));
-								} else
-									jump = val;
-							} else {
-								Runtime.throwError(ErrorMessage('`for` loop\'s `${FOR_LOOP_JUMP}` argument must be of type $TYPE_INT/$TYPE_FLOAT (given: ${Interpreter.stringifyTokenValue(next)} as ${Interpreter.evaluate(next).getName()}). Defaulting to `1`'));
+						currentExpression = [];
+						currentlySet = 1;
+					}
+					case Identifier(_ == FOR_LOOP_JUMP => true): {
+						if (currentExpression.length > 0) {
+							switch currentlySet {
+								case -1: Runtime.throwError(ErrorMessage('Invalid `for` loop syntax: expected a `${Little.keywords.FOR_LOOP_TO}`, `${Little.keywords.FOR_LOOP_FROM}` or `${Little.keywords.FOR_LOOP_JUMP}` after the variable'));
+								case 0: from = Conversion.toHaxeValue(Actions.calculate(currentExpression));
+								case 1: to = Conversion.toHaxeValue(Actions.calculate(currentExpression));
+								case 2: Runtime.throwError(ErrorMessage('Cannot repeat `$FOR_LOOP_JUMP` tag twice in `for` loop.'));
 							}
 						}
-					case Block(_):
-						{
-							var ident = Interpreter.evaluate(token);
-							parserForLoop(ident.getName() == "Characters" ? Identifier(ident.getParameters()[0]) : ident, next);
-						}
-					case _:
+					}
+					case _: currentExpression.push(params[i]);
 				}
 			}
-
-			var i = 1;
-
-			while (i < fp.length) {
-				var token = fp[i];
-				var next = [];
-
-				var lookahead = fp[i + 1];
-				while (!Type.enumEq(lookahead, Identifier(FOR_LOOP_TO))
-					&& !Type.enumEq(lookahead, Identifier(FOR_LOOP_JUMP))) {
-					next.push(lookahead);
-					lookahead = fp[++i + 1];
-					if (lookahead == null)
-						break;
-				}
-				i--;
-
-				// trace(token, next);
-				parserForLoop(token, Expression(next, null));
-				i += 2;
+			switch currentlySet {
+				case -1: Runtime.throwError(ErrorMessage('Invalid `for` loop syntax: expected a `${Little.keywords.FOR_LOOP_TO}`, `${Little.keywords.FOR_LOOP_FROM}` or `${Little.keywords.FOR_LOOP_JUMP}` after the variable'));
+				case 0: Runtime.throwError(ErrorMessage('Cannot repeat `$FOR_LOOP_FROM` tag twice in `for` loop.'));
+				case 1: to = Conversion.toHaxeValue(Actions.calculate(currentExpression));
+				case 2: jump = Conversion.toHaxeValue(Actions.calculate(currentExpression));
 			}
 
-			if (from == null) {
-				Runtime.throwError(ErrorMessage('`for` loop must contain a `${FOR_LOOP_FROM}` argument.'));
-				return val;
-			}
-			if (from == null) {
-				Runtime.throwError(ErrorMessage('`for` loop must contain a `${FOR_LOOP_TO}` argument.'));
-				return val;
-			}
-
+			jump ??= 1;
 			if (from < to) {
 				while (from < to) {
 					val = Actions.run([
-						Write([params[0]], if (from == from.int()) Number("" + from) else Decimal("" + from))
+						Write([params[0]], Conversion.toLittleValue(from))
 					].concat(body));
 					from += jump;
 				}
 			} else {
 				while (from > to) {
 					val = Actions.run([
-						Write([params[0]], if (from == from.int()) Number("" + from) else Decimal("" + from))
+						Write([params[0]], Conversion.toLittleValue(from))
 					].concat(body));
 					from -= jump;
 				}
 			}
+			
 
 			return val;
 		});
 
-		Little.plugin.registerCondition("after", [Variable(Identifier("rule"), Module(Identifier(TYPE_BOOLEAN)))], (params, body) -> {
+		Little.plugin.registerCondition("after", (params:Array<InterpTokens>, body:Array<InterpTokens>) -> {
 			var val = NullValue;
-
-			var handle = Interpreter.accessObject(params[0].getParameters()[0][0]);
-			if (handle == null) {
-				Runtime.throwError(ErrorMessage('`after` condition must start with a variable to watch (expected definition, found: `${PrettyPrinter.stringifyParserparams[0].getParameters()[0][0])}`)'));
+			var ident:String = "";
+			if (params[0].is(BLOCK)) {
+				var output = Actions.evaluate(params[0]);
+				Actions.assert(output, CHARACTERS, '`after` condition that starts with a code block must have it\'s code block return a `${Little.keywords.TYPE_STRING}` (returned: ${PrettyPrinter.stringifyInterpreter(output)})');
+				ident = Conversion.toHaxeValue(output);
+			} else if (params[0].is(IDENTIFIER, PROPERTY_ACCESS)) {
+				ident = params[0].extractIdentifier();
+			} else {
+				Runtime.throwError(ErrorMessage('`after` condition must start with a variable to watch (expected definition, found: `${PrettyPrinter.stringifyInterpreter(params[0])}`)'));
 				return val;
 			}
 
-			function dispatchAndRemove(set:ParserTokens) {
-				if (Conversion.toHaxeValue(Interpreter.evaluateExpressionParts(params))) {
+			function listener(setIdentifiers:Array<String>) {
+				var cond:Bool = Conversion.toHaxeValue(Actions.calculate(params));
+				if (setIdentifiers.contains(ident) && cond) {
 					Actions.run(body);
-					handle.setterListeners.remove(dispatchAndRemove);
+					Runtime.onWriteValue.remove(listener);
 				}
 			}
-			handle.setterListeners.push(dispatchAndRemove);
+			
+			Runtime.onWriteValue.push(listener);
 
 			return val;
 		});
 
-		Little.plugin.registerCondition("whenever", [Variable(Identifier("rule"), Module(Identifier(TYPE_BOOLEAN)))], (params, body) -> {
+		Little.plugin.registerCondition("whenever", (params:Array<InterpTokens>, body:Array<InterpTokens>) -> {
 			var val = NullValue;
-
-			var handle = Interpreter.accessObject(params[0].getParameters()[0][0]);
-			if (handle == null) {
-				Runtime.throwError(ErrorMessage('`whenever` condition must start with a variable to watch (expected definition, found: `${PrettyPrinter.stringifyParserparams[0].getParameters()[0][0])}`)'));
+			var ident:String = "";
+			if (params[0].is(BLOCK)) {
+				var output = Actions.evaluate(params[0]);
+				Actions.assert(output, CHARACTERS, '`whenever` condition that starts with a code block must have it\'s code block return a `${Little.keywords.TYPE_STRING}` (returned: ${PrettyPrinter.stringifyInterpreter(output)})');
+				ident = Conversion.toHaxeValue(output);
+			} else if (params[0].is(IDENTIFIER, PROPERTY_ACCESS)) {
+				ident = params[0].extractIdentifier();
+			} else {
+				Runtime.throwError(ErrorMessage('`whenever` condition must start with a variable to watch (expected definition, found: `${PrettyPrinter.stringifyInterpreter(params[0])}`)'));
 				return val;
 			}
 
-			function dispatchAndRemove(set:ParserTokens) {
-				if (Conversion.toHaxeValue(Interpreter.evaluateExpressionParts(params))) {
+			function listener(setIdentifiers:Array<String>) {
+				var cond:Bool = Conversion.toHaxeValue(Actions.calculate(params));
+				if (setIdentifiers.contains(ident) && cond) {
 					Actions.run(body);
 				}
 			}
-			handle.setterListeners.push(dispatchAndRemove);
+			
+			Runtime.onWriteValue.push(listener);
 
 			return val;
 		});
