@@ -14,6 +14,7 @@ using StringTools;
 using Std;
 using Math;
 using little.tools.TextTools;
+using little.tools.Extensions;
 @:access(little.interpreter.Runtime)
 class Interpreter {
 	public static function convert(pre:Rest<ParserTokens>):Array<InterpTokens> {
@@ -24,27 +25,24 @@ class Interpreter {
 			post.push(switch item {
 				case SetLine(line): SetLine(line);
 				case SplitLine: SplitLine;
-				case Variable(name, type, doc): VariableDeclaration(convert(name)[0], convert(type)[0], convert(doc)[0]);
-				case Function(name, params, type, doc): FunctionDeclaration(convert(name)[0], convert(params)[0], convert(type)[0], convert(doc)[0]);
-				case Condition(name, exp, body): ConditionDeclaration(convert(name)[0], convert(exp)[0], convert(body)[0]);
+				case Variable(name, type, doc): VariableDeclaration(convert(name)[0], type == null ? Little.keywords.TYPE_DYNAMIC.asTokenPath() : convert(type)[0], doc == null ? Characters("") : convert(doc)[0]);
+				case Function(name, params, type, doc): FunctionDeclaration(convert(name)[0], convert(params)[0], type == null ? Little.keywords.TYPE_DYNAMIC.asTokenPath() : convert(type)[0], doc == null ? Characters("") : convert(doc)[0]);
+				case Condition(name, exp, body): ConditionCall(convert(name)[0], convert(exp)[0], convert(body)[0]);
 				case Read(name): null;
 				case Write(assignees, value): Write(convert(...assignees), convert(value)[0]);
 				case Identifier(word): Identifier(word);
 				case TypeDeclaration(value, type): TypeCast(convert(value)[0], convert(type)[0]);
 				case FunctionCall(name, params): FunctionCall(convert(name)[0], convert(params)[0]);
-				case Return(value, type): FunctionReturn(convert(value)[0], convert(type)[0]);
-				case Expression(parts, type): Expression(convert(...parts), convert(type)[0]);
-				case Block(body, type): Block(convert(...body), convert(type)[0]);
+				case Return(value, type): FunctionReturn(convert(value)[0], type == null ? Little.keywords.TYPE_DYNAMIC.asTokenPath() : convert(type)[0]);
+				case Expression(parts, type): Expression(convert(...parts), type == null ? Little.keywords.TYPE_DYNAMIC.asTokenPath() : convert(type)[0]);
+				case Block(body, type): Block(convert(...body), type == null ? Little.keywords.TYPE_DYNAMIC.asTokenPath() : convert(type)[0]);
 				case PartArray(parts): PartArray(convert(...parts));
 				case PropertyAccess(name, property): PropertyAccess(convert(name)[0], convert(property)[0]);
 				case Sign(sign): Sign(sign);
 				case Number(num): num.parseFloat().abs() > 2_147_483_647 ? Decimal(num.parseFloat()) : Number(num.parseInt());
 				case Decimal(num): Decimal(num.parseFloat());
 				case Characters(string): Characters(string);
-				case Documentation(doc): null;
-				case Module(name): null;
-				case External(get): null;
-				case ExternalCondition(use): null;
+				case Documentation(doc): Characters('""$doc""'); // Kinda strange behavior, should maybe disable entirely/throw an error.
 				case ErrorMessage(msg): ErrorMessage(msg);
 				case NullValue: NullValue;
 				case TrueValue: TrueValue;

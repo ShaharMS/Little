@@ -1,5 +1,6 @@
 package little;
 
+import little.tools.PrettyPrinter;
 import little.interpreter.memory.Memory;
 import little.interpreter.KeywordConfig;
 import little.interpreter.Actions;

@@ -1,5 +1,7 @@
 package little.tools;
 
+import little.interpreter.Operators;
+import haxe.Json;
 import haxe.xml.Access;
 import little.interpreter.Actions;
 import vision.tools.MathTools;
@@ -22,12 +24,9 @@ class PrepareRun {
 	public static var prepared:Bool = false;
 
 	public static function addTypes() {}
-
-	public static function addProps() {}
 		
 	public static function addFunctions() {
 		Little.plugin.registerFunction(PRINT_FUNCTION_NAME, null, [VariableDeclaration(Identifier("item"), null)], (params) -> {
-			trace(params);
 			var eval = Actions.evaluate(params[0]);
 			Runtime.__print(PrettyPrinter.stringifyInterpreter(eval), eval);
 			return NullValue;
@@ -42,6 +41,14 @@ class PrepareRun {
 		Little.plugin.registerFunction(RUN_CODE_FUNCTION_NAME, null, [VariableDeclaration(Identifier("code"), Identifier(TYPE_STRING))], (params) -> {
 			return Actions.run(Interpreter.convert(...Parser.parse(Lexer.lex(Conversion.toHaxeValue(params[0])))));
 		}, Little.keywords.TYPE_DYNAMIC);
+	}
+
+	public static function addProps() {
+		Little.plugin.registerInstanceVariable(OBJECT_TYPE_PROPERTY_NAME, TYPE_DYNAMIC, 'The name of this value\'s type, as a $TYPE_STRING', 
+			(value, address) -> {
+				return Characters(value.type());
+			}
+		);
 	}
 
 	public static function addSigns() {
@@ -291,6 +298,8 @@ class PrepareRun {
 				return l <= r ? TrueValue : FalseValue;
 			}
 		});
+
+		trace(PrettyPrinter.prettyPrintOperatorPriority(Operators.priority));
 	}
 
 	public static function addConditions() {

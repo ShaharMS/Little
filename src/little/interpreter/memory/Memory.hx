@@ -186,8 +186,19 @@ class Memory {
 					currentDoc = newCurrent.objectDoc;
 				}
 			}
+			// If it doesnt exist on that specific type, it may exist on TYPE_DYNAMIC:
+			else if (externs.instanceProperties.properties.exists(Little.keywords.TYPE_DYNAMIC)) {
+				var classProperties = externs.instanceProperties.properties.get(Little.keywords.TYPE_DYNAMIC);
+				if (classProperties.properties.exists(identifier)) {
+					var newCurrent = classProperties.properties.get(identifier).getter(current, currentAddress);
+					current = newCurrent.objectValue;
+					currentAddress = newCurrent.objectAddress;
+					currentDoc = newCurrent.objectDoc;
+				}
+			}
+
 			// Then, we check the object's hash table for that field
-			if (current.is(OBJECT)) {
+			else if (current.is(OBJECT)) {
 				var objectHashTableBytesLength = heap.readInt32(currentAddress);
 				var objectHashTableBytes = heap.readBytes(currentAddress.rawLocation + 4, objectHashTableBytesLength);
 				
@@ -211,7 +222,7 @@ class Memory {
 			}
 
 			// If we still don't have a value, we throw an error, cause that means that field doesn't exist.
-			Runtime.throwError(ErrorMessage('Field $identifier does not exist on ${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)}'));
+			else Runtime.throwError(ErrorMessage('Field $identifier does not exist on ${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)}'));
 		}
 
 
@@ -246,7 +257,6 @@ class Memory {
 		}
 
 		if (path.length == 1) {
-			trace("SimpleVarName: " + path[0]);
 			if (stack.getCurrentBlock().exists(path[0])) {
 				stack.getCurrentBlock().set(path[0], { address: value != null ? store(value) : null, type: type != null ? type : null, doc: doc != null ? doc : null });
 			} else {

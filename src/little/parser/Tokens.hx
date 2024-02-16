@@ -34,20 +34,6 @@ enum ParserTokens {
 		Documentation strings
 	**/
 	Documentation(doc:String);
-    
-    /**
-    	Used for multi-module coding & better error reporting.
-    **/
-    Module(name:ParserTokens);
-
-    /**
-    	Used for denoting an external var/func in the interpreter.
-    **/
-    External(get:Array<ParserTokens> -> ParserTokens);
-    /**
-    	Used for denoting external conditions in the interpreter
-    **/
-    ExternalCondition(use:(con:Array<ParserTokens>, body:Array<ParserTokens>) -> ParserTokens);
 
     /**
     	Used for errors & warnings

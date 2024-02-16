@@ -73,12 +73,9 @@ class PrettyPrinter {
 			case SetLine(line): return '${prefixFA(prefix)}$t$d SetLine($line)\n';
             case SplitLine: return '${prefixFA(prefix)}$t$d SplitLine\n';
             case Characters(string): return '${prefixFA(prefix)}$t$d "$string"\n';
-			case Module(name): return '${prefixFA(prefix)}$t$d Module: $name\n';
 			case ErrorMessage(name): return '${prefixFA(prefix)}$t$d Error: $name\n';
 			case Documentation(doc): return '${prefixFA(prefix)}$t$d Documentation: ${doc.replace("\n", "\n" + prefixFA(prefix) + '│                  ')}\n';
 			case NoBody:  return '${prefixFA(prefix)}$t$d <no body>\n';
-			case External(haxeValue): return '${prefixFA(prefix)}$t$d External Haxe Value Identifier: [$haxeValue]\n';
-			case ExternalCondition(use): return '${prefixFA(prefix)}$t$d External Haxe Condition Identifier: [$use]\n';
             case Decimal(num): return '${prefixFA(prefix)}$t$d $num\n';
             case Number(num): return '${prefixFA(prefix)}$t$d $num\n';
             case FalseValue: return '${prefixFA(prefix)}$t$d ${Keywords.FALSE_VALUE}\n';
@@ -243,7 +240,7 @@ class PrettyPrinter {
 				return title;
 			case Write(assignees, value):
 				var title = '${prefixFA(prefix)}$t$d Write\n';
-				title += getTree_INTERP(PartArray(assignees), prefix.copy(), level + 1, false);
+				title += getTree_INTERP(PartArray(assignees), pushIndex(prefix, level), level + 1, false);
 				title += getTree_INTERP(value, prefix.copy(), level + 1, true);
 				return title;
 			case TypeCast(value, type):
@@ -343,9 +340,6 @@ class PrettyPrinter {
 				case Decimal(num): s += num;
 				case Characters(string): s += '"' + string + '"';
 				case Documentation(doc): s += '"""' + doc + '"""';
-				case Module(name): 
-				case External(get):
-				case ExternalCondition(use):
 				case ErrorMessage(msg):
 				case NullValue: s += NULL_VALUE;
 				case TrueValue: s += TRUE_VALUE;

@@ -31,6 +31,8 @@ class ExternalInterfacing {
 	/**
 	    Properties of instances of a certain type.
 		for example, one may want to define a `length` property on an array
+
+		Use `TYPE_DYNAMIC` to have a property for every single type. PAY ATTENTION - it blocks this word from being used as a property name for an object.
 	**/
 	public var instanceProperties:ExtTree = new ExtTree();
 

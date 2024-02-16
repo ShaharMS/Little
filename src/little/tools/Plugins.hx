@@ -158,6 +158,7 @@ class Plugins {
 	**/
 	public function registerInstanceVariable(propertyName:String, onType:String, ?documentation:String, ?staticValue:InterpTokens, ?valueGetter:(objectValue:InterpTokens, objectAddress:MemoryPointer) -> InterpTokens) {
 		var classPath = onType.split(".");
+        classPath.push(propertyName);
 		var object = memory.externs.createPathFor(memory.externs.instanceProperties, ...classPath);
 
 		object.getter = (v, a) -> {
@@ -219,6 +220,7 @@ class Plugins {
 		}
 
 		var classPath = onType.split(".");
+        classPath.push(propertyName);
 		var object = memory.externs.createPathFor(memory.externs.instanceProperties, ...classPath);
 		var returnTypeToken = Interpreter.convert(...Parser.parse(Lexer.lex(returnType)))[0]; // May be a PropertyAccess or an Identifier
 		object.getter = (v, a) -> {
@@ -259,7 +261,7 @@ class Plugins {
 			// A bunch of ifs in order to shorten the final callback function, improves performance a bit
             if (info.lhsAllowedTypes != null && info.rhsAllowedTypes == null && info.allowedTypeCombos == null) {
                 callbackFunc = (lhs, rhs) -> {
-                    final lType = lhs.type(), rType = rhs.type();
+                    final lType = Actions.evaluate(lhs).type(), rType = Actions.evaluate(rhs).type();
                     if (!info.lhsAllowedTypes.contains(lType)) {
                         return Little.runtime.throwError(ErrorMessage('Cannot preform $lType(${lhs.extractIdentifier()}) $symbol $rType(${rhs.extractIdentifier()}) - Left operand cannot be of type $lType (accepted types: ${info.lhsAllowedTypes})'));
                     }
@@ -268,7 +270,7 @@ class Plugins {
                 }
             } else if (info.lhsAllowedTypes == null && info.rhsAllowedTypes != null && info.allowedTypeCombos == null) {
                 callbackFunc = (lhs, rhs) -> {
-                    final lType = lhs.type(), rType = rhs.type();
+                    final lType = Actions.evaluate(lhs).type(), rType = Actions.evaluate(rhs).type();
                     if (!info.rhsAllowedTypes.contains(rType)) {
                         return Little.runtime.throwError(ErrorMessage('Cannot preform $lType(${lhs.extractIdentifier()}) $symbol $rType(${rhs.extractIdentifier()}) - Right operand cannot be of type $rType (accepted types: ${info.rhsAllowedTypes})'));
                     }
@@ -277,7 +279,7 @@ class Plugins {
                 }
             } else if (info.lhsAllowedTypes != null && info.rhsAllowedTypes != null && info.allowedTypeCombos == null) {
                 callbackFunc = (lhs, rhs) -> {
-                    final lType = lhs.type(), rType = rhs.type();
+                    final lType = Actions.evaluate(lhs).type(), rType = Actions.evaluate(rhs).type();
                     if (!info.rhsAllowedTypes.contains(rType)) {
                         return Little.runtime.throwError(ErrorMessage('Cannot preform $lType(${lhs.extractIdentifier()}) $symbol $rType(${rhs.extractIdentifier()}) - Right operand cannot be of type $rType (accepted types: ${info.rhsAllowedTypes})'));
                     }
@@ -290,7 +292,7 @@ class Plugins {
                 }
             } else if (info.lhsAllowedTypes != null && info.rhsAllowedTypes == null && info.allowedTypeCombos != null) {
                 callbackFunc = (lhs, rhs) -> {
-                    final lType = lhs.type(), rType = rhs.type();
+                    final lType = Actions.evaluate(lhs).type(), rType = Actions.evaluate(rhs).type();
                     if (!info.lhsAllowedTypes.contains(lType) && !info.allowedTypeCombos.containsCombo(lType, rType)) {
                         return Little.runtime.throwError(ErrorMessage('Cannot preform $lType(${lhs.extractIdentifier()}) $symbol $rType(${rhs.extractIdentifier()}) - Right operand cannot be of type $rType while left operand is of type $lType (accepted types for left operand: ${info.lhsAllowedTypes}, accepted type combinations: ${info.allowedTypeCombos.map(object -> '${object.rhs} $symbol ${object.lhs}')})'));
                     }
@@ -299,7 +301,7 @@ class Plugins {
                 }
             } else if (info.lhsAllowedTypes == null && info.rhsAllowedTypes != null && info.allowedTypeCombos != null) {
                 callbackFunc = (lhs, rhs) -> {
-                    final lType = lhs.type(), rType = rhs.type();
+                    final lType = Actions.evaluate(lhs).type(), rType = Actions.evaluate(rhs).type();
                     if (!info.rhsAllowedTypes.contains(rType) && !info.allowedTypeCombos.containsCombo(lType, rType)) {
                         return Little.runtime.throwError(ErrorMessage('Cannot preform $lType(${lhs.extractIdentifier()}) $symbol $rType(${rhs.extractIdentifier()}) - Right operand cannot be of type $rType while left operand is of type $lType (accepted types for right operand: ${info.rhsAllowedTypes}, accepted type combinations: ${info.allowedTypeCombos.map(object -> '${object.rhs} $symbol ${object.lhs}')})'));
                     }
@@ -308,7 +310,7 @@ class Plugins {
                 }
             } else if (info.lhsAllowedTypes != null && info.rhsAllowedTypes != null && info.allowedTypeCombos != null) {
                 callbackFunc = (lhs, rhs) -> {
-                    final lType = lhs.type(), rType = rhs.type();
+                    final lType = Actions.evaluate(lhs).type(), rType = Actions.evaluate(rhs).type();
                     if (!info.rhsAllowedTypes.contains(rType) && !info.allowedTypeCombos.containsCombo(lType, rType)) {
                         return Little.runtime.throwError(ErrorMessage('Cannot preform $lType(${lhs.extractIdentifier()}) $symbol ${rType}(${rhs.extractIdentifier()}) - Right operand cannot be of type $rType (accepted types: ${info.rhsAllowedTypes}, accepted type combinations: ${info.allowedTypeCombos.map(object -> '${object.rhs} $symbol ${object.lhs}')})'));
                     }
@@ -332,7 +334,7 @@ class Plugins {
 
 			if (info.operatorType == LHS_ONLY) {
 				callbackFunc = (lhs) -> {
-					var lType = lhs.type();
+					var lType = Actions.evaluate(lhs).type();
 					if (!info.lhsAllowedTypes.contains(lType)) {
 						return Little.runtime.throwError(ErrorMessage('Cannot perform $lType(${lhs.extractIdentifier()})$symbol - Operand cannot be of type $lType (accepted types: ${info.lhsAllowedTypes})'));
 					}
@@ -341,7 +343,7 @@ class Plugins {
 				}
 			} else {
 				callbackFunc = (rhs) -> {
-                    var rType = rhs.type();
+                    var rType = Actions.evaluate(rhs).type();
 					if (!info.rhsAllowedTypes.contains(rType)) {
 						return Little.runtime.throwError(ErrorMessage('Cannot perform $symbol$rType(${rhs.extractIdentifier()}) - Operand cannot be of type $rType (accepted types: ${info.rhsAllowedTypes})'));
 					}

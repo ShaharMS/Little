@@ -76,7 +76,6 @@ class Actions {
         @param doc The documentation of the variable. Should be a `InterpTokens.Documentation(doc:String)`
     **/
     public static function declareVariable(name:InterpTokens, type:InterpTokens, doc:InterpTokens) {
-        trace(name, type, doc);
 		var path = name.asStringPath();
 		memory.write(path, NullValue, type.extractIdentifier(), doc != null ? evaluate(doc).extractIdentifier() : "");
 
@@ -199,7 +198,7 @@ class Actions {
 		for (assignee in assignees) {
 			switch assignee {
 				case VariableDeclaration(name, type, doc): declareVariable(name, type, doc); vars.push(name); containsVariable = true;
-				case FunctionDeclaration(name, params, type, doc): declareFunction(name, params, doc); funcs.push(name); containsFunction = true;
+				case FunctionDeclaration(name, params, type, doc): declareFunction(name, params, doc); funcs.push(name); containsFunction = true; //TODO: find a way to store function type
 				case ConditionDeclaration(name, ct, doc): // TODO: Condition declaration is not implemented yet.
 				case _: vars.push(assignee);
 			}
@@ -249,8 +248,6 @@ class Actions {
         }
         if (current.length > 0) processedParams.push(calculate(current));
 
-        trace(processedParams);
-
 		switch functionCode {
 			case FunctionCode(requiredParams, body): {
 				var given = processedParams;
@@ -267,7 +264,6 @@ class Actions {
                     if (processedParams.length > 0) value = processedParams.shift(); // Todo, handle mid-function optional arguments.
 					attachment.push(Write([VariableDeclaration(Identifier(name), type, null)], value));
 				}
-                trace(PrettyPrinter.printInterpreterAst(attachment.concat(body.parameter(0))));
 				return run(attachment.concat(body.parameter(0)));
 			}
 			case _: return null;
@@ -287,7 +283,7 @@ class Actions {
 	/**
 		Casts a value to a type
 		@param value The value to cast. Can be any token which has a non-void value (not `InterpTokens.SplitLine`, `InterpTokens.SetLine(line:Int)`...)
-		@param type The type to cast to. Can be any token which resolves to `InterpTokens.Module(name:String)`
+		@param type The type to cast to. Can be any token which resolves to a correct string path.
 		@return The value given, casted to the type.
 	**/
     public static function typeCast(value:InterpTokens, type:InterpTokens):InterpTokens {
@@ -319,7 +315,7 @@ class Actions {
         var i = 0;
         while (i < body.length) {
             var token = body[i];
-            trace('Running: $token. $i');
+            //trace('Running: $token. $i');
             if (token == null) {i++; continue;}
             switch token {
                 case SetLine(line): {
@@ -495,6 +491,7 @@ class Actions {
                     else if (calculated == null) calculated = token;
                     else if (sign == null) error("Two values cannot come one after the other. At least one of them should be an operator, or, put an operator in between.");
                     else {
+                        trace(calculated, sign, token);
                         calculated = Operators.call(calculated, sign, token);
                     }
                 }

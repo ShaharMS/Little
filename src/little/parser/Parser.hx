@@ -248,7 +248,7 @@ class Parser {
                 case Identifier(word): {
                     if (word == TYPE_DECL_OR_CAST && i + 1 < pre.length) {
                         var lookahead = pre[i + 1];
-                        post.push(TypeDeclaration(null, Module(mergeTypeDecls([lookahead])[0])));
+                        post.push(TypeDeclaration(null, mergeTypeDecls([lookahead])[0]));
                         i++;
                     } else if (word == TYPE_DECL_OR_CAST) {
                         // Throw error for incomplete type declarations;
@@ -491,7 +491,6 @@ class Parser {
                 case Expression(parts, type): post.push(Expression(mergeComplexStructures(parts), mergeComplexStructures([type])[0]));
                 case Block(body, type): post.push(Block(mergeComplexStructures(body), mergeComplexStructures([type])[0]));
                 case PropertyAccess(name, property): post.push(PropertyAccess(mergeComplexStructures([name])[0], mergeComplexStructures([property])[0]));
-                case Module(name): post.push(Module(mergeComplexStructures([name])[0]));
                 case _: post.push(token);
             }
             i++;
@@ -538,7 +537,6 @@ class Parser {
                 case Return(value, type): post.push(Return(mergeCalls([value])[0], mergeCalls([type])[0]));
                 case PropertyAccess(name, property): post.push(PropertyAccess(mergeCalls([name])[0], mergeCalls([property])[0]));
                 case PartArray(parts): post.push(PartArray(mergeCalls(parts)));
-                case Module(name): post.push(Module(mergeCalls([name])[0]));
                 case _: post.push(token);
             }
             i++;
@@ -641,10 +639,6 @@ class Parser {
                     if (potentialAssignee != null) post.push(potentialAssignee);
                     potentialAssignee = PropertyAccess(mergeWrites([name])[0], mergeWrites([property])[0]);
                 }
-                case Module(name): {
-                    if (potentialAssignee != null) post.push(potentialAssignee);
-                    potentialAssignee = Module(mergeWrites([name])[0]);
-                }
                 case _: {
                     if (potentialAssignee != null) post.push(potentialAssignee);
                     potentialAssignee = token;
@@ -701,7 +695,6 @@ class Parser {
                 case FunctionCall(name, params): post.unshift(FunctionCall(mergeValuesWithTypeDeclarations([name])[0], mergeValuesWithTypeDeclarations([params])[0]));
                 case Write(assignees, value): post.unshift(Write(mergeValuesWithTypeDeclarations(assignees), mergeValuesWithTypeDeclarations([value])[0]));
                 case PropertyAccess(name, property): post.unshift(PropertyAccess(mergeValuesWithTypeDeclarations([name])[0], mergeValuesWithTypeDeclarations([property])[0]));
-                case Module(name): post.unshift(Module(mergeValuesWithTypeDeclarations([name])[0]));
                 case _: post.unshift(token);
             }
             i--;
@@ -766,7 +759,6 @@ class Parser {
                 case FunctionCall(name, params): post.push(FunctionCall(mergeNonBlockBodies([name])[0], mergeNonBlockBodies([params])[0]));
                 case Write(assignees, value): post.push(Write(mergeNonBlockBodies(assignees), mergeNonBlockBodies([value])[0]));
                 case PropertyAccess(name, property): post.push(PropertyAccess(mergeNonBlockBodies([name])[0], mergeNonBlockBodies([property])[0]));
-                case Module(name): post.push(Module(mergeNonBlockBodies([name])[0]));
                 case _: post.push(token);
             }
             i++;
@@ -825,7 +817,6 @@ class Parser {
                 case FunctionCall(name, params): post.push(FunctionCall(mergeElses([name])[0], mergeElses([params])[0]));
                 case Write(assignees, value): post.push(Write(mergeElses(assignees), mergeElses([value])[0]));
                 case PropertyAccess(name, property): post.push(PropertyAccess(mergeElses([name])[0], mergeElses([property])[0]));
-                case Module(name): post.push(Module(mergeElses([name])[0]));
                 case _: post.push(token);
             }
             i++;
