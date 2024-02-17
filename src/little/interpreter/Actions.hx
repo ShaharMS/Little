@@ -206,7 +206,8 @@ class Actions {
 		if (containsFunction) {
 			var paths = funcs.map(x -> x.asStringPath());
 			for (path in paths) {
-				memory.write(path, value, value.parameter(1).asStringPath(), "");
+				var func = memory.read(...path).objectValue;
+				memory.write(path, FunctionCode(func.parameter(0), value), Little.keywords.TYPE_FUNCTION, "");
 			}
 		}
 		if (containsVariable) {

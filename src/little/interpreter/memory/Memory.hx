@@ -92,7 +92,7 @@ class Memory {
 			return heap.storeStatic(token);
 		} else if (token.is(OBJECT)) {
 			return heap.storeObject(token);
-		} else if (token.is(FUNCTION_CODE)) {
+		} else if (token.is(FUNCTION_CODE, BLOCK)) {
 			return heap.storeCodeBlock(token);
 		} else if (token.is(CONDITION_CODE)) {
 			return heap.storeCondition(token);
@@ -151,7 +151,7 @@ class Memory {
 			case (_ == Little.keywords.TYPE_CONDITION => true): heap.readCondition(data.address);
             // Because of the way we store lone nulls (as type dynamic), 
             // they might get confused with objects of type dynamic, so we need to do this:
-            case (_ == Little.keywords.TYPE_DYNAMIC && constants.getFromPointer(data.address).equals(NullValue) => true): NullValue;
+            case (_ == Little.keywords.TYPE_DYNAMIC && constants.hasPointer(data.address) && constants.getFromPointer(data.address).equals(NullValue) => true): NullValue;
             case _: heap.readObject(data.address);
 		}
 		var currentAddress:MemoryPointer = data.address;
@@ -267,7 +267,7 @@ class Memory {
 				stack.getCurrentBlock().reference(path[0], store(value), type, doc);
 			}
 		} else {
-			var pathCopy = path.slice(1);
+			var pathCopy = path.copy();
 			var wentThroughPath = path.slice(0, path.length - 1);
 			var current = stack.getCurrentBlock().get(pathCopy[0]);
 			while (pathCopy.length > 1) {
@@ -381,7 +381,6 @@ class Memory {
 	}
 
 	public function getTypeName(pointer:MemoryPointer):String {
-		trace(pointer);
 		// Externs prioritized:
 		if (externs.pointerToType.exists(pointer)) {
 			return externs.pointerToType[pointer];

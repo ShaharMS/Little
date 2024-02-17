@@ -64,6 +64,10 @@ class Extensions {
 		return path;
 	}
 
+	public static function asJoinedStringPath(token:InterpTokens):String {
+		return asStringPath(token).join(Little.keywords.PROPERTY_ACCESS_SIGN);		
+	}
+
 	public static function type(token:InterpTokens):String {
 		switch token {
 			case Characters(string): return Little.keywords.TYPE_STRING;

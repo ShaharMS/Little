@@ -58,11 +58,11 @@ class ConstantPool {
 			case 0x14: Identifier(Little.keywords.TYPE_DYNAMIC);
 			case 0x15: ErrorMessage("Default value for error message");
 			case 0x16: HaxeExtern(() -> Characters("Default value for external haxe code"));
-			case _: throw "not in constant pool";
+			case _: throw 'pointer ${pointer} not in constant pool';
 		}
 	}
 
 	public function hasPointer(pointer:MemoryPointer):Bool {
-		return pointer.rawLocation < 17 && pointer.rawLocation > 0;
+		return pointer.rawLocation < 17 && pointer.rawLocation >= 0;
 	}
 }

@@ -129,6 +129,7 @@ class PrepareRun {
 			allowedTypeCombos: [{lhs: TYPE_STRING, rhs: TYPE_DYNAMIC}, {lhs: TYPE_DYNAMIC, rhs: TYPE_STRING}],
 			priority: "with +_",
 			callback: (lhs, rhs) -> {
+				lhs = Actions.evaluate(lhs); rhs = Actions.evaluate(rhs);
 				var l = Conversion.toHaxeValue(lhs),
 					r = Conversion.toHaxeValue(rhs);
 				if (l is String || r is String) {
@@ -147,6 +148,7 @@ class PrepareRun {
 			allowedTypeCombos: [{lhs: TYPE_STRING, rhs: TYPE_STRING}],
 			priority: "with +",
 			callback: (lhs, rhs) -> {
+				lhs = Actions.evaluate(lhs); rhs = Actions.evaluate(rhs);
 				var l:Dynamic = Conversion.toHaxeValue(lhs),
 					r:Dynamic = Conversion.toHaxeValue(rhs);
 				if (l is String) {
@@ -165,6 +167,7 @@ class PrepareRun {
 			allowedTypeCombos: [{lhs: TYPE_STRING, rhs: TYPE_INT}],
 			priority: "between + √_",
 			callback: (lhs, rhs) -> {
+				lhs = Actions.evaluate(lhs); rhs = Actions.evaluate(rhs);
 				var l:Dynamic = Conversion.toHaxeValue(lhs),
 					r:Dynamic = Conversion.toHaxeValue(rhs);
 				if (l is String) {
@@ -195,6 +198,7 @@ class PrepareRun {
 			lhsAllowedTypes: [TYPE_FLOAT, TYPE_INT],
 			priority: "before *",
 			callback: (lhs, rhs) -> {
+				lhs = Actions.evaluate(lhs); rhs = Actions.evaluate(rhs);
 				var l = Conversion.toHaxeValue(lhs),
 					r = Conversion.toHaxeValue(rhs);
 				if (lhs.type() == TYPE_INT && rhs.type() == TYPE_INT)
