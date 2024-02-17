@@ -61,6 +61,7 @@ class UnitTests {
 				Sys.exit(1);
 			}
 			Sys.sleep(0.2);
+			Little.reset();
 			i++;
 		}
 

@@ -131,8 +131,10 @@ class PrepareRun {
 			callback: (lhs, rhs) -> {
 				var l = Conversion.toHaxeValue(lhs),
 					r = Conversion.toHaxeValue(rhs);
-				if (l is String || r is String)
+				if (l is String || r is String) {
+					l ??= Little.keywords.NULL_VALUE; r ??= Little.keywords.NULL_VALUE;
 					return Characters("" + l + r);
+				}
 				if (lhs.type() == TYPE_INT && rhs.type() == TYPE_INT)
 					return Number(cast l + r);
 				return Decimal(cast l + r);
@@ -147,8 +149,10 @@ class PrepareRun {
 			callback: (lhs, rhs) -> {
 				var l:Dynamic = Conversion.toHaxeValue(lhs),
 					r:Dynamic = Conversion.toHaxeValue(rhs);
-				if (l is String)
+				if (l is String) {
+					l ??= Little.keywords.NULL_VALUE; r ??= Little.keywords.NULL_VALUE;
 					return Characters(TextTools.subtract(l, r));
+				}
 				if (lhs.type() == TYPE_INT && rhs.type() == TYPE_INT)
 					return Number(cast l - r);
 				return Decimal(cast l - r);
@@ -163,8 +167,10 @@ class PrepareRun {
 			callback: (lhs, rhs) -> {
 				var l:Dynamic = Conversion.toHaxeValue(lhs),
 					r:Dynamic = Conversion.toHaxeValue(rhs);
-				if (l is String)
+				if (l is String) {
+					l ??= Little.keywords.NULL_VALUE;
 					return Characters(TextTools.multiply(l, r));
+				}
 				if (lhs.type() == TYPE_INT && rhs.type() == TYPE_INT)
 					return Number(cast l * r);
 				return Decimal(l * r);
@@ -298,8 +304,6 @@ class PrepareRun {
 				return l <= r ? TrueValue : FalseValue;
 			}
 		});
-
-		trace(PrettyPrinter.prettyPrintOperatorPriority(Operators.priority));
 	}
 
 	public static function addConditions() {

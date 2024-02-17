@@ -32,7 +32,7 @@ class Heap {
         #if !static if (b == null) return parent.constants.NULL; #end
 
         // Find a free spot
-        var i = 0;
+        var i = parent.constants.capacity;
         while (i < parent.reserved.length && parent.reserved[i] != 0) i++;
         if (i >= parent.reserved.length) parent.increaseBuffer();
         parent.memory[i] = b;
@@ -66,7 +66,7 @@ class Heap {
 
 
     public function storeBytes(size:Int, ?b:ByteArray):MemoryPointer {
-        var i = 0;
+        var i = parent.constants.capacity;
 		
         while (i < parent.reserved.length - size && !parent.reserved.getBytes(i, size).isEmpty()) i++;
 		if (i >= parent.reserved.length - size) {
@@ -111,7 +111,7 @@ class Heap {
         #if !static if (b == null) return parent.constants.NULL; #end
 
         // Find a free spot
-        var i = 0;
+        var i = parent.constants.capacity;
         while (i < parent.reserved.length - 1 && parent.reserved[i] != 0 && parent.reserved[i + 1] != 0) i++;
         if (i >= parent.reserved.length - 1) {
             parent.increaseBuffer();
@@ -170,7 +170,7 @@ class Heap {
         #if !static if (b == null) return parent.constants.NULL; #end
 
         // Find a free spot
-        var i = 0;
+        var i = parent.constants.capacity;
         while (i < parent.reserved.length - 3 && parent.reserved[i] + parent.reserved[i + 1] + parent.reserved[i + 2] + parent.reserved[i + 3] != 0) i++;
         if (i >= parent.reserved.length - 3) {
             parent.increaseBuffer();
@@ -229,7 +229,7 @@ class Heap {
         if (b == 0) return parent.constants.ZERO;
         #if !static if (b == null) return parent.constants.NULL; #end
 
-        var i = 0;
+        var i = parent.constants.capacity;
         while (i < parent.reserved.length - 7 && 
             parent.reserved[i] + parent.reserved[i + 1] + parent.reserved[i + 2] + parent.reserved[i + 3] + 
             parent.reserved[i + 4] + parent.reserved[i + 5] + parent.reserved[i + 6] + parent.reserved[i + 7] != 0) i++;
@@ -294,7 +294,7 @@ class Heap {
 		var bytes = ByteArray.from(stringBytes.length).concat(stringBytes);
 
 		// Find a free spot. Keep in mind that string's characters in this context are UTF-8 encoded, so each character is 1 byte
-		var i = 0;
+		var i = parent.constants.capacity;
 		
         while (i < parent.reserved.length - bytes.length && !parent.reserved.getBytes(i, bytes.length).isEmpty()) i++;
 		if (i >= parent.reserved.length - bytes.length) {

@@ -103,6 +103,10 @@ class Little {
         Runtime.callStack = [];
         Runtime.stdout.reset();
         Runtime.currentModule = Keywords.MAIN_MODULE_NAME;
+		Operators.lhsOnly.clear();
+		Operators.rhsOnly.clear();
+		Operators.standard.clear();
+		Operators.priority.clear();
 		Little.memory.reset();
 	}
 

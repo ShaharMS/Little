@@ -8,6 +8,11 @@ using little.tools.Extensions;
 
 class ConstantPool {
 
+	/**
+		The amount of bytes the constant pool takes up.
+	**/
+	public var capacity = 17;
+
     public var NULL:MemoryPointer = 0;
     public var FALSE:MemoryPointer = 1;
     public var TRUE:MemoryPointer = 2;

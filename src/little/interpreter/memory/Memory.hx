@@ -92,6 +92,10 @@ class Memory {
 			return heap.storeStatic(token);
 		} else if (token.is(OBJECT)) {
 			return heap.storeObject(token);
+		} else if (token.is(FUNCTION_CODE)) {
+			return heap.storeCodeBlock(token);
+		} else if (token.is(CONDITION_CODE)) {
+			return heap.storeCondition(token);
 		}
 
 		Runtime.throwError(ErrorMessage('Unable to allocate memory for token `$token`.'), MEMORY_HEAP);

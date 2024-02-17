@@ -206,14 +206,14 @@ class Actions {
 		if (containsFunction) {
 			var paths = funcs.map(x -> x.asStringPath());
 			for (path in paths) {
-				memory.write(path, value, value.parameter(1).asStringPath(), null);
+				memory.write(path, value, value.parameter(1).asStringPath(), "");
 			}
 		}
 		if (containsVariable) {
 			var paths = vars.map(x -> x.asStringPath());
 			var evaluated = evaluate(value); // No need to calculate multiple times, so we just evaluate once
 			for (path in paths) {
-				memory.write(path, value, value.type(), null);
+				memory.write(path, value, value.type(), "");
 			}
 		}
         
@@ -305,13 +305,14 @@ class Actions {
     }
 
 	/**
-		Runs the tokens and returns the result
+		Runs the tokens and returns the result.
+		Adds a new stack block.
 		@param body The tokens to run
 		@return The result of the tokens
 	**/
     public static function run(body:Array<InterpTokens>):InterpTokens {
         var returnVal:InterpTokens = null;
-
+		memory.stack.pushBlock(true);
         var i = 0;
         while (i < body.length) {
             var token = body[i];
@@ -358,6 +359,7 @@ class Actions {
             }
             i++;
         }
+		memory.stack.popBlock();
         return returnVal;
     }
 
@@ -468,7 +470,7 @@ class Actions {
                 case PartArray(parts): {
                     if (sign != "" && calculated == null) calculated = Operators.call(sign, calculate(parts)); // RHS operator
                     else if (calculated == null) calculated = calculate(parts);
-                    else if (sign == null) error("Two values cannot come one after the other. At least one of them should be an operator, or, put an operator in between.");
+                    else if (sign == "") error('Two values cannot come one after the other ($calculated, $token). At least one of them should be an operator, or, put an operator in between.');
                     else {
                         calculated = Operators.call(calculated, sign, calculate(parts)); // standard operator
                     }
@@ -481,17 +483,17 @@ class Actions {
                     var val = t != null ? typeCast(calculate(parts), t) : calculate(parts);
                     if (sign != "" && calculated == null) calculated = Operators.call(sign, val); // RHS operator
                     else if (calculated == null) calculated = val;
-                    else if (sign == null) error("Two values cannot come one after the other. At least one of them should be an operator, or, put an operator in between.");
+                    else if (sign == "") error('Two values cannot come one after the other ($calculated, $token). At least one of them should be an operator, or, put an operator in between.');
                     else {
                         calculated = Operators.call(calculated, sign, val); // standard operator
                     }
                 }
                 case _: {
                     if (sign != "" && calculated == null) calculated = Operators.call(sign, token);
+					else if (sign == "" && calculated != null) throw 'Unexpected token: $token After calculating $calculated';
                     else if (calculated == null) calculated = token;
-                    else if (sign == null) error("Two values cannot come one after the other. At least one of them should be an operator, or, put an operator in between.");
+                    else if (sign == "") error('Two values cannot come one after the other ($calculated, $token). At least one of them should be an operator, or, put an operator in between.');
                     else {
-                        trace(calculated, sign, token);
                         calculated = Operators.call(calculated, sign, token);
                     }
                 }

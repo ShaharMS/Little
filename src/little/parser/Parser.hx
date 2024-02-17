@@ -21,28 +21,28 @@ class Parser {
     public static function parse(lexerTokens:Array<LexerTokens>):Array<ParserTokens> {
         var tokens = convert(lexerTokens);
 
-        // trace("before:", tokens);
+        #if parser_debug trace("before:", PrettyPrinter.printParserAst(tokens)); #end
         tokens = mergeBlocks(tokens);
-        // trace("blocks:", tokens);
+        #if parser_debug trace("blocks:", PrettyPrinter.printParserAst(tokens)); #end
         tokens = mergeExpressions(tokens);
-        // trace("expressions:", tokens);
+        #if parser_debug trace("expressions:", PrettyPrinter.printParserAst(tokens)); #end
         tokens = mergePropertyOperations(tokens);
-        // trace("props:", tokens);
+        #if parser_debug trace("props:", PrettyPrinter.printParserAst(tokens)); #end
         tokens = mergeTypeDecls(tokens);
-        // trace("types:", tokens);
+        #if parser_debug trace("types:", PrettyPrinter.printParserAst(tokens)); #end
         tokens = mergeComplexStructures(tokens);
-        // trace("structures:", tokens);
+        #if parser_debug trace("structures:", PrettyPrinter.printParserAst(tokens)); #end
         tokens = mergeCalls(tokens);
-        // trace("calls:", tokens);
+        #if parser_debug trace("calls:", PrettyPrinter.printParserAst(tokens)); #end
         tokens = mergeWrites(tokens);
-        // trace("writes:", tokens);
+        #if parser_debug trace("writes:", PrettyPrinter.printParserAst(tokens)); #end
         tokens = mergeValuesWithTypeDeclarations(tokens);
-        // trace("casts:", tokens);
+        #if parser_debug trace("casts:", PrettyPrinter.printParserAst(tokens)); #end
         for (level in Parser.additionalParsingLevels) {
             tokens = level(tokens);
-            // trace('${level}:', tokens);
+            #if parser_debug trace('${level}:', tokens); #end
         }
-        // trace("macros:", tokens);
+        #if parser_debug trace("macros:", PrettyPrinter.printParserAst(tokens)); #end
 
         return tokens;
     }
@@ -445,7 +445,7 @@ class Parser {
                     var exp:ParserTokens = null;
                     var body:ParserTokens = null;
 
-					var fallback = i;
+					var fallback = i - 1; // Reason for -1 here is because of the lookahead - if this isnt a condition, i-1 is pushed and i is the next token.
 
                     while (i < pre.length) {
                         var lookahead = pre[i];
@@ -648,7 +648,6 @@ class Parser {
 
             i++;
         }
-        // trace(potentialAssignee);
         if (potentialAssignee != null) post.push(potentialAssignee);
         post.shift();
 
