@@ -44,6 +44,8 @@ class Keywords {
     public static var REGISTERED_MODULE_NAME:String = "Registered";
 
     public static var OBJECT_TYPE_PROPERTY_NAME:String = "type";
+	public static var OBJECT_ADDRESS_PROPERTY_NAME:String = "address";
+	public static var OBJECT_DOC_PROPERTY_NAME:String = "documentation";
     public static var TO_STRING_PROPERTY_NAME:String = "toString";
     public static var PRINT_FUNCTION_NAME:String = "print";
     public static var RAISE_ERROR_FUNCTION_NAME:String = "error";
@@ -105,6 +107,8 @@ class Keywords {
         MAIN_MODULE_NAME: "Main",
         REGISTERED_MODULE_NAME: "Registered",
         OBJECT_TYPE_PROPERTY_NAME: "type",
+		OBJECT_ADDRESS_PROPERTY_NAME: "address",
+		OBJECT_DOC_PROPERTY_NAME: "documentation",
         TO_STRING_PROPERTY_NAME: "toString",
         PRINT_FUNCTION_NAME: "print",
         RAISE_ERROR_FUNCTION_NAME: "error",
@@ -150,6 +154,8 @@ class Keywords {
         MAIN_MODULE_NAME = set.MAIN_MODULE_NAME;
         REGISTERED_MODULE_NAME = set.REGISTERED_MODULE_NAME;
         OBJECT_TYPE_PROPERTY_NAME = set.OBJECT_TYPE_PROPERTY_NAME;
+		OBJECT_ADDRESS_PROPERTY_NAME = set.OBJECT_ADDRESS_PROPERTY_NAME;
+		OBJECT_DOC_PROPERTY_NAME = set.OBJECT_DOC_PROPERTY_NAME;
         TO_STRING_PROPERTY_NAME = set.TO_STRING_PROPERTY_NAME;
         PRINT_FUNCTION_NAME = set.PRINT_FUNCTION_NAME;
         RAISE_ERROR_FUNCTION_NAME = set.RAISE_ERROR_FUNCTION_NAME;

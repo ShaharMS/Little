@@ -127,6 +127,7 @@ class Memory {
 				case TrueValue | FalseValue: Little.keywords.TYPE_BOOLEAN;
 				case NullValue: Little.keywords.TYPE_DYNAMIC;
 				case FunctionCode(_, _): Little.keywords.TYPE_FUNCTION;
+				case ConditionCode(_): Little.keywords.TYPE_CONDITION;
 				case _: throw "How did we get here? 3";
 			}
 			return {
@@ -146,7 +147,7 @@ class Memory {
 			case (_ == Little.keywords.TYPE_STRING => true): Characters(heap.readString(data.address));
 			case (_ == Little.keywords.TYPE_INT => true): Number(heap.readInt32(data.address));
 			case (_ == Little.keywords.TYPE_FLOAT => true): Decimal(heap.readDouble(data.address));
-			case (_ == Little.keywords.TYPE_BOOLEAN => true): heap.readByte(data.address) == 1 ? TrueValue : FalseValue;
+			case (_ == Little.keywords.TYPE_BOOLEAN => true): constants.getFromPointer(data.address);
 			case (_ == Little.keywords.TYPE_FUNCTION => true): heap.readCodeBlock(data.address);
 			case (_ == Little.keywords.TYPE_CONDITION => true): heap.readCondition(data.address);
             // Because of the way we store lone nulls (as type dynamic), 
@@ -213,7 +214,7 @@ class Memory {
 						case (_ == Little.keywords.TYPE_STRING => true): current = Characters(heap.readString(keyData.value));
 						case (_ == Little.keywords.TYPE_INT => true): current = Number(heap.readInt32(keyData.value));
 						case (_ == Little.keywords.TYPE_FLOAT => true): current = Decimal(heap.readDouble(keyData.value));
-						case (_ == Little.keywords.TYPE_BOOLEAN => true): current = heap.readByte(keyData.value) == 1 ? TrueValue : FalseValue;
+						case (_ == Little.keywords.TYPE_BOOLEAN => true): current = constants.getFromPointer(data.address);
 						case (_ == Little.keywords.TYPE_FUNCTION => true): current = heap.readCodeBlock(keyData.value);
 						case (_ == Little.keywords.TYPE_CONDITION => true): current = heap.readCondition(keyData.value);
 						case (keyData.value == constants.NULL => true): current = NullValue;

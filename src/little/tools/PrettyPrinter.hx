@@ -215,8 +215,8 @@ class PrettyPrinter {
 				return title;
 			case ConditionCall(name, exp, body):
 				var title = '${prefixFA(prefix)}$t$d Condition Call\n';
-				title += getTree_INTERP(name, pushIndex(prefix, level), level + 1, false);
-				title += getTree_INTERP(exp, prefix.copy(), level + 1, false);
+				title += getTree_INTERP(name, prefix.copy(), level + 1, false);
+				title += getTree_INTERP(exp, pushIndex(prefix, level), level + 1, false);
 				title += getTree_INTERP(body, prefix.copy(), level + 1, true);
 				return title;
 			case FunctionCode(requiredParams, body):
@@ -359,11 +359,11 @@ class PrettyPrinter {
 			switch token {
 				case SetLine(line): s += '\n$indent';
 				case SplitLine: s += ", ";
-				case VariableDeclaration(name, type, doc): s += '$VARIABLE_DECLARATION $name ${if (type != null) '$TYPE_DECL_OR_CAST ${stringifyInterpreter(type)}' else ''}';
+				case VariableDeclaration(name, type, doc): s += '$VARIABLE_DECLARATION ${stringifyInterpreter(name)} ${if (type != null) '$TYPE_DECL_OR_CAST ${stringifyInterpreter(type)}' else ''}';
 				case FunctionDeclaration(name, params, type, doc): s += '$FUNCTION_DECLARATION ${stringifyInterpreter(name)}(${stringifyInterpreter(params)}) ${if (type != null) '$TYPE_DECL_OR_CAST ${stringifyInterpreter(type)}' else ''}';
 				case ConditionDeclaration(name, ct, doc): throw new NotImplementedException();
 				case ClassDeclaration(name, doc): throw new NotImplementedException();
-				case Write(assignees, value): s += [assignees.concat([value]).map(t -> stringifyInterpreter(t)).join(" = ")];
+				case Write(assignees, value): s += assignees.concat([value]).map(t -> stringifyInterpreter(t)).join(" = ");
 				case Identifier(word): s += word;
 				case TypeCast(value, type): s += '${stringifyInterpreter(value)} $TYPE_DECL_OR_CAST ${stringifyInterpreter(type)}';
 				case FunctionCall(name, params): s += '${stringifyInterpreter(name)}(${stringifyInterpreter(params)})';
@@ -376,7 +376,7 @@ class PrettyPrinter {
 					indent = indent.subtract("	");
 				case PartArray(parts): s += stringifyInterpreter(parts);
 				case PropertyAccess(name, property): s += '${stringifyInterpreter(name)}$PROPERTY_ACCESS_SIGN${stringifyInterpreter(property)}';
-				case Sign(sign): s += " " + sign + " ";
+				case Sign(sign): s += sign;
 				case Number(num): s += num;
 				case Decimal(num): s += num;
 				case Characters(string): s += '"' + string + '"';
@@ -387,9 +387,10 @@ class PrettyPrinter {
 				case FalseValue: s += FALSE_VALUE;
 				case _: throw 'Stringifying token $token does not make sense, as it is represented by other tokens on parse time, and thus cannot appear in a non-manipulated InterpTokens AST';
 			}
+			s += " ";
 		}
 
-		return s;
+		return s.replaceLast(" ", "");
 	}
 
 	public static function prettyPrintOperatorPriority(priority:Map<Int, Array<{sign:String, side:OperatorType}>>) {

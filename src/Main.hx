@@ -105,12 +105,12 @@ class Main {
 					if (input == "run!") {
 						try {
 							Little.run(code, true);
-							trace(PrettyPrinter.printParserAst(Parser.parse(Lexer.lex(code))));
+							trace(PrettyPrinter.printInterpreterAst(Interpreter.convert(...Parser.parse(Lexer.lex(code)))));
 							trace(Runtime.stdout.output);
 						} catch (e) {
 							trace(Lexer.lex(code));
 							trace(Parser.parse(Lexer.lex(code)));
-							trace(PrettyPrinter.printParserAst(Parser.parse(Lexer.lex(code))));
+							trace(PrettyPrinter.printInterpreterAst(Interpreter.convert(...Parser.parse(Lexer.lex(code)))));
 							trace(e.details());
 							trace(Runtime.stdout.output);
 						}
@@ -142,21 +142,22 @@ class Main {
 						break;
 					}
 					try {
-						Sys.println(PrettyPrinter.printParserAst(Parser.parse(Lexer.lex(input))));
+						Sys.println(PrettyPrinter.printInterpreterAst(Interpreter.convert(...Parser.parse(Lexer.lex(input)))));
 					}
 				}
 			} else {
 				try {
 					Little.run(input, true);
-					trace(PrettyPrinter.printParserAst(Parser.parse(Lexer.lex(input))));
+					trace(PrettyPrinter.printInterpreterAst(Interpreter.convert(...Parser.parse(Lexer.lex(input)))));
 					trace(Runtime.stdout.output);
 				} catch (e) {
 					trace(Lexer.lex(input));
 					trace(Parser.parse(Lexer.lex(input)));
-					trace(PrettyPrinter.printParserAst(Parser.parse(Lexer.lex(input))));
+					trace(PrettyPrinter.printInterpreterAst(Interpreter.convert(...Parser.parse(Lexer.lex(input)))));
 					trace(e.details());
 					trace(Runtime.stdout.output);
 				}
+				Little.reset();
 			}
 		}
 

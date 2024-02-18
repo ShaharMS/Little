@@ -407,6 +407,16 @@ class Heap {
 	}
 
 
+    /**
+		Stores an object using 3 parts:
+		
+		- POINTER_SIZE + 4 Bytes directly at the site of storage, including:
+		  - Byte 0 to 4: The length of the object's hashtable
+		  - Byte 4 to POINTER_SIZE + 4: A pointer to the object's hashtable
+		- The object's hashtable, at another location. The hashtable can be moved around, and when this
+		  is done, the data at the object's address changes.
+		
+    **/
     public function storeObject(object:InterpTokens):MemoryPointer {
 		if (object.is(NULL_VALUE)) return parent.constants.NULL;
         if (!object.is(OBJECT)) throw new ArgumentException("object", '${object} is not a dynamic object');
@@ -460,7 +470,7 @@ class Heap {
                 var bytesLength = ByteArray.from(bytes.length);
                 var bytesPointer = storeBytes(bytes.length, bytes);
 
-                return storeBytes(POINTER_SIZE + 4 , ByteArray.from(bytes.length).concat(ByteArray.from(bytesPointer.rawLocation)));
+                return storeBytes(4 + POINTER_SIZE , ByteArray.from(bytes.length).concat(ByteArray.from(bytesPointer.rawLocation)));
             }
 			case _:
                 throw new ArgumentException("object", '${object} must be an `Interpreter.Object`');

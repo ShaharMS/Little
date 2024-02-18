@@ -19,10 +19,6 @@ class Runtime {
     public static var line(default, null):Int = 0;
 
     /**
-    	The program's memory manager.
-    **/
-    public static var memory:Memory = Little.memory;
-    /**
         The next token to be interpreted
     **/
     public static var currentToken(default, null):InterpTokens = null;
@@ -161,6 +157,25 @@ class Runtime {
         stdout.output += '\n${if (Little.debug) (INTERPRETER : String).toUpperCase() + ": " else ""}Module $currentModule, Line $line:  $item';
 		stdout.stdoutTokens.push(Characters(item));
 	}
+
+	public static function reset() {
+        line = 0;
+		currentToken = null;
+		currentModule = null;
+		previousToken = null;
+		errorThrown = false;
+		errorToken = null;
+		exitCode = 0;
+		stdout.reset();
+        callStack = [];
+
+		onLineChanged = [];
+		onTokenInterpreted = [];
+		onErrorThrown = [];
+		onWriteValue = [];
+		onLineSplit = [];
+	}
+
 
     public static function broadcast(item:String) {
         stdout.output += '\n${if (Little.debug) "BROADCAST: " else ""}${item}';

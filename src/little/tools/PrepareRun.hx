@@ -1,5 +1,7 @@
 package little.tools;
 
+import little.interpreter.memory.MemoryPointer;
+import little.interpreter.memory.MemoryPointer.POINTER_SIZE;
 import little.interpreter.Operators;
 import haxe.Json;
 import haxe.xml.Access;
@@ -47,6 +49,11 @@ class PrepareRun {
 		Little.plugin.registerInstanceVariable(OBJECT_TYPE_PROPERTY_NAME, TYPE_DYNAMIC, 'The name of this value\'s type, as a $TYPE_STRING', 
 			(value, address) -> {
 				return Characters(value.type());
+			}
+		);
+		Little.plugin.registerInstanceVariable(OBJECT_ADDRESS_PROPERTY_NAME, TYPE_DYNAMIC, 'The address of this value',
+			(value:InterpTokens, address:MemoryPointer) -> {
+				return POINTER_SIZE == 4 ? Number(address.rawLocation) : Decimal(address.rawLocation);
 			}
 		);
 	}
@@ -314,7 +321,6 @@ class PrepareRun {
 		Little.plugin.registerCondition("while", "A loop that executes code until the condition is not met", (params, body) -> {
 			var val = NullValue;
 			var safetyNet = 0;
-
 			while (safetyNet < 500000) {
 				var condition:Dynamic = Conversion.toHaxeValue(Actions.calculate(params));
 				if (condition is Bool && condition) {
@@ -342,7 +348,7 @@ class PrepareRun {
 			if (cond is Bool && cond) {
 				val = Actions.run(body);
 			}
-			else if (!cond is Bool) {
+			else if (!(cond is Bool)) {
 				Runtime.throwError(ErrorMessage('If condition must be a ${Little.keywords.TYPE_BOOLEAN}'), INTERPRETER);
 			}
 
@@ -353,7 +359,6 @@ class PrepareRun {
 			var val = NullValue;
 
 			var fp = [];
-
 			// Incase one does `from (4 + 2)` and it accidentally parses a function
 			for (p in params) {
 				switch p {
@@ -383,9 +388,9 @@ class PrepareRun {
 				Runtime.throwError(ErrorMessage('`for` loop must start with a variable to count on (expected definition/block, found: `${PrettyPrinter.stringifyInterpreter(params[0])}`)'));
 				return val;
 			}
-			var handle = Little.memory.read(...params[0].parameter(0).asStringPath());
-			if (![Little.keywords.TYPE_INT, Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_DYNAMIC].contains(handle.objectTypeName)) {
-				Runtime.throwError(ErrorMessage('`for` loop\'s variable must be of type ${Little.keywords.TYPE_INT}, ${Little.keywords.TYPE_FLOAT} or ${Little.keywords.TYPE_DYNAMIC} (given: ${handle.objectTypeName})'));
+			var typeName = (params[0].parameter(1) : InterpTokens).asJoinedStringPath();
+			if (![Little.keywords.TYPE_INT, Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_DYNAMIC].contains(typeName)) {
+				Runtime.throwError(ErrorMessage('`for` loop\'s variable must be of type ${Little.keywords.TYPE_INT}, ${Little.keywords.TYPE_FLOAT} or ${Little.keywords.TYPE_DYNAMIC} (given: ${typeName})'));
 			}
 
 			var from:Null<Float> = null, to:Null<Float> = null, jump:Float = 1;
@@ -427,6 +432,8 @@ class PrepareRun {
 								case 2: Runtime.throwError(ErrorMessage('Cannot repeat `$FOR_LOOP_JUMP` tag twice in `for` loop.'));
 							}
 						}
+						currentExpression = [];
+						currentlySet = 2;
 					}
 					case _: currentExpression.push(params[i]);
 				}

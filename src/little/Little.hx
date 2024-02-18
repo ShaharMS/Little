@@ -98,11 +98,7 @@ class Little {
     }
 
 	public static function reset() {
-		Runtime.errorThrown = false;
-        Runtime.line = 0;
-        Runtime.callStack = [];
-        Runtime.stdout.reset();
-        Runtime.currentModule = Keywords.MAIN_MODULE_NAME;
+        runtime.reset();
 		Operators.lhsOnly.clear();
 		Operators.rhsOnly.clear();
 		Operators.standard.clear();

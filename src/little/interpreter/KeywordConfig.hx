@@ -43,6 +43,8 @@ class KeywordConfig {
     @:optional public var REGISTERED_MODULE_NAME:String = "Registered";
 
     @:optional public var OBJECT_TYPE_PROPERTY_NAME:String = "type";
+	@:optional public var OBJECT_ADDRESS_PROPERTY_NAME:String = "address";
+	@:optional public var OBJECT_DOC_PROPERTY_NAME:String = "documentation";
     @:optional public var TO_STRING_PROPERTY_NAME:String = "toString";
     @:optional public var PRINT_FUNCTION_NAME:String = "print";
     @:optional public var RAISE_ERROR_FUNCTION_NAME:String = "error";

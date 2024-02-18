@@ -16,7 +16,7 @@ using little.parser.Parser;
 @:access(little.interpreter.Runtime)
 class Parser {
 
-    public static var additionalParsingLevels:Array<Array<ParserTokens> -> Array<ParserTokens>> = [Parser.mergeNonBlockBodies, Parser.mergeElses];
+    public static var additionalParsingLevels:Array<Array<ParserTokens> -> Array<ParserTokens>> = [/*Parser.mergeNonBlockBodies ,*/ Parser.mergeElses];
 
     public static function parse(lexerTokens:Array<LexerTokens>):Array<ParserTokens> {
         var tokens = convert(lexerTokens);
@@ -452,6 +452,7 @@ class Parser {
                         switch lookahead {
                             case SetLine(_): {}
                             case SplitLine: { // Encountering a line split in any place breaks the sequence (if (), {}, if, () {})
+							if (exp != null && body != null) break;
 								i = fallback;
 								break;
 							}

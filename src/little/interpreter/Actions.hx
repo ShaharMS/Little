@@ -1,5 +1,6 @@
 package little.interpreter;
 
+import haxe.extern.AsVar;
 import little.lexer.Lexer;
 import haxe.exceptions.NotImplementedException;
 import little.interpreter.Tokens.InterpTokens;
@@ -173,7 +174,7 @@ class Actions {
 				var conditionRunner = (caller.parameter(0) : Array<InterpTokens>);
 				var params = [
 					Write([VariableDeclaration(Identifier(Little.keywords.CONDITION_PATTERN_PARAMETER_NAME), Identifier(Little.keywords.TYPE_STRING), null)], Characters(patternString)),
-					Write([VariableDeclaration(Identifier(Little.keywords.CONDITION_BODY_PARAMETER_NAME), Identifier(Little.keywords.TYPE_STRING), null)], Characters(bodyString))
+					Write([VariableDeclaration(Identifier(Little.keywords.CONDITION_BODY_PARAMETER_NAME), Identifier(Little.keywords.TYPE_STRING), null)], Characters(bodyString)),
 				];
 				return run(params.concat(conditionRunner));
 			}
@@ -192,6 +193,7 @@ class Actions {
     	@return The value given, evaluated using `Actions.evaluate(value)`
     **/
     public static function write(assignees:Array<InterpTokens>, value:InterpTokens):InterpTokens {
+
 		var vars = [], funcs = [];
 		var containsFunction = false;
 		var containsVariable = false;
@@ -200,9 +202,10 @@ class Actions {
 				case VariableDeclaration(name, type, doc): declareVariable(name, type, doc); vars.push(name); containsVariable = true;
 				case FunctionDeclaration(name, params, type, doc): declareFunction(name, params, doc); funcs.push(name); containsFunction = true; //TODO: find a way to store function type
 				case ConditionDeclaration(name, ct, doc): // TODO: Condition declaration is not implemented yet.
-				case _: vars.push(assignee);
+				case _: vars.push(assignee); containsVariable = true;
 			}
 		}
+
 		if (containsFunction) {
 			var paths = funcs.map(x -> x.asStringPath());
 			for (path in paths) {
@@ -210,17 +213,18 @@ class Actions {
 				memory.write(path, FunctionCode(func.parameter(0), value), Little.keywords.TYPE_FUNCTION, "");
 			}
 		}
+
 		if (containsVariable) {
 			var paths = vars.map(x -> x.asStringPath());
 			var evaluated = evaluate(value); // No need to calculate multiple times, so we just evaluate once
 			for (path in paths) {
-				memory.write(path, value, value.type(), "");
+				memory.write(path, evaluated, evaluated.type(), "");
 			}
 		}
         
 		// Listeners
 
-        for (listener in Runtime.onWriteValue) {
+        for (listener in Runtime.onWriteValue.copy()) {
             listener(vars.map(x -> x.extractIdentifier()).concat(funcs.map(x -> x.extractIdentifier())));
         }
 
@@ -319,6 +323,7 @@ class Actions {
             var token = body[i];
             //trace('Running: $token. $i');
             if (token == null) {i++; continue;}
+			Little.runtime.currentToken = token;
             switch token {
                 case SetLine(line): {
                     setLine(line);
@@ -358,6 +363,7 @@ class Actions {
                 }
                 case _: returnVal = evaluate(token);
             }
+			Little.runtime.previousToken = token;
             i++;
         }
 		memory.stack.popBlock();
@@ -387,8 +393,7 @@ class Actions {
                 return NullValue;
             }
             case Expression(parts, t): {
-                if (t != null) return typeCast(calculate(parts), t);
-                return calculate(parts);
+                return typeCast(calculate(parts), t);
             }
             case Block(body, t): {
 				var currentLine = Runtime.line;

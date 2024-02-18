@@ -242,7 +242,6 @@ class Plugins {
 		}
 	}
 
-
     static function combosHas(combos:Array<{lhs:String, rhs:String}>, lhs:String, rhs:String) {
         for (c in combos) if (c.rhs == rhs && c.lhs == lhs) return true;
         return false;
