@@ -16,7 +16,7 @@ using little.parser.Parser;
 @:access(little.interpreter.Runtime)
 class Parser {
 
-    public static var additionalParsingLevels:Array<Array<ParserTokens> -> Array<ParserTokens>> = [/*Parser.mergeNonBlockBodies ,*/ Parser.mergeElses];
+    public static var additionalParsingLevels:Array<Array<ParserTokens> -> Array<ParserTokens>> = [Parser.mergeElses];
 
     public static function parse(lexerTokens:Array<LexerTokens>):Array<ParserTokens> {
         var tokens = convert(lexerTokens);
@@ -38,6 +38,8 @@ class Parser {
         #if parser_debug trace("writes:", PrettyPrinter.printParserAst(tokens)); #end
         tokens = mergeValuesWithTypeDeclarations(tokens);
         #if parser_debug trace("casts:", PrettyPrinter.printParserAst(tokens)); #end
+		tokens = mergeNonBlockBodies(tokens);
+		#if parser_debug trace("non-block bodies:", PrettyPrinter.printParserAst(tokens)); #end
         for (level in Parser.additionalParsingLevels) {
             tokens = level(tokens);
             #if parser_debug trace('${level}:', tokens); #end
@@ -731,35 +733,23 @@ class Parser {
             switch token {
                 case SetLine(line): {setLine(line); post.push(token);}
                 case SplitLine: {nextPart(); post.push(token);}
-                case Condition(name, exp, Custom("NoBody", [])): {
-                    if (i + 1 >= pre.length) {
-                        Runtime.throwError(ErrorMessage('Condition has no body, body may be cut off by the end of file, block or expression.'), PARSER);
-                        return null;
-                    }
-                    var skip = 2;
-                    function look(i:Int):ParserTokens {
-                        i++;
-                        var lookahead = pre[i];
-                        switch lookahead {
-                            case SplitLine: {
-                                Runtime.throwError(ErrorMessage('Condition has no body, body cut off by a line split, or does not exist'), PARSER);
-                                return null;
-                            }
-                            case SetLine(_): {
-                                Runtime.throwError(ErrorMessage('Condition has no body, body cut off by a new line, or does not exist'), PARSER);
-                                return null;
-                            }
-                            case Condition(name1, exp1, Custom("NoBody", [])): { //allow chaining 
-                                skip++;
-                                return Condition(mergeNonBlockBodies([name])[0], mergeNonBlockBodies([exp])[0], mergeNonBlockBodies([{name = name1; exp = exp1; look(i);}])[0]);
-                            }
-                            case _: return Condition(mergeNonBlockBodies([name])[0], mergeNonBlockBodies([exp])[0], mergeNonBlockBodies([lookahead])[0]);
-                        }
-                    }
-                    post.push(mergeNonBlockBodies([look(i)])[0]);
-                    i += skip;
-                    continue;
-                }
+				case FunctionCall(name, params): {
+					if (i + 1 >= pre.length) {
+						post.push(FunctionCall(mergeNonBlockBodies([name])[0], mergeNonBlockBodies([params])[0]));
+						i++;
+						continue;
+					}
+					var lookahead = pre[i + 1];
+					switch lookahead {
+						case SetLine(_) | SplitLine: {
+							post.push(FunctionCall(mergeNonBlockBodies([name])[0], mergeNonBlockBodies([params])[0]));
+						}
+						case _: {
+							post.push(Condition(mergeNonBlockBodies([name])[0], mergeNonBlockBodies([params])[0], Block(mergeNonBlockBodies([lookahead]), null)));
+							i++; // We consumed the lookahead, so we need to increment to its position, so that the final i++ gets to the next, correct, token.
+						}
+					}
+				}
                 case Block(body, type): post.push(Block(mergeNonBlockBodies(body), mergeNonBlockBodies([type])[0]));
                 case Expression(parts, type): post.push(Expression(mergeNonBlockBodies(parts), mergeNonBlockBodies([type])[0]));
                 case Variable(name, type, doc): post.push(Variable(mergeNonBlockBodies([name])[0], mergeNonBlockBodies([type])[0], mergeNonBlockBodies([doc])[0]));
@@ -767,7 +757,6 @@ class Parser {
                 case Condition(name, exp, body): post.push(Condition(mergeNonBlockBodies([name])[0], mergeNonBlockBodies([exp])[0], mergeNonBlockBodies([body])[0]));
                 case Return(value, type): post.push(Return(mergeNonBlockBodies([value])[0], mergeNonBlockBodies([type])[0]));
                 case PartArray(parts): post.push(PartArray(mergeNonBlockBodies(parts)));
-                case FunctionCall(name, params): post.push(FunctionCall(mergeNonBlockBodies([name])[0], mergeNonBlockBodies([params])[0]));
                 case Write(assignees, value): post.push(Write(mergeNonBlockBodies(assignees), mergeNonBlockBodies([value])[0]));
                 case PropertyAccess(name, property): post.push(PropertyAccess(mergeNonBlockBodies([name])[0], mergeNonBlockBodies([property])[0]));
 				case Custom(name, params): post.push(Custom(name, params.map(x -> mergeNonBlockBodies([x])[0])));

@@ -126,7 +126,7 @@ class UnitTests {
 	}
 
 	public static function test5():UnitTestResult {
-		var code = "define i = 0\nwhile (i <= 5) { print (i); i = i + 1}\nfor (define j from 0 to 10 jump 3) { print(j) }";
+		var code = "define i = 0\nwhile (i <= 5) { print (i); i = i + 1}\nfor (define j from 0 to 10 jump 3) print(j)";
 		Little.run(code);
 		var result = PartArray(Runtime.stdout.stdoutTokens);
 		var exp = PartArray([Number(0), Number(1), Number(2), Number(3), Number(4), Number(5), Number(0), Number(3), Number(6), Number(9)]);
@@ -140,7 +140,7 @@ class UnitTests {
 	}
 
 	public static function test6():UnitTestResult {
-		var code = 'define i = 4, if (i != 0) print(true)\nafter (i == 6) { print("i is 6") }, whenever (i == i) { print("i has changed") }\ni = i + 1, i = i + 1';
+		var code = 'define i = 4, if (i != 0) print(true)\nafter (i == 6) print("i is 6"), whenever (i == i) print("i has changed")\ni = i + 1, i = i + 1';
 		Little.run(code);
 		var result = PartArray(Runtime.stdout.stdoutTokens);
 		var exp = PartArray([TrueValue, Characters("i has changed"), Characters("i is 6"), Characters("i has changed")]);
