@@ -75,7 +75,6 @@ class PrettyPrinter {
             case Characters(string): return '${prefixFA(prefix)}$t$d "$string"\n';
 			case ErrorMessage(name): return '${prefixFA(prefix)}$t$d Error: $name\n';
 			case Documentation(doc): return '${prefixFA(prefix)}$t$d Documentation: ${doc.replace("\n", "\n" + prefixFA(prefix) + '│                  ')}\n';
-			case NoBody:  return '${prefixFA(prefix)}$t$d <no body>\n';
             case Decimal(num): return '${prefixFA(prefix)}$t$d $num\n';
             case Number(num): return '${prefixFA(prefix)}$t$d $num\n';
             case FalseValue: return '${prefixFA(prefix)}$t$d ${Keywords.FALSE_VALUE}\n';
@@ -133,6 +132,14 @@ class PrettyPrinter {
 					strParts.push(getTree_PARSER(parts[parts.length - 1], prefix.copy(), level + 1, true));
 					return strParts.join("");
 				}
+			case Custom(name, parts): {
+				if (parts.length == 0) return '${prefixFA(prefix)}$t$d $name\n';
+				var strParts = ['${prefixFA(prefix)}$t$d $name\n'].concat([
+					for (i in 0...parts.length - 1) getTree_PARSER(parts[i], pushIndex(prefix, level), level + 1, false)
+				]);
+				strParts.push(getTree_PARSER(parts[parts.length - 1], prefix.copy(), level + 1, true));
+				return strParts.join("");
+			}
             case Block(body, type): {
                 if (body.length == 0)
                     return '${prefixFA(prefix)}$t$d <empty block>\n';
@@ -344,7 +351,7 @@ class PrettyPrinter {
 				case NullValue: s += NULL_VALUE;
 				case TrueValue: s += TRUE_VALUE;
 				case FalseValue: s += FALSE_VALUE;
-				case NoBody:
+				case Custom(_, _): throw 'Custom tokens cannot be stringified, as they dont represent any output syntax (found $token)';
 			}
 		}
 

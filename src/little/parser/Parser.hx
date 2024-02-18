@@ -125,6 +125,7 @@ class Parser {
                 }
                 case Expression(parts, type): post.push(Expression(mergeBlocks(parts), mergeBlocks([type])[0]));
                 case Block(body, type): post.push(Block(mergeBlocks(body), mergeBlocks([type])[0]));
+				case Custom(name, params): post.push(Custom(name, params.map(x -> mergeBlocks([x])[0])));
                 case _: post.push(token);
             }
             i++;
@@ -174,6 +175,7 @@ class Parser {
 
                 case Expression(parts, type): post.push(Expression(mergeExpressions(parts), mergeExpressions([type])[0]));
                 case Block(body, type): post.push(Block(mergeExpressions(body), mergeExpressions([type])[0]));
+				case Custom(name, params): post.push(Custom(name, params.map(x -> mergeExpressions([x])[0])));
                 case _: post.push(token);
             }
             i++;
@@ -223,6 +225,7 @@ class Parser {
                 }
                 case Block(body, type): post.push(Block(mergePropertyOperations(body), mergePropertyOperations([type])[0]));
                 case Expression(parts, type): post.push(Expression(mergePropertyOperations(parts), mergePropertyOperations([type])[0]));
+				case Custom(name, params): post.push(Custom(name, params.map(x -> mergePropertyOperations([x])[0])));
                 case _: post.push(token);
             }
             i++;
@@ -263,6 +266,7 @@ class Parser {
                 case Expression(parts, type): post.push(Expression(mergeTypeDecls(parts), mergeTypeDecls([type])[0]));
                 case Block(body, type): post.push(Block(mergeTypeDecls(body), mergeTypeDecls([type])[0]));
                 case PropertyAccess(name, property): post.push(PropertyAccess(mergeTypeDecls([name])[0], mergeTypeDecls([property])[0]));
+				case Custom(name, params): post.push(Custom(name, params.map(x -> mergeTypeDecls([x])[0])));
                 case _: post.push(token);
             }
             i++;
@@ -492,6 +496,7 @@ class Parser {
                 case Expression(parts, type): post.push(Expression(mergeComplexStructures(parts), mergeComplexStructures([type])[0]));
                 case Block(body, type): post.push(Block(mergeComplexStructures(body), mergeComplexStructures([type])[0]));
                 case PropertyAccess(name, property): post.push(PropertyAccess(mergeComplexStructures([name])[0], mergeComplexStructures([property])[0]));
+				case Custom(name, params): post.push(Custom(name, params.map(x -> mergeComplexStructures([x])[0])));
                 case _: post.push(token);
             }
             i++;
@@ -538,6 +543,7 @@ class Parser {
                 case Return(value, type): post.push(Return(mergeCalls([value])[0], mergeCalls([type])[0]));
                 case PropertyAccess(name, property): post.push(PropertyAccess(mergeCalls([name])[0], mergeCalls([property])[0]));
                 case PartArray(parts): post.push(PartArray(mergeCalls(parts)));
+				case Custom(name, params): post.push(Custom(name, params.map(x -> mergeCalls([x])[0])));
                 case _: post.push(token);
             }
             i++;
@@ -640,6 +646,10 @@ class Parser {
                     if (potentialAssignee != null) post.push(potentialAssignee);
                     potentialAssignee = PropertyAccess(mergeWrites([name])[0], mergeWrites([property])[0]);
                 }
+				case Custom(name, params): {
+					if (potentialAssignee != null) post.push(potentialAssignee);
+					potentialAssignee = Custom(name, params.map(x -> mergeWrites([x])[0]));
+				}
                 case _: {
                     if (potentialAssignee != null) post.push(potentialAssignee);
                     potentialAssignee = token;
@@ -695,7 +705,8 @@ class Parser {
                 case FunctionCall(name, params): post.unshift(FunctionCall(mergeValuesWithTypeDeclarations([name])[0], mergeValuesWithTypeDeclarations([params])[0]));
                 case Write(assignees, value): post.unshift(Write(mergeValuesWithTypeDeclarations(assignees), mergeValuesWithTypeDeclarations([value])[0]));
                 case PropertyAccess(name, property): post.unshift(PropertyAccess(mergeValuesWithTypeDeclarations([name])[0], mergeValuesWithTypeDeclarations([property])[0]));
-                case _: post.unshift(token);
+				case Custom(name, params): post.unshift(Custom(name, params.map(x -> mergeValuesWithTypeDeclarations([x])[0])));
+				case _: post.unshift(token);
             }
             i--;
         }
@@ -720,7 +731,7 @@ class Parser {
             switch token {
                 case SetLine(line): {setLine(line); post.push(token);}
                 case SplitLine: {nextPart(); post.push(token);}
-                case Condition(name, exp, NoBody): {
+                case Condition(name, exp, Custom("NoBody", [])): {
                     if (i + 1 >= pre.length) {
                         Runtime.throwError(ErrorMessage('Condition has no body, body may be cut off by the end of file, block or expression.'), PARSER);
                         return null;
@@ -738,7 +749,7 @@ class Parser {
                                 Runtime.throwError(ErrorMessage('Condition has no body, body cut off by a new line, or does not exist'), PARSER);
                                 return null;
                             }
-                            case Condition(name1, exp1, NoBody): { //allow chaining 
+                            case Condition(name1, exp1, Custom("NoBody", [])): { //allow chaining 
                                 skip++;
                                 return Condition(mergeNonBlockBodies([name])[0], mergeNonBlockBodies([exp])[0], mergeNonBlockBodies([{name = name1; exp = exp1; look(i);}])[0]);
                             }
@@ -759,6 +770,7 @@ class Parser {
                 case FunctionCall(name, params): post.push(FunctionCall(mergeNonBlockBodies([name])[0], mergeNonBlockBodies([params])[0]));
                 case Write(assignees, value): post.push(Write(mergeNonBlockBodies(assignees), mergeNonBlockBodies([value])[0]));
                 case PropertyAccess(name, property): post.push(PropertyAccess(mergeNonBlockBodies([name])[0], mergeNonBlockBodies([property])[0]));
+				case Custom(name, params): post.push(Custom(name, params.map(x -> mergeNonBlockBodies([x])[0])));
                 case _: post.push(token);
             }
             i++;
@@ -817,6 +829,7 @@ class Parser {
                 case FunctionCall(name, params): post.push(FunctionCall(mergeElses([name])[0], mergeElses([params])[0]));
                 case Write(assignees, value): post.push(Write(mergeElses(assignees), mergeElses([value])[0]));
                 case PropertyAccess(name, property): post.push(PropertyAccess(mergeElses([name])[0], mergeElses([property])[0]));
+				case Custom(name, params): post.push(Custom(name, params.map(x -> mergeElses([x])[0])));
                 case _: post.push(token);
             }
             i++;

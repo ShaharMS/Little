@@ -1,5 +1,6 @@
 package little.parser;
 
+import little.interpreter.Tokens.InterpTokens;
 import little.parser.Parser;
 
 enum ParserTokens {
@@ -44,8 +45,18 @@ enum ParserTokens {
     TrueValue;
     FalseValue;
 
-    /**
-        Used for no-body conditions
-    **/
-    NoBody;
+	/**
+		A custom token, if you want to implement macros with special syntax.
+		You can match against your custom token using this syntax:
+
+			switch token {
+				case Custom("TokenName", [param1, param2]): {
+					// do something
+				}
+				case Custom("IntHaver", [num]) if (num.match(Number(_))):
+				case Custom("SimpleToken", []):
+				case Custom("AnotherToken", enumParameters):
+			}
+	**/
+	Custom(name:String, params:Array<ParserTokens>);
 }

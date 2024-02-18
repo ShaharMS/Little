@@ -47,7 +47,7 @@ class Interpreter {
 				case NullValue: NullValue;
 				case TrueValue: TrueValue;
 				case FalseValue: FalseValue;
-				case NoBody: null;
+				case Custom(name, params): throw 'Custom tokens cannot remain when transitioning from Parser to Interpreter tokens (found $item)';
 			});
 		}
 
