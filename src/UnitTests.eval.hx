@@ -43,7 +43,7 @@ class UnitTests {
 	static var UNDERLINE = "\033[4m";
 
 	public static function run() {
-		var testFunctions = [test1, test2, test3, /*test4,*/ test5, test6, test7, test8];
+		var testFunctions = [test1, test2, test3, /*test4,*/ test5, test6, test7, test8, test9];
 
 		var i = 1;
 		for (func in testFunctions) {
@@ -175,6 +175,19 @@ class UnitTests {
 			success: result.equals(Decimal(3)),
 			returned: result,
 			expected: Decimal(3),
+			code: code
+		}
+	}
+
+	public static function test9():UnitTestResult {
+		var code = 'if (false) print("Wrong") else if (false && true) print("Also Wrong") else { print("Right") }';
+		Little.run(code);
+		var result = Runtime.stdout.stdoutTokens.pop();
+		return {
+			testName: "If-Else",
+			success: result.equals(Characters("Right")),
+			returned: result,
+			expected: Characters("Right"),
 			code: code
 		}
 	}

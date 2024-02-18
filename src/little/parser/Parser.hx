@@ -805,7 +805,8 @@ class Parser {
                             Runtime.throwError(ErrorMessage('`$ELSE` condition has no body, body cut off by a new line, or does not exist'), PARSER);
                             return null;
                         }
-                        case _: post.push(Condition(Identifier("if"), exp, body));
+						case Condition(Identifier("if"), exp2, body): post.push(Condition(Identifier("if"), Expression([exp, Sign("&&"), exp2], null) , !body.is(BLOCK) ? Block([body], null) : body));
+                        case _: post.push(Condition(Identifier("if"), exp, !body.is(BLOCK) ? Block([body], null) : body));
                     }
                 }
                 case Block(body, type): post.push(Block(mergeElses(body), mergeElses([type])[0]));
