@@ -1,8 +1,14 @@
 --class-path src
 --main Main
+-w -WStaticInitOrder -WDeprecated
 --library vision
---js interp.js
-#--interp
+--library no-warnings
+--library hash
+--library hxOrderedMap
+#--js interp.js
+--interp
+#--define memory_tests
 --define unit
+#--define parser_debug
 --debug
 # --dce full

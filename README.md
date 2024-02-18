@@ -1,3 +1,4 @@
+> Notice - the majority of the progress right now is happening on the fix/better_memory branch
 # Little
 
 ### What is it?

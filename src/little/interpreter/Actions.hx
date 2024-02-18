@@ -1,5 +1,9 @@
 package little.interpreter;
 
+import haxe.extern.AsVar;
+import little.lexer.Lexer;
+import haxe.exceptions.NotImplementedException;
+import little.interpreter.Tokens.InterpTokens;
 import little.tools.PrettyPrinter;
 import haxe.macro.Context.Message;
 import haxe.xml.Parser;
@@ -7,32 +11,23 @@ import haxe.xml.Access;
 import little.tools.Layer;
 import little.interpreter.memory.*;
 import little.interpreter.Runtime;
-import little.parser.Tokens.ParserTokens;
 
 using StringTools;
 using little.tools.Extensions;
 using little.tools.TextTools;
 
 @:access(little.interpreter.Runtime)
-@:access(little.interpreter.Interpreter)
 class Actions {
     
-    public static var memory:MemoryTree = Interpreter.memory;
-
-    /**
-    	Switch Current Working Memory
-    **/
-    public static function scwm(memory:MemoryTree) {
-        Actions.memory = memory;
-    }
+	static var memory:Memory = Little.memory;
     
     /**
         Raise an error in the program, with the given message.
         @param message The error message
         @param layer The layer of the error. see `little.tools.Layer`.
-        @return the error token, as ParserTokens.ErrorMessage(msg:String)
+        @return the error token, as InterpTokens.ErrorMessage(msg:String)
     **/
-    public static function error(message:String, layer:Layer = INTERPRETER):ParserTokens {
+    public static function error(message:String, layer:Layer = INTERPRETER):InterpTokens {
         Runtime.throwError(ErrorMessage(message), layer);
         trace(Runtime.stdout.output);
         throw "";
@@ -43,12 +38,20 @@ class Actions {
         Raise a warning in the program, with the given message. A warning never stops execution.
         @param message The warning message
         @param layer The layer of the warning. see `little.tools.Layer`.
-        @return the warning token, as ParserTokens.ErrorMessage(msg:String)
+        @return the warning token, as InterpTokens.ErrorMessage(msg:String)
     **/
-    public static function warn(message:String, layer:Layer = INTERPRETER):ParserTokens {
+    public static function warn(message:String, layer:Layer = INTERPRETER):InterpTokens {
         Runtime.warn(ErrorMessage(message), layer);
         return ErrorMessage(message);
     }
+
+	public static function assert(token:InterpTokens, isType:InterpTokensSimple, ?errorMessage:String = null) {
+		if (!token.is(isType)) {
+			Runtime.throwError(errorMessage != null ? ErrorMessage(errorMessage) : ErrorMessage('Assertion failed, token $token is not of type $isType'), INTERPRETER);
+			return NullValue;
+		}
+		return token;
+	}
 
     /**
         Set the current line of the program
@@ -61,126 +64,123 @@ class Actions {
     }
 
     /**
-        Set the current module
-    **/
-    public static function setModule(name:String) {
-        var o = Runtime.currentModule;
-        Runtime.currentModule = name;
-
-        // Listeners
-    }
-
-    /**
         Split the current line. In other words, create a new line, but keep the old line number.
     **/
     public static function splitLine() {
+        for (listener in Runtime.onLineSplit) listener();
+    }
+
+    /**
+        Declare a new variable. That variable will be added to the current stack block.
+        @param name The name of the variable. Can be any token stringifiyable via `token.extractIdentifier()`.
+        @param type The type of the variable. Can be any token stringifiyable via `token.extractIdentifier()`.
+        @param doc The documentation of the variable. Should be a `InterpTokens.Documentation(doc:String)`
+    **/
+    public static function declareVariable(name:InterpTokens, type:InterpTokens, doc:InterpTokens) {
+		var path = name.asStringPath();
+		memory.write(path, NullValue, type.extractIdentifier(), doc != null ? evaluate(doc).extractIdentifier() : "");
+
         // Listeners
     }
 
     /**
-        Declare a new variable. That variable will be added to the current working memory. Switch the working memory using `scwm`
-        @param name The name of the variable. Can be any token stringifiyable via `token.value()`.
-        @param type The type of the variable. Can be any token stringifiyable via `token.value()`.
-        @param doc The documentation of the variable. Should be a `ParserTokens.Documentation(doc:String)`
+        Declare a new function. That function will be added to the current stack block.
+        @param name The name of the function. Can be any token stringifiyable via `token.extractIdentifier()`.
+        @param params The parameters of the function. Should be a `InterpTokens.PartArray(parts:Array<InterpTokens>)`
+        @param doc The documentation of the function. Should be a `InterpTokens.Documentation(doc:String)`
     **/
-    public static function declareVariable(name:ParserTokens, type:ParserTokens, doc:ParserTokens) {
-        function access(onObject:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
-            switch prop {
-                case PropertyAccess(_, property): {
-                    objName += '${Little.keywords.PROPERTY_ACCESS_SIGN}${prop.value()}';
-                    // trace(object, prop.value(), property);
-                    if (onObject.get(prop.value()) == null) {
-                        // We can already know that object.name.property is null
-                        error('Unable to create `$objName${Little.keywords.PROPERTY_ACCESS_SIGN}${property.identifier()}`: `$objName` Does not contain property `${property.identifier()}`.');
-                        return null;
-                    }
-                    return access(onObject.get(prop.value()), property, objName);
-                }
-                case _: {
-                    if (onObject.get(prop.identifier()) == null) {
-                        onObject.set(prop.identifier(), new MemoryObject(NullValue, type, onObject, doc.value()));
-                    }
-                    return onObject.get(prop.identifier());
-                }
-            }
-        }
-        switch name {
-            case PropertyAccess(name, property): {
-                access(memory.get(name.value()), property, name.value());
-            }
-            case _: {
-                if (memory.exists(name.value())) {
-                    warn('Variable ${name.value()} already exists. New declaration ignored.');
-                } else memory.set(name.value(), new MemoryObject(NullValue, type != null ? evaluate(type) : NullValue, memory.object, doc.value())); 
-            }
-        }
-        
+    public static function declareFunction(name:InterpTokens, params:InterpTokens, doc:InterpTokens) {
+        var path = name.asStringPath();
+
+		var paramMap = new OrderedMap<String, InterpTokens>();
+		// Because values are allowed as well as types, were gonna abuse TypeCasts:
+		var array = (params.parameter(0) : Array<InterpTokens>); 
+		for (entry in array) {
+			if (entry.is(SPLIT_LINE, SET_LINE)) continue;
+			switch entry {
+				case VariableDeclaration(name, null, _): paramMap[name.extractIdentifier()] = TypeCast(NullValue, Identifier(Little.keywords.TYPE_DYNAMIC));
+				case VariableDeclaration(name, type, _): paramMap[name.extractIdentifier()] = TypeCast(NullValue, type);
+				case Write(assignees, value): {
+					switch assignees[0] {
+						case VariableDeclaration(name, null, _): paramMap[name.extractIdentifier()] = TypeCast(value, Identifier(Little.keywords.TYPE_DYNAMIC));
+						case VariableDeclaration(name, type, _): paramMap[name.extractIdentifier()] = TypeCast(value, type);
+						default:
+					}
+				}
+				default:
+			}
+		}
+
+		memory.write(path, FunctionCode(paramMap, Block([], Identifier(Little.keywords.TYPE_DYNAMIC))), Little.keywords.TYPE_FUNCTION, doc != null ? evaluate(doc).extractIdentifier() : "");
+    
         // Listeners
-
-        return read(name);
-    }
-
-    /**
-        Declare a new function. That function will be added to the current working memory. Switch the working memory using `scwm`
-        @param name The name of the function. Can be any token stringifiyable via `token.value()`.
-        @param params The parameters of the function. Should be a `ParserTokens.PartArray(parts:Array<ParserTokens>)`
-        @param type The type of the function. Can be any token stringifiyable via `token.value()`.
-        @param doc The documentation of the function. Should be a `ParserTokens.Documentation(doc:String)`
-    **/
-    public static function declareFunction(name:ParserTokens, params:ParserTokens, type:ParserTokens, doc:ParserTokens) {
-        function access(object:MemoryObject, prop:ParserTokens, objName:String):MemoryObject {
-            switch prop {
-                case PropertyAccess(_, nestedProperty): {
-                    objName += '${Little.keywords.PROPERTY_ACCESS_SIGN}${prop.value()}';
-                    // trace(object, prop.value(), property);
-                    if (object.get(prop.value()) == null) {
-                        // We can already know that object.name.property is null
-                        error('Unable to create `$objName${Little.keywords.PROPERTY_ACCESS_SIGN}${nestedProperty.identifier()}`: `$objName` Does not contain property `${nestedProperty.identifier()}`.');
-                        return null;
-                    }
-                    return access(object.get(prop.value()), nestedProperty, objName);
-                }
-                case _: {
-                    if (object.get(prop.identifier()) == null) {
-                        object.set(prop.identifier(), new MemoryObject(NullValue, null, params.getParameters()[0], type != null ? type : NullValue, object, doc.value()));
-                    }
-                    return object.get(prop.identifier());
-                }
-            }
-        }
-        switch name {
-            case PropertyAccess(name, property): {
-                access(memory.get(name.value()), property, name.value());
-            }
-            case _: {
-                
-                if (memory.exists(name.value())) {
-                    warn('Function ${name.value()} already exists. New declaration ignored.');
-                } else memory.set(name.value(), new MemoryObject(NullValue, null, params.getParameters()[0], type != null ? evaluate(type) : NullValue, memory.object, doc.value())); 
-            }
-        }
-
-        // Listeners
-
-        return read(name);
     }
 
 	/**
 		Calls a condition. The condition's `body` is repeated `0` to `n` times, depending on the condition's `conditionParams`.
-		@param name The name of the condition. Can be any token stringifiyable via `token.value()`.
-		@param conditionParams The parameters of the condition. Should be either a `ParserTokens.PartArray(parts:Array<ParserTokens>)`. **Note** - any `ParserToken` with a single, `Array<ParserToken>` parameter should work too (`Expression`, `Block`)
-		@param body The body of the condition. Should be a `Block(body:Array<ParserTokens>, type:ParserTokens);`
+		@param pattern The pattern of the condition. Should be a `InterpTokens.PartArray(parts:Array<InterpTokens>)`
+		@param body The body of the condition. Should be a `InterpTokens.Block(body:Array<InterpTokens>)`
 	**/
-    public static function condition(name:ParserTokens, conditionParams:ParserTokens, body:ParserTokens):ParserTokens {
-        if (memory.get(name.value()) == null) {
-            return error('No Such Condition:  `${name.value()}`');
-        } 
-        else {
-            var o = memory.get(name.value()).use(PartArray([conditionParams, body]));
-			if (o.equals(NullValue)) return o;
-            if (o.getName() == "ErrorMessage") return error(o.value());
-            return o;
-        }
+    public static function condition(name:InterpTokens, pattern:InterpTokens, body:InterpTokens):InterpTokens {
+        var conditionToken = memory.read(...name.asStringPath());
+		assert(conditionToken.objectValue, CONDITION_CODE, '${name.asStringPath()} is not a condition.');
+
+		var patterns:Map<Array<InterpTokens>, InterpTokens> = conditionToken.objectValue.parameter(0);
+		var givenPattern = pattern.parameter(0);
+		function fit(given:Array<InterpTokens>, pattern:Array<InterpTokens>, currentlyFits:Bool = true):Bool {
+			for (i in 0...given.length) {
+				if (pattern[i] == null) continue;
+				if (given[i].equals(pattern[i])) continue;
+				if (given[i].getName() != pattern[i].getName()) return false;
+				switch given[i] {
+					case SetLine(_) | Number(_) | Decimal(_) | Characters(_) | Documentation(_) | Sign(_) | Identifier(_) | ErrorMessage(_): if (pattern[i].parameter(0) != null) return false; 
+					case VariableDeclaration(_, _, _) | FunctionDeclaration(_, _, _, _) | ClassDeclaration(_, _) | ConditionDeclaration(_, _, _): currentlyFits = currentlyFits && fit(cast given[i].getParameters(), cast pattern[i].getParameters(), currentlyFits);
+					case ConditionCode(_): return false; // Cant be matched with, only valid in the context of a condition definition. Represented by other tokens in other cases
+					case FunctionCode(_, _): return false; // same as above
+					case ConditionCall(_, _, _) | FunctionCall(_, _): currentlyFits = currentlyFits && fit(cast given[i].getParameters(), cast pattern[i].getParameters(), currentlyFits);
+					case FunctionReturn(_, _) | TypeCast(_, _): currentlyFits = currentlyFits && fit(cast given[i].getParameters(), cast pattern[i].getParameters(), currentlyFits);
+					case Write(assignees, value): {
+						var patternAssignees:Array<InterpTokens> = pattern[i].parameter(0);
+						if (patternAssignees != null) currentlyFits = currentlyFits && fit(assignees, patternAssignees, currentlyFits);
+						if (pattern[i].parameter(1) != null) currentlyFits = currentlyFits && fit(cast value.getParameters(), cast pattern[i].parameter(1).getParameters(), currentlyFits);
+					}
+					case Expression(parts, type) | Block(parts, type): {
+						var patternParts:Array<InterpTokens> = pattern[i].parameter(0).copy();
+						if (patternParts != null) currentlyFits = currentlyFits && fit(parts, patternParts, currentlyFits);
+						if (pattern[i].parameter(1) != null) currentlyFits = currentlyFits && fit(cast type.getParameters(), cast pattern[i].parameter(1).getParameters(), currentlyFits);
+					}
+					case PartArray(parts): {
+						var patternParts:Array<InterpTokens> = pattern[i].parameter(0);
+						if (patternParts != null) currentlyFits = currentlyFits && fit(parts, patternParts, currentlyFits);
+					}
+					case PropertyAccess(name, property): currentlyFits = currentlyFits && fit(cast given[i].getParameters(), cast pattern[i].getParameters(), currentlyFits);
+					case Object(toString, props, typeName): return false; // Cant be matched with, only valid in the context of object instantiation. Represented by FunctionCall in most cases.
+					case Class(name, instanceFields, staticFields): return false; // Deprecated. Will be replaced in the future
+					case _: continue;
+				}
+
+				if (!currentlyFits) return false;
+			}
+
+			return currentlyFits;
+		}
+
+		var patternString = PrettyPrinter.stringifyInterpreter(pattern);
+		// We might want to attach stuff to the body, so we need to make it so it doesn't create a new stack scope & strip type info from it
+		var bodyString = PrettyPrinter.stringifyInterpreter(body.parameter(0)); 
+
+		for (pattern => caller in patterns) {
+			if (pattern == null || fit(givenPattern, pattern)) { // As per the docs, a null pattern means any pattern
+				var conditionRunner = (caller.parameter(0) : Array<InterpTokens>);
+				var params = [
+					Write([VariableDeclaration(Identifier(Little.keywords.CONDITION_PATTERN_PARAMETER_NAME), Identifier(Little.keywords.TYPE_STRING), null)], Characters(patternString)),
+					Write([VariableDeclaration(Identifier(Little.keywords.CONDITION_BODY_PARAMETER_NAME), Identifier(Little.keywords.TYPE_STRING), null)], Characters(bodyString)),
+				];
+				return run(params.concat(conditionRunner));
+			}
+		}
+
+		return error('Pattern $patternString is not supported in condition ${name.asStringPath()} (patterns (`*` means any value): \n\t(${[for (pattern in patterns.keys()) pattern].map(x -> PrettyPrinter.stringifyInterpreter(x).replace("null", "*")).join('),\n\t(')})\n)');
 
         // Listeners
 
@@ -188,163 +188,198 @@ class Actions {
 
     /**
 		Assign a value to multiple variables/functions/types.
-    	@param assignees The variables/functions/types to assign to. Should be a `ParserTokens.Variable(name:ParserTokens, type:ParserTokens, doc:ParserTokens)` or `ParserTokens.Function(name:ParserTokens, params:ParserTokens, type:ParserTokens, doc:ParserTokens)`
-    	@param value The value to assign. Can be any token which has a non-void value (not `ParserTokens.SplitLine`, `ParserTokens.SetLine(line:Int)`...)
+    	@param assignees The variables/functions/types to assign to. Should be a `InterpTokens.VariableDeclaration(name:InterpTokens, type:InterpTokens, doc:InterpTokens)` or `ParserTokens.FunctionDeclaration(name:InterpTokens, params:ParserTokens, type:InterpTokens, doc:InterpTokens)`
+    	@param value The value to assign. Can be any token which has a non-void value (not `InterpTokens.SplitLine`, `InterpTokens.SetLine(line:Int)`...)
     	@return The value given, evaluated using `Actions.evaluate(value)`
     **/
-    public static function write(assignees:Array<ParserTokens>, value:ParserTokens):ParserTokens {
-        var v = null;
-        if (assignees.containsAny(x -> x.is(FUNCTION))) v = value;
-        else v = evaluate(value);
-        for (a in assignees) {
-            var assignee = Interpreter.accessObject(a, memory);
-            if (assignee == null) continue;
-            if (assignee.params != null)
-                assignee.value = value;
-            else {
-                if (v.getName() != "ErrorMessage") {
-                    assignee.value = v;
-                }
-            }
+    public static function write(assignees:Array<InterpTokens>, value:InterpTokens):InterpTokens {
+
+		var vars = [], funcs = [];
+		var containsFunction = false;
+		var containsVariable = false;
+		for (assignee in assignees) {
+			switch assignee {
+				case VariableDeclaration(name, type, doc): declareVariable(name, type, doc); vars.push(name); containsVariable = true;
+				case FunctionDeclaration(name, params, type, doc): declareFunction(name, params, doc); funcs.push(name); containsFunction = true; //TODO: find a way to store function type
+				case ConditionDeclaration(name, ct, doc): // TODO: Condition declaration is not implemented yet.
+				case _: vars.push(assignee); containsVariable = true;
+			}
+		}
+
+		if (containsFunction) {
+			var paths = funcs.map(x -> x.asStringPath());
+			for (path in paths) {
+				var func = memory.read(...path).objectValue;
+				memory.write(path, FunctionCode(func.parameter(0), value), Little.keywords.TYPE_FUNCTION, "");
+			}
+		}
+
+		if (containsVariable) {
+			var paths = vars.map(x -> x.asStringPath());
+			var evaluated = evaluate(value); // No need to calculate multiple times, so we just evaluate once
+			for (path in paths) {
+				memory.write(path, evaluated, evaluated.type(), "");
+			}
+		}
+        
+		// Listeners
+
+        for (listener in Runtime.onWriteValue.copy()) {
+            listener(vars.map(x -> x.extractIdentifier()).concat(funcs.map(x -> x.extractIdentifier())));
         }
 
-        // Listeners
-
-        return v;
+        return value;
     }
 
 	/**
 		Calls a function and returns the result using `params`.
 		@param name The name of the function. Can be any token stringifiyable via `token.value()`.
-		@param params The parameters of the function. Should be a `ParserTokens.PartArray(parts:Array<ParserTokens>)`
+		@param params The parameters of the function. Should be a `InterpTokens.PartArray(parts:Array<InterpTokens>)`
 	**/
-    public static function call(name:ParserTokens, params:ParserTokens):ParserTokens {
-        if (memory.get(name.value()) == null) {
-            return error('No Such Function: `${name.value()}`');
-        } 
-        else {
-            var o = memory.get(name.value()).use(params);
-            if (o.getName() == "ErrorMessage") return error(o.value());
-            return o;
+    public static function call(name:InterpTokens, params:InterpTokens):InterpTokens {
+        var functionCode = memory.read(...name.asStringPath()).objectValue;
+
+        var processedParams = [];
+        var current = [];
+        for (p in (params.parameter(0) : Array<InterpTokens>)) {
+            switch p {
+                case SplitLine: {
+                    processedParams.push(calculate(current));
+                    current = [];
+                }
+                case SetLine(l): setLine(l);
+                case _: current.push(p);
+            }
         }
+        if (current.length > 0) processedParams.push(calculate(current));
+
+		switch functionCode {
+			case FunctionCode(requiredParams, body): {
+				var given = processedParams;
+				
+				var attachment = [];
+				for (key => typeCast in requiredParams.keyValueIterator()) {
+					var name = key, value = NullValue, type = Identifier(Little.keywords.TYPE_DYNAMIC);
+					switch typeCast {
+						case TypeCast(NullValue, t): type = t; 
+						case TypeCast(v, _.parameter(0) == Little.keywords.TYPE_DYNAMIC => true): value = v;
+						case TypeCast(v, t): type = t; value = v;
+						case _:
+					}
+                    if (processedParams.length > 0) value = processedParams.shift(); // Todo, handle mid-function optional arguments.
+					attachment.push(Write([VariableDeclaration(Identifier(name), type, null)], value));
+				}
+				return run(attachment.concat(body.parameter(0)));
+			}
+			case _: return null;
+		}
+
     }
 
 	/**
-		Reads the value of a variable/function. When reading a function, the body is returned as a `ParserTokens.Block(body:Array<ParserTokens>, type:ParserTokens)`.
-		@param name The name of the variable/function. Should be one of `ParserTokens.Identifier(name:String)`, `ParserTokens.Read(name:String)` or `ParserTokens.PropertyAccess(name:ParserTokens, property:ParserTokens)`
+		Reads the value of a variable/function. When reading a function, the body is returned as a `InterpTokens.FunctionCode(requiredParams:OrderedMap<String, InterpTokens.Identifier>, body:InterpTokens)`.
+		@param name The name of the variable/function. Should be one of `InterpTokens.Identifier(name:String)` or `InterpTokens.PropertyAccess(name:InterpTokens, property:InterpTokens)`
 		@return The value of the variable/function
 	**/
-    public static function read(name:ParserTokens):ParserTokens {
-		if (name.getName() == "PropertyAccess") {
-			return evaluate(name);
-		}
-        var word = name.identifier();
-        return evaluate(if (memory.get(word) != null) memory.get(word).value else ErrorMessage('No Such Variable: `$word`'));
+    public static function read(name:InterpTokens):InterpTokens {
+		return memory.read(...name.asStringPath()).objectValue;
     }
 
 	/**
 		Casts a value to a type
-		@param value The value to cast. Can be any token which has a non-void value (not `ParserTokens.SplitLine`, `ParserTokens.SetLine(line:Int)`...)
-		@param type The type to cast to. Can be any token which resolves to `ParserTokens.Module(name:String)`
+		@param value The value to cast. Can be any token which has a non-void value (not `InterpTokens.SplitLine`, `InterpTokens.SetLine(line:Int)`...)
+		@param type The type to cast to. Can be any token which resolves to a correct string path.
 		@return The value given, casted to the type.
 	**/
-    public static function type(value:ParserTokens, type:ParserTokens):ParserTokens {
-        var val = evaluate(value);
-        var valT = Interpreter.getValueType(val);
-        var t = evaluate(type);
+    public static function typeCast(value:InterpTokens, type:InterpTokens):InterpTokens {
+		if (value.is(NUMBER) && type.parameter(0) == Little.keywords.TYPE_FLOAT) {
+			return Decimal(value.parameter(0));
+		}
+		if (value.is(DECIMAL) && type.parameter(0) == Little.keywords.TYPE_INT) {
+			return Number(Std.int(value.parameter(0)));
+		}
+		if (value.is(NUMBER, DECIMAL) && type.parameter(0) == Little.keywords.TYPE_STRING) {
+			return Characters(Std.string(value.parameter(0)));
+		}
+		if (value.is(TRUE_VALUE, FALSE_VALUE, NULL_VALUE) && type.parameter(0) == Little.keywords.TYPE_STRING) {
+			return Characters(value.is(TRUE_VALUE) ? Little.keywords.TRUE_VALUE : value.is(FALSE_VALUE) ? Little.keywords.FALSE_VALUE : Little.keywords.NULL_VALUE);
+		}
 
-        if (!t.is(MODULE) || !valT.is(MODULE)) {
-            trace(val, valT, t);
-        }
-        if (t.equals(valT)) {
-            return val;
-        } else {
-            var castFunc = Interpreter.accessObject(value).get(Little.keywords.TYPE_CAST_FUNCTION_PREFIX + t.value());
-            if (castFunc == null) {
-                warn('Mismatch at type declaration: the value $value has been declared as being of type $t, while its type is $valT. This might cause issues.', INTERPRETER_VALUE_EVALUATOR);
-                return val;
-            }
-            return castFunc.use(PartArray([]));
-        }
+        return value; // TODO, needs to be done with types in memory management
+		
     }
 
 	/**
-		Runs the tokens and returns the result
+		Runs the tokens and returns the result.
+		Adds a new stack block.
 		@param body The tokens to run
 		@return The result of the tokens
 	**/
-    public static function run(body:Array<ParserTokens>):ParserTokens {
-        var returnVal:ParserTokens = null;
-
+    public static function run(body:Array<InterpTokens>):InterpTokens {
+        var returnVal:InterpTokens = null;
+		memory.stack.pushBlock(true);
         var i = 0;
         while (i < body.length) {
             var token = body[i];
+            //trace('Running: $token. $i');
             if (token == null) {i++; continue;}
+			Little.runtime.currentToken = token;
             switch token {
                 case SetLine(line): {
                     setLine(line);
                 }
-                case Module(name): {
-                    setModule(name);
-                }
                 case SplitLine: splitLine();
-                case Variable(name, type, doc): {
-                    declareVariable(name, type, doc);
+                case VariableDeclaration(name, type, doc): {
+                    declareVariable(name.is(BLOCK) ? evaluate(name) : name, type.is(BLOCK) ? evaluate(type) : type, doc != null ? evaluate(doc) : Characters(""));
                     returnVal = NullValue;
                 }
-                case Function(name, params, type, doc): {
-                    declareFunction(name, params, type, doc);
+                case FunctionDeclaration(name, params, type, doc): {
+					declareFunction(name.is(BLOCK) ? evaluate(name) : name, params, doc != null ? evaluate(doc) : Characters("")); // TODO: type is not used
                     returnVal = NullValue;
                 }
-                case Condition(name, exp, body): {
+                case ConditionCall(name, exp, body): {
                     returnVal = condition(name, exp, body);
                 }
                 case Write(assignees, value): {
                     returnVal = write(assignees, value);
                 }
                 case FunctionCall(name, params): {
-					var currentLine = Runtime.line;
                     returnVal = call(name, params);
-					setLine(currentLine);
                 }
-                case Return(value, type): {
-                    return evaluate(value);
+                case FunctionReturn(value, type): {
+                    return evaluate(value); // TODO
                 }
                 case Block(body, type): {
-					var currentLine = Runtime.line;
                     returnVal = run(body);
-					setLine(currentLine);
                 }
                 case PropertyAccess(name, property): {
                     returnVal = evaluate(token);
                 }
-                case Read(name): {
-                    returnVal =  read(name);
+                case Identifier(name): {
+                    returnVal =  read(token);
+                }
+                case HaxeExtern(func): {
+                    returnVal = evaluate(func());
                 }
                 case _: returnVal = evaluate(token);
             }
+			Little.runtime.previousToken = token;
             i++;
         }
+		memory.stack.popBlock();
         return returnVal;
     }
 
     /**
-    	A combination of `Actions.run` and `Actions.calculate`, which operates on a single `ParserTokens` token
+    	A combination of `Actions.run` and `Actions.calculate`, which operates on a single `InterpTokens` token.
     	@param exp the token to evaluate
     	@param dontThrow if `true`, `Runtime.throwError` is not called when an error occurs
     	@return the result of the evaluation
     **/
-    public static function evaluate(exp:ParserTokens, ?dontThrow:Bool = false):ParserTokens {
-
-        if (memory == null) memory = Interpreter.memory; // If no memory map is given, use the base one.
-
-        if (exp == null) {
-            // trace("null token");
-            return NullValue;
-        }
+    public static function evaluate(exp:InterpTokens, ?dontThrow:Bool = false):InterpTokens {
 
         switch exp {
-            case Number(_) | Decimal(_) | Characters(_) | TrueValue | FalseValue | NullValue | Sign(_) | Module(_): return exp;
+            case Number(_) | Decimal(_) | Characters(_) | TrueValue | FalseValue | NullValue | Sign(_): return exp;
             case ErrorMessage(msg): {
                 if (!dontThrow) Runtime.throwError(exp, INTERPRETER_VALUE_EVALUATOR);
                 return exp;
@@ -358,15 +393,14 @@ class Actions {
                 return NullValue;
             }
             case Expression(parts, t): {
-                if (t != null) return type(calculate(parts), t);
-                return calculate(parts);
+                return typeCast(calculate(parts), t);
             }
             case Block(body, t): {
 				var currentLine = Runtime.line;
                 var returnVal = run(body);
 				setLine(currentLine);
                 if (t == null) return evaluate(returnVal, dontThrow);
-				return evaluate(type(returnVal, t), dontThrow);
+				return evaluate(typeCast(returnVal, t), dontThrow);
             }
             case FunctionCall(name, params): {
 				var currentLine = Runtime.line;
@@ -377,23 +411,28 @@ class Actions {
                 return PartArray([for (p in parts) evaluate(p, dontThrow)]);
             }
             case Identifier(word): {
-                return evaluate(if (memory.get(word) != null) memory.get(word).value else ErrorMessage('No Such Variable: `$word`'), dontThrow);
+                return read(exp);
             }
-            case TypeDeclaration(value, t): return type(value, t);
+            case TypeCast(value, t): return typeCast(value, t);
             case Write(assignees, value): return write(assignees, value);
-            case Read(name): return read(name);
-            case Condition(name, exp, body): return condition(name, exp, body);
-            case Variable(name, type, doc): return declareVariable(name, type, doc);
-            case Function(name, params, type, doc): return declareFunction(name, params, type, doc);
-            case External(_): return Characters("External Function/Variable");
+            case ConditionCall(name, exp, body): return condition(name, exp, body);
+            case VariableDeclaration(name, type, doc): {
+				declareVariable(name.is(BLOCK) ? evaluate(name) : name, type.is(BLOCK) ? evaluate(type) : type, evaluate(doc));
+				return NullValue;
+			}
+            case FunctionDeclaration(name, params, type, doc): {
+				declareFunction(name.is(BLOCK) ? evaluate(name) : name, params, evaluate(doc)); // TODO: type is not stored.
+				return NullValue;
+			}
             case PropertyAccess(_, _): {
-                var o = Interpreter.accessObject(exp, memory);
-                if (o != null) return o.value;
-                return NullValue;
+                return read(exp);
             }
-            case Return(value, t): return evaluate(type(value, t));
+            case FunctionReturn(value, t): return evaluate(typeCast(value, t));
+            case HaxeExtern(func): return evaluate(func());
             case _: return evaluate(ErrorMessage('Unable to evaluate token `$exp`'), dontThrow);
         }
+
+		return null;
     }
 
 	/**
@@ -413,12 +452,12 @@ class Actions {
 		@param parts The parts of the expression
 		@return The result of the expression
 	**/
-    public static function calculate(p:Array<ParserTokens>):ParserTokens {
+    public static function calculate(p:Array<InterpTokens>):InterpTokens {
 
         while (p.length == 1 && p[0].parameter(0) is Array) p = p[0].parameter(0);
 
 		var tokens = group(p);
-        var castType:ParserTokens = null;
+        var castType:InterpTokens = null;
 
         if (tokens.length == 1) {
             if (tokens[0].is(PART_ARRAY)) tokens = tokens[0].parameter(0);
@@ -428,7 +467,7 @@ class Actions {
             }
         }
 
-        var calculated:ParserTokens = null;
+        var calculated:InterpTokens = null;
         var sign:String = "";
 
         tokens = tokens.filter(x -> x != null); // Safety clause, for strange edge cases such as 2 + ---5.
@@ -437,7 +476,7 @@ class Actions {
                 case PartArray(parts): {
                     if (sign != "" && calculated == null) calculated = Operators.call(sign, calculate(parts)); // RHS operator
                     else if (calculated == null) calculated = calculate(parts);
-                    else if (sign == null) error("Two values cannot come one after the other. At least one of them should be an operator, or, put an operator in between.");
+                    else if (sign == "") error('Two values cannot come one after the other ($calculated, $token). At least one of them should be an operator, or, put an operator in between.');
                     else {
                         calculated = Operators.call(calculated, sign, calculate(parts)); // standard operator
                     }
@@ -447,18 +486,19 @@ class Actions {
                     if (tokens[tokens.length - 1].equals(token)) calculated = Operators.call(calculated, sign); //LHS operator
                 }
                 case Expression(parts, t): {
-                    var val = t != null ? type(calculate(parts), t) : calculate(parts);
+                    var val = t != null ? typeCast(calculate(parts), t) : calculate(parts);
                     if (sign != "" && calculated == null) calculated = Operators.call(sign, val); // RHS operator
                     else if (calculated == null) calculated = val;
-                    else if (sign == null) error("Two values cannot come one after the other. At least one of them should be an operator, or, put an operator in between.");
+                    else if (sign == "") error('Two values cannot come one after the other ($calculated, $token). At least one of them should be an operator, or, put an operator in between.');
                     else {
                         calculated = Operators.call(calculated, sign, val); // standard operator
                     }
                 }
                 case _: {
                     if (sign != "" && calculated == null) calculated = Operators.call(sign, token);
+					else if (sign == "" && calculated != null) throw 'Unexpected token: $token After calculating $calculated';
                     else if (calculated == null) calculated = token;
-                    else if (sign == null) error("Two values cannot come one after the other. At least one of them should be an operator, or, put an operator in between.");
+                    else if (sign == "") error('Two values cannot come one after the other ($calculated, $token). At least one of them should be an operator, or, put an operator in between.');
                     else {
                         calculated = Operators.call(calculated, sign, token);
                     }
@@ -466,12 +506,12 @@ class Actions {
             }
         }
 
-        if (castType != null) return type(calculated, castType);
+        if (castType != null) return typeCast(calculated, castType);
         return calculated;
 
     }
 
-	public static function group(tokens:Array<ParserTokens>):Array<ParserTokens> {
+	public static function group(tokens:Array<InterpTokens>):Array<InterpTokens> {
 		var post = tokens;
 		var pre = [];
 
@@ -484,7 +524,7 @@ class Actions {
 
 			var i = 0;
 			while (i < pre.length) {
-				var token = pre[i].is(READ, IDENTIFIER, BLOCK) ? evaluate(pre[i]) : pre[i];
+				var token = pre[i].is(IDENTIFIER, BLOCK) ? evaluate(pre[i]) : pre[i];
 
                 switch token {
                     case Sign(operatorGroup.filter(x -> x.sign == _).length > 0 => true): {
@@ -499,7 +539,7 @@ class Actions {
                         }
 
                         var lookbehind = post.length > 0 ? post[post.length - 1] /* Post has only evaluated tokens */ : Sign("_"); // Just an arbitrary "sign" to not have null here
-                        var lookahead = pre[i + 1].is(READ, IDENTIFIER, BLOCK) ? evaluate(pre[i + 1]) : pre[i + 1];
+                        var lookahead = pre[i + 1].is(IDENTIFIER, BLOCK) ? evaluate(pre[i + 1]) : pre[i + 1];
 
                         if (lookbehind.is(SIGN) && operatorGroup.filter(x -> x.sign == lookbehind.parameter(1)).length > 0) { // Because of our check above, valid for the start of an expression too.
                             if (lookahead.is(SIGN)) {
@@ -507,13 +547,13 @@ class Actions {
                                 // Look ahead until we run out of signs. Then, group the iterated signs and the final operand into an array,
                                 // and pass it onto "group()". Pay attention - this only groups signs with the current priority level.
                                 if (i + 1 >= pre.length) error("Expression ended with an operator, when an operand was expected.");
-                                var lookahead2 = pre[i + 1].is(READ, IDENTIFIER, BLOCK) ? evaluate(pre[i + 1]) : pre[i + 1];
+                                var lookahead2 = pre[i + 1].is(IDENTIFIER, BLOCK) ? evaluate(pre[i + 1]) : pre[i + 1];
                                 var g = [];
                                 while (lookahead2.is(SIGN) && operatorGroup.filter(x -> x.sign == lookahead2.parameter(1) && x.side == RHS_ONLY).length > 0) {
                                     g.push(lookahead2);
                                     i++;
                                     if (i + 1 >= pre.length) error("Expression ended with an operator, when an operand was expected.");
-                                    lookahead2 = pre[i + 1].is(READ, IDENTIFIER, BLOCK) ? evaluate(pre[i + 1]) : pre[i + 1];
+                                    lookahead2 = pre[i + 1].is(IDENTIFIER, BLOCK) ? evaluate(pre[i + 1]) : pre[i + 1];
                                 } 
                                 // Last token is an operand
                                 g.push(lookahead2);
@@ -543,7 +583,7 @@ class Actions {
                                 var op = lookahead;
                                 // We have to repeat the check in RHS_ONLY, since RHS can also start with a sign
                                 if (i + 2 >= pre.length) error("Expression ended with an operator, when an operand was expected.");
-                                var lookahead2 = pre[i + 2].is(READ, IDENTIFIER, BLOCK) ? evaluate(pre[i + 2]) : pre[i + 2];
+                                var lookahead2 = pre[i + 2].is(IDENTIFIER, BLOCK) ? evaluate(pre[i + 2]) : pre[i + 2];
                                 
                                 if (!lookahead2.is(SIGN)) {
                                     post.push(PartArray([operand1, token, PartArray([lookahead, lookahead2])]));
@@ -554,7 +594,7 @@ class Actions {
                                         g.push(lookahead2);
                                         i++;
                                         if (i + 2 >= pre.length) error("Expression ended with an operator, when an operand was expected.");
-                                        lookahead2 = pre[i + 2].is(READ, IDENTIFIER, BLOCK) ? evaluate(pre[i + 2]) : pre[i + 2];
+                                        lookahead2 = pre[i + 2].is(IDENTIFIER, BLOCK) ? evaluate(pre[i + 2]) : pre[i + 2];
                                     } 
 									// Last token is an operand
 									g.push(lookahead2);

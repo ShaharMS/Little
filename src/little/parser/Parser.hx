@@ -9,39 +9,40 @@ import little.interpreter.Runtime;
 
 using StringTools;
 using little.tools.TextTools;
+using little.tools.Extensions;
 
 using little.parser.Parser;
 
 @:access(little.interpreter.Runtime)
 class Parser {
 
-    public static var additionalParsingLevels:Array<Array<ParserTokens> -> Array<ParserTokens>> = [Parser.mergeNonBlockBodies, Parser.mergeElses];
+    public static var additionalParsingLevels:Array<Array<ParserTokens> -> Array<ParserTokens>> = [/*Parser.mergeNonBlockBodies ,*/ Parser.mergeElses];
 
     public static function parse(lexerTokens:Array<LexerTokens>):Array<ParserTokens> {
         var tokens = convert(lexerTokens);
 
-        // trace("before:", tokens);
+        #if parser_debug trace("before:", PrettyPrinter.printParserAst(tokens)); #end
         tokens = mergeBlocks(tokens);
-        // trace("blocks:", tokens);
+        #if parser_debug trace("blocks:", PrettyPrinter.printParserAst(tokens)); #end
         tokens = mergeExpressions(tokens);
-        // trace("expressions:", tokens);
+        #if parser_debug trace("expressions:", PrettyPrinter.printParserAst(tokens)); #end
         tokens = mergePropertyOperations(tokens);
-        // trace("props:", tokens);
+        #if parser_debug trace("props:", PrettyPrinter.printParserAst(tokens)); #end
         tokens = mergeTypeDecls(tokens);
-        // trace("types:", tokens);
+        #if parser_debug trace("types:", PrettyPrinter.printParserAst(tokens)); #end
         tokens = mergeComplexStructures(tokens);
-        // trace("structures:", tokens);
+        #if parser_debug trace("structures:", PrettyPrinter.printParserAst(tokens)); #end
         tokens = mergeCalls(tokens);
-        // trace("calls:", tokens);
+        #if parser_debug trace("calls:", PrettyPrinter.printParserAst(tokens)); #end
         tokens = mergeWrites(tokens);
-        // trace("writes:", tokens);
+        #if parser_debug trace("writes:", PrettyPrinter.printParserAst(tokens)); #end
         tokens = mergeValuesWithTypeDeclarations(tokens);
-        // trace("casts:", tokens);
+        #if parser_debug trace("casts:", PrettyPrinter.printParserAst(tokens)); #end
         for (level in Parser.additionalParsingLevels) {
             tokens = level(tokens);
-            // trace('${level}:', tokens);
+            #if parser_debug trace('${level}:', tokens); #end
         }
-        // trace("macros:", tokens);
+        #if parser_debug trace("macros:", PrettyPrinter.printParserAst(tokens)); #end
 
         return tokens;
     }
@@ -63,8 +64,8 @@ class Parser {
                     else if (num.countOccurrencesOf(".") == 1) tokens.push(Decimal(num));
                 }
                 case Boolean(value): {
-                    if (value == FALSE_VALUE) tokens.push(FalseValue);
-                    else if (value == TRUE_VALUE) tokens.push(TrueValue);
+                    if (value == Little.keywords.FALSE_VALUE) tokens.push(FalseValue);
+                    else if (value == Little.keywords.TRUE_VALUE) tokens.push(TrueValue);
                 }
                 case Characters(string): tokens.push(Characters(string));
                 case NullValue: tokens.push(NullValue);
@@ -287,7 +288,7 @@ class Parser {
                 case SetLine(line): {setLine(line); post.push(token);}
                 case SplitLine: {nextPart(); post.push(token);}
 				case Documentation(doc): currentDoc = token;
-                case Identifier(_ == VARIABLE_DECLARATION => true): {
+                case Identifier(_ == Little.keywords.VARIABLE_DECLARATION => true): {
                     i++;
                     if (i >= pre.length) {
                         Runtime.throwError(ErrorMessage("Missing variable name, variable is cut off by the end of the file, block or expression."), Layer.PARSER);
@@ -343,7 +344,7 @@ class Parser {
                     post.push(Variable(if (name.length == 1) name[0] else PartArray(name) /* Soon to be: PropertyAccess */, type, currentDoc));
 					currentDoc = null;
                 }
-                case Identifier(_ == FUNCTION_DECLARATION => true): {
+                case Identifier(_ == Little.keywords.FUNCTION_DECLARATION => true): {
                     i++;
                     if (i >= pre.length) {
                         Runtime.throwError(ErrorMessage("Missing function name, function is cut off by the end of the file, block or expression."), Layer.PARSER);
@@ -409,63 +410,7 @@ class Parser {
                     post.push(Function(if (name.length == 1) name[0] else PartArray(name) /* Will be converted to PropertyAccess later on*/, params, type, currentDoc));
 					currentDoc = null;
                 }
-                case Identifier(CONDITION_TYPES.contains(_) => true): {
-                    i++;
-                    if (i >= pre.length) {
-                        Runtime.throwError(ErrorMessage("Missing condition name, condition is cut off by the end of the file, block or expression."), Layer.PARSER);
-                        return null;
-                    }
-
-                    var name:ParserTokens = Identifier(token.getParameters()[0]);
-                    var exp:ParserTokens = null;
-                    var body:ParserTokens = null;
-
-                    while (i < pre.length) {
-                        var lookahead = pre[i];
-                        switch lookahead {
-                            case SetLine(_): {
-                                if (exp == null) {
-                                    Runtime.throwError(ErrorMessage("Condition expression does not exist/is cut off by the end of a line"), PARSER);
-                                    return null;
-                                } else if (body == null) {
-                                    Runtime.throwError(ErrorMessage("Condition body does not exist/is cut off by the end of a line"), PARSER);
-                                    return null;
-                                }
-                                else break;
-                            }
-                            case SplitLine: {
-                                if (exp == null) {
-                                    Runtime.throwError(ErrorMessage("Condition expression does not exist/is cut off by a line split"), PARSER);
-                                    return null;
-                                } else if (body == null) {
-                                    Runtime.throwError(ErrorMessage("Condition body does not exist/is cut off by a line split"), PARSER);
-                                    return null;
-                                }
-                                else break;
-                            }
-                            case Block(b, type): {
-                                if (exp == null) exp = Block(mergeComplexStructures(b), mergeComplexStructures([type])[0]);
-                                else if (body == null) body = Block(mergeComplexStructures(b), mergeComplexStructures([type])[0])
-                                else break;
-                            }
-                            case Expression(parts, type): {
-                                if (exp == null) exp = Expression(mergeComplexStructures(parts), mergeComplexStructures([type])[0]);
-                                else if (body == null) body = Expression(mergeComplexStructures(parts), mergeComplexStructures([type])[0])
-                                else break;
-                            }
-                            case _: {
-                                if (exp == null) exp = lookahead;
-                                else if (body == null) {body = NoBody; i--;}
-                                else break;
-                            }
-                        }
-                        i++;
-                    }
-                    i--;
-                    post.push(Condition(name, exp, body));
-					currentDoc = null;
-                }
-                case Identifier(_ == FUNCTION_RETURN => true): {
+                case Identifier(_ == Little.keywords.FUNCTION_RETURN => true): {
                     i++;
                     if (i >= pre.length) {
                         Runtime.throwError(ErrorMessage("Missing return value, value is cut off by the end of the file, block or expression."), Layer.PARSER);
@@ -489,6 +434,61 @@ class Parser {
                     }
                     post.push(Return(if (valueToReturn.length == 1) valueToReturn[0] else Expression(valueToReturn.copy(), null), null));
                 }
+				case Identifier(_): { // Condition are definable, we need to look for the syntax: Identifier -> Expression -> Block. 
+                    i++;
+                    if (i + 1>= pre.length) {
+                        post.push(token);
+                        continue;
+                    }
+
+                    var name:ParserTokens = Identifier(token.getParameters()[0]);
+                    var exp:ParserTokens = null;
+                    var body:ParserTokens = null;
+
+					var fallback = i - 1; // Reason for -1 here is because of the lookahead - if this isnt a condition, i-1 is pushed and i is the next token.
+
+                    while (i < pre.length) {
+                        var lookahead = pre[i];
+                        switch lookahead {
+                            case SetLine(_): {}
+                            case SplitLine: { // Encountering a line split in any place breaks the sequence (if (), {}, if, () {})
+							if (exp != null && body != null) break;
+								i = fallback;
+								break;
+							}
+                            case Block(b, type): {
+                                if (exp == null) {
+									i = fallback;
+									break;
+								}
+                                else if (body == null) body = Block(mergeComplexStructures(b), mergeComplexStructures([type])[0])
+                                else break;
+                            }
+                            case Expression(parts, type): {
+                                if (exp == null) exp = Expression(mergeComplexStructures(parts), mergeComplexStructures([type])[0]);
+                                else if (body == null) {
+									i = fallback;
+								}
+                                else break;
+                            }
+                            case _: {
+                                if (exp == null || body == null) {
+									i = fallback;
+									break;
+								}
+                                else break;
+                            }
+                        }
+                        i++;
+                    }
+					if (i == fallback) {
+						post.push(token);
+					} else {
+						i--;
+						post.push(Condition(name, exp, body));
+						currentDoc = null;
+					}
+                }                
                 case Expression(parts, type): post.push(Expression(mergeComplexStructures(parts), mergeComplexStructures([type])[0]));
                 case Block(body, type): post.push(Block(mergeComplexStructures(body), mergeComplexStructures([type])[0]));
                 case PropertyAccess(name, property): post.push(PropertyAccess(mergeComplexStructures([name])[0], mergeComplexStructures([property])[0]));
@@ -523,11 +523,6 @@ class Parser {
                         var lookbehind = pre[i - 1];
                         switch lookbehind {
                             case Sign(_) | SplitLine | SetLine(_): post.push(Expression(parts, type));
-                            case PropertyAccess(name, property): {
-                                post.pop();
-                                token = PartArray(parts);
-                                post.push(PropertyAccess(name, FunctionCall(property, token)));
-                            }
                             case _: {
                                 var previous = post.pop(); // When parsing a function that returns a function, this handles the "nested call" correctly
                                 token = PartArray(parts);
@@ -654,7 +649,6 @@ class Parser {
 
             i++;
         }
-        // trace(potentialAssignee);
         if (potentialAssignee != null) post.push(potentialAssignee);
         post.shift();
 
@@ -710,6 +704,9 @@ class Parser {
         return post;
     }
 
+    /**
+    	NEEDS REWORKING
+    **/
     public static function mergeNonBlockBodies(pre:Array<ParserTokens>):Array<ParserTokens> {
 
         if (pre == null) return null;
@@ -795,7 +792,7 @@ class Parser {
                         return null;
                     }
                     var exp:ParserTokens = post[post.length - 1].getParameters()[1]; //Condition(name:ParserTokens, ->exp:ParserTokens<-, body:ParserTokens, type:ParserTokens)
-                    exp = Expression([exp, Sign("!="), TrueValue], Module(TYPE_BOOLEAN));
+                    exp = Expression([exp, Sign("!="), TrueValue], null);
                     i++;
                     var body:ParserTokens = pre[i];
                     switch body {

@@ -1,13 +1,16 @@
 package little.tools;
 
+import haxe.DynamicAccess;
+import little.interpreter.Actions;
+import little.interpreter.Tokens.InterpTokens;
 import Type.ValueType;
 import little.interpreter.Interpreter;
 import haxe.Log;
 import haxe.macro.Expr;
-import little.parser.Tokens.ParserTokens;
 import little.Keywords.*;
 
 using little.tools.TextTools;
+using little.tools.Extensions;
 using Std;
 
 class Conversion {
@@ -26,31 +29,60 @@ class Conversion {
         }
     }
 
-    public static function toLittleValue(val:Dynamic):ParserTokens {
+    public static function toLittleValue(val:Dynamic):InterpTokens {
         if (val == null) return NullValue;
-        var type = toLittleType(extractHaxeType(Type.typeof(val)));
-        return switch type {
-            case (_ == TYPE_BOOLEAN => true): {
-                if (val) TrueValue else FalseValue;
+        var type = Type.typeof(val);
+		return switch type {
+			case TNull: NullValue;
+			case TInt: Number(val);
+			case TFloat: Decimal(val);
+			case TBool: if (val) TrueValue else FalseValue;
+			case TObject if (Type.getClass(val) != null): {
+                var map:Map<String, {documentation:String, value:InterpTokens}> = new Map();
+				for (field in Type.getInstanceFields(Type.getClass(val))) {
+                    map[field] = {
+                        value: toLittleValue(Reflect.getProperty(val, field)),
+                        documentation: ""
+                    }
+                }
+                map[Little.keywords.TO_STRING_PROPERTY_NAME] = {
+                    value: Block(
+                        [FunctionReturn(Characters(Std.string(val)), Identifier(Little.keywords.TYPE_STRING))], Identifier(Little.keywords.TYPE_STRING)),
+                    documentation: "The function that will be used to convert this object to a string."
+                }
+                map[Little.keywords.OBJECT_TYPE_PROPERTY_NAME] = {
+                    value: Characters(toLittleType(Type.getClassName(val))),
+                    documentation: 'The type of this object, as a ${Little.keywords.TYPE_STRING}.'
+                }
+                Object(map[Little.keywords.TO_STRING_PROPERTY_NAME].value, map, map[Little.keywords.OBJECT_TYPE_PROPERTY_NAME].value.parameter(0));
+			}
+            case TObject: {
+                var objType = Little.keywords.TYPE_DYNAMIC;
+                var toString = Block([FunctionReturn(Characters("Dynamic Object"), Identifier(Little.keywords.TYPE_STRING))], Identifier(Little.keywords.TYPE_STRING));
+                var map:Map<String, {documentation:String, value:InterpTokens}> = new Map();
+				for (field in Type.getInstanceFields(Type.getClass(val))) {
+                    map[field] = {
+                        value: toLittleValue(Reflect.getProperty(val, field)),
+                        documentation: ""
+                    }
+                }
+                Object(toString, map, objType);
             }
-            case (_ == TYPE_FLOAT => true): {
-                Decimal(Std.string(val));
-            }
-            case (_ == TYPE_INT => true): {
-                Number(Std.string(val));
-            }
-            case (_ == TYPE_STRING => true): {
-                Characters(Std.string(val));
-            }
-            case _: {
-                trace("WARNING: Unparsable value: " + val + ". Returning NullValue");
-                NullValue;
-            }
-        }
+            case TFunction: {
+				NullValue; // Todo: Functions (or maybe intended behavior?)
+			}
+			case TClass(c): {
+				NullValue; // Todo: Classes
+			}
+			case TEnum(e): {
+				NullValue; // Todo: Enums
+			}
+			case TUnknown: NullValue;
+		}
     }
 
-    public static function toHaxeValue(val:ParserTokens):Dynamic {
-        val = Interpreter.evaluate(val);
+    public static function toHaxeValue(val:InterpTokens):Dynamic {
+        val = Actions.evaluate(val);
         return switch val {
             case ErrorMessage(msg): {
                 trace("WARNING: " + msg + ". Returning null");
@@ -59,9 +91,18 @@ class Conversion {
             case TrueValue: true;
             case FalseValue: false;
             case NullValue: null;
-            case Decimal(num): num.parseFloat();
-            case Number(num): num.parseInt();
+            case Decimal(num): num;
+            case Number(num): num;
             case Characters(string): string;
+            case Object(toString, props, typeName): {
+                var obj:Dynamic = {};
+                for (key => value in props) {
+                    if (key == Little.keywords.TO_STRING_PROPERTY_NAME) continue;
+                    obj.key = toHaxeValue(value.value);
+                }
+
+                obj;
+            }
             case _: {
                 trace("WARNING: Unparsable token: " + val + ". Returning null");
                 return null;
@@ -75,7 +116,8 @@ class Conversion {
             case "Int": TYPE_INT;
             case "Float": TYPE_FLOAT;
             case "String": TYPE_STRING;
-            case _: TYPE_DYNAMIC;
+            case "Dynamic": TYPE_DYNAMIC;
+            case _: type;
         }
     }
 }

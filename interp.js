@@ -3561,26 +3561,26 @@ little_tools_PrettyPrinter.stringify = function(code,token) {
 			var _g1 = token.doc;
 			var name = token.name;
 			var type = token.type;
-			s += "" + little_Keywords.VARIABLE_DECLARATION + " " + Std.string(name) + " " + (type != null ? "" + little_Keywords.TYPE_DECL_OR_CAST + " " + little_tools_PrettyPrinter.stringify(null,type) : "");
+			s += "" + little_Keywords.VARIABLE_DECLARATION + " " + Std.string(name) + " " + (type != null ? "" + little_Keywords.TYPE_DECL_OR_CAST + " " + little_tools_PrettyPrinter.stringifyParsernull,type) : "");
 			break;
 		case 3:
 			var _g2 = token.doc;
 			var name1 = token.name;
 			var params = token.params;
 			var type1 = token.type;
-			s += "" + little_Keywords.FUNCTION_DECLARATION + " " + little_tools_PrettyPrinter.stringify(null,name1) + "(" + little_tools_PrettyPrinter.stringify(null,params) + ") " + (type1 != null ? "" + little_Keywords.TYPE_DECL_OR_CAST + " " + little_tools_PrettyPrinter.stringify(null,type1) : "");
+			s += "" + little_Keywords.FUNCTION_DECLARATION + " " + little_tools_PrettyPrinter.stringifyParsernull,name1) + "(" + little_tools_PrettyPrinter.stringifyParsernull,params) + ") " + (type1 != null ? "" + little_Keywords.TYPE_DECL_OR_CAST + " " + little_tools_PrettyPrinter.stringifyParsernull,type1) : "");
 			break;
 		case 4:
 			var name2 = token.name;
 			var exp = token.exp;
 			var body = token.body;
 			little_tools_PrettyPrinter.indent += "\t";
-			s += "" + little_tools_PrettyPrinter.stringify(null,name2) + " (" + little_tools_PrettyPrinter.stringify(null,exp) + ") \n" + little_tools_PrettyPrinter.stringify(null,body);
+			s += "" + little_tools_PrettyPrinter.stringifyParsernull,name2) + " (" + little_tools_PrettyPrinter.stringifyParsernull,exp) + ") \n" + little_tools_PrettyPrinter.stringifyParsernull,body);
 			little_tools_PrettyPrinter.indent = little_tools_TextTools.replaceLast(little_tools_PrettyPrinter.indent,"\t","");
 			break;
 		case 5:
 			var name3 = token.name;
-			s += little_tools_PrettyPrinter.stringify(null,name3);
+			s += little_tools_PrettyPrinter.stringifyParsernull,name3);
 			break;
 		case 6:
 			var assignees = token.assignees;
@@ -3591,7 +3591,7 @@ little_tools_PrettyPrinter.stringify = function(code,token) {
 			var _g4 = _this.length;
 			while(_g3 < _g4) {
 				var i = _g3++;
-				result[i] = little_tools_PrettyPrinter.stringify(null,_this[i]);
+				result[i] = little_tools_PrettyPrinter.stringifyParsernull,_this[i]);
 			}
 			s += Std.string([result.join(" = ")]);
 			break;
@@ -3602,38 +3602,38 @@ little_tools_PrettyPrinter.stringify = function(code,token) {
 		case 8:
 			var value1 = token.value;
 			var type2 = token.type;
-			s += "" + little_Keywords.TYPE_DECL_OR_CAST + " " + little_tools_PrettyPrinter.stringify(null,type2);
+			s += "" + little_Keywords.TYPE_DECL_OR_CAST + " " + little_tools_PrettyPrinter.stringifyParsernull,type2);
 			break;
 		case 9:
 			var name4 = token.name;
 			var params1 = token.params;
-			s += "" + little_tools_PrettyPrinter.stringify(null,name4) + "(" + little_tools_PrettyPrinter.stringify(null,params1) + ")";
+			s += "" + little_tools_PrettyPrinter.stringifyParsernull,name4) + "(" + little_tools_PrettyPrinter.stringifyParsernull,params1) + ")";
 			break;
 		case 10:
 			var value2 = token.value;
 			var type3 = token.type;
-			s += "" + little_Keywords.FUNCTION_RETURN + " " + little_tools_PrettyPrinter.stringify(null,value2);
+			s += "" + little_Keywords.FUNCTION_RETURN + " " + little_tools_PrettyPrinter.stringifyParsernull,value2);
 			break;
 		case 11:
 			var parts = token.parts;
 			var type4 = token.type;
-			s += little_tools_PrettyPrinter.stringify(parts);
+			s += little_tools_PrettyPrinter.stringifyParserparts);
 			break;
 		case 12:
 			var body1 = token.body;
 			var type5 = token.type;
 			little_tools_PrettyPrinter.indent += "\t";
-			s += "{" + little_tools_PrettyPrinter.stringify(body1) + "} " + (type5 != null ? "" + little_Keywords.TYPE_DECL_OR_CAST + " " + little_tools_PrettyPrinter.stringify(null,type5) : "");
+			s += "{" + little_tools_PrettyPrinter.stringifyParserbody1) + "} " + (type5 != null ? "" + little_Keywords.TYPE_DECL_OR_CAST + " " + little_tools_PrettyPrinter.stringifyParsernull,type5) : "");
 			little_tools_PrettyPrinter.indent = little_tools_TextTools.replaceLast(little_tools_PrettyPrinter.indent,"\t","");
 			break;
 		case 13:
 			var parts1 = token.parts;
-			s += little_tools_PrettyPrinter.stringify(parts1);
+			s += little_tools_PrettyPrinter.stringifyParserparts1);
 			break;
 		case 14:
 			var name5 = token.name;
 			var property = token.property;
-			s += "" + little_tools_PrettyPrinter.stringify(null,name5) + little_Keywords.PROPERTY_ACCESS_SIGN + little_tools_PrettyPrinter.stringify(null,property);
+			s += "" + little_tools_PrettyPrinter.stringifyParsernull,name5) + little_Keywords.PROPERTY_ACCESS_SIGN + little_tools_PrettyPrinter.stringifyParsernull,property);
 			break;
 		case 15:
 			var sign = token.sign;
@@ -4701,7 +4701,7 @@ little_interpreter_Interpreter.evaluateExpressionParts = function(parts,memory) 
 			if(currentSign == "") {
 				currentSign = sign;
 			} else {
-				evaluatedValue = Object.prototype.hasOwnProperty.call(little_interpreter_Operators.lhsOnly.h,currentSign) ? little_interpreter_Operators.lhsOnly.h[currentSign](evaluatedValue) : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.rhsOnly.h,currentSign) ? little_parser_ParserTokens.ErrorMessage("Operator " + currentSign + " is used incorrectly - should appear after the sign (" + currentSign + little_tools_PrettyPrinter.stringify(null,evaluatedValue) + " instead of " + little_tools_PrettyPrinter.stringify(null,evaluatedValue) + currentSign + ")") : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.standard.h,currentSign) ? little_parser_ParserTokens.ErrorMessage("Operator " + currentSign + " is used incorrectly - should appear between two values (" + little_tools_PrettyPrinter.stringify(null,evaluatedValue) + " " + currentSign + " <some value>)") : little_parser_ParserTokens.ErrorMessage("Operator " + currentSign + " does not exist. did you make a typo?");
+				evaluatedValue = Object.prototype.hasOwnProperty.call(little_interpreter_Operators.lhsOnly.h,currentSign) ? little_interpreter_Operators.lhsOnly.h[currentSign](evaluatedValue) : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.rhsOnly.h,currentSign) ? little_parser_ParserTokens.ErrorMessage("Operator " + currentSign + " is used incorrectly - should appear after the sign (" + currentSign + little_tools_PrettyPrinter.stringifyParsernull,evaluatedValue) + " instead of " + little_tools_PrettyPrinter.stringifyParsernull,evaluatedValue) + currentSign + ")") : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.standard.h,currentSign) ? little_parser_ParserTokens.ErrorMessage("Operator " + currentSign + " is used incorrectly - should appear between two values (" + little_tools_PrettyPrinter.stringifyParsernull,evaluatedValue) + " " + currentSign + " <some value>)") : little_parser_ParserTokens.ErrorMessage("Operator " + currentSign + " does not exist. did you make a typo?");
 				currentSign = sign;
 			}
 			break;
@@ -4711,11 +4711,11 @@ little_interpreter_Interpreter.evaluateExpressionParts = function(parts,memory) 
 			break;
 		default:
 			if(evaluatedValue == null && currentSign != "") {
-				evaluatedValue = Object.prototype.hasOwnProperty.call(little_interpreter_Operators.rhsOnly.h,currentSign) ? little_interpreter_Operators.rhsOnly.h[currentSign](val) : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.lhsOnly.h,currentSign) ? little_parser_ParserTokens.ErrorMessage("Operator " + currentSign + " is used incorrectly - should appear before the sign (" + little_tools_PrettyPrinter.stringify(null,val) + currentSign + " instead of " + currentSign + little_tools_PrettyPrinter.stringify(null,val) + ")") : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.standard.h,currentSign) ? little_parser_ParserTokens.ErrorMessage("Operator " + currentSign + " is used incorrectly - should appear between two values (" + little_tools_PrettyPrinter.stringify(null,val) + " " + currentSign + " <some value>)") : little_parser_ParserTokens.ErrorMessage("Operator " + currentSign + " does not exist. did you make a typo?");
+				evaluatedValue = Object.prototype.hasOwnProperty.call(little_interpreter_Operators.rhsOnly.h,currentSign) ? little_interpreter_Operators.rhsOnly.h[currentSign](val) : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.lhsOnly.h,currentSign) ? little_parser_ParserTokens.ErrorMessage("Operator " + currentSign + " is used incorrectly - should appear before the sign (" + little_tools_PrettyPrinter.stringifyParsernull,val) + currentSign + " instead of " + currentSign + little_tools_PrettyPrinter.stringifyParsernull,val) + ")") : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.standard.h,currentSign) ? little_parser_ParserTokens.ErrorMessage("Operator " + currentSign + " is used incorrectly - should appear between two values (" + little_tools_PrettyPrinter.stringifyParsernull,val) + " " + currentSign + " <some value>)") : little_parser_ParserTokens.ErrorMessage("Operator " + currentSign + " does not exist. did you make a typo?");
 				currentSign = "";
 			} else if(evaluatedValue != null && currentSign != "" && rhs == null) {
 				rhs = val;
-				evaluatedValue = Object.prototype.hasOwnProperty.call(little_interpreter_Operators.standard.h,currentSign) ? little_interpreter_Operators.standard.h[currentSign](evaluatedValue,rhs) : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.lhsOnly.h,currentSign) ? little_parser_ParserTokens.ErrorMessage("Operator " + currentSign + " is used incorrectly - should not appear between two values, only to the right of one of them (" + little_tools_PrettyPrinter.stringify(null,rhs) + currentSign + " or " + little_tools_PrettyPrinter.stringify(null,evaluatedValue) + currentSign + ")") : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.rhsOnly.h,currentSign) ? little_parser_ParserTokens.ErrorMessage("Operator " + currentSign + " is used incorrectly - should not appear between two values, only to the left of one of them (" + currentSign + little_tools_PrettyPrinter.stringify(null,rhs) + " or " + currentSign + little_tools_PrettyPrinter.stringify(null,evaluatedValue) + ")") : little_parser_ParserTokens.ErrorMessage("Operator " + currentSign + " does not exist. did you make a typo?");
+				evaluatedValue = Object.prototype.hasOwnProperty.call(little_interpreter_Operators.standard.h,currentSign) ? little_interpreter_Operators.standard.h[currentSign](evaluatedValue,rhs) : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.lhsOnly.h,currentSign) ? little_parser_ParserTokens.ErrorMessage("Operator " + currentSign + " is used incorrectly - should not appear between two values, only to the right of one of them (" + little_tools_PrettyPrinter.stringifyParsernull,rhs) + currentSign + " or " + little_tools_PrettyPrinter.stringifyParsernull,evaluatedValue) + currentSign + ")") : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.rhsOnly.h,currentSign) ? little_parser_ParserTokens.ErrorMessage("Operator " + currentSign + " is used incorrectly - should not appear between two values, only to the left of one of them (" + currentSign + little_tools_PrettyPrinter.stringifyParsernull,rhs) + " or " + currentSign + little_tools_PrettyPrinter.stringifyParsernull,evaluatedValue) + ")") : little_parser_ParserTokens.ErrorMessage("Operator " + currentSign + " does not exist. did you make a typo?");
 				rhs = null;
 				currentSign = "";
 			} else if(evaluatedValue == null) {
@@ -4726,7 +4726,7 @@ little_interpreter_Interpreter.evaluateExpressionParts = function(parts,memory) 
 		}
 	}
 	if(currentSign != "") {
-		evaluatedValue = Object.prototype.hasOwnProperty.call(little_interpreter_Operators.lhsOnly.h,currentSign) ? little_interpreter_Operators.lhsOnly.h[currentSign](evaluatedValue) : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.rhsOnly.h,currentSign) ? little_parser_ParserTokens.ErrorMessage("Operator " + currentSign + " is used incorrectly - should appear after the sign (" + currentSign + little_tools_PrettyPrinter.stringify(null,evaluatedValue) + " instead of " + little_tools_PrettyPrinter.stringify(null,evaluatedValue) + currentSign + ")") : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.standard.h,currentSign) ? little_parser_ParserTokens.ErrorMessage("Operator " + currentSign + " is used incorrectly - should appear between two values (" + little_tools_PrettyPrinter.stringify(null,evaluatedValue) + " " + currentSign + " <some value>)") : little_parser_ParserTokens.ErrorMessage("Operator " + currentSign + " does not exist. did you make a typo?");
+		evaluatedValue = Object.prototype.hasOwnProperty.call(little_interpreter_Operators.lhsOnly.h,currentSign) ? little_interpreter_Operators.lhsOnly.h[currentSign](evaluatedValue) : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.rhsOnly.h,currentSign) ? little_parser_ParserTokens.ErrorMessage("Operator " + currentSign + " is used incorrectly - should appear after the sign (" + currentSign + little_tools_PrettyPrinter.stringifyParsernull,evaluatedValue) + " instead of " + little_tools_PrettyPrinter.stringifyParsernull,evaluatedValue) + currentSign + ")") : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.standard.h,currentSign) ? little_parser_ParserTokens.ErrorMessage("Operator " + currentSign + " is used incorrectly - should appear between two values (" + little_tools_PrettyPrinter.stringifyParsernull,evaluatedValue) + " " + currentSign + " <some value>)") : little_parser_ParserTokens.ErrorMessage("Operator " + currentSign + " does not exist. did you make a typo?");
 	}
 	return evaluatedValue;
 };
@@ -5219,45 +5219,45 @@ little_interpreter_Actions.calculate = function(p) {
 			var t = token.type;
 			var val = t != null ? little_interpreter_Actions.type(little_interpreter_Actions.calculate(parts),t) : little_interpreter_Actions.calculate(parts);
 			if(sign != "" && calculated == null) {
-				calculated = Object.prototype.hasOwnProperty.call(little_interpreter_Operators.rhsOnly.h,sign) ? little_interpreter_Operators.rhsOnly.h[sign](val) : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.lhsOnly.h,sign) ? little_parser_ParserTokens.ErrorMessage("Operator " + sign + " is used incorrectly - should appear before the sign (" + little_tools_PrettyPrinter.stringify(null,val) + sign + " instead of " + sign + little_tools_PrettyPrinter.stringify(null,val) + ")") : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.standard.h,sign) ? little_parser_ParserTokens.ErrorMessage("Operator " + sign + " is used incorrectly - should appear between two values (" + little_tools_PrettyPrinter.stringify(null,val) + " " + sign + " <some value>)") : little_parser_ParserTokens.ErrorMessage("Operator " + sign + " does not exist. did you make a typo?");
+				calculated = Object.prototype.hasOwnProperty.call(little_interpreter_Operators.rhsOnly.h,sign) ? little_interpreter_Operators.rhsOnly.h[sign](val) : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.lhsOnly.h,sign) ? little_parser_ParserTokens.ErrorMessage("Operator " + sign + " is used incorrectly - should appear before the sign (" + little_tools_PrettyPrinter.stringifyParsernull,val) + sign + " instead of " + sign + little_tools_PrettyPrinter.stringifyParsernull,val) + ")") : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.standard.h,sign) ? little_parser_ParserTokens.ErrorMessage("Operator " + sign + " is used incorrectly - should appear between two values (" + little_tools_PrettyPrinter.stringifyParsernull,val) + " " + sign + " <some value>)") : little_parser_ParserTokens.ErrorMessage("Operator " + sign + " does not exist. did you make a typo?");
 			} else if(calculated == null) {
 				calculated = val;
 			} else if(sign == null) {
 				little_interpreter_Actions.error("Two values cannot come one after the other. At least one of them should be an operator, or, put an operator in between.");
 			} else {
-				calculated = Object.prototype.hasOwnProperty.call(little_interpreter_Operators.standard.h,sign) ? little_interpreter_Operators.standard.h[sign](calculated,val) : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.lhsOnly.h,sign) ? little_parser_ParserTokens.ErrorMessage("Operator " + sign + " is used incorrectly - should not appear between two values, only to the right of one of them (" + little_tools_PrettyPrinter.stringify(null,val) + sign + " or " + little_tools_PrettyPrinter.stringify(null,calculated) + sign + ")") : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.rhsOnly.h,sign) ? little_parser_ParserTokens.ErrorMessage("Operator " + sign + " is used incorrectly - should not appear between two values, only to the left of one of them (" + sign + little_tools_PrettyPrinter.stringify(null,val) + " or " + sign + little_tools_PrettyPrinter.stringify(null,calculated) + ")") : little_parser_ParserTokens.ErrorMessage("Operator " + sign + " does not exist. did you make a typo?");
+				calculated = Object.prototype.hasOwnProperty.call(little_interpreter_Operators.standard.h,sign) ? little_interpreter_Operators.standard.h[sign](calculated,val) : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.lhsOnly.h,sign) ? little_parser_ParserTokens.ErrorMessage("Operator " + sign + " is used incorrectly - should not appear between two values, only to the right of one of them (" + little_tools_PrettyPrinter.stringifyParsernull,val) + sign + " or " + little_tools_PrettyPrinter.stringifyParsernull,calculated) + sign + ")") : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.rhsOnly.h,sign) ? little_parser_ParserTokens.ErrorMessage("Operator " + sign + " is used incorrectly - should not appear between two values, only to the left of one of them (" + sign + little_tools_PrettyPrinter.stringifyParsernull,val) + " or " + sign + little_tools_PrettyPrinter.stringifyParsernull,calculated) + ")") : little_parser_ParserTokens.ErrorMessage("Operator " + sign + " does not exist. did you make a typo?");
 			}
 			break;
 		case 13:
 			var parts1 = token.parts;
 			if(sign != "" && calculated == null) {
 				var rhs = little_interpreter_Actions.calculate(parts1);
-				calculated = Object.prototype.hasOwnProperty.call(little_interpreter_Operators.rhsOnly.h,sign) ? little_interpreter_Operators.rhsOnly.h[sign](rhs) : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.lhsOnly.h,sign) ? little_parser_ParserTokens.ErrorMessage("Operator " + sign + " is used incorrectly - should appear before the sign (" + little_tools_PrettyPrinter.stringify(null,rhs) + sign + " instead of " + sign + little_tools_PrettyPrinter.stringify(null,rhs) + ")") : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.standard.h,sign) ? little_parser_ParserTokens.ErrorMessage("Operator " + sign + " is used incorrectly - should appear between two values (" + little_tools_PrettyPrinter.stringify(null,rhs) + " " + sign + " <some value>)") : little_parser_ParserTokens.ErrorMessage("Operator " + sign + " does not exist. did you make a typo?");
+				calculated = Object.prototype.hasOwnProperty.call(little_interpreter_Operators.rhsOnly.h,sign) ? little_interpreter_Operators.rhsOnly.h[sign](rhs) : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.lhsOnly.h,sign) ? little_parser_ParserTokens.ErrorMessage("Operator " + sign + " is used incorrectly - should appear before the sign (" + little_tools_PrettyPrinter.stringifyParsernull,rhs) + sign + " instead of " + sign + little_tools_PrettyPrinter.stringifyParsernull,rhs) + ")") : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.standard.h,sign) ? little_parser_ParserTokens.ErrorMessage("Operator " + sign + " is used incorrectly - should appear between two values (" + little_tools_PrettyPrinter.stringifyParsernull,rhs) + " " + sign + " <some value>)") : little_parser_ParserTokens.ErrorMessage("Operator " + sign + " does not exist. did you make a typo?");
 			} else if(calculated == null) {
 				calculated = little_interpreter_Actions.calculate(parts1);
 			} else if(sign == null) {
 				little_interpreter_Actions.error("Two values cannot come one after the other. At least one of them should be an operator, or, put an operator in between.");
 			} else {
 				var rhs1 = little_interpreter_Actions.calculate(parts1);
-				calculated = Object.prototype.hasOwnProperty.call(little_interpreter_Operators.standard.h,sign) ? little_interpreter_Operators.standard.h[sign](calculated,rhs1) : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.lhsOnly.h,sign) ? little_parser_ParserTokens.ErrorMessage("Operator " + sign + " is used incorrectly - should not appear between two values, only to the right of one of them (" + little_tools_PrettyPrinter.stringify(null,rhs1) + sign + " or " + little_tools_PrettyPrinter.stringify(null,calculated) + sign + ")") : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.rhsOnly.h,sign) ? little_parser_ParserTokens.ErrorMessage("Operator " + sign + " is used incorrectly - should not appear between two values, only to the left of one of them (" + sign + little_tools_PrettyPrinter.stringify(null,rhs1) + " or " + sign + little_tools_PrettyPrinter.stringify(null,calculated) + ")") : little_parser_ParserTokens.ErrorMessage("Operator " + sign + " does not exist. did you make a typo?");
+				calculated = Object.prototype.hasOwnProperty.call(little_interpreter_Operators.standard.h,sign) ? little_interpreter_Operators.standard.h[sign](calculated,rhs1) : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.lhsOnly.h,sign) ? little_parser_ParserTokens.ErrorMessage("Operator " + sign + " is used incorrectly - should not appear between two values, only to the right of one of them (" + little_tools_PrettyPrinter.stringifyParsernull,rhs1) + sign + " or " + little_tools_PrettyPrinter.stringifyParsernull,calculated) + sign + ")") : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.rhsOnly.h,sign) ? little_parser_ParserTokens.ErrorMessage("Operator " + sign + " is used incorrectly - should not appear between two values, only to the left of one of them (" + sign + little_tools_PrettyPrinter.stringifyParsernull,rhs1) + " or " + sign + little_tools_PrettyPrinter.stringifyParsernull,calculated) + ")") : little_parser_ParserTokens.ErrorMessage("Operator " + sign + " does not exist. did you make a typo?");
 			}
 			break;
 		case 15:
 			var s = token.sign;
 			sign = s;
 			if(Type.enumEq(tokens[tokens.length - 1],token)) {
-				calculated = Object.prototype.hasOwnProperty.call(little_interpreter_Operators.lhsOnly.h,sign) ? little_interpreter_Operators.lhsOnly.h[sign](calculated) : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.rhsOnly.h,sign) ? little_parser_ParserTokens.ErrorMessage("Operator " + sign + " is used incorrectly - should appear after the sign (" + sign + little_tools_PrettyPrinter.stringify(null,calculated) + " instead of " + little_tools_PrettyPrinter.stringify(null,calculated) + sign + ")") : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.standard.h,sign) ? little_parser_ParserTokens.ErrorMessage("Operator " + sign + " is used incorrectly - should appear between two values (" + little_tools_PrettyPrinter.stringify(null,calculated) + " " + sign + " <some value>)") : little_parser_ParserTokens.ErrorMessage("Operator " + sign + " does not exist. did you make a typo?");
+				calculated = Object.prototype.hasOwnProperty.call(little_interpreter_Operators.lhsOnly.h,sign) ? little_interpreter_Operators.lhsOnly.h[sign](calculated) : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.rhsOnly.h,sign) ? little_parser_ParserTokens.ErrorMessage("Operator " + sign + " is used incorrectly - should appear after the sign (" + sign + little_tools_PrettyPrinter.stringifyParsernull,calculated) + " instead of " + little_tools_PrettyPrinter.stringifyParsernull,calculated) + sign + ")") : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.standard.h,sign) ? little_parser_ParserTokens.ErrorMessage("Operator " + sign + " is used incorrectly - should appear between two values (" + little_tools_PrettyPrinter.stringifyParsernull,calculated) + " " + sign + " <some value>)") : little_parser_ParserTokens.ErrorMessage("Operator " + sign + " does not exist. did you make a typo?");
 			}
 			break;
 		default:
 			if(sign != "" && calculated == null) {
-				calculated = Object.prototype.hasOwnProperty.call(little_interpreter_Operators.rhsOnly.h,sign) ? little_interpreter_Operators.rhsOnly.h[sign](token) : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.lhsOnly.h,sign) ? little_parser_ParserTokens.ErrorMessage("Operator " + sign + " is used incorrectly - should appear before the sign (" + little_tools_PrettyPrinter.stringify(null,token) + sign + " instead of " + sign + little_tools_PrettyPrinter.stringify(null,token) + ")") : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.standard.h,sign) ? little_parser_ParserTokens.ErrorMessage("Operator " + sign + " is used incorrectly - should appear between two values (" + little_tools_PrettyPrinter.stringify(null,token) + " " + sign + " <some value>)") : little_parser_ParserTokens.ErrorMessage("Operator " + sign + " does not exist. did you make a typo?");
+				calculated = Object.prototype.hasOwnProperty.call(little_interpreter_Operators.rhsOnly.h,sign) ? little_interpreter_Operators.rhsOnly.h[sign](token) : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.lhsOnly.h,sign) ? little_parser_ParserTokens.ErrorMessage("Operator " + sign + " is used incorrectly - should appear before the sign (" + little_tools_PrettyPrinter.stringifyParsernull,token) + sign + " instead of " + sign + little_tools_PrettyPrinter.stringifyParsernull,token) + ")") : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.standard.h,sign) ? little_parser_ParserTokens.ErrorMessage("Operator " + sign + " is used incorrectly - should appear between two values (" + little_tools_PrettyPrinter.stringifyParsernull,token) + " " + sign + " <some value>)") : little_parser_ParserTokens.ErrorMessage("Operator " + sign + " does not exist. did you make a typo?");
 			} else if(calculated == null) {
 				calculated = token;
 			} else if(sign == null) {
 				little_interpreter_Actions.error("Two values cannot come one after the other. At least one of them should be an operator, or, put an operator in between.");
 			} else {
-				calculated = Object.prototype.hasOwnProperty.call(little_interpreter_Operators.standard.h,sign) ? little_interpreter_Operators.standard.h[sign](calculated,token) : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.lhsOnly.h,sign) ? little_parser_ParserTokens.ErrorMessage("Operator " + sign + " is used incorrectly - should not appear between two values, only to the right of one of them (" + little_tools_PrettyPrinter.stringify(null,token) + sign + " or " + little_tools_PrettyPrinter.stringify(null,calculated) + sign + ")") : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.rhsOnly.h,sign) ? little_parser_ParserTokens.ErrorMessage("Operator " + sign + " is used incorrectly - should not appear between two values, only to the left of one of them (" + sign + little_tools_PrettyPrinter.stringify(null,token) + " or " + sign + little_tools_PrettyPrinter.stringify(null,calculated) + ")") : little_parser_ParserTokens.ErrorMessage("Operator " + sign + " does not exist. did you make a typo?");
+				calculated = Object.prototype.hasOwnProperty.call(little_interpreter_Operators.standard.h,sign) ? little_interpreter_Operators.standard.h[sign](calculated,token) : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.lhsOnly.h,sign) ? little_parser_ParserTokens.ErrorMessage("Operator " + sign + " is used incorrectly - should not appear between two values, only to the right of one of them (" + little_tools_PrettyPrinter.stringifyParsernull,token) + sign + " or " + little_tools_PrettyPrinter.stringifyParsernull,calculated) + sign + ")") : Object.prototype.hasOwnProperty.call(little_interpreter_Operators.rhsOnly.h,sign) ? little_parser_ParserTokens.ErrorMessage("Operator " + sign + " is used incorrectly - should not appear between two values, only to the left of one of them (" + sign + little_tools_PrettyPrinter.stringifyParsernull,token) + " or " + sign + little_tools_PrettyPrinter.stringifyParsernull,calculated) + ")") : little_parser_ParserTokens.ErrorMessage("Operator " + sign + " does not exist. did you make a typo?");
 			}
 		}
 	}
@@ -7440,7 +7440,7 @@ little_tools_PrepareRun.addSigns = function() {
 		var l = little_tools_Conversion.toHaxeValue(lhs);
 		var r = little_tools_Conversion.toHaxeValue(rhs);
 		if(r == 0) {
-			little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("Cannot divide by 0 " + ($hxEnums[rhs.__enum__].__constructs__[rhs._hx_index]._hx_name == "Number" || $hxEnums[rhs.__enum__].__constructs__[rhs._hx_index]._hx_name == "Decimal" ? "" : "(" + little_tools_PrettyPrinter.stringify(null,rhs) + " is 0)")));
+			little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("Cannot divide by 0 " + ($hxEnums[rhs.__enum__].__constructs__[rhs._hx_index]._hx_name == "Number" || $hxEnums[rhs.__enum__].__constructs__[rhs._hx_index]._hx_name == "Decimal" ? "" : "(" + little_tools_PrettyPrinter.stringifyParsernull,rhs) + " is 0)")));
 		}
 		return little_parser_ParserTokens.Decimal(l / r + "");
 	}});
@@ -7571,7 +7571,7 @@ little_tools_PrepareRun.addConditions = function() {
 			++safetyNet;
 		}
 		if(safetyNet >= 500000) {
-			little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("Too much iteration (is `" + little_tools_PrettyPrinter.stringify(params) + "` forever `" + Std.string(little_tools_ParserTokensSimple.TRUE_VALUE) + "`?)"),"Interpreter");
+			little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("Too much iteration (is `" + little_tools_PrettyPrinter.stringifyParserparams) + "` forever `" + Std.string(little_tools_ParserTokensSimple.TRUE_VALUE) + "`?)"),"Interpreter");
 		}
 		return val;
 	});
@@ -7622,7 +7622,7 @@ little_tools_PrepareRun.addConditions = function() {
 		params = fp;
 		var handle = little_interpreter_Interpreter.accessObject(params[0]);
 		if(handle == null) {
-			little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("`for` loop must start with a variable to count on (expected definition/block, found: `" + little_tools_PrettyPrinter.stringify(null,params[0]) + "`)"));
+			little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("`for` loop must start with a variable to count on (expected definition/block, found: `" + little_tools_PrettyPrinter.stringifyParsernull,params[0]) + "`)"));
 			return val;
 		}
 		var from = null;
@@ -7724,7 +7724,7 @@ little_tools_PrepareRun.addConditions = function() {
 		var val = little_parser_ParserTokens.NullValue;
 		var handle = little_interpreter_Interpreter.accessObject(Type.enumParameters(params[0])[0][0]);
 		if(handle == null) {
-			little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("`after` condition must start with a variable to watch (expected definition, found: `" + little_tools_PrettyPrinter.stringify(Type.enumParameters(params[0])[0][0]) + "`)"));
+			little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("`after` condition must start with a variable to watch (expected definition, found: `" + little_tools_PrettyPrinter.stringifyParserType.enumParameters(params[0])[0][0]) + "`)"));
 			return val;
 		}
 		var dispatchAndRemove = null;
@@ -7741,7 +7741,7 @@ little_tools_PrepareRun.addConditions = function() {
 		var val = little_parser_ParserTokens.NullValue;
 		var handle = little_interpreter_Interpreter.accessObject(Type.enumParameters(params[0])[0][0]);
 		if(handle == null) {
-			little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("`whenever` condition must start with a variable to watch (expected definition, found: `" + little_tools_PrettyPrinter.stringify(Type.enumParameters(params[0])[0][0]) + "`)"));
+			little_interpreter_Runtime.throwError(little_parser_ParserTokens.ErrorMessage("`whenever` condition must start with a variable to watch (expected definition, found: `" + little_tools_PrettyPrinter.stringifyParserType.enumParameters(params[0])[0][0]) + "`)"));
 			return val;
 		}
 		var dispatchAndRemove = function(set) {

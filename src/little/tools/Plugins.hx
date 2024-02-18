@@ -1,5 +1,8 @@
 package little.tools;
 
+import little.interpreter.memory.MemoryPointer;
+import little.interpreter.memory.ExternalInterfacing.ExtTree;
+import little.interpreter.memory.Memory;
 import little.interpreter.Actions;
 import little.interpreter.Operators;
 import haxe.exceptions.ArgumentException;
@@ -9,261 +12,46 @@ import haxe.extern.EitherType;
 import little.lexer.Lexer;
 import little.parser.Parser;
 import little.interpreter.Interpreter;
-import little.parser.Tokens.ParserTokens;
-import little.interpreter.memory.MemoryObject;
+import little.interpreter.Tokens.InterpTokens;
 import little.Little.*;
 import little.Keywords.*;
 
 using little.tools.Plugins;
+using little.tools.Extensions;
 @:access(little.Little)
 @:access(little.interpreter.Runtime)
 class Plugins {
-	/**
-		Registers an entire Haxe class's static fields & methods, to allow accessing them through Little. for example:
 
-		doing:  
+    private var memory:Memory;
 
-			Little.plugin.registerHaxeClass(Data.getClassInfo("Math"));
-
-		Will let you access all of Math's static fields & methods through little:
-		```haxe
-		print(Math.sqrt(4) + Math.max(2, {define i = 3, i}))
-		```
-
-		@param stats Data about the class, obtained by using `Data.getClassInfo("YourClassName")`
-		@param littleClassName When provided, remaps the class in little, placing the properties inside the value of `littleClassName` instead of the class name given previously.
-	**/
-	public static function registerHaxeClass(stats:Array<ItemInfo>, ?littleClassName:String) {
-
-		if (stats.length == 0) {
-			return;
-		}
-        littleClassName = littleClassName != null ? littleClassName : stats[0].className;
-		var fieldValues = new Map<String, Dynamic>();
-		var fieldFunctions = new Map<String, Dynamic>();
-		var cls = Type.resolveClass(stats[0].className);
-
-		// Iterate over the fields of the class
-		for (s in stats) {
-            if (s.isStatic) {
-                var field = s.name;
-			    // Check if the field is a static field
-			    // Get the field value and store it in the fieldValues map
-			    var value = Reflect.field(cls, field);
-			    // Check if the field is a function (i.e., a method)
-			    if (Reflect.isFunction(value)) {
-			    	// Store the function in the fieldFunctions map
-                    
-			    	fieldFunctions.set(field, value);
-			    } else {
-                    fieldValues.set(field, value);
-                } 
-            } else {
-                var field = s.name;
-                var value = Reflect.field(Type.createEmptyInstance(cls), field);
-                if (Reflect.isFunction(value)) {
-                    fieldFunctions.set(field, (obj:ParserTokens, paramsArray) -> {
-                        
-                        return Reflect.callMethod(Conversion.toHaxeValue(obj), Reflect.field(Conversion.toHaxeValue(obj), field), paramsArray);
-                    });
-                } else {
-                    fieldValues.set(field, (obj:ParserTokens) -> {
-                        return Reflect.field(Conversion.toHaxeValue(obj), field);
-                    });
-                }
-            }
-           
-
-		}
-
-		//// Test the maps by printing the values of Math.PI and Math.sqrt()
-		// trace(fieldValues);
-		// trace(fieldFunctions);
-
-		var motherObj = new MemoryObject(Module(littleClassName), [], null, Module(TYPE_MODULE), true); 
-
-		for (instance in stats) {
-			//trace(instance.fieldType, instance.allowWrite, instance.name, instance.parameters, instance.returnType);
-			switch (instance.fieldType) {
-				case "var":
-					{
-                        if (instance.isStatic) {
-                            var value:ParserTokens = Conversion.toLittleValue(fieldValues[instance.name]);
-						    var type:ParserTokens = Identifier(Conversion.toLittleType(instance.returnType));
-						    motherObj.props.set(instance.name, new MemoryObject(value, [] /*Should this be implemented?*/, null, type, true, motherObj));
-                        } else {
-                            var value:ParserTokens = External(params -> {
-                                return Conversion.toLittleValue(fieldValues[instance.name](params[0])); // params[0] should be the current var's value when using the function
-                            });
-                            var type:ParserTokens = Identifier(Conversion.toLittleType(instance.returnType));
-                            motherObj.props.set(instance.name, new MemoryObject(value, [] /*Should this be implemented?*/, [
-                                Variable(Identifier("value " /* That extra space is used to differentiate between non-static fields and functions. Todo: Pretty bad solution */), Identifier(littleClassName))
-                            ], type, true, false, true, motherObj));
-                        }
-						
-					}
-				case "function": {
-                    if (instance.isStatic) {
-                        var value:ParserTokens = External((args) -> {
-					    	return Conversion.toLittleValue(Reflect.callMethod(null, fieldFunctions[instance.name], [for (arg in args) Conversion.toHaxeValue(arg)]));
-					    });
-
-					    var type:ParserTokens = Identifier(Conversion.toLittleType(instance.returnType));
-					    var params = [];
-					    for (param in instance.parameters) 
-					    	params.push(Variable(Identifier(param.name), Identifier(param.type)));
-
-					    motherObj.props.set(instance.name, new MemoryObject(value, [] /*Should this be implemented?*/, params, type, true, motherObj));
-                    } else {
-                        var value:ParserTokens = External((args) -> {
-                            var obj = args.shift();
-                            var params = [for (a in args) Conversion.toHaxeValue(a)];
-                            return Conversion.toLittleValue(fieldFunctions[instance.name](obj, params));
-					    });
-
-					    var type:ParserTokens = Identifier(Conversion.toLittleType(instance.returnType));
-					    var params = [];
-					    for (param in instance.parameters) 
-					    	params.push(Variable(Identifier(param.name), Identifier(param.type)));
-                        params.unshift(Variable(Identifier("value"), Identifier(littleClassName)));
-					    motherObj.props.set(instance.name, new MemoryObject(value, [] /*Should this be implemented?*/, params, type, true, false, true, motherObj));
-                    }
-
-                    
-				}
-			}
-		}
-
-		Interpreter.memory.set(littleClassName, motherObj);
-	}
-
-	/**
-		Registers a haxe function inside Little code.
-		@param stats Data about the function, obtained using `Data.getFunctionInfo("functionName", "moduleName")`.
-		@param littleName When provided, remaps the function name in Little code. This name allows property access, such as `SomeType.functionName`
-	**/
-	public static function registerHaxeFunction(stats:ItemInfo, ?littleName:String) {
-		var cls = Type.resolveClass(stats.className);
-		var func = Reflect.field(cls, stats.name);
-
-		var motherObj = new MemoryObject(Module(stats.className), [], null, Module(TYPE_MODULE), true);
-		if (littleName != null) {
-			motherObj = Actions.memory.object;
-			var objects = littleName.split(Little.keywords.PROPERTY_ACCESS_SIGN);
-			stats.name = objects.pop();
-			for (name in objects) {
-				if (motherObj.get(name) != null) {
-					motherObj = motherObj.get(name);
-				} else {
-					var child = new MemoryObject(NullValue, [], null, Module(TYPE_DYNAMIC), true); // No reason to create a type, it's not used as one.
-					motherObj.set(name, child);
-					motherObj = child;
-				}
-			}
-		}
-
-		if (stats.isStatic) {
-			var value:ParserTokens = External((args) -> {
-				return Conversion.toLittleValue(Reflect.callMethod(null, func, [for (arg in args) Conversion.toHaxeValue(arg)]));
-			});
-
-			var type:ParserTokens = Identifier(Conversion.toLittleType(stats.returnType));
-			var params = [];
-			for (param in stats.parameters) 
-				params.push(Variable(Identifier(param.name), Identifier(param.type)));
-
-			motherObj.props.set(stats.name, new MemoryObject(value, [] /*Should this be implemented?*/, params, type, true, motherObj));
-		}
-	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    public function new(memory:Memory) {
+        this.memory = memory;
+    }
 
     /**
         registers a haxe value/property inside Little code.
 
-        @param variableName the name of the variable, for usage in Little code.
-        @param variableModuleName the module at which the variable "is declared". errors & logs point to this module.
-        @param allowWriting Whether writing to this variable is allowed or not.
+        @param variableName the name of the variable, for usage in Little code. If you want it nested in some kind of path, use `.` (e.g. `mother.varName`)
+        @param documentation documentation for this variable.
         @param staticValue **Option 1** - a static value to assign to this variable
         @param valueGetter **Option 2** - a function that returns a value that this variable gives when accessed.
-        @param valueSetter a function that dispatches whenever this value is assigned to. Takes effect when `allowWriting == true`.
     **/
-    public static function registerVariable(variableName:String, ?variableModuleName:String, allowWriting:Bool = false, ?staticValue:ParserTokens, ?valueGetter:Void -> ParserTokens, ?valueSetter:ParserTokens -> ParserTokens) {
-        Interpreter.memory.set(variableName, new MemoryObject(
-            External(params -> {
-                var currentModuleName = Little.runtime.currentModule;
-                if (variableModuleName != null) Little.runtime.currentModule = variableModuleName;
-                return try {
-                    var val = if (staticValue != null) staticValue;
-                    else valueGetter();
-                    Little.runtime.currentModule = currentModuleName;
-                    val;
-                } catch (e) {
-                    Little.runtime.currentModule = currentModuleName;
-                    ErrorMessage('External Variable Error: ' + e.details());
+    public function registerVariable(variableName:String, ?documentation:String, ?staticValue:InterpTokens, ?valueGetter:Void -> InterpTokens) {
+        var varPath = variableName.split(".");
+        var object = memory.externs.createPathFor(memory.externs.globalProperties, ...varPath);
+        object.getter = (_, _) -> {
+            return try {
+                var value = staticValue == null ? valueGetter() : staticValue;
+                {
+                    objectValue: value,
+                    objectAddress: memory.store(value),
+                    objectDoc: documentation ?? ""
                 }
-            }), 
-            [], 
-            null,
-            null, 
-            true, 
-            Interpreter.memory.object
-        ));
-
-        if (valueSetter != null) {
-            Interpreter.memory.get(variableName).valueSetter = function (v) {
-                return Interpreter.memory.get(variableName).value = valueSetter(v);
-            }
-        }
-        if (allowWriting == false) { //syntax here explained later on 
-            Interpreter.memory.get(variableName).valueSetter = function (v) {
-                Runtime.warn(ErrorMessage('Editing the variable $variableName is disallowed. New value is ignored, returning original value.'));
-                var currentModuleName = Little.runtime.currentModule;
-                if (variableModuleName != null) Little.runtime.currentModule = variableModuleName;
-                return try {
-                    var val = if (staticValue != null) staticValue;
-                    else valueGetter();
-                    Little.runtime.currentModule = currentModuleName;
-                    val;
-                } catch (e) {
-                    Little.runtime.currentModule = currentModuleName;
-                    ErrorMessage('External Variable Error: ' + e.details());
+            } catch (e) {
+                {
+                    objectValue: ErrorMessage('External Variable Error: ' + e.details()),
+                    objectAddress: memory.constants.ERROR,
+                    objectDoc: ""
                 }
             }
         }
@@ -272,180 +60,194 @@ class Plugins {
     /**
     	Allows usage of a function written in haxe inside Little code.
 
-    	@param actionName The name by which to identify the function
-    	@param actionModuleName The module from which access to this function is granted. Also, when & if this function ever throws an error/prints to standard output, the name provided here will be present in the error message as the responsible module.
-    	@param expectedParameters an `Array<ParserTokens>` consisting of `ParserTokens.Variable`s which contain the names & types of the parameters that should be passed on to the function. For example:
+    	@param actionName The name by which to identify the function. If you want this nested in some kind of path, use `.` (e.g. `mother.funcName`)
+    	@param documentation documentation for this function.
+    	@param expectedParameters an `Array<InterpTokens>` consisting of `InterpTokens.Variable`s which contain the names & types of the parameters that should be passed on to the function. For example:
             ```
-            [Variable(Identifier(x), Identifier("String"))]
+            [VariableDeclaration(Identifier(x), Identifier("Characters"))]
             ```
             **alternatively** - can be normal parameter "list" written in little: 
             ``` 
-            define value, define index as Number
+            define x as Characters, define index = 3, define y
             ```
-    	@param callback The actual function, which gets an array of the given parameters as little tokens (specifically of type `Expression`, 0 or more of them), and returns a value based on them
+            **Important** - if variables appear in the end and have assigned values, they are optional.
+    	@param callback The actual function, which gets an array of the given parameters as reduced little tokens (basic types and `Object`), and returns a value based on them
+		@param returnType The type of the returned value. This exists due to implementation limitations. You can use the `Conversion` class to know which types to put here.
     **/
-    public static function registerFunction(actionName:String, ?actionModuleName:String, expectedParameters:EitherType<String, Array<ParserTokens>>, callback:Array<ParserTokens> -> ParserTokens) {
+    public function registerFunction(functionName:String, ?documentation:String, expectedParameters:EitherType<String, Array<InterpTokens>>, callback:Array<InterpTokens> -> InterpTokens, returnType:String) {
         var params = if (expectedParameters is String) {
-            Parser.parse(Lexer.lex(expectedParameters));
-        } else expectedParameters;
+            Interpreter.convert(...Parser.parse(Lexer.lex(expectedParameters)));
+        } else (expectedParameters : Array<InterpTokens>);
 
-        var memObject = new MemoryObject(
-            External(params -> {
-                var currentModuleName = Little.runtime.currentModule;
-                if (actionModuleName != null) Little.runtime.currentModule = actionModuleName;
-                return try {
-                    var val = callback(params);
-                    Little.runtime.currentModule = currentModuleName;
-                    val;
-                } catch (e) {
-                    Little.runtime.currentModule = currentModuleName;
-                    ErrorMessage('External Function Error: ' + e.details());
-                }
-            }), 
-            [], 
-            params, 
-            null, 
-            true
-        );
-
-        if (actionModuleName != null) {
-            Interpreter.memory.set(actionModuleName, new MemoryObject(Module(actionModuleName), [], null, Module(TYPE_MODULE), true, Interpreter.memory.object));
-            memObject.parent = Interpreter.memory.get(actionModuleName);
-            Interpreter.memory.get(actionModuleName).props.set(actionName, memObject);
-        } else Interpreter.memory.set(actionName, memObject);
-    }
-
-    public static function registerCondition(conditionName:String, ?expectedConditionPattern:EitherType<String, Array<ParserTokens>> ,callback:(Array<ParserTokens>, Array<ParserTokens>) -> ParserTokens) {
-        CONDITION_TYPES.push(conditionName);
-
-		var params = if (expectedConditionPattern is String) {
-            Parser.parse(Lexer.lex(expectedConditionPattern));
-        } else expectedConditionPattern;
-
-        Interpreter.memory.set(conditionName, new MemoryObject(
-            ExternalCondition((con, body) -> {
-                return try {
-                    callback(con, body);
-                } catch (e) {
-                    ErrorMessage('External Condition Error: ' + e.details());
-                }
-            }), 
-            [], 
-            params, 
-            null, 
-            true,
-			true,
-            Interpreter.memory.object
-        ));
-    }
-
-    public static function registerProperty(propertyName:String, onObject:String, isType:Bool, ?valueOption1:FunctionInfo, ?valueOption2:VariableInfo) {
-        if (isType) {
-            if (!Interpreter.memory.exists(onObject) || Interpreter.memory.silentGet(onObject).value.getName() != "Module") {
-                Interpreter.memory.set(onObject, new MemoryObject(Module(onObject), [], null, Module(TYPE_MODULE), true));
-            }
-        } else {
-            if (!Interpreter.memory.exists(onObject)) {
-                Interpreter.memory.set(onObject, new MemoryObject(NullValue, [], null, Module(TYPE_DYNAMIC), true));
-            }
-        }
-
-        var memObject:MemoryObject = new MemoryObject();
-        var parent = Interpreter.memory.silentGet(onObject);
-        if (valueOption2 != null) {
-            // Variable
-            var info:VariableInfo = valueOption2;
-            memObject = new MemoryObject(
-                External(params -> {
-                    return try {
-                        var val = if (info.staticValue != null) info.staticValue;
-                        else info.valueGetter(memObject.parent);
-                        val;
-                    } catch (e) {
-                        ErrorMessage('External Variable Error: ' + e.details());
-                    }
-                }), 
-                [], 
-                if (!isType) null else [
-                    Variable(Identifier("value " /* That extra space is used to differentiate between non-static fields and functions. Todo: Pretty bad solution */), Identifier(onObject))
-                ],
-                Identifier(info.type), 
-                true,
-                false,
-                isType,
-                parent
-            );
-
-            if (info.valueSetter != null) {
-                memObject.valueSetter = function (v) {
-                    return memObject.value = info.valueSetter(memObject.parent, v);
-                }
-            }
-
-            if (info.allowWriting == false) {// null defaults to true here, so cant use !info.allowWriting
-                memObject.valueSetter = function (v) {
-                    Runtime.warn(ErrorMessage('Directly editing the property $onObject$PROPERTY_ACCESS_SIGN$propertyName is disallowed. New value is ignored, returning original value.'));
-                    return try {
-                        var val = if (info.staticValue != null) info.staticValue;
-                        else info.valueGetter(memObject.parent);
-                        val;
-                    } catch (e) {
-                        ErrorMessage('External Variable Error: ' + e.details());
-                    }
-                }
-            }
-        } else {
-            // Function
-            var info:FunctionInfo = valueOption1;
-
-            var params = if (info.expectedParameters is String) {
-                Parser.parse(Lexer.lex(info.expectedParameters));
-            } else info.expectedParameters;
-            if (isType) params.unshift(Variable(Identifier("value"), Identifier(onObject)));
-
-            memObject = new MemoryObject(
-                External(params -> {
-                    return try {
-                        var val = info.callback(memObject.parent, params);
-                        val;
-                    } catch (e) {
-                        ErrorMessage('External Function Error: ' + e.details());
-                    }
-                }), 
-                [], 
-                params, 
-                Identifier(info.type), 
-                true,
-                false,
-                isType,
-                parent
-            );
-
-            if (info.allowWriting == false) {// null defaults to true here, so cant use !info.allowWriting
-                memObject.valueSetter = function (v) {
-                    Runtime.throwError(ErrorMessage('Directly editing the property $onObject$PROPERTY_ACCESS_SIGN$propertyName is disallowed. New value is ignored, returning original value.'));
-                    return try {
-                        var val = info.callback(memObject.parent, params);
-                        val;
-                    } catch (e) {
-                        ErrorMessage('External Function Error: ' + e.details());
-                    }
-                }
-            }
-        }
-       
-        // trace('Adding $propertyName to $onObject');
-        parent.props.set(propertyName, memObject);
+        var functionPath = functionName.split(".");
         
+        var paramMap = new OrderedMap<String, InterpTokens>();
+		for (entry in params) {
+			if (entry.is(SPLIT_LINE, SET_LINE)) continue;
+			switch entry {
+				case VariableDeclaration(name, null, _): paramMap[name.extractIdentifier()] = TypeCast(NullValue, Identifier(Little.keywords.TYPE_DYNAMIC));
+				case VariableDeclaration(name, type, _): paramMap[name.extractIdentifier()] = TypeCast(NullValue, type);
+				case Write(assignees, value): {
+					switch assignees[0] {
+						case VariableDeclaration(name, null, _): paramMap[name.extractIdentifier()] = TypeCast(value, Identifier(Little.keywords.TYPE_DYNAMIC));
+						case VariableDeclaration(name, type, _): paramMap[name.extractIdentifier()] = TypeCast(value, type);
+						default:
+					}
+				}
+				default:
+			}
+		}
+
+		var returnTypeToken = Interpreter.convert(...Parser.parse(Lexer.lex(returnType)))[0]; // May be a PropertyAccess or an Identifier
+        var token:InterpTokens = FunctionCode(paramMap, Block([
+            FunctionReturn(HaxeExtern(() -> callback(paramMap.keys().toArray().map(key -> Actions.evaluate(memory.read(key).objectValue)))), returnTypeToken)
+        ], returnTypeToken));
+        
+        var object = memory.externs.createPathFor(memory.externs.globalProperties, ...functionPath);
+
+        object.getter = (_, _) -> {
+			objectValue: token,
+			objectAddress: memory.constants.EXTERN,
+			objectDoc: documentation ?? ""
+        }
     }
 
+    /**
+		Adds a condition to be used in Little.
+
+		Conditions are can be described as a special function, that decides how many time another given function is run, and with which parameters.
+		Their syntax:
+
+			<condition_name> (<params>) {
+				<body>
+			}
+		
+		@param conditionName The name by which to identify the condition. If you want this nested in some kind of path, use `.` (e.g. `mother.conditionName`)
+		@param documentation documentation for this condition.
+		@param callback The actual function, which gets an array of the given parameters, exactly as given (which means they might require further evaluation), 
+			and another array representing the block of code right after the condition, and return an outcome token of the condition. 
+			The outcome is usually expected to be the last value in the last iteration of the condition (for example, the same as haxe `if` statements)
+    **/
+    public function registerCondition(conditionName:String, ?documentation:String ,callback:(params:Array<InterpTokens>, body:Array<InterpTokens>) -> InterpTokens) {
+		var conditionPath = conditionName.split(".");
+		var object = memory.externs.createPathFor(memory.externs.globalProperties, ...conditionPath);
+
+		object.getter = (_, _) -> {
+			objectValue: ConditionCode([
+				null => Block([
+					FunctionReturn(HaxeExtern(() -> callback(
+						Interpreter.convert(...Parser.parse(Lexer.lex(memory.read(Little.keywords.CONDITION_PATTERN_PARAMETER_NAME).objectValue.parameter(0)))), 
+						Interpreter.convert(...Parser.parse(Lexer.lex(memory.read(Little.keywords.CONDITION_BODY_PARAMETER_NAME).objectValue.parameter(0))))))
+					, null /**forces type inference**/)
+				], null)
+			]),
+			objectAddress: memory.constants.EXTERN,
+			objectDoc: documentation ?? ""
+		}
+    }
+
+	/**
+		Registers a haxe-property-like variable on a little class found at `onType`.
+
+
+		@param propertyName The name of the property, must not include property access sign.
+		@param onType The type of the object the property is on. Must be a little class, and if the class is nested within an object, a full path must be specified.
+		@param documentation The documentation of the property
+		@param staticValue **Option 1**. A static value this property always returns.
+		@param valueGetter **Option 2**. A function that returns the value of the property. It takes in the value of the parent object, and it's address in memory.
+	**/
+	public function registerInstanceVariable(propertyName:String, onType:String, ?documentation:String, ?staticValue:InterpTokens, ?valueGetter:(objectValue:InterpTokens, objectAddress:MemoryPointer) -> InterpTokens) {
+		var classPath = onType.split(".");
+        classPath.push(propertyName);
+		var object = memory.externs.createPathFor(memory.externs.instanceProperties, ...classPath);
+
+		object.getter = (v, a) -> {
+			return try {
+				var value = staticValue == null ? valueGetter(v, a) : staticValue;
+				{
+					objectValue: value,
+					objectAddress: memory.store(value),
+					objectDoc: documentation ?? ""
+				}
+			} catch (e) {
+				{
+					objectValue: ErrorMessage('External Function Error: ' + e.details()),
+					objectAddress: memory.constants.ERROR,
+					objectDoc: ""
+				}
+			}
+		}
+	}
+
+	/**
+		Registers a method on every object of the given type, that can be called from Little.
+
+		@param propertyName The name of the property, must not include property access sign.
+		@param onType The type of the object the property is on. Must be a little class, and if the class is nested within an object, a full path must be specified.
+		@param documentation The documentation of the property
+		@param expectedParameters an `Array<InterpTokens>` consisting of `InterpTokens.Variable`s which contain the names & types of the parameters that should be passed on to the function. For example:
+            ```
+            [VariableDeclaration(Identifier(x), Identifier("Characters"))]
+            ```
+            **alternatively** - can be normal parameter "list" written in little: 
+            ``` 
+            define x as Characters, define index = 3, define y
+            ```
+            **Important** - if variables appear in the end and have assigned values, they are optional.
+		@param callback The actual function, which gets 3 parameters: the value of the object, the address of the object in memory, and an array of the given parameters, exactly as the user gave them (which means they might require further evaluation). The function should return something at the end, or a `VoidValue`.
+		@param returnType The type of the returned value. This exists due to implementation limitations. You can use the `Conversion` class to know which types to put here.
+	**/
+	public function registerInstanceFunction(propertyName:String, onType:String, ?documentation:String, expectedParameters:EitherType<String, Array<InterpTokens>>, callback:(objectValue:InterpTokens, objectAddress:MemoryPointer, params:Array<InterpTokens>) -> InterpTokens, returnType:String) {
+		var params = if (expectedParameters is String) {
+            Interpreter.convert(...Parser.parse(Lexer.lex(expectedParameters)));
+        } else (expectedParameters : Array<InterpTokens>);
+        
+        var paramMap = new OrderedMap<String, InterpTokens>();
+		for (entry in params) {
+			if (entry.is(SPLIT_LINE, SET_LINE)) continue;
+			switch entry {
+				case VariableDeclaration(name, null, _): paramMap[name.extractIdentifier()] = TypeCast(NullValue, Identifier(Little.keywords.TYPE_DYNAMIC));
+				case VariableDeclaration(name, type, _): paramMap[name.extractIdentifier()] = TypeCast(NullValue, type);
+				case Write(assignees, value): {
+					switch assignees[0] {
+						case VariableDeclaration(name, null, _): paramMap[name.extractIdentifier()] = TypeCast(value, Identifier(Little.keywords.TYPE_DYNAMIC));
+						case VariableDeclaration(name, type, _): paramMap[name.extractIdentifier()] = TypeCast(value, type);
+						default:
+					}
+				}
+				default:
+			}
+		}
+
+		var classPath = onType.split(".");
+        classPath.push(propertyName);
+		var object = memory.externs.createPathFor(memory.externs.instanceProperties, ...classPath);
+		var returnTypeToken = Interpreter.convert(...Parser.parse(Lexer.lex(returnType)))[0]; // May be a PropertyAccess or an Identifier
+		object.getter = (v, a) -> {
+			return try {
+				{
+					objectValue: FunctionCode(paramMap, Block([
+						FunctionReturn(HaxeExtern(() -> callback(v, a, paramMap.keys().toArray().map(key -> Actions.evaluate(memory.read(key).objectValue)))), returnTypeToken)
+					], returnTypeToken)),
+					objectAddress: memory.constants.EXTERN,
+					objectDoc: documentation ?? ""
+				}
+			} catch (e) {
+				{
+					objectValue: ErrorMessage('External Function Error: ' + e.details()),
+					objectAddress: memory.constants.ERROR,
+					objectDoc: ""
+				}
+			}
+		}
+	}
 
     static function combosHas(combos:Array<{lhs:String, rhs:String}>, lhs:String, rhs:String) {
         for (c in combos) if (c.rhs == rhs && c.lhs == lhs) return true;
         return false;
     }
 
-    public static function registerSign(symbol:String, info:SignInfo) {
+    public function registerSign(symbol:String, info:SignInfo) {
 
         if (info.operatorType == null || info.operatorType == LHS_RHS) {
             if (info.callback == null && info.singleSidedOperatorCallback != null) 
@@ -453,73 +255,67 @@ class Plugins {
             else if (info.callback == null)
                 throw new ArgumentException("callback", 'No callback given for operator type ${info.operatorType ?? LHS_RHS} (`callback` is null)');
             
-            var callbackFunc:(ParserTokens, ParserTokens) -> ParserTokens;
+            var callbackFunc:(InterpTokens, InterpTokens) -> InterpTokens;
 
 			// A bunch of ifs in order to shorten the final callback function, improves performance a bit
             if (info.lhsAllowedTypes != null && info.rhsAllowedTypes == null && info.allowedTypeCombos == null) {
                 callbackFunc = (lhs, rhs) -> {
-                    if (!info.lhsAllowedTypes.contains(Interpreter.getValueType(lhs).getParameters()[0])) {
-                        var t = Interpreter.getValueType(lhs).getParameters()[0];
-                        return Little.runtime.throwError(ErrorMessage('Cannot preform ${t}(${Interpreter.stringifyTokenIdentifier(lhs)}) $symbol ${Interpreter.getValueType(rhs).getParameters()[0]}(${Interpreter.stringifyTokenIdentifier(rhs)}) - Left operand cannot be of type $t (accepted types: ${info.lhsAllowedTypes})'));
+                    final lType = Actions.evaluate(lhs).type(), rType = Actions.evaluate(rhs).type();
+                    if (!info.lhsAllowedTypes.contains(lType)) {
+                        return Little.runtime.throwError(ErrorMessage('Cannot preform $lType(${lhs.extractIdentifier()}) $symbol $rType(${rhs.extractIdentifier()}) - Left operand cannot be of type $lType (accepted types: ${info.lhsAllowedTypes})'));
                     }
 
                     return info.callback(lhs, rhs);
                 }
             } else if (info.lhsAllowedTypes == null && info.rhsAllowedTypes != null && info.allowedTypeCombos == null) {
                 callbackFunc = (lhs, rhs) -> {
-                    if (!info.rhsAllowedTypes.contains(Interpreter.getValueType(rhs).getParameters()[0])) {
-                        var t = Interpreter.getValueType(rhs).getParameters()[0];
-                        return Little.runtime.throwError(ErrorMessage('Cannot preform ${Interpreter.getValueType(lhs).getParameters()[0]}(${Interpreter.stringifyTokenIdentifier(lhs)}) $symbol ${t}(${Interpreter.stringifyTokenIdentifier(rhs)}) - Right operand cannot be of type $t (accepted types: ${info.rhsAllowedTypes})'));
+                    final lType = Actions.evaluate(lhs).type(), rType = Actions.evaluate(rhs).type();
+                    if (!info.rhsAllowedTypes.contains(rType)) {
+                        return Little.runtime.throwError(ErrorMessage('Cannot preform $lType(${lhs.extractIdentifier()}) $symbol $rType(${rhs.extractIdentifier()}) - Right operand cannot be of type $rType (accepted types: ${info.rhsAllowedTypes})'));
                     }
 
                     return info.callback(lhs, rhs);
                 }
             } else if (info.lhsAllowedTypes != null && info.rhsAllowedTypes != null && info.allowedTypeCombos == null) {
                 callbackFunc = (lhs, rhs) -> {
-                    var rhsType = Interpreter.getValueType(rhs).getParameters()[0],
-                        lhsType = Interpreter.getValueType(lhs).getParameters()[0];
-                    if (!info.rhsAllowedTypes.contains(Interpreter.getValueType(rhs).getParameters()[0])) {
-                        var t = Interpreter.getValueType(rhs).getParameters()[0];
-                        return Little.runtime.throwError(ErrorMessage('Cannot preform ${Interpreter.getValueType(lhs).getParameters()[0]}(${Interpreter.stringifyTokenIdentifier(lhs)}) $symbol ${t}(${Interpreter.stringifyTokenIdentifier(rhs)}) - Right operand cannot be of type $t (accepted types: ${info.rhsAllowedTypes})'));
+                    final lType = Actions.evaluate(lhs).type(), rType = Actions.evaluate(rhs).type();
+                    if (!info.rhsAllowedTypes.contains(rType)) {
+                        return Little.runtime.throwError(ErrorMessage('Cannot preform $lType(${lhs.extractIdentifier()}) $symbol $rType(${rhs.extractIdentifier()}) - Right operand cannot be of type $rType (accepted types: ${info.rhsAllowedTypes})'));
                     }
 					
-                    if (!info.rhsAllowedTypes.contains(Interpreter.getValueType(lhs).getParameters()[0])) {
-                        var t = Interpreter.getValueType(lhs).getParameters()[0];
-                        return Little.runtime.throwError(ErrorMessage('Cannot preform ${Interpreter.getValueType(lhs).getParameters()[0]}(${Interpreter.stringifyTokenIdentifier(lhs)}) $symbol ${t}(${Interpreter.stringifyTokenIdentifier(rhs)}) - Left operand cannot be of type $t (accepted types: ${info.lhsAllowedTypes})'));
+                    if (!info.rhsAllowedTypes.contains(lType)) {
+                        return Little.runtime.throwError(ErrorMessage('Cannot preform $lType(${lhs.extractIdentifier()}) $symbol $rType(${rhs.extractIdentifier()}) - Left operand cannot be of type $lType (accepted types: ${info.lhsAllowedTypes})'));
                     }
 
                     return info.callback(lhs, rhs);
                 }
             } else if (info.lhsAllowedTypes != null && info.rhsAllowedTypes == null && info.allowedTypeCombos != null) {
                 callbackFunc = (lhs, rhs) -> {
-                    var r = Interpreter.getValueType(rhs).getParameters()[0];
-                    var l = Interpreter.getValueType(lhs).getParameters()[0];
-                    if (!info.lhsAllowedTypes.contains(l) && !info.allowedTypeCombos.containsCombo(l, r)) {
-                        return Little.runtime.throwError(ErrorMessage('Cannot preform ${l}(${Interpreter.stringifyTokenIdentifier(lhs)}) $symbol ${r}(${Interpreter.stringifyTokenIdentifier(rhs)}) - Right operand cannot be of type $r while left operand is of type $l (accepted types for left operand: ${info.lhsAllowedTypes}, accepted type combinations: ${info.allowedTypeCombos.map(object -> '${object.rhs} $symbol ${object.lhs}')})'));
+                    final lType = Actions.evaluate(lhs).type(), rType = Actions.evaluate(rhs).type();
+                    if (!info.lhsAllowedTypes.contains(lType) && !info.allowedTypeCombos.containsCombo(lType, rType)) {
+                        return Little.runtime.throwError(ErrorMessage('Cannot preform $lType(${lhs.extractIdentifier()}) $symbol $rType(${rhs.extractIdentifier()}) - Right operand cannot be of type $rType while left operand is of type $lType (accepted types for left operand: ${info.lhsAllowedTypes}, accepted type combinations: ${info.allowedTypeCombos.map(object -> '${object.rhs} $symbol ${object.lhs}')})'));
                     }
 
                     return info.callback(lhs, rhs);
                 }
             } else if (info.lhsAllowedTypes == null && info.rhsAllowedTypes != null && info.allowedTypeCombos != null) {
                 callbackFunc = (lhs, rhs) -> {
-                    var r = Interpreter.getValueType(rhs).getParameters()[0];
-                    var l = Interpreter.getValueType(lhs).getParameters()[0];
-                    if (!info.rhsAllowedTypes.contains(r) && !info.allowedTypeCombos.containsCombo(l, r)) {
-                        return Little.runtime.throwError(ErrorMessage('Cannot preform ${l}(${Interpreter.stringifyTokenIdentifier(lhs)}) $symbol ${r}(${Interpreter.stringifyTokenIdentifier(rhs)}) - Right operand cannot be of type $r while left operand is of type $l (accepted types for right operand: ${info.rhsAllowedTypes}, accepted type combinations: ${info.allowedTypeCombos.map(object -> '${object.rhs} $symbol ${object.lhs}')})'));
+                    final lType = Actions.evaluate(lhs).type(), rType = Actions.evaluate(rhs).type();
+                    if (!info.rhsAllowedTypes.contains(rType) && !info.allowedTypeCombos.containsCombo(lType, rType)) {
+                        return Little.runtime.throwError(ErrorMessage('Cannot preform $lType(${lhs.extractIdentifier()}) $symbol $rType(${rhs.extractIdentifier()}) - Right operand cannot be of type $rType while left operand is of type $lType (accepted types for right operand: ${info.rhsAllowedTypes}, accepted type combinations: ${info.allowedTypeCombos.map(object -> '${object.rhs} $symbol ${object.lhs}')})'));
                     }
 
                     return info.callback(lhs, rhs);
                 }
             } else if (info.lhsAllowedTypes != null && info.rhsAllowedTypes != null && info.allowedTypeCombos != null) {
                 callbackFunc = (lhs, rhs) -> {
-                    var rhsType = Interpreter.getValueType(rhs).getParameters()[0],
-                        lhsType = Interpreter.getValueType(lhs).getParameters()[0];
-                    if (!info.rhsAllowedTypes.contains(rhsType) && !info.allowedTypeCombos.containsCombo(lhsType, rhsType)) {
-                        return Little.runtime.throwError(ErrorMessage('Cannot preform ${lhsType}(${Interpreter.stringifyTokenIdentifier(lhs)}) $symbol ${rhsType}(${Interpreter.stringifyTokenIdentifier(rhs)}) - Right operand cannot be of type $rhsType (accepted types: ${info.rhsAllowedTypes}, accepted type combinations: ${info.allowedTypeCombos.map(object -> '${object.rhs} $symbol ${object.lhs}')})'));
+                    final lType = Actions.evaluate(lhs).type(), rType = Actions.evaluate(rhs).type();
+                    if (!info.rhsAllowedTypes.contains(rType) && !info.allowedTypeCombos.containsCombo(lType, rType)) {
+                        return Little.runtime.throwError(ErrorMessage('Cannot preform $lType(${lhs.extractIdentifier()}) $symbol ${rType}(${rhs.extractIdentifier()}) - Right operand cannot be of type $rType (accepted types: ${info.rhsAllowedTypes}, accepted type combinations: ${info.allowedTypeCombos.map(object -> '${object.rhs} $symbol ${object.lhs}')})'));
                     }
 					
-                    if (!info.rhsAllowedTypes.contains(lhsType) && !info.allowedTypeCombos.containsCombo(lhsType, rhsType)) {
-                        return Little.runtime.throwError(ErrorMessage('Cannot preform ${lhsType}(${Interpreter.stringifyTokenIdentifier(lhs)}) $symbol ${rhsType}(${Interpreter.stringifyTokenIdentifier(rhs)}) - Left operand cannot be of type $lhsType (accepted types: ${info.lhsAllowedTypes}, accepted type combinations: ${info.allowedTypeCombos.map(object -> '${object.rhs} $symbol ${object.lhs}')})'));
+                    if (!info.rhsAllowedTypes.contains(lType) && !info.allowedTypeCombos.containsCombo(lType, rType)) {
+                        return Little.runtime.throwError(ErrorMessage('Cannot preform $lType(${lhs.extractIdentifier()}) $symbol ${rType}(${rhs.extractIdentifier()}) - Left operand cannot be of type $lType (accepted types: ${info.lhsAllowedTypes}, accepted type combinations: ${info.allowedTypeCombos.map(object -> '${object.rhs} $symbol ${object.lhs}')})'));
                     }
 
                     return info.callback(lhs, rhs);
@@ -533,22 +329,22 @@ class Plugins {
             else if (info.singleSidedOperatorCallback == null)
                 throw new ArgumentException("singleSidedOperatorCallback", 'No callback given for operator type ${info.operatorType ?? LHS_RHS} (`singleSidedOperatorCallback` is null)');
             
-			var callbackFunc:ParserTokens -> ParserTokens;
+			var callbackFunc:InterpTokens -> InterpTokens;
 
 			if (info.operatorType == LHS_ONLY) {
 				callbackFunc = (lhs) -> {
-					var l = Interpreter.getValueType(lhs).getParameters()[0];
-					if (!info.lhsAllowedTypes.contains(l)) {
-						return Little.runtime.throwError(ErrorMessage('Cannot perform $l(${Interpreter.stringifyTokenIdentifier(lhs)})$symbol - Operand cannot be of type $l (accepted types: ${info.lhsAllowedTypes})'));
+					var lType = Actions.evaluate(lhs).type();
+					if (!info.lhsAllowedTypes.contains(lType)) {
+						return Little.runtime.throwError(ErrorMessage('Cannot perform $lType(${lhs.extractIdentifier()})$symbol - Operand cannot be of type $lType (accepted types: ${info.lhsAllowedTypes})'));
 					}
 
 					return info.singleSidedOperatorCallback(lhs);
 				}
 			} else {
 				callbackFunc = (rhs) -> {
-					var r = Interpreter.getValueType(rhs).getParameters()[0];
-					if (!info.rhsAllowedTypes.contains(r)) {
-						return Little.runtime.throwError(ErrorMessage('Cannot perform $symbol$r(${Interpreter.stringifyTokenIdentifier(rhs)}) - Operand cannot be of type $r (accepted types: ${info.rhsAllowedTypes})'));
+                    var rType = Actions.evaluate(rhs).type();
+					if (!info.rhsAllowedTypes.contains(rType)) {
+						return Little.runtime.throwError(ErrorMessage('Cannot perform $symbol$rType(${rhs.extractIdentifier()}) - Operand cannot be of type $rType (accepted types: ${info.rhsAllowedTypes})'));
 					}
 
 					return info.singleSidedOperatorCallback(rhs);
@@ -597,39 +393,12 @@ typedef ItemInfo = {
     isStatic:Bool
 }
 
-typedef FunctionInfo = {
-    expectedParameters:EitherType<String, Array<ParserTokens>>,
-    callback:(MemoryObject, Array<ParserTokens>) -> ParserTokens, //parent, params to value
-    ?allowWriting:Bool,
-    ?type:String
-}
-typedef StaticFunctionInfo = {
-    expectedParameters:EitherType<String, Array<ParserTokens>>,
-    callback:(Array<ParserTokens>) -> ParserTokens, //parent, params to value
-    ?allowWriting:Bool,
-	?valueType:String
-}
-typedef InstanceFunctionInfo = {
-    expectedParameters:EitherType<String, Array<ParserTokens>>,
-    callback:(thisObject:MemoryObject, Array<ParserTokens>) -> ParserTokens, //parent, params to value
-    ?allowWriting:Bool,
-    ?type:String
-}
-
-typedef VariableInfo = {
-    ?staticValue:ParserTokens, 
-    ?valueGetter:MemoryObject -> ParserTokens, //parent to value
-    ?valueSetter:(MemoryObject, ParserTokens) -> ParserTokens, //parent, provided value to value
-    ?allowWriting:Bool,
-    ?type:String
-}
-
 typedef SignInfo = {
     ?lhsAllowedTypes:Array<String>,
     ?rhsAllowedTypes:Array<String>,
     ?allowedTypeCombos:Array<{lhs:String, rhs:String}>,
-    ?callback:(ParserTokens, ParserTokens) -> ParserTokens,
-    ?singleSidedOperatorCallback:ParserTokens -> ParserTokens,
+    ?callback:(InterpTokens, InterpTokens) -> InterpTokens,
+    ?singleSidedOperatorCallback:InterpTokens -> InterpTokens,
     ?operatorType:OperatorType,
 	/**
 		@see Operators.setPriority

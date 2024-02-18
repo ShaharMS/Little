@@ -11,11 +11,22 @@ class Keywords {
     public static var TRUE_VALUE:String = "true";
     public static var FALSE_VALUE:String = "false";
     public static var TYPE_DYNAMIC:String = "Anything";
-    public static var TYPE_VOID:String = "Void";
     public static var TYPE_INT:String = "Number";
     public static var TYPE_FLOAT:String = "Decimal";
     public static var TYPE_BOOLEAN:String = "Boolean";
     public static var TYPE_STRING:String = "Characters";
+
+    /**
+        Represents the main function type.
+        The underlying type is `TYPE_STRING`.
+    **/
+    public static var TYPE_FUNCTION:String = "Action";
+
+	/**
+		Represents the general type of a condition.
+		The underlying type is `TYPE_STRING`.
+	**/
+	public static var TYPE_CONDITION:String = "Condition";
 
     /**
         represent the "type" type:
@@ -32,17 +43,22 @@ class Keywords {
     public static var MAIN_MODULE_NAME:String = "Main";
     public static var REGISTERED_MODULE_NAME:String = "Registered";
 
+    public static var OBJECT_TYPE_PROPERTY_NAME:String = "type";
+	public static var OBJECT_ADDRESS_PROPERTY_NAME:String = "address";
+	public static var OBJECT_DOC_PROPERTY_NAME:String = "documentation";
+    public static var TO_STRING_PROPERTY_NAME:String = "toString";
     public static var PRINT_FUNCTION_NAME:String = "print";
     public static var RAISE_ERROR_FUNCTION_NAME:String = "error";
     public static var READ_FUNCTION_NAME:String = "read";
     public static var RUN_CODE_FUNCTION_NAME:String = "run";
+	public static var CONDITION_PATTERN_PARAMETER_NAME:String = "pattern";
+	public static var CONDITION_BODY_PARAMETER_NAME:String = "code";
 
     /**
     	No need to ever change this, this is a parser-only feature
     **/
     public static var TYPE_UNKNOWN:String = "Unknown";
 
-    public static var CONDITION_TYPES:Array<String> = [];
     public static var ELSE:String = "else";
     public static var RECOGNIZED_SIGNS:Array<String> = [];
 
@@ -80,19 +96,26 @@ class Keywords {
         TRUE_VALUE: "true",
         FALSE_VALUE: "false",
         TYPE_DYNAMIC: "Anything",
-        TYPE_VOID: "Void",
         TYPE_INT: "Number",
         TYPE_FLOAT: "Decimal",
         TYPE_BOOLEAN: "Boolean",
         TYPE_STRING: "Characters",
+        TYPE_FUNCTION: "Action",
+		TYPE_CONDITION: "Condition",
         TYPE_MODULE: "Type",
         TYPE_SIGN: "Sign",
         MAIN_MODULE_NAME: "Main",
         REGISTERED_MODULE_NAME: "Registered",
+        OBJECT_TYPE_PROPERTY_NAME: "type",
+		OBJECT_ADDRESS_PROPERTY_NAME: "address",
+		OBJECT_DOC_PROPERTY_NAME: "documentation",
+        TO_STRING_PROPERTY_NAME: "toString",
         PRINT_FUNCTION_NAME: "print",
         RAISE_ERROR_FUNCTION_NAME: "error",
         READ_FUNCTION_NAME: "read",
         RUN_CODE_FUNCTION_NAME: "run",
+		CONDITION_PATTERN_PARAMETER_NAME: "pattern",
+		CONDITION_BODY_PARAMETER_NAME: "code",
         TYPE_UNKNOWN: "Unknown",
         RECOGNIZED_SIGNS: [],
         PROPERTY_ACCESS_SIGN: ".",
@@ -120,19 +143,26 @@ class Keywords {
         TRUE_VALUE = set.TRUE_VALUE;
         FALSE_VALUE = set.FALSE_VALUE;
         TYPE_DYNAMIC = set.TYPE_DYNAMIC;
-        TYPE_VOID = set.TYPE_VOID;
         TYPE_INT = set.TYPE_INT;
         TYPE_FLOAT = set.TYPE_FLOAT;
         TYPE_BOOLEAN = set.TYPE_BOOLEAN;
         TYPE_STRING = set.TYPE_STRING;
+        TYPE_FUNCTION = set.TYPE_FUNCTION;
+		TYPE_CONDITION = set.TYPE_CONDITION;
         TYPE_MODULE = set.TYPE_MODULE;
         TYPE_SIGN = set.TYPE_SIGN;
         MAIN_MODULE_NAME = set.MAIN_MODULE_NAME;
         REGISTERED_MODULE_NAME = set.REGISTERED_MODULE_NAME;
+        OBJECT_TYPE_PROPERTY_NAME = set.OBJECT_TYPE_PROPERTY_NAME;
+		OBJECT_ADDRESS_PROPERTY_NAME = set.OBJECT_ADDRESS_PROPERTY_NAME;
+		OBJECT_DOC_PROPERTY_NAME = set.OBJECT_DOC_PROPERTY_NAME;
+        TO_STRING_PROPERTY_NAME = set.TO_STRING_PROPERTY_NAME;
         PRINT_FUNCTION_NAME = set.PRINT_FUNCTION_NAME;
         RAISE_ERROR_FUNCTION_NAME = set.RAISE_ERROR_FUNCTION_NAME;
         READ_FUNCTION_NAME = set.READ_FUNCTION_NAME;
         RUN_CODE_FUNCTION_NAME = set.RAISE_ERROR_FUNCTION_NAME;
+		CONDITION_PATTERN_PARAMETER_NAME = set.CONDITION_PATTERN_PARAMETER_NAME;
+		CONDITION_BODY_PARAMETER_NAME = set.CONDITION_BODY_PARAMETER_NAME;
         TYPE_UNKNOWN = set.TYPE_UNKNOWN;
         RECOGNIZED_SIGNS = set.RECOGNIZED_SIGNS;
         PROPERTY_ACCESS_SIGN = set.PROPERTY_ACCESS_SIGN;
