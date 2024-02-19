@@ -114,6 +114,22 @@
             border-color: #75747a;
         }
 
+        #data {
+            font-size: 0.9em;
+            opacity: 0.8;
+            text-align: center;
+            margin-block: -20px;
+        }
+
+        #version, #build-number, #build-date {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #2b2a33;
+            border: solid 1px;
+            border-radius: 2px;
+            border-color: #75747a;
+            font-size: 0.8em;
+        }
+
         button, input {
             background-color: #2b2a33;
             border: solid 1px;
@@ -293,6 +309,10 @@ Ast
                 </tr>
             </tbody>
         </table>
+        <hr>
+        <div id="data">
+            <p>Version <span id="version">alpha-1.1.0</span>, Last built in <span id="build-date"></span>, Build number <span id="build-number"></p>
+        </div>
         <hr>
         <div id="guide">
             <h1>Quickstart</h1>

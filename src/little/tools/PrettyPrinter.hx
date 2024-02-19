@@ -97,7 +97,7 @@ class PrettyPrinter {
 					if (type != null) title += getTree_PARSER(type, prefix.copy(), level + 1, true);
 					return title;
 				}
-			case Condition(name, exp, body):
+			case ConditionCall(name, exp, body):
 				{
 					var title = '${prefixFA(prefix)}$t$d Condition\n';
 					title += getTree_PARSER(name, prefix.copy(), level + 1, false);
@@ -325,7 +325,7 @@ class PrettyPrinter {
 				case SplitLine: s += ", ";
 				case Variable(name, type): s += '$VARIABLE_DECLARATION $name ${if (type != null) '$TYPE_DECL_OR_CAST ${stringifyParser(type)}' else ''}';
 				case Function(name, params, type): s += '$FUNCTION_DECLARATION ${stringifyParser(name)}(${stringifyParser(params)}) ${if (type != null) '$TYPE_DECL_OR_CAST ${stringifyParser(type)}' else ''}';
-				case Condition(name, exp, body): 
+				case ConditionCall(name, exp, body): 
 					indent += "	";
 					s += '${stringifyParser(name)} (${stringifyParser(exp)}) \n${stringifyParser(body)}';
 					indent = indent.subtract("	");

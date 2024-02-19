@@ -17,6 +17,7 @@ import little.tools.PrettyPrinter;
 import little.interpreter.Interpreter;
 #if js
 import js.Browser;
+import js_example.JsExample;
 #elseif sys
 import sys.FileSystem;
 import sys.io.File;

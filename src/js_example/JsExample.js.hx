@@ -1,5 +1,6 @@
-package;
+package js_example;
 
+import js.html.SpanElement;
 import js.html.TableColElement;
 import js.html.Node;
 import js.Syntax;
@@ -13,7 +14,7 @@ import little.interpreter.Runtime;
 import little.Little;
 import js.Browser;
 
-using JsExample;
+using js_example.JsExample;
 import little.Keywords.*;
 class JsExample {
     
@@ -23,6 +24,14 @@ class JsExample {
         var input:TextAreaElement = cast d.getElementById("input");
         var ast:TextAreaElement = cast d.getElementById("ast");
         var output:TextAreaElement = cast d.getElementById("output");
+
+        var version:SpanElement = cast d.getElementById("version");
+        var buildDate:SpanElement = cast d.getElementById("build-date");
+        var buildNumber:SpanElement = cast d.getElementById("build-number");
+
+        buildNumber.innerText = JsMacro.getBuildCount();
+        buildDate.innerText = JsMacro.getBuildTime();
+
         trace(input, ast, output);
         input.addEventListener("keyup", function(_) {
 			try {

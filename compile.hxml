@@ -1,12 +1,13 @@
 --class-path src
 --main Main
 -w -WStaticInitOrder -WDeprecated
+--macro js_example.JsMacro.increaseBuildCounter()
 --library vision
 --library no-warnings
 --library hash
 --library hxOrderedMap
-#--js interp.js
---interp
+--js interp.js
+#--interp
 #--define memory_tests
 --define unit
 #--define parser_debug
