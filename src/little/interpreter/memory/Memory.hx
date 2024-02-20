@@ -56,11 +56,12 @@ class Memory {
 	}
 
 	public function reset() {
+		trace("resizing");
 		memory.resize(memoryChunkSize);
 		reserved.resize(memoryChunkSize);
 		memory.fill(0, memoryChunkSize, 0);
 		reserved.fill(0, memoryChunkSize, 0);
-
+		trace("resizing done");
 		while (stack.getCurrentBlock() != null) {
 			stack.popBlock();
 		}
@@ -71,7 +72,7 @@ class Memory {
 
 	public function increaseBuffer() {
 		if (memory.length > maxMemorySize) {
-			Runtime.throwError(ErrorMessage('Out of memory'), MEMORY);
+			Little.runtime.throwError(ErrorMessage('Out of memory'), MEMORY);
 		}
 		var size = MathTools.min(memory.length + memoryChunkSize, maxMemorySize);
 		var delta = size - memory.length;
@@ -98,7 +99,7 @@ class Memory {
 			return heap.storeCondition(token);
 		}
 
-		Runtime.throwError(ErrorMessage('Unable to allocate memory for token `$token`.'), MEMORY_HEAP);
+		Little.runtime.throwError(ErrorMessage('Unable to allocate memory for token `$token`.'), MEMORY_HEAP);
 
 		return constants.NULL;
 	}
@@ -227,7 +228,7 @@ class Memory {
 			}
 
 			// If we still don't have a value, we throw an error, cause that means that field doesn't exist.
-			else Runtime.throwError(ErrorMessage('Field $identifier does not exist on ${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)}'));
+			else Little.runtime.throwError(ErrorMessage('Field $identifier does not exist on ${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)}'));
 		}
 
 
@@ -257,11 +258,12 @@ class Memory {
 		*/
 
 		if (path.length == 0) {
-			Runtime.throwError(ErrorMessage('Cannot write to an empty path'));
+			Little.runtime.throwError(ErrorMessage('Cannot write to an empty path'));
 			// Does not make sense to have a path of length 0, but still more useful than a quiet return/crash.
 		}
 
 		if (path.length == 1) {
+			trace(stack.getCurrentBlock().exists(path[0]), path);
 			if (stack.getCurrentBlock().exists(path[0])) {
 				stack.getCurrentBlock().set(path[0], { address: value != null ? store(value) : null, type: type != null ? type : null, doc: doc != null ? doc : null });
 			} else {
@@ -273,11 +275,11 @@ class Memory {
 			var current = stack.getCurrentBlock().get(pathCopy[0]);
 			while (pathCopy.length > 1) {
 				if (getTypeInformation(current.type).isStaticType) {
-					Runtime.throwError(ErrorMessage('Cannot write to a static type. Only objects can have dynamic properties (${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)} is `${current.type}`)'));
+					Little.runtime.throwError(ErrorMessage('Cannot write to a static type. Only objects can have dynamic properties (${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)} is `${current.type}`)'));
 				}
 				if (!ObjectHashing.hashTableHasKey(ObjectHashing.getHashTableOf(current.address, heap), pathCopy[0], heap)) {
 					var a = wentThroughPath.concat([pathCopy[0]]).join(Little.keywords.PROPERTY_ACCESS_SIGN);
-					Runtime.throwError(ErrorMessage('Cannot write a property to ${a}, since ${pathCopy[0]} does not exist (did you forget to define ${a}?)'));
+					Little.runtime.throwError(ErrorMessage('Cannot write a property to ${a}, since ${pathCopy[0]} does not exist (did you forget to define ${a}?)'));
 				}
 				var hashTableKey = ObjectHashing.hashTableGetKey(ObjectHashing.getHashTableOf(current.address, heap), pathCopy[0], heap);
 				current = {
@@ -290,12 +292,12 @@ class Memory {
 			}
 
 			if (getTypeInformation(current.type).isStaticType) {
-				Runtime.throwError(ErrorMessage('Cannot write to a property to values of a static type. Only objects can have dynamic properties (${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)} is `${current.type}`)'));
+				Little.runtime.throwError(ErrorMessage('Cannot write to a property to values of a static type. Only objects can have dynamic properties (${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)} is `${current.type}`)'));
 			}
 			if (ObjectHashing.hashTableHasKey(ObjectHashing.getHashTableOf(current.address, heap), pathCopy[0], heap)) {
 				ObjectHashing.objectSetKey(current.address, pathCopy[0], {value: value != null ? store(value) : null, type: type != null ? getTypeInformation(type).pointer : null, doc: doc != null ? heap.storeString(doc) : null}, heap);
 			} else if (externs.instanceProperties.properties.exists(pathCopy[0])) {
-				Runtime.throwError(ErrorMessage('Cannot write to an extern property (${pathCopy[0]})'));
+				Little.runtime.throwError(ErrorMessage('Cannot write to an extern property (${pathCopy[0]})'));
 			} else {
 				ObjectHashing.objectAddKey(current.address, pathCopy[0], store(value), getTypeInformation(type).pointer, heap.storeString(doc), heap);
 			}
@@ -308,7 +310,7 @@ class Memory {
 	    @return A pointer to the allocated memory
 	**/
 	public function allocate(size:Int):MemoryPointer {
-		if (size <= 0) Runtime.throwError(ErrorMessage('Cannot allocate ${size} bytes'));
+		if (size <= 0) Little.runtime.throwError(ErrorMessage('Cannot allocate ${size} bytes'));
 		return heap.storeBytes(size);
 	}
 	

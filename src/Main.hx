@@ -107,13 +107,13 @@ class Main {
 						try {
 							Little.run(code, true);
 							trace(PrettyPrinter.printInterpreterAst(Interpreter.convert(...Parser.parse(Lexer.lex(code)))));
-							trace(Runtime.stdout.output);
+							trace(Little.runtime.stdout.output);
 						} catch (e) {
 							trace(Lexer.lex(code));
 							trace(Parser.parse(Lexer.lex(code)));
 							trace(PrettyPrinter.printInterpreterAst(Interpreter.convert(...Parser.parse(Lexer.lex(code)))));
 							trace(e.details());
-							trace(Runtime.stdout.output);
+							trace(Little.runtime.stdout.output);
 						}
 						Sys.print(code.replaceFirst("\n", "  >> ").replace("\n", "\n  >> ") + "\n");
 					} else if (input == "default!") {
@@ -150,13 +150,13 @@ class Main {
 				try {
 					Little.run(input, true);
 					trace(PrettyPrinter.printInterpreterAst(Interpreter.convert(...Parser.parse(Lexer.lex(input)))));
-					trace(Runtime.stdout.output);
+					trace(Little.runtime.stdout.output);
 				} catch (e) {
 					trace(Lexer.lex(input));
 					trace(Parser.parse(Lexer.lex(input)));
 					trace(PrettyPrinter.printInterpreterAst(Interpreter.convert(...Parser.parse(Lexer.lex(input)))));
 					trace(e.details());
-					trace(Runtime.stdout.output);
+					trace(Little.runtime.stdout.output);
 				}
 				Little.reset();
 			}
@@ -188,7 +188,7 @@ class Main {
 
 		// 		try {
 		// 			Little.run(code);
-		// 			File.saveContent(output, Runtime.stdout);
+		// 			File.saveContent(output, Little.runtime.stdout);
 		// 			File.saveContent(compilerError, "");
 		// 		} catch (e) {File.saveContent(compilerError, e.details());}
 

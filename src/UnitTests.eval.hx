@@ -55,7 +55,7 @@ class UnitTests {
 				Sys.println('        - $RESET$BOLD$WHITE Returned:$RESET $ITALIC$RED${result.returned}$RESET');
 				Sys.print('        - $RESET$BOLD$WHITE Code:$RESET \n            ${result.code.replace("\n", "\n            ")}$RESET\n');
 				Sys.print('        - $RESET$BOLD$WHITE Abstract Syntax Tree:$RESET\n            ${PrettyPrinter.printParserAst(Parser.parse(Lexer.lex(result.code))).replace("\n", "\n            ")}$RESET\n');
-				Sys.print('        - $RESET$BOLD$WHITE Stdout:$RESET\n            ${Runtime.stdout.output.replace("\n", "\n            ")}$RESET\n');
+				Sys.print('        - $RESET$BOLD$WHITE Stdout:$RESET\n            ${Little.runtime.stdout.output.replace("\n", "\n            ")}$RESET\n');
 			}
 
 			if (!result.success) {
@@ -74,7 +74,7 @@ class UnitTests {
 	public static function test1():UnitTestResult {
 		var code = "print((5 + (3 - 2)) * 5^2 + 3 * 4 / 4 + 4! + 8 + -2)";
 		Little.run(code);
-		var result = Runtime.stdout.stdoutTokens.pop();
+		var result = Little.runtime.stdout.stdoutTokens.pop();
 		return {
 			testName: "Basic Math",
 			success: result.equals(Decimal(183)),
@@ -87,7 +87,7 @@ class UnitTests {
 	public static function test2():UnitTestResult {
 		var code = 'define x as Number = 3, define y as Decimal, define z\nprint(x + ", " + y.type + ", " + z.type + ", " + z)';
 		Little.run(code);
-		var result = Runtime.stdout.stdoutTokens.pop();
+		var result = Little.runtime.stdout.stdoutTokens.pop();
 		return {
 			testName: "Variable declaration",
 			success: result.equals(Characters("3, Decimal, Anything, nothing")),
@@ -101,7 +101,7 @@ class UnitTests {
 	public static function test3():UnitTestResult {
 		var code = "action x1() = { print(1) }\naction x2(define x as Number) = { print(x) }\naction x21(define x as Number) = { return x }\naction x3() = { print(1 + x21(5)) }\n\nx1(), x2(5), x3()";
 		Little.run(code);
-		var result = PartArray(Runtime.stdout.stdoutTokens);
+		var result = PartArray(Little.runtime.stdout.stdoutTokens);
 		var exp = PartArray([Number(1), Number(5), Number(6)]);
 		return {
 			testName: "Function declaration",
@@ -115,7 +115,7 @@ class UnitTests {
 	public static function test4():UnitTestResult {
 		var code = "define x as Number = 3\ndefine x.y = 5\ndefine x.y.z as Decimal = x.y\nprint(x.y.z + x.y + x)";
 		Little.run(code);
-		var result = Runtime.stdout.stdoutTokens.pop();
+		var result = Little.runtime.stdout.stdoutTokens.pop();
 		return {
 			testName: "Property access",
 			success: result.equals(Decimal(13)),
@@ -128,7 +128,7 @@ class UnitTests {
 	public static function test5():UnitTestResult {
 		var code = "define i = 0\nwhile (i <= 5) { print (i); i = i + 1}\nfor (define j from 0 to 10 jump 3) print(j)";
 		Little.run(code);
-		var result = PartArray(Runtime.stdout.stdoutTokens);
+		var result = PartArray(Little.runtime.stdout.stdoutTokens);
 		var exp = PartArray([Number(0), Number(1), Number(2), Number(3), Number(4), Number(5), Number(0), Number(3), Number(6), Number(9)]);
 		return {
 			testName: "Loops",
@@ -142,7 +142,7 @@ class UnitTests {
 	public static function test6():UnitTestResult {
 		var code = 'define i = 4, if (i != 0) print(true)\nafter (i == 6) print("i is 6"), whenever (i == i) print("i has changed")\ni = i + 1, i = i + 1';
 		Little.run(code);
-		var result = PartArray(Runtime.stdout.stdoutTokens);
+		var result = PartArray(Little.runtime.stdout.stdoutTokens);
 		var exp = PartArray([TrueValue, Characters("i has changed"), Characters("i is 6"), Characters("i has changed")]);
 		return {
 			testName: "Events and conditionals",
@@ -156,7 +156,7 @@ class UnitTests {
 	public static function test7():UnitTestResult {
 		var code = "define x = {define y = 0; y = y + 5; (6^2 * y)}, print(x)";
 		Little.run(code);
-		var result = Runtime.stdout.stdoutTokens.pop();
+		var result = Little.runtime.stdout.stdoutTokens.pop();
 		return {
 			testName: "Code blocks",
 			success: result.equals(Number(180)),
@@ -169,7 +169,7 @@ class UnitTests {
 	public static function test8():UnitTestResult {
 		var code = '\ndefine x = 1.2\nx = (x + 2 * x) / x\nprint(x)';
 		Little.run(code);
-		var result = Actions.evaluate(Runtime.stdout.stdoutTokens.pop());
+		var result = Actions.evaluate(Little.runtime.stdout.stdoutTokens.pop());
 		return {
 			testName: "Self assignment",
 			success: result.equals(Decimal(3)),
@@ -182,7 +182,7 @@ class UnitTests {
 	public static function test9():UnitTestResult {
 		var code = 'if (false) print("Wrong") else if (false && true) print("Also Wrong") else { print("Right") }';
 		Little.run(code);
-		var result = Runtime.stdout.stdoutTokens.pop();
+		var result = Little.runtime.stdout.stdoutTokens.pop();
 		return {
 			testName: "If-Else",
 			success: result.equals(Characters("Right")),

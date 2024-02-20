@@ -30,11 +30,11 @@ class PrepareRun {
 	public static function addFunctions() {
 		Little.plugin.registerFunction(PRINT_FUNCTION_NAME, null, [VariableDeclaration(Identifier("item"), null)], (params) -> {
 			var eval = Actions.evaluate(params[0]);
-			Runtime.__print(PrettyPrinter.stringifyInterpreter(eval), eval);
+			Little.runtime.__print(PrettyPrinter.stringifyInterpreter(eval), eval);
 			return NullValue;
 		}, Little.keywords.TYPE_DYNAMIC);
 		Little.plugin.registerFunction(RAISE_ERROR_FUNCTION_NAME, null, [VariableDeclaration(Identifier("message"), null)], (params) -> {
-			Runtime.throwError(params[0]);
+			Little.runtime.throwError(params[0]);
 			return NullValue;
 		}, Little.keywords.TYPE_DYNAMIC);
 		Little.plugin.registerFunction(READ_FUNCTION_NAME, null, [VariableDeclaration(Identifier("identifier"), Identifier(TYPE_STRING))], (params) -> {
@@ -195,7 +195,7 @@ class PrepareRun {
 				var l = Conversion.toHaxeValue(lhs),
 					r = Conversion.toHaxeValue(rhs);
 				if (r == 0)
-					Runtime.throwError(ErrorMessage('Cannot divide by 0'));
+					Little.runtime.throwError(ErrorMessage('Cannot divide by 0'));
 				return Decimal(l / r);
 			}
 		});
@@ -331,12 +331,12 @@ class PrepareRun {
 					return val;
 				} 
 				else {
-					Runtime.throwError(ErrorMessage('While condition must be a ${Little.keywords.TYPE_BOOLEAN} or ${Little.keywords.FALSE_VALUE}'), INTERPRETER);
+					Little.runtime.throwError(ErrorMessage('While condition must be a ${Little.keywords.TYPE_BOOLEAN} or ${Little.keywords.FALSE_VALUE}'), INTERPRETER);
 					return val;
 				}
 			}
 			if (safetyNet >= 500000) {
-				Runtime.throwError(ErrorMessage('Too much iteration (is `${PrettyPrinter.stringifyInterpreter(params)}` forever `${Little.keywords.TRUE_VALUE}`?)'), INTERPRETER);
+				Little.runtime.throwError(ErrorMessage('Too much iteration (is `${PrettyPrinter.stringifyInterpreter(params)}` forever `${Little.keywords.TRUE_VALUE}`?)'), INTERPRETER);
 			}
 
 			return val;
@@ -349,7 +349,7 @@ class PrepareRun {
 				val = Actions.run(body);
 			}
 			else if (!(cond is Bool)) {
-				Runtime.throwError(ErrorMessage('If condition must be a ${Little.keywords.TYPE_BOOLEAN}'), INTERPRETER);
+				Little.runtime.throwError(ErrorMessage('If condition must be a ${Little.keywords.TYPE_BOOLEAN}'), INTERPRETER);
 			}
 
 			return val;
@@ -385,12 +385,12 @@ class PrepareRun {
 			params = fp;
 
 			if (!params[0].is(VARIABLE_DECLARATION)) {
-				Runtime.throwError(ErrorMessage('`for` loop must start with a variable to count on (expected definition/block, found: `${PrettyPrinter.stringifyInterpreter(params[0])}`)'));
+				Little.runtime.throwError(ErrorMessage('`for` loop must start with a variable to count on (expected definition/block, found: `${PrettyPrinter.stringifyInterpreter(params[0])}`)'));
 				return val;
 			}
 			var typeName = (params[0].parameter(1) : InterpTokens).asJoinedStringPath();
 			if (![Little.keywords.TYPE_INT, Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_DYNAMIC].contains(typeName)) {
-				Runtime.throwError(ErrorMessage('`for` loop\'s variable must be of type ${Little.keywords.TYPE_INT}, ${Little.keywords.TYPE_FLOAT} or ${Little.keywords.TYPE_DYNAMIC} (given: ${typeName})'));
+				Little.runtime.throwError(ErrorMessage('`for` loop\'s variable must be of type ${Little.keywords.TYPE_INT}, ${Little.keywords.TYPE_FLOAT} or ${Little.keywords.TYPE_DYNAMIC} (given: ${typeName})'));
 			}
 
 			var from:Null<Float> = null, to:Null<Float> = null, jump:Float = 1;
@@ -402,8 +402,8 @@ class PrepareRun {
 					case Identifier(_ == FOR_LOOP_FROM => true): {
 						if (currentExpression.length > 0) {
 							switch currentlySet {
-								case -1: Runtime.throwError(ErrorMessage('Invalid `for` loop syntax: expected a `${Little.keywords.FOR_LOOP_TO}`, `${Little.keywords.FOR_LOOP_FROM}` or `${Little.keywords.FOR_LOOP_JUMP}` after the variable'));
-								case 0: Runtime.throwError(ErrorMessage('Cannot repeat `$FOR_LOOP_FROM` tag twice in `for` loop.'));
+								case -1: Little.runtime.throwError(ErrorMessage('Invalid `for` loop syntax: expected a `${Little.keywords.FOR_LOOP_TO}`, `${Little.keywords.FOR_LOOP_FROM}` or `${Little.keywords.FOR_LOOP_JUMP}` after the variable'));
+								case 0: Little.runtime.throwError(ErrorMessage('Cannot repeat `$FOR_LOOP_FROM` tag twice in `for` loop.'));
 								case 1: to = Conversion.toHaxeValue(Actions.calculate(currentExpression));
 								case 2: jump = Conversion.toHaxeValue(Actions.calculate(currentExpression));
 							}
@@ -414,9 +414,9 @@ class PrepareRun {
 					case Identifier(_ == FOR_LOOP_TO => true): {
 						if (currentExpression.length > 0) {
 							switch currentlySet {
-								case -1: Runtime.throwError(ErrorMessage('Invalid `for` loop syntax: expected a `${Little.keywords.FOR_LOOP_TO}`, `${Little.keywords.FOR_LOOP_FROM}` or `${Little.keywords.FOR_LOOP_JUMP}` after the variable'));
+								case -1: Little.runtime.throwError(ErrorMessage('Invalid `for` loop syntax: expected a `${Little.keywords.FOR_LOOP_TO}`, `${Little.keywords.FOR_LOOP_FROM}` or `${Little.keywords.FOR_LOOP_JUMP}` after the variable'));
 								case 0: from = Conversion.toHaxeValue(Actions.calculate(currentExpression));
-								case 1: Runtime.throwError(ErrorMessage('Cannot repeat `$FOR_LOOP_TO` tag twice in `for` loop.'));
+								case 1: Little.runtime.throwError(ErrorMessage('Cannot repeat `$FOR_LOOP_TO` tag twice in `for` loop.'));
 								case 2: jump = Conversion.toHaxeValue(Actions.calculate(currentExpression));
 							}
 						}
@@ -426,10 +426,10 @@ class PrepareRun {
 					case Identifier(_ == FOR_LOOP_JUMP => true): {
 						if (currentExpression.length > 0) {
 							switch currentlySet {
-								case -1: Runtime.throwError(ErrorMessage('Invalid `for` loop syntax: expected a `${Little.keywords.FOR_LOOP_TO}`, `${Little.keywords.FOR_LOOP_FROM}` or `${Little.keywords.FOR_LOOP_JUMP}` after the variable'));
+								case -1: Little.runtime.throwError(ErrorMessage('Invalid `for` loop syntax: expected a `${Little.keywords.FOR_LOOP_TO}`, `${Little.keywords.FOR_LOOP_FROM}` or `${Little.keywords.FOR_LOOP_JUMP}` after the variable'));
 								case 0: from = Conversion.toHaxeValue(Actions.calculate(currentExpression));
 								case 1: to = Conversion.toHaxeValue(Actions.calculate(currentExpression));
-								case 2: Runtime.throwError(ErrorMessage('Cannot repeat `$FOR_LOOP_JUMP` tag twice in `for` loop.'));
+								case 2: Little.runtime.throwError(ErrorMessage('Cannot repeat `$FOR_LOOP_JUMP` tag twice in `for` loop.'));
 							}
 						}
 						currentExpression = [];
@@ -439,8 +439,8 @@ class PrepareRun {
 				}
 			}
 			switch currentlySet {
-				case -1: Runtime.throwError(ErrorMessage('Invalid `for` loop syntax: expected a `${Little.keywords.FOR_LOOP_TO}`, `${Little.keywords.FOR_LOOP_FROM}` or `${Little.keywords.FOR_LOOP_JUMP}` after the variable'));
-				case 0: Runtime.throwError(ErrorMessage('Cannot repeat `$FOR_LOOP_FROM` tag twice in `for` loop.'));
+				case -1: Little.runtime.throwError(ErrorMessage('Invalid `for` loop syntax: expected a `${Little.keywords.FOR_LOOP_TO}`, `${Little.keywords.FOR_LOOP_FROM}` or `${Little.keywords.FOR_LOOP_JUMP}` after the variable'));
+				case 0: Little.runtime.throwError(ErrorMessage('Cannot repeat `$FOR_LOOP_FROM` tag twice in `for` loop.'));
 				case 1: to = Conversion.toHaxeValue(Actions.calculate(currentExpression));
 				case 2: jump = Conversion.toHaxeValue(Actions.calculate(currentExpression));
 			}
@@ -476,7 +476,7 @@ class PrepareRun {
 			} else if (params[0].is(IDENTIFIER, PROPERTY_ACCESS)) {
 				ident = params[0].extractIdentifier();
 			} else {
-				Runtime.throwError(ErrorMessage('`after` condition must start with a variable to watch (expected definition, found: `${PrettyPrinter.stringifyInterpreter(params[0])}`)'));
+				Little.runtime.throwError(ErrorMessage('`after` condition must start with a variable to watch (expected definition, found: `${PrettyPrinter.stringifyInterpreter(params[0])}`)'));
 				return val;
 			}
 
@@ -484,11 +484,11 @@ class PrepareRun {
 				var cond:Bool = Conversion.toHaxeValue(Actions.calculate(params));
 				if (setIdentifiers.contains(ident) && cond) {
 					Actions.run(body);
-					Runtime.onWriteValue.remove(listener);
+					Little.runtime.onWriteValue.remove(listener);
 				}
 			}
 			
-			Runtime.onWriteValue.push(listener);
+			Little.runtime.onWriteValue.push(listener);
 
 			return val;
 		});
@@ -503,7 +503,7 @@ class PrepareRun {
 			} else if (params[0].is(IDENTIFIER, PROPERTY_ACCESS)) {
 				ident = params[0].extractIdentifier();
 			} else {
-				Runtime.throwError(ErrorMessage('`whenever` condition must start with a variable to watch (expected definition, found: `${PrettyPrinter.stringifyInterpreter(params[0])}`)'));
+				Little.runtime.throwError(ErrorMessage('`whenever` condition must start with a variable to watch (expected definition, found: `${PrettyPrinter.stringifyInterpreter(params[0])}`)'));
 				return val;
 			}
 
@@ -514,7 +514,7 @@ class PrepareRun {
 				}
 			}
 			
-			Runtime.onWriteValue.push(listener);
+			Little.runtime.onWriteValue.push(listener);
 
 			return val;
 		});

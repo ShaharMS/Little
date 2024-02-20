@@ -13,10 +13,10 @@ class StackBlock {
 		inner = new StringMap();
 	}
 
-	public function exists(key:String):Bool return inner.exists(key);
+	
 	public function remove(key:String) inner.remove(key);
 	public function copy() return inner.copy();
-
+	public function toString() return "[" + inner.keys().toArray().join(", ") + "]";
 
 	public function reference(key:String, address:MemoryPointer, type:String, doc:String) {
 		inner.set(key, {address: address, type: type, doc: doc});
@@ -26,14 +26,28 @@ class StackBlock {
 		inner.remove(key);
 	}
 
+	public function exists(key:String):Bool {
+		var current = this;
+		while (current != null) {
+			trace(current, key);
+			if (current.directExists(key)) return true;
+			current = current.previous;
+		}
+		return false;
+	}
+
+	public function directExists(key:String):Bool {
+		return inner.exists(key);
+	}
+
 	public function get(key:String):{address:MemoryPointer, type:String, doc:String} {
 		// Do lookbehind until we find something
 		var current = this;
 		while (current != null) {
-			if (current.exists(key)) return current.directGet(key);
+			if (current.directExists(key)) return current.directGet(key);
 			current = current.previous;
 		}
-		Runtime.throwError(ErrorMessage('Variable/function ${key} does not exist'));
+		Little.runtime.throwError(ErrorMessage('Variable/function ${key} does not exist'));
 		return { address: MemoryPointer.fromInt(0), type: Little.keywords.TYPE_DYNAMIC, doc: ''};
 	}
 
@@ -43,15 +57,16 @@ class StackBlock {
 
 	public function set(key:String, value:{?address:Null<MemoryPointer>, ?type:Null<String>, ?doc:Null<String>}) {
 		// Do lookbehind until we find something
-		// var current = this;
-		// while (current != null) {
-		// 	if (current.exists(key)) {
-		// 		if (value.address != null) current.get(key).address = value.address;
-		// 		if (value.type != null) current.get(key).type = value.type;
-		// 		if (value.doc != null) current.get(key).doc = value.doc;
-		// 	}
-		// 	current = current.previous;
-		// }
+		var current = this;
+		while (current != null) {
+			if (current.directExists(key)) {
+				if (value.address != null) current.get(key).address = value.address;
+				if (value.type != null) current.get(key).type = value.type;
+				if (value.doc != null) current.get(key).doc = value.doc;
+				break;
+			}
+			current = current.previous;
+		}
 		inner.set(key, value);
 	}
 

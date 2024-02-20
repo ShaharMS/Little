@@ -28,8 +28,8 @@ class Actions {
         @return the error token, as InterpTokens.ErrorMessage(msg:String)
     **/
     public static function error(message:String, layer:Layer = INTERPRETER):InterpTokens {
-        Runtime.throwError(ErrorMessage(message), layer);
-        trace(Runtime.stdout.output);
+        Little.runtime.throwError(ErrorMessage(message), layer);
+        trace(Little.runtime.stdout.output);
         throw "";
         return ErrorMessage(message);
     }
@@ -41,13 +41,13 @@ class Actions {
         @return the warning token, as InterpTokens.ErrorMessage(msg:String)
     **/
     public static function warn(message:String, layer:Layer = INTERPRETER):InterpTokens {
-        Runtime.warn(ErrorMessage(message), layer);
+        Little.runtime.warn(ErrorMessage(message), layer);
         return ErrorMessage(message);
     }
 
 	public static function assert(token:InterpTokens, isType:InterpTokensSimple, ?errorMessage:String = null) {
 		if (!token.is(isType)) {
-			Runtime.throwError(errorMessage != null ? ErrorMessage(errorMessage) : ErrorMessage('Assertion failed, token $token is not of type $isType'), INTERPRETER);
+			Little.runtime.throwError(errorMessage != null ? ErrorMessage(errorMessage) : ErrorMessage('Assertion failed, token $token is not of type $isType'), INTERPRETER);
 			return NullValue;
 		}
 		return token;
@@ -57,17 +57,17 @@ class Actions {
         Set the current line of the program
     **/
     public static function setLine(l:Int) {
-        var o = Runtime.line;
-        Runtime.line = l;
+        var o = Little.runtime.line;
+        Little.runtime.line = l;
 
-        for (listener in Runtime.onLineChanged) listener(o);
+        for (listener in Little.runtime.onLineChanged) listener(o);
     }
 
     /**
         Split the current line. In other words, create a new line, but keep the old line number.
     **/
     public static function splitLine() {
-        for (listener in Runtime.onLineSplit) listener();
+        for (listener in Little.runtime.onLineSplit) listener();
     }
 
     /**
@@ -224,7 +224,7 @@ class Actions {
         
 		// Listeners
 
-        for (listener in Runtime.onWriteValue.copy()) {
+        for (listener in Little.runtime.onWriteValue.copy()) {
             listener(vars.map(x -> x.extractIdentifier()).concat(funcs.map(x -> x.extractIdentifier())));
         }
 
@@ -292,6 +292,7 @@ class Actions {
 		@return The value given, casted to the type.
 	**/
     public static function typeCast(value:InterpTokens, type:InterpTokens):InterpTokens {
+        if (Math.random() > 0.9999) trace(PrettyPrinter.stringifyInterpreter(value));
 		if (value.is(NUMBER) && type.parameter(0) == Little.keywords.TYPE_FLOAT) {
 			return Decimal(value.parameter(0));
 		}
@@ -373,7 +374,7 @@ class Actions {
     /**
     	A combination of `Actions.run` and `Actions.calculate`, which operates on a single `InterpTokens` token.
     	@param exp the token to evaluate
-    	@param dontThrow if `true`, `Runtime.throwError` is not called when an error occurs
+    	@param dontThrow if `true`, `Little.runtime.throwError` is not called when an error occurs
     	@return the result of the evaluation
     **/
     public static function evaluate(exp:InterpTokens, ?dontThrow:Bool = false):InterpTokens {
@@ -381,7 +382,7 @@ class Actions {
         switch exp {
             case Number(_) | Decimal(_) | Characters(_) | TrueValue | FalseValue | NullValue | Sign(_): return exp;
             case ErrorMessage(msg): {
-                if (!dontThrow) Runtime.throwError(exp, INTERPRETER_VALUE_EVALUATOR);
+                if (!dontThrow) Little.runtime.throwError(exp, INTERPRETER_VALUE_EVALUATOR);
                 return exp;
             }
             case SetLine(line): {
@@ -393,17 +394,19 @@ class Actions {
                 return NullValue;
             }
             case Expression(parts, t): {
+                if (t.asJoinedStringPath() == Little.keywords.TYPE_DYNAMIC) return calculate(parts);
                 return typeCast(calculate(parts), t);
             }
             case Block(body, t): {
-				var currentLine = Runtime.line;
+				var currentLine = Little.runtime.line;
                 var returnVal = run(body);
 				setLine(currentLine);
-                if (t == null) return evaluate(returnVal, dontThrow);
+                trace(t.asJoinedStringPath());
+                if (t.asJoinedStringPath() == Little.keywords.TYPE_DYNAMIC) return evaluate(returnVal, dontThrow);
 				return evaluate(typeCast(returnVal, t), dontThrow);
             }
             case FunctionCall(name, params): {
-				var currentLine = Runtime.line;
+				var currentLine = Little.runtime.line;
 				return call(name, params);
 				setLine(currentLine);
 			}
@@ -432,7 +435,7 @@ class Actions {
             case _: return evaluate(ErrorMessage('Unable to evaluate token `$exp`'), dontThrow);
         }
 
-		return null;
+		return NullValue;
     }
 
 	/**

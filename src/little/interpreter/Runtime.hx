@@ -13,57 +13,59 @@ using little.tools.TextTools;
 @:access(little.interpreter.Interpreter)
 class Runtime {
     
+    public function new() {}
+
     /**
     	The line currently interpreted.
     **/
-    public static var line(default, null):Int = 0;
+    public var line(default, null):Int = 0;
 
     /**
         The next token to be interpreted
     **/
-    public static var currentToken(default, null):InterpTokens = null;
+    public var currentToken(default, null):InterpTokens = null;
 
     /**
     	The module in which tokens are currently interpreted.
     **/
-    public static var currentModule(default, null):String;
+    public var currentModule(default, null):String;
 
     /**
         The token that has just been interpreted
     **/
-    public static var previousToken(default, null):InterpTokens;
+    public var previousToken(default, null):InterpTokens;
 
     /**
         | Code | Description |
         | :---:| ---         |
         | **0** | Everything went fine, aside from potential warnings. |
-        | **1** | An error was thrown, and terminated the program. The error is printed to stdout, and its token is kept after the fact in `Runtime.errorToken`. |
+        | **1** | An error was thrown, and terminated the program. The error is printed to stdout, and its token is kept after the fact in `Little.runtime.errorToken`. |
     **/
-    public static var exitCode(default, null):Int = 0;
+    public var exitCode(default, null):Int = 0;
 
 	/**
 		This is set to `true` if an error was thrown. Execution should stop.
 	**/
-	public static var errorThrown(default, null):Bool = false;
+	public var errorThrown(default, null):Bool = false;
     
     /**
         The last error that was thrown. On normal settings, gets set at the same time the program terminates.
     **/
-    public static var errorToken(default, null):InterpTokens;
+    public var errorToken(default, null):InterpTokens;
 
     /**
     	Dispatches right before the interpreter starts running a line of code.
 
         @param line The line the interpreter just finished running.
     **/
-    public static var onLineChanged:Array<Int -> Void> = [];
+    public var onLineChanged:Array<Int -> Void> = [];
 	
 	/**
 		Dispatches every time the interpreter finds a line splitter (`,` or `;`)
 
 		@param line The line the interpreter just finished running.
 	**/
-	public static var onLineSplit:Array<Void -> Void> = [];
+	public var onLineSplit:Array<Void -> Void> = [];
 
     /**
     	Dispatches after finishing interpreting a token.
@@ -78,7 +80,7 @@ class Runtime {
 
         After each iteration, this method gets called, passing the token we've just parsed as an argument.
     **/
-    public static var onTokenInterpreted:Array<InterpTokens -> Void> = [];
+    public var onTokenInterpreted:Array<InterpTokens -> Void> = [];
 
     /**
     	Dispatches right after an error is thrown, and printed to the console.
@@ -88,23 +90,23 @@ class Runtime {
         @param title The error's title. When a non-`Error(title, reason)` token is thrown, this value is empty.
         @param reason The contents of the error.
     **/
-    public static var onErrorThrown:Array<(String, Int, String, String) -> Void> = [];
+    public var onErrorThrown:Array<(String, Int, String, String) -> Void> = [];
 
     /**
     	Dispatches right after the program has written something to a variable/multiple variables.
     
         @param variables The variables that were written to. Value can be retrieved using `memory.read()`.
     **/
-    public static var onWriteValue:Array<Array<String> -> Void> = [];
+    public var onWriteValue:Array<Array<String> -> Void> = [];
     /**
     	The program's standard output.
     **/
-    public static var stdout = StdOut;
+    public var stdout:StdOut = new StdOut();
 
     /**
     	Contains every function call interpreted during the program's runtime.
     **/
-    public static var callStack:Array<InterpTokens> = [];
+    public var callStack:Array<InterpTokens> = [];
 
     /**
     	Stops the execution of the program, and prints an error message to the console. Dispatches `onErrorThrown`.
@@ -112,7 +114,7 @@ class Runtime {
         @param layer the "stage" from which the error was called
         @return the token that caused the error (the first parameter of this function)
         **/
-    public static function throwError(token:InterpTokens, ?layer:Layer = INTERPRETER):InterpTokens {
+    public function throwError(token:InterpTokens, ?layer:Layer = INTERPRETER):InterpTokens {
 
         trace('Thrown: $token');
         callStack.push(token);
@@ -139,7 +141,7 @@ class Runtime {
         @param token some token which is the error, usually `ErrorMessage`
         @param layer the "stage" from which the error was called
     **/
-    public static function warn(token:InterpTokens, ?layer:Layer = INTERPRETER) {
+    public function warn(token:InterpTokens, ?layer:Layer = INTERPRETER) {
         callStack.push(token);
         
         var reason:String;
@@ -153,40 +155,21 @@ class Runtime {
 		stdout.stdoutTokens.push(token);
     }
 
-    public static function print(item:String) {
+    public function print(item:String) {
         stdout.output += '\n${if (Little.debug) (INTERPRETER : String).toUpperCase() + ": " else ""}Module $currentModule, Line $line:  $item';
 		stdout.stdoutTokens.push(Characters(item));
 	}
 
-	public static function reset() {
-        line = 0;
-		currentToken = null;
-		currentModule = null;
-		previousToken = null;
-		errorThrown = false;
-		errorToken = null;
-		exitCode = 0;
-		stdout.reset();
-        callStack = [];
-
-		onLineChanged = [];
-		onTokenInterpreted = [];
-		onErrorThrown = [];
-		onWriteValue = [];
-		onLineSplit = [];
-	}
-
-
-    public static function broadcast(item:String) {
+    public function broadcast(item:String) {
         stdout.output += '\n${if (Little.debug) "BROADCAST: " else ""}${item}';
 		stdout.stdoutTokens.push(Characters(item));
     }
 
-	static function __broadcast(item:String) {
+	function __broadcast(item:String) {
         stdout.output += '\n${if (Little.debug) "BROADCAST: " else ""}${item}';		
 	}
 
-	static function __print(item:String, representativeToken:InterpTokens) {
+	function __print(item:String, representativeToken:InterpTokens) {
 		stdout.output += '\n${if (Little.debug) (INTERPRETER : String).toUpperCase() + ": " else ""}Module $currentModule, Line $line:  $item';
 		stdout.stdoutTokens.push(representativeToken);
 	}

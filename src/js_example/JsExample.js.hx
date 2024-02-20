@@ -35,12 +35,15 @@ class JsExample {
         trace(input, ast, output);
         input.addEventListener("keyup", function(_) {
 			try {
-				ast.value = little.tools.PrettyPrinter.printParserAst(little.parser.Parser.parse(little.lexer.Lexer.lex(input.value)));
+                trace(input.value);
+				ast.value = little.tools.PrettyPrinter.printInterpreterAst(little.interpreter.Interpreter.convert(...little.parser.Parser.parse(little.lexer.Lexer.lex(input.value))));
 			} catch (e) {}
 
 			try {
+                trace(input.value);
+                Little.reset();
 				Little.run(input.value, true);
-				output.value = Runtime.stdout.output;
+				output.value = Little.runtime.stdout.output;
 			} catch (e) {}
 		});
 

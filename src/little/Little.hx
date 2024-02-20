@@ -20,7 +20,7 @@ class Little {
     
     public static var keywords(default, null):KeywordConfig = Keywords.defaultKeywordSet;
 
-    public static var runtime(default, null) = Runtime;
+    public static var runtime(default, null):Runtime = new Runtime();
     public static var operators(default, null) = Operators;
     public static var memory(default, null):Memory = new Memory();
     public static var plugin(default, null):Plugins = new Plugins(Little.memory);
@@ -46,9 +46,9 @@ class Little {
             we wait for `Little.run()` to get called, and then we parse and run this module right before the main module. Defaults to false.
     **/
     public static function loadModule(code:String, name:String, debug:Bool = false, runRightBeforeMain:Bool = false) {
-        Runtime.errorThrown = false;
-        Runtime.line = 0;
-        Runtime.currentModule = name;
+        runtime.errorThrown = false;
+        runtime.line = 0;
+        runtime.currentModule = name;
         if (runRightBeforeMain) {
 
         } else {
@@ -93,12 +93,13 @@ class Little {
             PrepareRun.addConditions();
             PrepareRun.addProps();
         }
+        runtime.currentModule = keywords.MAIN_MODULE_NAME;
         Actions.run(Interpreter.convert(...Parser.parse(Lexer.lex(code))));
         if (debug != null) Little.debug = previous;
     }
 
 	public static function reset() {
-        runtime.reset();
+        runtime = new Runtime();
 		Operators.lhsOnly.clear();
 		Operators.rhsOnly.clear();
 		Operators.standard.clear();
