@@ -17,7 +17,8 @@ class JsMacro {
 		return macro($v{s} : String);
 	} 
 	
-	public macro static function increaseBuildCounter() {
+	@:noCompletion public macro static function increaseBuildCounter() {
+		#if !display
 		if (!sys.FileSystem.exists("build-count.txt")) {
 			var output = sys.io.File.write("build-count.txt", false);
 			output.writeString("0");
@@ -27,7 +28,7 @@ class JsMacro {
 		var output = sys.io.File.write("build-count.txt", false);
 		output.writeString("" + (prev + 1));
 		output.close();
-		
+		#end
 		return macro null;
 	} 
 }

@@ -8,34 +8,6 @@
     <title>Document</title>
 </head>
 
-<!-- <body>
-    <h3>hey!</h3>
-    <div style="display: flex; flex-direction: column; justify-content: center;">
-        <div style="display: flex; flex-direction: row;">
-            <textarea id="input" style="height: 50vh; width: 45vw; display:inline-block; white-space:pre-wrap;"></textarea>
-            <textarea id="output-parser" style="height: 50vh; width: 45vw; overflow-x: scroll;" wrap="off"></textarea>
-        </div>
-        <textarea id="output" style="height: 30vh; width: calc(90vw + 8px); overflow-x: scroll;" wrap="off"></textarea>
-    </div>
-    
-    <script>
-        document.getElementById('input').addEventListener('keydown', function (e) {
-            if (e.key == 'Tab') {
-                e.preventDefault();
-                var start = this.selectionStart;
-                var end = this.selectionEnd;
-
-                // set textarea value to: text before caret + tab + text after caret
-                this.value = this.value.substring(0, start) + "\t" + this.value.substring(end);
-
-                // put caret at right position again
-                this.selectionStart = this.selectionEnd = start + 1;
-            }
-        });
-    </script>
-    <script src="./interp.js"></script>
-</body> -->
-
 <body>
     <script>document.body.innerHTML = ""</script>
 
@@ -188,7 +160,7 @@
 
         #k-table-body {  
             display: block;
-            height: 50vh;
+            height: 45vh;
             overflow-y: auto;
             width: -moz-fit-content;
             width: fit-content;
