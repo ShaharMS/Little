@@ -787,7 +787,7 @@ class Parser {
                 case SetLine(line): {setLine(line); post.push(token);}
                 case SplitLine: {nextPart(); post.push(token);}
                 case Identifier(_ == ELSE => true): {
-                    if (post.length == 0 || post[post.length - 1].getName() != 'Condition') {
+                    if (post.length == 0 || !post[post.length - 1].is(CONDITION_CALL)) {
                         post.push(token);
                         i++;
                         continue;
