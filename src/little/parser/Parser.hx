@@ -491,7 +491,7 @@ class Parser {
 						post.push(token);
 					} else {
 						i--;
-						post.push(Condition(name, exp, body));
+						post.push(ConditionCall(name, exp, body));
 						currentDoc = null;
 					}
                 }                
@@ -541,7 +541,7 @@ class Parser {
                 case Block(body, type): post.push(Block(mergeCalls(body), mergeCalls([type])[0]));
                 case Variable(name, type, doc): post.push(Variable(mergeCalls([name])[0], mergeCalls([type])[0], mergeCalls([doc])[0]));
                 case Function(name, params, type, doc): post.push(Function(mergeCalls([name])[0], mergeCalls([params])[0], mergeCalls([type])[0], mergeCalls([doc])[0]));
-                case Condition(name, exp, body): post.push(Condition(mergeCalls([name])[0], mergeCalls([exp])[0], mergeCalls([body])[0]));
+                case ConditionCall(name, exp, body): post.push(ConditionCall(mergeCalls([name])[0], mergeCalls([exp])[0], mergeCalls([body])[0]));
                 case Return(value, type): post.push(Return(mergeCalls([value])[0], mergeCalls([type])[0]));
                 case PropertyAccess(name, property): post.push(PropertyAccess(mergeCalls([name])[0], mergeCalls([property])[0]));
                 case PartArray(parts): post.push(PartArray(mergeCalls(parts)));
@@ -632,9 +632,9 @@ class Parser {
                     if (potentialAssignee != null) post.push(potentialAssignee);
                     potentialAssignee = Function(mergeWrites([name])[0], mergeWrites([params])[0], mergeWrites([type])[0], mergeWrites([doc])[0]);
                 }
-                case Condition(name, exp, body): {
+                case ConditionCall(name, exp, body): {
                     if (potentialAssignee != null) post.push(potentialAssignee);
-                    potentialAssignee = Condition(mergeWrites([name])[0], mergeWrites([exp])[0], mergeWrites([body])[0]);
+                    potentialAssignee = ConditionCall(mergeWrites([name])[0], mergeWrites([exp])[0], mergeWrites([body])[0]);
                 }
                 case Return(value, type): {
                     if (potentialAssignee != null) post.push(potentialAssignee);
@@ -701,7 +701,7 @@ class Parser {
                 case Expression(parts, type): post.unshift(Expression(mergeValuesWithTypeDeclarations(parts), mergeValuesWithTypeDeclarations([type])[0]));
                 case Variable(name, type, doc): post.unshift(Variable(mergeValuesWithTypeDeclarations([name])[0], mergeValuesWithTypeDeclarations([type])[0], mergeValuesWithTypeDeclarations([doc])[0]));
                 case Function(name, params, type, doc): post.unshift(Function(mergeValuesWithTypeDeclarations([name])[0], mergeValuesWithTypeDeclarations([params])[0], mergeValuesWithTypeDeclarations([type])[0], mergeValuesWithTypeDeclarations([doc])[0]));
-                case Condition(name, exp, body): post.unshift(Condition(mergeValuesWithTypeDeclarations([name])[0], mergeValuesWithTypeDeclarations([exp])[0], mergeValuesWithTypeDeclarations([body])[0]));
+                case ConditionCall(name, exp, body): post.unshift(ConditionCall(mergeValuesWithTypeDeclarations([name])[0], mergeValuesWithTypeDeclarations([exp])[0], mergeValuesWithTypeDeclarations([body])[0]));
                 case Return(value, type): post.unshift(Return(mergeValuesWithTypeDeclarations([value])[0], mergeValuesWithTypeDeclarations([type])[0]));
                 case PartArray(parts): post.unshift(PartArray(mergeValuesWithTypeDeclarations(parts)));
                 case FunctionCall(name, params): post.unshift(FunctionCall(mergeValuesWithTypeDeclarations([name])[0], mergeValuesWithTypeDeclarations([params])[0]));
@@ -745,7 +745,7 @@ class Parser {
 							post.push(FunctionCall(mergeNonBlockBodies([name])[0], mergeNonBlockBodies([params])[0]));
 						}
 						case _: {
-							post.push(Condition(mergeNonBlockBodies([name])[0], mergeNonBlockBodies([params])[0], Block(mergeNonBlockBodies([lookahead]), null)));
+							post.push(ConditionCall(mergeNonBlockBodies([name])[0], mergeNonBlockBodies([params])[0], Block(mergeNonBlockBodies([lookahead]), null)));
 							i++; // We consumed the lookahead, so we need to increment to its position, so that the final i++ gets to the next, correct, token.
 						}
 					}
@@ -754,7 +754,7 @@ class Parser {
                 case Expression(parts, type): post.push(Expression(mergeNonBlockBodies(parts), mergeNonBlockBodies([type])[0]));
                 case Variable(name, type, doc): post.push(Variable(mergeNonBlockBodies([name])[0], mergeNonBlockBodies([type])[0], mergeNonBlockBodies([doc])[0]));
                 case Function(name, params, type, doc): post.push(Function(mergeNonBlockBodies([name])[0], mergeNonBlockBodies([params])[0], mergeNonBlockBodies([type])[0], mergeNonBlockBodies([doc])[0]));
-                case Condition(name, exp, body): post.push(Condition(mergeNonBlockBodies([name])[0], mergeNonBlockBodies([exp])[0], mergeNonBlockBodies([body])[0]));
+                case ConditionCall(name, exp, body): post.push(ConditionCall(mergeNonBlockBodies([name])[0], mergeNonBlockBodies([exp])[0], mergeNonBlockBodies([body])[0]));
                 case Return(value, type): post.push(Return(mergeNonBlockBodies([value])[0], mergeNonBlockBodies([type])[0]));
                 case PartArray(parts): post.push(PartArray(mergeNonBlockBodies(parts)));
                 case Write(assignees, value): post.push(Write(mergeNonBlockBodies(assignees), mergeNonBlockBodies([value])[0]));
@@ -783,7 +783,7 @@ class Parser {
                 case SetLine(line): {setLine(line); post.push(token);}
                 case SplitLine: {nextPart(); post.push(token);}
                 case Identifier(_ == ELSE => true): {
-                    if (post.length == 0 || post[post.length - 1].getName() != 'Condition') {
+                    if (post.length == 0 || !post[post.length - 1].is(CONDITION_CALL)) {
                         post.push(token);
                         i++;
                         continue;
@@ -805,15 +805,15 @@ class Parser {
                             Runtime.throwError(ErrorMessage('`$ELSE` condition has no body, body cut off by a new line, or does not exist'), PARSER);
                             return null;
                         }
-						case Condition(Identifier("if"), exp2, body): post.push(Condition(Identifier("if"), Expression([exp, Sign("&&"), exp2], null) , !body.is(BLOCK) ? Block([body], null) : body));
-                        case _: post.push(Condition(Identifier("if"), exp, !body.is(BLOCK) ? Block([body], null) : body));
+						case ConditionCall(Identifier("if"), exp2, body): post.push(ConditionCall(Identifier("if"), Expression([exp, Sign("&&"), exp2], null) , !body.is(BLOCK) ? Block([body], null) : body));
+                        case _: post.push(ConditionCall(Identifier("if"), exp, !body.is(BLOCK) ? Block([body], null) : body));
                     }
                 }
                 case Block(body, type): post.push(Block(mergeElses(body), mergeElses([type])[0]));
                 case Expression(parts, type): post.push(Expression(mergeElses(parts), mergeElses([type])[0]));
                 case Variable(name, type, doc): post.push(Variable(mergeElses([name])[0], mergeElses([type])[0], mergeElses([doc])[0]));
                 case Function(name, params, type, doc): post.push(Function(mergeElses([name])[0], mergeElses([params])[0], mergeElses([type])[0], mergeElses([doc])[0]));
-                case Condition(name, exp, body): post.push(Condition(mergeElses([name])[0], mergeElses([exp])[0], mergeElses([body])[0]));
+                case ConditionCall(name, exp, body): post.push(ConditionCall(mergeElses([name])[0], mergeElses([exp])[0], mergeElses([body])[0]));
                 case Return(value, type): post.push(Return(mergeElses([value])[0], mergeElses([type])[0]));
                 case PartArray(parts): post.push(PartArray(mergeElses(parts)));
                 case FunctionCall(name, params): post.push(FunctionCall(mergeElses([name])[0], mergeElses([params])[0]));

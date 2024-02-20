@@ -27,7 +27,7 @@ class Interpreter {
 				case SplitLine: SplitLine;
 				case Variable(name, type, doc): VariableDeclaration(convert(name)[0], type == null ? Little.keywords.TYPE_DYNAMIC.asTokenPath() : convert(type)[0], doc == null ? Characters("") : convert(doc)[0]);
 				case Function(name, params, type, doc): FunctionDeclaration(convert(name)[0], convert(params)[0], type == null ? Little.keywords.TYPE_DYNAMIC.asTokenPath() : convert(type)[0], doc == null ? Characters("") : convert(doc)[0]);
-				case Condition(name, exp, body): ConditionCall(convert(name)[0], convert(exp)[0], convert(body)[0]);
+				case ConditionCall(name, exp, body): ConditionCall(convert(name)[0], convert(exp)[0], convert(body)[0]);
 				case Read(name): null;
 				case Write(assignees, value): Write(convert(...assignees), convert(value)[0]);
 				case Identifier(word): Identifier(word);
