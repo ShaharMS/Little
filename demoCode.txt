@@ -34,7 +34,7 @@ action someRandomAction() = {
 		print(i)
 	}
 """
-condition doTwiceIf(define condition as Characters, define body) = {
+condition doTwiceIf = (define condition as Characters, define body) {
 	if (run(condition)) {
 		runWith(body, "define i = 1")
 		runWith(body, "define i = 2")
