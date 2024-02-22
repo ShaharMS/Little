@@ -56,12 +56,10 @@ class Memory {
 	}
 
 	public function reset() {
-		trace("resizing");
 		memory.resize(memoryChunkSize);
 		reserved.resize(memoryChunkSize);
 		memory.fill(0, memoryChunkSize, 0);
 		reserved.fill(0, memoryChunkSize, 0);
-		trace("resizing done");
 		while (stack.getCurrentBlock() != null) {
 			stack.popBlock();
 		}
@@ -190,21 +188,23 @@ class Memory {
 					current = newCurrent.objectValue;
 					currentAddress = newCurrent.objectAddress;
 					currentDoc = newCurrent.objectDoc;
+					continue;
 				}
 			}
 			// If it doesnt exist on that specific type, it may exist on TYPE_DYNAMIC:
-			else if (externs.instanceProperties.properties.exists(Little.keywords.TYPE_DYNAMIC)) {
+			if (externs.instanceProperties.properties.exists(Little.keywords.TYPE_DYNAMIC)) {
 				var classProperties = externs.instanceProperties.properties.get(Little.keywords.TYPE_DYNAMIC);
 				if (classProperties.properties.exists(identifier)) {
 					var newCurrent = classProperties.properties.get(identifier).getter(current, currentAddress);
 					current = newCurrent.objectValue;
 					currentAddress = newCurrent.objectAddress;
 					currentDoc = newCurrent.objectDoc;
+					continue;
 				}
 			}
 
 			// Then, we check the object's hash table for that field
-			else if (current.is(OBJECT)) {
+			if (current.is(OBJECT)) {
 				var objectHashTableBytesLength = heap.readInt32(currentAddress);
 				var objectHashTableBytes = heap.readBytes(currentAddress.rawLocation + 4, objectHashTableBytesLength);
 				
@@ -228,7 +228,16 @@ class Memory {
 			}
 
 			// If we still don't have a value, we throw an error, cause that means that field doesn't exist.
-			else Little.runtime.throwError(ErrorMessage('Field $identifier does not exist on ${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)}'));
+			else {
+				wentThroughPath.pop();
+				Little.runtime.throwError(ErrorMessage('Field `$identifier` does not exist on `${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)}`'));
+				return {
+					objectValue: NullValue,
+					objectAddress: constants.NULL,
+					objectTypeName: Little.keywords.TYPE_DYNAMIC,
+					objectDoc: ""
+				}
+			}
 		}
 
 
@@ -263,8 +272,7 @@ class Memory {
 		}
 
 		if (path.length == 1) {
-			trace(stack.getCurrentBlock().exists(path[0]), path);
-			if (stack.getCurrentBlock().exists(path[0])) {
+			if (stack.getCurrentBlock().directExists(path[0])) {
 				stack.getCurrentBlock().set(path[0], { address: value != null ? store(value) : null, type: type != null ? type : null, doc: doc != null ? doc : null });
 			} else {
 				stack.getCurrentBlock().reference(path[0], store(value), type, doc);
@@ -300,6 +308,54 @@ class Memory {
 				Little.runtime.throwError(ErrorMessage('Cannot write to an extern property (${pathCopy[0]})'));
 			} else {
 				ObjectHashing.objectAddKey(current.address, pathCopy[0], store(value), getTypeInformation(type).pointer, heap.storeString(doc), heap);
+			}
+		}
+	}
+
+	public function set(path:Array<String>, ?value:InterpTokens, ?type:String, ?doc:String) {
+
+		if (path.length == 0) {
+			Little.runtime.throwError(ErrorMessage('Cannot set the value of an empty path'));
+			// Does not make sense to have a path of length 0, but still more useful than a quiet return/crash.
+		}
+
+		if (path.length == 1) {
+			if (stack.getCurrentBlock().exists(path[0])) {
+				stack.getCurrentBlock().set(path[0], { address: value != null ? store(value) : null, type: type != null ? type : null, doc: doc != null ? doc : null });
+			} else {
+				Little.runtime.throwError(ErrorMessage('Variable/function ${path[0]} does not exist'));
+			}
+		} else {
+			var pathCopy = path.copy();
+			var wentThroughPath = path.slice(0, path.length - 1);
+			var current = stack.getCurrentBlock().get(pathCopy[0]);
+			while (pathCopy.length > 1) {
+				if (getTypeInformation(current.type).isStaticType) {
+					Little.runtime.throwError(ErrorMessage('Cannot set properties tovalues of a static type. Only objects can have dynamic properties (${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)} is `${current.type}`)'));
+				}
+				if (!ObjectHashing.hashTableHasKey(ObjectHashing.getHashTableOf(current.address, heap), pathCopy[0], heap)) {
+					var a = wentThroughPath.concat([pathCopy[0]]).join(Little.keywords.PROPERTY_ACCESS_SIGN);
+					Little.runtime.throwError(ErrorMessage('Cannot set a property of ${a}, since ${pathCopy[0]} does not exist (did you forget to define ${a}?)'));
+				}
+				var hashTableKey = ObjectHashing.hashTableGetKey(ObjectHashing.getHashTableOf(current.address, heap), pathCopy[0], heap);
+				current = {
+					address: hashTableKey.value,
+					type: getTypeName(hashTableKey.type),
+					doc: heap.readString(hashTableKey.doc),
+				}
+				wentThroughPath.push(pathCopy[0]);
+				pathCopy.shift();
+			}
+
+			if (getTypeInformation(current.type).isStaticType) {
+				Little.runtime.throwError(ErrorMessage('Cannot set properties to values of a static type. Only objects can have dynamic properties (${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)} is `${current.type}`)'));
+			}
+			if (ObjectHashing.hashTableHasKey(ObjectHashing.getHashTableOf(current.address, heap), pathCopy[0], heap)) {
+				ObjectHashing.objectSetKey(current.address, pathCopy[0], {value: value != null ? store(value) : null, type: type != null ? getTypeInformation(type).pointer : null, doc: doc != null ? heap.storeString(doc) : null}, heap);
+			} else if (externs.instanceProperties.properties.exists(pathCopy[0])) {
+				Little.runtime.throwError(ErrorMessage('Cannot set an extern property (${pathCopy[0]})'));
+			} else {
+				Little.runtime.throwError(ErrorMessage('Cannot set the value of ${pathCopy.join(Little.keywords.PROPERTY_ACCESS_SIGN)}, since ${pathCopy.join(Little.keywords.PROPERTY_ACCESS_SIGN)} does not exist.'));
 			}
 		}
 	}

@@ -43,7 +43,7 @@ class UnitTests {
 	static var UNDERLINE = "\033[4m";
 
 	public static function run() {
-		var testFunctions = [test1, test2, test3, /*test4,*/ test5, test6, test7, test8, test9];
+		var testFunctions = [test1, test2, test3, /*test4,*/ test5, test6, test7, test8, test9, test10];
 
 		var i = 1;
 		for (func in testFunctions) {
@@ -190,5 +190,23 @@ class UnitTests {
 			expected: Characters("Right"),
 			code: code
 		}
+	}
+	
+	public static function test10():UnitTestResult {
+		var code = 'define i = 3\n{{define i = 5, print(i)}}\nprint(i)';
+		Little.run(code);
+		var result = PartArray(Little.runtime.stdout.stdoutTokens);
+		var exp = PartArray([Number(5), Number(3)]);
+		return {
+			testName: "Nested code blocks",
+			success: !Lambda.has([for (i in 0...2) Type.enumEq(exp.getParameters()[0][i], result.getParameters()[0][i])], false),
+			returned: result,
+			expected: exp,
+			code: code
+		}
+	}
+
+	public static function test11():UnitTestResult {
+		var code = 'define a = nothing, define b = nothing, define c = 0, define d = 0.0, print(a.pointer )'
 	}
 }

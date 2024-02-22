@@ -210,7 +210,7 @@ class Actions {
 			var paths = funcs.map(x -> x.asStringPath());
 			for (path in paths) {
 				var func = memory.read(...path).objectValue;
-				memory.write(path, FunctionCode(func.parameter(0), value), Little.keywords.TYPE_FUNCTION, "");
+				memory.set(path, FunctionCode(func.parameter(0), value), Little.keywords.TYPE_FUNCTION, "");
 			}
 		}
 
@@ -218,7 +218,7 @@ class Actions {
 			var paths = vars.map(x -> x.asStringPath());
 			var evaluated = evaluate(value); // No need to calculate multiple times, so we just evaluate once
 			for (path in paths) {
-				memory.write(path, evaluated, evaluated.type(), "");
+				memory.set(path, evaluated, evaluated.type(), "");
 			}
 		}
         
@@ -401,7 +401,6 @@ class Actions {
 				var currentLine = Little.runtime.line;
                 var returnVal = run(body);
 				setLine(currentLine);
-                trace(t.asJoinedStringPath());
                 if (t.asJoinedStringPath() == Little.keywords.TYPE_DYNAMIC) return evaluate(returnVal, dontThrow);
 				return evaluate(typeCast(returnVal, t), dontThrow);
             }
