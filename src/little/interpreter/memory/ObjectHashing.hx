@@ -1,5 +1,7 @@
 package little.interpreter.memory;
 
+import haxe.crypto.Sha1;
+import haxe.crypto.Sha256;
 import little.interpreter.memory.MemoryPointer.POINTER_SIZE;
 import haxe.Int64;
 import haxe.io.Bytes;
