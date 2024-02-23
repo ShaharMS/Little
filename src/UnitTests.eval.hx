@@ -42,8 +42,8 @@ class UnitTests {
 	static var ITALIC = "\033[3m";
 	static var UNDERLINE = "\033[4m";
 
-	public static function run() {
-		var testFunctions = [test1, test2, test3, /*test4,*/ test5, test6, test7, test8, test9, test10];
+	public static function run(bulk:Bool = false) {
+		var testFunctions = [test1, test2, test3, /*test4,*/ test5, test6, test7, test8, test9, test10, test11];
 
 		var i = 1;
 		for (func in testFunctions) {
@@ -58,10 +58,10 @@ class UnitTests {
 				Sys.print('        - $RESET$BOLD$WHITE Stdout:$RESET\n            ${Little.runtime.stdout.output.replace("\n", "\n            ")}$RESET\n');
 			}
 
-			if (!result.success) {
+			if (!result.success && !bulk) {
 				Sys.exit(1);
 			}
-			Sys.sleep(0.2);
+			Sys.sleep(bulk ? 0.05 : 0.2);
 			Little.reset();
 			i++;
 		}
@@ -207,6 +207,16 @@ class UnitTests {
 	}
 
 	public static function test11():UnitTestResult {
-		var code = 'define a = nothing, define b = nothing, define c = 0, define d = 0.0, print(a.pointer )'
+		var code = 'define a = nothing, define b = nothing, define c = 0, define d = 0.0, print(a.address == b.address), print(c.address == d.address)';
+		Little.run(code);
+		var result = PartArray(Little.runtime.stdout.stdoutTokens);
+		var exp = PartArray([TrueValue, TrueValue]);
+		return {
+			testName: "Constant pool",
+			success: !Lambda.has([for (i in 0...2) Type.enumEq(exp.getParameters()[0][i], result.getParameters()[0][i])], false),
+			returned: result,
+			expected: exp,
+			code: code
+		}
 	}
 }
