@@ -13,7 +13,7 @@ import haxe.io.UInt8Array;
 import vision.ds.ByteArray;
 
 using little.tools.Extensions;
-class Heap {
+class Storage {
 
 	public var parent:Memory;
 
@@ -23,9 +23,9 @@ class Heap {
 
 
     /**
-        stores a byte to the heap
+        stores a byte to the storage
         @param b an 8-bit number
-        @return A pointer to its address on the heap. The size of this "object" is `1`.
+        @return A pointer to its address on the storage. The size of this "object" is `1`.
     **/
     public function storeByte(b:Int):MemoryPointer {
         if (b == 0) return parent.constants.ZERO;
@@ -47,7 +47,7 @@ class Heap {
     }
 
     /**
-        Reads a byte from the heap
+        Reads a byte from the storage
         @param address The address of the byte to read
         @return The byte
     **/
@@ -56,7 +56,7 @@ class Heap {
     }
 
     /**
-        Pops a byte from the heap
+        Pops a byte from the storage
         @param address The address of the byte to remove
     **/
     public function freeByte(address:MemoryPointer) {
@@ -402,7 +402,7 @@ class Heap {
 			case Number(num): return storeInt32(num);
 			case Decimal(num): return storeDouble(num);
 			case Characters(string): return storeString(string);
-            case _: throw new ArgumentException("token", '${token} cannot be statically stored to the heap');
+            case _: throw new ArgumentException("token", '${token} cannot be statically stored to the storage');
 		}
 	}
 

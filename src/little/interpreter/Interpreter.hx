@@ -1,6 +1,6 @@
 package little.interpreter;
 
-import little.interpreter.memory.Stack;
+import little.interpreter.memory.Referrer;
 import haxe.Int32;
 import haxe.Rest;
 import little.interpreter.Tokens.InterpTokens;

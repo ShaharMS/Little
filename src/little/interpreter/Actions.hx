@@ -71,7 +71,7 @@ class Actions {
     }
 
     /**
-        Declare a new variable. That variable will be added to the current stack block.
+        Declare a new variable. That variable will be added to the current scope.
         @param name The name of the variable. Can be any token stringifiyable via `token.extractIdentifier()`.
         @param type The type of the variable. Can be any token stringifiyable via `token.extractIdentifier()`.
         @param doc The documentation of the variable. Should be a `InterpTokens.Documentation(doc:String)`
@@ -84,7 +84,7 @@ class Actions {
     }
 
     /**
-        Declare a new function. That function will be added to the current stack block.
+        Declare a new function. That function will be added to the current scope.
         @param name The name of the function. Can be any token stringifiyable via `token.extractIdentifier()`.
         @param params The parameters of the function. Should be a `InterpTokens.PartArray(parts:Array<InterpTokens>)`
         @param doc The documentation of the function. Should be a `InterpTokens.Documentation(doc:String)`
@@ -166,7 +166,7 @@ class Actions {
 		}
 
 		var patternString = PrettyPrinter.stringifyInterpreter(pattern);
-		// We might want to attach stuff to the body, so we need to make it so it doesn't create a new stack scope & strip type info from it
+		// We might want to attach stuff to the body, so we need to make it so it doesn't create a new scope & strip type info from it
 		var bodyString = PrettyPrinter.stringifyInterpreter(body.parameter(0)); 
 
 		for (pattern => caller in patterns) {
@@ -312,13 +312,13 @@ class Actions {
 
 	/**
 		Runs the tokens and returns the result.
-		Adds a new stack block.
+		Adds a new scope.
 		@param body The tokens to run
 		@return The result of the tokens
 	**/
     public static function run(body:Array<InterpTokens>):InterpTokens {
         var returnVal:InterpTokens = null;
-		memory.stack.pushBlock(true);
+		memory.referrer.pushScope(true);
         var i = 0;
         while (i < body.length) {
             var token = body[i];
@@ -367,7 +367,7 @@ class Actions {
 			Little.runtime.previousToken = token;
             i++;
         }
-		memory.stack.popBlock();
+		memory.referrer.popScope();
         return returnVal;
     }
 

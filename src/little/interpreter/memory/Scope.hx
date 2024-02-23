@@ -4,9 +4,9 @@ import haxe.ds.StringMap;
 using little.tools.Extensions;
 
 @:forward(iterator, clear, keys)
-class StackBlock extends StringMap<{?address:MemoryPointer, ?type:String, ?doc:String}>{
+class Scope extends StringMap<{?address:MemoryPointer, ?type:String, ?doc:String}>{
 	
-	public var previous:Null<StackBlock>;
+	public var previous:Null<Scope>;
 
 	public function new() {
 		super();
@@ -27,7 +27,7 @@ class StackBlock extends StringMap<{?address:MemoryPointer, ?type:String, ?doc:S
 			if (current.directExists(key)) return current.directGet(key);
 			current = current.previous;
 		}
-		Little.runtime.throwError(ErrorMessage('Variable/function ${key} does not exist'));
+		throw 'Variable/function ${key} does not exist, use `Scope.exists` to check first.';
 		return { address: MemoryPointer.fromInt(0), type: Little.keywords.TYPE_DYNAMIC, doc: ''};
 	}
 

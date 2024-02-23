@@ -3717,7 +3717,7 @@ var little_interpreter_memory_Memory = function() {
 	this1.fill(0,length,0);
 	this.reserved = this1;
 	this.reserved.fill(0,this.memoryChunkSize,0);
-	this.heap = new little_interpreter_memory_Heap(this);
+	this.storage = new little_interpreter_memory_Heap(this);
 	this.stack = new little_interpreter_memory_Stack(this);
 	this.constants = new little_interpreter_memory_ConstantPool(this);
 	this.externs = new little_interpreter_memory_ExternalInterfacing(this);
@@ -3727,7 +3727,7 @@ little_interpreter_memory_Memory.__name__ = "little.interpreter.memory.Memory";
 little_interpreter_memory_Memory.prototype = {
 	memory: null
 	,reserved: null
-	,heap: null
+	,storage: null
 	,stack: null
 	,externs: null
 	,constants: null
@@ -3815,7 +3815,7 @@ little_interpreter_memory_Memory.prototype = {
 				tmp = true;
 			}
 			if(tmp) {
-				return this.heap.storeStatic(token);
+				return this.storage.storeStatic(token);
 			} else {
 				var _this = [little_tools_InterpTokensSimple.OBJECT].slice();
 				var result = new Array(_this.length);
@@ -3827,7 +3827,7 @@ little_interpreter_memory_Memory.prototype = {
 					result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
 				}
 				if(result.indexOf($hxEnums[token.__enum__].__constructs__[token._hx_index]._hx_name.toLowerCase()) != -1) {
-					return this.heap.storeObject(token);
+					return this.storage.storeObject(token);
 				} else {
 					var _this = [little_tools_InterpTokensSimple.FUNCTION_CODE,little_tools_InterpTokensSimple.BLOCK].slice();
 					var result = new Array(_this.length);
@@ -3839,7 +3839,7 @@ little_interpreter_memory_Memory.prototype = {
 						result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
 					}
 					if(result.indexOf($hxEnums[token.__enum__].__constructs__[token._hx_index]._hx_name.toLowerCase()) != -1) {
-						return this.heap.storeCodeBlock(token);
+						return this.storage.storeCodeBlock(token);
 					} else {
 						var _this = [little_tools_InterpTokensSimple.CONDITION_CODE].slice();
 						var result = new Array(_this.length);
@@ -3851,7 +3851,7 @@ little_interpreter_memory_Memory.prototype = {
 							result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
 						}
 						if(result.indexOf($hxEnums[token.__enum__].__constructs__[token._hx_index]._hx_name.toLowerCase()) != -1) {
-							return this.heap.storeCondition(token);
+							return this.storage.storeCondition(token);
 						}
 					}
 				}
@@ -3921,15 +3921,15 @@ little_interpreter_memory_Memory.prototype = {
 		var _hx_tmp4;
 		var _hx_tmp5;
 		if(_g == little_Little.keywords.TYPE_STRING == true) {
-			current = little_interpreter_InterpTokens.Characters(this.heap.readString(data.address));
+			current = little_interpreter_InterpTokens.Characters(this.storage.readString(data.address));
 		} else {
 			_hx_tmp5 = _g == little_Little.keywords.TYPE_INT;
 			if(_hx_tmp5 == true) {
-				current = little_interpreter_InterpTokens.Number(this.heap.readInt32(data.address));
+				current = little_interpreter_InterpTokens.Number(this.storage.readInt32(data.address));
 			} else {
 				_hx_tmp4 = _g == little_Little.keywords.TYPE_FLOAT;
 				if(_hx_tmp4 == true) {
-					current = little_interpreter_InterpTokens.Decimal(this.heap.readDouble(data.address));
+					current = little_interpreter_InterpTokens.Decimal(this.storage.readDouble(data.address));
 				} else {
 					_hx_tmp3 = _g == little_Little.keywords.TYPE_BOOLEAN;
 					if(_hx_tmp3 == true) {
@@ -3937,14 +3937,14 @@ little_interpreter_memory_Memory.prototype = {
 					} else {
 						_hx_tmp2 = _g == little_Little.keywords.TYPE_FUNCTION;
 						if(_hx_tmp2 == true) {
-							current = this.heap.readCodeBlock(data.address);
+							current = this.storage.readCodeBlock(data.address);
 						} else {
 							_hx_tmp1 = _g == little_Little.keywords.TYPE_CONDITION;
 							if(_hx_tmp1 == true) {
-								current = this.heap.readCondition(data.address);
+								current = this.storage.readCondition(data.address);
 							} else {
 								_hx_tmp = _g == little_Little.keywords.TYPE_DYNAMIC && this.constants.hasPointer(data.address) && Type.enumEq(this.constants.getFromPointer(data.address),little_interpreter_InterpTokens.NullValue);
-								current = _hx_tmp == true ? little_interpreter_InterpTokens.NullValue : this.heap.readObject(data.address);
+								current = _hx_tmp == true ? little_interpreter_InterpTokens.NullValue : this.storage.readObject(data.address);
 							}
 						}
 					}
@@ -4025,10 +4025,10 @@ little_interpreter_memory_Memory.prototype = {
 					result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
 				}
 				if(result.indexOf($hxEnums[current.__enum__].__constructs__[current._hx_index]._hx_name.toLowerCase()) != -1) {
-					var objectHashTableBytesLength = this.heap.readInt32(currentAddress);
-					var objectHashTableBytes = this.heap.readBytes(little_interpreter_memory_MemoryPointer.fromInt(Std.parseInt(currentAddress) + 4),objectHashTableBytesLength);
-					if(little_interpreter_memory_ObjectHashing.hashTableHasKey(objectHashTableBytes,identifier,this.heap)) {
-						var keyData = little_interpreter_memory_ObjectHashing.hashTableGetKey(objectHashTableBytes,identifier,this.heap);
+					var objectHashTableBytesLength = this.storage.readInt32(currentAddress);
+					var objectHashTableBytes = this.storage.readBytes(little_interpreter_memory_MemoryPointer.fromInt(Std.parseInt(currentAddress) + 4),objectHashTableBytesLength);
+					if(little_interpreter_memory_ObjectHashing.hashTableHasKey(objectHashTableBytes,identifier,this.storage)) {
+						var keyData = little_interpreter_memory_ObjectHashing.hashTableGetKey(objectHashTableBytes,identifier,this.storage);
 						var _g10 = this.getTypeName(keyData.type);
 						var _hx_tmp;
 						var _hx_tmp1;
@@ -4037,15 +4037,15 @@ little_interpreter_memory_Memory.prototype = {
 						var _hx_tmp4;
 						var _hx_tmp5;
 						if(_g10 == little_Little.keywords.TYPE_STRING == true) {
-							current = little_interpreter_InterpTokens.Characters(this.heap.readString(keyData.value));
+							current = little_interpreter_InterpTokens.Characters(this.storage.readString(keyData.value));
 						} else {
 							_hx_tmp5 = _g10 == little_Little.keywords.TYPE_INT;
 							if(_hx_tmp5 == true) {
-								current = little_interpreter_InterpTokens.Number(this.heap.readInt32(keyData.value));
+								current = little_interpreter_InterpTokens.Number(this.storage.readInt32(keyData.value));
 							} else {
 								_hx_tmp4 = _g10 == little_Little.keywords.TYPE_FLOAT;
 								if(_hx_tmp4 == true) {
-									current = little_interpreter_InterpTokens.Decimal(this.heap.readDouble(keyData.value));
+									current = little_interpreter_InterpTokens.Decimal(this.storage.readDouble(keyData.value));
 								} else {
 									_hx_tmp3 = _g10 == little_Little.keywords.TYPE_BOOLEAN;
 									if(_hx_tmp3 == true) {
@@ -4053,17 +4053,17 @@ little_interpreter_memory_Memory.prototype = {
 									} else {
 										_hx_tmp2 = _g10 == little_Little.keywords.TYPE_FUNCTION;
 										if(_hx_tmp2 == true) {
-											current = this.heap.readCodeBlock(keyData.value);
+											current = this.storage.readCodeBlock(keyData.value);
 										} else {
 											_hx_tmp1 = _g10 == little_Little.keywords.TYPE_CONDITION;
 											if(_hx_tmp1 == true) {
-												current = this.heap.readCondition(keyData.value);
+												current = this.storage.readCondition(keyData.value);
 											} else {
 												_hx_tmp = keyData.value == this.constants.NULL;
 												if(_hx_tmp == true) {
 													current = little_interpreter_InterpTokens.NullValue;
 												} else {
-													current = this.heap.readObject(keyData.value);
+													current = this.storage.readObject(keyData.value);
 												}
 											}
 										}
@@ -4137,24 +4137,24 @@ little_interpreter_memory_Memory.prototype = {
 				if(this.getTypeInformation(current.type).isStaticType) {
 					little_Little.runtime.throwError(little_interpreter_InterpTokens.ErrorMessage("Cannot write to a static type. Only objects can have dynamic properties (" + wentThroughPath.join(little_Little.keywords.PROPERTY_ACCESS_SIGN) + " is `" + current.type + "`)"));
 				}
-				if(!little_interpreter_memory_ObjectHashing.hashTableHasKey(little_interpreter_memory_ObjectHashing.getHashTableOf(current.address,this.heap),pathCopy[0],this.heap)) {
+				if(!little_interpreter_memory_ObjectHashing.hashTableHasKey(little_interpreter_memory_ObjectHashing.getHashTableOf(current.address,this.storage),pathCopy[0],this.storage)) {
 					var a = wentThroughPath.concat([pathCopy[0]]).join(little_Little.keywords.PROPERTY_ACCESS_SIGN);
 					little_Little.runtime.throwError(little_interpreter_InterpTokens.ErrorMessage("Cannot write a property to " + a + ", since " + pathCopy[0] + " does not exist (did you forget to define " + a + "?)"));
 				}
-				var hashTableKey = little_interpreter_memory_ObjectHashing.hashTableGetKey(little_interpreter_memory_ObjectHashing.getHashTableOf(current.address,this.heap),pathCopy[0],this.heap);
-				current = { address : hashTableKey.value, type : this.getTypeName(hashTableKey.type), doc : this.heap.readString(hashTableKey.doc)};
+				var hashTableKey = little_interpreter_memory_ObjectHashing.hashTableGetKey(little_interpreter_memory_ObjectHashing.getHashTableOf(current.address,this.storage),pathCopy[0],this.storage);
+				current = { address : hashTableKey.value, type : this.getTypeName(hashTableKey.type), doc : this.storage.readString(hashTableKey.doc)};
 				wentThroughPath.push(pathCopy[0]);
 				pathCopy.shift();
 			}
 			if(this.getTypeInformation(current.type).isStaticType) {
 				little_Little.runtime.throwError(little_interpreter_InterpTokens.ErrorMessage("Cannot write to a property to values of a static type. Only objects can have dynamic properties (" + wentThroughPath.join(little_Little.keywords.PROPERTY_ACCESS_SIGN) + " is `" + current.type + "`)"));
 			}
-			if(little_interpreter_memory_ObjectHashing.hashTableHasKey(little_interpreter_memory_ObjectHashing.getHashTableOf(current.address,this.heap),pathCopy[0],this.heap)) {
-				little_interpreter_memory_ObjectHashing.objectSetKey(current.address,pathCopy[0],{ value : value != null ? this.store(value) : null, type : type != null ? this.getTypeInformation(type).pointer : null, doc : doc != null ? this.heap.storeString(doc) : null},this.heap);
+			if(little_interpreter_memory_ObjectHashing.hashTableHasKey(little_interpreter_memory_ObjectHashing.getHashTableOf(current.address,this.storage),pathCopy[0],this.storage)) {
+				little_interpreter_memory_ObjectHashing.objectSetKey(current.address,pathCopy[0],{ value : value != null ? this.store(value) : null, type : type != null ? this.getTypeInformation(type).pointer : null, doc : doc != null ? this.storage.storeString(doc) : null},this.storage);
 			} else if(Object.prototype.hasOwnProperty.call(this.externs.instanceProperties.properties.h,pathCopy[0])) {
 				little_Little.runtime.throwError(little_interpreter_InterpTokens.ErrorMessage("Cannot write to an extern property (" + pathCopy[0] + ")"));
 			} else {
-				little_interpreter_memory_ObjectHashing.objectAddKey(current.address,pathCopy[0],this.store(value),this.getTypeInformation(type).pointer,this.heap.storeString(doc),this.heap);
+				little_interpreter_memory_ObjectHashing.objectAddKey(current.address,pathCopy[0],this.store(value),this.getTypeInformation(type).pointer,this.storage.storeString(doc),this.storage);
 			}
 		}
 	}
@@ -4162,7 +4162,7 @@ little_interpreter_memory_Memory.prototype = {
 		if(size <= 0) {
 			little_Little.runtime.throwError(little_interpreter_InterpTokens.ErrorMessage("Cannot allocate " + size + " bytes"));
 		}
-		return this.heap.storeBytes(size);
+		return this.storage.storeBytes(size);
 	}
 	,getTypeInformation: function(name) {
 		var p;
@@ -4210,7 +4210,7 @@ little_interpreter_memory_Memory.prototype = {
 		}
 		var block = this.stack.getCurrentBlock();
 		var reference = block.get(name);
-		var typeInfo = this.heap.readType(reference.address);
+		var typeInfo = this.storage.readType(reference.address);
 		return { pointer : reference.address, typeName : name, isStaticType : true, isExternal : false, instanceByteSize : typeInfo.sizeOfInstanceFields, staticByteSize : typeInfo.sizeOfStaticFields, instanceFields : typeInfo.instanceFields, staticFields : typeInfo.staticFields, classByteSize : 16 + typeInfo.sizeOfInstanceFields + typeInfo.sizeOfStaticFields};
 	}
 	,getTypeName: function(pointer) {
@@ -4721,7 +4721,7 @@ little_interpreter_memory_Heap.prototype = {
 		case 22:case 23:case 24:
 			return this.parent.constants.get(token);
 		default:
-			throw new haxe_exceptions_ArgumentException("token","" + Std.string(token) + " cannot be statically stored to the heap",null,{ fileName : "src/little/interpreter/memory/Heap.hx", lineNumber : 405, className : "little.interpreter.memory.Heap", methodName : "storeStatic"});
+			throw new haxe_exceptions_ArgumentException("token","" + Std.string(token) + " cannot be statically stored to the storage",null,{ fileName : "src/little/interpreter/memory/Heap.hx", lineNumber : 405, className : "little.interpreter.memory.Heap", methodName : "storeStatic"});
 		}
 	}
 	,storeObject: function(object) {
@@ -5547,13 +5547,13 @@ little_interpreter_memory_CoreTypes.addFor = function(externs) {
 	externs.createPathFor(externs.instanceProperties,little_Little.keywords.TYPE_STRING);
 	var this1 = externs.typeToPointer;
 	var k = little_Little.keywords.TYPE_STRING;
-	var v = externs.parent.heap.storeByte(1);
+	var v = externs.parent.storage.storeByte(1);
 	this1.h[k] = v;
 	var tmp = externs.instanceProperties.properties.h[little_Little.keywords.TYPE_STRING];
 	var _g = new haxe_ds_StringMap();
 	var value = new little_interpreter_memory_ExtTree(function(value,_) {
 		var length = Type.enumParameters(value)[0].length;
-		return { objectValue : little_interpreter_InterpTokens.Number(length), objectAddress : externs.parent.heap.storeInt32(length), objectDoc : "the length of the string"};
+		return { objectValue : little_interpreter_InterpTokens.Number(length), objectAddress : externs.parent.storage.storeInt32(length), objectDoc : "the length of the string"};
 	});
 	_g.h["length"] = value;
 	tmp.properties = _g;
@@ -5561,24 +5561,24 @@ little_interpreter_memory_CoreTypes.addFor = function(externs) {
 	externs.createPathFor(externs.instanceProperties,little_Little.keywords.TYPE_FUNCTION);
 	var this1 = externs.typeToPointer;
 	var k = little_Little.keywords.TYPE_FUNCTION;
-	var v = externs.parent.heap.storeByte(1);
+	var v = externs.parent.storage.storeByte(1);
 	this1.h[k] = v;
 	var tmp = externs.instanceProperties.properties.h[little_Little.keywords.TYPE_FUNCTION];
 	var _g = new haxe_ds_StringMap();
 	var value = new little_interpreter_memory_ExtTree(function(value,_) {
-		return { objectValue : little_interpreter_InterpTokens.Characters(Std.string(value)), objectAddress : externs.parent.heap.storeString(Std.string(value)), objectDoc : "the token of the function, as a String"};
+		return { objectValue : little_interpreter_InterpTokens.Characters(Std.string(value)), objectAddress : externs.parent.storage.storeString(Std.string(value)), objectDoc : "the token of the function, as a String"};
 	});
 	_g.h["token"] = value;
 	tmp.properties = _g;
 	externs.createPathFor(externs.instanceProperties,little_Little.keywords.TYPE_CONDITION);
 	var this1 = externs.typeToPointer;
 	var k = little_Little.keywords.TYPE_CONDITION;
-	var v = externs.parent.heap.storeByte(1);
+	var v = externs.parent.storage.storeByte(1);
 	this1.h[k] = v;
 	var tmp = externs.instanceProperties.properties.h[little_Little.keywords.TYPE_CONDITION];
 	var _g = new haxe_ds_StringMap();
 	var value = new little_interpreter_memory_ExtTree(function(value,_) {
-		return { objectValue : little_interpreter_InterpTokens.Characters(Std.string(value)), objectAddress : externs.parent.heap.storeString(Std.string(value)), objectDoc : "the token of the condition, as a String"};
+		return { objectValue : little_interpreter_InterpTokens.Characters(Std.string(value)), objectAddress : externs.parent.storage.storeString(Std.string(value)), objectDoc : "the token of the condition, as a String"};
 	});
 	_g.h["token"] = value;
 	tmp.properties = _g;
@@ -8366,7 +8366,7 @@ little_interpreter_memory_ObjectHashing.generateObjectHashTable = function(pairs
 	}
 	return array;
 };
-little_interpreter_memory_ObjectHashing.readObjectHashTable = function(bytes,heap) {
+little_interpreter_memory_ObjectHashing.readObjectHashTable = function(bytes,storage) {
 	var arr = [];
 	var i = 0;
 	while(i < bytes.length) {
@@ -8379,15 +8379,15 @@ little_interpreter_memory_ObjectHashing.readObjectHashTable = function(bytes,hea
 			i += little_interpreter_memory_ObjectHashing.CELL_SIZE;
 			continue;
 		}
-		if(heap != null) {
-			key = heap.readString(keyPointer);
+		if(storage != null) {
+			key = storage.readString(keyPointer);
 		}
 		arr.push({ key : key, keyPointer : keyPointer, value : value, type : type, doc : doc});
 		i += little_interpreter_memory_ObjectHashing.CELL_SIZE;
 	}
 	return arr;
 };
-little_interpreter_memory_ObjectHashing.hashTableHasKey = function(hashTable,key,heap) {
+little_interpreter_memory_ObjectHashing.hashTableHasKey = function(hashTable,key,storage) {
 	var keyHash = haxe_hash_Murmur1.hash(haxe_io_Bytes.ofString(key));
 	var khI64 = new haxe__$Int64__$_$_$Int64(0,keyHash);
 	if(UInt.gt(0,keyHash)) {
@@ -8435,7 +8435,7 @@ little_interpreter_memory_ObjectHashing.hashTableHasKey = function(hashTable,key
 	var keyIndex = this_low;
 	var incrementation = 0;
 	while(true) {
-		var currentKey = heap.readString(little_interpreter_memory_MemoryPointer.fromInt(keyIndex));
+		var currentKey = storage.readString(little_interpreter_memory_MemoryPointer.fromInt(keyIndex));
 		if(currentKey == key) {
 			return true;
 		}
@@ -8449,7 +8449,7 @@ little_interpreter_memory_ObjectHashing.hashTableHasKey = function(hashTable,key
 		}
 	}
 };
-little_interpreter_memory_ObjectHashing.hashTableGetKey = function(hashTable,key,heap) {
+little_interpreter_memory_ObjectHashing.hashTableGetKey = function(hashTable,key,storage) {
 	var keyHash = haxe_hash_Murmur1.hash(haxe_io_Bytes.ofString(key));
 	var a_high = keyHash >> 31;
 	var a_low = keyHash;
@@ -8485,7 +8485,7 @@ little_interpreter_memory_ObjectHashing.hashTableGetKey = function(hashTable,key
 	var keyIndex = haxe_Int64.divMod(this1,new haxe__$Int64__$_$_$Int64(x >> 31,x)).modulus.low;
 	var incrementation = 0;
 	while(true) {
-		var currentKey = heap.readString(little_interpreter_memory_MemoryPointer.fromInt(keyIndex));
+		var currentKey = storage.readString(little_interpreter_memory_MemoryPointer.fromInt(keyIndex));
 		if(currentKey == key) {
 			return { key : key, keyPointer : little_interpreter_memory_MemoryPointer.fromInt(keyIndex), value : little_interpreter_memory_MemoryPointer.fromInt(keyIndex + 4 | 0), type : little_interpreter_memory_MemoryPointer.fromInt(keyIndex + 8 | 0), doc : little_interpreter_memory_MemoryPointer.fromInt(keyIndex + 12 | 0)};
 		}
@@ -8499,21 +8499,21 @@ little_interpreter_memory_ObjectHashing.hashTableGetKey = function(hashTable,key
 		}
 	}
 };
-little_interpreter_memory_ObjectHashing.objectAddKey = function(object,key,value,type,doc,heap) {
-	var hashTableBytes = heap.readBytes(heap.readPointer(little_interpreter_memory_MemoryPointer.fromInt(Std.parseInt(object) + 4)),heap.readInt32(little_interpreter_memory_MemoryPointer.fromInt(Std.parseInt(object))));
-	var table = little_interpreter_memory_ObjectHashing.readObjectHashTable(hashTableBytes,heap);
+little_interpreter_memory_ObjectHashing.objectAddKey = function(object,key,value,type,doc,storage) {
+	var hashTableBytes = storage.readBytes(storage.readPointer(little_interpreter_memory_MemoryPointer.fromInt(Std.parseInt(object) + 4)),storage.readInt32(little_interpreter_memory_MemoryPointer.fromInt(Std.parseInt(object))));
+	var table = little_interpreter_memory_ObjectHashing.readObjectHashTable(hashTableBytes,storage);
 	var tableSize = hashTableBytes.length;
 	var occupied = table.length * little_interpreter_memory_ObjectHashing.CELL_SIZE;
 	if(occupied / tableSize >= 0.7) {
-		table.push({ key : key, keyPointer : heap.storeString(key), value : value, type : type, doc : doc});
+		table.push({ key : key, keyPointer : storage.storeString(key), value : value, type : type, doc : doc});
 		var newHashTable = little_interpreter_memory_ObjectHashing.generateObjectHashTable(table);
-		heap.freeBytes(heap.readPointer(little_interpreter_memory_MemoryPointer.fromInt(Std.parseInt(object) + 4)),hashTableBytes.length);
-		var tablePointer = heap.storeBytes(newHashTable.length,newHashTable);
-		heap.setPointer(little_interpreter_memory_MemoryPointer.fromInt(Std.parseInt(object) + 4),tablePointer);
-		heap.setInt32(little_interpreter_memory_MemoryPointer.fromInt(Std.parseInt(object)),newHashTable.length);
+		storage.freeBytes(storage.readPointer(little_interpreter_memory_MemoryPointer.fromInt(Std.parseInt(object) + 4)),hashTableBytes.length);
+		var tablePointer = storage.storeBytes(newHashTable.length,newHashTable);
+		storage.setPointer(little_interpreter_memory_MemoryPointer.fromInt(Std.parseInt(object) + 4),tablePointer);
+		storage.setInt32(little_interpreter_memory_MemoryPointer.fromInt(Std.parseInt(object)),newHashTable.length);
 		return;
 	}
-	var hashTablePosition = heap.readPointer(little_interpreter_memory_MemoryPointer.fromInt(Std.parseInt(object) + 4));
+	var hashTablePosition = storage.readPointer(little_interpreter_memory_MemoryPointer.fromInt(Std.parseInt(object) + 4));
 	var keyHash = haxe_hash_Murmur1.hash(haxe_io_Bytes.ofString(key));
 	var khI64 = new haxe__$Int64__$_$_$Int64(0,keyHash);
 	if(UInt.gt(0,keyHash)) {
@@ -8560,10 +8560,10 @@ little_interpreter_memory_ObjectHashing.objectAddKey = function(object,key,value
 	var incrementation = 0;
 	while(true) {
 		if(hashTableBytes.getInt32(keyIndex) == 0) {
-			heap.setInt32(little_interpreter_memory_MemoryPointer.fromInt(Std.parseInt(hashTablePosition) + keyIndex | 0),Std.parseInt(heap.storeString(key)));
-			heap.setInt32(little_interpreter_memory_MemoryPointer.fromInt((Std.parseInt(hashTablePosition) + keyIndex | 0) + 4 | 0),Std.parseInt(value));
-			heap.setInt32(little_interpreter_memory_MemoryPointer.fromInt((Std.parseInt(hashTablePosition) + keyIndex | 0) + 8 | 0),Std.parseInt(type));
-			heap.setInt32(little_interpreter_memory_MemoryPointer.fromInt((Std.parseInt(hashTablePosition) + keyIndex | 0) + 12 | 0),Std.parseInt(doc));
+			storage.setInt32(little_interpreter_memory_MemoryPointer.fromInt(Std.parseInt(hashTablePosition) + keyIndex | 0),Std.parseInt(storage.storeString(key)));
+			storage.setInt32(little_interpreter_memory_MemoryPointer.fromInt((Std.parseInt(hashTablePosition) + keyIndex | 0) + 4 | 0),Std.parseInt(value));
+			storage.setInt32(little_interpreter_memory_MemoryPointer.fromInt((Std.parseInt(hashTablePosition) + keyIndex | 0) + 8 | 0),Std.parseInt(type));
+			storage.setInt32(little_interpreter_memory_MemoryPointer.fromInt((Std.parseInt(hashTablePosition) + keyIndex | 0) + 12 | 0),Std.parseInt(doc));
 			return;
 		}
 		keyIndex = keyIndex + little_interpreter_memory_ObjectHashing.CELL_SIZE | 0;
@@ -8576,9 +8576,9 @@ little_interpreter_memory_ObjectHashing.objectAddKey = function(object,key,value
 		}
 	}
 };
-little_interpreter_memory_ObjectHashing.objectSetKey = function(object,key,pair,heap) {
-	var hashTableBytes = heap.readBytes(heap.readPointer(little_interpreter_memory_MemoryPointer.fromInt(Std.parseInt(object) + 4)),heap.readInt32(little_interpreter_memory_MemoryPointer.fromInt(Std.parseInt(object))));
-	var hashTablePosition = heap.readPointer(little_interpreter_memory_MemoryPointer.fromInt(Std.parseInt(object) + 4));
+little_interpreter_memory_ObjectHashing.objectSetKey = function(object,key,pair,storage) {
+	var hashTableBytes = storage.readBytes(storage.readPointer(little_interpreter_memory_MemoryPointer.fromInt(Std.parseInt(object) + 4)),storage.readInt32(little_interpreter_memory_MemoryPointer.fromInt(Std.parseInt(object))));
+	var hashTablePosition = storage.readPointer(little_interpreter_memory_MemoryPointer.fromInt(Std.parseInt(object) + 4));
 	var keyHash = haxe_hash_Murmur1.hash(haxe_io_Bytes.ofString(key));
 	var khI64 = new haxe__$Int64__$_$_$Int64(0,keyHash);
 	if(UInt.gt(0,keyHash)) {
@@ -8626,19 +8626,19 @@ little_interpreter_memory_ObjectHashing.objectSetKey = function(object,key,pair,
 	var keyIndex = haxe_Int64.divMod(this1,new haxe__$Int64__$_$_$Int64(x >> 31,x)).modulus.low;
 	var incrementation = 0;
 	while(true) {
-		var currentKey = heap.readString(heap.readPointer(little_interpreter_memory_MemoryPointer.fromInt(Std.parseInt(hashTablePosition) + keyIndex | 0)));
+		var currentKey = storage.readString(storage.readPointer(little_interpreter_memory_MemoryPointer.fromInt(Std.parseInt(hashTablePosition) + keyIndex | 0)));
 		if(currentKey == key) {
 			if(pair.value != null) {
 				var tmp = Std.parseInt(pair.value);
-				heap.setInt32(little_interpreter_memory_MemoryPointer.fromInt((Std.parseInt(hashTablePosition) + keyIndex | 0) + 4 | 0),tmp);
+				storage.setInt32(little_interpreter_memory_MemoryPointer.fromInt((Std.parseInt(hashTablePosition) + keyIndex | 0) + 4 | 0),tmp);
 			}
 			if(pair.type != null) {
 				var tmp1 = Std.parseInt(pair.type);
-				heap.setInt32(little_interpreter_memory_MemoryPointer.fromInt((Std.parseInt(hashTablePosition) + keyIndex | 0) + 8 | 0),tmp1);
+				storage.setInt32(little_interpreter_memory_MemoryPointer.fromInt((Std.parseInt(hashTablePosition) + keyIndex | 0) + 8 | 0),tmp1);
 			}
 			if(pair.doc != null) {
 				var tmp2 = Std.parseInt(pair.doc);
-				heap.setInt32(little_interpreter_memory_MemoryPointer.fromInt((Std.parseInt(hashTablePosition) + keyIndex | 0) + 12 | 0),tmp2);
+				storage.setInt32(little_interpreter_memory_MemoryPointer.fromInt((Std.parseInt(hashTablePosition) + keyIndex | 0) + 12 | 0),tmp2);
 			}
 		}
 		keyIndex = keyIndex + little_interpreter_memory_ObjectHashing.CELL_SIZE | 0;
@@ -8651,10 +8651,10 @@ little_interpreter_memory_ObjectHashing.objectSetKey = function(object,key,pair,
 		}
 	}
 };
-little_interpreter_memory_ObjectHashing.getHashTableOf = function(objectPointer,heap) {
-	var byteLength = heap.readInt32(little_interpreter_memory_MemoryPointer.fromInt(Std.parseInt(objectPointer)));
-	var bytesPointer = heap.readPointer(little_interpreter_memory_MemoryPointer.fromInt(Std.parseInt(objectPointer) + 4));
-	return heap.readBytes(bytesPointer,byteLength);
+little_interpreter_memory_ObjectHashing.getHashTableOf = function(objectPointer,storage) {
+	var byteLength = storage.readInt32(little_interpreter_memory_MemoryPointer.fromInt(Std.parseInt(objectPointer)));
+	var bytesPointer = storage.readPointer(little_interpreter_memory_MemoryPointer.fromInt(Std.parseInt(objectPointer) + 4));
+	return storage.readBytes(bytesPointer,byteLength);
 };
 var little_lexer_Lexer = function() { };
 $hxClasses["little.lexer.Lexer"] = little_lexer_Lexer;

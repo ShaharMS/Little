@@ -16,8 +16,8 @@ class Memory {
 	public var memory:ByteArray;
 	public var reserved:ByteArray;
 
-    public var heap:Heap;
-	public var stack:Stack;
+    public var storage:Storage;
+	public var referrer:Referrer;
 	public var externs:ExternalInterfacing;
     public var constants:ConstantPool;
 
@@ -49,8 +49,8 @@ class Memory {
 		reserved = new ByteArray(memoryChunkSize);
 		reserved.fill(0, memoryChunkSize, 0);
 
-		heap = new Heap(this);
-		stack = new Stack(this);
+		storage = new Storage(this);
+		referrer = new Referrer(this);
 		constants = new ConstantPool(this);
 		externs = new ExternalInterfacing(this);
 	}
@@ -60,8 +60,8 @@ class Memory {
 		reserved.resize(memoryChunkSize);
 		memory.fill(0, memoryChunkSize, 0);
 		reserved.fill(0, memoryChunkSize, 0);
-		while (stack.getCurrentBlock() != null) {
-			stack.popBlock();
+		while (referrer.getCurrentScope() != null) {
+			referrer.popScope();
 		}
 
 		externs = new ExternalInterfacing(this);
@@ -81,23 +81,23 @@ class Memory {
 		General-purpose memory allocation for objects:
 
 		- if `token` is `true`, `false`, `0`, or `null`, it pulls a pointer from the constant pool
-		- if `token` is a string, a number, a sign or a decimal, it stores & pulls a pointer from the heap.
-		- if `token` is a structure, it stores it on the heap, and returns a pointer to it.
+		- if `token` is a string, a number, a sign or a decimal, it stores & pulls a pointer from the storage.
+		- if `token` is a structure, it stores it on the storage, and returns a pointer to it.
 	**/
 	public function store(token:InterpTokens):MemoryPointer {
 		if (token.is(TRUE_VALUE, FALSE_VALUE, NULL_VALUE)) {
 			return constants.get(token);
 		} else if (token.staticallyStorable()) {
-			return heap.storeStatic(token);
+			return storage.storeStatic(token);
 		} else if (token.is(OBJECT)) {
-			return heap.storeObject(token);
+			return storage.storeObject(token);
 		} else if (token.is(FUNCTION_CODE, BLOCK)) {
-			return heap.storeCodeBlock(token);
+			return storage.storeCodeBlock(token);
 		} else if (token.is(CONDITION_CODE)) {
-			return heap.storeCondition(token);
+			return storage.storeCondition(token);
 		}
 
-		Little.runtime.throwError(ErrorMessage('Unable to allocate memory for token `$token`.'), MEMORY_HEAP);
+		Little.runtime.throwError(ErrorMessage('Unable to allocate memory for token `$token`.'), MEMORY_STORAGE);
 
 		return constants.NULL;
 	}
@@ -137,22 +137,22 @@ class Memory {
 			}
 		}
 
-		// If we didn't find anything on the externs, we look in the stack.
+		// If we didn't find anything on the externs, we look in the current scope.
 		// We don't care if the field is found or not, since its supposed
 		// To throw a runtime error that a variable was not found.
-		var stackBlock = stack.getCurrentBlock();
+		var stackBlock = referrer.getCurrentScope();
 		var data = stackBlock.get(path[0]);
 		var current:InterpTokens = switch data.type {
-			case (_ == Little.keywords.TYPE_STRING => true): Characters(heap.readString(data.address));
-			case (_ == Little.keywords.TYPE_INT => true): Number(heap.readInt32(data.address));
-			case (_ == Little.keywords.TYPE_FLOAT => true): Decimal(heap.readDouble(data.address));
+			case (_ == Little.keywords.TYPE_STRING => true): Characters(storage.readString(data.address));
+			case (_ == Little.keywords.TYPE_INT => true): Number(storage.readInt32(data.address));
+			case (_ == Little.keywords.TYPE_FLOAT => true): Decimal(storage.readDouble(data.address));
 			case (_ == Little.keywords.TYPE_BOOLEAN => true): constants.getFromPointer(data.address);
-			case (_ == Little.keywords.TYPE_FUNCTION => true): heap.readCodeBlock(data.address);
-			case (_ == Little.keywords.TYPE_CONDITION => true): heap.readCondition(data.address);
+			case (_ == Little.keywords.TYPE_FUNCTION => true): storage.readCodeBlock(data.address);
+			case (_ == Little.keywords.TYPE_CONDITION => true): storage.readCondition(data.address);
             // Because of the way we store lone nulls (as type dynamic), 
             // they might get confused with objects of type dynamic, so we need to do this:
             case (_ == Little.keywords.TYPE_DYNAMIC && constants.hasPointer(data.address) && constants.getFromPointer(data.address).equals(NullValue) => true): NullValue;
-            case _: heap.readObject(data.address);
+            case _: storage.readObject(data.address);
 		}
 		var currentAddress:MemoryPointer = data.address;
 		var currentType:String = data.type;
@@ -205,21 +205,21 @@ class Memory {
 
 			// Then, we check the object's hash table for that field
 			if (current.is(OBJECT)) {
-				var objectHashTableBytesLength = heap.readInt32(currentAddress);
-				var objectHashTableBytes = heap.readBytes(currentAddress.rawLocation + 4, objectHashTableBytesLength);
+				var objectHashTableBytesLength = storage.readInt32(currentAddress);
+				var objectHashTableBytes = storage.readBytes(currentAddress.rawLocation + 4, objectHashTableBytesLength);
 				
-				if (ObjectHashing.hashTableHasKey(objectHashTableBytes, identifier, heap)) {
-					var keyData = ObjectHashing.hashTableGetKey(objectHashTableBytes, identifier, heap);
+				if (ObjectHashing.hashTableHasKey(objectHashTableBytes, identifier, storage)) {
+					var keyData = ObjectHashing.hashTableGetKey(objectHashTableBytes, identifier, storage);
 					
 					switch getTypeName(keyData.type) {
-						case (_ == Little.keywords.TYPE_STRING => true): current = Characters(heap.readString(keyData.value));
-						case (_ == Little.keywords.TYPE_INT => true): current = Number(heap.readInt32(keyData.value));
-						case (_ == Little.keywords.TYPE_FLOAT => true): current = Decimal(heap.readDouble(keyData.value));
+						case (_ == Little.keywords.TYPE_STRING => true): current = Characters(storage.readString(keyData.value));
+						case (_ == Little.keywords.TYPE_INT => true): current = Number(storage.readInt32(keyData.value));
+						case (_ == Little.keywords.TYPE_FLOAT => true): current = Decimal(storage.readDouble(keyData.value));
 						case (_ == Little.keywords.TYPE_BOOLEAN => true): current = constants.getFromPointer(data.address);
-						case (_ == Little.keywords.TYPE_FUNCTION => true): current = heap.readCodeBlock(keyData.value);
-						case (_ == Little.keywords.TYPE_CONDITION => true): current = heap.readCondition(keyData.value);
+						case (_ == Little.keywords.TYPE_FUNCTION => true): current = storage.readCodeBlock(keyData.value);
+						case (_ == Little.keywords.TYPE_CONDITION => true): current = storage.readCondition(keyData.value);
 						case (keyData.value == constants.NULL => true): current = NullValue;
-						case _: current = heap.readObject(keyData.value);
+						case _: current = storage.readObject(keyData.value);
 					}
 
 					currentAddress = keyData.value;
@@ -272,28 +272,28 @@ class Memory {
 		}
 
 		if (path.length == 1) {
-			if (stack.getCurrentBlock().directExists(path[0])) {
-				stack.getCurrentBlock().set(path[0], { address: value != null ? store(value) : null, type: type != null ? type : null, doc: doc != null ? doc : null });
+			if (referrer.getCurrentScope().directExists(path[0])) {
+				referrer.getCurrentScope().set(path[0], { address: value != null ? store(value) : null, type: type != null ? type : null, doc: doc != null ? doc : null });
 			} else {
-				stack.getCurrentBlock().reference(path[0], store(value), type, doc);
+				referrer.getCurrentScope().reference(path[0], store(value), type, doc);
 			}
 		} else {
 			var pathCopy = path.copy();
 			var wentThroughPath = path.slice(0, path.length - 1);
-			var current = stack.getCurrentBlock().get(pathCopy[0]);
+			var current = referrer.getCurrentScope().get(pathCopy[0]);
 			while (pathCopy.length > 1) {
 				if (getTypeInformation(current.type).isStaticType) {
 					Little.runtime.throwError(ErrorMessage('Cannot write to a static type. Only objects can have dynamic properties (${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)} is `${current.type}`)'));
 				}
-				if (!ObjectHashing.hashTableHasKey(ObjectHashing.getHashTableOf(current.address, heap), pathCopy[0], heap)) {
+				if (!ObjectHashing.hashTableHasKey(ObjectHashing.getHashTableOf(current.address, storage), pathCopy[0], storage)) {
 					var a = wentThroughPath.concat([pathCopy[0]]).join(Little.keywords.PROPERTY_ACCESS_SIGN);
 					Little.runtime.throwError(ErrorMessage('Cannot write a property to ${a}, since ${pathCopy[0]} does not exist (did you forget to define ${a}?)'));
 				}
-				var hashTableKey = ObjectHashing.hashTableGetKey(ObjectHashing.getHashTableOf(current.address, heap), pathCopy[0], heap);
+				var hashTableKey = ObjectHashing.hashTableGetKey(ObjectHashing.getHashTableOf(current.address, storage), pathCopy[0], storage);
 				current = {
 					address: hashTableKey.value,
 					type: getTypeName(hashTableKey.type),
-					doc: heap.readString(hashTableKey.doc),
+					doc: storage.readString(hashTableKey.doc),
 				}
 				wentThroughPath.push(pathCopy[0]);
 				pathCopy.shift();
@@ -302,12 +302,12 @@ class Memory {
 			if (getTypeInformation(current.type).isStaticType) {
 				Little.runtime.throwError(ErrorMessage('Cannot write to a property to values of a static type. Only objects can have dynamic properties (${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)} is `${current.type}`)'));
 			}
-			if (ObjectHashing.hashTableHasKey(ObjectHashing.getHashTableOf(current.address, heap), pathCopy[0], heap)) {
-				ObjectHashing.objectSetKey(current.address, pathCopy[0], {value: value != null ? store(value) : null, type: type != null ? getTypeInformation(type).pointer : null, doc: doc != null ? heap.storeString(doc) : null}, heap);
+			if (ObjectHashing.hashTableHasKey(ObjectHashing.getHashTableOf(current.address, storage), pathCopy[0], storage)) {
+				ObjectHashing.objectSetKey(current.address, pathCopy[0], {value: value != null ? store(value) : null, type: type != null ? getTypeInformation(type).pointer : null, doc: doc != null ? storage.storeString(doc) : null}, storage);
 			} else if (externs.instanceProperties.properties.exists(pathCopy[0])) {
 				Little.runtime.throwError(ErrorMessage('Cannot write to an extern property (${pathCopy[0]})'));
 			} else {
-				ObjectHashing.objectAddKey(current.address, pathCopy[0], store(value), getTypeInformation(type).pointer, heap.storeString(doc), heap);
+				ObjectHashing.objectAddKey(current.address, pathCopy[0], store(value), getTypeInformation(type).pointer, storage.storeString(doc), storage);
 			}
 		}
 	}
@@ -320,28 +320,28 @@ class Memory {
 		}
 
 		if (path.length == 1) {
-			if (stack.getCurrentBlock().exists(path[0])) {
-				stack.getCurrentBlock().set(path[0], { address: value != null ? store(value) : null, type: type != null ? type : null, doc: doc != null ? doc : null });
+			if (referrer.getCurrentScope().exists(path[0])) {
+				referrer.getCurrentScope().set(path[0], { address: value != null ? store(value) : null, type: type != null ? type : null, doc: doc != null ? doc : null });
 			} else {
 				Little.runtime.throwError(ErrorMessage('Variable/function ${path[0]} does not exist'));
 			}
 		} else {
 			var pathCopy = path.copy();
 			var wentThroughPath = path.slice(0, path.length - 1);
-			var current = stack.getCurrentBlock().get(pathCopy[0]);
+			var current = referrer.getCurrentScope().get(pathCopy[0]);
 			while (pathCopy.length > 1) {
 				if (getTypeInformation(current.type).isStaticType) {
 					Little.runtime.throwError(ErrorMessage('Cannot set properties tovalues of a static type. Only objects can have dynamic properties (${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)} is `${current.type}`)'));
 				}
-				if (!ObjectHashing.hashTableHasKey(ObjectHashing.getHashTableOf(current.address, heap), pathCopy[0], heap)) {
+				if (!ObjectHashing.hashTableHasKey(ObjectHashing.getHashTableOf(current.address, storage), pathCopy[0], storage)) {
 					var a = wentThroughPath.concat([pathCopy[0]]).join(Little.keywords.PROPERTY_ACCESS_SIGN);
 					Little.runtime.throwError(ErrorMessage('Cannot set a property of ${a}, since ${pathCopy[0]} does not exist (did you forget to define ${a}?)'));
 				}
-				var hashTableKey = ObjectHashing.hashTableGetKey(ObjectHashing.getHashTableOf(current.address, heap), pathCopy[0], heap);
+				var hashTableKey = ObjectHashing.hashTableGetKey(ObjectHashing.getHashTableOf(current.address, storage), pathCopy[0], storage);
 				current = {
 					address: hashTableKey.value,
 					type: getTypeName(hashTableKey.type),
-					doc: heap.readString(hashTableKey.doc),
+					doc: storage.readString(hashTableKey.doc),
 				}
 				wentThroughPath.push(pathCopy[0]);
 				pathCopy.shift();
@@ -350,8 +350,8 @@ class Memory {
 			if (getTypeInformation(current.type).isStaticType) {
 				Little.runtime.throwError(ErrorMessage('Cannot set properties to values of a static type. Only objects can have dynamic properties (${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)} is `${current.type}`)'));
 			}
-			if (ObjectHashing.hashTableHasKey(ObjectHashing.getHashTableOf(current.address, heap), pathCopy[0], heap)) {
-				ObjectHashing.objectSetKey(current.address, pathCopy[0], {value: value != null ? store(value) : null, type: type != null ? getTypeInformation(type).pointer : null, doc: doc != null ? heap.storeString(doc) : null}, heap);
+			if (ObjectHashing.hashTableHasKey(ObjectHashing.getHashTableOf(current.address, storage), pathCopy[0], storage)) {
+				ObjectHashing.objectSetKey(current.address, pathCopy[0], {value: value != null ? store(value) : null, type: type != null ? getTypeInformation(type).pointer : null, doc: doc != null ? storage.storeString(doc) : null}, storage);
 			} else if (externs.instanceProperties.properties.exists(pathCopy[0])) {
 				Little.runtime.throwError(ErrorMessage('Cannot set an extern property (${pathCopy[0]})'));
 			} else {
@@ -367,7 +367,7 @@ class Memory {
 	**/
 	public function allocate(size:Int):MemoryPointer {
 		if (size <= 0) Little.runtime.throwError(ErrorMessage('Cannot allocate ${size} bytes'));
-		return heap.storeBytes(size);
+		return storage.storeBytes(size);
 	}
 	
 
@@ -422,9 +422,9 @@ class Memory {
 			}
 		}
 		
-		var block = stack.getCurrentBlock();
+		var block = referrer.getCurrentScope();
 		var reference = block.get(name);
-		var typeInfo:Heap.TypeBlocks = heap.readType(reference.address);
+		var typeInfo:Storage.TypeBlocks = storage.readType(reference.address);
 
 		return {
 			pointer: reference.address,
@@ -449,7 +449,7 @@ class Memory {
 		if (constants.hasPointer(pointer)) {
 			return constants.getFromPointer(pointer).extractIdentifier();
 		}
-		var block = stack.getCurrentBlock();
+		var block = referrer.getCurrentScope();
 
 		for (key => value in block) {
 			if (value.address == pointer) {

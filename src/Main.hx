@@ -40,26 +40,26 @@ class Main {
 		trace(memory.stringifyMemoryBytes());
 		trace(memory.stringifyReservedBytes());
 		
-		var intPointer = memory.heap.storeInt32(-456);
-		trace("int read/write", memory.heap.readInt32(intPointer));
-		var floatPointer = memory.heap.storeDouble(123.456);
-		trace("float read/write", memory.heap.readDouble(floatPointer));
-		var stringPointer = memory.heap.storeString("hello");
-		trace("string read/write", memory.heap.readString(stringPointer));
-		var codePointer = memory.heap.storeCodeBlock(
+		var intPointer = memory.storage.storeInt32(-456);
+		trace("int read/write", memory.storage.readInt32(intPointer));
+		var floatPointer = memory.storage.storeDouble(123.456);
+		trace("float read/write", memory.storage.readDouble(floatPointer));
+		var stringPointer = memory.storage.storeString("hello");
+		trace("string read/write", memory.storage.readString(stringPointer));
+		var codePointer = memory.storage.storeCodeBlock(
 			Block([
 				VariableDeclaration(Identifier("z"), Identifier(Little.keywords.TYPE_INT)),
 			], Identifier(Little.keywords.TYPE_INT))
 		);
-		trace("code read/write", memory.heap.readCodeBlock(codePointer));
+		trace("code read/write", memory.storage.readCodeBlock(codePointer));
 		var boolPointer = memory.store(TrueValue);
 		trace("bool read/write", memory.constants.getFromPointer(boolPointer));
-		var nullPointer = memory.heap.storeStatic(NullValue);
+		var nullPointer = memory.storage.storeStatic(NullValue);
 		trace("null read/write", memory.constants.getFromPointer(nullPointer));
-		var signPointer = memory.heap.storeSign("^&");
-		trace("sign read/write", memory.heap.readSign(signPointer));
+		var signPointer = memory.storage.storeSign("^&");
+		trace("sign read/write", memory.storage.readSign(signPointer));
 
-		var objectPointer = memory.heap.storeObject(
+		var objectPointer = memory.storage.storeObject(
 			Object(
 				Block([FunctionReturn(Characters("hello"), Identifier(Little.keywords.TYPE_STRING))], Identifier(Little.keywords.TYPE_STRING)),
 				[
@@ -71,15 +71,15 @@ class Main {
 			)
 		);
 
-		trace("object read/write","\n" + PrettyPrinter.printInterpreterAst([memory.heap.readObject(objectPointer)]));
+		trace("object read/write","\n" + PrettyPrinter.printInterpreterAst([memory.storage.readObject(objectPointer)]));
 
-		//var classPointer = memory.heap.storeType(
+		//var classPointer = memory.storage.storeType(
 		//	[VariableDeclaration(Identifier("n"), TypeReference([Little.keywords.TYPE_INT])),
 		//	VariableDeclaration(Identifier("s"), TypeReference([Little.keywords.TYPE_BOOLEAN]))],
 		//	[]
 		//);
 //
-		//trace("class read/write", memory.heap.readType(classPointer));
+		//trace("class read/write", memory.storage.readType(classPointer));
 		
 
 		trace("memory:");
