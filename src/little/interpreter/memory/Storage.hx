@@ -13,71 +13,14 @@ import haxe.io.UInt8Array;
 import vision.ds.ByteArray;
 
 using little.tools.Extensions;
-
-/**
-	A stack-heap like memory manager, where static values (numbers, static arrays) are stored in-place,
-	and dynamic values (strings, objects) are stored as pointers, to their location in another bulk of memory.
-
-	Addresses differ between the static and dynamic storage by prepending them with a negative (-) sign.
-
-	Values in the stack are stored as-is, while values in the heap must have 5 bytes of data before each item:
-	 - Bytes 0-4: The item's length, not including the 5-byte header.
-	 - Byte 5: Whether this memory is in use or not.
-	
-	The headers purpose is in easier memory allocation & freeing:
-
-	 - **When looking to store something, we start at the first byte, and read its header. If its taken, we jump it's length bytes, and try again.**
-	 	- The heap always starts with, and ends with a header. The last header has no length, and is not taken.
-	 - **When actually storing something, There are two cases:**
-	    1. Were storing it in a larger amount of freed data, when `large_amount > size + header`:
-		  	- We first change the header's length to the new object, but keep its old value
-		  	- We set it as used memory
-		  	- We than append the new object with a new header, with the remaining length, and set as not used
-	    2. Were storing it at the end of the heap:
-		  	- We change the header's length attribute from `0` to the new object's size
-		  	- We set it as used memory
-	 - **When freeing something, we only denote in the header that the following memory is not used.**
-**/
 class Storage {
 
 	public var parent:Memory;
-
-	/**
-		A pointer to the dynamically-sized array containing the pointers to new scopes in the stack.
-		
-		This is pointer is relevant to the heap, and it may change as this array grows.
-	**/
-	public var stackPointers:MemoryPointer;
-
-	public var stack:ByteArray;
-	public var heap:ByteArray;
 
     public function new(memory:Memory) {
         parent = memory;
     }
 
-	/* 
-
-
-		   SSSSSSSSSSSSSSS         tttt                                                  kkkkkkkk           
-		 SS:::::::::::::::S     ttt:::t                                                  k::::::k           
-		S:::::SSSSSS::::::S     t:::::t                                                  k::::::k           
-		S:::::S     SSSSSSS     t:::::t                                                  k::::::k           
-		S:::::S           ttttttt:::::ttttttt       aaaaaaaaaaaaa       cccccccccccccccc k::::::k    kkkkkkk
-		S:::::S           t:::::::::::::::::t       a::::::::::::a    cc:::::::::::::::c k::::::k   k:::::k 
-		 S::::SSSS        t:::::::::::::::::t       aaaaaaaaa:::::a  c:::::::::::::::::c k::::::k  k:::::k  
-		  SS::::::SSSSS   tttttt:::::::tttttt                a::::a c:::::::cccccc:::::c k::::::k k:::::k   
-		    SSS::::::::SS       t:::::t               aaaaaaa:::::a c::::::c     ccccccc k:::::::k:::::k    
-		       SSSSSS::::S      t:::::t             aa::::::::::::a c:::::c              k::::::::::::k     
-		            S:::::S     t:::::t            a::::aaaa::::::a c:::::c              k::::::::::::k     
-		            S:::::S     t:::::t    tttttt a::::a    a:::::a c::::::c     ccccccc k:::::::k:::::k    
-		SSSSSSS     S:::::S     t::::::tttt:::::t a::::a    a:::::a c:::::::cccccc:::::c k::::::k k:::::k   
-		S::::::SSSSSS:::::S     tt::::::::::::::t a:::::aaaa::::::a  c:::::::::::::::::c k::::::k  k:::::k  
-		S:::::::::::::::SS        tt:::::::::::tt  a::::::::::aa:::a  cc:::::::::::::::c k::::::k   k:::::k 
-		 SSSSSSSSSSSSSSS            ttttttttttt     aaaaaaaaaa  aaaa    cccccccccccccccc kkkkkkkk    kkkkkkk
-
-
-	*/ 
 
     /**
         stores a byte to the storage
@@ -222,7 +165,6 @@ class Storage {
         freeInt16(address);
     }
 
-
     public function storeInt32(b:Int):MemoryPointer {
         if (b == 0) return parent.constants.ZERO;
         #if !static if (b == null) return parent.constants.NULL; #end
@@ -265,7 +207,6 @@ class Storage {
 			parent.reserved[address.rawLocation + j] = 0;
         }
     }
-
 
     public function storeUInt32(b:UInt):MemoryPointer {
         return storeInt32(b);
@@ -343,42 +284,6 @@ class Storage {
 	}
 
 
-	/*
-
-
-		HHHHHHHHH     HHHHHHHHH                                                          
-		H:::::::H     H:::::::H                                                          
-		H:::::::H     H:::::::H                                                          
-		HH::::::H     H::::::HH                                                          
-		  H:::::H     H:::::H      eeeeeeeeeeee      aaaaaaaaaaaaa   ppppp   ppppppppp   
-		  H:::::H     H:::::H    ee::::::::::::ee    a::::::::::::a  p::::ppp:::::::::p  
-		  H::::::HHHHH::::::H   e::::::eeeee:::::ee  aaaaaaaaa:::::a p:::::::::::::::::p 
-		  H:::::::::::::::::H  e::::::e     e:::::e           a::::a pp::::::ppppp::::::p
-		  H:::::::::::::::::H  e:::::::eeeee::::::e    aaaaaaa:::::a  p:::::p     p:::::p
-		  H::::::HHHHH::::::H  e:::::::::::::::::e   aa::::::::::::a  p:::::p     p:::::p
-		  H:::::H     H:::::H  e::::::eeeeeeeeeee   a::::aaaa::::::a  p:::::p     p:::::p
-		  H:::::H     H:::::H  e:::::::e           a::::a    a:::::a  p:::::p    p::::::p
-		HH::::::H     H::::::H e::::::::e          a::::a    a:::::a  p:::::ppppp:::::::p
-		H:::::::H     H:::::::H e::::::::eeeeeeee  a:::::aaaa::::::a  p::::::::::::::::p 
-		H:::::::H     H:::::::H  ee:::::::::::::e   a::::::::::aa:::a p::::::::::::::pp  
-		HHHHHHHHH     HHHHHHHHH    eeeeeeeeeeeeee    aaaaaaaaaa  aaaa p::::::pppppppp    
-		                                                              p:::::p            
-		                                                              p:::::p            
-		                                                             p:::::::p           
-		                                                             p:::::::p           
-		                                                             p:::::::p           
-		                                                             ppppppppp           
-
-	*/
-
-	public function storeDynamicArray(a:Array<InterpTokens>) {
-		
-	}
-
-
-	/**
-		Stores a string on the heap, and a pointer to it on the stack. The stack pointer is the one returned.
-	**/
 	public function storeString(b:String):MemoryPointer {
 		if (b == "") return parent.constants.ZERO;
 		#if !static if (b == null) return parent.constants.NULL; #end
