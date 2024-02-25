@@ -5,28 +5,28 @@ using little.tools.Extensions;
 
 class Referrer {
 
-	public var blocks:Array<Scope> = [];
+	public var scopes:Array<Scope> = [];
 
 	public var parent:Memory;
 
 	public function new(parent:Memory) {
 		this.parent = parent;
-		blocks.push(new Scope()); // Kick off with an empty block
+		scopes.push(new Scope()); // Kick off with an empty block
 	}
 
 	public function pushScope(allowLookbehind:Bool = true) {
-		var block = new Scope();
-		if (allowLookbehind) block.previous = blocks[blocks.length - 1];
-		blocks.push(block);
+		var scope = new Scope();
+		if (allowLookbehind) scope.previous = scopes[scopes.length - 1];
+		scopes.push(scope);
 	}
 
 	public function popScope() {
-		blocks.pop();
+		scopes.pop();
 
 		// Todo: Garbage collection
 	}
 
 	public function getCurrentScope():Scope {
-		return blocks[blocks.length - 1];
+		return scopes[scopes.length - 1];
 	}
 }

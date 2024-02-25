@@ -105,6 +105,56 @@ class Storage {
         }
     }
 
+    public function storeArray(length:Int, elementSize:Int, defaultElement:ByteArray) {
+        var size = elementSize * length;
+        var bytes = new ByteArray(size + 4); // First 4 bytes are the length of the array
+        if (!defaultElement.isEmpty()) {
+            for (i in 0...length) {
+                bytes.setBytes(i + 4, defaultElement);
+            }
+        }
+
+        bytes.setInt32(0, length);
+
+        return storeBytes(bytes.length, bytes);
+    }
+
+    public function setArray(address:MemoryPointer, length:Int, elementSize:Int, defaultElement:ByteArray) {
+        var size = elementSize * length;
+        var bytes = new ByteArray(size + 4 + 4); // First 4 bytes are the length of the array, next 4 bytes are for element size.
+        if (!defaultElement.isEmpty()) {
+            for (i in 0...length) {
+                bytes.setBytes(i + 8, defaultElement);
+            }
+        }
+
+        bytes.setInt32(0, length);
+        bytes.setInt32(4, elementSize);
+
+        return setBytes(address, bytes);
+    }
+
+    public function readArray(address:MemoryPointer):Array<ByteArray> {
+        var length = readInt32(address);
+        var elementSize = readInt32(address.rawLocation + 4);
+        address.rawLocation += 8;
+
+        var array = [];
+
+        for (i in 0...length) {
+            array.push(readBytes(address, elementSize));
+            address.rawLocation += elementSize;
+        }
+
+        return array;
+    }
+
+    public function freeArray(address:MemoryPointer) {
+        var length = readInt32(address);
+        var elementSize = readInt32(address.rawLocation + 4);
+        freeBytes(address, length * elementSize + 8);
+    }
+
 
     public function storeInt16(b:Int):MemoryPointer {
         if (b == 0) return parent.constants.ZERO;
