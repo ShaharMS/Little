@@ -208,8 +208,8 @@ class Memory {
 				var objectHashTableBytesLength = storage.readInt32(currentAddress);
 				var objectHashTableBytes = storage.readBytes(currentAddress.rawLocation + 4, objectHashTableBytesLength);
 				
-				if (ObjectHashing.hashTableHasKey(objectHashTableBytes, identifier, storage)) {
-					var keyData = ObjectHashing.hashTableGetKey(objectHashTableBytes, identifier, storage);
+				if (HashTables.hashTableHasKey(objectHashTableBytes, identifier, storage)) {
+					var keyData = HashTables.hashTableGetKey(objectHashTableBytes, identifier, storage);
 					
 					switch getTypeName(keyData.type) {
 						case (_ == Little.keywords.TYPE_STRING => true): current = Characters(storage.readString(keyData.value));
@@ -285,11 +285,11 @@ class Memory {
 				if (getTypeInformation(current.type).isStaticType) {
 					Little.runtime.throwError(ErrorMessage('Cannot write to a static type. Only objects can have dynamic properties (${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)} is `${current.type}`)'));
 				}
-				if (!ObjectHashing.hashTableHasKey(ObjectHashing.getHashTableOf(current.address, storage), pathCopy[0], storage)) {
+				if (!HashTables.hashTableHasKey(HashTables.getHashTableOf(current.address, storage), pathCopy[0], storage)) {
 					var a = wentThroughPath.concat([pathCopy[0]]).join(Little.keywords.PROPERTY_ACCESS_SIGN);
 					Little.runtime.throwError(ErrorMessage('Cannot write a property to ${a}, since ${pathCopy[0]} does not exist (did you forget to define ${a}?)'));
 				}
-				var hashTableKey = ObjectHashing.hashTableGetKey(ObjectHashing.getHashTableOf(current.address, storage), pathCopy[0], storage);
+				var hashTableKey = HashTables.hashTableGetKey(HashTables.getHashTableOf(current.address, storage), pathCopy[0], storage);
 				current = {
 					address: hashTableKey.value,
 					type: getTypeName(hashTableKey.type),
@@ -302,12 +302,12 @@ class Memory {
 			if (getTypeInformation(current.type).isStaticType) {
 				Little.runtime.throwError(ErrorMessage('Cannot write to a property to values of a static type. Only objects can have dynamic properties (${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)} is `${current.type}`)'));
 			}
-			if (ObjectHashing.hashTableHasKey(ObjectHashing.getHashTableOf(current.address, storage), pathCopy[0], storage)) {
-				ObjectHashing.objectSetKey(current.address, pathCopy[0], {value: value != null ? store(value) : null, type: type != null ? getTypeInformation(type).pointer : null, doc: doc != null ? storage.storeString(doc) : null}, storage);
+			if (HashTables.hashTableHasKey(HashTables.getHashTableOf(current.address, storage), pathCopy[0], storage)) {
+				HashTables.objectSetKey(current.address, pathCopy[0], {value: value != null ? store(value) : null, type: type != null ? getTypeInformation(type).pointer : null, doc: doc != null ? storage.storeString(doc) : null}, storage);
 			} else if (externs.instanceProperties.properties.exists(pathCopy[0])) {
 				Little.runtime.throwError(ErrorMessage('Cannot write to an extern property (${pathCopy[0]})'));
 			} else {
-				ObjectHashing.objectAddKey(current.address, pathCopy[0], store(value), getTypeInformation(type).pointer, storage.storeString(doc), storage);
+				HashTables.objectAddKey(current.address, pathCopy[0], store(value), getTypeInformation(type).pointer, storage.storeString(doc), storage);
 			}
 		}
 	}
@@ -333,11 +333,11 @@ class Memory {
 				if (getTypeInformation(current.type).isStaticType) {
 					Little.runtime.throwError(ErrorMessage('Cannot set properties tovalues of a static type. Only objects can have dynamic properties (${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)} is `${current.type}`)'));
 				}
-				if (!ObjectHashing.hashTableHasKey(ObjectHashing.getHashTableOf(current.address, storage), pathCopy[0], storage)) {
+				if (!HashTables.hashTableHasKey(HashTables.getHashTableOf(current.address, storage), pathCopy[0], storage)) {
 					var a = wentThroughPath.concat([pathCopy[0]]).join(Little.keywords.PROPERTY_ACCESS_SIGN);
 					Little.runtime.throwError(ErrorMessage('Cannot set a property of ${a}, since ${pathCopy[0]} does not exist (did you forget to define ${a}?)'));
 				}
-				var hashTableKey = ObjectHashing.hashTableGetKey(ObjectHashing.getHashTableOf(current.address, storage), pathCopy[0], storage);
+				var hashTableKey = HashTables.hashTableGetKey(HashTables.getHashTableOf(current.address, storage), pathCopy[0], storage);
 				current = {
 					address: hashTableKey.value,
 					type: getTypeName(hashTableKey.type),
@@ -350,8 +350,8 @@ class Memory {
 			if (getTypeInformation(current.type).isStaticType) {
 				Little.runtime.throwError(ErrorMessage('Cannot set properties to values of a static type. Only objects can have dynamic properties (${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)} is `${current.type}`)'));
 			}
-			if (ObjectHashing.hashTableHasKey(ObjectHashing.getHashTableOf(current.address, storage), pathCopy[0], storage)) {
-				ObjectHashing.objectSetKey(current.address, pathCopy[0], {value: value != null ? store(value) : null, type: type != null ? getTypeInformation(type).pointer : null, doc: doc != null ? storage.storeString(doc) : null}, storage);
+			if (HashTables.hashTableHasKey(HashTables.getHashTableOf(current.address, storage), pathCopy[0], storage)) {
+				HashTables.objectSetKey(current.address, pathCopy[0], {value: value != null ? store(value) : null, type: type != null ? getTypeInformation(type).pointer : null, doc: doc != null ? storage.storeString(doc) : null}, storage);
 			} else if (externs.instanceProperties.properties.exists(pathCopy[0])) {
 				Little.runtime.throwError(ErrorMessage('Cannot set an extern property (${pathCopy[0]})'));
 			} else {

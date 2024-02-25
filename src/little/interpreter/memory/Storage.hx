@@ -13,6 +13,8 @@ import haxe.io.UInt8Array;
 import vision.ds.ByteArray;
 
 using little.tools.Extensions;
+
+
 class Storage {
 
 	public var parent:Memory;
@@ -119,10 +121,10 @@ class Storage {
         return storeBytes(bytes.length, bytes);
     }
 
-    public function setArray(address:MemoryPointer, length:Int, elementSize:Int, defaultElement:ByteArray) {
+    public function setArray(address:MemoryPointer, length:Int, elementSize:Int, ?defaultElement:ByteArray) {
         var size = elementSize * length;
         var bytes = new ByteArray(size + 4 + 4); // First 4 bytes are the length of the array, next 4 bytes are for element size.
-        if (!defaultElement.isEmpty()) {
+        if (defaultElement != null) {
             for (i in 0...length) {
                 bytes.setBytes(i + 8, defaultElement);
             }
@@ -516,7 +518,7 @@ class Storage {
                     quintuples.push({key: key, keyPointer: keyPointer, value: value, type: type, doc: storeString(v.documentation) /*Todo, not a good solution, docs will some out of classes most of the time.*/});
                 }
 
-                var bytes = ObjectHashing.generateObjectHashTable(quintuples);
+                var bytes = HashTables.generateObjectHashTable(quintuples);
                 var bytesLength = ByteArray.from(bytes.length);
                 var bytesPointer = storeBytes(bytes.length, bytes);
 
@@ -531,7 +533,7 @@ class Storage {
 
 	public function readObject(pointer:MemoryPointer):InterpTokens {
         var hashTableBytes = readBytes(readPointer(pointer.rawLocation + 4), readInt32(pointer));
-        var table = ObjectHashing.readObjectHashTable(hashTableBytes, this);
+        var table = HashTables.readObjectHashTable(hashTableBytes, this);
         var map = new Map<String, {value:InterpTokens, documentation:String}>();
         for (entry in table) {
             map[entry.key] = {

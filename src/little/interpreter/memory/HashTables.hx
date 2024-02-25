@@ -6,7 +6,7 @@ import haxe.io.Bytes;
 import haxe.hash.Murmur1;
 import vision.ds.ByteArray;
 
-class ObjectHashing {
+class HashTables {
     
     public static final CELL_SIZE:Int = POINTER_SIZE * 4; 
 
@@ -47,11 +47,9 @@ class ObjectHashing {
                 array.setInt32(keyIndex + POINTER_SIZE, pair.value.rawLocation);
                 array.setInt32(keyIndex + POINTER_SIZE * 2, pair.type.rawLocation);
                 array.setInt32(keyIndex + POINTER_SIZE * 3, pair.doc.rawLocation);
-                // trace('key ${pair.key} stored at ${keyIndex}');
             } else {
                 // To handle collisions, we will basically move on until we find an empty slot
                 // Then, fill it with the new key-value-type triplet
-                // trace ('key ${pair.key} collided at ${keyIndex}');
                 var incrementation = 0; // Todo - revisit
                 var i = keyIndex;
                 while (array.getInt32(i) != 0) {
@@ -68,7 +66,6 @@ class ObjectHashing {
                 array.setInt32(i + POINTER_SIZE, pair.value.rawLocation);
                 array.setInt32(i + POINTER_SIZE * 2, pair.type.rawLocation);
                 array.setInt32(i + POINTER_SIZE * 3, pair.doc.rawLocation);
-                // trace ('key ${pair.key} stored at ${i}');
             }
         }
 
@@ -176,7 +173,7 @@ class ObjectHashing {
 
     public static function objectAddKey(object:MemoryPointer, key:String, value:MemoryPointer, type:MemoryPointer, doc:MemoryPointer, storage:Storage) {
         var hashTableBytes = storage.readBytes(storage.readPointer(object.rawLocation + POINTER_SIZE), storage.readInt32(object.rawLocation));
-        var table = ObjectHashing.readObjectHashTable(hashTableBytes, storage);
+        var table = HashTables.readObjectHashTable(hashTableBytes, storage);
 
         // Fresh objects have 0.33 size-to-fill ratio, so usually we would just need to hash and add a key.
         // In case the size-to-fill ration is grater that 0,7, we will need to rehash everything and add the key
@@ -193,7 +190,7 @@ class ObjectHashing {
                 type: type,
                 doc: doc
             });
-            var newHashTable = ObjectHashing.generateObjectHashTable(table);
+            var newHashTable = HashTables.generateObjectHashTable(table);
             // Free the old hash table:
             storage.freeBytes(storage.readPointer(object.rawLocation + POINTER_SIZE), hashTableBytes.length);
             // Store the new one, retrieve the pointer to it:

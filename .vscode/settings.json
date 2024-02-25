@@ -16,6 +16,7 @@
 		"incrementation",
 		"Interp",
 		"keyup",
+		"lookbehinds",
 		"MULTICHAR",
 		"println",
 		"STRINGIFIER",
