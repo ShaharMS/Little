@@ -318,7 +318,7 @@ class Actions {
 	**/
     public static function run(body:Array<InterpTokens>):InterpTokens {
         var returnVal:InterpTokens = null;
-		memory.referrer.pushScope(true);
+		memory.referrer.pushScope();
         var i = 0;
         while (i < body.length) {
             var token = body[i];

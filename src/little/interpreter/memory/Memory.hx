@@ -58,11 +58,10 @@ class Memory {
 	public function reset() {
 		memory.resize(memoryChunkSize);
 		reserved.resize(memoryChunkSize);
+		referrer.bytes.resize(1024);
 		memory.fill(0, memoryChunkSize, 0);
 		reserved.fill(0, memoryChunkSize, 0);
-		while (referrer.getCurrentScope() != null) {
-			referrer.popScope();
-		}
+		referrer.bytes.fill(0, 1024, 0);
 
 		externs = new ExternalInterfacing(this);
 		// Constants don't need to be reset
@@ -104,14 +103,13 @@ class Memory {
 
 	/**
 	**/
-	public function read(...path:String):{objectValue:InterpTokens, objectTypeName:String, objectAddress:MemoryPointer, objectDoc:String} {
+	public function read(...path:String):{objectValue:InterpTokens, objectTypeName:String, objectAddress:MemoryPointer} {
 		// If the path is empty, we just return null
 		if (path.length == 0) {
 			return {
 				objectValue: null,
 				objectTypeName: null,
 				objectAddress: null,
-				objectDoc: null
 			}
 		}
 
@@ -133,15 +131,13 @@ class Memory {
 				objectValue: object.objectValue,
 				objectTypeName: typeName,
 				objectAddress: object.objectAddress,
-				objectDoc: object.objectDoc
 			}
 		}
 
 		// If we didn't find anything on the externs, we look in the current scope.
 		// We don't care if the field is found or not, since its supposed
 		// To throw a runtime error that a variable was not found.
-		var stackBlock = referrer.getCurrentScope();
-		var data = stackBlock.get(path[0]);
+		var data = referrer.get(path[0]);
 		var current:InterpTokens = switch data.type {
 			case (_ == Little.keywords.TYPE_STRING => true): Characters(storage.readString(data.address));
 			case (_ == Little.keywords.TYPE_INT => true): Number(storage.readInt32(data.address));
@@ -156,7 +152,6 @@ class Memory {
 		}
 		var currentAddress:MemoryPointer = data.address;
 		var currentType:String = data.type;
-		var currentDoc:String = data.doc;
 		
 		var processed = path.toArray();
 		var wentThroughPath = [];
@@ -187,7 +182,6 @@ class Memory {
 					var newCurrent = classProperties.properties.get(identifier).getter(current, currentAddress);
 					current = newCurrent.objectValue;
 					currentAddress = newCurrent.objectAddress;
-					currentDoc = newCurrent.objectDoc;
 					continue;
 				}
 			}
@@ -198,7 +192,6 @@ class Memory {
 					var newCurrent = classProperties.properties.get(identifier).getter(current, currentAddress);
 					current = newCurrent.objectValue;
 					currentAddress = newCurrent.objectAddress;
-					currentDoc = newCurrent.objectDoc;
 					continue;
 				}
 			}
@@ -223,7 +216,6 @@ class Memory {
 					}
 
 					currentAddress = keyData.value;
-					currentDoc = keyData.doc;
 				}
 			}
 
@@ -235,7 +227,6 @@ class Memory {
 					objectValue: NullValue,
 					objectAddress: constants.NULL,
 					objectTypeName: Little.keywords.TYPE_DYNAMIC,
-					objectDoc: ""
 				}
 			}
 		}
@@ -255,7 +246,6 @@ class Memory {
 				case ConditionCode(_): Little.keywords.TYPE_CONDITION;
 				case _: throw "How did we get here? 3";
 			},
-			objectDoc: currentDoc
 		}
 	}
 
@@ -272,15 +262,12 @@ class Memory {
 		}
 
 		if (path.length == 1) {
-			if (referrer.getCurrentScope().directExists(path[0])) {
-				referrer.getCurrentScope().set(path[0], { address: value != null ? store(value) : null, type: type != null ? type : null, doc: doc != null ? doc : null });
-			} else {
-				referrer.getCurrentScope().reference(path[0], store(value), type, doc);
-			}
+			referrer.reference(path[0], store(value), type);
+
 		} else {
 			var pathCopy = path.copy();
 			var wentThroughPath = path.slice(0, path.length - 1);
-			var current = referrer.getCurrentScope().get(pathCopy[0]);
+			var current = referrer.get(pathCopy[0]);
 			while (pathCopy.length > 1) {
 				if (getTypeInformation(current.type).isStaticType) {
 					Little.runtime.throwError(ErrorMessage('Cannot write to a static type. Only objects can have dynamic properties (${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)} is `${current.type}`)'));
@@ -293,7 +280,6 @@ class Memory {
 				current = {
 					address: hashTableKey.value,
 					type: getTypeName(hashTableKey.type),
-					doc: storage.readString(hashTableKey.doc),
 				}
 				wentThroughPath.push(pathCopy[0]);
 				pathCopy.shift();
@@ -320,15 +306,15 @@ class Memory {
 		}
 
 		if (path.length == 1) {
-			if (referrer.getCurrentScope().exists(path[0])) {
-				referrer.getCurrentScope().set(path[0], { address: value != null ? store(value) : null, type: type != null ? type : null, doc: doc != null ? doc : null });
+			if (referrer.exists(path[0])) {
+				referrer.set(path[0], { address: value != null ? store(value) : null, type: type != null ? type : null});
 			} else {
 				Little.runtime.throwError(ErrorMessage('Variable/function ${path[0]} does not exist'));
 			}
 		} else {
 			var pathCopy = path.copy();
 			var wentThroughPath = path.slice(0, path.length - 1);
-			var current = referrer.getCurrentScope().get(pathCopy[0]);
+			var current = referrer.get(pathCopy[0]);
 			while (pathCopy.length > 1) {
 				if (getTypeInformation(current.type).isStaticType) {
 					Little.runtime.throwError(ErrorMessage('Cannot set properties tovalues of a static type. Only objects can have dynamic properties (${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)} is `${current.type}`)'));
@@ -341,7 +327,6 @@ class Memory {
 				current = {
 					address: hashTableKey.value,
 					type: getTypeName(hashTableKey.type),
-					doc: storage.readString(hashTableKey.doc),
 				}
 				wentThroughPath.push(pathCopy[0]);
 				pathCopy.shift();
@@ -422,8 +407,7 @@ class Memory {
 			}
 		}
 		
-		var block = referrer.getCurrentScope();
-		var reference = block.get(name);
+		var reference = referrer.get(name);
 		var typeInfo:Storage.TypeBlocks = storage.readType(reference.address);
 
 		return {
@@ -449,9 +433,8 @@ class Memory {
 		if (constants.hasPointer(pointer)) {
 			return constants.getFromPointer(pointer).extractIdentifier();
 		}
-		var block = referrer.getCurrentScope();
 
-		for (key => value in block) {
+		for (key => value in referrer) {
 			if (value.address == pointer) {
 				return key;
 			}

@@ -30,6 +30,9 @@ class Referrer {
 	@:noCompletion function get_currentScopeLength() return bytes.getUInt16(bytes.getInt32(0) + 2);
 
 	public function new(memory:Memory) {
+
+		parent = memory;
+
 		bytes = new ByteArray(1024); // 1mb, no need to be too big
 		bytes.setInt32(0, 4); // The current scope starts at position 4.
 		bytes.setUInt16(4, 0); // always 0 elements backwards, were at the start,
@@ -46,7 +49,7 @@ class Referrer {
 
 		var header = new ByteArray(4);
 		header.setUInt16(0, currentScopeLength);
-		header.setInt32(2, 0); // Currently, 0 elements ahead.
+		header.setUInt16(2, 0); // Currently, 0 elements ahead.
 
 		var writePosition = currentScopeStart + currentScopeLength * KEY_SIZE;
 
@@ -71,6 +74,7 @@ class Referrer {
 
 	
 	public function reference(key:String, address:MemoryPointer, type:String) {
+		trace(key);
         var keyHash = Murmur1.hash(ByteArray.from(key));
         var stringName = parent.storage.storeString(key);
 		
@@ -107,7 +111,7 @@ class Referrer {
 		bytes.setUInt16(bytes.getInt32(0) + 2, bytes.getUInt16(bytes.getInt32(0) + 2) - 1); // Decrement the length of the current scope.
 	}
 
-	public function get(key:String):{value:MemoryPointer, type:String} {
+	public function get(key:String):{address:MemoryPointer, type:String} {
 		// This one is a little more complicated, since it involves lookbehinds.
 		var keyHash = Murmur1.hash(ByteArray.from(key));
 
@@ -116,14 +120,15 @@ class Referrer {
 		var nextScope = currentScopeStart - bytes.getUInt16(currentScopeStart) * KEY_SIZE - 4;
 
 		while (nextScope != 0) {
-			var i = checkingScope;
+			var i = checkingScope + 4;
 			while (i < (checkingScope + elementCount * KEY_SIZE)) {
 				var testingHash = bytes.getInt32(i);
 				if (keyHash == testingHash) {
 					var stringName = parent.storage.readString(bytes.getInt32(i + 4));
 					if (stringName == key) {
+						trace(key, bytes.toHex());
 						return {
-							value: MemoryPointer.fromInt(bytes.getInt32(i + 4 + POINTER_SIZE)),
+							address: MemoryPointer.fromInt(bytes.getInt32(i + 4 + POINTER_SIZE)),
 							type: parent.storage.readString(bytes.getInt32(i + 4 + POINTER_SIZE * 2))
 						}
 					}
@@ -220,38 +225,5 @@ class Referrer {
 		}
 
 		return map.keyValueIterator();
-	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	public var scopes:Array<Scope> = [];
-
-
-	public function getCurrentScope():Scope {
-		return scopes[scopes.length - 1];
 	}
 }
