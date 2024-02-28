@@ -74,7 +74,6 @@ class Referrer {
 
 	
 	public function reference(key:String, address:MemoryPointer, type:String) {
-		trace(key);
         var keyHash = Murmur1.hash(ByteArray.from(key));
         var stringName = parent.storage.storeString(key);
 		
@@ -84,12 +83,12 @@ class Referrer {
 			requestMemory();
 		}
 
-		bytes.setInt32(writePosition, keyHash);
+		bytes.setUInt32(writePosition, keyHash);
 		bytes.setInt32(writePosition + 4, stringName.rawLocation);
 		bytes.setInt32(writePosition + 4 + POINTER_SIZE, address.rawLocation);
 		bytes.setInt32(writePosition + 4 + POINTER_SIZE * 2, parent.getTypeInformation(type).pointer.rawLocation);
 
-		bytes.setUInt16(bytes.getInt32(0) + 2, bytes.getUInt16(bytes.getInt32(0) + 2) + 1); // Increment the length of the current scope.
+		bytes.setUInt16(currentScopeStart + 2, bytes.getUInt16(currentScopeStart + 2) + 1); // Increment the length of the current scope.
 	}
 
 	public function dereference(key:String) {
@@ -98,7 +97,7 @@ class Referrer {
 		var writePosition = currentScopeStart + 4;
 
 		while (true) {
-			var currentKeyHash = bytes.getInt32(writePosition);
+			var currentKeyHash = bytes.getUInt32(writePosition);
 			if (currentKeyHash == keyHash) {
 				var stringName = parent.storage.readString(bytes.getInt32(writePosition + 4));
 				if (stringName == key) break;
@@ -119,17 +118,21 @@ class Referrer {
 		var elementCount = bytes.getUInt16(currentScopeStart + 2);
 		var nextScope = currentScopeStart - bytes.getUInt16(currentScopeStart) * KEY_SIZE - 4;
 
-		while (nextScope != 0) {
+		trace(checkingScope, nextScope);
+
+		do {
 			var i = checkingScope + 4;
 			while (i < (checkingScope + elementCount * KEY_SIZE)) {
-				var testingHash = bytes.getInt32(i);
+				var testingHash = bytes.getUInt32(i);
+				trace(keyHash, testingHash);
 				if (keyHash == testingHash) {
 					var stringName = parent.storage.readString(bytes.getInt32(i + 4));
+					trace(key, stringName);
 					if (stringName == key) {
-						trace(key, bytes.toHex());
+						trace(key, parent.getTypeName(bytes.getInt32(i + 4 + POINTER_SIZE * 2)));
 						return {
 							address: MemoryPointer.fromInt(bytes.getInt32(i + 4 + POINTER_SIZE)),
-							type: parent.storage.readString(bytes.getInt32(i + 4 + POINTER_SIZE * 2))
+							type: parent.getTypeName(bytes.getInt32(i + 4 + POINTER_SIZE * 2))
 						}
 					}
 				}
@@ -138,8 +141,9 @@ class Referrer {
 			}
 			checkingScope = nextScope;
 			elementCount = bytes.getUInt16(nextScope + 2);
+			trace(elementCount);
 			nextScope = nextScope - bytes.getUInt16(nextScope) * KEY_SIZE - 4;
-		}
+		} while (checkingScope != 0);
 
 		throw 'Key $key does not exist.';
 	}
@@ -151,15 +155,16 @@ class Referrer {
 		var elementCount = bytes.getUInt16(currentScopeStart + 2);
 		var nextScope = currentScopeStart - bytes.getUInt16(currentScopeStart) * KEY_SIZE - 4;
 
-		while (nextScope != 0) {
-			var i = checkingScope;
+		do {
+			var i = checkingScope + 4;
 			while (i < (checkingScope + elementCount * KEY_SIZE)) {
-				var testingHash = bytes.getInt32(i);
+				var testingHash = bytes.getUInt32(i);
 				if (keyHash == testingHash) {
 					var stringName = parent.storage.readString(bytes.getInt32(i + 4));
 					if (stringName == key) {
 						if (value.address != null) bytes.setInt32(i + 4 + POINTER_SIZE, value.address.rawLocation);
 						if (value.type != null) bytes.setInt32(i + 4 + POINTER_SIZE * 2, parent.getTypeInformation(value.type).pointer.rawLocation);
+						return;
 					}
 				}
 
@@ -168,7 +173,7 @@ class Referrer {
 			checkingScope = nextScope;
 			elementCount = bytes.getUInt16(nextScope + 2);
 			nextScope = nextScope - bytes.getUInt16(nextScope) * KEY_SIZE - 4;
-		}
+		} while (checkingScope != 0);
 
 		throw 'Cannot set $key -  does not exist.';
 	}
@@ -180,12 +185,14 @@ class Referrer {
 		var elementCount = bytes.getUInt16(currentScopeStart + 2);
 		var nextScope = currentScopeStart - bytes.getUInt16(currentScopeStart) * KEY_SIZE - 4;
 
-		while (nextScope != 0) {
-			var i = checkingScope;
+		do {
+			var i = checkingScope + 4;
 			while (i < (checkingScope + elementCount * KEY_SIZE)) {
-				var testingHash = bytes.getInt32(i);
+				var testingHash = bytes.getUInt32(i);
+				trace(testingHash, keyHash);
 				if (keyHash == testingHash) {
 					var stringName = parent.storage.readString(bytes.getInt32(i + 4));
+					trace(stringName, key);
 					if (stringName == key) {
 						return true;
 					}
@@ -196,7 +203,7 @@ class Referrer {
 			checkingScope = nextScope;
 			elementCount = bytes.getUInt16(nextScope + 2);
 			nextScope = nextScope - bytes.getUInt16(nextScope) * KEY_SIZE - 4;
-		}
+		} while (checkingScope != 0);
 
 		return false;
 	}
@@ -208,7 +215,7 @@ class Referrer {
 		var checkingScope = currentScopeStart;
 		var elementCount = bytes.getUInt16(currentScopeStart + 2);
 		var nextScope = currentScopeStart - bytes.getUInt16(currentScopeStart) * KEY_SIZE - 4;
-		while (nextScope != 0) {
+		do {
 			var i = checkingScope;
 			while (i < (checkingScope + elementCount * KEY_SIZE)) {
 				var stringName = parent.storage.readString(bytes.getInt32(i + 4));
@@ -222,7 +229,7 @@ class Referrer {
 			checkingScope = nextScope;
 			elementCount = bytes.getUInt16(nextScope + 2);
 			nextScope = nextScope - bytes.getUInt16(nextScope) * KEY_SIZE - 4;
-		}
+		} while (checkingScope != 0);
 
 		return map.keyValueIterator();
 	}

@@ -52,12 +52,12 @@ class ConstantPool {
 			case 0x01: FalseValue;
 			case 0x02: TrueValue;
 			case 0x03: Number(0);
-			case 0x11: Identifier(Little.keywords.TYPE_INT);
-			case 0x12: Identifier(Little.keywords.TYPE_FLOAT);
-			case 0x13: Identifier(Little.keywords.TYPE_BOOLEAN);
-			case 0x14: Identifier(Little.keywords.TYPE_DYNAMIC);
-			case 0x15: ErrorMessage("Default value for error message");
-			case 0x16: HaxeExtern(() -> Characters("Default value for external haxe code"));
+			case 0x0B: Identifier(Little.keywords.TYPE_INT);
+			case 0x0C: Identifier(Little.keywords.TYPE_FLOAT);
+			case 0x0D: Identifier(Little.keywords.TYPE_BOOLEAN);
+			case 0x0E: Identifier(Little.keywords.TYPE_DYNAMIC);
+			case 0x0F: ErrorMessage("Default value for error message");
+			case 0x10: HaxeExtern(() -> Characters("Default value for external haxe code"));
 			case _: throw 'pointer ${pointer} not in constant pool';
 		}
 	}
