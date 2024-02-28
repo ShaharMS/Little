@@ -1,4 +1,4 @@
-package little.interpreter.memory;
+package little.interpreter;
 
 import haxe.Unserializer;
 import haxe.Serializer;
