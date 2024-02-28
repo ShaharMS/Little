@@ -118,18 +118,13 @@ class Referrer {
 		var elementCount = bytes.getUInt16(currentScopeStart + 2);
 		var nextScope = currentScopeStart - bytes.getUInt16(currentScopeStart) * KEY_SIZE - 4;
 
-		trace(checkingScope, nextScope);
-
 		do {
 			var i = checkingScope + 4;
 			while (i < (checkingScope + elementCount * KEY_SIZE)) {
 				var testingHash = bytes.getUInt32(i);
-				trace(keyHash, testingHash);
 				if (keyHash == testingHash) {
 					var stringName = parent.storage.readString(bytes.getInt32(i + 4));
-					trace(key, stringName);
 					if (stringName == key) {
-						trace(key, parent.getTypeName(bytes.getInt32(i + 4 + POINTER_SIZE * 2)));
 						return {
 							address: MemoryPointer.fromInt(bytes.getInt32(i + 4 + POINTER_SIZE)),
 							type: parent.getTypeName(bytes.getInt32(i + 4 + POINTER_SIZE * 2))
@@ -141,7 +136,6 @@ class Referrer {
 			}
 			checkingScope = nextScope;
 			elementCount = bytes.getUInt16(nextScope + 2);
-			trace(elementCount);
 			nextScope = nextScope - bytes.getUInt16(nextScope) * KEY_SIZE - 4;
 		} while (checkingScope != 0);
 
@@ -189,10 +183,8 @@ class Referrer {
 			var i = checkingScope + 4;
 			while (i < (checkingScope + elementCount * KEY_SIZE)) {
 				var testingHash = bytes.getUInt32(i);
-				trace(testingHash, keyHash);
 				if (keyHash == testingHash) {
 					var stringName = parent.storage.readString(bytes.getInt32(i + 4));
-					trace(stringName, key);
 					if (stringName == key) {
 						return true;
 					}
