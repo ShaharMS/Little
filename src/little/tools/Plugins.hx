@@ -1,5 +1,6 @@
 package little.tools;
 
+import haxe.ds.StringMap;
 import little.interpreter.memory.MemoryPointer;
 import little.interpreter.memory.ExternalInterfacing.ExtTree;
 import little.interpreter.memory.Memory;
@@ -18,6 +19,7 @@ import little.Keywords.*;
 
 using little.tools.Plugins;
 using little.tools.Extensions;
+using little.tools.TextTools;
 @:access(little.Little)
 @:access(little.interpreter.Runtime)
 class Plugins {
@@ -26,6 +28,173 @@ class Plugins {
 
     public function new(memory:Memory) {
         this.memory = memory;
+    }
+
+    @:noCompletion static var __noTypeCreation:Bool;
+    /**
+        registers a class in little code. The class' fields are dictated by this function's `fields` attribute,
+        which provides instance & static functions, variables, and nested objects. 
+        The allowed key-value types in `fields`'s key-value pairs:
+
+        |Key Syntax                                             | Type                                                                                                                          | Application       | Description |
+        |-------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------|-------------------|-------------|
+        |`public var <name>`                                    | `(address:MemoryPointer, value:InterpTokens) -> InterpTokens`                                                                 | Instance Variable | A function that returns a value, that can be based on its parent. The returned value is stored in memory upon retrieval. |
+        |`public var <name>`                                    | `(address:MemoryPointer, value:InterpTokens) -> {address:MemoryPointer, value:InterpTokens}`                                  | Instance Variable | A function that returns a value, that can be based on its parent. The returned value is not stored in memory, and we rely upon the given pointer to be correct. |
+        |`public function <name> (define <param> as <Type>)`    | `(address:MemoryPointer, value:InterpTokens, givenParams:Array<InterpTokens>) -> InterpTokens`                                | Instance Function | A function, that returns a value based on its parent & other given parameters, provided by a Little function call. The returned value is stored in memory upon retrieval. |
+        |`static var <name>`                                    | `() -> InterpTokens`                                                                                                          | Static Variable   | A function that returns a static value. The returned value is stored in memory upon retrieval. |
+        |`static var <name>`                                    | `() -> {address:MemoryPointer, value:InterpTokens}`                                                                           | Static Variable   | A function that returns a static value. The returned value is not stored in memory, and we rely upon the given pointer to be correct. |
+        |`static function <name> ()`                            | `(givenParams:Array<InterpTokens>) -> InterpTokens`                                                                           | Static Function   | A function that returns a value based on some given parameters, provided by a Little function call. The returned value is stored in memory upon retrieval. |
+        |`static var <name>`                                    | `TypeFields`                                                                                                                  | Static Variable   | Another option for a static variable, but this time it's for a nested object. The object itself isn't allocated in Little's memory, but its decedents may be. instance objects are not available this way, since they are tied to an object, thus needing to be allocated many times. |
+
+        **Notice** - key syntax is very sensitive - must start with one of the 4 combinations specified above, and each item must be separated by a single whitespace. Anything else may throw an error, or behave unexpectedly.
+        
+        **Notice 2** - for function parameters, syntax follows Little function parameter syntax - multiple parameter declarations, with optional type and optional default values, separated by a comma.
+        
+        @param typeName The name of the class. May be nested inside other "packages" using a `.` (for example. my_pack.MyClass)
+        @param fields A string map that has key-value pairs of certain types. Refer to the table above for more information.
+    **/
+    public function registerType(typeName:String, fields:TypeFields) {
+        var instances = memory.externs.createPathFor(memory.externs.instanceProperties, ...typeName.split("."));
+        var statics = memory.externs.createPathFor(memory.externs.globalProperties, ...typeName.split("."));
+
+        if (__noTypeCreation) __noTypeCreation = false;
+        else {
+            memory.externs.typeToPointer[typeName] = memory.storage.storeByte(1);
+        }
+
+        for (key => field in fields) {
+            switch key.split(" ").slice(0, 2) {
+                case ["public", "var"]: {
+                    var name = key.split(" ")[2];
+                    instances.properties[name] = new ExtTree((value, address) -> {
+                        // We can't optimize for the two cases outside of the callback, since haxe doesnt support
+                        // type checking on function types.
+                        try {
+                            var result = untyped field(value, address);
+                            if (result is InterpTokens) {
+                                return {
+                                    objectValue: result,
+                                    objectAddress: memory.store(result)
+                                };
+                            } 
+                            return {
+                                objectValue: untyped result.value,
+                                objectAddress: untyped result.address
+                            }
+                        } catch (e) {
+                            return {
+                                objectValue: ErrorMessage('External Variable Error: ' + e.details()),
+                                objectAddress: memory.constants.ERROR
+                            }
+                        }
+                        
+                    });
+                }
+                case ["public", "function"]: {
+                    var name = key.split(" ")[2];
+                    var params = Interpreter.convert(...Parser.parse(Lexer.lex(key.split(" ")[3].replaceFirst("(", "").replaceLast(")", ""))));
+
+                    var paramMap = new OrderedMap<String, InterpTokens>();
+		            for (entry in params) {
+		            	if (entry.is(SPLIT_LINE, SET_LINE)) continue;
+		            	switch entry {
+		            		case VariableDeclaration(name, null, _): paramMap[name.extractIdentifier()] = TypeCast(NullValue, Identifier(Little.keywords.TYPE_DYNAMIC));
+		            		case VariableDeclaration(name, type, _): paramMap[name.extractIdentifier()] = TypeCast(NullValue, type);
+		            		case Write(assignees, value): {
+		            			switch assignees[0] {
+		            				case VariableDeclaration(name, null, _): paramMap[name.extractIdentifier()] = TypeCast(value, Identifier(Little.keywords.TYPE_DYNAMIC));
+		            				case VariableDeclaration(name, type, _): paramMap[name.extractIdentifier()] = TypeCast(value, type);
+		            				default:
+		            			}
+		            		}
+		            		default:
+		            	}
+		            }
+
+                    instances.properties[name] = new ExtTree((value, address) -> {
+                        var dynType:InterpTokens = TYPE_DYNAMIC.asTokenPath();
+                        return {
+                            objectValue: FunctionCode(paramMap, Block([
+                                FunctionReturn(HaxeExtern(() -> {
+                                    var result = (field : (MemoryPointer, InterpTokens, Array<InterpTokens>) -> InterpTokens)(address, value, paramMap.keys().toArray().map(key -> Actions.evaluate(memory.read(key).objectValue)));
+                                    dynType = result.type().asTokenPath();
+                                    return result;
+                                }), dynType)
+                            ], dynType)),
+                            objectAddress: memory.constants.EXTERN
+                        }
+                    });
+                }
+
+                case ["static", "var"]: {
+                    var name = key.split(" ")[2];
+                    if (field is StringMap) {
+                        __noTypeCreation = true;
+                        registerType(typeName + "." + name, field);
+                        continue;
+                    }
+                    statics.properties[name] = new ExtTree((_, _) -> {
+                        // We can't optimize for the two cases outside of the callback, since haxe doesn't support
+                        // type checking on function types.
+                            try {
+                                var result = untyped field();
+                                if (result is InterpTokens) {
+                                    return {
+                                        objectValue: result,
+                                        objectAddress: memory.store(result)
+                                    };
+                                } 
+                                return {
+                                    objectValue: untyped result.value,
+                                    objectAddress: untyped result.address
+                                }
+                            } catch (e) {
+                                return {
+                                    objectValue: ErrorMessage('External Variable Error: ' + e.details()),
+                                    objectAddress: memory.constants.ERROR
+                                }
+                            }
+                    });
+                }
+                case ["static", "function"]: {
+                    var name = key.split(" ")[2];
+                    var params = Interpreter.convert(...Parser.parse(Lexer.lex(key.split(" ")[3].replaceFirst("(", "").replaceLast(")", ""))));
+                    trace(typeName, name, params);
+                    var paramMap = new OrderedMap<String, InterpTokens>();
+		            for (entry in params) {
+		            	if (entry.is(SPLIT_LINE, SET_LINE)) continue;
+		            	switch entry {
+		            		case VariableDeclaration(name, null, _): paramMap[name.extractIdentifier()] = TypeCast(NullValue, Identifier(Little.keywords.TYPE_DYNAMIC));
+		            		case VariableDeclaration(name, type, _): paramMap[name.extractIdentifier()] = TypeCast(NullValue, type);
+		            		case Write(assignees, value): {
+		            			switch assignees[0] {
+		            				case VariableDeclaration(name, null, _): paramMap[name.extractIdentifier()] = TypeCast(value, Identifier(Little.keywords.TYPE_DYNAMIC));
+		            				case VariableDeclaration(name, type, _): paramMap[name.extractIdentifier()] = TypeCast(value, type);
+		            				default:
+		            			}
+		            		}
+		            		default:
+		            	}
+		            }
+                    
+                    statics.properties[name] = new ExtTree((_, _) -> {
+                        var dynType:InterpTokens = TYPE_DYNAMIC.asTokenPath();
+                        return {
+                            objectValue: FunctionCode(paramMap, Block([
+                                FunctionReturn(HaxeExtern(() -> {
+                                    var result = (field : (Array<InterpTokens>) -> InterpTokens)(paramMap.keys().toArray().map(key -> Actions.evaluate(memory.read(key).objectValue)));
+                                    dynType = result.type().asTokenPath();
+                                    return result;
+                                }), dynType)
+                            ], dynType)),
+                            objectAddress: memory.constants.EXTERN
+                        }
+                    });
+                }
+
+                case _: throw 'Invalid key syntax for `$key`. Must start with either `public`/`static` `function`/`var`, and end with a variable name. (Example: `public var myVar`). Each item must be seperated by a single whitespace.';
+            }
+        }
     }
 
     /**
@@ -45,13 +214,13 @@ class Plugins {
                 {
                     objectValue: value,
                     objectAddress: memory.store(value),
-                    objectDoc: documentation ?? ""
+                    // objectDoc: documentation ?? ""
                 }
             } catch (e) {
                 {
                     objectValue: ErrorMessage('External Variable Error: ' + e.details()),
                     objectAddress: memory.constants.ERROR,
-                    objectDoc: ""
+                    // objectDoc: ""
                 }
             }
         }
@@ -108,7 +277,7 @@ class Plugins {
         object.getter = (_, _) -> {
 			objectValue: token,
 			objectAddress: memory.constants.EXTERN,
-			objectDoc: documentation ?? ""
+			// objectDoc: documentation ?? ""
         }
     }
 
@@ -142,7 +311,7 @@ class Plugins {
 				], null)
 			]),
 			objectAddress: memory.constants.EXTERN,
-			objectDoc: documentation ?? ""
+			// objectDoc: documentation ?? ""
 		}
     }
 
@@ -167,13 +336,13 @@ class Plugins {
 				{
 					objectValue: value,
 					objectAddress: memory.store(value),
-					objectDoc: documentation ?? ""
+					// objectDoc: documentation ?? ""
 				}
 			} catch (e) {
 				{
 					objectValue: ErrorMessage('External Function Error: ' + e.details()),
 					objectAddress: memory.constants.ERROR,
-					objectDoc: ""
+					// objectDoc: ""
 				}
 			}
 		}
@@ -230,13 +399,13 @@ class Plugins {
 						FunctionReturn(HaxeExtern(() -> callback(v, a, paramMap.keys().toArray().map(key -> Actions.evaluate(memory.read(key).objectValue)))), returnTypeToken)
 					], returnTypeToken)),
 					objectAddress: memory.constants.EXTERN,
-					objectDoc: documentation ?? ""
+					// objectDoc: documentation ?? ""
 				}
 			} catch (e) {
 				{
 					objectValue: ErrorMessage('External Function Error: ' + e.details()),
 					objectAddress: memory.constants.ERROR,
-					objectDoc: ""
+					// objectDoc: ""
 				}
 			}
 		}
@@ -405,3 +574,19 @@ typedef SignInfo = {
 	**/
 	?priority:String,
 }
+
+typedef TypeFields = Map<String, OneOfSeven<
+    // Instance fields:
+    (address:MemoryPointer, value:InterpTokens) -> InterpTokens, // variable
+    (address:MemoryPointer, value:InterpTokens) -> {address:MemoryPointer, value:InterpTokens}, // variable, with pointer
+    (address:MemoryPointer, value:InterpTokens, givenParams:Array<InterpTokens>) -> InterpTokens, // function
+        // Static fields:
+    () -> InterpTokens, // variable
+    () -> {address:MemoryPointer, value:InterpTokens}, // variable
+    (givenParams:Array<InterpTokens>) -> InterpTokens, // function
+    TypeFields // nested object
+>>;
+
+abstract OneOfSeven<T1, T2, T3, T4, T5, T6, T7>(Dynamic) 
+    from T1 from T2 from T3 from T4 from T5 from T6 from T7
+    to T1 to T2 to T3 to T4 to T5 to T6 to T7{}

@@ -85,7 +85,7 @@ class ExternalInterfacing {
 		return true;
 	}
 
-	public function getGlobal(...path:String):{objectValue:InterpTokens, objectAddress:MemoryPointer, objectDoc:String} {
+	public function getGlobal(...path:String):{objectValue:InterpTokens, objectAddress:MemoryPointer} {
 		var identifiers = path.toArray();
 		
 		var handle = globalProperties;
@@ -103,16 +103,15 @@ class ExtTree {
 	    A getter for the extern value.
 		The returned token has its parent's address in memory and value, if you want to modify it.
 	**/
-	public var getter:(objectValue:InterpTokens, objectAddress:MemoryPointer) -> {objectValue:InterpTokens, objectAddress:MemoryPointer, objectDoc:String};
+	public var getter:(objectValue:InterpTokens, objectAddress:MemoryPointer) -> {objectValue:InterpTokens, objectAddress:MemoryPointer};
 
 	public var properties:Map<String, ExtTree>;
 
-	public function new(?getter:(objectValue:InterpTokens, objectAddress:MemoryPointer) -> {objectValue:InterpTokens, objectAddress:MemoryPointer, objectDoc:String}, ?properties:Map<String, ExtTree>) {
+	public function new(?getter:(objectValue:InterpTokens, objectAddress:MemoryPointer) -> {objectValue:InterpTokens, objectAddress:MemoryPointer}, ?properties:Map<String, ExtTree>) {
 		this.getter = getter ?? (objectValue, objectAddress) -> {
 			return {
 				objectValue: Characters('Externally registered, attached to $objectAddress'),
 				objectAddress: objectAddress,
-				objectDoc: ""
 			}
 		}
 		this.properties = properties ?? new Map<String, ExtTree>();

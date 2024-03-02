@@ -16,7 +16,7 @@ class CoreTypes {
         externs.instanceProperties.properties[Little.keywords.TYPE_STRING].properties = [
             "length" => new ExtTree((value, _) -> {
                 var length = value.parameter(0).length;
-                return { objectValue: Number(length), objectAddress: externs.parent.storage.storeInt32(length), objectDoc: "the length of the string" }
+                return { objectValue: Number(length), objectAddress: externs.parent.storage.storeInt32(length) }
             })
         ];
         externs.instanceProperties.properties[Little.keywords.TYPE_STRING].properties = [
@@ -31,7 +31,7 @@ class CoreTypes {
 
         externs.instanceProperties.properties[Little.keywords.TYPE_FUNCTION].properties = [
             "token" => new ExtTree((value, _) -> {
-                return { objectValue: Characters(Std.string(value)), objectAddress: externs.parent.storage.storeString(Std.string(value)), objectDoc: "the token of the function, as a String" }
+                return { objectValue: Characters(Std.string(value)), objectAddress: externs.parent.storage.storeString(Std.string(value)) }
             })
         ];
 
@@ -44,7 +44,7 @@ class CoreTypes {
 
 		externs.instanceProperties.properties[Little.keywords.TYPE_CONDITION].properties = [
 			"token" => new ExtTree((value, _) -> {
-				return { objectValue: Characters(Std.string(value)), objectAddress: externs.parent.storage.storeString(Std.string(value)), objectDoc: "the token of the condition, as a String" }
+				return { objectValue: Characters(Std.string(value)), objectAddress: externs.parent.storage.storeString(Std.string(value)) }
 			})
 		];
     }

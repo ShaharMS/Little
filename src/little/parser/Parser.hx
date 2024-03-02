@@ -721,9 +721,6 @@ class Parser {
         return post;
     }
 
-    /**
-    	NEEDS REWORKING
-    **/
     public static function mergeNonBlockBodies(pre:Array<ParserTokens>):Array<ParserTokens> {
 
         if (pre == null) return null;

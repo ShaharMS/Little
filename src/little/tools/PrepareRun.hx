@@ -25,7 +25,14 @@ import little.Keywords.*;
 class PrepareRun {
 	public static var prepared:Bool = false;
 
-	public static function addTypes() {}
+	public static function addTypes() {
+
+		Little.plugin.registerType("Date", [
+			"static function now ()" => (_) -> {
+				return Conversion.toLittleValue(Date.now().toString());
+			}
+		]);
+	}
 		
 	public static function addFunctions() {
 		Little.plugin.registerFunction(PRINT_FUNCTION_NAME, null, [VariableDeclaration(Identifier("item"), null)], (params) -> {

@@ -31,6 +31,7 @@ class Conversion {
 
     public static function toLittleValue(val:Dynamic):InterpTokens {
         if (val == null) return NullValue;
+        if (val is String) return Characters(val);
         var type = Type.typeof(val);
 		return switch type {
 			case TNull: NullValue;
