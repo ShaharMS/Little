@@ -1,5 +1,8 @@
 package little.interpreter.memory;
 
+import little.interpreter.memory.Memory.TypeInfo;
+import haxe.hash.Murmur1;
+import vision.tools.MathTools;
 import haxe.display.Display.Module;
 import little.interpreter.memory.MemoryPointer;
 import haxe.Int64;
@@ -565,162 +568,150 @@ class Storage {
         var hashTableSize = readInt32(pointer);
         var hashTablePointer = readPointer(pointer.rawLocation + 4);
         freeBytes(hashTablePointer, hashTableSize);
-        freeBytes(pointer, 4 + 4);
+        freeBytes(pointer, POINTER_SIZE + 4);
 	}
 
-	public function storeType(staticFields:Array<InterpTokens>, instanceFields:Array<InterpTokens>):MemoryPointer {
-		/*
-			NOTE FOR LATER: type parameter support isn't implemented, will be considered in the future.
+	public function storeType(name:String, statics:Map<String, {value:InterpTokens, documentation:String, type:String}>, instances:Map<String, {documentation:String, type:String}>) {
+		var bytes = ByteArray.from(storeString(name).rawLocation);
+		var cellSize = POINTER_SIZE * 4;
 
-			This will be done as such:
-			 - Bytes 0-7 represent the amount of bytes consumed by instance fields
-			 - The Next 8-15 bytes represent the amount of bytes consumed by static fields
-			 - From byte 16 until the value of bytes 0-7 + 24 are the instance fields, so, for each field:
-			   - 8 bytes to represent the type of the value, using a pointer to the type.
-			   - if debug mode: The string containing documentation for each field, then a null terminator
-			 - after storing the non-static fields, we store the static fields, the same way as above
-		*/
-		var cbytes = new ByteArray(0);
-		
-        // Now count the amount of bytes consumed by instance & static fields
-        var instanceBytes = [], staticBytes = [];
+		// We'll create each map with some extra space to avoid frequent collisions. more overhead? yes. faster? also probably yes.
+		cellSize = POINTER_SIZE * 4;
+		var staticsLength = statics.keys().toArray().length;
+		var staticHashMap = new ByteArray(MathTools.floor(staticsLength * cellSize /*field name, value, type, doc*/ * 3 / 2));
 
-        var byteArrays = [instanceBytes, staticBytes];
-        var fieldArrays = [instanceFields, staticFields];
-        
-        for (t in 0...2) {
+		var instancesLength = instances.keys().toArray().length;
+		var instancesHashMap = new ByteArray(MathTools.floor(instancesLength * (cellSize - POINTER_SIZE) /*field name, type, doc*/ * 3 / 2));
 
-            for (field in fieldArrays[t]) {
-                switch field {
-                    case VariableDeclaration(_, type, doc): {
+		for (__item in [{a: staticsLength, b: staticHashMap, c:statics }, {a: instancesLength, b: instancesHashMap, c:instances}]) {
+			var elements = __item.a;
+			var hashTable = __item.b;
+			var fields:Map<String, Dynamic> = __item.c;
 
-						// store the type's pointer
-						var typePointer = parent.getTypeInformation(type.parameter(0) /**todo**/).pointer;
-                        byteArrays[t] = byteArrays[t].concat(typePointer.toArray());
-
-						// store the documentation, if any/needed
-                        if (Little.debug && doc != null) {
-                            var docBytes = Bytes.ofString(Actions.assert(Actions.evaluate(doc), CHARACTERS).parameter(0));
-							docBytes = new ByteArray(4).concat(docBytes);
-							docBytes.setInt32(0, docBytes.length);
-                            for (i in 0...docBytes.length) {
-                                byteArrays[t].push(docBytes.get(i));
-                            }
-                        }
-                    }
-					case FunctionDeclaration(_, _, _, doc) | ConditionDeclaration(_, _, doc): {
-						// Functions/conditions are always stored as strings, so we don't need to do anything type related. 8 bytes shall be reserved.
-						var typePointer = parent.getTypeInformation(Little.keywords.TYPE_STRING).pointer;
-                        byteArrays[t] = byteArrays[t].concat(typePointer.toArray());
-
-						// store the documentation, if any/needed
-                        if (Little.debug && doc != null) {
-                            var docBytes = Bytes.ofString(Actions.assert(Actions.evaluate(doc), CHARACTERS).parameter(0));
-							docBytes = new ByteArray(4).concat(docBytes);
-							docBytes.setInt32(0, docBytes.length);
-                            for (i in 0...docBytes.length) {
-                                byteArrays[t].push(docBytes.get(i));
-                            }
-                        }
+			for (k => v in fields) {
+				var keyHash = Murmur1.hash(Bytes.ofString(k));
+				// Make sure divisibility by cellSize is possible. see HashTables.generateObjectHashTable for more info
+				var khI64 = Int64.make(0, keyHash);
+				if (keyHash < 0) {
+					khI64 = 2_147_483_647; // 32bit signed int limit
+					khI64 += -keyHash;
+				}
+				var keyIndex = ((khI64 * cellSize) % elements).low;
+	
+				if (hashTable.getInt32(keyIndex) == 0) {
+					var address = keyIndex;
+					hashTable.setInt32(address, storeString(k).rawLocation);
+					address += POINTER_SIZE;
+					if (fields == statics) {
+						hashTable.setInt32(address, parent.store(v.value).rawLocation);
+						address += POINTER_SIZE;
 					}
-                    case _: throw new ArgumentException("field", 'members of instanceFields must be of type VariableDeclaration, FunctionDeclaration, or ConditionDeclaration (got ${field})');
-                }
-            }
-        }
+					hashTable.setInt32(address, parent.getTypeInformation(v.type).pointer.rawLocation);
+					address += POINTER_SIZE;
+					hashTable.setInt32(keyIndex, storeString(v.documentation).rawLocation);
+				} else {
+					
+					var incrementation = 0;
+					var i = keyIndex;
+					while (hashTable.getInt32(i) != 0) {
+						i += cellSize;
+						incrementation += cellSize;
+						if (i >= hashTable.length) {
+							i = 0;
+						}
+						if (incrementation >= hashTable.length) {
+							throw 'Object hash table did not generate. This should never happen. Initial length may be incorrect.';
+						}
+					}
+					var address = keyIndex;
+					hashTable.setInt32(address, storeString(k).rawLocation);
+					address += POINTER_SIZE;
+					if (fields == statics) {
+						hashTable.setInt32(address, parent.store(v.value).rawLocation);
+						address += POINTER_SIZE;
+					}
+					hashTable.setInt32(address, parent.getTypeInformation(v.type).pointer.rawLocation);
+					address += POINTER_SIZE;
+					hashTable.setInt32(keyIndex, storeString(v.documentation).rawLocation);
+				}
+			}
 
-        var instanceLength = Int64.make(0, instanceBytes.length);
-		var ibytes = new ByteArray(8); ibytes.setInt64(0, instanceLength);
-        var staticLength = Int64.make(0, staticBytes.length);
-        var sbytes = new ByteArray(8); sbytes.setInt64(0, staticLength);
-
-		var bytes = cbytes.concat(ibytes).concat(sbytes);
-		for (i in 0...instanceBytes.length - 1) 
-			bytes.set(i + 24, instanceBytes[i] & 0xFF);
-		for (i in 0...staticBytes.length - 1) 
-			bytes.set(i + 24 + instanceBytes.length, staticBytes[i] & 0xFF);
-
+			cellSize -= POINTER_SIZE;
+		}
+		staticHashMap = ByteArray.from(staticHashMap.length).concat(staticHashMap);
+		instancesHashMap = ByteArray.from(instancesHashMap.length).concat(instancesHashMap);
+		bytes = bytes.concat(staticHashMap).concat(instancesHashMap);
 		return storeBytes(bytes.length, bytes);
 	}
 
-	public function readType(pointer:MemoryPointer):TypeBlocks {
-		var handle = pointer.rawLocation;
-		var sizeOfInstanceFields = readInt32(handle); // Memory buffer limitation: byte array on accepts indices of type Int32
-		handle += 8;
-		var sizeOfStaticFields = readInt32(handle); // Memory buffer limitation: byte array on accepts indices of type Int32
-		handle += 8;
+	public function readType(pointer:MemoryPointer):TypeInfo {
+		var className = readString(readPointer(pointer.rawLocation));
 
-        var instanceFieldBytes = readBytes(handle, sizeOfInstanceFields);
-        var staticFieldBytes = readBytes(handle + sizeOfInstanceFields, sizeOfStaticFields);
-        
-        var instanceFields:Array<{type:MemoryPointer, doc:Null<String>}> = [], staticFields:Array<{type:MemoryPointer, doc:Null<String>}> = [];
+		var cellSize = POINTER_SIZE * 4;
+		// Statics:
+		var statics:Map<String, {value:MemoryPointer, type:MemoryPointer, doc:MemoryPointer}> = [];
+		var staticsLength = readInt32(pointer.rawLocation + POINTER_SIZE);
 
-        var handle = 0;
-        for(fieldCollector in [instanceFields, staticFields]) {
-            while (true) {
-                var type = readPointer(handle);
-                var doc:String = null;
-                handle += 8;
-                if (Little.debug) {
-                    var bytesLength = readInt32(handle) + 4; // String length
-                    doc = readString(handle);
-                    handle += bytesLength;
-                }
-    
-                fieldCollector.push({type: type, doc: doc});
+        var i = pointer.rawLocation + POINTER_SIZE;
+        while (i < pointer.rawLocation + POINTER_SIZE + staticsLength) {
+            var keyPointer = MemoryPointer.fromInt(readInt32(i));
+            var value = MemoryPointer.fromInt(readInt32(i + POINTER_SIZE));
+            var type = MemoryPointer.fromInt(readInt32(i + POINTER_SIZE * 2));
+            var doc = MemoryPointer.fromInt(readInt32(i + POINTER_SIZE * 3));
+
+            if (keyPointer.rawLocation == 0) {
+                i += cellSize;
+                continue; // Nothing to do here
             }
+
+            statics[readString(keyPointer)] = {
+				value: value,
+				type: type,
+				doc: doc
+			}
+
+            i += cellSize;
         }
-        
+
+		cellSize -= POINTER_SIZE;
+
+		// Instances:
+		var instances:Map<String, {type:MemoryPointer, doc:MemoryPointer}> = [];
+		var instancesLength = readInt32(i + POINTER_SIZE);
+
+		while (i < i + POINTER_SIZE + instancesLength) {
+			var keyPointer = MemoryPointer.fromInt(readInt32(i));
+			var type = MemoryPointer.fromInt(readInt32(i + POINTER_SIZE));
+			var doc = MemoryPointer.fromInt(readInt32(i + POINTER_SIZE * 2));
+
+			if (keyPointer.rawLocation == 0) {
+				i += cellSize;
+				continue; // Nothing to do here
+			}
+
+			instances[readString(keyPointer)] = {
+				type: type,
+				doc: doc
+			}
+
+			i += cellSize;
+		}
 
 		return {
-			sizeOfInstanceFields: sizeOfInstanceFields,
-			sizeOfStaticFields: sizeOfStaticFields,
-			instanceFieldsBytes: instanceFieldBytes,
-			staticFieldsBytes: staticFieldBytes,
-            instanceFields: instanceFields,
-            staticFields: staticFields
+			typeName: className,
+			pointer: pointer,
+			isStaticType: false, // Final decision: static fields cannot be created at runtime, only externally
+			isExternal: false,
+			instanceFields: instances,
+			staticFields: statics
 		}
 	}
 
 	public function freeType(pointer:MemoryPointer) {
-		var totalSize = 0;
-
-		totalSize += 16; // Size of instance & static fields in bytes
-		totalSize += readInt32(pointer.rawLocation + 8); // Instance fields
-		totalSize += readInt32(pointer.rawLocation + 8 + 8); // Static fields
-
-		freeBytes(pointer, totalSize);
+		freeString(pointer);
+		var byteCount = readInt32(pointer.rawLocation + POINTER_SIZE);
+		byteCount += readInt32(pointer.rawLocation + POINTER_SIZE + byteCount);
+		byteCount += 4 + 4;
+		freeBytes(pointer, byteCount);
 	}
-
-    public function storeType_NEW(clazz:InterpTokens) {
-        if (clazz.is(NULL_VALUE)) return parent.constants.NULL;
-        if (!clazz.is(CLASS)) throw new ArgumentException("object", '${clazz} is not a class');
-        /*
-            - First bytes will be reserved for the name of the type
-            - Then, we will store the instance fields & the static fields as two hashtables,
-              With each one having its length in bytes right before it.
-        */
-        switch clazz {
-            case Class(name, instanceFields, staticFields): {
-                var bytes = ByteArray.from(name);
-                var instance;
-            }
-            case _:
-        }
-        
-        return null;
-    }
-}
-
-typedef TypeBlocks = {
-	sizeOfInstanceFields:Int,
-	sizeOfStaticFields:Int,
-	instanceFieldsBytes:ByteArray,
-	staticFieldsBytes:ByteArray,
-    instanceFields:Array<{type:MemoryPointer, doc:Null<String>}>,
-    staticFields:Array<{type:MemoryPointer, doc:Null<String>}>,
-}
-
-typedef ObjectInfo = {
-    pointer:MemoryPointer,
-    fields:Map<String, {keyPointer:MemoryPointer, value:MemoryPointer, type:MemoryPointer}>
 }

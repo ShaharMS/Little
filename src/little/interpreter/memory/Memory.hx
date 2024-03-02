@@ -479,11 +479,8 @@ class Memory {
 				},
 				isStaticType: true,
 				isExternal: false,
-				instanceByteSize: 0,
-				staticByteSize: 0,
 				instanceFields: [],
 				staticFields: [],
-				classByteSize: 0
 			}
 		}
 
@@ -498,27 +495,21 @@ class Memory {
 				typeName: name,
 				isStaticType: false,
 				isExternal: true,
-				instanceByteSize: 0,
-				staticByteSize: 0,
 				instanceFields: [],
-				staticFields: [],
-				classByteSize: 0
+				staticFields: []
 			}
 		}
 		
 		var reference = referrer.get(name);
-		var typeInfo:Storage.TypeBlocks = storage.readType(reference.address);
+		var typeInfo = storage.readType(reference.address);
 
 		return {
 			pointer: reference.address,
 			typeName: name,
-			isStaticType: true, // massive TODO, what about post-defined static types? maybe a developer defines a special static type...
-			isExternal: false,
-			instanceByteSize: typeInfo.sizeOfInstanceFields,
-			staticByteSize: typeInfo.sizeOfStaticFields,
+			isStaticType: typeInfo.isStaticType, 
+			isExternal: typeInfo.isExternal,
 			instanceFields: typeInfo.instanceFields,
 			staticFields: typeInfo.staticFields,
-			classByteSize: 8 /**indicator of instance field size**/ + 8 /**same for statics**/ + typeInfo.sizeOfInstanceFields + typeInfo.sizeOfStaticFields /**total size of object**/,
 		}
 	}
 
@@ -533,13 +524,7 @@ class Memory {
 			return constants.getFromPointer(pointer).extractIdentifier();
 		}
 
-		for (key => value in referrer) {
-			if (value.address == pointer) {
-				return key;
-			}
-		}
-
-		throw 'Cannot retrieve name of type at $pointer';
+		return storage.readType(pointer).typeName;
 	}
 
 	public function stringifyMemoryBytes():String {
@@ -564,9 +549,6 @@ typedef TypeInfo = {
 	typeName:String,
 	isStaticType:Bool,
 	isExternal:Bool,
-	instanceByteSize:Int,
-	staticByteSize:Int,
-	instanceFields:Array<{type:MemoryPointer, doc:Null<String>}>,
-	staticFields:Array<{type:MemoryPointer, doc:Null<String>}>,
-	classByteSize:Int,
+	instanceFields:Map<String, {type:MemoryPointer, doc:MemoryPointer}>,
+    staticFields:Map<String, {value:MemoryPointer, type:MemoryPointer, doc:MemoryPointer}>
 }
