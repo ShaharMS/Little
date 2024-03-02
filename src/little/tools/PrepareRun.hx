@@ -32,6 +32,74 @@ class PrepareRun {
 				return Conversion.toLittleValue(Date.now().toString());
 			}
 		]);
+
+		Little.plugin.registerType(TYPE_INT, [
+			'public function toString ()' => (_, value, _) -> {
+				return Conversion.toLittleValue(Std.string(value.parameter(0)));
+			}
+		]);
+
+		Little.plugin.registerType(TYPE_FLOAT, [
+			'public function toString ()' => (_, value, _) -> {
+				return Conversion.toLittleValue(Std.string(value.parameter(0)));
+			},
+			'public function isWhole ()' => (_, value, _) -> {
+				return Conversion.toLittleValue((value.parameter(0) : Float) % 1 == 0);
+			}
+		]);
+
+		Little.plugin.registerType(TYPE_STRING, [
+			'public var length' => (_, value) -> {
+				return Conversion.toLittleValue(value.parameter(0).length);
+			},
+			'public function charAt (define index as $TYPE_INT)' => (_, value, params) -> {
+				return Conversion.toLittleValue(value.parameter(0).charAt(Conversion.toHaxeValue(params[0])));
+			},
+			'public function substring (define start as $TYPE_INT, define end as $TYPE_INT = -1)' => (_, value, params) -> {
+				return Characters(value.parameter(0).substring(Conversion.toHaxeValue(params[0]), Conversion.toHaxeValue(params[1])));
+			},
+			'public function toLowerCase ()' => (_, value, _) -> {
+				return Characters(value.parameter(0).toLowerCase());
+			},
+			'public function toUpperCase ()' => (_, value, _) -> {
+				return Characters(value.parameter(0).toUpperCase());
+			},
+			'public function replace (define search as $TYPE_STRING, define replace as $TYPE_STRING)' => (_, value, params) -> {
+				return Characters(value.parameter(0).replace(Conversion.toHaxeValue(params[0]), Conversion.toHaxeValue(params[1])));
+			},
+			'public function trim ()' => (_, value, _) -> {
+				return Characters(value.parameter(0).trim());
+			},
+			'public function remove (define search as $TYPE_STRING)' => (_, value, params) -> {
+				return Characters(value.parameter(0).replace(Conversion.toHaxeValue(params[0]), ""));
+			},
+			'public function contains (define search as $TYPE_STRING)' => (_, value, params) -> {
+				return Conversion.toLittleValue(value.parameter(0).contains(Conversion.toHaxeValue(params[0])));
+			},
+			'public function indexOf (define search as $TYPE_STRING)' => (_, value, params) -> {
+				return Conversion.toLittleValue(value.parameter(0).indexOf(Conversion.toHaxeValue(params[0])));
+			},
+			'public function lastIndexOf (define search as $TYPE_STRING)' => (_, value, params) -> {
+				return Conversion.toLittleValue(value.parameter(0).lastIndexOf(Conversion.toHaxeValue(params[0])));
+			},
+			'public function startsWith (define prefix as $TYPE_STRING)' => (_, value, params) -> {
+				return Conversion.toLittleValue(value.parameter(0).indexOf(Conversion.toHaxeValue(params[0]) == 0));
+			},
+			'public function endsWith (define postfix as $TYPE_STRING)' => (_, value, params) -> {
+				return Conversion.toLittleValue(value.parameter(0).indexOf(Conversion.toHaxeValue(params[0])) == value.parameter(0).length - Conversion.toHaxeValue(params[0]).length);
+			},
+
+			'static function fromCharCode (define code as $TYPE_INT)' => (_, value, params) -> {
+				return Conversion.toLittleValue(String.fromCharCode(Conversion.toHaxeValue(params[0])));
+			}
+		]);
+
+		Little.plugin.registerType(TYPE_FUNCTION, [
+			
+		]);
+		Little.plugin.registerType(TYPE_CONDITION, [
+			
+		]);
 	}
 		
 	public static function addFunctions() {

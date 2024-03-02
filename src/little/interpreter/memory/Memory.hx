@@ -176,7 +176,7 @@ class Memory {
 			// We should notice that, like before, externs are prioritized, so externs are evaluated first.
 		
 			// Property check:
-			if (externs.instanceProperties.properties.exists(typeName)) {
+			if (externs.hasInstance(...typeName.split(Little.keywords.PROPERTY_ACCESS_SIGN))) {
 				var classProperties = externs.instanceProperties.properties.get(typeName);
 				if (classProperties.properties.exists(identifier)) {
 					var newCurrent = classProperties.properties.get(identifier).getter(current, currentAddress);
@@ -185,8 +185,8 @@ class Memory {
 					continue;
 				}
 			}
-			// If it doesnt exist on that specific type, it may exist on TYPE_DYNAMIC:
-			if (externs.instanceProperties.properties.exists(Little.keywords.TYPE_DYNAMIC)) {
+			// If it doesn't exist on that specific type, it may exist on TYPE_DYNAMIC:
+			if (externs.hasInstance(...Little.keywords.TYPE_DYNAMIC.split(Little.keywords.PROPERTY_ACCESS_SIGN))) {
 				var classProperties = externs.instanceProperties.properties.get(Little.keywords.TYPE_DYNAMIC);
 				if (classProperties.properties.exists(identifier)) {
 					var newCurrent = classProperties.properties.get(identifier).getter(current, currentAddress);
@@ -208,7 +208,106 @@ class Memory {
 						case (_ == Little.keywords.TYPE_STRING => true): current = Characters(storage.readString(keyData.value));
 						case (_ == Little.keywords.TYPE_INT => true): current = Number(storage.readInt32(keyData.value));
 						case (_ == Little.keywords.TYPE_FLOAT => true): current = Decimal(storage.readDouble(keyData.value));
-						case (_ == Little.keywords.TYPE_BOOLEAN => true): current = constants.getFromPointer(data.address);
+						case (_ == Little.keywords.TYPE_BOOLEAN => true): current = constants.getFromPointer(keyData.value);
+						case (_ == Little.keywords.TYPE_FUNCTION => true): current = storage.readCodeBlock(keyData.value);
+						case (_ == Little.keywords.TYPE_CONDITION => true): current = storage.readCondition(keyData.value);
+						case (keyData.value == constants.NULL => true): current = NullValue;
+						case _: current = storage.readObject(keyData.value);
+					}
+
+					currentAddress = keyData.value;
+				}
+			}
+
+			// If we still don't have a value, we throw an error, cause that means that field doesn't exist.
+			else {
+				wentThroughPath.pop();
+				Little.runtime.throwError(ErrorMessage('Field `$identifier` does not exist on `${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)}`'));
+				return {
+					objectValue: NullValue,
+					objectAddress: constants.NULL,
+					objectTypeName: Little.keywords.TYPE_DYNAMIC,
+				}
+			}
+		}
+
+
+		return {
+			objectValue: current,
+			objectAddress: currentAddress,
+			objectTypeName: switch current {
+				case Object(_, _, type): type;
+				case Number(_): Little.keywords.TYPE_INT;
+				case Decimal(_): Little.keywords.TYPE_FLOAT;
+				case Characters(_): Little.keywords.TYPE_STRING;
+				case TrueValue | FalseValue: Little.keywords.TYPE_BOOLEAN;
+				case NullValue: Little.keywords.TYPE_DYNAMIC;
+				case FunctionCode(_, _): Little.keywords.TYPE_FUNCTION;
+				case ConditionCode(_): Little.keywords.TYPE_CONDITION;
+				case _: throw "How did we get here? 3";
+			},
+		}
+	}
+
+	public function readFrom(value:{objectValue:InterpTokens, objectAddress:MemoryPointer}, ...path:String) {
+		var current = value.objectValue;
+		var currentAddress = value.objectAddress;
+
+		var processed = path.toArray();
+		var wentThroughPath = [];
+		while (processed.length > 0) {
+			// Get the current field, and the type of that field as well
+			var identifier = processed.shift();
+			wentThroughPath.push(identifier);
+			var typeName = switch current {
+				case Object(_, _, type): type;
+				case Number(_): Little.keywords.TYPE_INT;
+				case Decimal(_): Little.keywords.TYPE_FLOAT;
+				case Characters(_): Little.keywords.TYPE_STRING;
+				case TrueValue | FalseValue: Little.keywords.TYPE_BOOLEAN;
+				case NullValue: Little.keywords.TYPE_DYNAMIC;
+				case FunctionCode(_, _): Little.keywords.TYPE_FUNCTION;
+				case ConditionCode(_): Little.keywords.TYPE_CONDITION;
+				case _: throw "How did we get here? 3";
+			}
+			// By design, the only other way properties are accessible on non-object
+			// values is through externs. So, after the object checks, we only need to look there.
+			// We should notice that, like before, externs are prioritized, so externs are evaluated first.
+		
+			// Property check:
+			if (externs.hasInstance(...typeName.split(Little.keywords.PROPERTY_ACCESS_SIGN))) {
+				var classProperties = externs.instanceProperties.properties.get(typeName);
+				if (classProperties.properties.exists(identifier)) {
+					var newCurrent = classProperties.properties.get(identifier).getter(current, currentAddress);
+					current = newCurrent.objectValue;
+					currentAddress = newCurrent.objectAddress;
+					continue;
+				}
+			}
+			// If it doesn't exist on that specific type, it may exist on TYPE_DYNAMIC:
+			if (externs.hasInstance(...Little.keywords.TYPE_DYNAMIC.split(Little.keywords.PROPERTY_ACCESS_SIGN))) {
+				var classProperties = externs.instanceProperties.properties.get(Little.keywords.TYPE_DYNAMIC);
+				if (classProperties.properties.exists(identifier)) {
+					var newCurrent = classProperties.properties.get(identifier).getter(current, currentAddress);
+					current = newCurrent.objectValue;
+					currentAddress = newCurrent.objectAddress;
+					continue;
+				}
+			}
+
+			// Then, we check the object's hash table for that field
+			if (current.is(OBJECT)) {
+				var objectHashTableBytesLength = storage.readInt32(currentAddress);
+				var objectHashTableBytes = storage.readBytes(currentAddress.rawLocation + 4, objectHashTableBytesLength);
+				
+				if (HashTables.hashTableHasKey(objectHashTableBytes, identifier, storage)) {
+					var keyData = HashTables.hashTableGetKey(objectHashTableBytes, identifier, storage);
+					
+					switch getTypeName(keyData.type) {
+						case (_ == Little.keywords.TYPE_STRING => true): current = Characters(storage.readString(keyData.value));
+						case (_ == Little.keywords.TYPE_INT => true): current = Number(storage.readInt32(keyData.value));
+						case (_ == Little.keywords.TYPE_FLOAT => true): current = Decimal(storage.readDouble(keyData.value));
+						case (_ == Little.keywords.TYPE_BOOLEAN => true): current = constants.getFromPointer(keyData.value);
 						case (_ == Little.keywords.TYPE_FUNCTION => true): current = storage.readCodeBlock(keyData.value);
 						case (_ == Little.keywords.TYPE_CONDITION => true): current = storage.readCondition(keyData.value);
 						case (keyData.value == constants.NULL => true): current = NullValue;

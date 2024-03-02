@@ -88,6 +88,24 @@ class Extensions {
 		else return PropertyAccess(asTokenPath(path.slice(0, path.length - 1).join(Little.keywords.PROPERTY_ACCESS_SIGN)), Identifier(path.pop()));
 	}
 
+	public static function toIdentifierPath(propertyAccess:InterpTokens):Array<InterpTokens> {
+		var arr = [];
+		var current = propertyAccess;
+		while (current != null) {
+			switch current {
+				case PropertyAccess(source, property): {
+					arr.unshift(property);
+					current = source;
+				}
+				case _: {
+					arr.unshift(current);
+					current = null;
+				}
+			}
+		}
+		return arr;
+	}
+
 	public static function containsAny<T>(array:Array<T>, func:T -> Bool):Bool {
 		return array.filter(func).length > 0;
 	}

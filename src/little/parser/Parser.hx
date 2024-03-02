@@ -221,7 +221,14 @@ class Parser {
                         }
                         case _: {
                             var field = pre[++i];
-                            post.push(PropertyAccess(lookbehind, field));
+							if (i + 1 < pre.length && pre[i + 1].is(EXPRESSION)) { // For example, the case a.b()
+								// This is a special case in which we have to pre-generate a FunctionCall,
+								// in order to not mess up chains such as a.b().c().d.e
+								var expression = pre[++i];
+								post.push(FunctionCall(PropertyAccess(lookbehind, field), expression));
+							} else {
+								post.push(PropertyAccess(lookbehind, field));
+							}
                         }
                     }
                 }

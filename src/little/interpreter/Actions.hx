@@ -237,8 +237,7 @@ class Actions {
 		@param params The parameters of the function. Should be a `InterpTokens.PartArray(parts:Array<InterpTokens>)`
 	**/
     public static function call(name:InterpTokens, params:InterpTokens):InterpTokens {
-        var functionCode = memory.read(...name.asStringPath()).objectValue;
-
+        var functionCode = evaluate(name);
         var processedParams = [];
         var current = [];
         for (p in (params.parameter(0) : Array<InterpTokens>)) {
@@ -277,7 +276,7 @@ class Actions {
     }
 
 	/**
-		Reads the value of a variable/function. When reading a function, the body is returned as a `InterpTokens.FunctionCode(requiredParams:OrderedMap<String, InterpTokens.Identifier>, body:InterpTokens)`.
+		Reads the value of a variable/function, When reading a function, the body is returned as a `InterpTokens.FunctionCode(requiredParams:OrderedMap<String, InterpTokens.Identifier>, body:InterpTokens)`.
 		@param name The name of the variable/function. Should be one of `InterpTokens.Identifier(name:String)` or `InterpTokens.PropertyAccess(name:InterpTokens, property:InterpTokens)`
 		@return The value of the variable/function
 	**/
@@ -380,7 +379,7 @@ class Actions {
     public static function evaluate(exp:InterpTokens, ?dontThrow:Bool = false):InterpTokens {
 
         switch exp {
-            case Number(_) | Decimal(_) | Characters(_) | TrueValue | FalseValue | NullValue | Sign(_): return exp;
+            case Number(_) | Decimal(_) | Characters(_) | TrueValue | FalseValue | NullValue | Sign(_) | FunctionCode(_, _): return exp;
             case ErrorMessage(msg): {
                 if (!dontThrow) Little.runtime.throwError(exp, INTERPRETER_VALUE_EVALUATOR);
                 return exp;
@@ -426,8 +425,23 @@ class Actions {
 				declareFunction(name.is(BLOCK) ? evaluate(name) : name, params, evaluate(doc)); // TODO: type is not stored.
 				return NullValue;
 			}
-            case PropertyAccess(_, _): {
-                return read(exp);
+            case PropertyAccess(name, property): {
+                var path = exp.toIdentifierPath();
+				// Two cases:
+				//  - regular property access
+				//  - access on inline value
+				if (path.filter(p -> !p.is(IDENTIFIER)).length == 0) {
+					return read(exp);
+				} else if (!path[0].is(IDENTIFIER) && path.slice(1).filter(p -> !p.is(IDENTIFIER)).length == 0) {
+					trace('Accessing inline value: ${path.join(Little.keywords.PROPERTY_ACCESS_SIGN)}');
+					var value = Actions.evaluate(path[0]);
+					return memory.readFrom({
+						objectValue: value,
+						objectAddress: memory.store(value)
+					}, ...path.slice(1).map(ident -> ident.extractIdentifier())).objectValue; // Evaluation is never needed here, since only evaluated values can be stored.
+				} else {
+					return error('Cannot access ${path.join(Little.keywords.PROPERTY_ACCESS_SIGN)}, path cannot contain a raw value in the middle (for property: ${PrettyPrinter.stringifyInterpreter(path.slice(1).filter(p -> !p.is(IDENTIFIER))[0])}');
+				}
             }
             case FunctionReturn(value, t): return evaluate(typeCast(value, t));
             case HaxeExtern(func): return evaluate(func());

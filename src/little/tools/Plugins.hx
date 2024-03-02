@@ -32,7 +32,7 @@ class Plugins {
 
     @:noCompletion static var __noTypeCreation:Bool;
     /**
-        registers a class in little code. The class' fields are dictated by this function's `fields` attribute,
+        registers a class in little code, or extends the fields of an existing class. The class' fields are dictated by this function's `fields` attribute,
         which provides instance & static functions, variables, and nested objects. 
         The allowed key-value types in `fields`'s key-value pairs:
 
@@ -92,7 +92,7 @@ class Plugins {
                 }
                 case ["public", "function"]: {
                     var name = key.split(" ")[2];
-                    var params = Interpreter.convert(...Parser.parse(Lexer.lex(key.split(" ")[3].replaceFirst("(", "").replaceLast(")", ""))));
+                    var params = Interpreter.convert(...Parser.parse(Lexer.lex(key.replaceFirst('public function $name ', "").replaceFirst("(", "").replaceLast(")", ""))));
 
                     var paramMap = new OrderedMap<String, InterpTokens>();
 		            for (entry in params) {
@@ -158,8 +158,7 @@ class Plugins {
                 }
                 case ["static", "function"]: {
                     var name = key.split(" ")[2];
-                    var params = Interpreter.convert(...Parser.parse(Lexer.lex(key.split(" ")[3].replaceFirst("(", "").replaceLast(")", ""))));
-                    trace(typeName, name, params);
+                    var params = Interpreter.convert(...Parser.parse(Lexer.lex(key.replaceFirst('static function $name ', "").replaceFirst("(", "").replaceLast(")", ""))));
                     var paramMap = new OrderedMap<String, InterpTokens>();
 		            for (entry in params) {
 		            	if (entry.is(SPLIT_LINE, SET_LINE)) continue;

@@ -44,7 +44,7 @@ class ExternalInterfacing {
 	public function new(memory:Memory) {
 		parent = memory;
 		typeToPointer = new Map<String, MemoryPointer>();
-		CoreTypes.addFor(this);
+		//CoreTypes.addFor(this);
 	}
 
 	public function createPathFor(extType:ExtTree, ...path:String):ExtTree {
@@ -74,6 +74,21 @@ class ExternalInterfacing {
 		var identifiers = path.toArray();
 
 		var handle = globalProperties;
+		while (identifiers.length > 0) {
+			var identifier = identifiers.shift();
+			if (handle.properties.exists(identifier))
+				handle = handle.properties[identifier];
+			else
+				return false;
+		}
+
+		return true;
+	}
+
+	public function hasInstance(...path:String):Bool {
+		var identifiers = path.toArray();
+		
+		var handle = instanceProperties;
 		while (identifiers.length > 0) {
 			var identifier = identifiers.shift();
 			if (handle.properties.exists(identifier))

@@ -104,8 +104,10 @@ class Conversion {
 
                 obj;
             }
+			case FunctionCode(_, _): {
+				return null;
+			}
             case _: {
-                trace("WARNING: Unparsable token: " + val + ". Returning null");
                 return null;
             }
         }
