@@ -10,14 +10,15 @@ The language itself is cross-platform, as it's programmed in haxe.
 
 ### Why does this programming language exist?
 
-Other than teaching, the language has a lot of benefits, some I already mentioned before:
+Other than teaching, the language has many benefits, some already mentioned before:
 
  - cross platform
- - small bundle size
+ - relatively small bundle size
+ - Extendable
  - fast interpreter
  - Multilingual coding
- - interfaces with external Haxe code (Haxe transpiler only)
- - makes it easy to implement code interfacing in games
+ - Easily interfaces with external Haxe elements
+ - both low level & high level programming supported
  - Understandable errors that actually explain what went wrong and where
  - easy and accurate access to runtime details & definition values
 
@@ -27,8 +28,8 @@ The language is very minimal by design, and only has a couple of reserved words:
 
 **Notice - the language is still in development, syntax may change in the future**
 
- - **`define`** - used for defining variables.
- - **`action`** - used for defining functions.
+ - **`define`** - used for variable declaration.
+ - **`action`** - used for function declaration.
  - **`as`** - used for expression typing, for example: `define x as Number`
  - **`return`** used for returning action values.
  - **`nothing`** - the language's `null` value.
@@ -91,7 +92,7 @@ print(hey1) //3
 
 ### Consistency is key!
 
-everything is always consistent!
+the same syntax always does the same thing, without any special cases:
 ```
 define consistent = 5
 define consistent.newPropertyDeclaration = 6
