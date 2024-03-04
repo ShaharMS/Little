@@ -77,7 +77,7 @@ class Extensions {
 			case NullValue: return Little.keywords.TYPE_DYNAMIC;
 			case FunctionCode(requiredParams, body): return Little.keywords.TYPE_FUNCTION;
 			case Sign(sign): return Little.keywords.TYPE_SIGN;
-			case Object(toString, props, typeName): return props[Little.keywords.OBJECT_TYPE_PROPERTY_NAME].value.getParameters()[0];
+			case Object(_, _, typeName): return typeName;
 			case _: throw '$token is not a simple token (given $token)';
 		}
 	}

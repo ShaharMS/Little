@@ -113,49 +113,59 @@ class Memory {
 			}
 		}
 
-		// Before anything, global external values are prioritized
-		if (externs.hasGlobal(...path)) {
-			var object = externs.getGlobal(...path);
-			var typeName = switch object.objectValue {
-				case Object(_, _, type): type;
-				case Number(_): Little.keywords.TYPE_INT;
-				case Decimal(_): Little.keywords.TYPE_FLOAT;
-				case Characters(_): Little.keywords.TYPE_STRING;
-				case TrueValue | FalseValue: Little.keywords.TYPE_BOOLEAN;
-				case NullValue: Little.keywords.TYPE_DYNAMIC;
-				case FunctionCode(_, _): Little.keywords.TYPE_FUNCTION;
-				case ConditionCode(_): Little.keywords.TYPE_CONDITION;
-				case _: throw "How did we get here? 3";
-			}
-			return {
-				objectValue: object.objectValue,
-				objectTypeName: typeName,
-				objectAddress: object.objectAddress,
-			}
-		}
+		var current:InterpTokens = null;
+		var currentAddress:MemoryPointer = null;
+		var currentType:String = null;
 
-		// If we didn't find anything on the externs, we look in the current scope.
-		// We don't care if the field is found or not, since its supposed
-		// To throw a runtime error that a variable was not found.
-		var data = referrer.get(path[0]);
-		var current:InterpTokens = switch data.type {
-			case (_ == Little.keywords.TYPE_STRING => true): Characters(storage.readString(data.address));
-			case (_ == Little.keywords.TYPE_INT => true): Number(storage.readInt32(data.address));
-			case (_ == Little.keywords.TYPE_FLOAT => true): Decimal(storage.readDouble(data.address));
-			case (_ == Little.keywords.TYPE_BOOLEAN => true): constants.getFromPointer(data.address);
-			case (_ == Little.keywords.TYPE_FUNCTION => true): storage.readCodeBlock(data.address);
-			case (_ == Little.keywords.TYPE_CONDITION => true): storage.readCondition(data.address);
-            // Because of the way we store lone nulls (as type dynamic), 
-            // they might get confused with objects of type dynamic, so we need to do this:
-            case (_ == Little.keywords.TYPE_DYNAMIC && constants.hasPointer(data.address) && constants.getFromPointer(data.address).equals(NullValue) => true): NullValue;
-            case _: storage.readObject(data.address);
-		}
-		var currentAddress:MemoryPointer = data.address;
-		var currentType:String = data.type;
-		
 		var processed = path.toArray();
 		var wentThroughPath = [];
-		wentThroughPath.push(processed.shift()); // We already went through with it in the code above
+
+		// Before anything, global external values are prioritized
+
+		if (externs.hasGlobal(processed[0])) {
+			if (externs.hasGlobal(...path)) {
+				var object = externs.getGlobal(...path);
+				var typeName = getTypeName(externs.createPathFor(externs.globalProperties, ...path).type);
+				return {
+					objectValue: object.objectValue,
+					objectTypeName: typeName,
+					objectAddress: object.objectAddress,
+				}
+			} else {
+				var external = [processed.shift()];
+				wentThroughPath.push(external[0]);
+				while (externs.hasGlobal(...external.concat([processed[0]]))) {
+					external.push(processed.shift());
+					wentThroughPath.push(external[external.length - 1]);
+				}
+				var object = externs.getGlobal(...external);
+				current = object.objectValue;
+				currentAddress = object.objectAddress;
+				currentType = getTypeName(externs.createPathFor(externs.globalProperties, ...external).type);
+			}
+		} else {
+
+			// If we didn't find anything on the externs, we look in the current scope.
+			// We don't care if the field is found or not, since its supposed
+			// To throw a runtime error that a variable was not found.
+			var data = referrer.get(path[0]);
+			current = switch data.type {
+				case (_ == Little.keywords.TYPE_STRING => true): Characters(storage.readString(data.address));
+				case (_ == Little.keywords.TYPE_INT => true): Number(storage.readInt32(data.address));
+				case (_ == Little.keywords.TYPE_FLOAT => true): Decimal(storage.readDouble(data.address));
+				case (_ == Little.keywords.TYPE_BOOLEAN => true): constants.getFromPointer(data.address);
+				case (_ == Little.keywords.TYPE_FUNCTION => true): storage.readCodeBlock(data.address);
+				case (_ == Little.keywords.TYPE_CONDITION => true): storage.readCondition(data.address);
+	            // Because of the way we store lone nulls (as type dynamic), 
+	            // they might get confused with objects of type dynamic, so we need to do this:
+	            case (_ == Little.keywords.TYPE_DYNAMIC && constants.hasPointer(data.address) && constants.getFromPointer(data.address).equals(NullValue) => true): NullValue;
+	            case _: storage.readObject(data.address);
+			}
+			currentAddress = data.address;
+			currentType = data.type;
+			wentThroughPath.push(processed.shift()); // We already went through with it in the code above
+		}
+		
 		while (processed.length > 0) {
 			// Get the current field, and the type of that field as well
 			var identifier = processed.shift();
@@ -465,6 +475,8 @@ class Memory {
 			case (_ == Little.keywords.TYPE_FLOAT => true): constants.FLOAT;
 			case (_ == Little.keywords.TYPE_BOOLEAN => true): constants.BOOL;
 			case (_ == Little.keywords.TYPE_DYNAMIC => true): constants.DYNAMIC;
+			case (_ == Little.keywords.TYPE_MODULE => true): constants.TYPE;
+			case (_ == Little.keywords.TYPE_UNKNOWN => true): constants.UNKNOWN;
 			case _: MemoryPointer.fromInt(0);
 		}
 		if (p.rawLocation != 0) {
@@ -475,6 +487,8 @@ class Memory {
 					case 12 /* float */: Little.keywords.TYPE_FLOAT;
 					case 13 /* bool */: Little.keywords.TYPE_BOOLEAN;
 					case 14 /* dynamic */: Little.keywords.TYPE_DYNAMIC;
+					case 15 /* type */: Little.keywords.TYPE_MODULE;
+					case 16 /* unknown */: Little.keywords.TYPE_UNKNOWN;
 					case _: throw "How did we get here? 5";
 				},
 				isStaticType: true,
@@ -487,9 +501,16 @@ class Memory {
 		// If it's not a primitive type, the next priority is external types.
 		// The easiest way to get a valid type is to check the typeToPointer map
 		if (externs.typeToPointer.exists(name)) {
-			// Notice that everything is 0ed out, thats because technically this
-			// type doesn't take memory, its only on memory that the current platform's
-			// runtime itself allocates.
+
+			var instProps = externs.createPathFor(externs.instanceProperties, ...name.split(Little.keywords.PROPERTY_ACCESS_SIGN));
+			var instances = new Map<String, {address:MemoryPointer, type:MemoryPointer}>();
+
+			for (key => value in instProps.properties) {
+
+			}
+
+			//var statics:Map<String>
+
 			return {
 				pointer: externs.typeToPointer[name],
 				typeName: name,

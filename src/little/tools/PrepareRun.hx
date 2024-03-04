@@ -27,78 +27,77 @@ class PrepareRun {
 
 	public static function addTypes() {
 
+		Little.plugin.registerType(TYPE_FUNCTION, []);
+		Little.plugin.registerType(TYPE_CONDITION, []);
+		Little.plugin.registerType(TYPE_INT, []);
+		Little.plugin.registerType(TYPE_FLOAT, []);
+		Little.plugin.registerType(TYPE_STRING, []);
+
 		Little.plugin.registerType("Date", [
-			"static function now ()" => (_) -> {
+			'static $TYPE_STRING now ()' => (_) -> {
 				return Conversion.toLittleValue(Date.now().toString());
 			}
 		]);
 
 		Little.plugin.registerType(TYPE_INT, [
-			'public function toString ()' => (_, value, _) -> {
+			'public $TYPE_STRING toString ()' => (_, value, _) -> {
 				return Conversion.toLittleValue(Std.string(value.parameter(0)));
 			}
 		]);
 
 		Little.plugin.registerType(TYPE_FLOAT, [
-			'public function toString ()' => (_, value, _) -> {
+			'public $TYPE_STRING toString ()' => (_, value, _) -> {
 				return Conversion.toLittleValue(Std.string(value.parameter(0)));
 			},
-			'public function isWhole ()' => (_, value, _) -> {
+			'public $TYPE_BOOLEAN isWhole ()' => (_, value, _) -> {
 				return Conversion.toLittleValue((value.parameter(0) : Float) % 1 == 0);
 			}
 		]);
 
 		Little.plugin.registerType(TYPE_STRING, [
-			'public var length' => (_, value) -> {
+			'public $TYPE_INT length' => (_, value) -> {
 				return Conversion.toLittleValue(value.parameter(0).length);
 			},
-			'public function charAt (define index as $TYPE_INT)' => (_, value, params) -> {
+			'public $TYPE_STRING charAt (define index as $TYPE_INT)' => (_, value, params) -> {
 				return Conversion.toLittleValue(value.parameter(0).charAt(Conversion.toHaxeValue(params[0])));
 			},
-			'public function substring (define start as $TYPE_INT, define end as $TYPE_INT = -1)' => (_, value, params) -> {
+			'public $TYPE_STRING substring (define start as $TYPE_INT, define end as $TYPE_INT = -1)' => (_, value, params) -> {
 				return Characters(value.parameter(0).substring(Conversion.toHaxeValue(params[0]), Conversion.toHaxeValue(params[1])));
 			},
-			'public function toLowerCase ()' => (_, value, _) -> {
+			'public $TYPE_STRING toLowerCase ()' => (_, value, _) -> {
 				return Characters(value.parameter(0).toLowerCase());
 			},
-			'public function toUpperCase ()' => (_, value, _) -> {
+			'public $TYPE_STRING toUpperCase ()' => (_, value, _) -> {
 				return Characters(value.parameter(0).toUpperCase());
 			},
-			'public function replace (define search as $TYPE_STRING, define replace as $TYPE_STRING)' => (_, value, params) -> {
+			'public $TYPE_STRING replace (define search as $TYPE_STRING, define replace as $TYPE_STRING)' => (_, value, params) -> {
 				return Characters(value.parameter(0).replace(Conversion.toHaxeValue(params[0]), Conversion.toHaxeValue(params[1])));
 			},
-			'public function trim ()' => (_, value, _) -> {
+			'public $TYPE_STRING trim ()' => (_, value, _) -> {
 				return Characters(value.parameter(0).trim());
 			},
-			'public function remove (define search as $TYPE_STRING)' => (_, value, params) -> {
+			'public $TYPE_STRING remove (define search as $TYPE_STRING)' => (_, value, params) -> {
 				return Characters(value.parameter(0).replace(Conversion.toHaxeValue(params[0]), ""));
 			},
-			'public function contains (define search as $TYPE_STRING)' => (_, value, params) -> {
+			'public $TYPE_BOOLEAN contains (define search as $TYPE_STRING)' => (_, value, params) -> {
 				return Conversion.toLittleValue(value.parameter(0).contains(Conversion.toHaxeValue(params[0])));
 			},
-			'public function indexOf (define search as $TYPE_STRING)' => (_, value, params) -> {
+			'public $TYPE_INT indexOf (define search as $TYPE_STRING)' => (_, value, params) -> {
 				return Conversion.toLittleValue(value.parameter(0).indexOf(Conversion.toHaxeValue(params[0])));
 			},
-			'public function lastIndexOf (define search as $TYPE_STRING)' => (_, value, params) -> {
+			'public $TYPE_INT lastIndexOf (define search as $TYPE_STRING)' => (_, value, params) -> {
 				return Conversion.toLittleValue(value.parameter(0).lastIndexOf(Conversion.toHaxeValue(params[0])));
 			},
-			'public function startsWith (define prefix as $TYPE_STRING)' => (_, value, params) -> {
+			'public $TYPE_BOOLEAN startsWith (define prefix as $TYPE_STRING)' => (_, value, params) -> {
 				return Conversion.toLittleValue(value.parameter(0).indexOf(Conversion.toHaxeValue(params[0]) == 0));
 			},
-			'public function endsWith (define postfix as $TYPE_STRING)' => (_, value, params) -> {
+			'public $TYPE_BOOLEAN endsWith (define postfix as $TYPE_STRING)' => (_, value, params) -> {
 				return Conversion.toLittleValue(value.parameter(0).indexOf(Conversion.toHaxeValue(params[0])) == value.parameter(0).length - Conversion.toHaxeValue(params[0]).length);
 			},
 
-			'static function fromCharCode (define code as $TYPE_INT)' => (_, value, params) -> {
+			'static $TYPE_STRING fromCharCode (define code as $TYPE_INT)' => (_, value, params) -> {
 				return Conversion.toLittleValue(String.fromCharCode(Conversion.toHaxeValue(params[0])));
 			}
-		]);
-
-		Little.plugin.registerType(TYPE_FUNCTION, [
-			
-		]);
-		Little.plugin.registerType(TYPE_CONDITION, [
-			
 		]);
 	}
 		
@@ -121,12 +120,12 @@ class PrepareRun {
 	}
 
 	public static function addProps() {
-		Little.plugin.registerInstanceVariable(OBJECT_TYPE_PROPERTY_NAME, TYPE_DYNAMIC, 'The name of this value\'s type, as a $TYPE_STRING', 
+		Little.plugin.registerInstanceVariable(OBJECT_TYPE_PROPERTY_NAME, TYPE_STRING, TYPE_DYNAMIC, 'The name of this value\'s type, as a $TYPE_STRING', 
 			(value, address) -> {
 				return Characters(value.type());
 			}
 		);
-		Little.plugin.registerInstanceVariable(OBJECT_ADDRESS_PROPERTY_NAME, TYPE_DYNAMIC, 'The address of this value',
+		Little.plugin.registerInstanceVariable(OBJECT_ADDRESS_PROPERTY_NAME, POINTER_SIZE == 4 ? TYPE_INT : TYPE_FLOAT, TYPE_DYNAMIC, 'The address of this value',
 			(value:InterpTokens, address:MemoryPointer) -> {
 				return POINTER_SIZE == 4 ? Number(address.rawLocation) : Decimal(address.rawLocation);
 			}

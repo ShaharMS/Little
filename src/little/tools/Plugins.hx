@@ -36,17 +36,20 @@ class Plugins {
         which provides instance & static functions, variables, and nested objects. 
         The allowed key-value types in `fields`'s key-value pairs:
 
-        |Key Syntax                                             | Type                                                                                                                          | Application       | Description |
-        |-------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------|-------------------|-------------|
-        |`public var <name>`                                    | `(address:MemoryPointer, value:InterpTokens) -> InterpTokens`                                                                 | Instance Variable | A function that returns a value, that can be based on its parent. The returned value is stored in memory upon retrieval. |
-        |`public var <name>`                                    | `(address:MemoryPointer, value:InterpTokens) -> {address:MemoryPointer, value:InterpTokens}`                                  | Instance Variable | A function that returns a value, that can be based on its parent. The returned value is not stored in memory, and we rely upon the given pointer to be correct. |
-        |`public function <name> (define <param> as <Type>)`    | `(address:MemoryPointer, value:InterpTokens, givenParams:Array<InterpTokens>) -> InterpTokens`                                | Instance Function | A function, that returns a value based on its parent & other given parameters, provided by a Little function call. The returned value is stored in memory upon retrieval. |
-        |`static var <name>`                                    | `() -> InterpTokens`                                                                                                          | Static Variable   | A function that returns a static value. The returned value is stored in memory upon retrieval. |
-        |`static var <name>`                                    | `() -> {address:MemoryPointer, value:InterpTokens}`                                                                           | Static Variable   | A function that returns a static value. The returned value is not stored in memory, and we rely upon the given pointer to be correct. |
-        |`static function <name> ()`                            | `(givenParams:Array<InterpTokens>) -> InterpTokens`                                                                           | Static Function   | A function that returns a value based on some given parameters, provided by a Little function call. The returned value is stored in memory upon retrieval. |
-        |`static var <name>`                                    | `TypeFields`                                                                                                                  | Static Variable   | Another option for a static variable, but this time it's for a nested object. The object itself isn't allocated in Little's memory, but its decedents may be. instance objects are not available this way, since they are tied to an object, thus needing to be allocated many times. |
+        |Key Syntax                                           | Type                                                                                                                          | Application       | Description |
+        |-----------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------|-------------------|-------------|
+        |`public <Type> <name>`                               | `(address:MemoryPointer, value:InterpTokens) -> InterpTokens`                                                                 | Instance Variable | A function that returns a value, that can be based on its parent. The returned value is stored in memory upon retrieval. |
+        |`public <Type> <name>`                               | `(address:MemoryPointer, value:InterpTokens) -> {address:MemoryPointer, value:InterpTokens}`                                  | Instance Variable | A function that returns a value, that can be based on its parent. The returned value is not stored in memory, and we rely upon the given pointer to be correct. |
+        |`public <Type> <name> (define <param> as <Type>)`    | `(address:MemoryPointer, value:InterpTokens, givenParams:Array<InterpTokens>) -> InterpTokens`                                | Instance Function | A function, that returns a value based on its parent & other given parameters, provided by a Little function call. The returned value is stored in memory upon retrieval. |
+        |`static <Type> <name>`                               | `() -> InterpTokens`                                                                                                          | Static Variable   | A function that returns a static value. The returned value is stored in memory upon retrieval. |
+        |`static <Type> <name>`                               | `() -> {address:MemoryPointer, value:InterpTokens}`                                                                           | Static Variable   | A function that returns a static value. The returned value is not stored in memory, and we rely upon the given pointer to be correct. |
+        |`static <Type> <name> ()`                            | `(givenParams:Array<InterpTokens>) -> InterpTokens`                                                                           | Static Function   | A function that returns a value based on some given parameters, provided by a Little function call. The returned value is stored in memory upon retrieval. |
+        |`static <Type> <name>`                               | `TypeFields`                                                                                                                  | Static Variable   | Another option for a static variable, but this time it's for a nested object. The object itself isn't allocated in Little's memory, but its decedents may be. instance objects are not available this way, since they are tied to an object, thus needing to be allocated many times. |
 
-        **Notice** - key syntax is very sensitive - must start with one of the 4 combinations specified above, and each item must be separated by a single whitespace. Anything else may throw an error, or behave unexpectedly.
+        **Notice** - key syntax is very sensitive - must start with `public` or `static`, continue with a `little` type, then a name, and parameters if its a function. Each element separated by a single whitespace. Example:
+        
+            'public Number id'
+            'static ${Conversion.toLittleType("String")} getProfile (define summed as ${Conversion.toLittleType("Bool")})'
         
         **Notice 2** - for function parameters, syntax follows Little function parameter syntax - multiple parameter declarations, with optional type and optional default values, separated by a comma.
         
@@ -57,16 +60,20 @@ class Plugins {
         var instances = memory.externs.createPathFor(memory.externs.instanceProperties, ...typeName.split("."));
         var statics = memory.externs.createPathFor(memory.externs.globalProperties, ...typeName.split("."));
 
+        instances.type = statics.type = memory.getTypeInformation(Little.keywords.TYPE_MODULE).pointer;
+        //statics.getter = (_, _) -> { objectValue: Object(Block([], Little.keywords.TYPE_STRING.asTokenPath()), [], typeName), objectAddress: memory.constants.EXTERN }; // Hack, todo: actually have a type token.
+
         if (__noTypeCreation) __noTypeCreation = false;
         else {
             memory.externs.typeToPointer[typeName] = memory.storage.storeByte(1);
         }
 
         for (key => field in fields) {
-            switch key.split(" ").slice(0, 2) {
-                case ["public", "var"]: {
+            switch key.split(" ") {
+                case (_[0] == "public" && _.length == 3) => true: {
                     var name = key.split(" ")[2];
-                    instances.properties[name] = new ExtTree((value, address) -> {
+                    var type = memory.getTypeInformation(key.split(" ")[1]).pointer;
+                    instances.properties[name] = new ExtTree(type, (value, address) -> {
                         // We can't optimize for the two cases outside of the callback, since haxe doesnt support
                         // type checking on function types.
                         try {
@@ -90,8 +97,9 @@ class Plugins {
                         
                     });
                 }
-                case ["public", "function"]: {
+                case (_[0] == "public") => true: {
                     var name = key.split(" ")[2];
+                    var type = memory.getTypeInformation(key.split(" ")[1]);
                     var params = Interpreter.convert(...Parser.parse(Lexer.lex(key.replaceFirst('public function $name ', "").replaceFirst("(", "").replaceLast(")", ""))));
 
                     var paramMap = new OrderedMap<String, InterpTokens>();
@@ -111,29 +119,29 @@ class Plugins {
 		            	}
 		            }
 
-                    instances.properties[name] = new ExtTree((value, address) -> {
-                        var dynType:InterpTokens = TYPE_DYNAMIC.asTokenPath();
+                    instances.properties[name] = new ExtTree(memory.getTypeInformation(Little.keywords.TYPE_FUNCTION).pointer, (value, address) -> {
+                        var returnType:InterpTokens = type.typeName.asTokenPath();
                         return {
                             objectValue: FunctionCode(paramMap, Block([
                                 FunctionReturn(HaxeExtern(() -> {
                                     var result = (field : (MemoryPointer, InterpTokens, Array<InterpTokens>) -> InterpTokens)(address, value, paramMap.keys().toArray().map(key -> Actions.evaluate(memory.read(key).objectValue)));
-                                    dynType = result.type().asTokenPath();
                                     return result;
-                                }), dynType)
-                            ], dynType)),
+                                }), returnType)
+                            ], returnType)),
                             objectAddress: memory.constants.EXTERN
                         }
                     });
                 }
 
-                case ["static", "var"]: {
+                case (_[0] == "static" && _.length == 3) => true: {
                     var name = key.split(" ")[2];
+                    var type = memory.getTypeInformation(key.split(" ")[1]).pointer;
                     if (field is StringMap) {
                         __noTypeCreation = true;
                         registerType(typeName + "." + name, field);
                         continue;
                     }
-                    statics.properties[name] = new ExtTree((_, _) -> {
+                    statics.properties[name] = new ExtTree(type, (_, _) -> {
                         // We can't optimize for the two cases outside of the callback, since haxe doesn't support
                         // type checking on function types.
                             try {
@@ -156,8 +164,9 @@ class Plugins {
                             }
                     });
                 }
-                case ["static", "function"]: {
+                case (_[0] == "static") => true: {
                     var name = key.split(" ")[2];
+                    var type = memory.getTypeInformation(key.split(" ")[1]);
                     var params = Interpreter.convert(...Parser.parse(Lexer.lex(key.replaceFirst('static function $name ', "").replaceFirst("(", "").replaceLast(")", ""))));
                     var paramMap = new OrderedMap<String, InterpTokens>();
 		            for (entry in params) {
@@ -176,16 +185,15 @@ class Plugins {
 		            	}
 		            }
                     
-                    statics.properties[name] = new ExtTree((_, _) -> {
-                        var dynType:InterpTokens = TYPE_DYNAMIC.asTokenPath();
+                    statics.properties[name] = new ExtTree(memory.getTypeInformation(Little.keywords.TYPE_FUNCTION).pointer, (_, _) -> {
+                        var returnType:InterpTokens = type.typeName.asTokenPath();
                         return {
                             objectValue: FunctionCode(paramMap, Block([
                                 FunctionReturn(HaxeExtern(() -> {
                                     var result = (field : (Array<InterpTokens>) -> InterpTokens)(paramMap.keys().toArray().map(key -> Actions.evaluate(memory.read(key).objectValue)));
-                                    dynType = result.type().asTokenPath();
                                     return result;
-                                }), dynType)
-                            ], dynType)),
+                                }), returnType)
+                            ], returnType)),
                             objectAddress: memory.constants.EXTERN
                         }
                     });
@@ -200,13 +208,16 @@ class Plugins {
         registers a haxe value/property inside Little code.
 
         @param variableName the name of the variable, for usage in Little code. If you want it nested in some kind of path, use `.` (e.g. `mother.varName`)
+        @param variableType the type of the variable, in little. Use `Conversion.toLittleType` for haxe basic types if needed.       
         @param documentation documentation for this variable.
         @param staticValue **Option 1** - a static value to assign to this variable
         @param valueGetter **Option 2** - a function that returns a value that this variable gives when accessed.
     **/
-    public function registerVariable(variableName:String, ?documentation:String, ?staticValue:InterpTokens, ?valueGetter:Void -> InterpTokens) {
+    public function registerVariable(variableName:String, variableType:String, ?documentation:String, ?staticValue:InterpTokens, ?valueGetter:Void -> InterpTokens) {
         var varPath = variableName.split(".");
         var object = memory.externs.createPathFor(memory.externs.globalProperties, ...varPath);
+
+        object.type = memory.getTypeInformation(variableName).pointer;
         object.getter = (_, _) -> {
             return try {
                 var value = staticValue == null ? valueGetter() : staticValue;
@@ -273,6 +284,7 @@ class Plugins {
         
         var object = memory.externs.createPathFor(memory.externs.globalProperties, ...functionPath);
 
+        object.type = memory.getTypeInformation(Little.keywords.TYPE_FUNCTION).pointer;
         object.getter = (_, _) -> {
 			objectValue: token,
 			objectAddress: memory.constants.EXTERN,
@@ -319,16 +331,18 @@ class Plugins {
 
 
 		@param propertyName The name of the property, must not include property access sign.
+        @param propertyType The type of the property. Must be a little class. 
 		@param onType The type of the object the property is on. Must be a little class, and if the class is nested within an object, a full path must be specified.
 		@param documentation The documentation of the property
 		@param staticValue **Option 1**. A static value this property always returns.
 		@param valueGetter **Option 2**. A function that returns the value of the property. It takes in the value of the parent object, and it's address in memory.
 	**/
-	public function registerInstanceVariable(propertyName:String, onType:String, ?documentation:String, ?staticValue:InterpTokens, ?valueGetter:(objectValue:InterpTokens, objectAddress:MemoryPointer) -> InterpTokens) {
+	public function registerInstanceVariable(propertyName:String, propertyType:String, onType:String, ?documentation:String, ?staticValue:InterpTokens, ?valueGetter:(objectValue:InterpTokens, objectAddress:MemoryPointer) -> InterpTokens) {
 		var classPath = onType.split(".");
         classPath.push(propertyName);
 		var object = memory.externs.createPathFor(memory.externs.instanceProperties, ...classPath);
 
+        object.type = memory.getTypeInformation(propertyType).pointer;
 		object.getter = (v, a) -> {
 			return try {
 				var value = staticValue == null ? valueGetter(v, a) : staticValue;
@@ -391,7 +405,9 @@ class Plugins {
         classPath.push(propertyName);
 		var object = memory.externs.createPathFor(memory.externs.instanceProperties, ...classPath);
 		var returnTypeToken = Interpreter.convert(...Parser.parse(Lexer.lex(returnType)))[0]; // May be a PropertyAccess or an Identifier
-		object.getter = (v, a) -> {
+		
+        object.type = memory.getTypeInformation(Little.keywords.TYPE_FUNCTION).pointer;
+        object.getter = (v, a) -> {
 			return try {
 				{
 					objectValue: FunctionCode(paramMap, Block([

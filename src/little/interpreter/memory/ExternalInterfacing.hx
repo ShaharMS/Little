@@ -34,17 +34,16 @@ class ExternalInterfacing {
 
 		Use `TYPE_DYNAMIC` to have a property for every single type. PAY ATTENTION - it blocks this word from being used as a property name for an object.
 	**/
-	public var instanceProperties:ExtTree = new ExtTree();
+	public var instanceProperties:ExtTree = new ExtTree(0, null, null, 0);
 
 	/**
 	    Global static variables, defined using a path to the property.
 	**/
-	public var globalProperties:ExtTree = new ExtTree();
+	public var globalProperties:ExtTree = new ExtTree(0, null, null, 0);
 
 	public function new(memory:Memory) {
 		parent = memory;
 		typeToPointer = new Map<String, MemoryPointer>();
-		//CoreTypes.addFor(this);
 	}
 
 	public function createPathFor(extType:ExtTree, ...path:String):ExtTree {
@@ -120,9 +119,19 @@ class ExtTree {
 	**/
 	public var getter:(objectValue:InterpTokens, objectAddress:MemoryPointer) -> {objectValue:InterpTokens, objectAddress:MemoryPointer};
 
+	/**
+	    A pointer to this prop's doc. Used instead of string to avoid re-allocations.
+	**/
+	public var doc:MemoryPointer;
+
+	/**
+	    A pointer to the type this prop's getter returns. Used for providing consistent behavior for runtime type info acquisition.
+	**/
+	public var type:MemoryPointer;
+
 	public var properties:Map<String, ExtTree>;
 
-	public function new(?getter:(objectValue:InterpTokens, objectAddress:MemoryPointer) -> {objectValue:InterpTokens, objectAddress:MemoryPointer}, ?properties:Map<String, ExtTree>) {
+	public function new(?type:MemoryPointer, ?getter:(objectValue:InterpTokens, objectAddress:MemoryPointer) -> {objectValue:InterpTokens, objectAddress:MemoryPointer}, ?properties:Map<String, ExtTree>, ?doc:MemoryPointer) {
 		this.getter = getter ?? (objectValue, objectAddress) -> {
 			return {
 				objectValue: Characters('Externally registered, attached to $objectAddress'),
@@ -130,5 +139,7 @@ class ExtTree {
 			}
 		}
 		this.properties = properties ?? new Map<String, ExtTree>();
+		this.doc = doc ?? Little.memory.constants.EMPTY_STRING;
+		this.type = type ?? Little.memory.constants.UNKNOWN;
 	}
 }

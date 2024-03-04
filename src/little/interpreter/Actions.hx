@@ -379,7 +379,7 @@ class Actions {
     public static function evaluate(exp:InterpTokens, ?dontThrow:Bool = false):InterpTokens {
 
         switch exp {
-            case Number(_) | Decimal(_) | Characters(_) | TrueValue | FalseValue | NullValue | Sign(_) | FunctionCode(_, _): return exp;
+            case Number(_) | Decimal(_) | Characters(_) | TrueValue | FalseValue | NullValue | Sign(_) | FunctionCode(_, _) | Object(_, _, _): return exp;
             case ErrorMessage(msg): {
                 if (!dontThrow) Little.runtime.throwError(exp, INTERPRETER_VALUE_EVALUATOR);
                 return exp;
