@@ -66,6 +66,10 @@ class Plugins {
         if (__noTypeCreation) __noTypeCreation = false;
         else {
             memory.externs.typeToPointer[typeName] = memory.storage.storeByte(1);
+            statics.getter = (_, _) -> {
+                objectValue: ClassPointer(memory.externs.typeToPointer[typeName]),
+                objectAddress: memory.externs.typeToPointer[typeName]
+            }
         }
 
         for (key => field in fields) {

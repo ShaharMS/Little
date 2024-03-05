@@ -94,7 +94,11 @@ class Memory {
 			return storage.storeCodeBlock(token);
 		} else if (token.is(CONDITION_CODE)) {
 			return storage.storeCondition(token);
+		} else if (token.is(CLASS_POINTER)) {
+			return token.parameter(0);
 		}
+
+		throw 'Unable to allocate memory for token `$token`.';
 
 		Little.runtime.throwError(ErrorMessage('Unable to allocate memory for token `$token`.'), MEMORY_STORAGE);
 
@@ -156,6 +160,7 @@ class Memory {
 				case (_ == Little.keywords.TYPE_BOOLEAN => true): constants.getFromPointer(data.address);
 				case (_ == Little.keywords.TYPE_FUNCTION => true): storage.readCodeBlock(data.address);
 				case (_ == Little.keywords.TYPE_CONDITION => true): storage.readCondition(data.address);
+				case (_ == Little.keywords.TYPE_MODULE => true): ClassPointer(data.address);
 	            // Because of the way we store lone nulls (as type dynamic), 
 	            // they might get confused with objects of type dynamic, so we need to do this:
 	            case (_ == Little.keywords.TYPE_DYNAMIC && constants.hasPointer(data.address) && constants.getFromPointer(data.address).equals(NullValue) => true): NullValue;
@@ -179,6 +184,7 @@ class Memory {
 				case NullValue: Little.keywords.TYPE_DYNAMIC;
 				case FunctionCode(_, _): Little.keywords.TYPE_FUNCTION;
 				case ConditionCode(_): Little.keywords.TYPE_CONDITION;
+				case ClassPointer(_): Little.keywords.TYPE_MODULE;
 				case _: throw "How did we get here? 3";
 			}
 			// By design, the only other way properties are accessible on non-object
@@ -221,6 +227,7 @@ class Memory {
 						case (_ == Little.keywords.TYPE_BOOLEAN => true): current = constants.getFromPointer(keyData.value);
 						case (_ == Little.keywords.TYPE_FUNCTION => true): current = storage.readCodeBlock(keyData.value);
 						case (_ == Little.keywords.TYPE_CONDITION => true): current = storage.readCondition(keyData.value);
+						case (_ == Little.keywords.TYPE_MODULE => true): current = ClassPointer(keyData.value);
 						case (keyData.value == constants.NULL => true): current = NullValue;
 						case _: current = storage.readObject(keyData.value);
 					}
@@ -254,6 +261,7 @@ class Memory {
 				case NullValue: Little.keywords.TYPE_DYNAMIC;
 				case FunctionCode(_, _): Little.keywords.TYPE_FUNCTION;
 				case ConditionCode(_): Little.keywords.TYPE_CONDITION;
+				case ClassPointer(_): Little.keywords.TYPE_MODULE;
 				case _: throw "How did we get here? 3";
 			},
 		}
@@ -278,6 +286,7 @@ class Memory {
 				case NullValue: Little.keywords.TYPE_DYNAMIC;
 				case FunctionCode(_, _): Little.keywords.TYPE_FUNCTION;
 				case ConditionCode(_): Little.keywords.TYPE_CONDITION;
+				case ClassPointer(_): Little.keywords.TYPE_MODULE;
 				case _: throw "How did we get here? 3";
 			}
 			// By design, the only other way properties are accessible on non-object
@@ -320,6 +329,7 @@ class Memory {
 						case (_ == Little.keywords.TYPE_BOOLEAN => true): current = constants.getFromPointer(keyData.value);
 						case (_ == Little.keywords.TYPE_FUNCTION => true): current = storage.readCodeBlock(keyData.value);
 						case (_ == Little.keywords.TYPE_CONDITION => true): current = storage.readCondition(keyData.value);
+						case (_ == Little.keywords.TYPE_MODULE => true): current = ClassPointer(keyData.value);
 						case (keyData.value == constants.NULL => true): current = NullValue;
 						case _: current = storage.readObject(keyData.value);
 					}
@@ -353,6 +363,7 @@ class Memory {
 				case NullValue: Little.keywords.TYPE_DYNAMIC;
 				case FunctionCode(_, _): Little.keywords.TYPE_FUNCTION;
 				case ConditionCode(_): Little.keywords.TYPE_CONDITION;
+				case ClassPointer(_): Little.keywords.TYPE_MODULE;
 				case _: throw "How did we get here? 3";
 			},
 		}

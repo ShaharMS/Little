@@ -138,6 +138,8 @@ enum InterpTokens {
     Characters(string:String);
 	/**String UTF8**/
 	Documentation(doc:String);
+	/**32/64bit memory pointer**/
+	ClassPointer(pointer:MemoryPointer);
 	/**String UTF8**/
 	Sign(sign:String);
 	/**`null`**/

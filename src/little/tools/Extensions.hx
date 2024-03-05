@@ -78,6 +78,7 @@ class Extensions {
 			case FunctionCode(requiredParams, body): return Little.keywords.TYPE_FUNCTION;
 			case Sign(sign): return Little.keywords.TYPE_SIGN;
 			case Object(_, _, typeName): return typeName;
+			case ClassPointer(pointer): return Little.keywords.TYPE_MODULE;
 			case _: throw '$token is not a simple token (given $token)';
 		}
 	}
@@ -175,6 +176,7 @@ enum InterpTokensSimple {
 	DECIMAL;
 	CHARACTERS;
 	DOCUMENTATION;
+	CLASS_POINTER;
 	SIGN;
 	NULL_VALUE;
 	TRUE_VALUE;

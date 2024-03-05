@@ -195,6 +195,7 @@ class PrettyPrinter {
 			case FalseValue: return '${prefixFA(prefix)}$t$d ${FalseValue}\n';
 			case Identifier(word): return '${prefixFA(prefix)}$t$d ${word}\n';
 			case Documentation(doc): return '${prefixFA(prefix)}$t$d """${doc}"""\n';
+			case ClassPointer(pointer): return '${prefixFA(prefix)}$t$d ClassPointer: ${pointer}\n';
 			case HaxeExtern(func): return '${prefixFA(prefix)}$t$d <Haxe Extern>\n';
 			case VariableDeclaration(name, type, doc):
 				var title = '${prefixFA(prefix)}$t$d Variable Declaration\n';
@@ -392,6 +393,7 @@ class PrettyPrinter {
 				case NullValue: s += NULL_VALUE;
 				case TrueValue: s += TRUE_VALUE;
 				case FalseValue: s += FALSE_VALUE;
+				case ClassPointer(pointer): s += Little.memory != null ? Little.memory.getTypeName(pointer) : throw "No memory for ClassPointer token " + pointer;
 				case _: throw 'Stringifying token $token does not make sense, as it is represented by other tokens on parse time, and thus cannot appear in a non-manipulated InterpTokens AST';
 			}
 			s += " ";
