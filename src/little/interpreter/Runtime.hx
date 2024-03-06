@@ -116,7 +116,6 @@ class Runtime {
         **/
     public function throwError(token:InterpTokens, ?layer:Layer = INTERPRETER):InterpTokens {
 
-        trace('Thrown: $token');
         callStack.push(token);
         
         var module:String = currentModule, title:String = "", reason:String;
@@ -132,6 +131,8 @@ class Runtime {
         errorToken = token;
         errorThrown = true;        
         for (func in onErrorThrown) func(module, line, title, reason);
+
+        throw "Quitting..."; // Currently, no flag exists that disables immediate quitting, so this is fine.
 
         return token;
     }

@@ -10,7 +10,7 @@ enum abstract Layer(String) from String to String {
     var INTERPRETER_TOKEN_VALUE_STRINGIFIER = "Interpreter, Token Value Stringifier";
     var INTERPRETER_TOKEN_IDENTIFIER_STRINGIFIER = "Interpreter, Token Identifier Stringifier";
 	var MEMORY = "Memory";
-	var MEMORY_STACK = "Memory, Stack";
+	var MEMORY_REFERRER = "Memory, Referrer";
 	var MEMORY_STORAGE = "Memory, Storage";
 	var MEMORY_EXTERNAL_INTERFACING = "Memory, External Interfacing";
 	var MEMORY_SIZE_EVALUATOR = "Memory, Size Evaluator";
@@ -27,7 +27,7 @@ enum abstract Layer(String) from String to String {
             case INTERPRETER_TOKEN_VALUE_STRINGIFIER: 7;
             case INTERPRETER_TOKEN_IDENTIFIER_STRINGIFIER: 8;
 			case MEMORY: 9;
-			case MEMORY_STACK: 10;
+			case MEMORY_REFERRER: 10;
 			case MEMORY_STORAGE: 11;
 			case MEMORY_EXTERNAL_INTERFACING: 12;
 			case MEMORY_SIZE_EVALUATOR: 13;

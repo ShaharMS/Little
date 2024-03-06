@@ -104,17 +104,10 @@ class Main {
 					Sys.print("  >> ");
 					var input = Sys.stdin().readLine();
 					if (input == "run!") {
-						try {
-							Little.run(code, true);
-							trace(PrettyPrinter.printInterpreterAst(Interpreter.convert(...Parser.parse(Lexer.lex(code)))));
-							trace(Little.runtime.stdout.output);
-						} catch (e) {
-							trace(Lexer.lex(code));
-							trace(Parser.parse(Lexer.lex(code)));
-							trace(PrettyPrinter.printInterpreterAst(Interpreter.convert(...Parser.parse(Lexer.lex(code)))));
-							trace(e.details());
-							trace(Little.runtime.stdout.output);
-						}
+						Little.run(code, true);
+						trace(PrettyPrinter.printInterpreterAst(Interpreter.convert(...Parser.parse(Lexer.lex(code)))));
+						trace(Little.runtime.stdout.output);
+						Little.reset();
 						Sys.print(code.replaceFirst("\n", "  >> ").replace("\n", "\n  >> ") + "\n");
 					} else if (input == "default!") {
 						Sys.command("cls");
@@ -147,59 +140,12 @@ class Main {
 					}
 				}
 			} else {
-				try {
-					Little.run(input, true);
-					trace(PrettyPrinter.printInterpreterAst(Interpreter.convert(...Parser.parse(Lexer.lex(input)))));
-					trace(Little.runtime.stdout.output);
-				} catch (e) {
-					trace(Lexer.lex(input));
-					trace(Parser.parse(Lexer.lex(input)));
-					trace(PrettyPrinter.printInterpreterAst(Interpreter.convert(...Parser.parse(Lexer.lex(input)))));
-					trace(e.details());
-					trace(Little.runtime.stdout.output);
-				}
+				Little.run(input, true);
+				trace(PrettyPrinter.printInterpreterAst(Interpreter.convert(...Parser.parse(Lexer.lex(input)))));
+				trace(Little.runtime.stdout.output);
 				Little.reset();
 			}
 		}
-
-		// trace(Reflect.callMethod("hey", "hey".charAt, [0]));
-
-		// var path = FileSystem.absolutePath(Path.join([Sys.getCwd(), "test", "input.txt"]));
-		// var output = FileSystem.absolutePath(Path.join([Sys.getCwd(), "test", "output.txt"]));
-		// var ast = FileSystem.absolutePath(Path.join([Sys.getCwd(), "test", "ast.txt"]));
-		// var compilerError = FileSystem.absolutePath(Path.join([Sys.getCwd(), "test", "compiler_error.txt"]));
-		// trace(path, FileSystem.exists(path), output, FileSystem.exists(output), ast, FileSystem.exists(ast), compilerError, FileSystem.exists(compilerError));
-		// var lastModified = 0.;
-		// while (true) {
-		// 	var fileStats = FileSystem.stat(path);
-		// 	var currentModified = fileStats.mtime.getTime();
-		// 	if (currentModified != lastModified) {
-		// 		lastModified = currentModified;
-		// 		// Call your function here
-		// 		var code = File.getContent(path);
-		// 		if (code.endsWith("stop!")) {
-		// 			File.saveContent(path, code.substr(0, code.length - 6));
-		// 			break;
-		// 		}
-		// 		try {
-		// 			File.saveContent(ast, little.tools.PrettyPrinter.printParserAst(little.parser.Parser.parse(little.lexer.Lexer.lex(code))));
-		// 			File.saveContent(compilerError, "");
-		// 		} catch (e) {File.saveContent(compilerError, e.details());}
-
-		// 		try {
-		// 			Little.run(code);
-		// 			File.saveContent(output, Little.runtime.stdout);
-		// 			File.saveContent(compilerError, "");
-		// 		} catch (e) {File.saveContent(compilerError, e.details());}
-
-		// 	}
-
-		// 	// Sleep for some time before checking again
-		// 	Sys.sleep(1);
-		// }
-
-		// trace(PrettyPrinter.printParserAst(Interpreter.forceCorrectOrderOfOperations(Parser.parse(Lexer.lex('1 + 1 * 3')))));
-		// trace(Parser.parse(Lexer.lex('define x as String')));
 		#end
 	}
 }

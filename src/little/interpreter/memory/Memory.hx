@@ -82,6 +82,7 @@ class Memory {
 		- if `token` is `true`, `false`, `0`, or `null`, it pulls a pointer from the constant pool
 		- if `token` is a string, a number, a sign or a decimal, it stores & pulls a pointer from the storage.
 		- if `token` is a structure, it stores it on the storage, and returns a pointer to it.
+		- if `token` is a `ClassPointer`, it returns it's address.
 	**/
 	public function store(token:InterpTokens):MemoryPointer {
 		if (token.is(TRUE_VALUE, FALSE_VALUE, NULL_VALUE)) {
@@ -150,8 +151,9 @@ class Memory {
 		} else {
 
 			// If we didn't find anything on the externs, we look in the current scope.
-			// We don't care if the field is found or not, since its supposed
-			// To throw a runtime error that a variable was not found.
+			if (!referrer.exists(path[0])) {
+				Little.runtime.throwError(ErrorMessage('Variable `${path[0]}` does not exist'), MEMORY_REFERRER);
+			}
 			var data = referrer.get(path[0]);
 			current = switch data.type {
 				case (_ == Little.keywords.TYPE_STRING => true): Characters(storage.readString(data.address));
@@ -175,18 +177,7 @@ class Memory {
 			// Get the current field, and the type of that field as well
 			var identifier = processed.shift();
 			wentThroughPath.push(identifier);
-			var typeName = switch current {
-				case Object(_, _, type): type;
-				case Number(_): Little.keywords.TYPE_INT;
-				case Decimal(_): Little.keywords.TYPE_FLOAT;
-				case Characters(_): Little.keywords.TYPE_STRING;
-				case TrueValue | FalseValue: Little.keywords.TYPE_BOOLEAN;
-				case NullValue: Little.keywords.TYPE_DYNAMIC;
-				case FunctionCode(_, _): Little.keywords.TYPE_FUNCTION;
-				case ConditionCode(_): Little.keywords.TYPE_CONDITION;
-				case ClassPointer(_): Little.keywords.TYPE_MODULE;
-				case _: throw "How did we get here? 3";
-			}
+			var typeName = current.type();
 			// By design, the only other way properties are accessible on non-object
 			// values is through externs. So, after the object checks, we only need to look there.
 			// We should notice that, like before, externs are prioritized, so externs are evaluated first.
@@ -252,18 +243,7 @@ class Memory {
 		return {
 			objectValue: current,
 			objectAddress: currentAddress,
-			objectTypeName: switch current {
-				case Object(_, _, type): type;
-				case Number(_): Little.keywords.TYPE_INT;
-				case Decimal(_): Little.keywords.TYPE_FLOAT;
-				case Characters(_): Little.keywords.TYPE_STRING;
-				case TrueValue | FalseValue: Little.keywords.TYPE_BOOLEAN;
-				case NullValue: Little.keywords.TYPE_DYNAMIC;
-				case FunctionCode(_, _): Little.keywords.TYPE_FUNCTION;
-				case ConditionCode(_): Little.keywords.TYPE_CONDITION;
-				case ClassPointer(_): Little.keywords.TYPE_MODULE;
-				case _: throw "How did we get here? 3";
-			},
+			objectTypeName: current.type()
 		}
 	}
 
@@ -277,18 +257,7 @@ class Memory {
 			// Get the current field, and the type of that field as well
 			var identifier = processed.shift();
 			wentThroughPath.push(identifier);
-			var typeName = switch current {
-				case Object(_, _, type): type;
-				case Number(_): Little.keywords.TYPE_INT;
-				case Decimal(_): Little.keywords.TYPE_FLOAT;
-				case Characters(_): Little.keywords.TYPE_STRING;
-				case TrueValue | FalseValue: Little.keywords.TYPE_BOOLEAN;
-				case NullValue: Little.keywords.TYPE_DYNAMIC;
-				case FunctionCode(_, _): Little.keywords.TYPE_FUNCTION;
-				case ConditionCode(_): Little.keywords.TYPE_CONDITION;
-				case ClassPointer(_): Little.keywords.TYPE_MODULE;
-				case _: throw "How did we get here? 3";
-			}
+			var typeName = current.type();
 			// By design, the only other way properties are accessible on non-object
 			// values is through externs. So, after the object checks, we only need to look there.
 			// We should notice that, like before, externs are prioritized, so externs are evaluated first.
@@ -354,18 +323,7 @@ class Memory {
 		return {
 			objectValue: current,
 			objectAddress: currentAddress,
-			objectTypeName: switch current {
-				case Object(_, _, type): type;
-				case Number(_): Little.keywords.TYPE_INT;
-				case Decimal(_): Little.keywords.TYPE_FLOAT;
-				case Characters(_): Little.keywords.TYPE_STRING;
-				case TrueValue | FalseValue: Little.keywords.TYPE_BOOLEAN;
-				case NullValue: Little.keywords.TYPE_DYNAMIC;
-				case FunctionCode(_, _): Little.keywords.TYPE_FUNCTION;
-				case ConditionCode(_): Little.keywords.TYPE_CONDITION;
-				case ClassPointer(_): Little.keywords.TYPE_MODULE;
-				case _: throw "How did we get here? 3";
-			},
+			objectTypeName: current.type()
 		}
 	}
 

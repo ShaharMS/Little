@@ -1,5 +1,6 @@
 package little;
 
+import vision.helpers.VisionThread;
 import little.tools.PrettyPrinter;
 import little.interpreter.memory.Memory;
 import little.interpreter.KeywordConfig;
@@ -18,6 +19,8 @@ import little.Keywords.*;
 @:expose
 class Little {
     
+    public static var runningThread:VisionThread;
+
     public static var keywords(default, null):KeywordConfig = Keywords.defaultKeywordSet;
 
     public static var runtime(default, null):Runtime = new Runtime();
@@ -84,18 +87,22 @@ class Little {
         @param debug specifically specify whether or not to print more debugging information. Overrides default `Little.debug`.
     **/
     public static function run(code:String, ?debug:Bool) {
-        final previous = Little.debug;
-        if (debug != null) Little.debug = debug;
-        if (!PrepareRun.prepared) {
-            PrepareRun.addTypes();
-			PrepareRun.addSigns();
-            PrepareRun.addFunctions();
-            PrepareRun.addConditions();
-            PrepareRun.addProps();
+        try {
+            final previous = Little.debug;
+            if (debug != null) Little.debug = debug;
+            if (!PrepareRun.prepared) {
+                PrepareRun.addTypes();
+		    	PrepareRun.addSigns();
+                PrepareRun.addFunctions();
+                PrepareRun.addConditions();
+                PrepareRun.addProps();
+            }
+            runtime.currentModule = keywords.MAIN_MODULE_NAME;
+            Actions.run(Interpreter.convert(...Parser.parse(Lexer.lex(code))));
+            if (debug != null) Little.debug = previous;
+        } catch (e) {
+            trace(e.message);
         }
-        runtime.currentModule = keywords.MAIN_MODULE_NAME;
-        Actions.run(Interpreter.convert(...Parser.parse(Lexer.lex(code))));
-        if (debug != null) Little.debug = previous;
     }
 
 	public static function reset() {
