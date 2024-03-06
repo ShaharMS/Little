@@ -43,7 +43,7 @@ class UnitTests {
 	static var UNDERLINE = "\033[4m";
 
 	public static function run(bulk:Bool = false) {
-		var testFunctions = [test1, test2, test3, /*test4,*/ test5, test6, test7, test8, test9, test10, test11];
+		var testFunctions = [test1, test2, test3, /*test4,*/ test5, test6, test7, test8, test9, test10, test11, test12];
 
 		var i = 1;
 		for (func in testFunctions) {
@@ -216,6 +216,19 @@ class UnitTests {
 			success: !Lambda.has([for (i in 0...2) Type.enumEq(exp.getParameters()[0][i], result.getParameters()[0][i])], false),
 			returned: result,
 			expected: exp,
+			code: code
+		}
+	}
+
+	public static function test12():UnitTestResult {
+		var code = 'define a = {define b = 3, (b * 10)}, print({a = a + 3, a})';
+		Little.run(code);
+		var result = Little.runtime.stdout.stdoutTokens.pop();
+		return {
+			testName: "Inline Blocks",
+			success: result.equals(Number(33)),
+			returned: result,
+			expected: Number(33),
 			code: code
 		}
 	}

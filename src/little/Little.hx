@@ -101,7 +101,8 @@ class Little {
             Actions.run(Interpreter.convert(...Parser.parse(Lexer.lex(code))));
             if (debug != null) Little.debug = previous;
         } catch (e) {
-            trace(e.message);
+            
+            e.message == "Quitting..." ? trace(e.message) : trace(e.details());
         }
     }
 

@@ -29,7 +29,6 @@ class Actions {
     **/
     public static function error(message:String, layer:Layer = INTERPRETER):InterpTokens {
         Little.runtime.throwError(ErrorMessage(message), layer);
-        trace(Little.runtime.stdout.output);
         throw "";
         return ErrorMessage(message);
     }
@@ -291,7 +290,6 @@ class Actions {
 		@return The value given, casted to the type.
 	**/
     public static function typeCast(value:InterpTokens, type:InterpTokens):InterpTokens {
-        if (Math.random() > 0.9999) trace(PrettyPrinter.stringifyInterpreter(value));
 		if (value.is(NUMBER) && type.parameter(0) == Little.keywords.TYPE_FLOAT) {
 			return Decimal(value.parameter(0));
 		}
@@ -433,7 +431,6 @@ class Actions {
 				if (path.filter(p -> !p.is(IDENTIFIER)).length == 0) {
 					return read(exp);
 				} else if (!path[0].is(IDENTIFIER) && path.slice(1).filter(p -> !p.is(IDENTIFIER)).length == 0) {
-					trace('Accessing inline value: ${path.join(Little.keywords.PROPERTY_ACCESS_SIGN)}');
 					var value = Actions.evaluate(path[0]);
 					return memory.readFrom({
 						objectValue: value,
@@ -470,7 +467,7 @@ class Actions {
 	**/
     public static function calculate(p:Array<InterpTokens>):InterpTokens {
 
-        while (p.length == 1 && p[0].parameter(0) is Array) p = p[0].parameter(0);
+        while (p.length == 1 && p[0].parameter(0) is Array && !p[0].is(BLOCK)) p = p[0].parameter(0);
 
 		var tokens = group(p);
         var castType:InterpTokens = null;
@@ -479,6 +476,9 @@ class Actions {
             if (tokens[0].is(PART_ARRAY)) tokens = tokens[0].parameter(0);
             else if (tokens[0].is(EXPRESSION)) {
                 tokens = tokens[0].parameter(0);
+                castType = tokens[0].parameter(1);
+            } else if (tokens[0].is(BLOCK)) {
+                tokens = [run(tokens[0].parameter(0))];
                 castType = tokens[0].parameter(1);
             }
         }

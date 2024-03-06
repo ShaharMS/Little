@@ -91,7 +91,7 @@ class Main {
 		#elseif js
 		new JsExample();
 		#elseif unit
-		UnitTests.run();
+		UnitTests.run(true);
 		#elseif sys
 		while (true) {
 			Sys.print("  >> ");
