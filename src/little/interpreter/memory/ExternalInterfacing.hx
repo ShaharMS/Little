@@ -1,9 +1,5 @@
 package little.interpreter.memory;
 
-import haxe.extern.EitherType;
-import haxe.Exception;
-import little.tools.Conversion;
-import little.tools.Tree;
 import little.interpreter.Tokens.InterpTokens;
 
 class ExternalInterfacing {

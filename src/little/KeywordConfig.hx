@@ -1,4 +1,4 @@
-package little.interpreter;
+package little;
 
 @:structInit
 class KeywordConfig {
@@ -80,4 +80,6 @@ class KeywordConfig {
     @:optional public var FOR_LOOP_JUMP = "jump";
 
     @:optional public var TYPE_CAST_FUNCTION_PREFIX:String = "to";
+
+	@:optional public var ELSE = "else";
 }

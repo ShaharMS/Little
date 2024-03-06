@@ -4,7 +4,6 @@ import little.tools.Layer;
 import little.tools.PrettyPrinter;
 import little.parser.Tokens.ParserTokens;
 import little.lexer.Tokens.LexerTokens;
-import little.Keywords.*;
 import little.interpreter.Runtime;
 
 using StringTools;
@@ -200,7 +199,7 @@ class Parser {
             switch token {
                 case SetLine(line): {setLine(line); post.push(token);}
                 case SplitLine: {nextPart(); post.push(token);}
-                case Sign(_ == PROPERTY_ACCESS_SIGN => true): {
+                case Sign(_ == Little.keywords.PROPERTY_ACCESS_SIGN => true): {
                     if (i + 1 >= pre.length) {
                         Little.runtime.throwError(ErrorMessage("Property access cut off by the end of file, block or expression."), Layer.PARSER);
                         return null;
@@ -258,14 +257,14 @@ class Parser {
                 case SetLine(line): {setLine(line); post.push(token);}
                 case SplitLine: {nextPart(); post.push(token);}
                 case Identifier(word): {
-                    if (word == TYPE_DECL_OR_CAST && i + 1 < pre.length) {
+                    if (word == Little.keywords.TYPE_DECL_OR_CAST && i + 1 < pre.length) {
                         var lookahead = pre[i + 1];
                         post.push(TypeDeclaration(null, mergeTypeDecls([lookahead])[0]));
                         i++;
-                    } else if (word == TYPE_DECL_OR_CAST) {
+                    } else if (word == Little.keywords.TYPE_DECL_OR_CAST) {
                         // Throw error for incomplete type declarations;
                     if (i + 1 == pre.length) {
-                        Little.runtime.throwError(ErrorMessage('Incomplete type declaration, make sure to input a type after the `$TYPE_DECL_OR_CAST`.'));
+                        Little.runtime.throwError(ErrorMessage('Incomplete type declaration, make sure to input a type after the `${Little.keywords.TYPE_DECL_OR_CAST}`.'));
                         return null;
                     }
                     } else {
@@ -323,7 +322,7 @@ class Parser {
                                 break;
                             }
                             case SetLine(_) | SplitLine | Sign("="): i--; break;
-                            case Sign(_ == PROPERTY_ACCESS_SIGN => true): {
+                            case Sign(_ == Little.keywords.PROPERTY_ACCESS_SIGN => true): {
                                 pushToName = true;
                                 name.push(lookahead);
                             }
@@ -388,7 +387,7 @@ class Parser {
                                 break;
                             }
                             case Sign("="): i--; break;
-                            case Sign(_ == PROPERTY_ACCESS_SIGN => true): {
+                            case Sign(_ == Little.keywords.PROPERTY_ACCESS_SIGN => true): {
                                 if (params != null) {i--; break;}
                                 pushToName = true;
                                 name.push(lookahead);
@@ -412,7 +411,7 @@ class Parser {
                             case _: {
                                 if (pushToName) {name.push(lookahead); pushToName = false;}
                                 else if (params == null) params = lookahead;
-                                else if (type == null && lookahead.getName() == "TypeDeclaration") type = mergeComplexStructures([lookahead.getParameters()[1]])[0];
+                                else if (type == null && lookahead.getName() == "TypeDeclaration") type = mergeComplexStructures([lookahead.parameter(1)])[0];
                                 else {
                                     break;
                                 }
@@ -454,11 +453,11 @@ class Parser {
                         continue;
                     }
 
-                    var name:ParserTokens = Identifier(token.getParameters()[0]);
+                    var name:ParserTokens = Identifier(token.parameter(0));
                     var exp:ParserTokens = null;
                     var body:ParserTokens = null;
 
-					var fallback = i - 1; // Reason for -1 here is because of the lookahead - if this isnt a condition, i-1 is pushed and i is the next token.
+					var fallback = i - 1; // Reason for -1 here is because of the lookahead - if this isn't a condition, i-1 is pushed and i is the next token.
 
                     while (true) {
                         if (i >= pre.length) {
@@ -790,7 +789,7 @@ class Parser {
             switch token {
                 case SetLine(line): {setLine(line); post.push(token);}
                 case SplitLine: {nextPart(); post.push(token);}
-                case Identifier(_ == ELSE => true): {
+                case Identifier(_ == Little.keywords.ELSE => true): {
                     if (post.length == 0 || !post[post.length - 1].is(CONDITION_CALL)) {
                         post.push(token);
                         i++;
@@ -800,17 +799,17 @@ class Parser {
                         Little.runtime.throwError(ErrorMessage('Condition has no body, body may be cut off by the end of file, block or expression.'), PARSER);
                         return null;
                     }
-                    var exp:ParserTokens = post[post.length - 1].getParameters()[1]; //Condition(name:ParserTokens, ->exp:ParserTokens<-, body:ParserTokens, type:ParserTokens)
+                    var exp:ParserTokens = post[post.length - 1].parameter(1); //Condition(name:ParserTokens, ->exp:ParserTokens<-, body:ParserTokens, type:ParserTokens)
                     exp = Expression([exp, Sign("!="), TrueValue], null);
                     i++;
                     var body:ParserTokens = pre[i];
                     switch body {
                         case SplitLine: {
-                            Little.runtime.throwError(ErrorMessage('`$ELSE` condition has no body, body cut off by a line split, or does not exist'), PARSER);
+                            Little.runtime.throwError(ErrorMessage('`${Little.keywords.ELSE}` condition has no body, body cut off by a line split, or does not exist'), PARSER);
                             return null;
                         }
                         case SetLine(_): {
-                            Little.runtime.throwError(ErrorMessage('`$ELSE` condition has no body, body cut off by a new line, or does not exist'), PARSER);
+                            Little.runtime.throwError(ErrorMessage('`${Little.keywords.ELSE}` condition has no body, body cut off by a new line, or does not exist'), PARSER);
                             return null;
                         }
 						case ConditionCall(Identifier("if"), exp2, body): post.push(ConditionCall(Identifier("if"), Expression([exp, Sign("&&"), exp2], null) , !body.is(BLOCK) ? Block([body], null) : body));

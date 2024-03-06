@@ -4,7 +4,6 @@ import haxe.ds.StringMap;
 import little.interpreter.memory.MemoryPointer;
 import little.interpreter.memory.ExternalInterfacing.ExtTree;
 import little.interpreter.memory.Memory;
-import little.interpreter.Actions;
 import little.interpreter.Operators;
 import haxe.exceptions.ArgumentException;
 import little.interpreter.Operators.OperatorType;
@@ -15,7 +14,6 @@ import little.parser.Parser;
 import little.interpreter.Interpreter;
 import little.interpreter.Tokens.InterpTokens;
 import little.Little.*;
-import little.Keywords.*;
 
 using little.tools.Plugins;
 using little.tools.Extensions;
@@ -78,7 +76,7 @@ class Plugins {
                     var name = key.split(" ")[2];
                     var type = memory.getTypeInformation(key.split(" ")[1]).pointer;
                     instances.properties[name] = new ExtTree(type, (value, address) -> {
-                        // We can't optimize for the two cases outside of the callback, since haxe doesnt support
+                        // We can't optimize for the two cases outside of the callback, since haxe doesn't support
                         // type checking on function types.
                         try {
                             var result = untyped field(value, address);
@@ -128,7 +126,7 @@ class Plugins {
                         return {
                             objectValue: FunctionCode(paramMap, Block([
                                 FunctionReturn(HaxeExtern(() -> {
-                                    var result = (field : (MemoryPointer, InterpTokens, Array<InterpTokens>) -> InterpTokens)(address, value, paramMap.keys().toArray().map(key -> Actions.evaluate(memory.read(key).objectValue)));
+                                    var result = (field : (MemoryPointer, InterpTokens, Array<InterpTokens>) -> InterpTokens)(address, value, paramMap.keys().toArray().map(key -> Interpreter.evaluate(memory.read(key).objectValue)));
                                     return result;
                                 }), returnType)
                             ], returnType)),
@@ -194,7 +192,7 @@ class Plugins {
                         return {
                             objectValue: FunctionCode(paramMap, Block([
                                 FunctionReturn(HaxeExtern(() -> {
-                                    var result = (field : (Array<InterpTokens>) -> InterpTokens)(paramMap.keys().toArray().map(key -> Actions.evaluate(memory.read(key).objectValue)));
+                                    var result = (field : (Array<InterpTokens>) -> InterpTokens)(paramMap.keys().toArray().map(key -> Interpreter.evaluate(memory.read(key).objectValue)));
                                     return result;
                                 }), returnType)
                             ], returnType)),
@@ -203,7 +201,7 @@ class Plugins {
                     });
                 }
 
-                case _: throw 'Invalid key syntax for `$key`. Must start with either `public`/`static` `function`/`var`, and end with a variable name. (Example: `public var myVar`). Each item must be seperated by a single whitespace.';
+                case _: throw 'Invalid key syntax for `$key`. Must start with either `public`/`static` `function`/`var`, and end with a variable name. (Example: `public var myVar`). Each item must be separated by a single whitespace.';
             }
         }
     }
@@ -283,7 +281,7 @@ class Plugins {
 
 		var returnTypeToken = Interpreter.convert(...Parser.parse(Lexer.lex(returnType)))[0]; // May be a PropertyAccess or an Identifier
         var token:InterpTokens = FunctionCode(paramMap, Block([
-            FunctionReturn(HaxeExtern(() -> callback(paramMap.keys().toArray().map(key -> Actions.evaluate(memory.read(key).objectValue)))), returnTypeToken)
+            FunctionReturn(HaxeExtern(() -> callback(paramMap.keys().toArray().map(key -> Interpreter.evaluate(memory.read(key).objectValue)))), returnTypeToken)
         ], returnTypeToken));
         
         var object = memory.externs.createPathFor(memory.externs.globalProperties, ...functionPath);
@@ -415,7 +413,7 @@ class Plugins {
 			return try {
 				{
 					objectValue: FunctionCode(paramMap, Block([
-						FunctionReturn(HaxeExtern(() -> callback(v, a, paramMap.keys().toArray().map(key -> Actions.evaluate(memory.read(key).objectValue)))), returnTypeToken)
+						FunctionReturn(HaxeExtern(() -> callback(v, a, paramMap.keys().toArray().map(key -> Interpreter.evaluate(memory.read(key).objectValue)))), returnTypeToken)
 					], returnTypeToken)),
 					objectAddress: memory.constants.EXTERN,
 					// objectDoc: documentation ?? ""
@@ -448,7 +446,7 @@ class Plugins {
 			// A bunch of ifs in order to shorten the final callback function, improves performance a bit
             if (info.lhsAllowedTypes != null && info.rhsAllowedTypes == null && info.allowedTypeCombos == null) {
                 callbackFunc = (lhs, rhs) -> {
-                    final lType = Actions.evaluate(lhs).type(), rType = Actions.evaluate(rhs).type();
+                    final lType = Interpreter.evaluate(lhs).type(), rType = Interpreter.evaluate(rhs).type();
                     if (!info.lhsAllowedTypes.contains(lType)) {
                         return Little.runtime.throwError(ErrorMessage('Cannot preform $lType(${lhs.extractIdentifier()}) $symbol $rType(${rhs.extractIdentifier()}) - Left operand cannot be of type $lType (accepted types: ${info.lhsAllowedTypes})'));
                     }
@@ -457,7 +455,7 @@ class Plugins {
                 }
             } else if (info.lhsAllowedTypes == null && info.rhsAllowedTypes != null && info.allowedTypeCombos == null) {
                 callbackFunc = (lhs, rhs) -> {
-                    final lType = Actions.evaluate(lhs).type(), rType = Actions.evaluate(rhs).type();
+                    final lType = Interpreter.evaluate(lhs).type(), rType = Interpreter.evaluate(rhs).type();
                     if (!info.rhsAllowedTypes.contains(rType)) {
                         return Little.runtime.throwError(ErrorMessage('Cannot preform $lType(${lhs.extractIdentifier()}) $symbol $rType(${rhs.extractIdentifier()}) - Right operand cannot be of type $rType (accepted types: ${info.rhsAllowedTypes})'));
                     }
@@ -466,7 +464,7 @@ class Plugins {
                 }
             } else if (info.lhsAllowedTypes != null && info.rhsAllowedTypes != null && info.allowedTypeCombos == null) {
                 callbackFunc = (lhs, rhs) -> {
-                    final lType = Actions.evaluate(lhs).type(), rType = Actions.evaluate(rhs).type();
+                    final lType = Interpreter.evaluate(lhs).type(), rType = Interpreter.evaluate(rhs).type();
                     if (!info.rhsAllowedTypes.contains(rType)) {
                         return Little.runtime.throwError(ErrorMessage('Cannot preform $lType(${lhs.extractIdentifier()}) $symbol $rType(${rhs.extractIdentifier()}) - Right operand cannot be of type $rType (accepted types: ${info.rhsAllowedTypes})'));
                     }
@@ -479,7 +477,7 @@ class Plugins {
                 }
             } else if (info.lhsAllowedTypes != null && info.rhsAllowedTypes == null && info.allowedTypeCombos != null) {
                 callbackFunc = (lhs, rhs) -> {
-                    final lType = Actions.evaluate(lhs).type(), rType = Actions.evaluate(rhs).type();
+                    final lType = Interpreter.evaluate(lhs).type(), rType = Interpreter.evaluate(rhs).type();
                     if (!info.lhsAllowedTypes.contains(lType) && !info.allowedTypeCombos.containsCombo(lType, rType)) {
                         return Little.runtime.throwError(ErrorMessage('Cannot preform $lType(${lhs.extractIdentifier()}) $symbol $rType(${rhs.extractIdentifier()}) - Right operand cannot be of type $rType while left operand is of type $lType (accepted types for left operand: ${info.lhsAllowedTypes}, accepted type combinations: ${info.allowedTypeCombos.map(object -> '${object.rhs} $symbol ${object.lhs}')})'));
                     }
@@ -488,7 +486,7 @@ class Plugins {
                 }
             } else if (info.lhsAllowedTypes == null && info.rhsAllowedTypes != null && info.allowedTypeCombos != null) {
                 callbackFunc = (lhs, rhs) -> {
-                    final lType = Actions.evaluate(lhs).type(), rType = Actions.evaluate(rhs).type();
+                    final lType = Interpreter.evaluate(lhs).type(), rType = Interpreter.evaluate(rhs).type();
                     if (!info.rhsAllowedTypes.contains(rType) && !info.allowedTypeCombos.containsCombo(lType, rType)) {
                         return Little.runtime.throwError(ErrorMessage('Cannot preform $lType(${lhs.extractIdentifier()}) $symbol $rType(${rhs.extractIdentifier()}) - Right operand cannot be of type $rType while left operand is of type $lType (accepted types for right operand: ${info.rhsAllowedTypes}, accepted type combinations: ${info.allowedTypeCombos.map(object -> '${object.rhs} $symbol ${object.lhs}')})'));
                     }
@@ -497,7 +495,7 @@ class Plugins {
                 }
             } else if (info.lhsAllowedTypes != null && info.rhsAllowedTypes != null && info.allowedTypeCombos != null) {
                 callbackFunc = (lhs, rhs) -> {
-                    final lType = Actions.evaluate(lhs).type(), rType = Actions.evaluate(rhs).type();
+                    final lType = Interpreter.evaluate(lhs).type(), rType = Interpreter.evaluate(rhs).type();
                     if (!info.rhsAllowedTypes.contains(rType) && !info.allowedTypeCombos.containsCombo(lType, rType)) {
                         return Little.runtime.throwError(ErrorMessage('Cannot preform $lType(${lhs.extractIdentifier()}) $symbol ${rType}(${rhs.extractIdentifier()}) - Right operand cannot be of type $rType (accepted types: ${info.rhsAllowedTypes}, accepted type combinations: ${info.allowedTypeCombos.map(object -> '${object.rhs} $symbol ${object.lhs}')})'));
                     }
@@ -521,7 +519,7 @@ class Plugins {
 
 			if (info.operatorType == LHS_ONLY) {
 				callbackFunc = (lhs) -> {
-					var lType = Actions.evaluate(lhs).type();
+					var lType = Interpreter.evaluate(lhs).type();
 					if (!info.lhsAllowedTypes.contains(lType)) {
 						return Little.runtime.throwError(ErrorMessage('Cannot perform $lType(${lhs.extractIdentifier()})$symbol - Operand cannot be of type $lType (accepted types: ${info.lhsAllowedTypes})'));
 					}
@@ -530,7 +528,7 @@ class Plugins {
 				}
 			} else {
 				callbackFunc = (rhs) -> {
-                    var rType = Actions.evaluate(rhs).type();
+                    var rType = Interpreter.evaluate(rhs).type();
 					if (!info.rhsAllowedTypes.contains(rType)) {
 						return Little.runtime.throwError(ErrorMessage('Cannot perform $symbol$rType(${rhs.extractIdentifier()}) - Operand cannot be of type $rType (accepted types: ${info.rhsAllowedTypes})'));
 					}

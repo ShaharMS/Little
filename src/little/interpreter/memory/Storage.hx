@@ -6,7 +6,6 @@ import vision.tools.MathTools;
 import haxe.display.Display.Module;
 import little.interpreter.memory.MemoryPointer;
 import haxe.Int64;
-import little.tools.Tree;
 import haxe.ds.Either;
 import haxe.exceptions.ArgumentException;
 import little.interpreter.Tokens.InterpTokens;

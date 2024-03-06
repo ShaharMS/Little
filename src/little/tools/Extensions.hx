@@ -1,6 +1,5 @@
 package little.tools;
 
-import little.interpreter.Actions;
 import little.interpreter.Tokens.InterpTokens;
 import little.interpreter.Interpreter;
 import little.parser.Tokens.ParserTokens;
@@ -38,7 +37,7 @@ class Extensions {
 	}
 
 	public static inline function extractIdentifier(token:InterpTokens):String {
-		return is(token, IDENTIFIER, CHARACTERS) ? parameter(token, 0) : parameter(Actions.run([token]), 0);
+		return is(token, IDENTIFIER, CHARACTERS) ? parameter(token, 0) : parameter(Interpreter.run([token]), 0);
 	}
 
 	public static function asStringPath(token:InterpTokens):Array<String> {

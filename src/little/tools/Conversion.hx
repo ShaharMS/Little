@@ -1,13 +1,8 @@
 package little.tools;
 
-import haxe.DynamicAccess;
-import little.interpreter.Actions;
 import little.interpreter.Tokens.InterpTokens;
 import Type.ValueType;
 import little.interpreter.Interpreter;
-import haxe.Log;
-import haxe.macro.Expr;
-import little.Keywords.*;
 
 using little.tools.TextTools;
 using little.tools.Extensions;
@@ -83,7 +78,7 @@ class Conversion {
     }
 
     public static function toHaxeValue(val:InterpTokens):Dynamic {
-        val = Actions.evaluate(val);
+        val = Interpreter.evaluate(val);
         return switch val {
             case ErrorMessage(msg): {
                 trace("WARNING: " + msg + ". Returning null");
@@ -115,11 +110,11 @@ class Conversion {
 
     public static function toLittleType(type:String) {
         return switch type {
-            case "Bool": TYPE_BOOLEAN;
-            case "Int": TYPE_INT;
-            case "Float": TYPE_FLOAT;
-            case "String": TYPE_STRING;
-            case "Dynamic": TYPE_DYNAMIC;
+            case "Bool": Little.keywords.TYPE_BOOLEAN;
+            case "Int": Little.keywords.TYPE_INT;
+            case "Float": Little.keywords.TYPE_FLOAT;
+            case "String": Little.keywords.TYPE_STRING;
+            case "Dynamic": Little.keywords.TYPE_DYNAMIC;
             case _: type;
         }
     }

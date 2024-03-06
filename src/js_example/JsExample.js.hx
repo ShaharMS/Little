@@ -15,7 +15,7 @@ import little.Little;
 import js.Browser;
 
 using js_example.JsExample;
-import little.Keywords.*;
+
 class JsExample {
     
     var d = Browser.document;
@@ -85,7 +85,7 @@ class JsExample {
 
             var input = d.createInputElement();
             input.id = keyword;
-            input.placeholder = "single word, e.g. " + Reflect.field(Keywords.defaultKeywordSet, keyword);
+            input.placeholder = "single word, e.g. " + Reflect.field(Little,, keyword);
             input.onchange = () -> {
                 Reflect.setField(Keywords, keyword, input.value != null ? (input.value != "" ? input.value : Reflect.field(Keywords.defaultKeywordSet, keyword)) : Reflect.field(Keywords.defaultKeywordSet, keyword));
                 update();

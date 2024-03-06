@@ -1,10 +1,10 @@
 package little.lexer;
 
 import little.lexer.Tokens.LexerTokens;
-import little.Keywords.*;
 
 using StringTools;
 using little.tools.TextTools;
+using little.tools.Extensions;
 
 class Lexer {
     
@@ -86,9 +86,9 @@ class Lexer {
 
     public static function separateBooleanIdentifiers(tokens:Array<LexerTokens>):Array<LexerTokens> {
         return tokens.map(token -> {
-            if (Type.enumEq(token, Identifier(TRUE_VALUE)) || Type.enumEq(token, Identifier(FALSE_VALUE))) {
+            if (Type.enumEq(token, Identifier(Little.keywords.TRUE_VALUE)) || Type.enumEq(token, Identifier(Little.keywords.FALSE_VALUE))) {
                 Boolean(token.getParameters()[0]);
-            } else if (Type.enumEq(token, Identifier(NULL_VALUE))) {
+            } else if (Type.enumEq(token, Identifier(Little.keywords.NULL_VALUE))) {
                 NullValue;
             } else token;
         });
@@ -104,7 +104,7 @@ class Lexer {
             switch token {
                 case Sign(char): {
                     // First: reorder the keyword array by length
-                    var recognizedSigns = TextTools.sortByLength(RECOGNIZED_SIGNS.concat([PROPERTY_ACCESS_SIGN]));
+                    var recognizedSigns = TextTools.sortByLength(Little.keywords.RECOGNIZED_SIGNS.concat([Little.keywords.PROPERTY_ACCESS_SIGN]));
                     recognizedSigns.reverse();
 
                     var shouldContinue = false;

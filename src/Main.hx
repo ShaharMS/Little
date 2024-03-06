@@ -8,7 +8,6 @@ import haxe.SysTools;
 import haxe.Log;
 import vision.tools.MathTools;
 import haxe.io.Path;
-import little.tools.Data;
 import little.tools.Plugins;
 import little.tools.Conversion;
 import little.Little;

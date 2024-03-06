@@ -187,7 +187,7 @@ class Operators {
 	}
 
 	/**
-		Iterates over the operators in arrays ordred by their priority, from `0` to `n`.
+		Iterates over the operators in arrays ordered by their priority, from `0` to `n`.
 	**/
 	public static function iterateByPriority():Iterator<Array<{sign:String, side:OperatorType}>> {
 		var a = [for (x in priority.keys()) x];
@@ -214,7 +214,7 @@ class Operators {
 		for (i in 0...op.length)
 			if (!Lexer.signs.contains(op.charAt(i)))
 				Lexer.signs.push(op.charAt(i));
-		Keywords.RECOGNIZED_SIGNS.push(op);
+		Little.keywords.RECOGNIZED_SIGNS.push(op);
 		switch operatorType {
 			case LHS_RHS:
 				{

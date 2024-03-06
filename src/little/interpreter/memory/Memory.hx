@@ -1,10 +1,6 @@
 package little.interpreter.memory;
 
-import vision.ds.Queue;
 import little.tools.TextTools;
-import vision.ds.Color;
-import little.tools.Tree;
-import haxe.ds.Either;
 import little.interpreter.Tokens.InterpTokens;
 import vision.ds.ByteArray;
 
@@ -395,7 +391,7 @@ class Memory {
 			var current = referrer.get(pathCopy[0]);
 			while (pathCopy.length > 1) {
 				if (getTypeInformation(current.type).isStaticType) {
-					Little.runtime.throwError(ErrorMessage('Cannot set properties tovalues of a static type. Only objects can have dynamic properties (${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)} is `${current.type}`)'));
+					Little.runtime.throwError(ErrorMessage('Cannot set properties to values of a static type. Only objects can have dynamic properties (${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)} is `${current.type}`)'));
 				}
 				if (!HashTables.hashTableHasKey(HashTables.getHashTableOf(current.address, storage), pathCopy[0], storage)) {
 					var a = wentThroughPath.concat([pathCopy[0]]).join(Little.keywords.PROPERTY_ACCESS_SIGN);

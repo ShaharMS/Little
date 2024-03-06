@@ -6742,7 +6742,7 @@ little_interpreter_Actions.error = function(message,layer) {
 		layer = "Interpreter";
 	}
 	little_Little.runtime.throwError(little_interpreter_InterpTokens.ErrorMessage(message),layer);
-	haxe_Log.trace(little_Little.runtime.stdout.output,{ fileName : "src/little/interpreter/Actions.hx", lineNumber : 32, className : "little.interpreter.Actions", methodName : "error"});
+	haxe_Log.trace(little_Little.runtime.stdout.output,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 32, className : "little.interpreter.Actions", methodName : "error"});
 	throw haxe_Exception.thrown("");
 };
 little_interpreter_Actions.warn = function(message,layer) {

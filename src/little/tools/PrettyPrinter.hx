@@ -11,7 +11,6 @@ using little.tools.TextTools;
 
 import little.parser.Tokens;
 
-import little.Keywords.*;
 
 class PrettyPrinter {
     
@@ -77,9 +76,9 @@ class PrettyPrinter {
 			case Documentation(doc): return '${prefixFA(prefix)}$t$d Documentation: ${doc.replace("\n", "\n" + prefixFA(prefix) + '│                  ')}\n';
             case Decimal(num): return '${prefixFA(prefix)}$t$d $num\n';
             case Number(num): return '${prefixFA(prefix)}$t$d $num\n';
-            case FalseValue: return '${prefixFA(prefix)}$t$d ${Keywords.FALSE_VALUE}\n';
-            case TrueValue: return '${prefixFA(prefix)}$t$d ${Keywords.TRUE_VALUE}\n';
-            case NullValue: return '${prefixFA(prefix)}$t$d ${Keywords.NULL_VALUE}\n';
+            case FalseValue: return '${prefixFA(prefix)}$t$d ${Little.keywords.FALSE_VALUE}\n';
+            case TrueValue: return '${prefixFA(prefix)}$t$d ${Little.keywords.TRUE_VALUE}\n';
+            case NullValue: return '${prefixFA(prefix)}$t$d ${Little.keywords.NULL_VALUE}\n';
 			case Variable(name, type, doc):
 				{
 					var title = '${prefixFA(prefix)}$t$d Variable Creation\n';
@@ -296,12 +295,6 @@ class PrettyPrinter {
 					title += getTree_INTERP(value.value, i == [for (x in props.keys()) x].length ? prefix.copy() : pushIndex(prefix, level), level + 2, true);
 				}
 				return title;
-			case Class(name, instanceFields, staticFields):
-				var title = '${prefixFA(prefix)}$t$d Class\n';
-				title += getTree_INTERP(Identifier(name), prefix.copy(), level + 1, false);
-				title += getTree_INTERP(Identifier(instanceFields.toString()), prefix.copy(), level + 1, false);
-				title += getTree_INTERP(Identifier(staticFields.toString()), prefix.copy(), level + 1, true);
-				return title;
 			case ErrorMessage(msg): return '${prefixFA(prefix)}$t$d ${root}\n';
 		}
 	}
@@ -324,8 +317,8 @@ class PrettyPrinter {
 			switch token {
 				case SetLine(line):s += '\n$indent';
 				case SplitLine: s += ", ";
-				case Variable(name, type): s += '$VARIABLE_DECLARATION $name ${if (type != null) '$TYPE_DECL_OR_CAST ${stringifyParser(type)}' else ''}';
-				case Function(name, params, type): s += '$FUNCTION_DECLARATION ${stringifyParser(name)}(${stringifyParser(params)}) ${if (type != null) '$TYPE_DECL_OR_CAST ${stringifyParser(type)}' else ''}';
+				case Variable(name, type): s += '${Little.keywords.VARIABLE_DECLARATION} $name ${if (type != null) '${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyParser(type)}' else ''}';
+				case Function(name, params, type): s += '${Little.keywords.FUNCTION_DECLARATION} ${stringifyParser(name)}(${stringifyParser(params)}) ${if (type != null) '${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyParser(type)}' else ''}';
 				case ConditionCall(name, exp, body): 
 					indent += "	";
 					s += '${stringifyParser(name)} (${stringifyParser(exp)}) \n${stringifyParser(body)}';
@@ -333,25 +326,25 @@ class PrettyPrinter {
 				case Read(name): s += stringifyParser(name);
 				case Write(assignees, value): s += [assignees.concat([value]).map(t -> stringifyParser(t)).join(" = ")];
 				case Identifier(word): s += word;
-				case TypeDeclaration(value, type): s += '${stringifyParser(value)} $TYPE_DECL_OR_CAST ${stringifyParser(type)}';
+				case TypeDeclaration(value, type): s += '${stringifyParser(value)} ${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyParser(type)}';
 				case FunctionCall(name, params): s += '${stringifyParser(name)}(${stringifyParser(params)})';
-				case Return(value, type): s += '$FUNCTION_RETURN ${stringifyParser(value)}';
+				case Return(value, type): s += '${Little.keywords.FUNCTION_RETURN} ${stringifyParser(value)}';
 				case Expression(parts, type): s += stringifyParser(parts);
 				case Block(body, type): 
 					indent += "	";
-					s += '{${stringifyParser(body)}} ${if (type != null) '$TYPE_DECL_OR_CAST ${stringifyParser(type)}' else ''}';
+					s += '{${stringifyParser(body)}} ${if (type != null) '${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyParser(type)}' else ''}';
 					indent = indent.subtract("	");
 				case PartArray(parts): s += stringifyParser(parts);
-				case PropertyAccess(name, property): s += '${stringifyParser(name)}$PROPERTY_ACCESS_SIGN${stringifyParser(property)}';
+				case PropertyAccess(name, property): s += '${stringifyParser(name)}${Little.keywords.PROPERTY_ACCESS_SIGN}${stringifyParser(property)}';
 				case Sign(sign): s += " " + sign + " ";
 				case Number(num): s += num;
 				case Decimal(num): s += num;
 				case Characters(string): s += '"' + string + '"';
 				case Documentation(doc): s += '"""' + doc + '"""';
 				case ErrorMessage(msg):
-				case NullValue: s += NULL_VALUE;
-				case TrueValue: s += TRUE_VALUE;
-				case FalseValue: s += FALSE_VALUE;
+				case NullValue: s += Little.keywords.NULL_VALUE;
+				case TrueValue: s += Little.keywords.TRUE_VALUE;
+				case FalseValue: s += Little.keywords.FALSE_VALUE;
 				case Custom(_, _): throw 'Custom tokens cannot be stringified, as they dont represent any output syntax (found $token)';
 			}
 		}
@@ -367,32 +360,32 @@ class PrettyPrinter {
 			switch token {
 				case SetLine(line): s += '\n$indent';
 				case SplitLine: s += ", ";
-				case VariableDeclaration(name, type, doc): s += '$VARIABLE_DECLARATION ${stringifyInterpreter(name)} ${if (type != null) '$TYPE_DECL_OR_CAST ${stringifyInterpreter(type)}' else ''}';
-				case FunctionDeclaration(name, params, type, doc): s += '$FUNCTION_DECLARATION ${stringifyInterpreter(name)}(${stringifyInterpreter(params)}) ${if (type != null) '$TYPE_DECL_OR_CAST ${stringifyInterpreter(type)}' else ''}';
+				case VariableDeclaration(name, type, doc): s += '${Little.keywords.VARIABLE_DECLARATION} ${stringifyInterpreter(name)} ${if (type != null) '${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyInterpreter(type)}' else ''}';
+				case FunctionDeclaration(name, params, type, doc): s += '${Little.keywords.FUNCTION_DECLARATION} ${stringifyInterpreter(name)}(${stringifyInterpreter(params)}) ${if (type != null) '${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyInterpreter(type)}' else ''}';
 				case ConditionDeclaration(name, ct, doc): throw new NotImplementedException();
 				case ClassDeclaration(name, doc): throw new NotImplementedException();
 				case Write(assignees, value): s += assignees.concat([value]).map(t -> stringifyInterpreter(t)).join(" = ");
 				case Identifier(word): s += word;
-				case TypeCast(value, type): s += '${stringifyInterpreter(value)} $TYPE_DECL_OR_CAST ${stringifyInterpreter(type)}';
+				case TypeCast(value, type): s += '${stringifyInterpreter(value)} ${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyInterpreter(type)}';
 				case FunctionCall(name, params): s += '${stringifyInterpreter(name)}(${stringifyInterpreter(params)})';
 				case ConditionCall(name, exp, body): s += '${stringifyInterpreter(name)} (${stringifyInterpreter(exp)}) \n${stringifyInterpreter(body)}';
-				case FunctionReturn(value, type): s += '$FUNCTION_RETURN ${stringifyInterpreter(value)}';
+				case FunctionReturn(value, type): s += '${Little.keywords.FUNCTION_RETURN} ${stringifyInterpreter(value)}';
 				case Expression(parts, type): s += stringifyInterpreter(parts);
 				case Block(body, type): 
 					indent += "	";
-					s += '{${stringifyInterpreter(body)}} ${if (type != null) '$TYPE_DECL_OR_CAST ${stringifyInterpreter(type)}' else ''}';
+					s += '{${stringifyInterpreter(body)}} ${if (type != null) '${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyInterpreter(type)}' else ''}';
 					indent = indent.subtract("	");
 				case PartArray(parts): s += stringifyInterpreter(parts);
-				case PropertyAccess(name, property): s += '${stringifyInterpreter(name)}$PROPERTY_ACCESS_SIGN${stringifyInterpreter(property)}';
+				case PropertyAccess(name, property): s += '${stringifyInterpreter(name)}${Little.keywords.PROPERTY_ACCESS_SIGN}${stringifyInterpreter(property)}';
 				case Sign(sign): s += sign;
 				case Number(num): s += num;
 				case Decimal(num): s += num;
 				case Characters(string): s += '"' + string + '"';
 				case Documentation(doc): s += '"""' + doc + '"""';
 				case ErrorMessage(msg):
-				case NullValue: s += NULL_VALUE;
-				case TrueValue: s += TRUE_VALUE;
-				case FalseValue: s += FALSE_VALUE;
+				case NullValue: s += Little.keywords.NULL_VALUE;
+				case TrueValue: s += Little.keywords.TRUE_VALUE;
+				case FalseValue: s += Little.keywords.FALSE_VALUE;
 				case ClassPointer(pointer): s += Little.memory != null ? Little.memory.getTypeName(pointer) : throw "No memory for ClassPointer token " + pointer;
 				case _: throw 'Stringifying token $token does not make sense, as it is represented by other tokens on parse time, and thus cannot appear in a non-manipulated InterpTokens AST';
 			}

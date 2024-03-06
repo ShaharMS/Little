@@ -3,8 +3,6 @@ package little;
 import vision.helpers.VisionThread;
 import little.tools.PrettyPrinter;
 import little.interpreter.memory.Memory;
-import little.interpreter.KeywordConfig;
-import little.interpreter.Actions;
 import little.interpreter.Operators;
 import little.tools.Plugins;
 import little.tools.PrepareRun;
@@ -12,7 +10,6 @@ import little.lexer.Lexer;
 import little.parser.Parser;
 import little.interpreter.Interpreter;
 import little.interpreter.Runtime;
-import little.Keywords.*;
 
 @:access(little.interpreter.Interpreter)
 @:access(little.interpreter.Runtime)
@@ -21,7 +18,7 @@ class Little {
     
     public static var runningThread:VisionThread;
 
-    public static var keywords(default, null):KeywordConfig = Keywords.defaultKeywordSet;
+    public static var keywords(default, null):KeywordConfig = {};
 
     public static var runtime(default, null):Runtime = new Runtime();
     public static var operators(default, null) = Operators;
@@ -64,7 +61,7 @@ class Little {
                 PrepareRun.addConditions();
                 PrepareRun.addProps();
             }
-            Actions.run(Interpreter.convert(...Parser.parse(Lexer.lex(code))));
+            Interpreter.run(Interpreter.convert(...Parser.parse(Lexer.lex(code))));
             if (debug != null) Little.debug = previous;
         }
     }
@@ -98,7 +95,7 @@ class Little {
                 PrepareRun.addProps();
             }
             runtime.currentModule = keywords.MAIN_MODULE_NAME;
-            Actions.run(Interpreter.convert(...Parser.parse(Lexer.lex(code))));
+            Interpreter.run(Interpreter.convert(...Parser.parse(Lexer.lex(code))));
             if (debug != null) Little.debug = previous;
         } catch (e) {
             

@@ -2,7 +2,6 @@ package;
 
 import little.interpreter.Interpreter;
 import little.interpreter.Tokens.InterpTokens;
-import little.interpreter.Actions;
 import sys.io.File;
 import sys.FileSystem;
 import little.tools.PrettyPrinter;
@@ -16,6 +15,7 @@ import little.tools.Layer;
 
 using StringTools;
 using little.tools.TextTools;
+using little.tools.Extensions;
 
 typedef UnitTestResult = {
 	testName:String,
@@ -105,7 +105,7 @@ class UnitTests {
 		var exp = PartArray([Number(1), Number(5), Number(6)]);
 		return {
 			testName: "Function declaration",
-			success: !Lambda.has([for (i in 0...3) Type.enumEq(result.getParameters()[0][i], exp.getParameters()[0][i])], false),
+			success: !Lambda.has([for (i in 0...3) Type.enumEq(result.parameter(0)[i], exp.parameter(0)[i])], false),
 			returned: result,
 			expected: Characters("1, 5, 6"),
 			code: code
@@ -132,7 +132,7 @@ class UnitTests {
 		var exp = PartArray([Number(0), Number(1), Number(2), Number(3), Number(4), Number(5), Number(0), Number(3), Number(6), Number(9)]);
 		return {
 			testName: "Loops",
-			success: !Lambda.has([for (i in 0...10) Type.enumEq(exp.getParameters()[0][i], result.getParameters()[0][i])], false),
+			success: !Lambda.has([for (i in 0...10) Type.enumEq(exp.parameter(0)[i], result.parameter(0)[i])], false),
 			returned: result,
 			expected: exp,
 			code: code
@@ -146,7 +146,7 @@ class UnitTests {
 		var exp = PartArray([TrueValue, Characters("i has changed"), Characters("i is 6"), Characters("i has changed")]);
 		return {
 			testName: "Events and conditionals",
-			success: !Lambda.has([for (i in 0...4) Type.enumEq(exp.getParameters()[0][i], result.getParameters()[0][i])], false),
+			success: !Lambda.has([for (i in 0...4) Type.enumEq(exp.parameter(0)[i], result.parameter(0)[i])], false),
 			returned: result,
 			expected: exp,
 			code: code
@@ -169,7 +169,7 @@ class UnitTests {
 	public static function test8():UnitTestResult {
 		var code = '\ndefine x = 1.2\nx = (x + 2 * x) / x\nprint(x)';
 		Little.run(code);
-		var result = Actions.evaluate(Little.runtime.stdout.stdoutTokens.pop());
+		var result = Interpreter.evaluate(Little.runtime.stdout.stdoutTokens.pop());
 		return {
 			testName: "Self assignment",
 			success: result.equals(Decimal(3)),
@@ -199,7 +199,7 @@ class UnitTests {
 		var exp = PartArray([Number(5), Number(3)]);
 		return {
 			testName: "Nested code blocks",
-			success: !Lambda.has([for (i in 0...2) Type.enumEq(exp.getParameters()[0][i], result.getParameters()[0][i])], false),
+			success: !Lambda.has([for (i in 0...2) Type.enumEq(exp.parameter(0)[i], result.parameter(0)[i])], false),
 			returned: result,
 			expected: exp,
 			code: code
@@ -213,7 +213,7 @@ class UnitTests {
 		var exp = PartArray([TrueValue, TrueValue]);
 		return {
 			testName: "Constant pool",
-			success: !Lambda.has([for (i in 0...2) Type.enumEq(exp.getParameters()[0][i], result.getParameters()[0][i])], false),
+			success: !Lambda.has([for (i in 0...2) Type.enumEq(exp.parameter(0)[i], result.parameter(0)[i])], false),
 			returned: result,
 			expected: exp,
 			code: code
