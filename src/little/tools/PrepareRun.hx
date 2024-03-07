@@ -108,7 +108,7 @@ class PrepareRun {
 	public static function addFunctions() {
 		Little.plugin.registerFunction(Little.keywords.PRINT_FUNCTION_NAME, null, [VariableDeclaration(Identifier("item"), null)], (params) -> {
 			var eval = Interpreter.evaluate(params[0]);
-			Little.runtime.__print(PrettyPrinter.stringifyInterpreter(eval), eval);
+			Little.runtime.__print(eval.is(OBJECT) ? @:privateAccess PrettyPrinter.printInterpreterAst([eval]) : PrettyPrinter.stringifyInterpreter(eval), eval);
 			return NullValue;
 		}, Little.keywords.TYPE_DYNAMIC);
 		Little.plugin.registerFunction(Little.keywords.RAISE_ERROR_FUNCTION_NAME, null, [VariableDeclaration(Identifier("message"), null)], (params) -> {
