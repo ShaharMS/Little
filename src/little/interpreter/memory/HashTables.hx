@@ -1,5 +1,6 @@
 package little.interpreter.memory;
 
+import vision.tools.MathTools;
 import little.interpreter.memory.MemoryPointer.POINTER_SIZE;
 import haxe.Int64;
 import haxe.io.Bytes;
@@ -22,9 +23,9 @@ class HashTables {
         @param pairs an array of key-value-type triples 
     **/
     public static function generateObjectHashTable(pairs:Array<{key:String, keyPointer:MemoryPointer, value:MemoryPointer, type:MemoryPointer, doc:MemoryPointer}>) {
-        var initialLength = pairs.length * CELL_SIZE * 3; 
+        var initialLength = (pairs.length != 0 ? pairs.length : 5) * CELL_SIZE * 3; 
         // a memory pointer is 8 bytes, 3 pointers is `CELL_SIZE` bytes
-        // We double the memory for a nice size-to-store ratio (0.5)
+        // We triple the memory for a nice size-to-store ratio (0.33)
 
         var array = new ByteArray(initialLength);
 
@@ -121,10 +122,14 @@ class HashTables {
             khI64 += -keyHash;
         }
 
-        var keyIndex = (khI64 * CELL_SIZE % hashTable.length).low;
+        var keyIndex = ((khI64 * CELL_SIZE) % hashTable.length).low;
+        trace(keyIndex);
+        trace(hashTable.getInt32(keyIndex));
+        trace(storage.readInt32(hashTable.getInt32(keyIndex)));
+        trace(storage.readString(hashTable.getInt32(keyIndex)));
         var incrementation = 0;
         while (true) {
-            var currentKey = storage.readString(keyIndex);
+            var currentKey = storage.readString(hashTable.getInt32(keyIndex));
             if (currentKey == key) {
                 return true;
             }
@@ -142,18 +147,24 @@ class HashTables {
     public static function hashTableGetKey(hashTable:ByteArray, key:String, storage:Storage):{key:String, keyPointer:MemoryPointer, value:MemoryPointer, type:MemoryPointer, doc:MemoryPointer} {
         var keyHash = Murmur1.hash(Bytes.ofString(key));
 
-        var keyIndex = (Int64.mul(keyHash, CELL_SIZE) % hashTable.length).low;
+        var khI64 = Int64.make(0, keyHash);
+        if (keyHash < 0) {
+            khI64 = 2_147_483_647; // 32bit signed int limit
+            khI64 += -keyHash;
+        }
+
+        var keyIndex = ((khI64 * CELL_SIZE) % hashTable.length).low;
 
         var incrementation = 0;
         while (true) {
-            var currentKey = storage.readString(keyIndex);
+            var currentKey = storage.readString(hashTable.getInt32(keyIndex));
             if (currentKey == key) {
                 return {
                     key: key,
-                    keyPointer: MemoryPointer.fromInt(keyIndex),
-                    value: MemoryPointer.fromInt(keyIndex + POINTER_SIZE),
-                    type: MemoryPointer.fromInt(keyIndex + POINTER_SIZE * 2),
-                    doc: MemoryPointer.fromInt(keyIndex + POINTER_SIZE * 3)
+                    keyPointer: hashTable.getInt32(keyIndex),
+                    value: hashTable.getInt32(keyIndex + POINTER_SIZE),
+                    type: hashTable.getInt32(keyIndex + POINTER_SIZE * 2),
+                    doc: hashTable.getInt32(keyIndex + POINTER_SIZE * 3)
                 }
             }
 
@@ -190,19 +201,24 @@ class HashTables {
                 type: type,
                 doc: doc
             });
+
+            trace("Rehashing object: " + object.rawLocation);
+
             var newHashTable = HashTables.generateObjectHashTable(table);
             // Free the old hash table:
             storage.freeBytes(storage.readPointer(object.rawLocation + POINTER_SIZE), hashTableBytes.length);
             // Store the new one, retrieve the pointer to it:
             var tablePointer = storage.storeBytes(newHashTable.length, newHashTable);
+            trace(tablePointer, newHashTable.length);
             // Update the object's hash table pointer:
-            storage.setPointer(object.rawLocation + POINTER_SIZE, tablePointer);
+            storage.setPointer(object.rawLocation + 4, tablePointer);
             // Don't forget, the table length also needs to be replaced
             storage.setInt32(object.rawLocation, newHashTable.length); 
             return; // The object was rehashed, the given pointer is still valid and all fields are good. Done here.
         }
 
-        var hashTablePosition = storage.readPointer(object.rawLocation + POINTER_SIZE);
+        var hashTablePosition = storage.readPointer(object.rawLocation + 4);
+        trace("Adding key: " + key + " to object: " + object.rawLocation + " (hashTable: " + hashTablePosition + ")");
 
         var keyHash = Murmur1.hash(Bytes.ofString(key));
         var khI64 = Int64.make(0, keyHash);
@@ -210,7 +226,7 @@ class HashTables {
             khI64 = 2_147_483_647;
             khI64 += -keyHash;
         }
-        var keyIndex = (Int64.mul(khI64, CELL_SIZE) % tableSize).low;
+        var keyIndex = ((khI64 * CELL_SIZE) % hashTableBytes.length).low;
 
         var incrementation = 0;
 
@@ -235,19 +251,21 @@ class HashTables {
     }
 
     public static function objectSetKey(object:MemoryPointer, key:String, pair:{?value:MemoryPointer, ?type:MemoryPointer, ?doc:MemoryPointer}, storage:Storage) {
-        var hashTableBytes = storage.readBytes(storage.readPointer(object.rawLocation + 4), storage.readInt32(object.rawLocation));
+        var hashTableBytesLength = storage.readInt32(object.rawLocation);
         var hashTablePosition = storage.readPointer(object.rawLocation + 4);
+
         var keyHash = Murmur1.hash(Bytes.ofString(key));
         var khI64 = Int64.make(0, keyHash);
         if (keyHash < 0) {
             khI64 = 2_147_483_647;
             khI64 += -keyHash;
         }
-        var keyIndex = (Int64.mul(khI64, CELL_SIZE) % hashTableBytes.length).low;
+        var keyIndex = ((khI64 * CELL_SIZE) % hashTableBytesLength).low;
 
         var incrementation = 0;
         while (true) {
             var currentKey = storage.readString(storage.readPointer(hashTablePosition.rawLocation + keyIndex));
+            trace(currentKey);
             if (currentKey == key) {
                 if (pair.value != null)
                     storage.setInt32(hashTablePosition.rawLocation + keyIndex + POINTER_SIZE, pair.value.rawLocation);
@@ -255,24 +273,31 @@ class HashTables {
                     storage.setInt32(hashTablePosition.rawLocation + keyIndex + POINTER_SIZE * 2, pair.type.rawLocation);
                 if (pair.doc != null)
                     storage.setInt32(hashTablePosition.rawLocation + keyIndex + POINTER_SIZE * 3, pair.doc.rawLocation);
+
+                return;
             }
 
             keyIndex += CELL_SIZE;
             incrementation += CELL_SIZE;
-            if (keyIndex >= hashTableBytes.length) {
+            if (keyIndex >= hashTableBytesLength) {
                 keyIndex = 0;
             }
-            if (incrementation >= hashTableBytes.length) {
+            if (incrementation >= hashTableBytesLength) {
                 throw "How did you get here? 7";
             }
         }
         
     }
 
-	public static function getHashTableOf(objectPointer:MemoryPointer, storage:Storage) {
-		var byteLength = storage.readInt32(objectPointer.rawLocation);
-		var bytesPointer = storage.readPointer(objectPointer.rawLocation + 4);
+    public static function objectGetKey(object:MemoryPointer, key:String, storage:Storage) {
+        var hashTableBytes = storage.readBytes(storage.readPointer(object.rawLocation + POINTER_SIZE), storage.readInt32(object.rawLocation));
+        return hashTableGetKey(hashTableBytes, key, storage);
+    }
 
-		return storage.readBytes(bytesPointer, byteLength);
+	public static function getHashTableOf(objectPointer:MemoryPointer, storage:Storage) {
+		var bytesLength = storage.readInt32(objectPointer.rawLocation);
+		var bytesPointer = storage.readPointer(objectPointer.rawLocation + 4);
+        trace(bytesLength, bytesPointer, Little.memory.memory.length);
+		return storage.readBytes(bytesPointer, bytesLength);
 	}
 }

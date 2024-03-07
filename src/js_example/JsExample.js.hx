@@ -4,7 +4,6 @@ import js.html.SpanElement;
 import js.html.TableColElement;
 import js.html.Node;
 import js.Syntax;
-import little.Keywords;
 import haxe.display.Display.Keyword;
 import js.html.TableRowElement;
 import js.html.TableElement;
@@ -85,9 +84,9 @@ class JsExample {
 
             var input = d.createInputElement();
             input.id = keyword;
-            input.placeholder = "single word, e.g. " + Reflect.field(Little,, keyword);
+            input.placeholder = "single word, e.g. " + Reflect.field(Little.keywords, keyword);
             input.onchange = () -> {
-                Reflect.setField(Keywords, keyword, input.value != null ? (input.value != "" ? input.value : Reflect.field(Keywords.defaultKeywordSet, keyword)) : Reflect.field(Keywords.defaultKeywordSet, keyword));
+                Reflect.setField(Little.keywords, keyword, input.value != null ? (input.value != "" ? input.value : Reflect.field(Little.keywords, keyword)) : Reflect.field(Little.keywords, keyword));
                 update();
             }
 
@@ -116,35 +115,35 @@ class JsExample {
 
     public function getCodeExample(keyword:String) {
         return switch keyword {
-            case "VARIABLE_DECLARATION": '$VARIABLE_DECLARATION x $TYPE_DECL_OR_CAST $TYPE_INT = 8';
-            case "FUNCTION_DECLARATION": '$FUNCTION_DECLARATION y($VARIABLE_DECLARATION parameter, $VARIABLE_DECLARATION times $TYPE_DECL_OR_CAST $TYPE_INT) $TYPE_DECL_OR_CAST $TYPE_STRING =  {\n&nbsp;&nbsp;&nbsp;&nbsp;$FUNCTION_RETURN parameter * times\n}\n$PRINT_FUNCTION_NAME(y("Hey", 3))';
-            case "NULL_VALUE": 'if (x == $NULL_VALUE) {}\n$VARIABLE_DECLARATION x = $NULL_VALUE';
-            case "RUN_CODE_FUNCTION_NAME": '$RUN_CODE_FUNCTION_NAME("$PRINT_FUNCTION_NAME(5 + 3)")';
-            case "RAISE_ERROR_FUNCTION_NAME": '$RAISE_ERROR_FUNCTION_NAME("My Own Custom Error! :D")';
-            case "PRINT_FUNCTION_NAME": '$PRINT_FUNCTION_NAME("Hello World")';
-            case "TYPE_DECL_OR_CAST": '$VARIABLE_DECLARATION x $TYPE_DECL_OR_CAST $TYPE_STRING\nx = $TRUE_VALUE $TYPE_DECL_OR_CAST $TYPE_STRING //"$TRUE_VALUE"';
-			case "TYPE_CAST_FUNCTION_PREFIX": 'if (1$PROPERTY_ACCESS_SIGN$TYPE_CAST_FUNCTION_PREFIX$TYPE_BOOLEAN()) {\n&nbsp;&nbsp;&nbsp;&nbsp;$PRINT_FUNCTION_NAME("$TRUE_VALUE"$PROPERTY_ACCESS_SIGN$TYPE_CAST_FUNCTION_PREFIX$TYPE_BOOLEAN()$PROPERTY_ACCESS_SIGN$TYPE_CAST_FUNCTION_PREFIX$TYPE_INT())\n}';
-            case "TYPE_FLOAT": '$VARIABLE_DECLARATION x $TYPE_DECL_OR_CAST $TYPE_FLOAT = 8.8';
-            case "TYPE_INT": '$VARIABLE_DECLARATION x $TYPE_DECL_OR_CAST $TYPE_INT = 8';
-            case "TYPE_BOOLEAN": '$VARIABLE_DECLARATION x $TYPE_DECL_OR_CAST $TYPE_BOOLEAN = $TRUE_VALUE || $FALSE_VALUE';
-            case "TYPE_STRING": '$VARIABLE_DECLARATION x $TYPE_DECL_OR_CAST $TYPE_STRING = "Hey There!"';
-            case "TYPE_MODULE": '$VARIABLE_DECLARATION x $TYPE_DECL_OR_CAST $TYPE_MODULE = $TYPE_BOOLEAN';
-            case "TYPE_SIGN": '$VARIABLE_DECLARATION x $TYPE_DECL_OR_CAST $TYPE_SIGN = +';
-            case "FUNCTION_RETURN": '$FUNCTION_DECLARATION y() = {\n&nbsp;&nbsp;&nbsp;&nbsp;$FUNCTION_RETURN 8\n}';
-            case "READ_FUNCTION_NAME": '$VARIABLE_DECLARATION x = 3\n$READ_FUNCTION_NAME("x")';
-            case "TYPE_DYNAMIC": '$VARIABLE_DECLARATION x $TYPE_DECL_OR_CAST $TYPE_DYNAMIC = nothing';
-            case "PROPERTY_ACCESS_SIGN": '$VARIABLE_DECLARATION len = 8${PROPERTY_ACCESS_SIGN}type${PROPERTY_ACCESS_SIGN}length\n$PRINT_FUNCTION_NAME(len${PROPERTY_ACCESS_SIGN}type) //$TYPE_INT';
-            case "TRUE_VALUE": '$VARIABLE_DECLARATION x $TYPE_DECL_OR_CAST $TYPE_BOOLEAN = $TRUE_VALUE $OR_SIGN $FALSE_VALUE\nif ($TRUE_VALUE) {}';
-            case "FALSE_VALUE": '$VARIABLE_DECLARATION x $TYPE_DECL_OR_CAST $TYPE_BOOLEAN = $TRUE_VALUE $AND_SIGN $FALSE_VALUE\nif ($FALSE_VALUE) {}';
-			case "EQUALS_SIGN": '$VARIABLE_DECLARATION x = $TRUE_VALUE $EQUALS_SIGN $TRUE_VALUE\nif (x $EQUALS_SIGN $TRUE_VALUE) {}';
-			case "NOT_EQUALS_SIGN": '$VARIABLE_DECLARATION x = $TRUE_VALUE $NOT_EQUALS_SIGN $TRUE_VALUE\nif (x $NOT_EQUALS_SIGN $TRUE_VALUE) {}';
-			case "LARGER_SIGN": '$VARIABLE_DECLARATION x = 5\nif (x $LARGER_SIGN 1) {}';
-			case "SMALLER_SIGN": '$VARIABLE_DECLARATION x = -5\nif (x $SMALLER_SIGN 1) {}';
-			case "LARGER_EQUALS_SIGN": '$VARIABLE_DECLARATION x = 5\nif (x $LARGER_EQUALS_SIGN 1 + 4) {}';
-			case "SMALLER_EQUALS_SIGN": '$VARIABLE_DECLARATION x = 5\nif (x $SMALLER_EQUALS_SIGN -(1 + 4)) {}';
-			case "XOR_SIGN": '$VARIABLE_DECLARATION x = $TRUE_VALUE $XOR_SIGN $TRUE_VALUE\nif (x $XOR_SIGN $TRUE_VALUE) {}';
-			case "OR_SIGN": '$VARIABLE_DECLARATION x = $TRUE_VALUE $OR_SIGN $TRUE_VALUE\nif (x $OR_SIGN $TRUE_VALUE) {}';
-			case "AND_SIGN": '$VARIABLE_DECLARATION x = $TRUE_VALUE $AND_SIGN $TRUE_VALUE\nif (x $AND_SIGN $TRUE_VALUE) {}';
+            case "VARIABLE_DECLARATION": '${Little.keywords.VARIABLE_DECLARATION} x ${Little.keywords.TYPE_DECL_OR_CAST} ${Little.keywords.TYPE_INT} = 8';
+            case "FUNCTION_DECLARATION": '${Little.keywords.FUNCTION_DECLARATION} y(${Little.keywords.VARIABLE_DECLARATION} parameter, ${Little.keywords.VARIABLE_DECLARATION} times ${Little.keywords.TYPE_DECL_OR_CAST} ${Little.keywords.TYPE_INT}) ${Little.keywords.TYPE_DECL_OR_CAST} ${Little.keywords.TYPE_STRING} =  {\n&nbsp;&nbsp;&nbsp;&nbsp;${Little.keywords.FUNCTION_RETURN} parameter * times\n}\n${Little.keywords.PRINT_FUNCTION_NAME}(y("Hey", 3))';
+            case "NULL_VALUE": 'if (x == ${Little.keywords.NULL_VALUE}) {}\n${Little.keywords.VARIABLE_DECLARATION} x = ${Little.keywords.NULL_VALUE}';
+            case "RUN_CODE_FUNCTION_NAME": '${Little.keywords.RUN_CODE_FUNCTION_NAME}("${Little.keywords.PRINT_FUNCTION_NAME}(5 + 3)")';
+            case "RAISE_ERROR_FUNCTION_NAME": '${Little.keywords.RAISE_ERROR_FUNCTION_NAME}("My Own Custom Error! :D")';
+            case "PRINT_FUNCTION_NAME": '${Little.keywords.PRINT_FUNCTION_NAME}("Hello World")';
+            case "TYPE_DECL_OR_CAST": '${Little.keywords.VARIABLE_DECLARATION} x ${Little.keywords.TYPE_DECL_OR_CAST} ${Little.keywords.TYPE_STRING}\nx = ${Little.keywords.TRUE_VALUE} ${Little.keywords.TYPE_DECL_OR_CAST} ${Little.keywords.TYPE_STRING} //"${Little.keywords.TRUE_VALUE}"';
+			case "TYPE_CAST_FUNCTION_PREFIX": 'if (1${Little.keywords.PROPERTY_ACCESS_SIGN}${Little.keywords.TYPE_CAST_FUNCTION_PREFIX}${Little.keywords.TYPE_BOOLEAN}()) {\n&nbsp;&nbsp;&nbsp;&nbsp;${Little.keywords.PRINT_FUNCTION_NAME}("${Little.keywords.TRUE_VALUE}"${Little.keywords.PROPERTY_ACCESS_SIGN}${Little.keywords.TYPE_CAST_FUNCTION_PREFIX}${Little.keywords.TYPE_BOOLEAN}()${Little.keywords.PROPERTY_ACCESS_SIGN}${Little.keywords.TYPE_CAST_FUNCTION_PREFIX}${Little.keywords.TYPE_INT}())\n}';
+            case "TYPE_FLOAT": '${Little.keywords.VARIABLE_DECLARATION} x ${Little.keywords.TYPE_DECL_OR_CAST} ${Little.keywords.TYPE_FLOAT} = 8.8';
+            case "TYPE_INT": '${Little.keywords.VARIABLE_DECLARATION} x ${Little.keywords.TYPE_DECL_OR_CAST} ${Little.keywords.TYPE_INT} = 8';
+            case "TYPE_BOOLEAN": '${Little.keywords.VARIABLE_DECLARATION} x ${Little.keywords.TYPE_DECL_OR_CAST} ${Little.keywords.TYPE_BOOLEAN} = ${Little.keywords.TRUE_VALUE} || ${Little.keywords.FALSE_VALUE}';
+            case "TYPE_STRING": '${Little.keywords.VARIABLE_DECLARATION} x ${Little.keywords.TYPE_DECL_OR_CAST} ${Little.keywords.TYPE_STRING} = "Hey There!"';
+            case "TYPE_MODULE": '${Little.keywords.VARIABLE_DECLARATION} x ${Little.keywords.TYPE_DECL_OR_CAST} ${Little.keywords.TYPE_MODULE} = ${Little.keywords.TYPE_BOOLEAN}';
+            case "TYPE_SIGN": '${Little.keywords.VARIABLE_DECLARATION} x ${Little.keywords.TYPE_DECL_OR_CAST} ${Little.keywords.TYPE_SIGN} = +';
+            case "FUNCTION_RETURN": '${Little.keywords.FUNCTION_DECLARATION} y() = {\n&nbsp;&nbsp;&nbsp;&nbsp;${Little.keywords.FUNCTION_RETURN} 8\n}';
+            case "READ_FUNCTION_NAME": '${Little.keywords.VARIABLE_DECLARATION} x = 3\n${Little.keywords.READ_FUNCTION_NAME}("x")';
+            case "TYPE_DYNAMIC": '${Little.keywords.VARIABLE_DECLARATION} x ${Little.keywords.TYPE_DECL_OR_CAST} ${Little.keywords.TYPE_DYNAMIC} = nothing';
+            case "PROPERTY_ACCESS_SIGN": '${Little.keywords.VARIABLE_DECLARATION} len = 8${Little.keywords.PROPERTY_ACCESS_SIGN}type${Little.keywords.PROPERTY_ACCESS_SIGN}length\n${Little.keywords.PRINT_FUNCTION_NAME}(len${Little.keywords.PROPERTY_ACCESS_SIGN}type) //${Little.keywords.TYPE_INT}';
+            case "TRUE_VALUE": '${Little.keywords.VARIABLE_DECLARATION} x ${Little.keywords.TYPE_DECL_OR_CAST} ${Little.keywords.TYPE_BOOLEAN} = ${Little.keywords.TRUE_VALUE} ${Little.keywords.OR_SIGN} ${Little.keywords.FALSE_VALUE}\nif (${Little.keywords.TRUE_VALUE}) {}';
+            case "FALSE_VALUE": '${Little.keywords.VARIABLE_DECLARATION} x ${Little.keywords.TYPE_DECL_OR_CAST} ${Little.keywords.TYPE_BOOLEAN} = ${Little.keywords.TRUE_VALUE} ${Little.keywords.AND_SIGN} ${Little.keywords.FALSE_VALUE}\nif (${Little.keywords.FALSE_VALUE}) {}';
+			case "EQUALS_SIGN": '${Little.keywords.VARIABLE_DECLARATION} x = ${Little.keywords.TRUE_VALUE} ${Little.keywords.EQUALS_SIGN} ${Little.keywords.TRUE_VALUE}\nif (x ${Little.keywords.EQUALS_SIGN} ${Little.keywords.TRUE_VALUE}) {}';
+			case "NOT_EQUALS_SIGN": '${Little.keywords.VARIABLE_DECLARATION} x = ${Little.keywords.TRUE_VALUE} ${Little.keywords.NOT_EQUALS_SIGN} ${Little.keywords.TRUE_VALUE}\nif (x ${Little.keywords.NOT_EQUALS_SIGN} ${Little.keywords.TRUE_VALUE}) {}';
+			case "LARGER_SIGN": '${Little.keywords.VARIABLE_DECLARATION} x = 5\nif (x ${Little.keywords.LARGER_SIGN} 1) {}';
+			case "SMALLER_SIGN": '${Little.keywords.VARIABLE_DECLARATION} x = -5\nif (x ${Little.keywords.SMALLER_SIGN} 1) {}';
+			case "LARGER_EQUALS_SIGN": '${Little.keywords.VARIABLE_DECLARATION} x = 5\nif (x ${Little.keywords.LARGER_EQUALS_SIGN} 1 + 4) {}';
+			case "SMALLER_EQUALS_SIGN": '${Little.keywords.VARIABLE_DECLARATION} x = 5\nif (x ${Little.keywords.SMALLER_EQUALS_SIGN} -(1 + 4)) {}';
+			case "XOR_SIGN": '${Little.keywords.VARIABLE_DECLARATION} x = ${Little.keywords.TRUE_VALUE} ${Little.keywords.XOR_SIGN} ${Little.keywords.TRUE_VALUE}\nif (x ${Little.keywords.XOR_SIGN} ${Little.keywords.TRUE_VALUE}) {}';
+			case "OR_SIGN": '${Little.keywords.VARIABLE_DECLARATION} x = ${Little.keywords.TRUE_VALUE} ${Little.keywords.OR_SIGN} ${Little.keywords.TRUE_VALUE}\nif (x ${Little.keywords.OR_SIGN} ${Little.keywords.TRUE_VALUE}) {}';
+			case "AND_SIGN": '${Little.keywords.VARIABLE_DECLARATION} x = ${Little.keywords.TRUE_VALUE} ${Little.keywords.AND_SIGN} ${Little.keywords.TRUE_VALUE}\nif (x ${Little.keywords.AND_SIGN} ${Little.keywords.TRUE_VALUE}) {}';
             case _: "Unknown Keyword";
         }
     }

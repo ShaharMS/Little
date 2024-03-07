@@ -78,7 +78,7 @@ class Storage {
             i += size; // Will leave some empty space, Todo.
         }
 
-        for (j in 0...size - 1) {
+        for (j in 0...size) {
             parent.memory[i + j] = j > b.length ? 0 : b[j];
             parent.reserved[i + j] = 1;
         }
@@ -87,15 +87,16 @@ class Storage {
     }
 
     public function setBytes(address:MemoryPointer, bytes:ByteArray) {
-        for (j in 0...bytes.length - 1) {
+        for (j in 0...bytes.length) {
             parent.memory[address.rawLocation + j] = bytes[j];
             parent.reserved[address.rawLocation + j] = 1;
         }
     }
 
     public function readBytes(address:MemoryPointer, size:Int):ByteArray {
+        if (address == parent.constants.NULL) return null;
         var bytes = new ByteArray(size);
-        for (j in 0...size - 1) {
+        for (j in 0...size) {
             bytes[j] = parent.memory[address.rawLocation + j];
         }
 
@@ -103,7 +104,7 @@ class Storage {
     }
 
     public function freeBytes(address:MemoryPointer, size:Int) {
-        for (j in 0...size - 1) {
+        for (j in 0...size) {
             parent.memory[address.rawLocation + j] = 0;
             parent.reserved[address.rawLocation + j] = 0;
         }
@@ -139,6 +140,7 @@ class Storage {
     }
 
     public function readArray(address:MemoryPointer):Array<ByteArray> {
+        if (address == parent.constants.NULL) return null;
         var length = readInt32(address);
         var elementSize = readInt32(address.rawLocation + 4);
         address.rawLocation += 8;
@@ -189,6 +191,7 @@ class Storage {
     }
 
     public function readInt16(address:MemoryPointer):Int {
+        if (address == parent.constants.NULL) return null;
         // Dont forget to make the number negative if needed.
         return (parent.memory[address.rawLocation] + (parent.memory[address.rawLocation + 1] << 8)) - 32767;
         
@@ -211,7 +214,7 @@ class Storage {
     }
 
     public function readUInt16(address:MemoryPointer) {
-
+        if (address == parent.constants.NULL) return null;
         return (parent.memory[address.rawLocation] + (parent.memory[address.rawLocation + 1] << 8));
     }
 
@@ -252,6 +255,7 @@ class Storage {
     }
 
     public function readInt32(address:MemoryPointer):Int {
+        if (address == parent.constants.NULL) return null;
         return (parent.memory[address.rawLocation] + (parent.memory[address.rawLocation + 1] << 8) + (parent.memory[address.rawLocation + 2] << 16) + (parent.memory[address.rawLocation + 3] << 24));
     }
 
@@ -310,6 +314,7 @@ class Storage {
     }
 
     public function readDouble(address:MemoryPointer):Float {
+        if (address == parent.constants.NULL) return null;
         return parent.memory.getDouble(address.rawLocation);
     }
 
@@ -374,6 +379,7 @@ class Storage {
     }
 
 	public function readString(address:MemoryPointer):String {
+        if (address == parent.constants.NULL) return null;
 		var length = readInt32(address.rawLocation);
 		return parent.memory.getString(address.rawLocation + 4, length, UTF8);
 	}
@@ -442,6 +448,7 @@ class Storage {
     }
 
     public function readSign(address:MemoryPointer):InterpTokens {
+        if (address == parent.constants.NULL) return null;
         return Sign(readString(address));
     }
 
@@ -483,8 +490,7 @@ class Storage {
 		*/
 
 		switch object {
-
-			case Object(toString, props, typeName): {
+			case Object(props, typeName): {
                 var quintuples = new Array<{key:String, keyPointer:MemoryPointer, value:MemoryPointer, type:MemoryPointer, doc:MemoryPointer}>();
 
                 var propsC = props.copy();
@@ -493,16 +499,12 @@ class Storage {
                     value: Characters(typeName),
                     documentation: 'The type of this object, as a ${Little.keywords.TYPE_STRING}.',
                 }
-                propsC[Little.keywords.TO_STRING_PROPERTY_NAME] = {
-                    value: FunctionCode(new OrderedMap(), toString),
-                    documentation: 'The function that will be used to convert this object to a string.',
-                }
 
                 for (k => v in propsC) {
                     var key = k;
                     var keyPointer = storeString(key);
                     var value = switch v.value {
-                        case Object(_, _, _): storeObject(v.value);
+                        case Object(_, _): storeObject(v.value);
                         case FunctionCode(_, _): storeCodeBlock(v.value);
                         case _: storeStatic(v.value);
                     }
@@ -513,7 +515,7 @@ class Storage {
                         case TrueValue | FalseValue: parent.getTypeInformation(Little.keywords.TYPE_BOOLEAN).pointer;
                         case NullValue: parent.getTypeInformation(Little.keywords.TYPE_DYNAMIC).pointer;
                         case FunctionCode(_, _): parent.getTypeInformation(Little.keywords.TYPE_FUNCTION).pointer;
-                        case Object(_, _, t): parent.getTypeInformation(t).pointer;
+                        case Object(_, t): parent.getTypeInformation(t).pointer;
                         case _: throw "Property value must be a static value, a code block or an object (given: `" + v + "`)";
                     }
 
@@ -534,6 +536,7 @@ class Storage {
     }
 
 	public function readObject(pointer:MemoryPointer):InterpTokens {
+        if (pointer == parent.constants.NULL) return null;
         var hashTableBytes = readBytes(readPointer(pointer.rawLocation + 4), readInt32(pointer));
         var table = HashTables.readObjectHashTable(hashTableBytes, this);
         var map = new Map<String, {value:InterpTokens, documentation:String}>();
@@ -555,7 +558,6 @@ class Storage {
         }
 
         return Object(
-            map[Little.keywords.TO_STRING_PROPERTY_NAME].value, 
             map, 
             map[Little.keywords.OBJECT_TYPE_PROPERTY_NAME].value.parameter(0) /* This value is a `Characters`, so it first param is a `String`.*/
         );
@@ -644,6 +646,7 @@ class Storage {
 	}
 
 	public function readType(pointer:MemoryPointer):TypeInfo {
+        if (pointer == parent.constants.NULL) return null;
 		var className = readString(readPointer(pointer.rawLocation));
 
 		var cellSize = POINTER_SIZE * 4;

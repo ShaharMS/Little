@@ -59,7 +59,6 @@ class Plugins {
         var statics = memory.externs.createPathFor(memory.externs.globalProperties, ...typeName.split("."));
 
         instances.type = statics.type = memory.getTypeInformation(Little.keywords.TYPE_MODULE).pointer;
-        //statics.getter = (_, _) -> { objectValue: Object(Block([], Little.keywords.TYPE_STRING.asTokenPath()), [], typeName), objectAddress: memory.constants.EXTERN }; // Hack, todo: actually have a type token.
 
         if (__noTypeCreation) __noTypeCreation = false;
         else {

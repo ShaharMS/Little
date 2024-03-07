@@ -284,7 +284,7 @@ class PrettyPrinter {
 				title += getTree_INTERP(property, prefix.copy(), level + 1, true);
 				return title;
 			
-			case Object(toString, props, _): 
+			case Object(props, _): 
 				var title = '${prefixFA(prefix)}$t$d Object\n';
 				
 				var i = 0;

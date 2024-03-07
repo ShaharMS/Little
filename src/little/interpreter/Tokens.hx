@@ -157,12 +157,11 @@ enum InterpTokens {
 
 	/**
 
-		- `toString` must be a `Block`, representing a function with 0 parameters returning a string.
-		- `props`' elements may either be a `Object`, a `FunctionBody`, or a **statically storable** object.
+		- `props`' elements may either be a `Object`, a `FunctionCode`, or a **statically storable** object.
 		- `typeName` must be a `String`, containing a proper, accessible type.
 			
 	**/
-	Object(toString:InterpTokens, props:Map<String, {documentation:String, value:InterpTokens}>, typeName:String);
+	Object(props:Map<String, {documentation:String, value:InterpTokens}>, typeName:String);
 
     /**
     	Used for errors & warnings

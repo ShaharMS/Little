@@ -50,11 +50,10 @@ class Conversion {
                     value: Characters(toLittleType(Type.getClassName(val))),
                     documentation: 'The type of this object, as a ${Little.keywords.TYPE_STRING}.'
                 }
-                Object(map[Little.keywords.TO_STRING_PROPERTY_NAME].value, map, map[Little.keywords.OBJECT_TYPE_PROPERTY_NAME].value.parameter(0));
+                Object(map, map[Little.keywords.OBJECT_TYPE_PROPERTY_NAME].value.parameter(0));
 			}
             case TObject: {
                 var objType = Little.keywords.TYPE_DYNAMIC;
-                var toString = Block([FunctionReturn(Characters("Dynamic Object"), Identifier(Little.keywords.TYPE_STRING))], Identifier(Little.keywords.TYPE_STRING));
                 var map:Map<String, {documentation:String, value:InterpTokens}> = new Map();
 				for (field in Type.getInstanceFields(Type.getClass(val))) {
                     map[field] = {
@@ -62,7 +61,7 @@ class Conversion {
                         documentation: ""
                     }
                 }
-                Object(toString, map, objType);
+                Object(map, objType);
             }
             case TFunction: {
 				NullValue; // Todo: Functions (or maybe intended behavior?)
@@ -90,7 +89,7 @@ class Conversion {
             case Decimal(num): num;
             case Number(num): num;
             case Characters(string): string;
-            case Object(toString, props, typeName): {
+            case Object(props, typeName): {
                 var obj:Dynamic = {};
                 for (key => value in props) {
                     if (key == Little.keywords.TO_STRING_PROPERTY_NAME) continue;

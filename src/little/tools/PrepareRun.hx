@@ -1,5 +1,6 @@
 package little.tools;
 
+import little.interpreter.memory.HashTables;
 import little.interpreter.memory.MemoryPointer;
 import little.interpreter.memory.MemoryPointer.POINTER_SIZE;
 import little.interpreter.Operators;
@@ -94,6 +95,12 @@ class PrepareRun {
 
 			'static ${Little.keywords.TYPE_STRING} fromCharCode (define code as ${Little.keywords.TYPE_INT})' => (_, value, params) -> {
 				return Conversion.toLittleValue(String.fromCharCode(Conversion.toHaxeValue(params[0])));
+			}
+		]);
+
+		Little.plugin.registerType("Object", [
+			'static Object create (define fieldEstimate as ${Little.keywords.TYPE_INT} = 20)' => (params) -> {
+				return Object([], "Object");
 			}
 		]);
 	}

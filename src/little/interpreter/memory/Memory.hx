@@ -201,12 +201,11 @@ class Memory {
 
 			// Then, we check the object's hash table for that field
 			if (current.is(OBJECT)) {
-				var objectHashTableBytesLength = storage.readInt32(currentAddress);
-				var objectHashTableBytes = storage.readBytes(currentAddress.rawLocation + 4, objectHashTableBytesLength);
+				var objectHashTableBytes = HashTables.getHashTableOf(currentAddress, storage);
 				
 				if (HashTables.hashTableHasKey(objectHashTableBytes, identifier, storage)) {
 					var keyData = HashTables.hashTableGetKey(objectHashTableBytes, identifier, storage);
-					
+					trace(keyData);
 					switch getTypeName(keyData.type) {
 						case (_ == Little.keywords.TYPE_STRING => true): current = Characters(storage.readString(keyData.value));
 						case (_ == Little.keywords.TYPE_INT => true): current = Number(storage.readInt32(keyData.value));
@@ -339,10 +338,11 @@ class Memory {
 			referrer.reference(path[0], store(value), type);
 
 		} else {
-			var pathCopy = path.copy();
-			var wentThroughPath = path.slice(0, path.length - 1);
-			var current = referrer.get(pathCopy[0]);
-			while (pathCopy.length > 1) {
+			var pathCopy = path.slice(0, path.length - 1);
+			var wentThroughPath = [path[0]];
+			var current = referrer.get(pathCopy.shift());
+			trace(pathCopy);
+			while (pathCopy.length > 0) {
 				if (getTypeInformation(current.type).isStaticType) {
 					Little.runtime.throwError(ErrorMessage('Cannot write to a static type. Only objects can have dynamic properties (${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)} is `${current.type}`)'));
 				}
@@ -355,19 +355,19 @@ class Memory {
 					address: hashTableKey.value,
 					type: getTypeName(hashTableKey.type),
 				}
-				wentThroughPath.push(pathCopy[0]);
-				pathCopy.shift();
+				wentThroughPath.push(pathCopy.shift());
 			}
-
+			trace(current);
 			if (getTypeInformation(current.type).isStaticType) {
 				Little.runtime.throwError(ErrorMessage('Cannot write to a property to values of a static type. Only objects can have dynamic properties (${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)} is `${current.type}`)'));
 			}
-			if (HashTables.hashTableHasKey(HashTables.getHashTableOf(current.address, storage), pathCopy[0], storage)) {
-				HashTables.objectSetKey(current.address, pathCopy[0], {value: value != null ? store(value) : null, type: type != null ? getTypeInformation(type).pointer : null, doc: doc != null ? storage.storeString(doc) : null}, storage);
-			} else if (externs.instanceProperties.properties.exists(pathCopy[0])) {
-				Little.runtime.throwError(ErrorMessage('Cannot write to an extern property (${pathCopy[0]})'));
+			if (!HashTables.hashTableHasKey(HashTables.getHashTableOf(current.address, storage), path[path.length - 1], storage)) {
+				trace(wentThroughPath + " has hash table");
+				HashTables.objectAddKey(current.address, path[path.length - 1], store(value), getTypeInformation(type).pointer, storage.storeString(doc), storage);
+			} else if (externs.instanceProperties.properties.exists(path[path.length - 1])) {
+				Little.runtime.throwError(ErrorMessage('Cannot write to an extern property (${path[path.length - 1]})'));
 			} else {
-				HashTables.objectAddKey(current.address, pathCopy[0], store(value), getTypeInformation(type).pointer, storage.storeString(doc), storage);
+				HashTables.objectSetKey(current.address, path[path.length - 1], {value: value != null ? store(value) : null, type: type != null ? getTypeInformation(type).pointer : null, doc: doc != null ? storage.storeString(doc) : null}, storage);
 			}
 		}
 	}
@@ -386,10 +386,10 @@ class Memory {
 				Little.runtime.throwError(ErrorMessage('Variable/function ${path[0]} does not exist'));
 			}
 		} else {
-			var pathCopy = path.copy();
-			var wentThroughPath = path.slice(0, path.length - 1);
-			var current = referrer.get(pathCopy[0]);
-			while (pathCopy.length > 1) {
+			var pathCopy = path.slice(0, path.length - 1);
+			var wentThroughPath = [path[0]];
+			var current = referrer.get(pathCopy.shift());
+			while (pathCopy.length > 0) {
 				if (getTypeInformation(current.type).isStaticType) {
 					Little.runtime.throwError(ErrorMessage('Cannot set properties to values of a static type. Only objects can have dynamic properties (${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)} is `${current.type}`)'));
 				}
@@ -402,19 +402,19 @@ class Memory {
 					address: hashTableKey.value,
 					type: getTypeName(hashTableKey.type),
 				}
-				wentThroughPath.push(pathCopy[0]);
-				pathCopy.shift();
+				wentThroughPath.push(pathCopy.shift());
 			}
-
+			trace(current);
+			trace(wentThroughPath);
 			if (getTypeInformation(current.type).isStaticType) {
 				Little.runtime.throwError(ErrorMessage('Cannot set properties to values of a static type. Only objects can have dynamic properties (${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)} is `${current.type}`)'));
 			}
-			if (HashTables.hashTableHasKey(HashTables.getHashTableOf(current.address, storage), pathCopy[0], storage)) {
-				HashTables.objectSetKey(current.address, pathCopy[0], {value: value != null ? store(value) : null, type: type != null ? getTypeInformation(type).pointer : null, doc: doc != null ? storage.storeString(doc) : null}, storage);
-			} else if (externs.instanceProperties.properties.exists(pathCopy[0])) {
-				Little.runtime.throwError(ErrorMessage('Cannot set an extern property (${pathCopy[0]})'));
+			if (HashTables.hashTableHasKey(HashTables.getHashTableOf(current.address, storage), path[path.length - 1], storage)) {
+				HashTables.objectSetKey(current.address, path[path.length - 1], {value: value != null ? store(value) : null, type: type != null ? getTypeInformation(type).pointer : null, doc: doc != null ? storage.storeString(doc) : null}, storage);
+			} else if (externs.instanceProperties.properties.exists(path[path.length - 1])) {
+				Little.runtime.throwError(ErrorMessage('Cannot set an extern property (${path[path.length - 1]})'));
 			} else {
-				Little.runtime.throwError(ErrorMessage('Cannot set the value of ${pathCopy.join(Little.keywords.PROPERTY_ACCESS_SIGN)}, since ${pathCopy.join(Little.keywords.PROPERTY_ACCESS_SIGN)} does not exist.'));
+				Little.runtime.throwError(ErrorMessage('Cannot set the value of ${path.join(Little.keywords.PROPERTY_ACCESS_SIGN)}, since ${path[path.length - 1]} does not exist.'));
 			}
 		}
 	}

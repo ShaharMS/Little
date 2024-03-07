@@ -60,7 +60,6 @@ class Main {
 
 		var objectPointer = memory.storage.storeObject(
 			Object(
-				Block([FunctionReturn(Characters("hello"), Identifier(Little.keywords.TYPE_STRING))], Identifier(Little.keywords.TYPE_STRING)),
 				[
 					"x" => {value: Decimal(123.456), documentation: ""},
 					"y" => {value: Number(456), documentation: ""},
@@ -140,7 +139,7 @@ class Main {
 				}
 			} else {
 				Little.run(input, true);
-				trace(PrettyPrinter.printInterpreterAst(Interpreter.convert(...Parser.parse(Lexer.lex(input)))));
+				//trace(PrettyPrinter.printInterpreterAst(Interpreter.convert(...Parser.parse(Lexer.lex(input)))));
 				trace(Little.runtime.stdout.output);
 				Little.reset();
 			}

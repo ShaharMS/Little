@@ -15,9 +15,25 @@ using little.parser.Parser;
 @:access(little.interpreter.Runtime)
 class Parser {
 
+    /**
+        An array of functions, which take in the current state of the abstract syntax tree as an array of `ParserTokens`,
+        and returns a manipulated version of that abstract syntax tree as another array of `ParserTokens`.
+
+        @see `Parser.mergeElses`
+    **/
     public static var additionalParsingLevels:Array<Array<ParserTokens> -> Array<ParserTokens>> = [Parser.mergeElses];
 
-    public static function parse(lexerTokens:Array<LexerTokens>):Array<ParserTokens> {
+    /**
+        Parses the given array of `LexerTokens` into an abstract syntax tree, using tokens of type `ParserTokens`.
+
+        To allow "macro" insertion, this function is assignable, which allows you to add parsing functions between existing ones.
+        If your macros aren't parse-level sensitive, it is recommended that you use the `additionalParsingLevels` 
+        field instead of reassigning this function.
+
+        @param lexerTokens The given tokens 
+        @return An array of tokens, representing an abstract syntax tree
+    **/
+    public static dynamic function parse(lexerTokens:Array<LexerTokens>):Array<ParserTokens> {
         var tokens = convert(lexerTokens);
 
         #if parser_debug trace("before:", PrettyPrinter.printParserAst(tokens)); #end
@@ -307,14 +323,14 @@ class Parser {
                         return null;
                     }
 
-                    var name:Array<ParserTokens> = [];
-                    var pushToName = true;
+                    var name:ParserTokens = null;
                     var type:ParserTokens = null;
+
                     while (i < pre.length) {
                         var lookahead = pre[i];
                         switch lookahead {
                             case TypeDeclaration(_, typeToken): {
-                                if (name.length == 0) {
+                                if (name == null) {
                                     Little.runtime.throwError(ErrorMessage("Missing variable name before type declaration."), Layer.PARSER);
                                     return null;
                                 }
@@ -322,12 +338,8 @@ class Parser {
                                 break;
                             }
                             case SetLine(_) | SplitLine | Sign("="): i--; break;
-                            case Sign(_ == Little.keywords.PROPERTY_ACCESS_SIGN => true): {
-                                pushToName = true;
-                                name.push(lookahead);
-                            }
                             case Block(body, type): {
-                                if (pushToName) {name.push(Block(mergeComplexStructures(body), mergeComplexStructures([type])[0])); pushToName = false;}
+                                if (name == null) name = Block(mergeComplexStructures(body), mergeComplexStructures([type])[0]);
                                 else if (type == null) type = Block(mergeComplexStructures(body), mergeComplexStructures([type])[0]);
                                 else {
                                     i--;
@@ -335,7 +347,7 @@ class Parser {
                                 }
                             }
                             case Expression(body, type): {
-                                if (pushToName) {name.push(Expression(mergeComplexStructures(body), mergeComplexStructures([type])[0])); pushToName = false;}
+                                if (name == null) name = Expression(mergeComplexStructures(body), mergeComplexStructures([type])[0]);
                                 else if (type == null) type = Expression(mergeComplexStructures(body), mergeComplexStructures([type])[0]);
                                 else {
                                     i--;
@@ -343,8 +355,8 @@ class Parser {
                                 }
                             }
                             case _: {
-                                if (pushToName) {name.push(lookahead); pushToName = false;}
-                                else if (type == null && lookahead.getName() == "TypeDeclaration") type = lookahead;
+                                if (name == null) name = lookahead;
+                                else if (type == null && lookahead.is(TYPE_DECLARATION)) type = lookahead;
                                 else {
                                     i--;
                                     break;
@@ -353,7 +365,10 @@ class Parser {
                         }
                         i++;
                     }
-                    post.push(Variable(if (name.length == 1) name[0] else PartArray(name) /* Soon to be: PropertyAccess */, type, currentDoc));
+                    if (name == null) 
+                        Little.runtime.throwError(ErrorMessage("Missing variable name, variable is cut off by the end of the file, block or expression."), Layer.PARSER);
+                    
+                    post.push(Variable(name, type, currentDoc));
 					currentDoc = null;
                 }
                 case Identifier(_ == Little.keywords.FUNCTION_DECLARATION => true): {
@@ -367,16 +382,15 @@ class Parser {
                         return null;
                     }
                     
-                    var name:Array<ParserTokens> = [];
-                    var pushToName = true;
+                    var name:ParserTokens = null;
                     var params:ParserTokens = null;
                     var type:ParserTokens = null;
                     while (i < pre.length) {
                         var lookahead = pre[i];
                         switch lookahead {
                             case TypeDeclaration(_, typeToken): {
-                                if (name.length == 0) {
-                                    Little.runtime.throwError(ErrorMessage("Missing function name & parameters before type declaration."), Layer.PARSER);
+                                if (name == null) {
+                                    Little.runtime.throwError(ErrorMessage("Missing function name and parameters before type declaration."), Layer.PARSER);
                                     return null;
                                 }
                                 else if (params == null) {
@@ -387,13 +401,8 @@ class Parser {
                                 break;
                             }
                             case Sign("="): i--; break;
-                            case Sign(_ == Little.keywords.PROPERTY_ACCESS_SIGN => true): {
-                                if (params != null) {i--; break;}
-                                pushToName = true;
-                                name.push(lookahead);
-                            }
                             case Block(body, type): {
-                                if (pushToName) {name.push(Block(mergeComplexStructures(body), mergeComplexStructures([type])[0])); pushToName = false;}
+                                if (name == null) name = Block(mergeComplexStructures(body), mergeComplexStructures([type])[0]);
                                 else if (params == null) params = Block(mergeComplexStructures(body), mergeComplexStructures([type])[0]);
                                 else if (type == null) type = Block(mergeComplexStructures(body), mergeComplexStructures([type])[0]);
                                 else {
@@ -401,7 +410,7 @@ class Parser {
                                 }
                             }
                             case Expression(body, type): {
-                                if (pushToName) {name.push(Expression(mergeComplexStructures(body), mergeComplexStructures([type])[0])); pushToName = false;}
+                                if (name == null) name = Expression(mergeComplexStructures(body), mergeComplexStructures([type])[0]);
                                 else if (params == null) params = Expression(mergeComplexStructures(body), mergeComplexStructures([type])[0]);
                                 else if (type == null) type = Expression(mergeComplexStructures(body), mergeComplexStructures([type])[0]);
                                 else {
@@ -409,7 +418,7 @@ class Parser {
                                 }
                             }
                             case _: {
-                                if (pushToName) {name.push(lookahead); pushToName = false;}
+                                if (name == null) name = lookahead;
                                 else if (params == null) params = lookahead;
                                 else if (type == null && lookahead.getName() == "TypeDeclaration") type = mergeComplexStructures([lookahead.parameter(1)])[0];
                                 else {
@@ -419,7 +428,12 @@ class Parser {
                         }
                         i++;
                     }
-                    post.push(Function(if (name.length == 1) name[0] else PartArray(name) /* Will be converted to PropertyAccess later on*/, params, type, currentDoc));
+                    if (name == null) 
+                        Little.runtime.throwError(ErrorMessage("Missing function name and parameters, function is cut off by the end of the file, block or expression."), Layer.PARSER);
+                    else if (params == null)
+                        Little.runtime.throwError(ErrorMessage("Missing function parameters, function is cut off by the end of the file, block or expression."), Layer.PARSER);
+
+                    post.push(Function(name, params, type, currentDoc));
 					currentDoc = null;
                 }
                 case Identifier(_ == Little.keywords.FUNCTION_RETURN => true): {
@@ -446,7 +460,7 @@ class Parser {
                     }
                     post.push(Return(if (valueToReturn.length == 1) valueToReturn[0] else Expression(valueToReturn.copy(), null), null));
                 }
-				case Identifier(_): { // Condition are definable, we need to look for the syntax: Identifier -> Expression -> Block. 
+				case Identifier(_): { // Conditions are definable, we need to look for the syntax: Identifier -> Expression -> Block. 
                     i++;
                     if (i + 1>= pre.length) {
                         post.push(token);

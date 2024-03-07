@@ -76,7 +76,7 @@ class Extensions {
 			case NullValue: return Little.keywords.TYPE_DYNAMIC;
 			case FunctionCode(requiredParams, body): return Little.keywords.TYPE_FUNCTION;
 			case Sign(sign): return Little.keywords.TYPE_SIGN;
-			case Object(_, _, typeName): return typeName;
+			case Object(_, typeName): return typeName;
 			case ClassPointer(pointer): return Little.keywords.TYPE_MODULE;
 			case _: throw '$token is not a simple token (given $token)';
 		}

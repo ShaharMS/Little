@@ -184,7 +184,7 @@ class Interpreter {
 						if (patternParts != null) currentlyFits = currentlyFits && fit(parts, patternParts, currentlyFits);
 					}
 					case PropertyAccess(name, property): currentlyFits = currentlyFits && fit(cast given[i].getParameters(), cast pattern[i].getParameters(), currentlyFits);
-					case Object(toString, props, typeName): return false; // Cant be matched with, only valid in the context of object instantiation. Represented by FunctionCall in most cases.
+					case Object(props, typeName): return false; // Cant be matched with, only valid in the context of object instantiation. Represented by FunctionCall in most cases.
 					case _: continue;
 				}
 
@@ -407,7 +407,7 @@ class Interpreter {
     public static function evaluate(exp:InterpTokens, ?dontThrow:Bool = false):InterpTokens {
 
         switch exp {
-            case Number(_) | Decimal(_) | Characters(_) | TrueValue | FalseValue | NullValue | Sign(_) | FunctionCode(_, _) | Object(_, _, _) | ClassPointer(_): return exp;
+            case Number(_) | Decimal(_) | Characters(_) | TrueValue | FalseValue | NullValue | Sign(_) | FunctionCode(_, _) | Object(_, _) | ClassPointer(_): return exp;
             case ErrorMessage(msg): {
                 if (!dontThrow) Little.runtime.throwError(exp, INTERPRETER_VALUE_EVALUATOR);
                 return exp;
