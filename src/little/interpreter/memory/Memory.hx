@@ -1,5 +1,6 @@
 package little.interpreter.memory;
 
+import little.interpreter.memory.MemoryPointer.POINTER_SIZE;
 import little.tools.TextTools;
 import little.interpreter.Tokens.InterpTokens;
 import vision.ds.ByteArray;
@@ -460,6 +461,15 @@ class Memory {
 				isExternal: false,
 				instanceFields: [],
 				staticFields: [],
+				defaultInstanceSize: switch p.rawLocation {
+					case 11 /* int */: 4;
+					case 12 /* float */: 8;
+					case 13 /* bool */: 1;
+					case 14 /* dynamic */: -1;
+					case 15 /* type */: -1;
+					case 16 /* unknown */: -1;
+					case _: throw "How did we get here? 51";
+				}
 			}
 		}
 
@@ -468,35 +478,31 @@ class Memory {
 		if (externs.typeToPointer.exists(name)) {
 
 			var instProps = externs.createPathFor(externs.instanceProperties, ...name.split(Little.keywords.PROPERTY_ACCESS_SIGN));
-			var instances = new Map<String, {address:MemoryPointer, type:MemoryPointer}>();
+			var statProps = externs.createPathFor(externs.globalProperties, ...name.split(Little.keywords.PROPERTY_ACCESS_SIGN));
+			var instances = new Map<String, {type:MemoryPointer, doc:MemoryPointer}>();
+			var statics = new Map<String, {type:MemoryPointer, doc:MemoryPointer}>();
 
-			for (key => value in instProps.properties) {
+			for (key => value in instProps.properties) 
+				instances[key] = {type: value.type, doc: value.doc};
+			for (key => value in statProps.properties)
+				statics[key] = {type: value.type, doc: value.doc};
 
-			}
-
-			//var statics:Map<String>
 
 			return {
 				pointer: externs.typeToPointer[name],
 				typeName: name,
 				isStaticType: false,
 				isExternal: true,
-				instanceFields: [],
-				staticFields: []
+				instanceFields: instances,
+				staticFields: statics,
+				defaultInstanceSize: 4 + POINTER_SIZE, // Objects take 8 bytes in-place
 			}
 		}
 		
 		var reference = referrer.get(name);
 		var typeInfo = storage.readType(reference.address);
 
-		return {
-			pointer: reference.address,
-			typeName: name,
-			isStaticType: typeInfo.isStaticType, 
-			isExternal: typeInfo.isExternal,
-			instanceFields: typeInfo.instanceFields,
-			staticFields: typeInfo.staticFields,
-		}
+		return typeInfo;
 	}
 
 	public function getTypeName(pointer:MemoryPointer):String {
@@ -536,5 +542,6 @@ typedef TypeInfo = {
 	isStaticType:Bool,
 	isExternal:Bool,
 	instanceFields:Map<String, {type:MemoryPointer, doc:MemoryPointer}>,
-    staticFields:Map<String, {value:MemoryPointer, type:MemoryPointer, doc:MemoryPointer}>
+    staticFields:Map<String, {type:MemoryPointer, doc:MemoryPointer}>,
+	defaultInstanceSize:Int
 }

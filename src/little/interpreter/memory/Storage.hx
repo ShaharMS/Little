@@ -682,9 +682,9 @@ class Storage {
 		var instancesLength = readInt32(i + POINTER_SIZE);
 
 		while (i < i + POINTER_SIZE + instancesLength) {
-			var keyPointer = MemoryPointer.fromInt(readInt32(i));
-			var type = MemoryPointer.fromInt(readInt32(i + POINTER_SIZE));
-			var doc = MemoryPointer.fromInt(readInt32(i + POINTER_SIZE * 2));
+			var keyPointer = readPointer(i);
+			var type = readPointer(i + POINTER_SIZE);
+			var doc = readPointer(i + POINTER_SIZE * 2);
 
 			if (keyPointer.rawLocation == 0) {
 				i += cellSize;
@@ -702,10 +702,11 @@ class Storage {
 		return {
 			typeName: className,
 			pointer: pointer,
-			isStaticType: false, // Final decision: static fields cannot be created at runtime, only externally
+			isStaticType: false, // Final decision: static types cannot be created at runtime, only externally
 			isExternal: false,
 			instanceFields: instances,
-			staticFields: statics
+			staticFields: statics,
+			defaultInstanceSize: 4 + POINTER_SIZE, // Objects take 8 bytes in-place
 		}
 	}
 

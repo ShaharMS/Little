@@ -23,7 +23,7 @@ class HashTables {
         @param pairs an array of key-value-type triples 
     **/
     public static function generateObjectHashTable(pairs:Array<{key:String, keyPointer:MemoryPointer, value:MemoryPointer, type:MemoryPointer, doc:MemoryPointer}>) {
-        var initialLength = (pairs.length != 0 ? pairs.length : 5) * CELL_SIZE * 3; 
+        var initialLength = (pairs.length > 1 ? pairs.length : 5) * CELL_SIZE * 3; 
         // a memory pointer is 8 bytes, 3 pointers is `CELL_SIZE` bytes
         // We triple the memory for a nice size-to-store ratio (0.33)
 

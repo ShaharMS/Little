@@ -43,7 +43,7 @@ class UnitTests {
 	static var UNDERLINE = "\033[4m";
 
 	public static function run(bulk:Bool = false) {
-		var testFunctions = [test1, test2, test3, /*test4,*/ test5, test6, test7, test8, test9, test10, test11, test12];
+		var testFunctions = [test1, test2, test3, test4, test5, test6, test7, test8, test9, test10, test11, test12];
 
 		var i = 1;
 		for (func in testFunctions) {
@@ -113,14 +113,14 @@ class UnitTests {
 	}
 
 	public static function test4():UnitTestResult {
-		var code = "define x as Number = 3\ndefine x.y = 5\ndefine x.y.z as Decimal = x.y\nprint(x.y.z + x.y + x)";
+		var code = "define x = Object.create(), define x.value as Number = 3\ndefine x.y = Object.create(), define x.y.value = 5\ndefine x.y.z = x.y.value\nprint(x.y.z + x.y.value + x.value)";
 		Little.run(code);
 		var result = Little.runtime.stdout.stdoutTokens.pop();
 		return {
 			testName: "Property access",
-			success: result.equals(Decimal(13)),
+			success: result.equals(Number(13)),
 			returned: result,
-			expected: Decimal(13),
+			expected: Number(13),
 			code: code
 		};
 	}
