@@ -573,7 +573,14 @@ class Storage {
 	}
 
 	public function storeType(name:String, statics:Map<String, {value:InterpTokens, documentation:String, type:String}>, instances:Map<String, {documentation:String, type:String}>) {
-		var bytes = ByteArray.from(storeString(name).rawLocation);
+		
+        /*
+            Some notices:
+             - we store statics "Strangely" in order to keep compatibility with object reading
+             - statics are expandable beyond class creation. instance fields aren't.
+        */
+        
+        var namePointer  = storeString(name).rawLocation;
 		var cellSize = POINTER_SIZE * 4;
 
 		// We'll create each map with some extra space to avoid frequent collisions. more overhead? yes. faster? also probably yes.
@@ -639,9 +646,9 @@ class Storage {
 
 			cellSize -= POINTER_SIZE;
 		}
-		staticHashMap = ByteArray.from(staticHashMap.length).concat(staticHashMap);
-		instancesHashMap = ByteArray.from(instancesHashMap.length).concat(instancesHashMap);
-		bytes = bytes.concat(staticHashMap).concat(instancesHashMap);
+        instancesHashMap = ByteArray.from(instancesHashMap.length).concat(instancesHashMap);
+        var staticsPointer = ByteArray.from(staticHashMap.length).concat(ByteArray.from(storeBytes(staticHashMap.length, staticHashMap).rawLocation));
+        var bytes = staticsPointer.concat(instancesHashMap).concat(ByteArray.from(namePointer));
 		return storeBytes(bytes.length, bytes);
 	}
 
@@ -649,39 +656,29 @@ class Storage {
         if (pointer == parent.constants.NULL) return null;
 		var className = readString(readPointer(pointer.rawLocation));
 
-		var cellSize = POINTER_SIZE * 4;
 		// Statics:
-		var statics:Map<String, {value:MemoryPointer, type:MemoryPointer, doc:MemoryPointer}> = [];
-		var staticsLength = readInt32(pointer.rawLocation + POINTER_SIZE);
+		var statics:Map<String, {type:MemoryPointer, doc:MemoryPointer}> = [];
+        var superClass:MemoryPointer = parent.constants.NULL;
 
-        var i = pointer.rawLocation + POINTER_SIZE;
-        while (i < pointer.rawLocation + POINTER_SIZE + staticsLength) {
-            var keyPointer = MemoryPointer.fromInt(readInt32(i));
-            var value = MemoryPointer.fromInt(readInt32(i + POINTER_SIZE));
-            var type = MemoryPointer.fromInt(readInt32(i + POINTER_SIZE * 2));
-            var doc = MemoryPointer.fromInt(readInt32(i + POINTER_SIZE * 3));
+        var data = HashTables.readObjectHashTable(HashTables.getHashTableOf(pointer, this), this);
 
-            if (keyPointer.rawLocation == 0) {
-                i += cellSize;
-                continue; // Nothing to do here
+        for (entry in data) {
+            if (entry.key == Little.keywords.SUPER_CLASS_PROPERTY_NAME)
+                superClass = entry.value;
+            statics[entry.key] = {
+                type: entry.type,
+                doc: entry.doc
             }
-
-            statics[readString(keyPointer)] = {
-				value: value,
-				type: type,
-				doc: doc
-			}
-
-            i += cellSize;
         }
 
-		cellSize -= POINTER_SIZE;
-
 		// Instances:
-		var instances:Map<String, {type:MemoryPointer, doc:MemoryPointer}> = [];
-		var instancesLength = readInt32(i + POINTER_SIZE);
+        var cellSize = POINTER_SIZE * 3;
+        var i = pointer.rawLocation + POINTER_SIZE + 4;
 
-		while (i < i + POINTER_SIZE + instancesLength) {
+        var instances:Map<String, {type:MemoryPointer, doc:MemoryPointer}> = [];
+		var instancesLength = readInt32(i + POINTER_SIZE);
+        i += POINTER_SIZE;
+		while (i < i + instancesLength) {
 			var keyPointer = readPointer(i);
 			var type = readPointer(i + POINTER_SIZE);
 			var doc = readPointer(i + POINTER_SIZE * 2);
@@ -698,9 +695,11 @@ class Storage {
 
 			i += cellSize;
 		}
+        var className = readString(readPointer(i));
 
 		return {
 			typeName: className,
+            superClass: superClass == parent.constants.NULL ? null : parent.getTypeName(superClass),
 			pointer: pointer,
 			isStaticType: false, // Final decision: static types cannot be created at runtime, only externally
 			isExternal: false,

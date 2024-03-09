@@ -24,11 +24,12 @@ class Interpreter {
 				case SplitLine: SplitLine;
 				case Variable(name, type, doc): VariableDeclaration(convert(name)[0], type == null ? Little.keywords.TYPE_DYNAMIC.asTokenPath() : convert(type)[0], doc == null ? Characters("") : convert(doc)[0]);
 				case Function(name, params, type, doc): FunctionDeclaration(convert(name)[0], convert(params)[0], type == null ? Little.keywords.TYPE_DYNAMIC.asTokenPath() : convert(type)[0], doc == null ? Characters("") : convert(doc)[0]);
-				case ConditionCall(name, exp, body): ConditionCall(convert(name)[0], convert(exp)[0], convert(body)[0]);
+				case Class(name, superClass, doc): ClassDeclaration(convert(name)[0], superClass == null ? Little.keywords.TYPE_OBJECT.asTokenPath() : convert(superClass)[0], doc == null ? Characters("") : convert(doc)[0]);
+                case ConditionCall(name, exp, body): ConditionCall(convert(name)[0], convert(exp)[0], convert(body)[0]);
 				case Read(name): null;
 				case Write(assignees, value): Write(convert(...assignees), convert(value)[0]);
 				case Identifier(word): Identifier(word);
-				case TypeDeclaration(value, type): TypeCast(convert(value)[0], convert(type)[0]);
+				case Cast(value, type): TypeCast(convert(value)[0], convert(type)[0]);
 				case FunctionCall(name, params): FunctionCall(convert(name)[0], convert(params)[0]);
 				case Return(value, type): FunctionReturn(convert(value)[0], type == null ? Little.keywords.TYPE_DYNAMIC.asTokenPath() : convert(type)[0]);
 				case Expression(parts, type): Expression(convert(...parts), type == null ? Little.keywords.TYPE_DYNAMIC.asTokenPath() : convert(type)[0]);

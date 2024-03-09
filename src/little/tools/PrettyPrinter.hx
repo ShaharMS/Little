@@ -96,6 +96,13 @@ class PrettyPrinter {
 					if (type != null) title += getTree_PARSER(type, prefix.copy(), level + 1, true);
 					return title;
 				}
+			case Class(name, superClass, doc): 
+				{
+					var title = '${prefixFA(prefix)}$t$d Class Creation\n';
+					if (doc != null) title += getTree_PARSER(doc, prefix.copy(), level + 1, false);
+					title += getTree_PARSER(name, prefix.copy(), level + 1, superClass == null);
+					if (superClass != null) title += getTree_PARSER(superClass, prefix.copy(), level + 1, true);
+				}
 			case ConditionCall(name, exp, body):
 				{
 					var title = '${prefixFA(prefix)}$t$d Condition\n';
@@ -114,7 +121,7 @@ class PrettyPrinter {
 				{
 					return '${prefixFA(prefix)}$t$d $value\n';
 				}
-            case TypeDeclaration(value, type): 
+            case Cast(value, type): 
 				{
 					return '${prefixFA(prefix)}$t$d Type Declaration\n${getTree_PARSER(value, if (type == null) prefix.copy() else pushIndex(prefix, level), level + 1, type == null)}${getTree_PARSER(type, prefix.copy(), level + 1, true)}';
             	}
@@ -215,9 +222,10 @@ class PrettyPrinter {
 				title += getTree_INTERP(name, prefix.copy(), level + 1, false);
 				title += getTree_INTERP(ct, prefix.copy(), level + 1, true);
 				return title;
-			case ClassDeclaration(name, doc):
+			case ClassDeclaration(name, superClass, doc):
 				var title = '${prefixFA(prefix)}$t$d Class Declaration\n';
 				if (doc != null) title += getTree_INTERP(doc, prefix.copy(), level + 1, false);
+				title += getTree_INTERP(superClass, prefix.copy(), level + 1, false);
 				title += getTree_INTERP(name, prefix.copy(), level + 1, true);
 				return title;
 			case ConditionCall(name, exp, body):
@@ -319,6 +327,7 @@ class PrettyPrinter {
 				case SplitLine: s += ", ";
 				case Variable(name, type): s += '${Little.keywords.VARIABLE_DECLARATION} $name ${if (type != null) '${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyParser(type)}' else ''}';
 				case Function(name, params, type): s += '${Little.keywords.FUNCTION_DECLARATION} ${stringifyParser(name)}(${stringifyParser(params)}) ${if (type != null) '${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyParser(type)}' else ''}';
+				case Class(name, superClass): s += '${Little.keywords.CLASS_DECLARATION} ${stringifyParser(name)} ${if (superClass != null) '${Little.keywords.EXTENDS} ${stringifyParser(superClass)}' else ''}';
 				case ConditionCall(name, exp, body): 
 					indent += "	";
 					s += '${stringifyParser(name)} (${stringifyParser(exp)}) \n${stringifyParser(body)}';
@@ -326,7 +335,7 @@ class PrettyPrinter {
 				case Read(name): s += stringifyParser(name);
 				case Write(assignees, value): s += [assignees.concat([value]).map(t -> stringifyParser(t)).join(" = ")];
 				case Identifier(word): s += word;
-				case TypeDeclaration(value, type): s += '${stringifyParser(value)} ${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyParser(type)}';
+				case Cast(value, type): s += '${stringifyParser(value)} ${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyParser(type)}';
 				case FunctionCall(name, params): s += '${stringifyParser(name)}(${stringifyParser(params)})';
 				case Return(value, type): s += '${Little.keywords.FUNCTION_RETURN} ${stringifyParser(value)}';
 				case Expression(parts, type): s += stringifyParser(parts);
@@ -363,7 +372,7 @@ class PrettyPrinter {
 				case VariableDeclaration(name, type, doc): s += '${Little.keywords.VARIABLE_DECLARATION} ${stringifyInterpreter(name)} ${if (type != null) '${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyInterpreter(type)}' else ''}';
 				case FunctionDeclaration(name, params, type, doc): s += '${Little.keywords.FUNCTION_DECLARATION} ${stringifyInterpreter(name)}(${stringifyInterpreter(params)}) ${if (type != null) '${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyInterpreter(type)}' else ''}';
 				case ConditionDeclaration(name, ct, doc): throw new NotImplementedException();
-				case ClassDeclaration(name, doc): throw new NotImplementedException();
+				case ClassDeclaration(name, superClass, doc): throw new NotImplementedException();
 				case Write(assignees, value): s += assignees.concat([value]).map(t -> stringifyInterpreter(t)).join(" = ");
 				case Identifier(word): s += word;
 				case TypeCast(value, type): s += '${stringifyInterpreter(value)} ${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyInterpreter(type)}';

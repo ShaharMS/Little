@@ -43,7 +43,7 @@ class Parser {
         #if parser_debug trace("expressions:", PrettyPrinter.printParserAst(tokens)); #end
         tokens = mergePropertyOperations(tokens);
         #if parser_debug trace("props:", PrettyPrinter.printParserAst(tokens)); #end
-        tokens = mergeTypeDecls(tokens);
+        tokens = mergeCasts(tokens);
         #if parser_debug trace("types:", PrettyPrinter.printParserAst(tokens)); #end
         tokens = mergeComplexStructures(tokens);
         #if parser_debug trace("structures:", PrettyPrinter.printParserAst(tokens)); #end
@@ -259,7 +259,7 @@ class Parser {
         return post;
     }
 
-    public static function mergeTypeDecls(pre:Array<ParserTokens>):Array<ParserTokens> {
+    public static function mergeCasts(pre:Array<ParserTokens>):Array<ParserTokens> {
         
         if (pre == null) return null;
         if (pre.length == 1 && pre[0] == null) return [null];
@@ -275,22 +275,22 @@ class Parser {
                 case Identifier(word): {
                     if (word == Little.keywords.TYPE_DECL_OR_CAST && i + 1 < pre.length) {
                         var lookahead = pre[i + 1];
-                        post.push(TypeDeclaration(null, mergeTypeDecls([lookahead])[0]));
+                        post.push(Cast(null, mergeCasts([lookahead])[0]));
                         i++;
                     } else if (word == Little.keywords.TYPE_DECL_OR_CAST) {
                         // Throw error for incomplete type declarations;
-                    if (i + 1 == pre.length) {
-                        Little.runtime.throwError(ErrorMessage('Incomplete type declaration, make sure to input a type after the `${Little.keywords.TYPE_DECL_OR_CAST}`.'));
-                        return null;
-                    }
+                        if (i + 1 == pre.length) {
+                            Little.runtime.throwError(ErrorMessage('Incomplete type declaration, make sure to input a type after the `${Little.keywords.TYPE_DECL_OR_CAST}`.'));
+                            return null;
+                        }
                     } else {
                         post.push(token);
                     }
                 }
-                case Expression(parts, type): post.push(Expression(mergeTypeDecls(parts), mergeTypeDecls([type])[0]));
-                case Block(body, type): post.push(Block(mergeTypeDecls(body), mergeTypeDecls([type])[0]));
-                case PropertyAccess(name, property): post.push(PropertyAccess(mergeTypeDecls([name])[0], mergeTypeDecls([property])[0]));
-				case Custom(name, params): post.push(Custom(name, params.map(x -> mergeTypeDecls([x])[0])));
+                case Expression(parts, type): post.push(Expression(mergeCasts(parts), mergeCasts([type])[0]));
+                case Block(body, type): post.push(Block(mergeCasts(body), mergeCasts([type])[0]));
+                case PropertyAccess(name, property): post.push(PropertyAccess(mergeCasts([name])[0], mergeCasts([property])[0]));
+				case Custom(name, params): post.push(Custom(name, params.map(x -> mergeCasts([x])[0])));
                 case _: post.push(token);
             }
             i++;
@@ -329,7 +329,7 @@ class Parser {
                     while (i < pre.length) {
                         var lookahead = pre[i];
                         switch lookahead {
-                            case TypeDeclaration(_, typeToken): {
+                            case Cast(_, typeToken): {
                                 if (name == null) {
                                     Little.runtime.throwError(ErrorMessage("Missing variable name before type declaration."), Layer.PARSER);
                                     return null;
@@ -338,25 +338,9 @@ class Parser {
                                 break;
                             }
                             case SetLine(_) | SplitLine | Sign("="): i--; break;
-                            case Block(body, type): {
-                                if (name == null) name = Block(mergeComplexStructures(body), mergeComplexStructures([type])[0]);
-                                else if (type == null) type = Block(mergeComplexStructures(body), mergeComplexStructures([type])[0]);
-                                else {
-                                    i--;
-                                    break;
-                                }
-                            }
-                            case Expression(body, type): {
-                                if (name == null) name = Expression(mergeComplexStructures(body), mergeComplexStructures([type])[0]);
-                                else if (type == null) type = Expression(mergeComplexStructures(body), mergeComplexStructures([type])[0]);
-                                else {
-                                    i--;
-                                    break;
-                                }
-                            }
                             case _: {
-                                if (name == null) name = lookahead;
-                                else if (type == null && lookahead.is(TYPE_DECLARATION)) type = lookahead;
+                                if (name == null) name = mergeComplexStructures([lookahead])[0];
+                                else if (type == null && lookahead.is(CAST)) type = mergeComplexStructures([lookahead.parameter(1)])[0];
                                 else {
                                     i--;
                                     break;
@@ -388,7 +372,7 @@ class Parser {
                     while (i < pre.length) {
                         var lookahead = pre[i];
                         switch lookahead {
-                            case TypeDeclaration(_, typeToken): {
+                            case Cast(_, typeToken): {
                                 if (name == null) {
                                     Little.runtime.throwError(ErrorMessage("Missing function name and parameters before type declaration."), Layer.PARSER);
                                     return null;
@@ -401,26 +385,10 @@ class Parser {
                                 break;
                             }
                             case Sign("="): i--; break;
-                            case Block(body, type): {
-                                if (name == null) name = Block(mergeComplexStructures(body), mergeComplexStructures([type])[0]);
-                                else if (params == null) params = Block(mergeComplexStructures(body), mergeComplexStructures([type])[0]);
-                                else if (type == null) type = Block(mergeComplexStructures(body), mergeComplexStructures([type])[0]);
-                                else {
-                                    break;
-                                }
-                            }
-                            case Expression(body, type): {
-                                if (name == null) name = Expression(mergeComplexStructures(body), mergeComplexStructures([type])[0]);
-                                else if (params == null) params = Expression(mergeComplexStructures(body), mergeComplexStructures([type])[0]);
-                                else if (type == null) type = Expression(mergeComplexStructures(body), mergeComplexStructures([type])[0]);
-                                else {
-                                    break;
-                                }
-                            }
                             case _: {
-                                if (name == null) name = lookahead;
-                                else if (params == null) params = lookahead;
-                                else if (type == null && lookahead.getName() == "TypeDeclaration") type = mergeComplexStructures([lookahead.parameter(1)])[0];
+                                if (name == null) name = mergeComplexStructures([lookahead])[0];
+                                else if (params == null) params = mergeComplexStructures([lookahead])[0];
+                                else if (type == null && lookahead.is(CAST)) type = mergeComplexStructures([lookahead.parameter(1)])[0];
                                 else {
                                     break;
                                 }
@@ -435,6 +403,45 @@ class Parser {
 
                     post.push(Function(name, params, type, currentDoc));
 					currentDoc = null;
+                }
+                case Identifier(_ == Little.keywords.CLASS_DECLARATION => true): {
+                    i++;
+                    if (i >= pre.length) {
+                        Little.runtime.throwError(ErrorMessage("Missing class name, class is cut off by the end of the file, block or expression."), Layer.PARSER);
+                        return null;
+                    }
+
+                    var name:ParserTokens = null;
+                    var assignSuperClass = false;
+                    var superClass:ParserTokens = null;
+
+                    while (i < pre.length) {
+                        var lookahead = pre[i];
+                        
+                        switch lookahead {
+                            case Identifier(_ == Little.keywords.EXTENDS => true): {
+                                assignSuperClass = true;
+                            }
+                            case SetLine(_) | SplitLine: i--; break;
+                            case _: {
+                                if (name == null && assignSuperClass) Little.runtime.throwError(ErrorMessage("Missing class name before super class declaration."), Layer.PARSER);
+                                else if (name == null) name = mergeComplexStructures([lookahead])[0];
+                                else if (name != null && !assignSuperClass) Little.runtime.throwError(ErrorMessage('Missing `${Little.keywords.EXTENDS}` before super class declaration.'), Layer.PARSER);
+                                else if (superClass == null) superClass = mergeComplexStructures([lookahead])[0];
+                                else {
+                                    i--;
+                                    break;
+                                }
+                            }
+                        }
+                        i++;
+                    }
+
+                    if (name == null) 
+                        Little.runtime.throwError(ErrorMessage("Missing class name class is cut off by the end of the file, block or expression."), Layer.PARSER);
+                    
+                    post.push(Class(name, superClass, currentDoc));
+                    currentDoc = null;
                 }
                 case Identifier(_ == Little.keywords.FUNCTION_RETURN => true): {
                     i++;
@@ -516,7 +523,6 @@ class Parser {
 					} else {
 						i--;
 						post.push(ConditionCall(name, exp, body));
-						currentDoc = null;
 					}
                 }                
                 case Expression(parts, type): post.push(Expression(mergeComplexStructures(parts), mergeComplexStructures([type])[0]));
@@ -705,7 +711,7 @@ class Parser {
             switch token {
                 case SetLine(line): {setLine(line); post.unshift(token);}
                 case SplitLine: {nextPart(); post.unshift(token);}
-                case TypeDeclaration(null, type): {
+                case Cast(null, type): {
                     if (i-- <= 0) {
                         Little.runtime.throwError(ErrorMessage("Value's type declaration cut off by the start of file, block or expression."), Layer.PARSER);
                         return null;
@@ -717,7 +723,7 @@ class Parser {
                             return null;
                         }
                         case _: {
-                            post.unshift(TypeDeclaration(lookbehind, type));
+                            post.unshift(Cast(lookbehind, type));
                         }
                     }
                 }

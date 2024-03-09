@@ -98,9 +98,9 @@ class PrepareRun {
 			}
 		]);
 
-		Little.plugin.registerType("Object", [
-			'static Object create (define fieldEstimate as ${Little.keywords.TYPE_INT} = 20)' => (params) -> {
-				return Object([], "Object");
+		Little.plugin.registerType(Little.keywords.TYPE_OBJECT, [
+			'static ${Little.keywords.TYPE_OBJECT} create (define fieldEstimate as ${Little.keywords.TYPE_INT} = 20)' => (params) -> {
+				return Object([], Little.keywords.TYPE_OBJECT);
 			}
 		]);
 	}

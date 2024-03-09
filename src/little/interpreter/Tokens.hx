@@ -37,7 +37,7 @@ enum InterpTokens {
 		@param name `Identifier`, `PropertyAccess`
 		@param doc `Characters`
 	**/
-	ClassDeclaration(name:InterpTokens, ?doc:InterpTokens);
+	ClassDeclaration(name:InterpTokens, ?superClass:InterpTokens, ?doc:InterpTokens);
 
 	/**
 		`callers` is a map of `InterpTokens` configs representing the structure of the condition itself, in correlation to the conditions outcome. 

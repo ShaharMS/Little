@@ -19,7 +19,7 @@ class PrettyOutput {
             "Merge Blocks" => Parser.mergeBlocks, 
             "Merge Expressions" => Parser.mergeExpressions, 
             "Merge Property Operations" => Parser.mergePropertyOperations, 
-            "Merge Type Declarations" => Parser.mergeTypeDecls, 
+            "Merge Type Declarations" => Parser.mergeCasts, 
             "Merge Complex Structures" => Parser.mergeComplexStructures, 
             "Merge Calls" => Parser.mergeCalls,
             "Merge Writes" => Parser.mergeWrites,

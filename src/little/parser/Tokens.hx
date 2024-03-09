@@ -10,13 +10,14 @@ enum ParserTokens {
 
     Variable(name:ParserTokens, type:ParserTokens, ?doc:ParserTokens);
     Function(name:ParserTokens, params:ParserTokens, type:ParserTokens, ?doc:ParserTokens);
+    Class(name:ParserTokens, ?superClass:ParserTokens, ?doc:ParserTokens);
     ConditionCall(name:ParserTokens, exp:ParserTokens, body:ParserTokens);
 
     Read(name:ParserTokens);
     Write(assignees:Array<ParserTokens>, value:ParserTokens);
 
     Identifier(word:String);
-    TypeDeclaration(value:ParserTokens, type:ParserTokens);
+    Cast(value:ParserTokens, type:ParserTokens);
     FunctionCall(name:ParserTokens, params:ParserTokens);
     Return(value:ParserTokens, type:ParserTokens);
 

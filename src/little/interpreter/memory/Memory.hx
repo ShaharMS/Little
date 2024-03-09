@@ -457,6 +457,7 @@ class Memory {
 					case 16 /* unknown */: Little.keywords.TYPE_UNKNOWN;
 					case _: throw "How did we get here? 5";
 				},
+				superClass: null,
 				isStaticType: true,
 				isExternal: false,
 				instanceFields: [],
@@ -487,10 +488,13 @@ class Memory {
 			for (key => value in statProps.properties)
 				statics[key] = {type: value.type, doc: value.doc};
 
+			var superClass =  statProps.properties.exists(Little.keywords.SUPER_CLASS_PROPERTY_NAME) ? 
+			getTypeName(statProps.properties[Little.keywords.SUPER_CLASS_PROPERTY_NAME].getter(null, null).objectAddress) : null;
 
 			return {
 				pointer: externs.typeToPointer[name],
 				typeName: name,
+				superClass: superClass,
 				isStaticType: false,
 				isExternal: true,
 				instanceFields: instances,
@@ -539,6 +543,7 @@ class Memory {
 typedef TypeInfo = {
 	pointer:MemoryPointer,
 	typeName:String,
+	?superClass:String,
 	isStaticType:Bool,
 	isExternal:Bool,
 	instanceFields:Map<String, {type:MemoryPointer, doc:MemoryPointer}>,

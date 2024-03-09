@@ -2,8 +2,12 @@ package little;
 
 @:structInit
 class KeywordConfig {
+
     @:optional public var VARIABLE_DECLARATION:String = "define";
     @:optional public var FUNCTION_DECLARATION:String = "action";
+    @:optional public var CONDITION_DECLARATION:String = "condition";
+    @:optional public var CLASS_DECLARATION:String = "class";
+    @:optional public var EXTENDS:String = "extends";
     @:optional public var TYPE_DECL_OR_CAST:String = "as";
     @:optional public var FUNCTION_RETURN:String = "return";
     @:optional public var NULL_VALUE:String = "nothing";
@@ -34,6 +38,11 @@ class KeywordConfig {
     @:optional public var TYPE_MODULE:String = "Type";
 
     /**
+        represents the dynamic object type, a map-like object
+    **/
+    @:optional public var TYPE_OBJECT:String = "Object";
+
+    /**
     	Represents the type of a sign (for example, +)
         Exists for fun, but still functional :)
     **/
@@ -44,6 +53,7 @@ class KeywordConfig {
 
     @:optional public var OBJECT_TYPE_PROPERTY_NAME:String = "type";
 	@:optional public var OBJECT_ADDRESS_PROPERTY_NAME:String = "address";
+    @:optional public var SUPER_CLASS_PROPERTY_NAME:String = "extendedClass";
 	@:optional public var OBJECT_DOC_PROPERTY_NAME:String = "documentation";
     @:optional public var TO_STRING_PROPERTY_NAME:String = "toString";
     @:optional public var PRINT_FUNCTION_NAME:String = "print";
