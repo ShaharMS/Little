@@ -216,11 +216,10 @@ class PrettyPrinter {
 				title += getTree_INTERP(params, prefix.copy(), level + 1, type == null);
 				if (type != null) title += getTree_INTERP(type, prefix.copy(), level + 1, true);
 				return title;
-			case ConditionDeclaration(name, ct, doc):
+			case ConditionDeclaration(name, doc):
 				var title = '${prefixFA(prefix)}$t$d Condition Declaration\n';
 				if (doc != null) title += getTree_INTERP(doc, prefix.copy(), level + 1, false);
-				title += getTree_INTERP(name, prefix.copy(), level + 1, false);
-				title += getTree_INTERP(ct, prefix.copy(), level + 1, true);
+				title += getTree_INTERP(name, prefix.copy(), level + 1, true);
 				return title;
 			case ClassDeclaration(name, superClass, doc):
 				var title = '${prefixFA(prefix)}$t$d Class Declaration\n';
@@ -371,7 +370,7 @@ class PrettyPrinter {
 				case SplitLine: s += ", ";
 				case VariableDeclaration(name, type, doc): s += '${Little.keywords.VARIABLE_DECLARATION} ${stringifyInterpreter(name)} ${if (type != null) '${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyInterpreter(type)}' else ''}';
 				case FunctionDeclaration(name, params, type, doc): s += '${Little.keywords.FUNCTION_DECLARATION} ${stringifyInterpreter(name)}(${stringifyInterpreter(params)}) ${if (type != null) '${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyInterpreter(type)}' else ''}';
-				case ConditionDeclaration(name, ct, doc): throw new NotImplementedException();
+				case ConditionDeclaration(name, doc): throw new NotImplementedException();
 				case ClassDeclaration(name, superClass, doc): throw new NotImplementedException();
 				case Write(assignees, value): s += assignees.concat([value]).map(t -> stringifyInterpreter(t)).join(" = ");
 				case Identifier(word): s += word;

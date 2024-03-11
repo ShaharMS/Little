@@ -30,7 +30,7 @@ enum InterpTokens {
 		@param conditionType `Identifier`, `PropertyAccess`
 		@param doc `Characters`
 	**/
-	ConditionDeclaration(name:InterpTokens, conditionType:InterpTokens, ?doc:InterpTokens);
+	ConditionDeclaration(name:InterpTokens, ?doc:InterpTokens);
 	
 	/**
 		Usage:

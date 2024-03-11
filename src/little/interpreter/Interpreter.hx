@@ -1,5 +1,6 @@
 package little.interpreter;
 
+import haxe.ds.Map;
 import haxe.Rest;
 import little.interpreter.Tokens.InterpTokens;
 import little.tools.PrettyPrinter;
@@ -147,6 +148,20 @@ class Interpreter {
         // Listeners
     }
 
+    public static function declareClass(name:InterpTokens, superClass:InterpTokens, doc:InterpTokens) {
+        var path = name.asStringPath();
+        var superPath = superClass.asStringPath();
+        var dummyType = memory.storage.storeType(path.copy().pop(), [
+            Little.keywords.SUPER_CLASS_PROPERTY_NAME => {
+                value: Characters(superPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)),
+                documentation: evaluate(doc).extractIdentifier(),
+                type: Little.keywords.TYPE_DYNAMIC
+            }
+        ], []);
+
+        memory.write(path, ClassPointer(dummyType), Little.keywords.TYPE_MODULE, doc != null ? evaluate(doc).extractIdentifier() : "");
+    }
+
 	/**
 		Calls a condition. The condition's `body` is repeated `0` to `n` times, depending on the condition's `conditionParams`.
 		@param pattern The pattern of the condition. Should be a `InterpTokens.PartArray(parts:Array<InterpTokens>)`
@@ -165,7 +180,7 @@ class Interpreter {
 				if (given[i].getName() != pattern[i].getName()) return false;
 				switch given[i] {
 					case SetLine(_) | Number(_) | Decimal(_) | Characters(_) | Documentation(_) | Sign(_) | Identifier(_) | ErrorMessage(_): if (pattern[i].parameter(0) != null) return false; 
-					case VariableDeclaration(_, _, _) | FunctionDeclaration(_, _, _, _) | ClassDeclaration(_, _) | ConditionDeclaration(_, _, _): currentlyFits = currentlyFits && fit(cast given[i].getParameters(), cast pattern[i].getParameters(), currentlyFits);
+					case VariableDeclaration(_, _, _) | FunctionDeclaration(_, _, _, _) | ClassDeclaration(_, _) | ConditionDeclaration(_, _): currentlyFits = currentlyFits && fit(cast given[i].getParameters(), cast pattern[i].getParameters(), currentlyFits);
 					case ConditionCode(_): return false; // Cant be matched with, only valid in the context of a condition definition. Represented by other tokens in other cases
 					case FunctionCode(_, _): return false; // same as above
 					case ConditionCall(_, _, _) | FunctionCall(_, _): currentlyFits = currentlyFits && fit(cast given[i].getParameters(), cast pattern[i].getParameters(), currentlyFits);
@@ -224,14 +239,16 @@ class Interpreter {
     **/
     public static function write(assignees:Array<InterpTokens>, value:InterpTokens):InterpTokens {
 
-		var vars = [], funcs = [];
+		var vars = [], funcs = [], classes = [];
 		var containsFunction = false;
 		var containsVariable = false;
+        var containsClass = false;
 		for (assignee in assignees) {
 			switch assignee {
 				case VariableDeclaration(name, type, doc): declareVariable(name, type, doc); vars.push(name); containsVariable = true;
 				case FunctionDeclaration(name, params, type, doc): declareFunction(name, params, doc); funcs.push(name); containsFunction = true; //TODO: find a way to store function type
-				case ConditionDeclaration(name, ct, doc): // TODO: Condition declaration is not implemented yet.
+				case ConditionDeclaration(name, doc): // TODO: Condition declaration is not implemented yet.
+                case ClassDeclaration(name, superClass, doc): declareClass(name, superClass, doc); classes.push(name); containsClass = true;
 				case _: vars.push(assignee); containsVariable = true;
 			}
 		}
@@ -251,6 +268,45 @@ class Interpreter {
 				memory.set(path, evaluated, evaluated.type(), "");
 			}
 		}
+
+        if (containsClass) {
+            var paths = classes.map(x -> x.asStringPath());
+            // This one is a little more complicated, since classes don't have any representative token.
+            var statics:Map<String, Dynamic> = [], instances:Map<String, Dynamic> = [];
+            
+            if (!value.is(BLOCK)) 
+                Little.runtime.throwError(ErrorMessage('Class value must be a block of code, containing definitions/actions.'));
+            
+            for (token in (value.parameter(0) : Array<InterpTokens>)) {
+                switch token {
+                    case VariableDeclaration(name, type, doc): 
+                        if (name.asStringPath()[0] == Little.keywords.THIS)
+                            instances[name.extractIdentifier()] = {type: type.extractIdentifier(), documentation: doc.extractIdentifier()};
+                        else
+                            statics[name.extractIdentifier()] = {value: NullValue, type: type.extractIdentifier(), documentation: doc.extractIdentifier()};
+                    case FunctionDeclaration(name, _, _, doc): // We intentionally lose this data. 
+                        if (name.asStringPath()[0] == Little.keywords.THIS)
+                            instances[name.extractIdentifier()] = {type: Little.keywords.TYPE_FUNCTION, documentation: doc.extractIdentifier()};
+                        else
+                            statics[name.extractIdentifier()] = {value: NullValue, type: Little.keywords.TYPE_FUNCTION, documentation: doc.extractIdentifier()};
+                    
+                    case ConditionDeclaration(name, doc):
+                        if (name.asStringPath()[0] == Little.keywords.THIS)
+                            instances[name.extractIdentifier()] = {type: Little.keywords.TYPE_CONDITION, documentation: doc.extractIdentifier()};
+                        else
+                            statics[name.extractIdentifier()] = {value: NullValue, type: Little.keywords.TYPE_CONDITION, documentation: doc.extractIdentifier()};
+                    
+                    case ClassDeclaration(_, _, _): Little.runtime.throwError(ErrorMessage('Nested class declarations are not supported.'));
+                    case Write(assignees, value): {
+
+                    }
+                    case _: Little.runtime.throwError(ErrorMessage('Unexpected token when interpreting class'));
+                }
+            }
+            for (path in paths) {
+                
+            }
+        }
         
 		// Listeners
 

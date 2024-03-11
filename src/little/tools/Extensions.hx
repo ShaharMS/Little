@@ -1,5 +1,6 @@
 package little.tools;
 
+import vision.exceptions.Unimplemented;
 import little.interpreter.Tokens.InterpTokens;
 import little.interpreter.Interpreter;
 import little.parser.Tokens.ParserTokens;

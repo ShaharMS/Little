@@ -21,6 +21,9 @@ class Foo = {
     action Foo.someStaticFunction() = {
         print(Foo.documentation)
     }
+
+    define self.a = Object.create() new Object()
+    define self.a.b = 4
 }
 
 define someVar as Decimal = 3

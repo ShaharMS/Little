@@ -362,7 +362,7 @@ class Memory {
 			if (getTypeInformation(current.type).isStaticType) {
 				Little.runtime.throwError(ErrorMessage('Cannot write to a property to values of a static type. Only objects can have dynamic properties (${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)} is `${current.type}`)'));
 			}
-			if (!HashTables.hashTableHasKey(HashTables.getHashTableOf(current.address, storage), path[path.length - 1], storage)) {
+			else if (!HashTables.hashTableHasKey(HashTables.getHashTableOf(current.address, storage), path[path.length - 1], storage)) {
 				trace(wentThroughPath + " has hash table");
 				HashTables.objectAddKey(current.address, path[path.length - 1], store(value), getTypeInformation(type).pointer, storage.storeString(doc), storage);
 			} else if (externs.instanceProperties.properties.exists(path[path.length - 1])) {
@@ -410,7 +410,8 @@ class Memory {
 			if (getTypeInformation(current.type).isStaticType) {
 				Little.runtime.throwError(ErrorMessage('Cannot set properties to values of a static type. Only objects can have dynamic properties (${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)} is `${current.type}`)'));
 			}
-			if (HashTables.hashTableHasKey(HashTables.getHashTableOf(current.address, storage), path[path.length - 1], storage)) {
+			if (type == Little.keywords.TYPE_MODULE)
+			else if (HashTables.hashTableHasKey(HashTables.getHashTableOf(current.address, storage), path[path.length - 1], storage)) {
 				HashTables.objectSetKey(current.address, path[path.length - 1], {value: value != null ? store(value) : null, type: type != null ? getTypeInformation(type).pointer : null, doc: doc != null ? storage.storeString(doc) : null}, storage);
 			} else if (externs.instanceProperties.properties.exists(path[path.length - 1])) {
 				Little.runtime.throwError(ErrorMessage('Cannot set an extern property (${path[path.length - 1]})'));

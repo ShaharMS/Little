@@ -3,6 +3,7 @@ package little;
 @:structInit
 class KeywordConfig {
 
+
     @:optional public var VARIABLE_DECLARATION:String = "define";
     @:optional public var FUNCTION_DECLARATION:String = "action";
     @:optional public var CONDITION_DECLARATION:String = "condition";
@@ -62,7 +63,8 @@ class KeywordConfig {
     @:optional public var RUN_CODE_FUNCTION_NAME:String = "run";
 	@:optional public var CONDITION_PATTERN_PARAMETER_NAME:String = "pattern";
 	@:optional public var CONDITION_BODY_PARAMETER_NAME:String = "code";
-
+    @:optional public var THIS:String = "self";
+    @:optional public var SUPER:String = "super";
     /**
     	No need to ever change this, this is a parser-only feature
     **/
