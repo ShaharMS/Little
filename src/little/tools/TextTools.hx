@@ -477,6 +477,9 @@ enum TextDirection
 
 private class MultilangFonts
 {
+	/**
+	    Instantiates a new `MultilangFonts` instance.
+	**/
 	function new() {}
 
 	/**

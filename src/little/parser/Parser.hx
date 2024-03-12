@@ -64,6 +64,9 @@ class Parser {
         return tokens;
     }
 
+    /**
+        Simply converts lexer to parser tokens.
+    **/
     public static function convert(lexerTokens:Array<LexerTokens>):Array<ParserTokens> {
         var tokens:Array<ParserTokens> = [];
 
@@ -101,6 +104,13 @@ class Parser {
     }
 
 
+    /**
+        Merges This structure:
+        ```
+        { ... }
+        ```
+        Into a `Block()` token
+    **/
     public static function mergeBlocks(pre:Array<ParserTokens>):Array<ParserTokens> {
 
         if (pre == null) return null;
@@ -152,6 +162,13 @@ class Parser {
         return post;
     }
 
+    /**
+        Merges This structure:
+        ```
+        (...)
+        ```
+        Into an `Expression()` token
+    **/
     public static function mergeExpressions(pre:Array<ParserTokens>):Array<ParserTokens> {
 
         if (pre == null) return null;
@@ -202,6 +219,15 @@ class Parser {
         return post;
     }
 
+    /**
+       Merges a chain of single tokens seperated by `.`s into a
+
+       `PropertyAccess(first, second)`
+
+       Or a nested version when there are multiple `.`s
+
+       `PropertyAccess(PropertyAccess(first, second), third)` 
+    **/
     public static function mergePropertyOperations(pre:Array<ParserTokens>) :Array<ParserTokens> {
 
         if (pre == null) return null;
@@ -259,6 +285,9 @@ class Parser {
         return post;
     }
 
+    /**
+        Merges `as <Type>` sequences into `TypeDeclaration(null, <Type>)`
+    **/
     public static function mergeTypeDecls(pre:Array<ParserTokens>):Array<ParserTokens> {
         
         if (pre == null) return null;
@@ -300,6 +329,13 @@ class Parser {
         return post;
     }
 
+    /**
+        Merges many complex seqences into single tokens:
+
+         - `define <name> [as <Type>]` -> `VariableCreation()`
+         - `action <name>(<params>) [as <Type>]` -> `FunctionCreation()`
+         - and more...
+    **/
     public static function mergeComplexStructures(pre:Array<ParserTokens>):Array<ParserTokens> {
 
         if (pre == null) return null;
@@ -532,6 +568,9 @@ class Parser {
         return post;
     }
 
+    /**
+        Merges a token followed by an expression immediately into a `FunctionCall()`
+    **/
     public static function mergeCalls(pre:Array<ParserTokens>):Array<ParserTokens> {
 
         if (pre == null) return null;
@@ -579,6 +618,9 @@ class Parser {
         return post;
     }
 
+    /**
+        Merges a chain of single tokens separated by a `=` into a `Write([<sequence>], <end of sequence>)`
+    **/
     public static function mergeWrites(pre:Array<ParserTokens>):Array<ParserTokens> {
 
         if (pre == null) return null;
@@ -692,6 +734,9 @@ class Parser {
         return post;
     }
 
+    /**
+        Merges `<token>, TypeDeclaration(null, <type>)` into `TypeDeclaration(<token>, <type>)`
+    **/
     public static function mergeValuesWithTypeDeclarations(pre:Array<ParserTokens>) :Array<ParserTokens> {
 
         if (pre == null) return null;
@@ -741,6 +786,13 @@ class Parser {
         return post;
     }
 
+    /**
+        Merges tokens that expect a `Block` as it's last parameter with the next token, if that last parameter is `null`.  
+        Comes into play with condition calls:
+        ```
+        if (<exp>) <exp>
+        ```
+    **/
     public static function mergeNonBlockBodies(pre:Array<ParserTokens>):Array<ParserTokens> {
 
         if (pre == null) return null;
@@ -790,6 +842,9 @@ class Parser {
         return post;
     }
 
+    /**
+        Macro that adds support for `if`-`else` patterns.
+    **/
     public static function mergeElses(pre:Array<ParserTokens>):Array<ParserTokens> {
 
         if (pre == null) return null;

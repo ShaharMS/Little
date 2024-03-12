@@ -135,7 +135,7 @@ class Main {
 					}
 					try {
 						Sys.println(PrettyPrinter.printInterpreterAst(Interpreter.convert(...Parser.parse(Lexer.lex(input)))));
-					}
+					} catch (e) {}
 				}
 			} else {
 				Little.run(input, true);

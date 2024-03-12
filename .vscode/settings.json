@@ -20,6 +20,7 @@
 		"MULTICHAR",
 		"println",
 		"STRINGIFIER",
+		"stringifiers",
 		"stringifiyable",
 		"Stringifying",
 		"struct",

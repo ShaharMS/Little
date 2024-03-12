@@ -7,8 +7,9 @@ import little.parser.Parser;
 using StringTools;
 
 class PrettyOutput {
-    
-
+    /**
+        Uses the parser to generate the AST, and then returns an HTML table of each stage of the parsing process.
+    **/
     public static function generateAstHtml(code:String):String {
         var htmlFile = "<table><tr><th>Stage</th><th>AST</th></tr>";
         

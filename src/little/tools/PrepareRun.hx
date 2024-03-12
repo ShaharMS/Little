@@ -20,9 +20,18 @@ using little.tools.Extensions;
 
 @:access(little.interpreter.Operators)
 @:access(little.interpreter.Runtime)
+/**
+    Contains `Little`'s standard library, as a group of functions, each adding different types of features.
+**/
 class PrepareRun {
+	/**
+		Whether or not the standard library has been prepared.
+	**/
 	public static var prepared:Bool = false;
 
+	/**
+	    Adds Standard library types.
+	**/
 	public static function addTypes() {
 
 		Little.plugin.registerType(Little.keywords.TYPE_FUNCTION, []);
@@ -104,7 +113,10 @@ class PrepareRun {
 			}
 		]);
 	}
-		
+	
+	/**
+	    Adds standard library, top-level functions.
+	**/
 	public static function addFunctions() {
 		Little.plugin.registerFunction(Little.keywords.PRINT_FUNCTION_NAME, null, [VariableDeclaration(Identifier("item"), null)], (params) -> {
 			var eval = Interpreter.evaluate(params[0]);
@@ -123,6 +135,9 @@ class PrepareRun {
 		}, Little.keywords.TYPE_DYNAMIC);
 	}
 
+	/**
+	    Adds standard instance properties to core types.
+	**/
 	public static function addProps() {
 		Little.plugin.registerInstanceVariable(Little.keywords.OBJECT_TYPE_PROPERTY_NAME, Little.keywords.TYPE_STRING, Little.keywords.TYPE_DYNAMIC, 'The name of this value\'s type, as a ${Little.keywords.TYPE_STRING}', 
 			(value, address) -> {
@@ -136,6 +151,9 @@ class PrepareRun {
 		);
 	}
 
+	/**
+		Adds standard library operators.
+	**/
 	public static function addSigns() {
 
 		// --------------------------------------------------
@@ -395,6 +413,9 @@ class PrepareRun {
 		});
 	}
 
+	/**
+	    Adds standard library top-level conditions and loops.
+	**/
 	public static function addConditions() {
 		Little.plugin.registerCondition("while", "A loop that executes code until the condition is not met", (params, body) -> {
 			var val = NullValue;

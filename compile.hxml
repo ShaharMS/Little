@@ -9,7 +9,7 @@
 #--js interp.js
 --interp
 #--define memory_tests
---define unit
+#--define unit
 #--define parser_debug
 --debug
 # --dce full

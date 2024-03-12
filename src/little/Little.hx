@@ -1,5 +1,6 @@
 package little;
 
+import vision.ds.Queue;
 import vision.helpers.VisionThread;
 import little.tools.PrettyPrinter;
 import little.interpreter.memory.Memory;
@@ -16,21 +17,45 @@ import little.interpreter.Runtime;
 @:expose
 class Little {
     
-    public static var runningThread:VisionThread;
-
+    /**
+        A feature of the `Little` programming language is that it is possible to change keywords & other
+        usually hardcoded properties.
+    **/
     public static var keywords(default, null):KeywordConfig = {};
 
+    /**
+        Used to access runtime details of the current "running instance" of `Little`.
+
+        Contains callbacks for operations, access to the callstack, and more.
+    **/
     public static var runtime(default, null):Runtime = new Runtime();
-    public static var operators(default, null) = Operators;
+
+    /**
+        The independent memory manager. Allocates and deallocates variables, using
+        gradually allocated byte arrays.
+    **/
     public static var memory(default, null):Memory = new Memory();
+
+    /**
+        A portal that allows external interfacing with little code, both during and before runtime.
+
+        You can add classes, variables, functions, and even operators.
+    **/
     public static var plugin(default, null):Plugins = new Plugins(Little.memory);
+
+    public static var operators(default, null) = Operators;
+
+    /**
+        Used to store code that is currently being ran/queued for running right before the main module using
+        `runRightBeforeMain` in `Little.loadModule()`.
+    **/
+    public static var queue(default, null):Queue<String>;
 
 
     /**
     	When enabled:
 
 		 - `print`, `error` and `warn` calls will contain the part of the lexer/parser/interpreter hat called them (see `little.tools.Layer`)
-		 - All documentation will be stored in memory, and can be accessed via property `documentation` (for example `someObject.documentation`, `Class.documentation`).
     **/
     public static var debug:Bool = false;
 
@@ -103,6 +128,9 @@ class Little {
         }
     }
 
+	/**
+	    Resets all runtime details.
+	**/
 	public static function reset() {
         runtime = new Runtime();
 		Operators.lhsOnly.clear();

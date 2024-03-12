@@ -1,5 +1,8 @@
 package little.tools;
 
+/**
+    An enumeration of the different layers of the `Little` Interpreter.
+**/
 enum abstract Layer(String) from String to String {
     var LEXER = "Lexer";
     var PARSER = "Parser";
@@ -16,7 +19,11 @@ enum abstract Layer(String) from String to String {
 	var MEMORY_SIZE_EVALUATOR = "Memory, Size Evaluator";
 	var MEMORY_GARBAGE_COLLECTOR = "Memory, Garbage Collector";
 
-    public static function getIndexOf(layer:String) {
+    /**
+        Gets the 0-based index of a layer, as a string.
+        @param layer An instance of the `Layer` enum, or a string representing a layer.
+    **/
+    public static function getIndexOf(layer:String):Int {
         return switch layer {
             case LEXER: 1;
             case PARSER: 2;

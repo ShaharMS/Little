@@ -8,8 +8,15 @@ using little.tools.TextTools;
 using little.tools.Extensions;
 using Std;
 
+/**
+    A class containing various functions to statically interface between Haxe and Little
+    values/types.
+**/
 class Conversion {
 
+    /**
+        Converts a `ValueType` instance into a string, containing the type it represents.         
+    **/
     public static function extractHaxeType(type:ValueType):String {
         return switch type {
             case TNull: "Dynamic";
@@ -24,6 +31,11 @@ class Conversion {
         }
     }
 
+    /**
+        Converts dynamic haxe values into `Little` tokens, specifically `InterpTokens`.
+        Only values are supported (no functions).  
+        Classes and enums are yet to be implemented.  
+    **/
     public static function toLittleValue(val:Dynamic):InterpTokens {
         if (val == null) return NullValue;
         if (val is String) return Characters(val);
@@ -76,6 +88,10 @@ class Conversion {
 		}
     }
 
+    /**
+        Converts `InterpTokens` into a haxe value, depending on its type.
+        `Little` functions are not supported.
+    **/
     public static function toHaxeValue(val:InterpTokens):Dynamic {
         val = Interpreter.evaluate(val);
         return switch val {
@@ -107,6 +123,9 @@ class Conversion {
         }
     }
 
+    /**
+        Converts core Haxe types into `Little` types. 
+    **/
     public static function toLittleType(type:String) {
         return switch type {
             case "Bool": Little.keywords.TYPE_BOOLEAN;

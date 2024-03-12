@@ -12,8 +12,17 @@ using little.tools.TextTools;
 import little.parser.Tokens;
 
 
+/**
+    A class containing stringifiers of complex structures in this library,
+	specifically `ParserTokens` and `InterpTokens`.
+**/
 class PrettyPrinter {
     
+    /**
+        Pretty-Prints an array of `ParserTokens` as a tree, with it's origin being `Ast` (Abstract Syntax Tree)
+        @param ast The tokens to stringify
+        @param spacingBetweenNodes The length of an indent between nested nodes.
+    **/
     public static function printParserAst(ast:Array<ParserTokens>, ?spacingBetweenNodes:Int = 6) {
 		if (ast == null) return "null (look for errors in input)";
 		s = " ".multiply(spacingBetweenNodes);
@@ -27,6 +36,11 @@ class PrettyPrinter {
 		return "\nAst\n" + filtered;
 	}
 
+	/**
+	    Pretty-Prints an array of `InterpTokens` as a tree, with it's origin being `Ast` (Abstract Syntax Tree)
+        @param ast The tokens to stringify
+        @param spacingBetweenNodes The length of an indent between nested nodes.
+	**/
 	public static function printInterpreterAst(ast:Array<InterpTokens>, ?spacingBetweenNodes:Int = 6) {
 		if (ast == null) return "null (look for errors in input)";
 		s = " ".multiply(spacingBetweenNodes);
@@ -40,7 +54,9 @@ class PrettyPrinter {
 		return "\nAst\n" + filtered;
 	}
 
-	static function prefixFA(pArray:Array<Int>) {
+	
+
+	static function prefixFA(pArray:Array<Int>):String {
 		var prefix = "";
 		for (i in 0...l) {
 			if (pArray[i] == 1) {
@@ -61,7 +77,7 @@ class PrettyPrinter {
 	static var s = "";
 	static var l = 0;
 
-	static function getTree_PARSER(root:ParserTokens, prefix:Array<Int>, level:Int, last:Bool):String {
+	@:noCompletion static function getTree_PARSER(root:ParserTokens, prefix:Array<Int>, level:Int, last:Bool):String {
 		l = level;
 		var t = if (last) "└" else "├";
 		var c = "├";
@@ -174,7 +190,7 @@ class PrettyPrinter {
 		return "";
 	}
 
-	static function getTree_INTERP(root:InterpTokens, prefix:Array<Int>, level:Int, last:Bool):String {
+	@:noCompletion static function getTree_INTERP(root:InterpTokens, prefix:Array<Int>, level:Int, last:Bool):String {
 		l = level;
 		var t = if (last) "└" else "├";
 		var c = "├";
@@ -309,6 +325,12 @@ class PrettyPrinter {
 
 	static var indent = "";
 
+	/**
+	    Converts an array of `ParserToken`s into their code form, with standard
+		indenting & formatting
+	    @param code An array of `ParserToken`s
+	    @param token If you jeu need to stringify a single token, give this instead.
+	**/
 	public static function stringifyParser(?code:Array<ParserTokens>, ?token:ParserTokens) {
 		if (token != null) code = [token];
 		var s = "";
@@ -352,6 +374,12 @@ class PrettyPrinter {
 		return s;
 	}
 
+	/**
+	    Converts an array of `InterpTokens`s into their code form, with standard
+		indenting & formatting
+	    @param code An array of `InterpToken`s
+	    @param token If you jeu need to stringify a single token, give this instead.
+	**/
 	public static function stringifyInterpreter(?code:Array<InterpTokens>, ?token:InterpTokens) {
 		if (token != null) code = [token];
 		var s = "";
@@ -395,6 +423,10 @@ class PrettyPrinter {
 		return s.replaceLast(" ", "");
 	}
 
+	/**
+	    Pretty prints the operator priority. Operators are registered through plugins.
+	    @param priority The priority map to print.
+	**/
 	public static function prettyPrintOperatorPriority(priority:Map<Int, Array<{sign:String, side:OperatorType}>>) {
 		var sortedKeys = [for (x in priority.keys()) x];
 		ArraySort.sort(sortedKeys, (x, y) -> x - y);
