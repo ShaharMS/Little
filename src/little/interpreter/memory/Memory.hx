@@ -9,9 +9,6 @@ using little.tools.Extensions;
 using vision.tools.MathTools;
 
 class Memory {
-    
-	public var memory:ByteArray;
-	public var reserved:ByteArray;
 
     public var storage:Storage;
 	public var referrer:Referrer;
@@ -31,21 +28,10 @@ class Memory {
 	**/
 	public var currentMemorySize(get, never):Int;
 	@:noCompletion function get_currentMemorySize() {
-		var initialSize = reserved.length;
-		var i = reserved.length - 1;
-		while (i >= 0 && reserved[i] == 0) {
-			i--;
-			initialSize--;
-		}
-
-		return initialSize;
+		return storage.reserved.length + referrer.bytes.length;
 	}
 
 	public function new() {
-		memory = new ByteArray(memoryChunkSize);
-		reserved = new ByteArray(memoryChunkSize);
-		reserved.fill(0, memoryChunkSize, 0);
-
 		storage = new Storage(this);
 		referrer = new Referrer(this);
 		constants = new ConstantPool(this);
@@ -53,26 +39,12 @@ class Memory {
 	}
 
 	public function reset() {
-		memory.resize(memoryChunkSize);
-		reserved.resize(memoryChunkSize);
-		referrer.bytes.resize(1024);
-		memory.fill(0, memoryChunkSize, 0);
-		reserved.fill(0, memoryChunkSize, 0);
-		referrer.bytes.fill(0, 1024, 0);
-
+		storage = new Storage(this);
+		referrer = new Referrer(this);
 		externs = new ExternalInterfacing(this);
 		// Constants don't need to be reset
 	}
 
-	public function increaseBuffer() {
-		if (memory.length > maxMemorySize) {
-			Little.runtime.throwError(ErrorMessage('Out of memory'), MEMORY);
-		}
-		var size = MathTools.min(memory.length + memoryChunkSize, maxMemorySize);
-		var delta = size - memory.length;
-		memory.resize(size);
-		reserved.resize(size);
-	}
 	/**
 		General-purpose memory allocation for objects:
 
@@ -516,22 +488,6 @@ class Memory {
 		}
 
 		return storage.readType(pointer).typeName;
-	}
-
-	public function stringifyMemoryBytes():String {
-		var s = "\n";
-		for (i in 0...memory.length) {
-			s += StringTools.hex(memory[i], 2) + " ";
-		}
-
-		return s;
-	}
-	public function stringifyReservedBytes():String {
-		var s = "\n";
-		for (i in 0...reserved.length) {
-			s += TextTools.multiply(reserved[i] + "", 2) + " ";
-		}
-		return s;
 	}
 }
 

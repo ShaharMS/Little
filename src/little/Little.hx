@@ -4,13 +4,13 @@ import vision.ds.Queue;
 import vision.helpers.VisionThread;
 import little.tools.PrettyPrinter;
 import little.interpreter.memory.Memory;
-import little.interpreter.memory.Operators;
 import little.tools.Plugins;
 import little.tools.PrepareRun;
 import little.lexer.Lexer;
 import little.parser.Parser;
 import little.interpreter.Interpreter;
 import little.interpreter.Runtime;
+import little.interpreter.memory.Operators;
 
 @:access(little.interpreter.Interpreter)
 @:access(little.interpreter.Runtime)
@@ -43,7 +43,7 @@ class Little {
     **/
     public static var plugin(default, null):Plugins = new Plugins(Little.memory);
 
-    public static var operators(default, null) = Operators;
+    public static var operators(default, null):Operators = new Operators();
 
     /**
         Used to store code that is currently being ran/queued for running right before the main module using
@@ -133,10 +133,10 @@ class Little {
 	**/
 	public static function reset() {
         runtime = new Runtime();
-		Operators.lhsOnly.clear();
-		Operators.rhsOnly.clear();
-		Operators.standard.clear();
-		Operators.priority.clear();
+		Little.operators.lhsOnly.clear();
+		Little.operators.rhsOnly.clear();
+		Little.operators.standard.clear();
+		Little.operators.priority.clear();
 		Little.memory.reset();
 	}
 

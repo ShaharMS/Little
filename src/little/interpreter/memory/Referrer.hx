@@ -40,6 +40,9 @@ class Referrer {
 	}
 
 	function requestMemory() {
+		if (bytes.length > parent.maxMemorySize) {
+			Little.runtime.throwError(ErrorMessage('Too many scopes, stack has overflown (check for infinite recursion)'), MEMORY_REFERRER);
+		}
 		bytes.resize(bytes.length + 1024);
 	}
 

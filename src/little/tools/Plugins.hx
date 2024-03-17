@@ -4,7 +4,6 @@ import haxe.ds.StringMap;
 import little.interpreter.memory.MemoryPointer;
 import little.interpreter.memory.ExternalInterfacing.ExtTree;
 import little.interpreter.memory.Memory;
-import little.interpreter.memory.Operators;
 import little.interpreter.memory.Operators.OperatorType;
 import haxe.exceptions.ArgumentException;
 import little.interpreter.Runtime;
@@ -587,7 +586,7 @@ typedef SignInfo = {
     ?singleSidedOperatorCallback:InterpTokens -> InterpTokens,
     ?operatorType:OperatorType,
 	/**
-		@see Operators.setPriority
+		@see Little.operators.setPriority
 	**/
 	?priority:String,
 }

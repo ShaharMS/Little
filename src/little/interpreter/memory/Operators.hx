@@ -17,20 +17,26 @@ using StringTools;
 @:allow(little.interpreter.Interpreter)
 @:allow(little.tools.Plugins)
 class Operators {
+
+	/**
+		Instantiates the `Little.operators` class.
+	**/
+	public function new() {}
+
 	/**
 		A map containing the priority of each operator, sorted by index to an array of operand-position-dependent operators.
 		for example:
 
-		| Priority | Operators |
+		| Priority | Little.operators |
 		| :---: | :---: |
 		| 0 | `{sign: "+", side: STANDARD}`, `{sign: "-", side: STANDARD}` |
 		| 1 | `{sign: "*", side: STANDARD}`, `{sign: "/", side: STANDARD}` |
 		| 2 | `{sign: "^", side: STANDARD}`, `{sign: "√", side: RHS_ONLY}` |
 	**/
-	public static var priority:Map<Int, Array<{sign:String, side:OperatorType}>> = [];
+	public var priority:Map<Int, Array<{sign:String, side:OperatorType}>> = [];
 
 	/**
-		Operators that require two sides to work, for example:
+		Little.operators that require two sides to work, for example:
 		| Operator | Code |
 		| :---: | :---: |
 		| Add | `5 + 5` |
@@ -38,10 +44,10 @@ class Operators {
 		| Exponentiation | `5^2` |
 		| "Non-Standard" Square Root  | `3√5` |
 	**/
-	public static var standard:Map<String, (lhs:InterpTokens, rhs:InterpTokens) -> InterpTokens> = new Map();
+	public var standard:Map<String, (lhs:InterpTokens, rhs:InterpTokens) -> InterpTokens> = new Map();
 
 	/**
-		Operators that require just the right side of the equations, for example:
+		Little.operators that require just the right side of the equations, for example:
 		| Operator | Code |
 		| :---: | :---: |
 		| Negate | `-5` |
@@ -49,17 +55,17 @@ class Operators {
 		| Decrement | `--5` |
 		| "Standard" Square Root  | `√5` |
 	**/
-	public static var rhsOnly:Map<String, (InterpTokens) -> InterpTokens> = new Map();
+	public var rhsOnly:Map<String, (InterpTokens) -> InterpTokens> = new Map();
 
 	/**
-		Operators that require just the left side of the equations, for example:
+		Little.operators that require just the left side of the equations, for example:
 		| Operator | Code |
 		| :---: | :---: |
 		| Post Increment | `5++` |
 		| Post Decrement | `5--` |
 		| Factorial | `5!` |
 	**/
-	public static var lhsOnly:Map<String, (InterpTokens) -> InterpTokens> = new Map();
+	public var lhsOnly:Map<String, (InterpTokens) -> InterpTokens> = new Map();
 
 	/**
 		Format of parameter `opPriority`:
@@ -78,7 +84,7 @@ class Operators {
 		| `after <sign>_` | Inserts the operator after the sign. the has only one underscore to the right of it, which means the sign is of type `RHS_ONLY`.| `after -_`, `after +_`|
 
 	**/
-	public static function setPriority(op:String, type:OperatorType, opPriority:String) {
+	public function setPriority(op:String, type:OperatorType, opPriority:String) {
 		var obj = {sign: op, side: type};
 		if (opPriority == "first") {
 			if (priority[-1] == null)
@@ -189,7 +195,7 @@ class Operators {
 		
 	}
 
-	public static function getPriority(op:String, type:OperatorType):Int {
+	public function getPriority(op:String, type:OperatorType):Int {
 		for (index => key in priority)
 			if (key.filter(x -> x.sign == op && x.side == type).length > 0) return index;
 		throw 'Operator $op not found';
@@ -198,7 +204,7 @@ class Operators {
 	/**
 		Iterates over the operators in arrays ordered by their priority, from `0` to `n`.
 	**/
-	public static function iterateByPriority():Iterator<Array<{sign:String, side:OperatorType}>> {
+	public function iterateByPriority():Iterator<Array<{sign:String, side:OperatorType}>> {
 		var a = [for (x in priority.keys()) x];
 		ArraySort.sort(a, (x, y) -> x - y);
 		var b = [for (x in a) priority[x]];
@@ -215,10 +221,10 @@ class Operators {
 		@param operatorType  **STANDARD** - operator that works with both sides of the equation, for example: `5 + 5` or `5 - 5`.  
 		**LHS_ONLY** - operator that only works with the left side of the equation, for example: `5++` or `5--`.  
 		**RHS_ONLY** - operator that only works with the right side of the equation, for example: `-5` or `++5`.  
-		@param priority a string indicating the priority of the operator using positional info/actual index. see `Operators.setPriority`
+		@param priority a string indicating the priority of the operator using positional info/actual index. see `Little.operators.setPriority`
 		@param callback depending on the operatorType, either a function that takes two arguments (lhs, rhs) or a function that takes one argument (lhs) or (rhs).
 	**/
-	public static function add(op:String, operatorType:OperatorType, priority:String,
+	public function add(op:String, operatorType:OperatorType, priority:String,
 			callback:EitherType<(InterpTokens) -> InterpTokens, (InterpTokens, InterpTokens) -> InterpTokens>) {
 		for (i in 0...op.length)
 			if (!Lexer.signs.contains(op.charAt(i)))
@@ -242,7 +248,7 @@ class Operators {
 		setPriority(op, operatorType, priority);
 	}
 
-	overload extern inline public static function call(lhs:InterpTokens, op:String) {
+	overload extern inline public function call(lhs:InterpTokens, op:String) {
 		if (lhsOnly.exists(op))
 			return lhsOnly[op](lhs);
 		else if (rhsOnly.exists(op))
@@ -254,7 +260,7 @@ class Operators {
 			return ErrorMessage('Operator $op does not exist. did you make a typo?');
 	}
 
-	overload extern inline public static function call(op:String, rhs:InterpTokens) {
+	overload extern inline public function call(op:String, rhs:InterpTokens) {
 		if (rhsOnly.exists(op))
 			return rhsOnly[op](rhs);
 		else if (lhsOnly.exists(op))
@@ -266,7 +272,7 @@ class Operators {
 			return ErrorMessage('Operator $op does not exist. did you make a typo?');
 	}
 
-	overload extern inline public static function call(?lhs:InterpTokens = null, op:String, ?rhs:InterpTokens = null):InterpTokens {
+	overload extern inline public function call(?lhs:InterpTokens = null, op:String, ?rhs:InterpTokens = null):InterpTokens {
 		if (standard.exists(op))
 			return standard[op](lhs, rhs);
 		else if (lhsOnly.exists(op))
@@ -279,7 +285,7 @@ class Operators {
 			return ErrorMessage('Operator $op does not exist. did you make a typo?');
 	}
 
-	private static function signPosToObject(signPos:String):{sign:String, side:OperatorType} {
+	function signPosToObject(signPos:String):{sign:String, side:OperatorType} {
 		var destinationOp, opSide;
 		if (signPos.countOccurrencesOf("_") != 1) {
 			destinationOp = signPos.replace("_", "");

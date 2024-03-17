@@ -2,7 +2,6 @@ package little.interpreter;
 
 import haxe.Rest;
 import little.interpreter.Tokens.InterpTokens;
-import little.interpreter.memory.Operators;
 import little.tools.PrettyPrinter;
 import little.tools.Layer;
 import little.Little.memory;
@@ -206,9 +205,7 @@ class Interpreter {
 					Write([VariableDeclaration(Identifier(Little.keywords.CONDITION_PATTERN_PARAMETER_NAME), Identifier(Little.keywords.TYPE_STRING), null)], Characters(patternString)),
 					Write([VariableDeclaration(Identifier(Little.keywords.CONDITION_BODY_PARAMETER_NAME), Identifier(Little.keywords.TYPE_STRING), null)], Characters(bodyString)),
 				];
-				var v = run(params.concat(conditionRunner), true);
-				trace(v);
-				return v;
+				return run(params.concat(conditionRunner), true);
 			}
 		}
 
@@ -526,34 +523,34 @@ class Interpreter {
         for (token in tokens) {
             switch token {
                 case PartArray(parts): {
-                    if (sign != "" && calculated == null) calculated = Operators.call(sign, calculate(parts)); // RHS operator
+                    if (sign != "" && calculated == null) calculated = Little.operators.call(sign, calculate(parts)); // RHS operator
                     else if (calculated == null) calculated = calculate(parts);
                     else if (sign == "") error('Two values cannot come one after the other ($calculated, $token). At least one of them should be an operator, or, put an operator in between.');
                     else {
-                        calculated = Operators.call(calculated, sign, calculate(parts)); // standard operator
+                        calculated = Little.operators.call(calculated, sign, calculate(parts)); // standard operator
                     }
                 }
                 case Sign(s): {
                     sign = s;
                     if (tokens.length == 1) return token;
-                    if (tokens[tokens.length - 1].equals(token)) calculated = Operators.call(calculated, sign); //LHS operator
+                    if (tokens[tokens.length - 1].equals(token)) calculated = Little.operators.call(calculated, sign); //LHS operator
                 }
                 case Expression(parts, t): {
                     var val = t != null ? typeCast(calculate(parts), t) : calculate(parts);
-                    if (sign != "" && calculated == null) calculated = Operators.call(sign, val); // RHS operator
+                    if (sign != "" && calculated == null) calculated = Little.operators.call(sign, val); // RHS operator
                     else if (calculated == null) calculated = val;
                     else if (sign == "") error('Two values cannot come one after the other ($calculated, $token). At least one of them should be an operator, or, put an operator in between.');
                     else {
-                        calculated = Operators.call(calculated, sign, val); // standard operator
+                        calculated = Little.operators.call(calculated, sign, val); // standard operator
                     }
                 }
                 case _: {
-                    if (sign != "" && calculated == null) calculated = Operators.call(sign, token);
+                    if (sign != "" && calculated == null) calculated = Little.operators.call(sign, token);
 					else if (sign == "" && calculated != null) throw 'Unexpected token: $token After calculating $calculated';
                     else if (calculated == null) calculated = token;
                     else if (sign == "") error('Two values cannot come one after the other ($calculated, $token). At least one of them should be an operator, or, put an operator in between.');
                     else {
-                        calculated = Operators.call(calculated, sign, token);
+                        calculated = Little.operators.call(calculated, sign, token);
                     }
                 }
             }

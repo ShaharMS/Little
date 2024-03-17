@@ -21,10 +21,25 @@ class Storage {
 
 	public var parent:Memory;
 
+	public var reserved:ByteArray;
+	public var storage:ByteArray;
+
     public function new(memory:Memory) {
         parent = memory;
-    }
+		
+		storage = new ByteArray(parent.memoryChunkSize);
+		reserved = new ByteArray(parent.memoryChunkSize);
+		reserved.fill(0, parent.memoryChunkSize, 0);
 
+    }
+	
+	function requestMemory() {
+		if (storage.length > parent.maxMemorySize) {
+			Little.runtime.throwError(ErrorMessage('Out of memory'), MEMORY_STORAGE);
+		}
+		storage.resize(storage.length + parent.memoryChunkSize);
+		reserved.resize(reserved.length + parent.memoryChunkSize);
+	}
 
     /**
         stores a byte to the storage
@@ -37,17 +52,17 @@ class Storage {
 
         // Find a free spot
         var i = parent.constants.capacity;
-        while (i < parent.reserved.length && parent.reserved[i] != 0) i++;
-        if (i >= parent.reserved.length) parent.increaseBuffer();
-        parent.memory[i] = b;
-        parent.reserved[i] = 1;
+        while (i < reserved.length && reserved[i] != 0) i++;
+        if (i >= reserved.length) requestMemory();
+        storage[i] = b;
+        reserved[i] = 1;
 
         return i;
     }
 
     public function setByte(address:MemoryPointer, b:Int) {
-        parent.memory[address.rawLocation] = b;
-        parent.reserved[address.rawLocation] = 1;
+        storage[address.rawLocation] = b;
+        reserved[address.rawLocation] = 1;
     }
 
     /**
@@ -56,7 +71,7 @@ class Storage {
         @return The byte
     **/
     public function readByte(address:MemoryPointer):Int {
-        return parent.memory[address.rawLocation];
+        return storage[address.rawLocation];
     }
 
     /**
@@ -64,23 +79,23 @@ class Storage {
         @param address The address of the byte to remove
     **/
     public function freeByte(address:MemoryPointer) {
-        parent.memory[address.rawLocation] = 0;
-        parent.reserved[address.rawLocation] = 0;
+        storage[address.rawLocation] = 0;
+        reserved[address.rawLocation] = 0;
     }
 
 
     public function storeBytes(size:Int, ?b:ByteArray):MemoryPointer {
         var i = parent.constants.capacity;
 		
-        while (i < parent.reserved.length - size && !parent.reserved.getBytes(i, size).isEmpty()) i++;
-		if (i >= parent.reserved.length - size) {
-            parent.increaseBuffer();
+        while (i < reserved.length - size && !reserved.getBytes(i, size).isEmpty()) i++;
+		if (i >= reserved.length - size) {
+            requestMemory();
             i += size; // Will leave some empty space, Todo.
         }
 
         for (j in 0...size) {
-            parent.memory[i + j] = j > b.length ? 0 : b[j];
-            parent.reserved[i + j] = 1;
+            storage[i + j] = j > b.length ? 0 : b[j];
+            reserved[i + j] = 1;
         }
 
         return i;
@@ -88,8 +103,8 @@ class Storage {
 
     public function setBytes(address:MemoryPointer, bytes:ByteArray) {
         for (j in 0...bytes.length) {
-            parent.memory[address.rawLocation + j] = bytes[j];
-            parent.reserved[address.rawLocation + j] = 1;
+            storage[address.rawLocation + j] = bytes[j];
+            reserved[address.rawLocation + j] = 1;
         }
     }
 
@@ -97,7 +112,7 @@ class Storage {
         if (address == parent.constants.NULL) return null;
         var bytes = new ByteArray(size);
         for (j in 0...size) {
-            bytes[j] = parent.memory[address.rawLocation + j];
+            bytes[j] = storage[address.rawLocation + j];
         }
 
         return bytes;
@@ -105,8 +120,8 @@ class Storage {
 
     public function freeBytes(address:MemoryPointer, size:Int) {
         for (j in 0...size) {
-            parent.memory[address.rawLocation + j] = 0;
-            parent.reserved[address.rawLocation + j] = 0;
+            storage[address.rawLocation + j] = 0;
+            reserved[address.rawLocation + j] = 0;
         }
     }
 
@@ -168,40 +183,40 @@ class Storage {
 
         // Find a free spot
         var i = parent.constants.capacity;
-        while (i < parent.reserved.length - 1 && parent.reserved[i] != 0 && parent.reserved[i + 1] != 0) i++;
-        if (i >= parent.reserved.length - 1) {
-            parent.increaseBuffer();
+        while (i < reserved.length - 1 && reserved[i] != 0 && reserved[i + 1] != 0) i++;
+        if (i >= reserved.length - 1) {
+            requestMemory();
             i += 2; // leaves empty byte Todo.
         }
 
         for (j in 0...1) {
-            parent.memory[i + j] = b & 0xFF;
+            storage[i + j] = b & 0xFF;
             b = b >> 8;
-            parent.reserved[i + j] = 1;
+            reserved[i + j] = 1;
         }
 
         return i;
     }
 
     public function setInt16(address:MemoryPointer, b:Int) {
-        parent.memory[address.rawLocation] = b & 0xFF;
-        parent.memory[address.rawLocation + 1] = (b >> 8) & 0xFF;
-        parent.reserved[address.rawLocation] = 1;
-        parent.reserved[address.rawLocation + 1] = 1;
+        storage[address.rawLocation] = b & 0xFF;
+        storage[address.rawLocation + 1] = (b >> 8) & 0xFF;
+        reserved[address.rawLocation] = 1;
+        reserved[address.rawLocation + 1] = 1;
     }
 
     public function readInt16(address:MemoryPointer):Int {
         if (address == parent.constants.NULL) return null;
         // Dont forget to make the number negative if needed.
-        return (parent.memory[address.rawLocation] + (parent.memory[address.rawLocation + 1] << 8)) - 32767;
+        return (storage[address.rawLocation] + (storage[address.rawLocation + 1] << 8)) - 32767;
         
     }
 
     public function freeInt16(address:MemoryPointer) {
-		parent.memory[address.rawLocation] = 0;
-		parent.memory[address.rawLocation + 1] = 0;
-        parent.reserved[address.rawLocation] = 0;
-        parent.reserved[address.rawLocation + 1] = 0;
+		storage[address.rawLocation] = 0;
+		storage[address.rawLocation + 1] = 0;
+        reserved[address.rawLocation] = 0;
+        reserved[address.rawLocation + 1] = 0;
     } 
 
 
@@ -215,7 +230,7 @@ class Storage {
 
     public function readUInt16(address:MemoryPointer) {
         if (address == parent.constants.NULL) return null;
-        return (parent.memory[address.rawLocation] + (parent.memory[address.rawLocation + 1] << 8));
+        return (storage[address.rawLocation] + (storage[address.rawLocation + 1] << 8));
     }
 
     public function freeUInt16(address:MemoryPointer) {
@@ -228,41 +243,41 @@ class Storage {
 
         // Find a free spot
         var i = parent.constants.capacity;
-        while (i < parent.reserved.length - 3 && parent.reserved[i] + parent.reserved[i + 1] + parent.reserved[i + 2] + parent.reserved[i + 3] != 0) i++;
-        if (i >= parent.reserved.length - 3) {
-            parent.increaseBuffer();
+        while (i < reserved.length - 3 && reserved[i] + reserved[i + 1] + reserved[i + 2] + reserved[i + 3] != 0) i++;
+        if (i >= reserved.length - 3) {
+            requestMemory();
             i += 4; // leaves empty bytes Todo.
         }
 
         for (j in 0...4) {
-            parent.memory[i + j] = b & 0xFF;
+            storage[i + j] = b & 0xFF;
             b = b >> 8;
-            parent.reserved[i + j] = 1;
+            reserved[i + j] = 1;
         }
 
 		return i;
     }
 
     public function setInt32(address:MemoryPointer, b:Int) {
-        parent.memory[address.rawLocation] = b & 0xFF;
-        parent.memory[address.rawLocation + 1] = (b >> 8) & 0xFF;
-        parent.memory[address.rawLocation + 2] = (b >> 16) & 0xFF;
-        parent.memory[address.rawLocation + 3] = (b >> 24) & 0xFF;
-        parent.reserved[address.rawLocation] = 1;
-        parent.reserved[address.rawLocation + 1] = 1;
-        parent.reserved[address.rawLocation + 2] = 1;
-        parent.reserved[address.rawLocation + 3] = 1;
+        storage[address.rawLocation] = b & 0xFF;
+        storage[address.rawLocation + 1] = (b >> 8) & 0xFF;
+        storage[address.rawLocation + 2] = (b >> 16) & 0xFF;
+        storage[address.rawLocation + 3] = (b >> 24) & 0xFF;
+        reserved[address.rawLocation] = 1;
+        reserved[address.rawLocation + 1] = 1;
+        reserved[address.rawLocation + 2] = 1;
+        reserved[address.rawLocation + 3] = 1;
     }
 
     public function readInt32(address:MemoryPointer):Int {
         if (address == parent.constants.NULL) return null;
-        return (parent.memory[address.rawLocation] + (parent.memory[address.rawLocation + 1] << 8) + (parent.memory[address.rawLocation + 2] << 16) + (parent.memory[address.rawLocation + 3] << 24));
+        return (storage[address.rawLocation] + (storage[address.rawLocation + 1] << 8) + (storage[address.rawLocation + 2] << 16) + (storage[address.rawLocation + 3] << 24));
     }
 
     public function freeInt32(address:MemoryPointer) {
         for (j in 0...4) {
-            parent.memory[address.rawLocation + j] = 0;
-			parent.reserved[address.rawLocation + j] = 0;
+            storage[address.rawLocation + j] = 0;
+			reserved[address.rawLocation + j] = 0;
         }
     }
 
@@ -288,40 +303,40 @@ class Storage {
         #if !static if (b == null) return parent.constants.NULL; #end
 
         var i = parent.constants.capacity;
-        while (i < parent.reserved.length - 7 && 
-            parent.reserved[i] + parent.reserved[i + 1] + parent.reserved[i + 2] + parent.reserved[i + 3] + 
-            parent.reserved[i + 4] + parent.reserved[i + 5] + parent.reserved[i + 6] + parent.reserved[i + 7] != 0) i++;
-        if (i >= parent.reserved.length - 7) {
-            parent.increaseBuffer();
+        while (i < reserved.length - 7 && 
+            reserved[i] + reserved[i + 1] + reserved[i + 2] + reserved[i + 3] + 
+            reserved[i + 4] + reserved[i + 5] + reserved[i + 6] + reserved[i + 7] != 0) i++;
+        if (i >= reserved.length - 7) {
+            requestMemory();
             i += 8; // leaves empty bytes Todo.
         }
 
         var bytes = Bytes.alloc(8);
 		bytes.setDouble(0, b);
         for (j in 0...8) {
-            parent.memory[i + j] = bytes.get(j);
-            parent.reserved[i + j] = 1;
+            storage[i + j] = bytes.get(j);
+            reserved[i + j] = 1;
         }
 
         return i;
     }
 
     public function setDouble(address:MemoryPointer, b:Float) {
-        parent.memory.setDouble(address.rawLocation, b);
+        storage.setDouble(address.rawLocation, b);
         for (j in 0...8) {
-            parent.reserved[address.rawLocation + j] = 1;
+            reserved[address.rawLocation + j] = 1;
         }
     }
 
     public function readDouble(address:MemoryPointer):Float {
         if (address == parent.constants.NULL) return null;
-        return parent.memory.getDouble(address.rawLocation);
+        return storage.getDouble(address.rawLocation);
     }
 
     public function freeDouble(address:MemoryPointer) {
         for (j in 0...8) {
-            parent.memory[address.rawLocation + j] = 0;
-			parent.reserved[address.rawLocation + j] = 0;
+            storage[address.rawLocation + j] = 0;
+			reserved[address.rawLocation + j] = 0;
         }
     }
 
@@ -355,15 +370,15 @@ class Storage {
 		// Find a free spot. Keep in mind that string's characters in this context are UTF-8 encoded, so each character is 1 byte
 		var i = parent.constants.capacity;
 		
-        while (i < parent.reserved.length - bytes.length && !parent.reserved.getBytes(i, bytes.length).isEmpty()) i++;
-		if (i >= parent.reserved.length - bytes.length) {
-            parent.increaseBuffer();
+        while (i < reserved.length - bytes.length && !reserved.getBytes(i, bytes.length).isEmpty()) i++;
+		if (i >= reserved.length - bytes.length) {
+            requestMemory();
             i += bytes.length; // leaves empty bytes Todo.
         }
 
 		// Each character in this string should be UTF-8 encoded
-		parent.memory.setBytes(i, bytes);
-        parent.reserved.setBytes(i, new ByteArray(bytes.length, 1));
+		storage.setBytes(i, bytes);
+        reserved.setBytes(i, new ByteArray(bytes.length, 1));
 
 		return i;
 	}
@@ -373,22 +388,22 @@ class Storage {
         var stringBytes = Bytes.ofString(b, UTF8);
         var bytes = ByteArray.from(stringBytes.length).concat(stringBytes);
         for (j in 0...bytes.length) {
-            parent.memory[address.rawLocation + j] = bytes.get(j);
-            parent.reserved[address.rawLocation + j] = 1;
+            storage[address.rawLocation + j] = bytes.get(j);
+            reserved[address.rawLocation + j] = 1;
         }
     }
 
 	public function readString(address:MemoryPointer):String {
         if (address == parent.constants.NULL) return null;
 		var length = readInt32(address.rawLocation);
-		return parent.memory.getString(address.rawLocation + 4, length, UTF8);
+		return storage.getString(address.rawLocation + 4, length, UTF8);
 	}
 
 	public function freeString(address:MemoryPointer) {
-		var len = parent.memory.getInt32(address.rawLocation) + 4;
+		var len = storage.getInt32(address.rawLocation) + 4;
 		for (j in 0...len) {
-			parent.memory[address.rawLocation + j] = 0;
-			parent.reserved[address.rawLocation + j] = 0;
+			storage[address.rawLocation + j] = 0;
+			reserved[address.rawLocation + j] = 0;
 		}
 	}
 

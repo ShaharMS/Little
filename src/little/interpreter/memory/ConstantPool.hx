@@ -29,8 +29,8 @@ class ConstantPool {
 	public var EMPTY_STRING:MemoryPointer = 19; // size: 4 bytes
 
     public function new(memory:Memory) {
-        for (i in 0...24) memory.reserved[i] = 1; // Contains "Core" values
-		memory.memory[2] = 1; // TRUE
+        for (i in 0...24) memory.storage.reserved[i] = 1; // Contains "Core" values
+		memory.storage.setByte(TRUE, 1); // TRUE
     }
 
 	public function get(token:InterpTokens) {

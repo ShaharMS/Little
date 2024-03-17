@@ -3,7 +3,6 @@ package little.tools;
 import little.interpreter.memory.HashTables;
 import little.interpreter.memory.MemoryPointer;
 import little.interpreter.memory.MemoryPointer.POINTER_SIZE;
-import little.interpreter.memory.Operators;
 import haxe.Json;
 import haxe.xml.Access;
 import vision.tools.MathTools;
@@ -18,7 +17,7 @@ using little.tools.TextTools;
 using little.tools.Extensions;
 
 
-@:access(little.interpreter.Operators)
+@:access(little.interpreter.Little.operators)
 @:access(little.interpreter.Runtime)
 /**
     Contains `Little`'s standard library, as a group of functions, each adding different types of features.
@@ -120,7 +119,7 @@ class PrepareRun {
 				return Object([], "Object");
 			}
 		]);
-		
+
 	}
 	
 	/**

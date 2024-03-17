@@ -1,7 +1,6 @@
 --class-path src
 --main Main
 -w -WStaticInitOrder -WDeprecated
---macro js_example.JsMacro.increaseBuildCounter()
 --library vision
 --library no-warnings
 --library hash

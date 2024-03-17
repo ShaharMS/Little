@@ -2,9 +2,9 @@ package little.tools;
 
 import haxe.exceptions.NotImplementedException;
 import little.interpreter.Tokens.InterpTokens;
+import little.interpreter.memory.Operators.OperatorType;
 import haxe.ds.ArraySort;
 import vision.algorithms.Radix;
-import little.interpreter.memory.Operators;
 import little.interpreter.Interpreter;
 using StringTools;
 using little.tools.TextTools;
@@ -424,7 +424,7 @@ class PrettyPrinter {
 	}
 
 	/**
-	    Pretty prints the operator priority. Operators are registered through plugins.
+	    Pretty prints the operator priority. Little.operators are registered through plugins.
 	    @param priority The priority map to print.
 	**/
 	public static function prettyPrintOperatorPriority(priority:Map<Int, Array<{sign:String, side:OperatorType}>>) {
