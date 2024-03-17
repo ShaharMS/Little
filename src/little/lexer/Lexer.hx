@@ -10,6 +10,10 @@ class Lexer {
     
     static var signs = ["!", "#", "$", "%", "&", "'", "(", ")", "*", "+", "-", ".", "/", ":", "<", "=", ">", "?", "@", "[", "\\", "]", "^", "_", "`", "{", "|", "}", "~", "^", "√"];
 
+    /**
+        Converts a string with many items separated by word boundaries into different tokens
+        of type `LexerTokens`.
+    **/
     public static function lex(code:String):Array<LexerTokens> {
         var tokens:Array<LexerTokens> = [];
 
@@ -84,6 +88,9 @@ class Lexer {
         return tokens;
     }
 
+    /**
+        Converts `Identifier("true"|"false"|"null")` tokens into `Boolean("true"|"false")` or `NullValue`.
+    **/
     public static function separateBooleanIdentifiers(tokens:Array<LexerTokens>):Array<LexerTokens> {
         return tokens.map(token -> {
             if (Type.enumEq(token, Identifier(Little.keywords.TRUE_VALUE)) || Type.enumEq(token, Identifier(Little.keywords.FALSE_VALUE))) {
@@ -94,6 +101,10 @@ class Lexer {
         });
     }
 
+
+    /**
+        Some signs are more than 1 character long, so we need split/merge them when needed.
+    **/
     public static function mergeOrSplitKnownSigns(tokens:Array<LexerTokens>):Array<LexerTokens> {
         var post = [];
 

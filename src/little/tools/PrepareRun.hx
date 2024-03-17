@@ -3,7 +3,7 @@ package little.tools;
 import little.interpreter.memory.HashTables;
 import little.interpreter.memory.MemoryPointer;
 import little.interpreter.memory.MemoryPointer.POINTER_SIZE;
-import little.interpreter.Operators;
+import little.interpreter.memory.Operators;
 import haxe.Json;
 import haxe.xml.Access;
 import vision.tools.MathTools;
@@ -39,6 +39,7 @@ class PrepareRun {
 		Little.plugin.registerType(Little.keywords.TYPE_INT, []);
 		Little.plugin.registerType(Little.keywords.TYPE_FLOAT, []);
 		Little.plugin.registerType(Little.keywords.TYPE_STRING, []);
+		Little.plugin.registerType(Little.keywords.TYPE_SIGN, []);
 
 		Little.plugin.registerType("Date", [
 			'static ${Little.keywords.TYPE_STRING} now ()' => (_) -> {
@@ -106,12 +107,13 @@ class PrepareRun {
 				return Conversion.toLittleValue(String.fromCharCode(Conversion.toHaxeValue(params[0])));
 			}
 		]);
-
+ 
 		Little.plugin.registerType("Object", [
 			'static Object create (define fieldEstimate as ${Little.keywords.TYPE_INT} = 20)' => (params) -> {
 				return Object([], "Object");
 			}
 		]);
+
 	}
 	
 	/**

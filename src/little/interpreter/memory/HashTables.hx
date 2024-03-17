@@ -123,10 +123,6 @@ class HashTables {
         }
 
         var keyIndex = ((khI64 * CELL_SIZE) % hashTable.length).low;
-        trace(keyIndex);
-        trace(hashTable.getInt32(keyIndex));
-        trace(storage.readInt32(hashTable.getInt32(keyIndex)));
-        trace(storage.readString(hashTable.getInt32(keyIndex)));
         var incrementation = 0;
         while (true) {
             var currentKey = storage.readString(hashTable.getInt32(keyIndex));
@@ -218,7 +214,6 @@ class HashTables {
         }
 
         var hashTablePosition = storage.readPointer(object.rawLocation + 4);
-        trace("Adding key: " + key + " to object: " + object.rawLocation + " (hashTable: " + hashTablePosition + ")");
 
         var keyHash = Murmur1.hash(Bytes.ofString(key));
         var khI64 = Int64.make(0, keyHash);
@@ -265,7 +260,6 @@ class HashTables {
         var incrementation = 0;
         while (true) {
             var currentKey = storage.readString(storage.readPointer(hashTablePosition.rawLocation + keyIndex));
-            trace(currentKey);
             if (currentKey == key) {
                 if (pair.value != null)
                     storage.setInt32(hashTablePosition.rawLocation + keyIndex + POINTER_SIZE, pair.value.rawLocation);
@@ -297,7 +291,6 @@ class HashTables {
 	public static function getHashTableOf(objectPointer:MemoryPointer, storage:Storage) {
 		var bytesLength = storage.readInt32(objectPointer.rawLocation);
 		var bytesPointer = storage.readPointer(objectPointer.rawLocation + 4);
-        trace(bytesLength, bytesPointer, Little.memory.memory.length);
 		return storage.readBytes(bytesPointer, bytesLength);
 	}
 }

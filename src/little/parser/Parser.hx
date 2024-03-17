@@ -256,10 +256,6 @@ class Parser {
                             Little.runtime.throwError(ErrorMessage("Property access cut off by the start of a line, or by a line split (; or ,)."), Layer.PARSER);
                             return null;
                         }
-                        case Sign(s): {
-                            Little.runtime.throwError(ErrorMessage('Cannot access the property of a sign ($s). Was the property access cut off by accident?'));
-                            return null;
-                        }
                         case _: {
                             var field = pre[++i];
 							if (i + 1 < pre.length && pre[i + 1].is(EXPRESSION)) { // For example, the case a.b()

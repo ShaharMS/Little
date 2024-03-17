@@ -463,6 +463,7 @@ class Storage {
 			case Number(num): return storeInt32(num);
 			case Decimal(num): return storeDouble(num);
 			case Characters(string): return storeString(string);
+            case Sign(sign): return storeSign(sign);
             case _: throw new ArgumentException("token", '${token} cannot be statically stored to the storage');
 		}
 	}

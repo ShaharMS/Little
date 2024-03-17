@@ -49,6 +49,10 @@ condition repeat(define iterationCounter, define body as Characters) = {
 	}
 } 
 
+sign (left ^% right) = {
+    return left + right ^ 2
+}
+print(^%.priority.type) //Number
 
 
 for (define x from 0 to -100 jump 10) print(x)

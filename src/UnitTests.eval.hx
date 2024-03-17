@@ -43,7 +43,7 @@ class UnitTests {
 	static var UNDERLINE = "\033[4m";
 
 	public static function run(bulk:Bool = false) {
-		var testFunctions = [test1, test2, test3, test4, test5, test6, test7, test8, test9, test10, test11, test12];
+		var testFunctions = [test1, test2, test3, test4, test5, test6, test7, test8, test9, test10, test11, test12, test13];
 
 		var i = 1;
 		for (func in testFunctions) {
@@ -207,6 +207,19 @@ class UnitTests {
 	}
 
 	public static function test11():UnitTestResult {
+		var code = 'define a = {define b = 3, (b * 10)}, print({a = a + 3, a})';
+		Little.run(code);
+		var result = Little.runtime.stdout.stdoutTokens.pop();
+		return {
+			testName: "Inline Blocks",
+			success: result.equals(Number(33)),
+			returned: result,
+			expected: Number(33),
+			code: code
+		}
+	}
+
+	public static function test12():UnitTestResult {
 		var code = 'define a = nothing, define b = nothing, define c = 0, define d = 0.0, print(a.address == b.address), print(c.address == d.address)';
 		Little.run(code);
 		var result = PartArray(Little.runtime.stdout.stdoutTokens);
@@ -220,15 +233,16 @@ class UnitTests {
 		}
 	}
 
-	public static function test12():UnitTestResult {
-		var code = 'define a = {define b = 3, (b * 10)}, print({a = a + 3, a})';
+	public static function test13():UnitTestResult {
+		var code = 'print(5.type + 5.5.type + true.type + nothing.type + +.type + Number.type)';
 		Little.run(code);
 		var result = Little.runtime.stdout.stdoutTokens.pop();
+		var exp = Characters("NumberDecimalBooleanAnythingSignType");
 		return {
-			testName: "Inline Blocks",
-			success: result.equals(Number(33)),
+			testName: "Type Name Property",
+			success: result.equals(exp),
 			returned: result,
-			expected: Number(33),
+			expected: exp,
 			code: code
 		}
 	}

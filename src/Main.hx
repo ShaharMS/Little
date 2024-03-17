@@ -1,7 +1,6 @@
 package;
 
 import little.interpreter.memory.Memory;
-import little.interpreter.Operators;
 import little.tools.PrepareRun;
 import little.tools.PrettyOutput;
 import haxe.SysTools;

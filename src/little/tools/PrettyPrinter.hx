@@ -4,7 +4,7 @@ import haxe.exceptions.NotImplementedException;
 import little.interpreter.Tokens.InterpTokens;
 import haxe.ds.ArraySort;
 import vision.algorithms.Radix;
-import little.interpreter.Operators;
+import little.interpreter.memory.Operators;
 import little.interpreter.Interpreter;
 using StringTools;
 using little.tools.TextTools;

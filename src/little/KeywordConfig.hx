@@ -1,5 +1,8 @@
 package little;
 
+/**
+    Represents a set of keys to use for different keywords/features in `Little`.
+**/
 @:structInit
 class KeywordConfig {
     @:optional public var VARIABLE_DECLARATION:String = "define";

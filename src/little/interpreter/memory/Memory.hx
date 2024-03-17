@@ -163,7 +163,8 @@ class Memory {
 	            // Because of the way we store lone nulls (as type dynamic), 
 	            // they might get confused with objects of type dynamic, so we need to do this:
 	            case (_ == Little.keywords.TYPE_DYNAMIC && constants.hasPointer(data.address) && constants.getFromPointer(data.address).equals(NullValue) => true): NullValue;
-	            case _: storage.readObject(data.address);
+	            case (_ == Little.keywords.TYPE_SIGN => true): storage.readSign(data.address);
+				case _: storage.readObject(data.address);
 			}
 			currentAddress = data.address;
 			currentType = data.type;
@@ -206,7 +207,6 @@ class Memory {
 				
 				if (HashTables.hashTableHasKey(objectHashTableBytes, identifier, storage)) {
 					var keyData = HashTables.hashTableGetKey(objectHashTableBytes, identifier, storage);
-					trace(keyData);
 					switch getTypeName(keyData.type) {
 						case (_ == Little.keywords.TYPE_STRING => true): current = Characters(storage.readString(keyData.value));
 						case (_ == Little.keywords.TYPE_INT => true): current = Number(storage.readInt32(keyData.value));
@@ -216,6 +216,7 @@ class Memory {
 						case (_ == Little.keywords.TYPE_CONDITION => true): current = storage.readCondition(keyData.value);
 						case (_ == Little.keywords.TYPE_MODULE => true): current = ClassPointer(keyData.value);
 						case (keyData.value == constants.NULL => true): current = NullValue;
+						case (_ == Little.keywords.TYPE_SIGN => true): current = storage.readSign(keyData.value);
 						case _: current = storage.readObject(keyData.value);
 					}
 
@@ -296,6 +297,7 @@ class Memory {
 						case (_ == Little.keywords.TYPE_CONDITION => true): current = storage.readCondition(keyData.value);
 						case (_ == Little.keywords.TYPE_MODULE => true): current = ClassPointer(keyData.value);
 						case (keyData.value == constants.NULL => true): current = NullValue;
+						case (_ == Little.keywords.TYPE_SIGN => true): current = storage.readSign(keyData.value);
 						case _: current = storage.readObject(keyData.value);
 					}
 
@@ -342,7 +344,6 @@ class Memory {
 			var pathCopy = path.slice(0, path.length - 1);
 			var wentThroughPath = [path[0]];
 			var current = referrer.get(pathCopy.shift());
-			trace(pathCopy);
 			while (pathCopy.length > 0) {
 				if (getTypeInformation(current.type).isStaticType) {
 					Little.runtime.throwError(ErrorMessage('Cannot write to a static type. Only objects can have dynamic properties (${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)} is `${current.type}`)'));
@@ -358,12 +359,10 @@ class Memory {
 				}
 				wentThroughPath.push(pathCopy.shift());
 			}
-			trace(current);
 			if (getTypeInformation(current.type).isStaticType) {
 				Little.runtime.throwError(ErrorMessage('Cannot write to a property to values of a static type. Only objects can have dynamic properties (${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)} is `${current.type}`)'));
 			}
 			if (!HashTables.hashTableHasKey(HashTables.getHashTableOf(current.address, storage), path[path.length - 1], storage)) {
-				trace(wentThroughPath + " has hash table");
 				HashTables.objectAddKey(current.address, path[path.length - 1], store(value), getTypeInformation(type).pointer, storage.storeString(doc), storage);
 			} else if (externs.instanceProperties.properties.exists(path[path.length - 1])) {
 				Little.runtime.throwError(ErrorMessage('Cannot write to an extern property (${path[path.length - 1]})'));
@@ -405,8 +404,6 @@ class Memory {
 				}
 				wentThroughPath.push(pathCopy.shift());
 			}
-			trace(current);
-			trace(wentThroughPath);
 			if (getTypeInformation(current.type).isStaticType) {
 				Little.runtime.throwError(ErrorMessage('Cannot set properties to values of a static type. Only objects can have dynamic properties (${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)} is `${current.type}`)'));
 			}

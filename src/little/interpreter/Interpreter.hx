@@ -2,6 +2,7 @@ package little.interpreter;
 
 import haxe.Rest;
 import little.interpreter.Tokens.InterpTokens;
+import little.interpreter.memory.Operators;
 import little.tools.PrettyPrinter;
 import little.tools.Layer;
 import little.Little.memory;
@@ -529,6 +530,7 @@ class Interpreter {
                 }
                 case Sign(s): {
                     sign = s;
+                    if (tokens.length == 1) return token;
                     if (tokens[tokens.length - 1].equals(token)) calculated = Operators.call(calculated, sign); //LHS operator
                 }
                 case Expression(parts, t): {

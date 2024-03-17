@@ -4,7 +4,7 @@ import vision.ds.Queue;
 import vision.helpers.VisionThread;
 import little.tools.PrettyPrinter;
 import little.interpreter.memory.Memory;
-import little.interpreter.Operators;
+import little.interpreter.memory.Operators;
 import little.tools.Plugins;
 import little.tools.PrepareRun;
 import little.lexer.Lexer;

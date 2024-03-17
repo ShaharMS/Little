@@ -1,4 +1,4 @@
-package little.interpreter;
+package little.interpreter.memory;
 
 import haxe.ds.ArraySort;
 import vision.algorithms.Radix;
@@ -10,6 +10,9 @@ import little.interpreter.Tokens.InterpTokens;
 using little.tools.TextTools;
 using StringTools;
 
+/**
+	An extension of `little.interpreter.memory.ExternalInterfacing`, that adds support for external operators.
+**/
 @:access(little.lexer.Lexer)
 @:allow(little.interpreter.Interpreter)
 @:allow(little.tools.Plugins)
@@ -184,6 +187,12 @@ class Operators {
 			priority = priorityCopy;
 		}
 		
+	}
+
+	public static function getPriority(op:String, type:OperatorType):Int {
+		for (index => key in priority)
+			if (key.filter(x -> x.sign == op && x.side == type).length > 0) return index;
+		throw 'Operator $op not found';
 	}
 
 	/**
