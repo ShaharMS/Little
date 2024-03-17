@@ -316,10 +316,11 @@ class Plugins {
 		object.getter = (_, _) -> {
 			objectValue: ConditionCode([
 				null => Block([
-					FunctionReturn(HaxeExtern(() -> callback(
+					HaxeExtern(() -> callback(
 						Interpreter.convert(...Parser.parse(Lexer.lex(memory.read(Little.keywords.CONDITION_PATTERN_PARAMETER_NAME).objectValue.parameter(0)))), 
-						Interpreter.convert(...Parser.parse(Lexer.lex(memory.read(Little.keywords.CONDITION_BODY_PARAMETER_NAME).objectValue.parameter(0))))))
-					, null /**forces type inference**/)
+						Interpreter.convert(...Parser.parse(Lexer.lex(memory.read(Little.keywords.CONDITION_BODY_PARAMETER_NAME).objectValue.parameter(0)))))
+					) // No FunctionReturn here, since conditions propagate existing returns, and if we put one here, it will get propagated outside
+					  // The scope of this condition, which results in unexpected behavior (program/function quits prematurely)
 				], null)
 			]),
 			objectAddress: memory.constants.EXTERN,

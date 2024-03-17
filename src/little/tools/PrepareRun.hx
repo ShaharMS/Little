@@ -41,11 +41,18 @@ class PrepareRun {
 		Little.plugin.registerType(Little.keywords.TYPE_STRING, []);
 		Little.plugin.registerType(Little.keywords.TYPE_SIGN, []);
 
+		Little.plugin.registerType(Little.keywords.TYPE_MODULE, [
+			'public ${Little.keywords.TYPE_STRING} toString ()' => (address, _, _) -> {
+				return Conversion.toLittleValue(Little.memory.getTypeName(address));
+			}
+		]);
+
 		Little.plugin.registerType("Date", [
 			'static ${Little.keywords.TYPE_STRING} now ()' => (_) -> {
 				return Conversion.toLittleValue(Date.now().toString());
 			}
 		]);
+		
 
 		Little.plugin.registerType(Little.keywords.TYPE_INT, [
 			'public ${Little.keywords.TYPE_STRING} toString ()' => (_, value, _) -> {
@@ -113,7 +120,7 @@ class PrepareRun {
 				return Object([], "Object");
 			}
 		]);
-
+		
 	}
 	
 	/**
@@ -122,7 +129,7 @@ class PrepareRun {
 	public static function addFunctions() {
 		Little.plugin.registerFunction(Little.keywords.PRINT_FUNCTION_NAME, null, [VariableDeclaration(Identifier("item"), null)], (params) -> {
 			var eval = Interpreter.evaluate(params[0]);
-			Little.runtime.__print(eval.is(OBJECT) ? @:privateAccess PrettyPrinter.printInterpreterAst([eval]) : PrettyPrinter.stringifyInterpreter(eval), eval);
+			Little.runtime.__print(eval.is(OBJECT) ? @:privateAccess PrettyPrinter.printInterpreterAst([eval]).split("\n").slice(1).map(s -> s.substring(6)).join("\n") : PrettyPrinter.stringifyInterpreter(eval), eval);
 			return NullValue;
 		}, Little.keywords.TYPE_DYNAMIC);
 		Little.plugin.registerFunction(Little.keywords.RAISE_ERROR_FUNCTION_NAME, null, [VariableDeclaration(Identifier("message"), null)], (params) -> {

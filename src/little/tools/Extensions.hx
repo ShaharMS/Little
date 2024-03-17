@@ -1,5 +1,8 @@
 package little.tools;
 
+import little.parser.Parser;
+import little.lexer.Tokens.LexerTokens;
+import little.lexer.Lexer;
 import little.interpreter.Tokens.InterpTokens;
 import little.interpreter.Interpreter;
 import little.parser.Tokens.ParserTokens;
@@ -23,6 +26,15 @@ class Extensions {
 	**/
 	overload extern inline public static function is(token:InterpTokens, ...tokens:InterpTokensSimple) {
 		return tokens.toArray().map(x -> x.getName().remove("_").toLowerCase()).contains(token.getName().toLowerCase());
+	}
+
+	public static function tokenize(code:String):Array<InterpTokens> {
+		return Interpreter.convert(...Parser.parse(Lexer.lex(code)));
+	}
+
+	public static function eval(code:String):InterpTokens {
+		return Interpreter.run(Interpreter.convert(...Parser.parse(Lexer.lex(code))));
+		
 	}
 
 	/**

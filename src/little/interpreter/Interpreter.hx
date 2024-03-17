@@ -52,7 +52,6 @@ class Interpreter {
 		return post;
 	}
 
-	
     /**
         Raise an error in the program, with the given message.
         @param message The error message
@@ -149,6 +148,7 @@ class Interpreter {
 
 	/**
 		Calls a condition. The condition's `body` is repeated `0` to `n` times, depending on the condition's `conditionParams`.
+		**Important** - Conditions are not functions, and thus they propagate `return`s.
 		@param pattern The pattern of the condition. Should be a `InterpTokens.PartArray(parts:Array<InterpTokens>)`
 		@param body The body of the condition. Should be a `InterpTokens.Block(body:Array<InterpTokens>)`
 	**/
@@ -206,7 +206,9 @@ class Interpreter {
 					Write([VariableDeclaration(Identifier(Little.keywords.CONDITION_PATTERN_PARAMETER_NAME), Identifier(Little.keywords.TYPE_STRING), null)], Characters(patternString)),
 					Write([VariableDeclaration(Identifier(Little.keywords.CONDITION_BODY_PARAMETER_NAME), Identifier(Little.keywords.TYPE_STRING), null)], Characters(bodyString)),
 				];
-				return run(params.concat(conditionRunner));
+				var v = run(params.concat(conditionRunner), true);
+				trace(v);
+				return v;
 			}
 		}
 
@@ -344,7 +346,7 @@ class Interpreter {
 		@param body The tokens to run
 		@return The result of the tokens
 	**/
-    public static function run(body:Array<InterpTokens>):InterpTokens {
+    public static function run(body:Array<InterpTokens>, propagateReturns = false):InterpTokens {
         var returnVal:InterpTokens = null;
 		memory.referrer.pushScope();
         var i = 0;
@@ -368,6 +370,7 @@ class Interpreter {
                 }
                 case ConditionCall(name, exp, body): {
                     returnVal = condition(name, exp, body);
+					if (returnVal.is(FUNCTION_RETURN)) return evaluate(returnVal);
                 }
                 case Write(assignees, value): {
                     returnVal = write(assignees, value);
@@ -376,7 +379,9 @@ class Interpreter {
                     returnVal = call(name, params);
                 }
                 case FunctionReturn(value, type): {
-                    return evaluate(value); // TODO
+					var v = evaluate(value);
+					var t = v.type().asTokenPath();
+                    return propagateReturns ? FunctionReturn(v, t) : v;
                 }
                 case Block(body, type): {
                     returnVal = run(body);

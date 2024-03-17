@@ -227,7 +227,8 @@ class Memory {
 			// If we still don't have a value, we throw an error, cause that means that field doesn't exist.
 			else {
 				wentThroughPath.pop();
-				Little.runtime.throwError(ErrorMessage('Field `$identifier` does not exist on `${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)}`'));
+				var p = wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN);
+				Little.runtime.throwError(ErrorMessage('Field `$identifier` does not exist on `$p` ${current.is(NULL_VALUE) ? '(`$p` is `${Little.keywords.NULL_VALUE}`)' : ''}'));
 				return {
 					objectValue: NullValue,
 					objectAddress: constants.NULL,
@@ -308,7 +309,8 @@ class Memory {
 			// If we still don't have a value, we throw an error, cause that means that field doesn't exist.
 			else {
 				wentThroughPath.pop();
-				Little.runtime.throwError(ErrorMessage('Field `$identifier` does not exist on `${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)}`'));
+				var p = wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN);
+				Little.runtime.throwError(ErrorMessage('Field `$identifier` does not exist on `$p` ${current.is(NULL_VALUE) ? '(`$p` is `${Little.keywords.NULL_VALUE}`)' : ''}'));
 				return {
 					objectValue: NullValue,
 					objectAddress: constants.NULL,

@@ -307,7 +307,7 @@ class PrettyPrinter {
 				for (key => value in props) {
 					i++;
 					title += getTree_INTERP(Identifier(key), prefix.copy(), level + 1, i == [for (x in props.keys()) x].length);
-					title += getTree_INTERP(Characters(value.documentation), i == [for (x in props.keys()) x].length ? prefix.copy() : pushIndex(prefix, level), level + 2, i == [for (x in props.keys()) x].length);
+					title += getTree_INTERP(Characters(value.documentation), i == [for (x in props.keys()) x].length ? prefix.copy() : pushIndex(prefix, level), level + 2, false);
 					title += getTree_INTERP(value.value, i == [for (x in props.keys()) x].length ? prefix.copy() : pushIndex(prefix, level), level + 2, true);
 				}
 				return title;

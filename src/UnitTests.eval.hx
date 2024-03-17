@@ -61,7 +61,7 @@ class UnitTests {
 			if (!result.success && !bulk) {
 				Sys.exit(1);
 			}
-			Sys.sleep(bulk ? 0.05 : 0.2);
+			Sys.sleep(bulk ? 0.02 : 0.2);
 			Little.reset();
 			i++;
 		}
