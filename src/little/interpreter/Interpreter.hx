@@ -267,6 +267,7 @@ class Interpreter {
 	**/
     public static function call(name:InterpTokens, params:InterpTokens):InterpTokens {
         var functionCode = evaluate(name);
+		var functionName = name.asJoinedStringPath();
         var processedParams = [];
         var current = [];
         for (p in (params.parameter(0) : Array<InterpTokens>)) {
@@ -284,6 +285,7 @@ class Interpreter {
 		switch functionCode {
 			case FunctionCode(requiredParams, body): {
 				var given = processedParams;
+				var resulting = [];
 				
 				var attachment = [];
 				for (key => typeCast in requiredParams.keyValueIterator()) {
@@ -295,8 +297,14 @@ class Interpreter {
 						case _:
 					}
                     if (processedParams.length > 0) value = processedParams.shift(); // Todo, handle mid-function optional arguments.
+					resulting.push(value);
 					attachment.push(Write([VariableDeclaration(Identifier(name), type, null)], value));
 				}
+
+				for (listener in Little.runtime.onFunctionCalled) {
+					listener(functionName, resulting);
+				}
+
 				return run(attachment.concat(body.parameter(0)));
 			}
 			case _: return null;

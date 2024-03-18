@@ -28,10 +28,16 @@ class Extensions {
 		return tokens.toArray().map(x -> x.getName().remove("_").toLowerCase()).contains(token.getName().toLowerCase());
 	}
 
+	/**
+		Converts code into an array of `InterpTokens`.
+	**/
 	public static function tokenize(code:String):Array<InterpTokens> {
 		return Interpreter.convert(...Parser.parse(Lexer.lex(code)));
 	}
 
+	/**
+		Converts code into an array of `InterpTokens`, runs them, and returns the result.
+	**/
 	public static function eval(code:String):InterpTokens {
 		return Interpreter.run(Interpreter.convert(...Parser.parse(Lexer.lex(code))));
 		

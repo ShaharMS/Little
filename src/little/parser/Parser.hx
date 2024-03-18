@@ -910,20 +910,27 @@ class Parser {
 
 
     static var line(get, set):Int;
-    static function get_line() return Little.runtime.line;
-    static function set_line(l:Int) return Little.runtime.line = l;
+    /** Parser.line getter **/ static function get_line() return Little.runtime.line;
+    /** Parser.line setter **/ static function set_line(l:Int) return Little.runtime.line = l;
     static var linePart:Int = 0;
-    static function setLine(l:Int) {
+    
+	/**
+		Changes the current line. Used only for error reporting.
+	**/
+	static function setLine(l:Int) {
         line = l;
         linePart = 0;
     }
+    /**
+    	Changes the current line part. Used only for error reporting.
+    **/
     static function nextPart() linePart++;
+
+    /**
+    	Resets the line counters, used between parse stages.
+    **/
     static function resetLines() {
         line = 0;
         linePart = 0;
-    }
-
-    static function get<T>(a:Array<T>, i:Int):T {
-        return a[i];
     }
 }

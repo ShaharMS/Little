@@ -73,7 +73,7 @@ class Little {
     public static function loadModule(code:String, name:String, debug:Bool = false, runRightBeforeMain:Bool = false) {
         runtime.errorThrown = false;
         runtime.line = 0;
-        runtime.currentModule = name;
+        runtime.module = name;
         if (runRightBeforeMain) {
 
         } else {
@@ -119,7 +119,7 @@ class Little {
                 PrepareRun.addConditions();
                 PrepareRun.addProps();
             }
-            runtime.currentModule = keywords.MAIN_MODULE_NAME;
+            runtime.module = keywords.MAIN_MODULE_NAME;
             Interpreter.run(Interpreter.convert(...Parser.parse(Lexer.lex(code))));
             if (debug != null) Little.debug = previous;
         } catch (e) {

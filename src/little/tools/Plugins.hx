@@ -23,6 +23,9 @@ class Plugins {
 
     private var memory:Memory;
 
+    /**
+    	Instantiates the `Plugins` class.
+    **/
     public function new(memory:Memory) {
         this.memory = memory;
     }
@@ -427,11 +430,21 @@ class Plugins {
 		}
 	}
 
+    /**
+		Checks if the given `Array<{lhs:String, rhs:String}>` contains the given `lhs` and `rhs` combination.
+    **/
     static function combosHas(combos:Array<{lhs:String, rhs:String}>, lhs:String, rhs:String) {
         for (c in combos) if (c.rhs == rhs && c.lhs == lhs) return true;
         return false;
     }
 
+    /**
+		Registers an operator, to be used in expressions in `Little`. An operator can be a single sided operator, or a double sided operator. 
+		An operator can also accept specific types for each side, or specific types for both sides.
+
+		@param symbol a `String` which is the symbol of the operator. Must not contain any letters or whitespaces.
+		@param info Information about the operator, including callback for when the operator is used and other properties.
+    **/
     public function registerSign(symbol:String, info:SignInfo) {
 
         if (info.operatorType == null || info.operatorType == LHS_RHS) {
@@ -559,6 +572,9 @@ class Plugins {
 
 
 
+    /**
+		Checks if the given array contains the given combo
+    **/
     static function containsCombo(array:Array<{lhs:String, rhs:String}>, lhs:String, rhs:String):Bool {
         for (a in array) {
             if (a.lhs == lhs && a.rhs == rhs) return true;

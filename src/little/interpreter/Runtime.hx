@@ -28,7 +28,7 @@ class Runtime {
     /**
     	The module in which tokens are currently interpreted.
     **/
-    public var currentModule(default, null):String;
+    public var module(default, null):String;
 
     /**
         The token that has just been interpreted
@@ -98,6 +98,17 @@ class Runtime {
         @param variables The variables that were written to. Value can be retrieved using `memory.read()`.
     **/
     public var onWriteValue:Array<Array<String> -> Void> = [];
+
+    /**
+    	Dispatches right after a function is called.
+
+		Useful when used with the `line`, `linePart` and `module` properties.
+			
+		@param name The name of the function, not including the module/object name.
+		@param parameters The parameters the function was called with.
+    **/
+	public var onFunctionCalled:Array<(String, Array<InterpTokens>) -> Void> = [];
+
     /**
     	The program's standard output.
     **/
@@ -118,11 +129,11 @@ class Runtime {
 
         callStack.push(token);
         
-        var module:String = currentModule, title:String = "", reason:String;
+        var mod:String = module, title:String = "", reason:String;
         var content = switch token {
             case _: {
                 reason = Std.string(token).remove(token.getName()).substring(1).replaceLast(")", "");
-                '${if (Little.debug) (layer : String).toUpperCase() + ": " else ""}ERROR: Module ${currentModule}, Line $line:  ${reason}';
+                '${if (Little.debug) (layer : String).toUpperCase() + ": " else ""}ERROR: Module ${module}, Line $line:  ${reason}';
             }
         }
         stdout.output += '\n$content';
@@ -130,7 +141,7 @@ class Runtime {
         exitCode = Layer.getIndexOf(layer);
         errorToken = token;
         errorThrown = true;        
-        for (func in onErrorThrown) func(module, line, title, reason);
+        for (func in onErrorThrown) func(mod, line, title, reason);
 
         throw "Quitting..."; // Currently, no flag exists that disables immediate quitting, so this is fine.
 
@@ -149,7 +160,7 @@ class Runtime {
         var content = switch token {
             case _: {
                 reason = Std.string(token).remove(token.getName()).substring(1).replaceLast(")", "");
-                '${if (Little.debug) (layer : String).toUpperCase() + ": " else ""}WARNING: Module ${currentModule}, Line $line:  ${reason}';
+                '${if (Little.debug) (layer : String).toUpperCase() + ": " else ""}WARNING: Module ${module}, Line $line:  ${reason}';
             }
         }
         stdout.output += '\n$content';
@@ -157,7 +168,7 @@ class Runtime {
     }
 
     public function print(item:String) {
-        stdout.output += '\n${if (Little.debug) (INTERPRETER : String).toUpperCase() + ": " else ""}Module $currentModule, Line $line:  $item';
+        stdout.output += '\n${if (Little.debug) (INTERPRETER : String).toUpperCase() + ": " else ""}Module $module, Line $line:  $item';
 		stdout.stdoutTokens.push(Characters(item));
 	}
 
@@ -171,7 +182,7 @@ class Runtime {
 	}
 
 	function __print(item:String, representativeToken:InterpTokens) {
-		stdout.output += '\n${if (Little.debug) (INTERPRETER : String).toUpperCase() + ": " else ""}Module $currentModule, Line $line:  $item';
+		stdout.output += '\n${if (Little.debug) (INTERPRETER : String).toUpperCase() + ": " else ""}Module $module, Line $line:  $item';
 		stdout.stdoutTokens.push(representativeToken);
 	}
 }

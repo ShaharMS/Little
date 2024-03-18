@@ -24,5 +24,8 @@ class StdOut {
 		stdoutTokens = new Array<InterpTokens>();
 	}
 
+	/**
+		Instantiates a new `StdOut`.
+	**/
 	public function new() {}
 }

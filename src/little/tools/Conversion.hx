@@ -76,13 +76,13 @@ class Conversion {
                 Object(map, objType);
             }
             case TFunction: {
-				NullValue; // Todo: Functions (or maybe intended behavior?)
+				NullValue; // Intended Behavior
 			}
 			case TClass(c): {
-				NullValue; // Todo: Classes
+				NullValue; // Intended Behavior
 			}
 			case TEnum(e): {
-				NullValue; // Todo: Enums
+				NullValue; // Intended Behavior
 			}
 			case TUnknown: NullValue;
 		}
