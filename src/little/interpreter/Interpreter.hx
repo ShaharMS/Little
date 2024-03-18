@@ -109,7 +109,8 @@ class Interpreter {
 		var path = name.asStringPath();
 		memory.write(path, NullValue, type.extractIdentifier(), doc != null ? evaluate(doc).extractIdentifier() : "");
 
-        // Listeners
+        for (listener in Little.runtime.onFieldDeclared) 
+			listener(name.asJoinedStringPath(), VARIABLE);
     }
 
     /**
@@ -142,7 +143,8 @@ class Interpreter {
 
 		memory.write(path, FunctionCode(paramMap, Block([], Identifier(Little.keywords.TYPE_DYNAMIC))), Little.keywords.TYPE_FUNCTION, doc != null ? evaluate(doc).extractIdentifier() : "");
     
-        // Listeners
+        for (listener in Little.runtime.onFieldDeclared) 
+			listener(name.asJoinedStringPath(), FUNCTION);
     }
 
 	/**
@@ -198,20 +200,23 @@ class Interpreter {
 		// We might want to attach stuff to the body, so we need to make it so it doesn't create a new scope & strip type info from it
 		var bodyString = PrettyPrinter.stringifyInterpreter(body.parameter(0)); 
 
-		for (pattern => caller in patterns) {
-			if (pattern == null || fit(givenPattern, pattern)) { // As per the docs, a null pattern means any pattern
+		for (_pattern => caller in patterns) {
+			if (_pattern == null || fit(givenPattern, _pattern)) { // As per the docs, a null pattern means any pattern
 				var conditionRunner = (caller.parameter(0) : Array<InterpTokens>);
 				var params = [
 					Write([VariableDeclaration(Identifier(Little.keywords.CONDITION_PATTERN_PARAMETER_NAME), Identifier(Little.keywords.TYPE_STRING), null)], Characters(patternString)),
 					Write([VariableDeclaration(Identifier(Little.keywords.CONDITION_BODY_PARAMETER_NAME), Identifier(Little.keywords.TYPE_STRING), null)], Characters(bodyString)),
 				];
+
+				for (listener in Little.runtime.onConditionCalled)
+					listener(name.asJoinedStringPath(), givenPattern, body);
+
 				return run(params.concat(conditionRunner), true);
 			}
 		}
 
 		return error('Pattern $patternString is not supported in condition ${name.asStringPath()} (patterns (`*` means any value): \n\t(${[for (pattern in patterns.keys()) pattern].map(x -> PrettyPrinter.stringifyInterpreter(x).replace("null", "*")).join('),\n\t(')})\n)');
 
-        // Listeners
 
     }
 
@@ -251,8 +256,6 @@ class Interpreter {
 			}
 		}
         
-		// Listeners
-
         for (listener in Little.runtime.onWriteValue.copy()) {
             listener(vars.map(x -> x.extractIdentifier()).concat(funcs.map(x -> x.extractIdentifier())));
         }
@@ -402,7 +405,12 @@ class Interpreter {
                 }
                 case _: returnVal = evaluate(token);
             }
+			for (listener in Little.runtime.onTokenInterpreted)
+				listener(token);
 			Little.runtime.previousToken = token;
+
+			
+
             i++;
         }
 		memory.referrer.popScope();
@@ -494,15 +502,15 @@ class Interpreter {
 		but instead of having code running and memory writing capabilities, it's capable of 
 		calculating complex equations of different types. example:
 
-		| Function | Input | Result | Process |
-		|:---: | :--- | --- | --- |
-		| 				  		| `1 + 1` 			| `1` 		| picks up the last token. |
-		| `Interpreter.run()` 		| `(2 + 2)` 		| `4` 		| picks up the last token. its an expression, so it's evaluated |
-		|						| `3 + (5 * 2)!` 	| `!` 		| picks up the last token. |
-		| --------------------- | ----------------- | --------- | -------------------------------------------------------------- |
-		|  						| `1 + 1` 			| `2` 		| evaluates all tokens and calculates the relations between them |
+		| 		   Function			| 		Input 		|   Result 	| 							Process 							 |
+		|			:---: 			|	 	:--- 		| 	  --- 	| 							  --- 								 |
+		| 				  			| `1 + 1` 			| `1` 		| picks up the last token. 										 |	
+		| `Interpreter.run()` 		| `(2 + 2)` 		| `4` 		| picks up the last token. its an expression, so it's evaluated  |
+		|							| `3 + (5 * 2)!` 	| `!` 		| picks up the last token. 										 |
+		| ------------------------- | ----------------- | --------- | -------------------------------------------------------------- |
+		|  							| `1 + 1` 			| `2` 		| evaluates all tokens and calculates the relations between them |
 		| `Interpreter.calculate()` | `(2 + 2)` 		| `4` 		| evaluates all tokens and calculates the relations between them |
-		| 						| `3 + (5 * 2)!` 	| `3628803` | evaluates all tokens and calculates the relations between them |
+		| 							| `3 + (5 * 2)!` 	| `3628803` | evaluates all tokens and calculates the relations between them |
 		@param parts The parts of the expression
 		@return The result of the expression
 	**/

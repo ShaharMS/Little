@@ -68,17 +68,19 @@ class Runtime {
 	public var onLineSplit:Array<Void -> Void> = [];
 
     /**
-    	Dispatches after finishing interpreting a token.
+		Dispatches after finishing interpreting a token.
 
-        #### - What is a token?
+		#### - What is a token?
 
-        In order for Little to run your code from a string, it has to 
-        
-         - first, extract the useful content ot of the string
-         - then, extract more information from the useful content we've just extracted
-         - and only then, iterate over the tokens in order to run the code
+		In order for Little to run your code from a string, it has to 
+				
+		 - first, extract the useful content ot of the string
+		 - then, extract more information from the useful content we've just extracted
+		 - and only then, iterate over the tokens in order to run the code
 
-        After each iteration, this method gets called, passing the token we've just parsed as an argument.
+		After each iteration, this method gets called, passing the token we've just parsed as an argument.
+
+		@param token The token that was just interpreted. Note - expressions (`()`) are passed as is, and may contain multiple tokens.
     **/
     public var onTokenInterpreted:Array<InterpTokens -> Void> = [];
 
@@ -100,14 +102,35 @@ class Runtime {
     public var onWriteValue:Array<Array<String> -> Void> = [];
 
     /**
-    	Dispatches right after a function is called.
+    	Dispatches right before a function is called.
 
 		Useful when used with the `line`, `linePart` and `module` properties.
 			
-		@param name The name of the function, not including the module/object name.
+		@param name The name of the function, may include module/object name.
 		@param parameters The parameters the function was called with.
     **/
 	public var onFunctionCalled:Array<(String, Array<InterpTokens>) -> Void> = [];
+
+	/**
+		Dispatches right before a condition is called.
+
+		Useful when used with the `line`, `linePart` and `module` properties.
+
+		@param name The name of the condition, may include module/object name.
+		@param parameters The parameters the condition was called with. 
+		@param body The body of the condition. Is either a `Block` containing code, or another single token.
+	**/
+	public var onConditionCalled:Array<(String, Array<InterpTokens>, InterpTokens) -> Void> = [];
+
+	/**
+		Dispatches right after a field is declared & written to memory.
+
+		Listeners are not triggered on external variable/function declarations.
+
+		@param name The name of the field. Includes full path (`object.a.c`, `b`)
+		@param fieldType The type of the field (variable, function, etc.)
+	**/
+	public var onFieldDeclared:Array<(String, FieldDeclarationType) -> Void> = [];
 
     /**
     	The program's standard output.
@@ -167,22 +190,47 @@ class Runtime {
 		stdout.stdoutTokens.push(token);
     }
 
+    /**
+    	Prints a Haxe string to `Little`'s standard output.
+    	@param item 
+    **/
     public function print(item:String) {
         stdout.output += '\n${if (Little.debug) (INTERPRETER : String).toUpperCase() + ": " else ""}Module $module, Line $line:  $item';
 		stdout.stdoutTokens.push(Characters(item));
 	}
 
+    /**
+    	Prints a Haxe string to `Little`'s standard output, wihout any positional information.
+		On `Little.debug` mode, the string will be prefixed with `BROADCAST: `. 
+    **/
     public function broadcast(item:String) {
         stdout.output += '\n${if (Little.debug) "BROADCAST: " else ""}${item}';
 		stdout.stdoutTokens.push(Characters(item));
     }
 
+	/**
+		Quiet broadcast, without addition to stdoutTokens 
+	**/
 	function __broadcast(item:String) {
         stdout.output += '\n${if (Little.debug) "BROADCAST: " else ""}${item}';		
 	}
 
+	/**
+		A special type of `print`, which allows addition of custom tokens to stdoutTokens.
+	**/
 	function __print(item:String, representativeToken:InterpTokens) {
 		stdout.output += '\n${if (Little.debug) (INTERPRETER : String).toUpperCase() + ": " else ""}Module $module, Line $line:  $item';
 		stdout.stdoutTokens.push(representativeToken);
 	}
+}
+
+/**
+	Types of field declarations.
+**/
+enum FieldDeclarationType {
+	VARIABLE;
+	FUNCTION;
+	CONDITION;
+	CLASS;
+	OPERATOR;
 }
