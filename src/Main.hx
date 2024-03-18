@@ -28,6 +28,9 @@ using little.tools.TextTools;
 
 class Main {
 
+	/**
+		The main function - the entry point of the program
+	**/
 	static function main() {
 		#if memory_tests
 

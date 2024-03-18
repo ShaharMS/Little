@@ -24,11 +24,15 @@ class Referrer {
 	public var bytes:ByteArray;
 
 	public var currentScopeStart(get, null):Int;
-	@:noCompletion function get_currentScopeStart() return bytes.getInt32(0);
+	/** Referrer.currentScopeStart getter **/ @:noCompletion function get_currentScopeStart() return bytes.getInt32(0);
 
 	public var currentScopeLength(get, null):Int;
-	@:noCompletion function get_currentScopeLength() return bytes.getUInt16(bytes.getInt32(0) + 2);
+	/** Referrer.currentScopeLength getter **/ @:noCompletion function get_currentScopeLength() return bytes.getUInt16(bytes.getInt32(0) + 2);
 
+
+	/**
+		Instantiates a new `Referrer`.
+	**/
 	public function new(memory:Memory) {
 
 		parent = memory;
@@ -39,13 +43,19 @@ class Referrer {
 		bytes.setUInt16(6, 0); // Were just starting, forward is 0 and will change.
 	}
 
+	/**
+		Requests 1024 bytes of extra memory for the referrer.
+	**/
 	function requestMemory() {
 		if (bytes.length > parent.maxMemorySize) {
-			Little.runtime.throwError(ErrorMessage('Too many scopes, stack has overflown (check for infinite recursion)'), MEMORY_REFERRER);
+			Little.runtime.throwError(ErrorMessage('Too many scopes have been created, referrer\'s stack has overflown (check for infinite recursion)'), MEMORY_REFERRER);
 		}
 		bytes.resize(bytes.length + 1024);
 	}
 
+	/**
+		Creates a new scope. Fields created after this will be added to the new scope, and won't affect fields from the previous scopes.
+	**/
 	public function pushScope() {
 		var currentScopeLength = bytes.getUInt16(bytes.getInt32(0) + 2);
 		var currentScopeStart = bytes.getInt32(0) + 4; // each header is 4 bytes long.
@@ -64,6 +74,9 @@ class Referrer {
 		bytes.setInt32(0, writePosition); // Update the start of the scope.
 	}
 
+	/**
+		Removes the last scope. TODO: Garbage collection.
+	**/
 	public function popScope() {
 		var currentScopePosition = bytes.getInt32(0);
 		var previousScopeLength = bytes.getUInt16(currentScopePosition);
@@ -75,7 +88,13 @@ class Referrer {
 		// Todo: garbage collector.
 	}
 
-	
+	/**
+		References a variable in the current scope. If it already exists in the current scope, it will be overwritten.
+		If it exists in parent scopes, they won't be affected.
+		@param key The name of the variable
+		@param address The address of the value
+		@param type The type of the value
+	**/
 	public function reference(key:String, address:MemoryPointer, type:String) {
         var keyHash = Murmur1.hash(ByteArray.from(key));
         var stringName = parent.storage.storeString(key);
@@ -94,6 +113,12 @@ class Referrer {
 		bytes.setUInt16(currentScopeStart + 2, bytes.getUInt16(currentScopeStart + 2) + 1); // Increment the length of the current scope.
 	}
 
+	/**
+		Removes a variable from the current scope. If it doesn't exist, throws an error.
+		If it also exists in parent scopes, they won't be affected.
+
+		@param key The name of the variable
+	**/
 	public function dereference(key:String) {
 		var keyHash = Murmur1.hash(ByteArray.from(key));
 
@@ -113,6 +138,15 @@ class Referrer {
 		bytes.setUInt16(bytes.getInt32(0) + 2, bytes.getUInt16(bytes.getInt32(0) + 2) - 1); // Decrement the length of the current scope.
 	}
 
+	/**
+		Looks up a variable in the current scope.  
+		If it doesn't exist in the current scope, it will look in parent scopes.
+
+		Throws an error if it doesn't exist in any scope.
+
+		@param key The name of the variable
+		@return The address and type of the variable, in the form of an anonymous structure: `{address: MemoryPointer, type: String}` 
+	**/
 	public function get(key:String):{address:MemoryPointer, type:String} {
 		// This one is a little more complicated, since it involves lookbehinds.
 		var keyHash = Murmur1.hash(ByteArray.from(key));
@@ -145,6 +179,15 @@ class Referrer {
 		throw 'Key $key does not exist.';
 	}
 
+	/**
+		Sets the value and type of an existing variable in the current scope.  
+		If it doesn't exist in the current scope, it will look in parent scopes.
+
+		Throws an error if it doesn't exist in any scope.
+
+		@param key The name of the variable
+		@param value The new value and type of the variable. If any of these are null, the previous value/type will remain. 
+	**/
 	public function set(key:String, value:{?address:MemoryPointer, ?type:String}) {
 		var keyHash = Murmur1.hash(ByteArray.from(key));
 
@@ -175,6 +218,11 @@ class Referrer {
 		throw 'Cannot set $key -  does not exist.';
 	}
 
+	/**
+		Checks if a key exists in any scope.
+		@param key The name of the variable
+		@return true if the key exists, false otherwise.
+	**/
 	public function exists(key:String):Bool {
 		var keyHash = Murmur1.hash(ByteArray.from(key));
 
@@ -203,6 +251,9 @@ class Referrer {
 		return false;
 	}
 
+	/**
+		Returns an iterator over all key/value pairs in all scopes, starting from the current scope, and going up the parent scopes.
+	**/
 	public function keyValueIterator():KeyValueIterator<String, {address:MemoryPointer, type:String}> {
 
 		var map = new Map<String, {address:MemoryPointer, type:String}>();

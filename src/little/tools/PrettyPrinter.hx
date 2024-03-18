@@ -55,7 +55,9 @@ class PrettyPrinter {
 	}
 
 	
-
+	/**
+		Prefix For Array
+	**/
 	static function prefixFA(pArray:Array<Int>):String {
 		var prefix = "";
 		for (i in 0...l) {
@@ -68,6 +70,9 @@ class PrettyPrinter {
 		return prefix;
 	}
 
+	/**
+		Pushes Index to Array
+	**/
 	static function pushIndex(pArray:Array<Int>, i:Int) {
 		var arr = pArray.copy();
 		arr[i + 1] = 1;
@@ -77,6 +82,14 @@ class PrettyPrinter {
 	static var s = "";
 	static var l = 0;
 
+	/**
+		returns string representation of tree
+		@param root The token to start from
+		@param prefix An array of prefixes, to determine 
+		@param level The depth of the tree in the current recursion
+		@param last Whether or not the current node is the last
+		@return The string representation
+	**/
 	@:noCompletion static function getTree_PARSER(root:ParserTokens, prefix:Array<Int>, level:Int, last:Bool):String {
 		l = level;
 		var t = if (last) "└" else "├";
@@ -190,6 +203,14 @@ class PrettyPrinter {
 		return "";
 	}
 
+	/**
+		returns string representation of tree
+		@param root The token to start from
+		@param prefix An array of prefixes, to determine 
+		@param level The depth of the tree in the current recursion
+		@param last Whether or not the current node is the last
+		@return The string representation
+	**/
 	@:noCompletion static function getTree_INTERP(root:InterpTokens, prefix:Array<Int>, level:Int, last:Bool):String {
 		l = level;
 		var t = if (last) "└" else "├";

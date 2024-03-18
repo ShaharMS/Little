@@ -15,7 +15,7 @@ class ExternalInterfacing {
 	    Inverse of `typeToPointer`, not performance efficient
 	**/
 	public var pointerToType(get ,null):Map<MemoryPointer, String>;
-	@:noCompletion function get_pointerToType() {
+	/** ExternalInterfacing.pointerToType getter **/ @:noCompletion function get_pointerToType() {
 		var pointerToType = new Map<MemoryPointer, String>();
 		for (type => pointer in typeToPointer) {
 			pointerToType[pointer] = type;
@@ -37,11 +37,23 @@ class ExternalInterfacing {
 	**/
 	public var globalProperties:ExtTree = new ExtTree(0, null, null, 0);
 
+	/**
+		Instantiates a new `ExternalInterfacing`.
+	**/
 	public function new(memory:Memory) {
 		parent = memory;
 		typeToPointer = new Map<String, MemoryPointer>();
 	}
 
+	/**
+		Creates an object at the end of the path. If some of the path does not exist, it will be created.
+
+		This function only creates paths at a specific tree - either `globalProperties` or `instanceProperties`.
+
+		@param extType The tree to create the object in - either `globalProperties` or `instanceProperties`.
+		@param path The path to the object. Provided as individual parameters. To use an array, use `...pathArray`
+		@return The created object at the end of the path, of type `ExtTree` (External Tree)
+	**/
 	public function createPathFor(extType:ExtTree, ...path:String):ExtTree {
 		var identifiers = path.toArray();
 
@@ -59,12 +71,23 @@ class ExternalInterfacing {
 		return handle;
 	}
 
+	/**
+		Helper function that uses `createPathFor` to create all possible paths for an object,
+		on both `globalProperties` and `instanceProperties`.
+
+		@param path The path to the object. Provided as individual parameters. To use an array, use `...pathArray`
+	**/
 	public function createAllPathsFor(...path:String) {
 		for (tree in [globalProperties, instanceProperties]) {
 			createPathFor(tree, ...path);
 		}
 	}
 
+	/**
+		Checks if a static object exists at the end of the path
+		@param path The path to the object. Provided as individual parameters. To use an array, use `...pathArray`
+		@return `true` if the object exists, `false` otherwise
+	**/
 	public function hasGlobal(...path:String):Bool {
 		var identifiers = path.toArray();
 
@@ -80,6 +103,11 @@ class ExternalInterfacing {
 		return true;
 	}
 
+	/**
+		Checks if an instance field exists at the end of the path
+		@param path The path to the object. Provided as individual parameters. To use an array, use `...pathArray`
+		@return `true` if the object exists, `false` otherwise
+	**/
 	public function hasInstance(...path:String):Bool {
 		var identifiers = path.toArray();
 		
@@ -95,6 +123,12 @@ class ExternalInterfacing {
 		return true;
 	}
 
+	/**
+		Gets a static object at the end of the path.
+
+		@param path The path to the object. Provided as individual parameters. To use an array, use `...pathArray`
+		@return The object at the end of the path, as a combination of `InterpTokens` and `MemoryPointer` 
+	**/
 	public function getGlobal(...path:String):{objectValue:InterpTokens, objectAddress:MemoryPointer} {
 		var identifiers = path.toArray();
 		
@@ -107,6 +141,9 @@ class ExternalInterfacing {
 	}
 }
 
+/**
+	The External Object Tree. Used to store information about an external object.
+**/
 class ExtTree {
 
 	/**
@@ -125,8 +162,21 @@ class ExtTree {
 	**/
 	public var type:MemoryPointer;
 
+	/**
+		This `ExtTree`'s children.
+	**/
 	public var properties:Map<String, ExtTree>;
 
+	/**
+		Instantiates a new `ExtTree`
+
+		@param type The `Little` type this `ExtTree`'s getter should return. Used for runtime type information 
+		@param getter The getter for the `ExtTree`, can be used in 2 ways - in the global tree, the two arguments are `null` and `null`. 
+		In the instance tree, the arguments are the parent object's value and it's address in memory. In both cases, the returned value should be a value, 
+		and it's address in memory.
+		@param properties The properties of this tree. Used to quickly populate this `ExtTree` with child trees.
+		@param doc The documentation of the field this `ExtTree` represents. 
+	**/
 	public function new(?type:MemoryPointer, ?getter:(objectValue:InterpTokens, objectAddress:MemoryPointer) -> {objectValue:InterpTokens, objectAddress:MemoryPointer}, ?properties:Map<String, ExtTree>, ?doc:MemoryPointer) {
 		this.getter = getter ?? (objectValue, objectAddress) -> {
 			return {

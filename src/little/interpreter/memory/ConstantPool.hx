@@ -6,12 +6,15 @@ import vision.ds.ByteArray;
 
 using little.tools.Extensions;
 
+/**
+	A class allowing access to static constants in Little, without having to allocate memory for them.
+**/
 class ConstantPool {
 
 	/**
 		The amount of bytes the constant pool takes up.
 	**/
-	public var capacity = 24;
+	public var capacity(default, null):Int = 24;
 
     public var NULL:MemoryPointer = 0;
     public var FALSE:MemoryPointer = 1;
@@ -28,12 +31,21 @@ class ConstantPool {
 	public var EXTERN:MemoryPointer = 18; // An extern function pointer, uses a haxeExtern token and thus cant be stored normally.
 	public var EMPTY_STRING:MemoryPointer = 19; // size: 4 bytes
 
+    /**
+		Instantiates a new `ConstantPool`
+    **/
     public function new(memory:Memory) {
-        for (i in 0...24) memory.storage.reserved[i] = 1; // Contains "Core" values
+        for (i in 0...capacity) memory.storage.reserved[i] = 1; // Contains "Core" values
 		memory.storage.setByte(TRUE, 1); // TRUE
     }
 
-	public function get(token:InterpTokens) {
+	/**
+		Converts an `InterpTokens` into a `MemoryPointer`, or throws an `ArgumentException` if it doesn't exist in the constant pool.
+		@param token The token to convert
+		@return The converted `MemoryPointer`
+		@throws ArgumentException If the token can't be represented using the constant pool
+	**/
+	public function get(token:InterpTokens):MemoryPointer {
 		switch (token) {
 			case NullValue: return NULL;
 			case FalseValue: return FALSE;
@@ -52,6 +64,12 @@ class ConstantPool {
 		}
 	}
 
+	/**
+		Converts a `MemoryPointer` into an `InterpTokens`, or throws an `ArgumentException` if it doesn't exist in the constant pool.
+		@param pointer The pointer to convert
+		@return The converted `InterpTokens`
+		@throws ArgumentException If the pointer doesn't exist in the constant pool
+	**/
 	public function getFromPointer(pointer:MemoryPointer):InterpTokens {
 		return switch pointer.rawLocation {
 			case 0x00: NullValue;
@@ -71,7 +89,12 @@ class ConstantPool {
 		}
 	}
 
+	/**
+		Checks if a `MemoryPointer` exists in the constant pool.
+		@param pointer The pointer to check
+		@return `true` if the pointer exists, `false` otherwise
+	**/
 	public function hasPointer(pointer:MemoryPointer):Bool {
-		return pointer.rawLocation < 24 && pointer.rawLocation >= 0;
+		return pointer.rawLocation < capacity && pointer.rawLocation >= 0;
 	}
 }

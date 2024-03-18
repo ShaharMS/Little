@@ -195,6 +195,12 @@ class Operators {
 		
 	}
 
+	/**
+		Returns the 0-based priority of the given operator.
+		@param op The operator
+		@param type The side of the operator - `LHS_ONLY`, `RHS_ONLY` or `LHS_RHS`
+		@return The operator's priority
+	**/
 	public function getPriority(op:String, type:OperatorType):Int {
 		for (index => key in priority)
 			if (key.filter(x -> x.sign == op && x.side == type).length > 0) return index;
@@ -248,6 +254,9 @@ class Operators {
 		setPriority(op, operatorType, priority);
 	}
 
+	/**
+		Calls the operator `op` with the argument `lhs` to the left side of the equation. 
+	**/
 	overload extern inline public function call(lhs:InterpTokens, op:String) {
 		if (lhsOnly.exists(op))
 			return lhsOnly[op](lhs);
@@ -260,6 +269,9 @@ class Operators {
 			return ErrorMessage('Operator $op does not exist. did you make a typo?');
 	}
 
+	/**
+		Calls the operator `op` with the argument `rhs` to the right side of the equation.
+	**/
 	overload extern inline public function call(op:String, rhs:InterpTokens) {
 		if (rhsOnly.exists(op))
 			return rhsOnly[op](rhs);
@@ -272,6 +284,9 @@ class Operators {
 			return ErrorMessage('Operator $op does not exist. did you make a typo?');
 	}
 
+	/**
+		Calls the operator `op` with the arguments `lhs` and `rhs` to the left and right side of the equation respectively.
+	**/
 	overload extern inline public function call(?lhs:InterpTokens = null, op:String, ?rhs:InterpTokens = null):InterpTokens {
 		if (standard.exists(op))
 			return standard[op](lhs, rhs);
@@ -285,6 +300,11 @@ class Operators {
 			return ErrorMessage('Operator $op does not exist. did you make a typo?');
 	}
 
+	/**
+		Converts shortened `_+_` syntax that includes both the operator and it's side to a sign-`OperatorType` pair.
+		@param signPos a string containing the operator and it's sides. see `Little.operators.setPriority` for syntax
+		@return a sign-`OperatorType` pair
+	**/
 	function signPosToObject(signPos:String):{sign:String, side:OperatorType} {
 		var destinationOp, opSide;
 		if (signPos.countOccurrencesOf("_") != 1) {
@@ -301,6 +321,10 @@ class Operators {
 	}
 }
 
+/**
+	Types of operators. Rhs means the operand is on the right hand side, 
+	while Lhs means the operand is on the left hand side.
+**/
 enum OperatorType {
 	LHS_RHS;
 	LHS_ONLY;

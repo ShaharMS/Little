@@ -9,7 +9,7 @@ import vision.ds.ByteArray;
 
 class HashTables {
     
-    public static final CELL_SIZE:Int = POINTER_SIZE * 4; 
+    public static final OBJECT_HASH_TABLE_CELL_SIZE:Int = POINTER_SIZE * 4; 
 
     /**
         Returns a hash table for the given key-value-type pairs.
@@ -23,27 +23,21 @@ class HashTables {
         @param pairs an array of key-value-type triples 
     **/
     public static function generateObjectHashTable(pairs:Array<{key:String, keyPointer:MemoryPointer, value:MemoryPointer, type:MemoryPointer, doc:MemoryPointer}>) {
-        var initialLength = (pairs.length > 1 ? pairs.length : 5) * CELL_SIZE * 3; 
-        // a memory pointer is 8 bytes, 3 pointers is `CELL_SIZE` bytes
+        var initialLength = (pairs.length > 1 ? pairs.length : 5) * OBJECT_HASH_TABLE_CELL_SIZE * 3; 
+        // a memory pointer is 8 bytes, 3 pointers is `OBJECT_HASH_TABLE_CELL_SIZE` bytes
         // We triple the memory for a nice size-to-store ratio (0.33)
 
         var array = new ByteArray(initialLength);
 
         for (pair in pairs) {
             var keyHash = Murmur1.hash(Bytes.ofString(pair.key));
-            // Since the array is `CELL_SIZE` bytes per entry, We need to assure that keyIndex is divisible by `CELL_SIZE`
+            // Since the array is `OBJECT_HASH_TABLE_CELL_SIZE` bytes per entry, We need to assure that keyIndex is divisible by `OBJECT_HASH_TABLE_CELL_SIZE`
             // What the following line does is assure the value doesn't overflow and wrap around to the negative.
-            // Basically, increase the ceiling, multiply by `CELL_SIZE`, take the remainder, and re-reduce the ceiling.
-            // Also, we need to make sure that the keyIndex is not negative, since the hash may very well be.
-            // THis is done by just adding the 32bit signed int limit, so -1 becomes 2.147b + 1.
+            // Basically, increase the ceiling, multiply by `OBJECT_HASH_TABLE_CELL_SIZE`, take the remainder, and re-reduce the ceiling.
             var khI64 = Int64.make(0, keyHash);
-            if (keyHash < 0) {
-                khI64 = 2_147_483_647; // 32bit signed int limit
-                khI64 += -keyHash;
-            }
-            var keyIndex = ((khI64 * CELL_SIZE) % array.length).low;
+            var keyIndex = ((khI64 * OBJECT_HASH_TABLE_CELL_SIZE) % array.length).low;
 
-            if (array.getInt32(keyIndex) == 0) {
+            if (array.getInt32(keyIndex) == 0) { // Always ok, on existing cells the first value cant be 0 because it represents `null`, and `null` fields are not creatable.
                 array.setInt32(keyIndex, pair.keyPointer.rawLocation);
                 array.setInt32(keyIndex + POINTER_SIZE, pair.value.rawLocation);
                 array.setInt32(keyIndex + POINTER_SIZE * 2, pair.type.rawLocation);
@@ -51,11 +45,11 @@ class HashTables {
             } else {
                 // To handle collisions, we will basically move on until we find an empty slot
                 // Then, fill it with the new key-value-type triplet
-                var incrementation = 0; // Todo - revisit
+                var incrementation = 0;
                 var i = keyIndex;
                 while (array.getInt32(i) != 0) {
-                    i += CELL_SIZE;
-                    incrementation += CELL_SIZE;
+                    i += OBJECT_HASH_TABLE_CELL_SIZE;
+                    incrementation += OBJECT_HASH_TABLE_CELL_SIZE;
                     if (i >= array.length) {
                         i = 0;
                     }
@@ -85,14 +79,14 @@ class HashTables {
 
         var i = 0;
         while (i < bytes.length) {
-            var keyPointer = MemoryPointer.fromInt(bytes.getInt32(i));
-            var value = MemoryPointer.fromInt(bytes.getInt32(i + POINTER_SIZE));
-            var type = MemoryPointer.fromInt(bytes.getInt32(i + POINTER_SIZE * 2));
-            var doc = MemoryPointer.fromInt(bytes.getInt32(i + POINTER_SIZE * 3));
+            var keyPointer:MemoryPointer = bytes.getInt32(i);
+            var value:MemoryPointer = bytes.getInt32(i + POINTER_SIZE);
+            var type:MemoryPointer = bytes.getInt32(i + POINTER_SIZE * 2);
+            var doc:MemoryPointer = bytes.getInt32(i + POINTER_SIZE * 3);
             var key = null;
 
             if (keyPointer.rawLocation == 0) {
-                i += CELL_SIZE;
+                i += OBJECT_HASH_TABLE_CELL_SIZE;
                 continue; // Nothing to do here
             }
             if (storage != null) {
@@ -107,29 +101,32 @@ class HashTables {
                 doc: doc
             });
 
-            i += CELL_SIZE;
+            i += OBJECT_HASH_TABLE_CELL_SIZE;
         }
 
         return arr;
     }
 
+    /**
+    	Whether a given key exists in a hash table.
+    	@param hashTable The bytes of the hash table, generated using the `HashTables` class
+    	@param key The key to check
+    	@param storage Must be provided in order to actually access the key values in the hash table
+    	@return `true` if the key exists, `false` otherwise
+    **/
     public static function hashTableHasKey(hashTable:ByteArray, key:String, storage:Storage):Bool {
         var keyHash = Murmur1.hash(Bytes.ofString(key));
 
         var khI64 = Int64.make(0, keyHash);
-        if (keyHash < 0) {
-            khI64 = 2_147_483_647; // 32bit signed int limit
-            khI64 += -keyHash;
-        }
 
-        var keyIndex = ((khI64 * CELL_SIZE) % hashTable.length).low;
+        var keyIndex = ((khI64 * OBJECT_HASH_TABLE_CELL_SIZE) % hashTable.length).low;
         var incrementation = 0;
         while (true) {
             var currentKey = storage.readString(hashTable.getInt32(keyIndex));
             if (currentKey == key) {
                 return true;
             }
-            keyIndex += CELL_SIZE;
+            keyIndex += OBJECT_HASH_TABLE_CELL_SIZE;
             incrementation++;
             if (keyIndex >= hashTable.length) {
                 keyIndex = 0;
@@ -140,16 +137,19 @@ class HashTables {
         } 
     }
 
+    /**
+		Looks up a key in a hash table.
+
+    	@param hashTable The bytes of the hash table, generated using the `HashTables` class
+    	@param key The key to check
+    	@param storage Must be provided in order to actually access the keys in the hash table
+    **/
     public static function hashTableGetKey(hashTable:ByteArray, key:String, storage:Storage):{key:String, keyPointer:MemoryPointer, value:MemoryPointer, type:MemoryPointer, doc:MemoryPointer} {
         var keyHash = Murmur1.hash(Bytes.ofString(key));
 
         var khI64 = Int64.make(0, keyHash);
-        if (keyHash < 0) {
-            khI64 = 2_147_483_647; // 32bit signed int limit
-            khI64 += -keyHash;
-        }
 
-        var keyIndex = ((khI64 * CELL_SIZE) % hashTable.length).low;
+        var keyIndex = ((khI64 * OBJECT_HASH_TABLE_CELL_SIZE) % hashTable.length).low;
 
         var incrementation = 0;
         while (true) {
@@ -164,8 +164,8 @@ class HashTables {
                 }
             }
 
-            keyIndex += CELL_SIZE;
-            incrementation += CELL_SIZE;
+            keyIndex += OBJECT_HASH_TABLE_CELL_SIZE;
+            incrementation += OBJECT_HASH_TABLE_CELL_SIZE;
             if (keyIndex >= hashTable.length) {
                 keyIndex = 0;
             }
@@ -178,6 +178,18 @@ class HashTables {
         throw 'How did you get here? 4';
     }
 
+    /**
+    	Directly accesses a specific object's memory, and adds a key-value "pair" to it's hash table.
+
+		If the hash table is too full (70% of its size is occupied), the hash table will be rehashed with the new key, and it's size will increase.
+
+    	@param object A pointer to an object 
+    	@param key The key to add
+    	@param value The key's value
+    	@param type The key's type
+    	@param doc The key's documentation
+    	@param storage Must be provided in order to access the object.
+    **/
     public static function objectAddKey(object:MemoryPointer, key:String, value:MemoryPointer, type:MemoryPointer, doc:MemoryPointer, storage:Storage) {
         var hashTableBytes = storage.readBytes(storage.readPointer(object.rawLocation + POINTER_SIZE), storage.readInt32(object.rawLocation));
         var table = HashTables.readObjectHashTable(hashTableBytes, storage);
@@ -186,7 +198,7 @@ class HashTables {
         // In case the size-to-fill ration is grater that 0,7, we will need to rehash everything and add the key
 
         var tableSize = hashTableBytes.length;
-        var occupied = table.length * CELL_SIZE;
+        var occupied = table.length * OBJECT_HASH_TABLE_CELL_SIZE;
 
         if (occupied / tableSize >= 0.7) {
             // Rehash with the the key:
@@ -217,24 +229,21 @@ class HashTables {
 
         var keyHash = Murmur1.hash(Bytes.ofString(key));
         var khI64 = Int64.make(0, keyHash);
-        if (keyHash < 0) {
-            khI64 = 2_147_483_647;
-            khI64 += -keyHash;
-        }
-        var keyIndex = ((khI64 * CELL_SIZE) % hashTableBytes.length).low;
+
+        var keyIndex = ((khI64 * OBJECT_HASH_TABLE_CELL_SIZE) % hashTableBytes.length).low;
 
         var incrementation = 0;
 
         while (true) {
             if (hashTableBytes.getInt32(keyIndex) == 0) {
-                storage.setInt32(hashTablePosition.rawLocation + keyIndex, storage.storeString(key).rawLocation);
-                storage.setInt32(hashTablePosition.rawLocation + keyIndex + POINTER_SIZE, value.rawLocation);
-                storage.setInt32(hashTablePosition.rawLocation + keyIndex + POINTER_SIZE * 2, type.rawLocation);
-                storage.setInt32(hashTablePosition.rawLocation + keyIndex + POINTER_SIZE * 3, doc.rawLocation);
+                storage.setPointer(hashTablePosition.rawLocation + keyIndex, storage.storeString(key).rawLocation);
+                storage.setPointer(hashTablePosition.rawLocation + keyIndex + POINTER_SIZE, value.rawLocation);
+                storage.setPointer(hashTablePosition.rawLocation + keyIndex + POINTER_SIZE * 2, type.rawLocation);
+                storage.setPointer(hashTablePosition.rawLocation + keyIndex + POINTER_SIZE * 3, doc.rawLocation);
                 return;
             }
-            keyIndex += CELL_SIZE;
-            incrementation += CELL_SIZE;
+            keyIndex += OBJECT_HASH_TABLE_CELL_SIZE;
+            incrementation += OBJECT_HASH_TABLE_CELL_SIZE;
             if (keyIndex >= tableSize) {
                 keyIndex = 0;
             }
@@ -245,17 +254,22 @@ class HashTables {
         
     }
 
+    /**
+		Directly accesses a specific object's memory, and sets a key-value "pair" to it's hash table.
+
+    	@param object A pointer to an object 
+    	@param key The key to add
+    	@param pair The key's value. Has 3 fields: value, type, doc. if a property is null, it will not modify that specific existing value of the key-value "pair"
+    	@param storage Must be provided in order to access the object.
+    **/
     public static function objectSetKey(object:MemoryPointer, key:String, pair:{?value:MemoryPointer, ?type:MemoryPointer, ?doc:MemoryPointer}, storage:Storage) {
         var hashTableBytesLength = storage.readInt32(object.rawLocation);
         var hashTablePosition = storage.readPointer(object.rawLocation + 4);
 
         var keyHash = Murmur1.hash(Bytes.ofString(key));
         var khI64 = Int64.make(0, keyHash);
-        if (keyHash < 0) {
-            khI64 = 2_147_483_647;
-            khI64 += -keyHash;
-        }
-        var keyIndex = ((khI64 * CELL_SIZE) % hashTableBytesLength).low;
+		
+        var keyIndex = ((khI64 * OBJECT_HASH_TABLE_CELL_SIZE) % hashTableBytesLength).low;
 
         var incrementation = 0;
         while (true) {
@@ -271,23 +285,35 @@ class HashTables {
                 return;
             }
 
-            keyIndex += CELL_SIZE;
-            incrementation += CELL_SIZE;
+            keyIndex += OBJECT_HASH_TABLE_CELL_SIZE;
+            incrementation += OBJECT_HASH_TABLE_CELL_SIZE;
             if (keyIndex >= hashTableBytesLength) {
                 keyIndex = 0;
             }
             if (incrementation >= hashTableBytesLength) {
-                throw "How did you get here? 7";
+                throw "Cannot set a non-existing key in the object's hash table.";
             }
         }
         
     }
 
+    /**
+		Looks up a key in an object's hash table using only the object's pointer.
+
+    	@param object A pointer to an object
+    	@param key The key to look up
+    	@param storage Must be provided in order to access the object.
+    **/
     public static function objectGetKey(object:MemoryPointer, key:String, storage:Storage) {
         var hashTableBytes = storage.readBytes(storage.readPointer(object.rawLocation + POINTER_SIZE), storage.readInt32(object.rawLocation));
         return hashTableGetKey(hashTableBytes, key, storage);
     }
 
+	/**
+		Retrieves the hash table of an object, as an array of bytes.
+		@param objectPointer A pointer to an object
+		@param storage Must be provided in order to access the object.
+	**/
 	public static function getHashTableOf(objectPointer:MemoryPointer, storage:Storage) {
 		var bytesLength = storage.readInt32(objectPointer.rawLocation);
 		var bytesPointer = storage.readPointer(objectPointer.rawLocation + 4);

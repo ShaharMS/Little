@@ -43,13 +43,16 @@ class Little {
     **/
     public static var plugin(default, null):Plugins = new Plugins(Little.memory);
 
+    /**
+		Another form of external interfacing, focused on operators.
+    **/
     public static var operators(default, null):Operators = new Operators();
 
     /**
         Used to store code that is currently being ran/queued for running right before the main module using
         `runRightBeforeMain` in `Little.loadModule()`.
     **/
-    public static var queue(default, null):Queue<String>;
+    public static var queue(default, null):Queue<String> = new Queue();
 
 
     /**
@@ -75,7 +78,7 @@ class Little {
         runtime.line = 0;
         runtime.module = name;
         if (runRightBeforeMain) {
-
+			Little.queue.enqueue(code);
         } else {
             final previous = Little.debug;
             if (debug != null) Little.debug = debug;
@@ -120,7 +123,10 @@ class Little {
                 PrepareRun.addProps();
             }
             runtime.module = keywords.MAIN_MODULE_NAME;
-            Interpreter.run(Interpreter.convert(...Parser.parse(Lexer.lex(code))));
+			Little.queue.enqueue(code);
+			for (item in Little.queue) {
+				Interpreter.run(Interpreter.convert(...Parser.parse(Lexer.lex(item))));
+			}
             if (debug != null) Little.debug = previous;
         } catch (e) {
             
@@ -138,6 +144,7 @@ class Little {
 		Little.operators.standard.clear();
 		Little.operators.priority.clear();
 		Little.memory.reset();
+		Little.queue = new Queue();
 	}
 
 }

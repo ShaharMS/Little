@@ -27,10 +27,13 @@ class Memory {
 		The current amount of memory allocated, in bytes.
 	**/
 	public var currentMemorySize(get, never):Int;
-	@:noCompletion function get_currentMemorySize() {
+	/** Memory.currentMemorySize getter **/ @:noCompletion function get_currentMemorySize() {
 		return storage.reserved.length + referrer.bytes.length;
 	}
 
+	/**
+		Instantiates a new `Memory`.
+	**/
 	public function new() {
 		storage = new Storage(this);
 		referrer = new Referrer(this);
@@ -38,6 +41,9 @@ class Memory {
 		externs = new ExternalInterfacing(this);
 	}
 
+	/**
+		Resets all stored values, and releases all extra allocated memory.
+	**/
 	public function reset() {
 		storage = new Storage(this);
 		referrer = new Referrer(this);
@@ -76,6 +82,10 @@ class Memory {
 	}
 
 	/**
+		Reads the value at the end of the path.
+
+		@param path The path to read. Provided as individual parameters. To use an array, use `...pathArray`.
+		@return an anonymous structure: `{objectValue:InterpTokens, objectTypeName:String, objectAddress:MemoryPointer}`.
 	**/
 	public function read(...path:String):{objectValue:InterpTokens, objectTypeName:String, objectAddress:MemoryPointer} {
 		// If the path is empty, we just return null
@@ -217,6 +227,12 @@ class Memory {
 		}
 	}
 
+	/**
+		Starts reading from a specified value instead of preforming a lookup, and returns the value at the end of the path, when
+		originating from the given value.
+		@param value a value-address pair
+		@param path the path to the value. Provided as individual parameters. To use an array, use `...pathArray`
+	**/
 	public function readFrom(value:{objectValue:InterpTokens, objectAddress:MemoryPointer}, ...path:String) {
 		var current = value.objectValue;
 		var currentAddress = value.objectAddress;
@@ -299,6 +315,18 @@ class Memory {
 		}
 	}
 
+	/**
+		Writes a new value to a **new** path specified by `path`.
+
+		If a part of the path doesn't exist which is not it's end, an error will be thrown in `Little`'s runtime.
+
+		If the path fully exists, it's value will be overwritten.
+
+		@param path An array of strings representing the path to the value
+		@param value The value to write. If `null`, the value will be set to `NullValue`
+		@param type The type of the value. If `null`, the type will be set to `TYPE_DYNAMIC`
+		@param doc The documentation of the value. If `null`, the documentation will be set to `""`
+	**/
 	public function write(path:Array<String>, ?value:InterpTokens, ?type:String, ?doc:String) {
 		// A couple notices:
 		/*
@@ -346,6 +374,16 @@ class Memory {
 		}
 	}
 
+	/**
+		Writes a new value to an **existing** path specified by `path`.
+		
+		If any part of the path does not exist, an error will be thrown in `Little`'s runtime.
+
+		@param path An array of strings representing the path to the value
+		@param value The value to write. If `null`, the original value will be preserved
+		@param type The type of the value. If `null`, the original type will be preserved
+		@param doc The documentation of the value. If `null`, the original documentation will be preserved
+	**/
 	public function set(path:Array<String>, ?value:InterpTokens, ?type:String, ?doc:String) {
 
 		if (path.length == 0) {
@@ -402,7 +440,12 @@ class Memory {
 	}
 	
 
+	/**
+		Returns information about types in Little at runtime.
 
+		@param name The name of the type. Allows property access (for example, `pack.Type`)
+		@return An object containing information about the type.
+	**/
 	public function getTypeInformation(name:String):TypeInfo {
 
 		// First, check for primitive types which are pre-allocated
@@ -476,6 +519,11 @@ class Memory {
 		return typeInfo;
 	}
 
+	/**
+		Returns the name of the type at the given pointer.
+		@param pointer The pointer to the type
+		@return The name of the type
+	**/
 	public function getTypeName(pointer:MemoryPointer):String {
 		// Externs prioritized:
 		if (externs.pointerToType.exists(pointer)) {
@@ -491,6 +539,9 @@ class Memory {
 	}
 }
 
+/**
+	Represents runtime information about a type.
+**/
 typedef TypeInfo = {
 	pointer:MemoryPointer,
 	typeName:String,

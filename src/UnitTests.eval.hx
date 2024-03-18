@@ -5,7 +5,6 @@ import little.interpreter.Tokens.InterpTokens;
 import sys.io.File;
 import sys.FileSystem;
 import little.tools.PrettyPrinter;
-import little.tools.Plugins.ItemInfo;
 import eval.luv.Stream;
 import little.Little;
 import little.interpreter.Runtime;
