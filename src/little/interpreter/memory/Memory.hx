@@ -1,5 +1,6 @@
 package little.interpreter.memory;
 
+import little.tools.PrettyPrinter;
 import little.interpreter.memory.MemoryPointer.POINTER_SIZE;
 import little.tools.TextTools;
 import little.interpreter.Tokens.InterpTokens;
@@ -74,11 +75,48 @@ class Memory {
 			return token.parameter(0);
 		}
 
-		throw 'Unable to allocate memory for token `$token`.';
-
 		Little.runtime.throwError(ErrorMessage('Unable to allocate memory for token `$token`.'), MEMORY_STORAGE);
+		throw 'Unable to allocate memory for token `$token`.';
+	}
 
-		return constants.NULL;
+	/**
+	    Similar to the `store` function, but respects pass by value/reference rules.
+
+		Whether an object of type `T` is passed by reference or not is dictated by the value of a field
+		named `passedByReference`. This field cannot be changed at runtime for existing types.
+
+	    @param token A simple token (for which the returned value will be the same as a `store` call), or an identifiable
+		token (evaluable by `Extensions.extractIdentifier`), specifically ones that return some sort of a "path" to that value. 
+	    @return A pointer to that location/value.
+	**/
+	public function retrieve(token:InterpTokens):MemoryPointer {
+		trace(token);
+		switch token {
+			case _ if (token.is(TRUE_VALUE, FALSE_VALUE, NULL_VALUE, OBJECT, FUNCTION_CODE, BLOCK, CONDITION_CODE, CLASS_POINTER) || token.staticallyStorable()): {
+				return store(token);
+			}
+			case Identifier(_) | PropertyAccess(_, _): {
+				var path = token.asStringPath();
+				var cell = read(...path);
+				
+				return cell.objectAddress;
+			}
+			case Block(_, _) | Expression(_, _): {
+				var result = Interpreter.evaluate(token);
+				switch result {
+					case Characters(string): return retrieve(string.asTokenPath());
+					case Identifier(_) | PropertyAccess(_, _): retrieve(result);
+					case _: {
+						Little.runtime.throwError(ErrorMessage('Code block returned a value that cannot be read from (for value: ${PrettyPrinter.stringifyInterpreter(result)})'));
+						throw 'Unable to retrieve a pointer to token $result';
+					}
+				}
+			}
+			case _:
+		}
+
+		Little.runtime.throwError(ErrorMessage('Unable to retrieve a pointer to token $token'));
+		throw 'Unable to retrieve a pointer to token $token';
 	}
 
 	/**
@@ -320,7 +358,10 @@ class Memory {
 
 		If a part of the path doesn't exist which is not it's end, an error will be thrown in `Little`'s runtime.
 
-		If the path fully exists, it's value will be overwritten.
+		If the path fully exists, it's value will be overwritten
+		If `value` is given as an identifier/property access/block, there will be an attempt
+		to retrieve the original object's address there, if it's type has `passedByReference` set to `true`. See `Memory.retrieve`
+
 
 		@param path An array of strings representing the path to the value
 		@param value The value to write. If `null`, the value will be set to `NullValue`
@@ -340,14 +381,14 @@ class Memory {
 		}
 
 		if (path.length == 1) {
-			referrer.reference(path[0], store(value), type);
+			referrer.reference(path[0], retrieve(value), type);
 
 		} else {
 			var pathCopy = path.slice(0, path.length - 1);
 			var wentThroughPath = [path[0]];
 			var current = referrer.get(pathCopy.shift());
 			while (pathCopy.length > 0) {
-				if (getTypeInformation(current.type).isStaticType) {
+				if (!getTypeInformation(current.type).passedByReference) {
 					Little.runtime.throwError(ErrorMessage('Cannot write to a static type. Only objects can have dynamic properties (${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)} is `${current.type}`)'));
 				}
 				if (!HashTables.hashTableHasKey(HashTables.getHashTableOf(current.address, storage), pathCopy[0], storage)) {
@@ -361,15 +402,15 @@ class Memory {
 				}
 				wentThroughPath.push(pathCopy.shift());
 			}
-			if (getTypeInformation(current.type).isStaticType) {
+			if (!getTypeInformation(current.type).passedByReference) {
 				Little.runtime.throwError(ErrorMessage('Cannot write to a property to values of a static type. Only objects can have dynamic properties (${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)} is `${current.type}`)'));
 			}
 			if (!HashTables.hashTableHasKey(HashTables.getHashTableOf(current.address, storage), path[path.length - 1], storage)) {
-				HashTables.objectAddKey(current.address, path[path.length - 1], store(value), getTypeInformation(type).pointer, storage.storeString(doc), storage);
+				HashTables.objectAddKey(current.address, path[path.length - 1], retrieve(value), getTypeInformation(type).pointer, storage.storeString(doc), storage);
 			} else if (externs.instanceProperties.properties.exists(path[path.length - 1])) {
 				Little.runtime.throwError(ErrorMessage('Cannot write to an extern property (${path[path.length - 1]})'));
 			} else {
-				HashTables.objectSetKey(current.address, path[path.length - 1], {value: value != null ? store(value) : null, type: type != null ? getTypeInformation(type).pointer : null, doc: doc != null ? storage.storeString(doc) : null}, storage);
+				HashTables.objectSetKey(current.address, path[path.length - 1], {value: value != null ? retrieve(value) : null, type: type != null ? getTypeInformation(type).pointer : null, doc: doc != null ? storage.storeString(doc) : null}, storage);
 			}
 		}
 	}
@@ -393,7 +434,7 @@ class Memory {
 
 		if (path.length == 1) {
 			if (referrer.exists(path[0])) {
-				referrer.set(path[0], { address: value != null ? store(value) : null, type: type != null ? type : null});
+				referrer.set(path[0], { address: value != null ? retrieve(value) : null, type: type != null ? type : null});
 			} else {
 				Little.runtime.throwError(ErrorMessage('Variable/function ${path[0]} does not exist'));
 			}
@@ -402,7 +443,7 @@ class Memory {
 			var wentThroughPath = [path[0]];
 			var current = referrer.get(pathCopy.shift());
 			while (pathCopy.length > 0) {
-				if (getTypeInformation(current.type).isStaticType) {
+				if (!getTypeInformation(current.type).passedByReference) {
 					Little.runtime.throwError(ErrorMessage('Cannot set properties to values of a static type. Only objects can have dynamic properties (${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)} is `${current.type}`)'));
 				}
 				if (!HashTables.hashTableHasKey(HashTables.getHashTableOf(current.address, storage), pathCopy[0], storage)) {
@@ -416,11 +457,11 @@ class Memory {
 				}
 				wentThroughPath.push(pathCopy.shift());
 			}
-			if (getTypeInformation(current.type).isStaticType) {
+			if (!getTypeInformation(current.type).passedByReference) {
 				Little.runtime.throwError(ErrorMessage('Cannot set properties to values of a static type. Only objects can have dynamic properties (${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)} is `${current.type}`)'));
 			}
 			if (HashTables.hashTableHasKey(HashTables.getHashTableOf(current.address, storage), path[path.length - 1], storage)) {
-				HashTables.objectSetKey(current.address, path[path.length - 1], {value: value != null ? store(value) : null, type: type != null ? getTypeInformation(type).pointer : null, doc: doc != null ? storage.storeString(doc) : null}, storage);
+				HashTables.objectSetKey(current.address, path[path.length - 1], {value: value != null ? retrieve(value) : null, type: type != null ? getTypeInformation(type).pointer : null, doc: doc != null ? storage.storeString(doc) : null}, storage);
 			} else if (externs.instanceProperties.properties.exists(path[path.length - 1])) {
 				Little.runtime.throwError(ErrorMessage('Cannot set an extern property (${path[path.length - 1]})'));
 			} else {
@@ -471,7 +512,7 @@ class Memory {
 					case 16 /* unknown */: Little.keywords.TYPE_UNKNOWN;
 					case _: throw "How did we get here? 5";
 				},
-				isStaticType: true,
+				passedByReference: p.rawLocation >= 14 && p.rawLocation <= 15,
 				isExternal: false,
 				instanceFields: [],
 				staticFields: [],
@@ -505,7 +546,7 @@ class Memory {
 			return {
 				pointer: externs.typeToPointer[name],
 				typeName: name,
-				isStaticType: false,
+				passedByReference: true,
 				isExternal: true,
 				instanceFields: instances,
 				staticFields: statics,
@@ -545,7 +586,7 @@ class Memory {
 typedef TypeInfo = {
 	pointer:MemoryPointer,
 	typeName:String,
-	isStaticType:Bool,
+	passedByReference:Bool,
 	isExternal:Bool,
 	instanceFields:Map<String, {type:MemoryPointer, doc:MemoryPointer}>,
     staticFields:Map<String, {type:MemoryPointer, doc:MemoryPointer}>,

@@ -250,9 +250,10 @@ class Interpreter {
 
 		if (containsVariable) {
 			var paths = vars.map(x -> x.asStringPath());
+            // filter for identifiers/property accesses, for which Memory.retrieve does the work.
 			var evaluated = evaluate(value); // No need to calculate multiple times, so we just evaluate once
-			for (path in paths) {
-				memory.set(path, evaluated, evaluated.type(), "");
+            for (path in paths) {
+				memory.set(path, value.is(IDENTIFIER, PROPERTY_ACCESS) ? value : evaluated, evaluated.type(), "");
 			}
 		}
         

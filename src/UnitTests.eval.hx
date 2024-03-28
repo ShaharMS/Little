@@ -43,7 +43,7 @@ class UnitTests {
 
 	public static function run(bulk:Bool = false) {
 		var testFunctions = [test1, test2, test3, test4, test5, test6, test7, test8, test9, test10, test11, test12, test13];
-
+		var allSuccessful = true;
 		var i = 1;
 		for (func in testFunctions) {
 			var result = func();
@@ -57,17 +57,17 @@ class UnitTests {
 				Sys.print('        - $RESET$BOLD$WHITE Stdout:$RESET\n            ${Little.runtime.stdout.output.replace("\n", "\n            ")}$RESET\n');
 			}
 
-			if (!result.success && !bulk) {
+			if (!result.success) allSuccessful = false;
+			if (!result.success && !bulk)
 				Sys.exit(1);
-			}
 			Sys.sleep(bulk ? 0.02 : 0.2);
 			Little.reset();
 			i++;
 		}
-
-		//File.saveContent('unit_tests.md');
+		if (allSuccessful) {
+			Sys.println('$GREEN$BOLD🥳 🥳 🥳 All tests passed! 🥳 🥳 🥳$RESET');
+		}
 	}
-
 
 
 	public static function test1():UnitTestResult {

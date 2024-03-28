@@ -971,7 +971,7 @@ class Storage {
 		return {
 			typeName: className,
 			pointer: pointer,
-			isStaticType: false, // Final decision: static types cannot be created at runtime, only externally
+			passedByReference: true, // Final decision: static types cannot be created at runtime, only externally
 			isExternal: false,
 			instanceFields: instances,
 			staticFields: statics,
