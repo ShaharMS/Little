@@ -32,63 +32,7 @@ class Main {
 		The main function - the entry point of the program
 	**/
 	static function main() {
-		#if memory_tests
-
-		
-		var memory = new Memory();
-		
-		trace("memory:");
-		trace(memory.stringifyMemoryBytes());
-		trace(memory.stringifyReservedBytes());
-		
-		var intPointer = memory.storage.storeInt32(-456);
-		trace("int read/write", memory.storage.readInt32(intPointer));
-		var floatPointer = memory.storage.storeDouble(123.456);
-		trace("float read/write", memory.storage.readDouble(floatPointer));
-		var stringPointer = memory.storage.storeString("hello");
-		trace("string read/write", memory.storage.readString(stringPointer));
-		var codePointer = memory.storage.storeCodeBlock(
-			Block([
-				VariableDeclaration(Identifier("z"), Identifier(Little.keywords.TYPE_INT)),
-			], Identifier(Little.keywords.TYPE_INT))
-		);
-		trace("code read/write", memory.storage.readCodeBlock(codePointer));
-		var boolPointer = memory.store(TrueValue);
-		trace("bool read/write", memory.constants.getFromPointer(boolPointer));
-		var nullPointer = memory.storage.storeStatic(NullValue);
-		trace("null read/write", memory.constants.getFromPointer(nullPointer));
-		var signPointer = memory.storage.storeSign("^&");
-		trace("sign read/write", memory.storage.readSign(signPointer));
-
-		var objectPointer = memory.storage.storeObject(
-			Object(
-				[
-					"x" => {value: Decimal(123.456), documentation: ""},
-					"y" => {value: Number(456), documentation: ""},
-					"Z" => {value: Characters("hello world"), documentation: ""}
-				],
-				Little.keywords.TYPE_DYNAMIC
-			)
-		);
-
-		trace("object read/write","\n" + PrettyPrinter.printInterpreterAst([memory.storage.readObject(objectPointer)]));
-
-		//var classPointer = memory.storage.storeType(
-		//	[VariableDeclaration(Identifier("n"), TypeReference([Little.keywords.TYPE_INT])),
-		//	VariableDeclaration(Identifier("s"), TypeReference([Little.keywords.TYPE_BOOLEAN]))],
-		//	[]
-		//);
-//
-		//trace("class read/write", memory.storage.readType(classPointer));
-		
-
-		trace("memory:");
-		trace(memory.stringifyMemoryBytes());
-		trace(memory.stringifyReservedBytes());
-		trace(memory.memory.length);
-		trace(memory.reserved.toArray().filter(x -> x == 1).length);
-
-		#elseif js
+		#if js
 		new JsExample();
 		#elseif unit
 		UnitTests.run(true);

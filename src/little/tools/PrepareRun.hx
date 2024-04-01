@@ -587,6 +587,9 @@ class PrepareRun {
 				return val;
 			}
 
+			/**
+				Listens for when `ident` is written to.
+			**/
 			function listener(setIdentifiers:Array<String>) {
 				var cond:Bool = Conversion.toHaxeValue(Interpreter.calculate(params));
 				if (setIdentifiers.contains(ident) && cond) {
@@ -613,7 +616,9 @@ class PrepareRun {
 				Little.runtime.throwError(ErrorMessage('`whenever` condition must start with a variable to watch (expected definition, found: `${PrettyPrinter.stringifyInterpreter(params[0])}`)'));
 				return val;
 			}
-
+			/**
+				Listens for when `ident` is written to.
+			**/
 			function listener(setIdentifiers:Array<String>) {
 				var cond:Bool = Conversion.toHaxeValue(Interpreter.calculate(params));
 				if (setIdentifiers.contains(ident) && cond) {
