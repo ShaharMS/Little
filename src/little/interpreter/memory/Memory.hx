@@ -92,7 +92,7 @@ class Memory {
 	public function retrieve(token:InterpTokens):MemoryPointer {
 		trace(token);
 		switch token {
-			case _ if (token.is(TRUE_VALUE, FALSE_VALUE, NULL_VALUE, OBJECT, FUNCTION_CODE, BLOCK, CONDITION_CODE, CLASS_POINTER) || token.staticallyStorable()): {
+			case _ if (token.is(TRUE_VALUE, FALSE_VALUE, NULL_VALUE, OBJECT, FUNCTION_CODE, BLOCK, CONDITION_CODE, CLASS_POINTER) || token.passedByValue()): {
 				return store(token);
 			}
 			case Identifier(_) | PropertyAccess(_, _): {

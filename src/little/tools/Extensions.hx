@@ -61,7 +61,7 @@ class Extensions {
 	    Whether or not `token` is passed by value.
 	**/
 	public static inline function passedByValue(token:InterpTokens):Bool {
-		return is(token, TRUE_VALUE, FALSE_VALUE, NULL_VALUE, NUMBER, DECIMAL, SIGN);
+		return is(token, TRUE_VALUE, FALSE_VALUE, NULL_VALUE, NUMBER, DECIMAL, SIGN, CHARACTERS);
 	}
 
 	/**
