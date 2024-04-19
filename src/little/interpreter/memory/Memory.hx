@@ -85,12 +85,11 @@ class Memory {
 		Whether an object of type `T` is passed by reference or not is dictated by the value of a field
 		named `passedByReference`. This field cannot be changed at runtime for existing types.
 
-	    @param token A simple token (for which the returned value will be the same as a `store` call), or an identifiable
+		@param token A simple token (for which the returned value will be the same as a `store` call), or an identifiable
 		token (evaluable by `Extensions.extractIdentifier`), specifically ones that return some sort of a "path" to that value. 
-	    @return A pointer to that location/value.
+		@return A pointer to that location/value.
 	**/
 	public function retrieve(token:InterpTokens):MemoryPointer {
-		trace(token);
 		switch token {
 			case _ if (token.is(TRUE_VALUE, FALSE_VALUE, NULL_VALUE, OBJECT, FUNCTION_CODE, BLOCK, CONDITION_CODE, CLASS_POINTER) || token.passedByValue()): {
 				return store(token);
@@ -98,7 +97,7 @@ class Memory {
 			case Identifier(_) | PropertyAccess(_, _): {
 				var path = token.asStringPath();
 				var cell = read(...path);
-				
+				if (cell.objectValue.passedByValue()) return store(cell.objectValue);
 				return cell.objectAddress;
 			}
 			case Block(_, _) | Expression(_, _): {

@@ -42,7 +42,7 @@ class UnitTests {
 	static var UNDERLINE = "\033[4m";
 
 	public static function run(bulk:Bool = false) {
-		var testFunctions = [test1, test2, test3, test4, test5, test6, test7, test8, test9, test10, test11, test12, test13];
+		var testFunctions = [test1, test2, test3, test4, test5, test6, test7, test8, test9, test10, test11, test12, test13, test14];
 		var allSuccessful = true;
 		var i = 1;
 		for (func in testFunctions) {
@@ -240,6 +240,20 @@ class UnitTests {
 		return {
 			testName: "Type Name Property",
 			success: result.equals(exp),
+			returned: result,
+			expected: exp,
+			code: code
+		}
+	}
+	
+	public static function test14():UnitTestResult {
+		var code = 'define a = Object.create(), define b = a, print(a.address == b.address)\ndefine c = 502, define d = c, print(c.address == d.address)\nprint(a.address, b.address, c.address, d.address)';
+		Little.run(code);
+		var result = PartArray(Little.runtime.stdout.stdoutTokens.slice(0, 2));
+		var exp = PartArray([TrueValue, FalseValue]);
+		return {
+			testName: "Reference vs. Value",
+			success: !Lambda.has([for (i in 0...2) Type.enumEq(exp.parameter(0)[i], result.parameter(0)[i])], false),
 			returned: result,
 			expected: exp,
 			code: code
