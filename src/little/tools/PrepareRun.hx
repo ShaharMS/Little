@@ -136,7 +136,9 @@ class PrepareRun {
 			return NullValue;
 		}, Little.keywords.TYPE_DYNAMIC);
 		Little.plugin.registerFunction(Little.keywords.READ_FUNCTION_NAME, null, [VariableDeclaration(Identifier("identifier"), Little.keywords.TYPE_STRING.asTokenPath())], (params) -> {
-			return Identifier(Conversion.toHaxeValue(params[0]));
+			trace(params[0], Conversion.toHaxeValue(Interpreter.evaluate(params[0])));
+			trace((Conversion.toHaxeValue(Interpreter.evaluate(params[0])) : String).asTokenPath());
+			return (Conversion.toHaxeValue(Interpreter.evaluate(params[0])) : String).asTokenPath();
 		}, Little.keywords.TYPE_DYNAMIC);
 		Little.plugin.registerFunction(Little.keywords.RUN_CODE_FUNCTION_NAME, null, [VariableDeclaration(Identifier("code"), Little.keywords.TYPE_STRING.asTokenPath())], (params) -> {
 			return Interpreter.run(Interpreter.convert(...Parser.parse(Lexer.lex(Conversion.toHaxeValue(params[0])))));
@@ -576,10 +578,14 @@ class PrepareRun {
 		Little.plugin.registerCondition("after", (params:Array<InterpTokens>, body:Array<InterpTokens>) -> {
 			var val = NullValue;
 			var ident:String = "";
+			trace(params);
 			if (params[0].is(BLOCK)) {
-				var output = Interpreter.evaluate(params[0]);
-				Interpreter.assert(output, CHARACTERS, '`after` condition that starts with a code block must have it\'s code block return a `${Little.keywords.TYPE_STRING}` (returned: ${PrettyPrinter.stringifyInterpreter(output)})');
-				ident = Conversion.toHaxeValue(output);
+				trace("found block");
+				var output = Interpreter.run(params[0].parameter(0));
+				Interpreter.assert(output, [IDENTIFIER, PROPERTY_ACCESS], '`after` condition that starts with a code block must have it\'s code block return an identifier using the `${Little.keywords.READ_FUNCTION_NAME}` function (returned: ${PrettyPrinter.stringifyInterpreter(output)})');
+				ident = output.asJoinedStringPath();
+				params[0] = output;
+				trace(PrettyPrinter.stringifyInterpreter(params));
 			} else if (params[0].is(IDENTIFIER, PROPERTY_ACCESS)) {
 				ident = params[0].extractIdentifier();
 			} else {
@@ -591,8 +597,11 @@ class PrepareRun {
 				Listens for when `ident` is written to.
 			**/
 			function listener(setIdentifiers:Array<String>) {
+				trace(setIdentifiers, ident);
 				var cond:Bool = Conversion.toHaxeValue(Interpreter.calculate(params));
+				trace(PrettyPrinter.stringifyInterpreter(params), cond);
 				if (setIdentifiers.contains(ident) && cond) {
+					trace(body);
 					Interpreter.run(body);
 					Little.runtime.onWriteValue.remove(listener);
 				}
@@ -608,7 +617,7 @@ class PrepareRun {
 			var ident:String = "";
 			if (params[0].is(BLOCK)) {
 				var output = Interpreter.evaluate(params[0]);
-				Interpreter.assert(output, CHARACTERS, '`whenever` condition that starts with a code block must have it\'s code block return a `${Little.keywords.TYPE_STRING}` (returned: ${PrettyPrinter.stringifyInterpreter(output)})');
+				Interpreter.assert(output, [IDENTIFIER, PROPERTY_ACCESS], '`whenever` condition that starts with a code block must have it\'s code block return a `${Little.keywords.TYPE_STRING}` (returned: ${PrettyPrinter.stringifyInterpreter(output)})');
 				ident = Conversion.toHaxeValue(output);
 			} else if (params[0].is(IDENTIFIER, PROPERTY_ACCESS)) {
 				ident = params[0].extractIdentifier();

@@ -103,7 +103,6 @@ class Memory {
 			case Block(_, _) | Expression(_, _): {
 				var result = Interpreter.evaluate(token);
 				switch result {
-					case Characters(string): return retrieve(string.asTokenPath());
 					case Identifier(_) | PropertyAccess(_, _): retrieve(result);
 					case _: {
 						Little.runtime.throwError(ErrorMessage('Code block returned a value that cannot be read from (for value: ${PrettyPrinter.stringifyInterpreter(result)})'));

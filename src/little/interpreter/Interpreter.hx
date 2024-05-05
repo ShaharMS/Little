@@ -5,6 +5,7 @@ import little.interpreter.Tokens.InterpTokens;
 import little.tools.PrettyPrinter;
 import little.tools.Layer;
 import little.Little.memory;
+import haxe.extern.EitherType;
 
 
 using StringTools;
@@ -22,17 +23,17 @@ class Interpreter {
 			post.push(switch item {
 				case SetLine(line): SetLine(line);
 				case SplitLine: SplitLine;
-				case Variable(name, type, doc): VariableDeclaration(convert(name)[0], type == null ? Little.keywords.TYPE_DYNAMIC.asTokenPath() : convert(type)[0], doc == null ? Characters("") : convert(doc)[0]);
-				case Function(name, params, type, doc): FunctionDeclaration(convert(name)[0], convert(params)[0], type == null ? Little.keywords.TYPE_DYNAMIC.asTokenPath() : convert(type)[0], doc == null ? Characters("") : convert(doc)[0]);
+				case Variable(name, type, doc): VariableDeclaration(convert(name)[0], type == null ? Little.keywords.TYPE_UNKNOWN.asTokenPath() : convert(type)[0], doc == null ? Characters("") : convert(doc)[0]);
+				case Function(name, params, type, doc): FunctionDeclaration(convert(name)[0], convert(params)[0], type == null ? Little.keywords.TYPE_UNKNOWN.asTokenPath() : convert(type)[0], doc == null ? Characters("") : convert(doc)[0]);
 				case ConditionCall(name, exp, body): ConditionCall(convert(name)[0], convert(exp)[0], convert(body)[0]);
 				case Read(name): null;
 				case Write(assignees, value): Write(convert(...assignees), convert(value)[0]);
 				case Identifier(word): Identifier(word);
 				case TypeDeclaration(value, type): TypeCast(convert(value)[0], convert(type)[0]);
 				case FunctionCall(name, params): FunctionCall(convert(name)[0], convert(params)[0]);
-				case Return(value, type): FunctionReturn(convert(value)[0], type == null ? Little.keywords.TYPE_DYNAMIC.asTokenPath() : convert(type)[0]);
-				case Expression(parts, type): Expression(convert(...parts), type == null ? Little.keywords.TYPE_DYNAMIC.asTokenPath() : convert(type)[0]);
-				case Block(body, type): Block(convert(...body), type == null ? Little.keywords.TYPE_DYNAMIC.asTokenPath() : convert(type)[0]);
+				case Return(value, type): FunctionReturn(convert(value)[0], type == null ? Little.keywords.TYPE_UNKNOWN.asTokenPath() : convert(type)[0]);
+				case Expression(parts, type): Expression(convert(...parts), type == null ? Little.keywords.TYPE_UNKNOWN.asTokenPath() : convert(type)[0]);
+				case Block(body, type): Block(convert(...body), type == null ? Little.keywords.TYPE_UNKNOWN.asTokenPath() : convert(type)[0]);
 				case PartArray(parts): PartArray(convert(...parts));
 				case PropertyAccess(name, property): PropertyAccess(convert(name)[0], convert(property)[0]);
 				case Sign(sign): Sign(sign);
@@ -74,8 +75,8 @@ class Interpreter {
         return ErrorMessage(message);
     }
 
-	public static function assert(token:InterpTokens, isType:InterpTokensSimple, ?errorMessage:String = null) {
-		if (!token.is(isType)) {
+	public static function assert(token:InterpTokens, isType:EitherType<InterpTokensSimple, Array<InterpTokensSimple>>, ?errorMessage:String = null) {
+		if ((isType is InterpTokensSimple && !token.is(isType)) || (isType is Array && !isType.containsAny(a -> token.is(a)))) {
 			Little.runtime.throwError(errorMessage != null ? ErrorMessage(errorMessage) : ErrorMessage('Assertion failed, token $token is not of type $isType'), INTERPRETER);
 			return NullValue;
 		}
@@ -128,11 +129,11 @@ class Interpreter {
 		for (entry in array) {
 			if (entry.is(SPLIT_LINE, SET_LINE)) continue;
 			switch entry {
-				case VariableDeclaration(name, null, _): paramMap[name.extractIdentifier()] = TypeCast(NullValue, Identifier(Little.keywords.TYPE_DYNAMIC));
+				case VariableDeclaration(name, null, _): paramMap[name.extractIdentifier()] = TypeCast(NullValue, Identifier(Little.keywords.TYPE_UNKNOWN));
 				case VariableDeclaration(name, type, _): paramMap[name.extractIdentifier()] = TypeCast(NullValue, type);
 				case Write(assignees, value): {
 					switch assignees[0] {
-						case VariableDeclaration(name, null, _): paramMap[name.extractIdentifier()] = TypeCast(value, Identifier(Little.keywords.TYPE_DYNAMIC));
+						case VariableDeclaration(name, null, _): paramMap[name.extractIdentifier()] = TypeCast(value, Identifier(Little.keywords.TYPE_UNKNOWN));
 						case VariableDeclaration(name, type, _): paramMap[name.extractIdentifier()] = TypeCast(value, type);
 						default:
 					}
@@ -141,7 +142,7 @@ class Interpreter {
 			}
 		}
 
-		memory.write(path, FunctionCode(paramMap, Block([], Identifier(Little.keywords.TYPE_DYNAMIC))), Little.keywords.TYPE_FUNCTION, doc != null ? evaluate(doc).extractIdentifier() : "");
+		memory.write(path, FunctionCode(paramMap, Block([], Identifier(Little.keywords.TYPE_UNKNOWN))), Little.keywords.TYPE_FUNCTION, doc != null ? evaluate(doc).extractIdentifier() : "");
     
         for (listener in Little.runtime.onFieldDeclared) 
 			listener(name.asJoinedStringPath(), FUNCTION);
@@ -296,7 +297,7 @@ class Interpreter {
 					var name = key, value = NullValue, type = Identifier(Little.keywords.TYPE_DYNAMIC);
 					switch typeCast {
 						case TypeCast(NullValue, t): type = t; 
-						case TypeCast(v, _.parameter(0) == Little.keywords.TYPE_DYNAMIC => true): value = v;
+						case TypeCast(v, _.parameter(0) == Little.keywords.TYPE_UNKNOWN => true): value = v;
 						case TypeCast(v, t): type = t; value = v;
 						case _:
 					}
@@ -388,6 +389,11 @@ class Interpreter {
                     returnVal = call(name, params);
                 }
                 case FunctionReturn(value, type): {
+                    if (value.is(HAXE_EXTERN)) {
+                        return value.parameter(0)();
+                    }
+                    // If we don't check for haxe externs, they may return a rogue value
+                    // and .type() will fail. 
 					var v = evaluate(value);
 					var t = v.type().asTokenPath();
                     return propagateReturns ? FunctionReturn(v, t) : v;
@@ -402,7 +408,7 @@ class Interpreter {
                     returnVal =  read(token);
                 }
                 case HaxeExtern(func): {
-                    returnVal = evaluate(func());
+                    returnVal = func();
                 }
                 case _: returnVal = evaluate(token);
             }
@@ -441,14 +447,14 @@ class Interpreter {
                 return NullValue;
             }
             case Expression(parts, t): {
-                if (t.asJoinedStringPath() == Little.keywords.TYPE_DYNAMIC) return calculate(parts);
+                if (t.asJoinedStringPath() == Little.keywords.TYPE_UNKNOWN) return calculate(parts);
                 return typeCast(calculate(parts), t);
             }
             case Block(body, t): {
 				var currentLine = Little.runtime.line;
                 var returnVal = run(body);
 				setLine(currentLine);
-                if (t.asJoinedStringPath() == Little.keywords.TYPE_DYNAMIC) return evaluate(returnVal, dontThrow);
+                if (t.asJoinedStringPath() == Little.keywords.TYPE_UNKNOWN) return evaluate(returnVal, dontThrow);
 				return evaluate(typeCast(returnVal, t), dontThrow);
             }
             case FunctionCall(name, params): {
@@ -491,7 +497,7 @@ class Interpreter {
 				}
             }
             case FunctionReturn(value, t): return evaluate(typeCast(value, t));
-            case HaxeExtern(func): return evaluate(func());
+            case HaxeExtern(func): return func();
             case _: return evaluate(ErrorMessage('Unable to evaluate token `$exp`'), dontThrow);
         }
 

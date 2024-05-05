@@ -8,6 +8,7 @@ import vision.algorithms.Radix;
 import little.interpreter.Interpreter;
 using StringTools;
 using little.tools.TextTools;
+using little.tools.Extensions;
 
 import little.parser.Tokens;
 
@@ -409,8 +410,8 @@ class PrettyPrinter {
 			switch token {
 				case SetLine(line): s += '\n$indent';
 				case SplitLine: s += ", ";
-				case VariableDeclaration(name, type, doc): s += '${Little.keywords.VARIABLE_DECLARATION} ${stringifyInterpreter(name)} ${if (type != null) '${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyInterpreter(type)}' else ''}';
-				case FunctionDeclaration(name, params, type, doc): s += '${Little.keywords.FUNCTION_DECLARATION} ${stringifyInterpreter(name)}(${stringifyInterpreter(params)}) ${if (type != null) '${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyInterpreter(type)}' else ''}';
+				case VariableDeclaration(name, type, doc): s += '${Little.keywords.VARIABLE_DECLARATION} ${stringifyInterpreter(name)} ${if (type != null  && type.asJoinedStringPath() != Little.keywords.TYPE_UNKNOWN) '${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyInterpreter(type)}' else ''}';
+				case FunctionDeclaration(name, params, type, doc): s += '${Little.keywords.FUNCTION_DECLARATION} ${stringifyInterpreter(name)}(${stringifyInterpreter(params)}) ${if (type != null && type.asJoinedStringPath() != Little.keywords.TYPE_UNKNOWN) '${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyInterpreter(type)}' else ''}';
 				case ConditionDeclaration(name, ct, doc): throw new NotImplementedException();
 				case ClassDeclaration(name, doc): throw new NotImplementedException();
 				case Write(assignees, value): s += assignees.concat([value]).map(t -> stringifyInterpreter(t)).join(" = ");
@@ -422,7 +423,7 @@ class PrettyPrinter {
 				case Expression(parts, type): s += stringifyInterpreter(parts);
 				case Block(body, type): 
 					indent += "	";
-					s += '{${stringifyInterpreter(body)}} ${if (type != null) '${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyInterpreter(type)}' else ''}';
+					s += '{${stringifyInterpreter(body)}} ${if (type != null && type.asJoinedStringPath() != Little.keywords.TYPE_UNKNOWN) '${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyInterpreter(type)}' else ''}';
 					indent = indent.subtract("	");
 				case PartArray(parts): s += stringifyInterpreter(parts);
 				case PropertyAccess(name, property): s += '${stringifyInterpreter(name)}${Little.keywords.PROPERTY_ACCESS_SIGN}${stringifyInterpreter(property)}';
