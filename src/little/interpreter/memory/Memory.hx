@@ -76,7 +76,7 @@ class Memory {
 		}
 
 		Little.runtime.throwError(ErrorMessage('Unable to allocate memory for token `$token`.'), MEMORY_STORAGE);
-		throw 'Unable to allocate memory for token `$token`.';
+		return constants.NULL;
 	}
 
 	/**
@@ -114,7 +114,27 @@ class Memory {
 		}
 
 		Little.runtime.throwError(ErrorMessage('Unable to retrieve a pointer to token $token'));
-		throw 'Unable to retrieve a pointer to token $token';
+		return constants.NULL;
+	}
+
+	function valueFromType(address:MemoryPointer, type:String, fullPath:Array<String>, ...currentPath:String) {
+		return switch type {
+			case (_ == Little.keywords.TYPE_STRING => true): Characters(storage.readString(address));
+			case (_ == Little.keywords.TYPE_INT => true): Number(storage.readInt32(address));
+			case (_ == Little.keywords.TYPE_FLOAT => true): Decimal(storage.readDouble(address));
+			case (_ == Little.keywords.TYPE_BOOLEAN => true): constants.getFromPointer(address);
+			case (_ == Little.keywords.TYPE_FUNCTION => true): storage.readCodeBlock(address);
+			case (_ == Little.keywords.TYPE_CONDITION => true): storage.readCondition(address);
+			case (_ == Little.keywords.TYPE_MODULE => true): ClassPointer(address);
+			// Because of the way we store lone nulls (as type dynamic), 
+			// they might get confused with objects of type dynamic, so we need to do this:
+			case ((_ == Little.keywords.TYPE_DYNAMIC || _ == Little.keywords.TYPE_UNKNOWN) && constants.hasPointer(address) && constants.getFromPointer(address).equals(NullValue) => true): NullValue;
+			case (_ == Little.keywords.TYPE_SIGN => true): storage.readSign(address);
+			case (_ == Little.keywords.TYPE_UNKNOWN => true): 
+				Little.runtime.throwError(ErrorMessage('Could not get the value at ${fullPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)} - field ${currentPath.toArray().join(Little.keywords.PROPERTY_ACCESS_SIGN)} was declared, but has no value/type.'), MEMORY_STORAGE);
+				// Not sure how someone can even get to the error above, but it's better to be safe than sorry - maybe a developer generates an extern field of type Unknown or something...
+			case _: storage.readObject(address);
+		}
 	}
 
 	/**
@@ -170,23 +190,11 @@ class Memory {
 				Little.runtime.throwError(ErrorMessage('Variable `${path[0]}` does not exist'), MEMORY_REFERRER);
 			}
 			var data = referrer.get(path[0]);
-			current = switch data.type {
-				case (_ == Little.keywords.TYPE_STRING => true): Characters(storage.readString(data.address));
-				case (_ == Little.keywords.TYPE_INT => true): Number(storage.readInt32(data.address));
-				case (_ == Little.keywords.TYPE_FLOAT => true): Decimal(storage.readDouble(data.address));
-				case (_ == Little.keywords.TYPE_BOOLEAN => true): constants.getFromPointer(data.address);
-				case (_ == Little.keywords.TYPE_FUNCTION => true): storage.readCodeBlock(data.address);
-				case (_ == Little.keywords.TYPE_CONDITION => true): storage.readCondition(data.address);
-				case (_ == Little.keywords.TYPE_MODULE => true): ClassPointer(data.address);
-	            // Because of the way we store lone nulls (as type dynamic), 
-	            // they might get confused with objects of type dynamic, so we need to do this:
-	            case (_ == Little.keywords.TYPE_DYNAMIC && constants.hasPointer(data.address) && constants.getFromPointer(data.address).equals(NullValue) => true): NullValue;
-	            case (_ == Little.keywords.TYPE_SIGN => true): storage.readSign(data.address);
-				case _: storage.readObject(data.address);
-			}
+			current = valueFromType(data.address, data.type, path, path[0]);
+			
 			currentAddress = data.address;
 			currentType = data.type;
-			wentThroughPath.push(processed.shift()); // We already went through with it in the code above
+			wentThroughPath.push(processed.shift()); // We just went through with the first element.
 		}
 		
 		while (processed.length > 0) {
@@ -225,18 +233,7 @@ class Memory {
 				
 				if (HashTables.hashTableHasKey(objectHashTableBytes, identifier, storage)) {
 					var keyData = HashTables.hashTableGetKey(objectHashTableBytes, identifier, storage);
-					switch getTypeName(keyData.type) {
-						case (_ == Little.keywords.TYPE_STRING => true): current = Characters(storage.readString(keyData.value));
-						case (_ == Little.keywords.TYPE_INT => true): current = Number(storage.readInt32(keyData.value));
-						case (_ == Little.keywords.TYPE_FLOAT => true): current = Decimal(storage.readDouble(keyData.value));
-						case (_ == Little.keywords.TYPE_BOOLEAN => true): current = constants.getFromPointer(keyData.value);
-						case (_ == Little.keywords.TYPE_FUNCTION => true): current = storage.readCodeBlock(keyData.value);
-						case (_ == Little.keywords.TYPE_CONDITION => true): current = storage.readCondition(keyData.value);
-						case (_ == Little.keywords.TYPE_MODULE => true): current = ClassPointer(keyData.value);
-						case (keyData.value == constants.NULL => true): current = NullValue;
-						case (_ == Little.keywords.TYPE_SIGN => true): current = storage.readSign(keyData.value);
-						case _: current = storage.readObject(keyData.value);
-					}
+					current = valueFromType(keyData.value, getTypeName(keyData.type), path, ...wentThroughPath);
 
 					currentAddress = keyData.value;
 				}
@@ -312,19 +309,7 @@ class Memory {
 				
 				if (HashTables.hashTableHasKey(objectHashTableBytes, identifier, storage)) {
 					var keyData = HashTables.hashTableGetKey(objectHashTableBytes, identifier, storage);
-					
-					switch getTypeName(keyData.type) {
-						case (_ == Little.keywords.TYPE_STRING => true): current = Characters(storage.readString(keyData.value));
-						case (_ == Little.keywords.TYPE_INT => true): current = Number(storage.readInt32(keyData.value));
-						case (_ == Little.keywords.TYPE_FLOAT => true): current = Decimal(storage.readDouble(keyData.value));
-						case (_ == Little.keywords.TYPE_BOOLEAN => true): current = constants.getFromPointer(keyData.value);
-						case (_ == Little.keywords.TYPE_FUNCTION => true): current = storage.readCodeBlock(keyData.value);
-						case (_ == Little.keywords.TYPE_CONDITION => true): current = storage.readCondition(keyData.value);
-						case (_ == Little.keywords.TYPE_MODULE => true): current = ClassPointer(keyData.value);
-						case (keyData.value == constants.NULL => true): current = NullValue;
-						case (_ == Little.keywords.TYPE_SIGN => true): current = storage.readSign(keyData.value);
-						case _: current = storage.readObject(keyData.value);
-					}
+					current = valueFromType(keyData.value, getTypeName(keyData.type), [PrettyPrinter.stringifyInterpreter(value.objectValue)].concat(path), ...wentThroughPath);
 
 					currentAddress = keyData.value;
 				}

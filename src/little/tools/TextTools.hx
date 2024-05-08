@@ -1,5 +1,7 @@
 package little.tools;
 
+using StringTools;
+
 /**
  * `TextTools` is a class containing static methods for manipulating text.
  * 
@@ -454,6 +456,19 @@ class TextTools
     public static function parseBool(string:String):Bool {
         return if (string == "true" || Std.parseFloat(string) != null && Std.parseFloat(string) != 0) true else if (string == "false") false else null;
     }
+
+	/**
+		Checks if `string` contains any of the strings in `from`
+		@param string the string to check
+		@param from the strings to check for
+		@return true if `string` contains any of the strings in `from`, false otherwise.
+	**/
+	public static function containsAny(string:String, from:Array<String>):Bool {
+		for (i in from) {
+			if (string.contains(i)) return true;
+		}
+		return false;
+	}
 
 	public static var loremIpsumText(default, null):String = "
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque finibus condimentum magna, eget porttitor libero aliquam non. Praesent commodo, augue nec hendrerit tincidunt, urna felis lobortis mi, non cursus libero tellus quis tellus. Vivamus ornare convallis tristique. Integer nec ornare libero. Phasellus feugiat facilisis faucibus. Vivamus porta id neque id placerat. Proin convallis vel felis et pharetra. Quisque magna justo, ullamcorper quis scelerisque eu, tincidunt vitae lectus. Nunc sed turpis justo. Aliquam porttitor, purus sit amet faucibus bibendum, ligula elit molestie purus, eu volutpat turpis sapien ac tellus. Fusce mauris arcu, volutpat ut aliquam ut, ultrices id ante. Morbi quis consectetur turpis. Integer semper lacinia urna id laoreet.

@@ -17,7 +17,6 @@ class ByteCode {
     public static function compile(...tokens:InterpTokens):String {
         return Serializer.run(tokens); // Simple, for now.
     }
-
     /**
 		Decompiles a string representing executable bytecode into an array of `InterpTokens`.
 

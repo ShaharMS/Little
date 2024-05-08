@@ -136,8 +136,6 @@ class PrepareRun {
 			return NullValue;
 		}, Little.keywords.TYPE_DYNAMIC);
 		Little.plugin.registerFunction(Little.keywords.READ_FUNCTION_NAME, null, [VariableDeclaration(Identifier("identifier"), Little.keywords.TYPE_STRING.asTokenPath())], (params) -> {
-			trace(params[0], Conversion.toHaxeValue(Interpreter.evaluate(params[0])));
-			trace((Conversion.toHaxeValue(Interpreter.evaluate(params[0])) : String).asTokenPath());
 			return (Conversion.toHaxeValue(Interpreter.evaluate(params[0])) : String).asTokenPath();
 		}, Little.keywords.TYPE_DYNAMIC);
 		Little.plugin.registerFunction(Little.keywords.RUN_CODE_FUNCTION_NAME, null, [VariableDeclaration(Identifier("code"), Little.keywords.TYPE_STRING.asTokenPath())], (params) -> {
@@ -170,7 +168,7 @@ class PrepareRun {
 		// ------------------------RHS-----------------------
 		// --------------------------------------------------
 
-		Little.plugin.registerSign("+", {
+		Little.plugin.registerOperator("+", {
 			rhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			operatorType: RHS_ONLY,
 			priority: "last",
@@ -182,7 +180,7 @@ class PrepareRun {
 			}
 		});
 
-		Little.plugin.registerSign("-", {
+		Little.plugin.registerOperator("-", {
 			rhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			operatorType: RHS_ONLY,
 			priority: "with +_",
@@ -194,7 +192,7 @@ class PrepareRun {
 			}
 		});
 
-		Little.plugin.registerSign("√", {
+		Little.plugin.registerOperator("√", {
 			rhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			operatorType: RHS_ONLY,
 			priority: "first",
@@ -205,7 +203,7 @@ class PrepareRun {
 			}
 		});
 
-		Little.plugin.registerSign("!", {
+		Little.plugin.registerOperator("!", {
 			rhsAllowedTypes: [Little.keywords.TYPE_BOOLEAN],
 			operatorType: RHS_ONLY,
 			priority: "with +_",
@@ -220,7 +218,7 @@ class PrepareRun {
 		// ------------------------LHS-----------------------
 		// --------------------------------------------------
 
-		Little.plugin.registerSign("!", {
+		Little.plugin.registerOperator("!", {
 			lhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			operatorType: LHS_ONLY,
 			priority: "with √_",
@@ -236,7 +234,7 @@ class PrepareRun {
 		// ----------------------STANDARD--------------------
 		// --------------------------------------------------
 
-		Little.plugin.registerSign("+", {
+		Little.plugin.registerOperator("+", {
 			rhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT, Little.keywords.TYPE_STRING],
 			lhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT, Little.keywords.TYPE_STRING],
 			allowedTypeCombos: [{lhs: Little.keywords.TYPE_STRING, rhs: Little.keywords.TYPE_DYNAMIC}, {lhs: Little.keywords.TYPE_DYNAMIC, rhs: Little.keywords.TYPE_STRING}],
@@ -255,7 +253,7 @@ class PrepareRun {
 			}
 		});
 
-		Little.plugin.registerSign("-", {
+		Little.plugin.registerOperator("-", {
 			rhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			lhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			allowedTypeCombos: [{lhs: Little.keywords.TYPE_STRING, rhs: Little.keywords.TYPE_STRING}],
@@ -274,7 +272,7 @@ class PrepareRun {
 			}
 		});
 
-		Little.plugin.registerSign("*", {
+		Little.plugin.registerOperator("*", {
 			rhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			lhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			allowedTypeCombos: [{lhs: Little.keywords.TYPE_STRING, rhs: Little.keywords.TYPE_INT}],
@@ -293,7 +291,7 @@ class PrepareRun {
 			}
 		});
 
-		Little.plugin.registerSign("/", {
+		Little.plugin.registerOperator("/", {
 			rhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			lhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			priority: "with *",
@@ -306,7 +304,7 @@ class PrepareRun {
 			}
 		});
 
-		Little.plugin.registerSign("^", {
+		Little.plugin.registerOperator("^", {
 			rhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			lhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			priority: "before *",
@@ -320,7 +318,7 @@ class PrepareRun {
 			}
 		});
 
-		Little.plugin.registerSign("√", {
+		Little.plugin.registerOperator("√", {
 			rhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			lhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			priority: "with ^",
@@ -337,36 +335,36 @@ class PrepareRun {
 
 		// Boolean
 
-		Little.plugin.registerSign("&&", {
+		Little.plugin.registerOperator("&&", {
 			rhsAllowedTypes: [Little.keywords.TYPE_BOOLEAN],
 			lhsAllowedTypes: [Little.keywords.TYPE_BOOLEAN],
 			priority: "last",
 			callback: (lhs, rhs) -> Conversion.toHaxeValue(lhs) && Conversion.toHaxeValue(rhs) ? TrueValue : FalseValue});
 
-		Little.plugin.registerSign("||", {
+		Little.plugin.registerOperator("||", {
 			rhsAllowedTypes: [Little.keywords.TYPE_BOOLEAN],
 			lhsAllowedTypes: [Little.keywords.TYPE_BOOLEAN],
 			priority: "with &&",
 			callback: (lhs, rhs) -> Conversion.toHaxeValue(lhs) || Conversion.toHaxeValue(rhs) ? TrueValue : FalseValue});
 
-		Little.plugin.registerSign("==", {
+		Little.plugin.registerOperator("==", {
 			priority: "last",
 			callback: (lhs, rhs) -> Conversion.toHaxeValue(lhs) == Conversion.toHaxeValue(rhs) ? TrueValue : FalseValue
 		});
 
-		Little.plugin.registerSign("!=", {
+		Little.plugin.registerOperator("!=", {
 			priority: "with ==",
 			callback: (lhs, rhs) -> Conversion.toHaxeValue(lhs) != Conversion.toHaxeValue(rhs) ? TrueValue : FalseValue
 		});
 
-		Little.plugin.registerSign("^^", {
+		Little.plugin.registerOperator("^^", {
 			rhsAllowedTypes: [Little.keywords.TYPE_BOOLEAN],
 			lhsAllowedTypes: [Little.keywords.TYPE_BOOLEAN],
 			priority: "with &&",
 			callback: (lhs, rhs) -> Conversion.toHaxeValue(lhs) != Conversion.toHaxeValue(rhs) ? TrueValue : FalseValue
 		});
 
-		Little.plugin.registerSign(">", {
+		Little.plugin.registerOperator(">", {
 			rhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			lhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			allowedTypeCombos: [{lhs: Little.keywords.TYPE_STRING, rhs: Little.keywords.TYPE_STRING}],
@@ -380,7 +378,7 @@ class PrepareRun {
 			}
 		});
 
-		Little.plugin.registerSign(">=", {
+		Little.plugin.registerOperator(">=", {
 			rhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			lhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			allowedTypeCombos: [{lhs: Little.keywords.TYPE_STRING, rhs: Little.keywords.TYPE_STRING}],
@@ -394,7 +392,7 @@ class PrepareRun {
 			}
 		});
 
-		Little.plugin.registerSign("<", {
+		Little.plugin.registerOperator("<", {
 			rhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			lhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			allowedTypeCombos: [{lhs: Little.keywords.TYPE_STRING, rhs: Little.keywords.TYPE_STRING}],
@@ -408,7 +406,7 @@ class PrepareRun {
 			}
 		});
 
-		Little.plugin.registerSign("<=", {
+		Little.plugin.registerOperator("<=", {
 			rhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			lhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			allowedTypeCombos: [{lhs: Little.keywords.TYPE_STRING, rhs: Little.keywords.TYPE_STRING}],
@@ -498,7 +496,7 @@ class PrepareRun {
 				return val;
 			}
 			var typeName = (params[0].parameter(1) : InterpTokens).asJoinedStringPath();
-			if (![Little.keywords.TYPE_INT, Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_DYNAMIC].contains(typeName)) {
+			if (![Little.keywords.TYPE_INT, Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_DYNAMIC, Little.keywords.TYPE_UNKNOWN].contains(typeName)) {
 				Little.runtime.throwError(ErrorMessage('`for` loop\'s variable must be of type ${Little.keywords.TYPE_INT}, ${Little.keywords.TYPE_FLOAT} or ${Little.keywords.TYPE_DYNAMIC} (given: ${typeName})'));
 			}
 
@@ -578,14 +576,11 @@ class PrepareRun {
 		Little.plugin.registerCondition("after", (params:Array<InterpTokens>, body:Array<InterpTokens>) -> {
 			var val = NullValue;
 			var ident:String = "";
-			trace(params);
 			if (params[0].is(BLOCK)) {
-				trace("found block");
 				var output = Interpreter.run(params[0].parameter(0));
 				Interpreter.assert(output, [IDENTIFIER, PROPERTY_ACCESS], '`after` condition that starts with a code block must have it\'s code block return an identifier using the `${Little.keywords.READ_FUNCTION_NAME}` function (returned: ${PrettyPrinter.stringifyInterpreter(output)})');
 				ident = output.asJoinedStringPath();
 				params[0] = output;
-				trace(PrettyPrinter.stringifyInterpreter(params));
 			} else if (params[0].is(IDENTIFIER, PROPERTY_ACCESS)) {
 				ident = params[0].extractIdentifier();
 			} else {
@@ -597,11 +592,8 @@ class PrepareRun {
 				Listens for when `ident` is written to.
 			**/
 			function listener(setIdentifiers:Array<String>) {
-				trace(setIdentifiers, ident);
 				var cond:Bool = Conversion.toHaxeValue(Interpreter.calculate(params));
-				trace(PrettyPrinter.stringifyInterpreter(params), cond);
 				if (setIdentifiers.contains(ident) && cond) {
-					trace(body);
 					Interpreter.run(body);
 					Little.runtime.onWriteValue.remove(listener);
 				}

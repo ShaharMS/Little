@@ -6,6 +6,7 @@ import little.tools.Layer;
 
 using StringTools;
 using little.tools.TextTools;
+using little.tools.Extensions;
 
 /**
 	A class containing values and callbacks related to Little's runtime.
@@ -85,14 +86,23 @@ class Runtime {
     public var onTokenInterpreted:Array<InterpTokens -> Void> = [];
 
     /**
-    	Dispatches right after an error is thrown, and printed to the console.
+    	Dispatches right after an error is thrown, and printed to the standard output.
 
         @param module the module from which the error was thrown.
         @param line the line from which the error was thrown.
-        @param title The error's title. When a non-`Error(title, reason)` token is thrown, this value is empty.
         @param reason The contents of the error.
     **/
-    public var onErrorThrown:Array<(String, Int, String, String) -> Void> = [];
+    public var onErrorThrown:Array<(String, Int, String) -> Void> = [];
+
+    /**
+        Dispatches right after a warning is printed to the standard output
+
+        @param module the module from which the warning was printed.
+        @param line the line form which the warning was printed
+        @param reason the contents of the warning
+
+    **/
+    public var onWarningPrinted:Array<(String, Int, String) -> Void> = [];
 
     /**
     	Dispatches right after the program has written something to a variable/multiple variables.
@@ -133,6 +143,14 @@ class Runtime {
 	public var onFieldDeclared:Array<(String, FieldDeclarationType) -> Void> = [];
 
     /**
+        Dispatches right after a value has successfully casted to a type.
+        
+        @param value the pre-casted value, which is castable to the type
+        @param type the type the value was casted to. Given as a string, containing the path to the type.
+    **/
+    public var onTypeCast:Array<(InterpTokens, String) -> Void> = [];
+
+    /**
     	The program's standard output.
     **/
     public var stdout:StdOut = new StdOut();
@@ -152,7 +170,7 @@ class Runtime {
 
         callStack.push(token);
         
-        var mod:String = module, title:String = "", reason:String;
+        var mod:String = module, reason:String;
         var content = switch token {
             case _: {
                 reason = Std.string(token).remove(token.getName()).substring(1).replaceLast(")", "");
@@ -164,7 +182,7 @@ class Runtime {
         exitCode = Layer.getIndexOf(layer);
         errorToken = token;
         errorThrown = true;        
-        for (func in onErrorThrown) func(mod, line, title, reason);
+        for (func in onErrorThrown) func(mod, line, reason);
 
         throw "Quitting..."; // Currently, no flag exists that disables immediate quitting, so this is fine.
 
@@ -172,7 +190,7 @@ class Runtime {
     }
 
     /**
-        Same as `throwError`, but doesnt stop execution, and has the "WARNING" prefix.
+        Same as `throwError`, but doesn't stop execution, and has the "WARNING" prefix.
         @param token some token which is the error, usually `ErrorMessage`
         @param layer the "stage" from which the error was called
     **/
@@ -188,6 +206,7 @@ class Runtime {
         }
         stdout.output += '\n$content';
 		stdout.stdoutTokens.push(token);
+        for (func in onWarningPrinted) func(module, line, reason);
     }
 
     /**
@@ -200,7 +219,7 @@ class Runtime {
 	}
 
     /**
-    	Prints a Haxe string to `Little`'s standard output, wihout any positional information.
+    	Prints a Haxe string to `Little`'s standard output, without any positional information.
 		On `Little.debug` mode, the string will be prefixed with `BROADCAST: `. 
     **/
     public function broadcast(item:String) {

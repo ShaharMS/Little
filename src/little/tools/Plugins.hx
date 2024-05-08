@@ -445,7 +445,7 @@ class Plugins {
 		@param symbol a `String` which is the symbol of the operator. Must not contain any letters or whitespaces.
 		@param info Information about the operator, including callback for when the operator is used and other properties.
     **/
-    public function registerSign(symbol:String, info:SignInfo) {
+    public function registerOperator(symbol:String, info:OperatorInfo) {
 
         if (info.operatorType == null || info.operatorType == LHS_RHS) {
             if (info.callback == null && info.singleSidedOperatorCallback != null) 
@@ -586,7 +586,7 @@ class Plugins {
 /**
 	Info about an operator
 **/
-typedef SignInfo = {
+typedef OperatorInfo = {
     ?lhsAllowedTypes:Array<String>,
     ?rhsAllowedTypes:Array<String>,
     ?allowedTypeCombos:Array<{lhs:String, rhs:String}>,

@@ -346,6 +346,10 @@ class Interpreter {
 			return Characters(value.is(TRUE_VALUE) ? Little.keywords.TRUE_VALUE : value.is(FALSE_VALUE) ? Little.keywords.FALSE_VALUE : Little.keywords.NULL_VALUE);
 		}
 
+        for (listener in Little.runtime.onTypeCast) {
+            listener(value, type.asJoinedStringPath());
+        }
+
         return value; // TODO, needs to be done with types in memory management
 		
     }

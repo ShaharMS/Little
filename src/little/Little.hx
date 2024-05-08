@@ -20,8 +20,10 @@ class Little {
     /**
         A feature of the `Little` programming language is that it is possible to change keywords & other
         usually hardcoded properties.
+
+        You can change the values here if you want to, or just 
     **/
-    public static var keywords(default, null):KeywordConfig = {};
+    public static var keywords:KeywordConfig = {};
 
     /**
         Used to access runtime details of the current "running instance" of `Little`.
@@ -123,6 +125,8 @@ class Little {
                 PrepareRun.addProps();
             }
             runtime.module = keywords.MAIN_MODULE_NAME;
+            runtime.errorThrown = false;
+            runtime.line = 0;
 			Little.queue.enqueue(code);
 			for (item in Little.queue) {
 				Interpreter.run(Interpreter.convert(...Parser.parse(Lexer.lex(item))));
@@ -132,6 +136,25 @@ class Little {
             
             e.message == "Quitting..." ? trace(e.message) : trace(e.details());
         }
+    }
+
+    /**
+        Converts a string of code written in Little into an array of tokens, representing an AST.
+
+        This array can be compiled into bytecode using `ByteCode.compile`, or run
+        on the spot using `Interpreter.run`.
+
+        This function, `ByteCode.compile` and `Interpreter.run` do no error handling on their own.
+        When using this function, either verify that the coe your'e running is 100% correct, or encase
+        the calls in a try-catch block.
+
+        Aside from the difference mentioned above, code running "on the spot" behaves no 
+        different than code running using `Little.run`.
+
+        @param code 
+    **/
+    public static function compile(code:String) {
+        return Interpreter.convert(...Parser.parse(Lexer.lex(code)));
     }
 
 	/**
