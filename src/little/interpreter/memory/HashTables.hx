@@ -1,6 +1,5 @@
 package little.interpreter.memory;
 
-import vision.tools.MathTools;
 import little.interpreter.memory.MemoryPointer.POINTER_SIZE;
 import haxe.Int64;
 import haxe.io.Bytes;

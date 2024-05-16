@@ -512,8 +512,8 @@ class Memory {
 		}
 
 		// If it's not a primitive type, the next priority is external types.
-		// The easiest way to get a valid type is to check the typeToPointer map
-		if (externs.typeToPointer.exists(name)) {
+		// The easiest way to get a valid type is to check the externToPointer map
+		if (externs.externToPointer.exists(name) && externs.getGlobal(name).objectValue.is(CLASS_POINTER)) {
 
 			var instProps = externs.createPathFor(externs.instanceProperties, ...name.split(Little.keywords.PROPERTY_ACCESS_SIGN));
 			var statProps = externs.createPathFor(externs.globalProperties, ...name.split(Little.keywords.PROPERTY_ACCESS_SIGN));
@@ -527,7 +527,7 @@ class Memory {
 
 
 			return {
-				pointer: externs.typeToPointer[name],
+				pointer: externs.externToPointer[name],
 				typeName: name,
 				passedByReference: true,
 				isExternal: true,
@@ -550,8 +550,9 @@ class Memory {
 	**/
 	public function getTypeName(pointer:MemoryPointer):String {
 		// Externs prioritized:
-		if (externs.pointerToType.exists(pointer)) {
-			return externs.pointerToType[pointer];
+		var ext = externs.pointerToExtern.get(pointer);
+		if (ext != null && externs.getGlobal(...ext.split(".")).objectValue.is(CLASS_POINTER)) {
+			return externs.pointerToExtern[pointer];
 			
 		}
 		// Then, constants:

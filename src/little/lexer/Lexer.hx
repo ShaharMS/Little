@@ -8,7 +8,6 @@ using little.tools.Extensions;
 
 class Lexer {
     
-    static var signs = ["!", "#", "$", "%", "&", "'", "(", ")", "*", "+", "-", ".", "/", ":", "<", "=", ">", "?", "@", "[", "\\", "]", "^", "_", "`", "{", "|", "}", "~", "^", "√"];
 
     /**
         Converts a string with many items separated by word boundaries into different tokens
@@ -60,10 +59,10 @@ class Lexer {
                 tokens.push(Newline);
             } else if (char == ";" || char == ",") {
                 tokens.push(SplitLine);
-            } else if (signs.contains(char)) {
+            } else if (KeywordConfig.recognizedOperators.contains(char)) {
                 var sign = char;
                 i++;
-                while (i < code.length && signs.contains(code.charAt(i))) {
+                while (i < code.length && KeywordConfig.recognizedOperators.contains(code.charAt(i))) {
                     sign += code.charAt(i);
                     i++;
                 }

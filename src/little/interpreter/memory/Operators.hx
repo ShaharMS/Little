@@ -3,7 +3,6 @@ package little.interpreter.memory;
 import haxe.ds.ArraySort;
 import vision.algorithms.Radix;
 import little.tools.PrettyPrinter;
-import little.lexer.Lexer;
 import haxe.extern.EitherType;
 import little.interpreter.Tokens.InterpTokens;
 
@@ -233,8 +232,8 @@ class Operators {
 	public function add(op:String, operatorType:OperatorType, priority:String,
 			callback:EitherType<(InterpTokens) -> InterpTokens, (InterpTokens, InterpTokens) -> InterpTokens>) {
 		for (i in 0...op.length)
-			if (!Lexer.signs.contains(op.charAt(i)))
-				Lexer.signs.push(op.charAt(i));
+			if (!KeywordConfig.recognizedOperators.contains(op.charAt(i)))
+				KeywordConfig.recognizedOperators.push(op.charAt(i));
 		Little.keywords.RECOGNIZED_SIGNS.push(op);
 		switch operatorType {
 			case LHS_RHS:

@@ -15,6 +15,15 @@ class KeywordConfig {
 		The default keyword configuration. Here incase you want to reset keywords, or just have a reference to the original ones.
 	**/
 	public static var defaultConfig(default, never):KeywordConfig = {};
+	
+	/**
+	    every single character in this array will be recognized as an operator.
+		If you register an operator, it should automatically exist here too.
+
+		IMPORTANT - this is not the same as the field RECOGNIZED_SIGNS - this is 
+		used strictly for lexing purposes.
+	**/
+	public static var recognizedOperators:Array<String> = ["!", "#", "$", "%", "&", "'", "(", ")", "*", "+", "-", ".", "/", ":", "<", "=", ">", "?", "@", "[", "\\", "]", "^", "_", "`", "{", "|", "}", "~", "^", "√"];
 
 	/**
 		Creates a new keyword config, using an existing config, made using the anonymous structure syntax.
@@ -36,7 +45,7 @@ class KeywordConfig {
 					throw new ArgumentException('config.$field', "Keywords of length 0 are not allowed.");
 				if (configValue.contains(" "))
 					throw new ArgumentException('config.$field', "Keywords cannot contain whitespaces.");
-				if (@:privateAccess configValue.containsAny(Lexer.signs))
+				if (configValue.containsAny(recognizedOperators))
 					throw new ArgumentException('config.$field', "Keywords cannot contain operators/signs.");
 				if (~/[0-9]/.match(configValue.charAt(0)))
 					throw new ArgumentException('config.$field', "Keywords cannot start with numbers.");

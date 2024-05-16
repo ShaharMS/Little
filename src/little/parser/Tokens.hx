@@ -1,8 +1,5 @@
 package little.parser;
 
-import little.interpreter.Tokens.InterpTokens;
-import little.parser.Parser;
-
 enum ParserTokens {
 
     SetLine(line:Int);

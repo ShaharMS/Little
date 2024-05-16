@@ -1,7 +1,6 @@
 package little.interpreter;
 
 import little.interpreter.Tokens.InterpTokens;
-import little.interpreter.memory.Memory;
 import little.tools.Layer;
 
 using StringTools;
@@ -222,7 +221,7 @@ class Runtime {
     	Prints a Haxe string to `Little`'s standard output, without any positional information.
 		On `Little.debug` mode, the string will be prefixed with `BROADCAST: `. 
     **/
-    public function broadcast(item:String) {
+    public dynamic function broadcast(item:String) {
         stdout.output += '\n${if (Little.debug) "BROADCAST: " else ""}${item}';
 		stdout.stdoutTokens.push(Characters(item));
     }
@@ -230,7 +229,7 @@ class Runtime {
 	/**
 		Quiet broadcast, without addition to stdoutTokens 
 	**/
-	function __broadcast(item:String) {
+	dynamic function __broadcast(item:String) {
         stdout.output += '\n${if (Little.debug) "BROADCAST: " else ""}${item}';		
 	}
 

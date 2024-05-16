@@ -7,21 +7,21 @@ class ExternalInterfacing {
 	public var parent:Memory;
 	
 	/**
-	    For each type registered, a pointer to the type must be provided
+	    For each type registered, a pointer to the type must be provided.
 	**/
-	public var typeToPointer:Map<String, MemoryPointer>;
+	public var externToPointer:Map<String, MemoryPointer>;
 
 	/**
-	    Inverse of `typeToPointer`, not performance efficient
+	    Inverse of `externToPointer`, not performance efficient
 	**/
-	public var pointerToType(get ,null):Map<MemoryPointer, String>;
-	/** ExternalInterfacing.pointerToType getter **/ @:noCompletion function get_pointerToType() {
-		var pointerToType = new Map<MemoryPointer, String>();
-		for (type => pointer in typeToPointer) {
-			pointerToType[pointer] = type;
+	public var pointerToExtern(get ,null):Map<MemoryPointer, String>;
+	/** ExternalInterfacing.pointerToExtern getter **/ @:noCompletion function get_pointerToExtern() {
+		var pointerToExtern = new Map<MemoryPointer, String>();
+		for (type => pointer in externToPointer) {
+			pointerToExtern[pointer] = type;
 		}
 
-		return pointerToType;
+		return pointerToExtern;
 	}
 
 	/**
@@ -42,7 +42,7 @@ class ExternalInterfacing {
 	**/
 	public function new(memory:Memory) {
 		parent = memory;
-		typeToPointer = new Map<String, MemoryPointer>();
+		externToPointer = new Map<String, MemoryPointer>();
 	}
 
 	/**
