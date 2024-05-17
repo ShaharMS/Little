@@ -167,8 +167,8 @@ class Interpreter {
 				if (given[i].getName() != pattern[i].getName()) return false;
 				switch given[i] {
 					case SetLine(_) | Number(_) | Decimal(_) | Characters(_) | Documentation(_) | Sign(_) | Identifier(_) | ErrorMessage(_): if (pattern[i].parameter(0) != null) return false; 
-					case VariableDeclaration(_, _, _) | FunctionDeclaration(_, _, _, _) | ClassDeclaration(_, _) | ConditionDeclaration(_, _, _): currentlyFits = currentlyFits && fit(cast given[i].getParameters(), cast pattern[i].getParameters(), currentlyFits);
-					case ConditionCode(_): return false; // Cant be matched with, only valid in the context of a condition definition. Represented by other tokens in other cases
+					case VariableDeclaration(_, _, _) | FunctionDeclaration(_, _, _, _): currentlyFits = currentlyFits && fit(cast given[i].getParameters(), cast pattern[i].getParameters(), currentlyFits);
+					case ConditionCode(_): return false; // Cant be matched with, only valid in the context of a condition definition, which is not supported. Represented by other tokens in other cases
 					case FunctionCode(_, _): return false; // same as above
 					case ConditionCall(_, _, _) | FunctionCall(_, _): currentlyFits = currentlyFits && fit(cast given[i].getParameters(), cast pattern[i].getParameters(), currentlyFits);
 					case FunctionReturn(_, _) | TypeCast(_, _): currentlyFits = currentlyFits && fit(cast given[i].getParameters(), cast pattern[i].getParameters(), currentlyFits);
@@ -236,7 +236,6 @@ class Interpreter {
 			switch assignee {
 				case VariableDeclaration(name, type, doc): declareVariable(name, type, doc); vars.push(name); containsVariable = true;
 				case FunctionDeclaration(name, params, type, doc): declareFunction(name, params, doc); funcs.push(name); containsFunction = true; //TODO: find a way to store function type
-				case ConditionDeclaration(name, ct, doc): // TODO: Condition declaration is not implemented yet.
 				case _: vars.push(assignee); containsVariable = true;
 			}
 		}

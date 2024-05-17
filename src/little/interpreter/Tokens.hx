@@ -25,21 +25,6 @@ enum InterpTokens {
     FunctionDeclaration(name:InterpTokens, params:InterpTokens, type:InterpTokens, ?doc:InterpTokens);
 
 	/**
-		Usage:
-		@param name `Identifier`, `PropertyAccess`
-		@param conditionType `Identifier`, `PropertyAccess`
-		@param doc `Characters`
-	**/
-	ConditionDeclaration(name:InterpTokens, conditionType:InterpTokens, ?doc:InterpTokens);
-	
-	/**
-		Usage:
-		@param name `Identifier`, `PropertyAccess`
-		@param doc `Characters`
-	**/
-	ClassDeclaration(name:InterpTokens, ?doc:InterpTokens);
-
-	/**
 		`callers` is a map of `InterpTokens` configs representing the structure of the condition itself, in correlation to the conditions outcome. 
 		Use haxe `null` to denote a wildcard - a free value decided by the user.  
 		for example, Little's for loop would be:
