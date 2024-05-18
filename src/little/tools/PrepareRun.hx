@@ -127,19 +127,19 @@ class PrepareRun {
 	**/
 	public static function addFunctions() {
 		Little.plugin.registerFunction(Little.keywords.PRINT_FUNCTION_NAME, null, [VariableDeclaration(Identifier("item"), null)], (params) -> {
-			var eval = Interpreter.evaluate(params[0]);
+			var eval = params[0].objectValue;
 			Little.runtime.__print(eval.is(OBJECT) ? @:privateAccess PrettyPrinter.printInterpreterAst([eval]).split("\n").slice(1).map(s -> s.substring(6)).join("\n") : PrettyPrinter.stringifyInterpreter(eval), eval);
 			return NullValue;
 		}, Little.keywords.TYPE_DYNAMIC);
 		Little.plugin.registerFunction(Little.keywords.RAISE_ERROR_FUNCTION_NAME, null, [VariableDeclaration(Identifier("message"), null)], (params) -> {
-			Little.runtime.throwError(params[0]);
+			Little.runtime.throwError(params[0].objectValue);
 			return NullValue;
 		}, Little.keywords.TYPE_DYNAMIC);
 		Little.plugin.registerFunction(Little.keywords.READ_FUNCTION_NAME, null, [VariableDeclaration(Identifier("identifier"), Little.keywords.TYPE_STRING.asTokenPath())], (params) -> {
-			return (Conversion.toHaxeValue(Interpreter.evaluate(params[0])) : String).asTokenPath();
+			return (Conversion.toHaxeValue(params[0].objectValue) : String).asTokenPath();
 		}, Little.keywords.TYPE_DYNAMIC);
 		Little.plugin.registerFunction(Little.keywords.RUN_CODE_FUNCTION_NAME, null, [VariableDeclaration(Identifier("code"), Little.keywords.TYPE_STRING.asTokenPath())], (params) -> {
-			return Interpreter.run(Interpreter.convert(...Parser.parse(Lexer.lex(Conversion.toHaxeValue(params[0])))));
+			return Interpreter.run(Interpreter.convert(...Parser.parse(Lexer.lex(Conversion.toHaxeValue(params[0].objectValue)))));
 		}, Little.keywords.TYPE_DYNAMIC);
 	}
 

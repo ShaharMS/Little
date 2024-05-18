@@ -65,6 +65,12 @@ class Little {
     public static var debug:Bool = false;
 
     /**
+        Indicates the version of the Little compiler & Interpreter.
+        First number is the major version, second is the minor version, third is the patch.
+    **/
+    public static var version:String = "1.0.0-f";
+
+    /**
         Loads little code, without clearing memory, stdout or the callstack. useful if you want to 
         use multiple files/want to preload code for the end user to use.
 

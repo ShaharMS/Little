@@ -383,7 +383,7 @@ class Interpreter {
                 }
                 case ConditionCall(name, exp, body): {
                     returnVal = condition(name, exp, body);
-					if (returnVal.is(FUNCTION_RETURN)) return evaluate(returnVal);
+					if (returnVal != null && returnVal.is(FUNCTION_RETURN)) return evaluate(returnVal);
                 }
                 case Write(assignees, value): {
                     returnVal = write(assignees, value);

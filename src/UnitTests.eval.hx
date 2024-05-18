@@ -25,9 +25,7 @@ typedef UnitTestResult = {
 }
 
 class UnitTests {
-	
 	// ANSI colors
-
 	static var RED = "\033[31m";
 	static var GREEN = "\033[32m";
 	static var YELLOW = "\033[33m";
@@ -42,8 +40,11 @@ class UnitTests {
 	static var UNDERLINE = "\033[4m";
 
 	public static function run(bulk:Bool = false) {
-		var testFunctions = [test1, test2, test3, test4, test5, test6, test7, test8, test9, test10, test11, test12, test13, test14];
+		var testFunctions = [
+			test1, test2, test3, test4, test5, test6, test7, test8, test9, test10, test11, test12, test13, test14
+		];
 		var allSuccessful = true;
+		var unsuccessful = 0;
 		var i = 1;
 		for (func in testFunctions) {
 			var result = func();
@@ -57,7 +58,10 @@ class UnitTests {
 				Sys.print('        - $RESET$BOLD$WHITE Stdout:$RESET\n            ${Little.runtime.stdout.output.replace("\n", "\n            ")}$RESET\n');
 			}
 
-			if (!result.success) allSuccessful = false;
+			if (!result.success) {
+				allSuccessful = false;
+				unsuccessful++;
+			}
 			if (!result.success && !bulk)
 				Sys.exit(1);
 			Sys.sleep(bulk ? 0.02 : 0.2);
@@ -66,9 +70,12 @@ class UnitTests {
 		}
 		if (allSuccessful) {
 			Sys.println('$GREEN$BOLD🥳 🥳 🥳 All tests passed! 🥳 🥳 🥳$RESET');
+		} else if (unsuccessful < testFunctions.length / 2) {
+			Sys.println('$YELLOW$BOLD⚠️ ⚠️ ⚠️ $unsuccessful out of ${testFunctions.length} tests failed! ⚠️ ⚠️ ⚠️$RESET');
+		} else if (unsuccessful >= testFunctions.length / 2) {
+			Sys.println('$RED$BOLD❌ ❌ ❌ $unsuccessful out of ${testFunctions.length} tests failed! ❌ ❌ ❌$RESET');
 		}
 	}
-
 
 	public static function test1():UnitTestResult {
 		var code = "print((5 + (3 - 2)) * 5^2 + 3 * 4 / 4 + 4! + 8 + -2)";
@@ -93,7 +100,6 @@ class UnitTests {
 			returned: result,
 			expected: Characters("3, Decimal, Anything, nothing"),
 			code: code
-
 		}
 	}
 
@@ -128,7 +134,8 @@ class UnitTests {
 		var code = "define i = 0\nwhile (i <= 5) { print (i); i = i + 1}\nfor (define j from 0 to 10 jump 3) print(j)";
 		Little.run(code);
 		var result = PartArray(Little.runtime.stdout.stdoutTokens);
-		var exp = PartArray([Number(0), Number(1), Number(2), Number(3), Number(4), Number(5), Number(0), Number(3), Number(6), Number(9)]);
+		var exp = PartArray([
+			Number(0), Number(1), Number(2), Number(3), Number(4), Number(5), Number(0), Number(3), Number(6), Number(9)]);
 		return {
 			testName: "Loops",
 			success: !Lambda.has([for (i in 0...10) Type.enumEq(exp.parameter(0)[i], result.parameter(0)[i])], false),
@@ -142,7 +149,12 @@ class UnitTests {
 		var code = 'define i = 4, if (i != 0) print(true)\nafter (i == 6) print("i is 6"), whenever (i == i) print("i has changed")\ni = i + 1, i = i + 1';
 		Little.run(code);
 		var result = PartArray(Little.runtime.stdout.stdoutTokens);
-		var exp = PartArray([TrueValue, Characters("i has changed"), Characters("i is 6"), Characters("i has changed")]);
+		var exp = PartArray([
+			TrueValue,
+			Characters("i has changed"),
+			Characters("i is 6"),
+			Characters("i has changed")
+		]);
 		return {
 			testName: "Events and conditionals",
 			success: !Lambda.has([for (i in 0...4) Type.enumEq(exp.parameter(0)[i], result.parameter(0)[i])], false),
@@ -190,9 +202,9 @@ class UnitTests {
 			code: code
 		}
 	}
-	
+
 	public static function test10():UnitTestResult {
-		var code = 'define i = 3\n{{define i = 5, print(i)}}\nprint(i)';
+		var code = 'define i = 3\n{{{define i = 5, print(i)}}}\nprint(i)';
 		Little.run(code);
 		var result = PartArray(Little.runtime.stdout.stdoutTokens);
 		var exp = PartArray([Number(5), Number(3)]);
@@ -240,12 +252,12 @@ class UnitTests {
 		return {
 			testName: "Type Name Property",
 			success: result.equals(exp),
-			returned: result,
+			returned: result,ן
 			expected: exp,
 			code: code
 		}
 	}
-	
+
 	public static function test14():UnitTestResult {
 		var code = 'define a = Object.create(), define b = a, print(a.address == b.address)\ndefine c = 502, define d = c, print(c.address == d.address)\nprint(a.address, b.address, c.address, d.address)';
 		Little.run(code);

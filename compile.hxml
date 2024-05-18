@@ -5,9 +5,11 @@
 --library no-warnings
 --library hash
 --library hxOrderedMap
-#--js interp.js
+--resource demoCode.txt@sample
+
+#--js clients/web/interp.js
 --interp
---define unit
+#--define unit
 #--define parser_debug
 --debug
 # --dce full

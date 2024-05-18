@@ -1,62 +1,26 @@
-
-"""
-    My Custom Class
-"""
-class Foo = {
-
-    define self.public = 5
-    define Foo.static = 5.6
-
-    """
-        Constructor
-    """
-    action self.create() = {
-        
-    }
-
-    action self.somePublicAction(define someParameter, define param as Number = 2) = {
-        print(self + " Called for " + someParameter + " and " param)
-    }
-
-    action Foo.someStaticFunction() = {
-        print(Foo.documentation)
-    }
-}
-
 define someVar as Decimal = 3
 
-action someRandomAction() = {
-
-}
-
 """
-	doTwiceIf (3 > 5) {
-		print(i)
-	}
+My Comment
 """
-condition doTwiceIf = (define condition as Characters, define body) {
-	if (run(condition)) {
-		runWith(body, "define i = 1")
-		runWith(body, "define i = 2")
-	}
+define x = Object.create()
+define x.value = 4.4
+
+action someRandomAction(define parameter, define p2 as Decimal = 2) = {
+    print(parameter)
+    print(p2)
 }
 
-condition repeat(define iterationCounter, define body as Characters) = {
-	define times = run(iterationCounter).toNumber()
-	while(times > 0) {
-		run(body)
-		times = times - 1
-	}
-} 
-
-sign (left ^% right) = {
-    return left + right ^ 2
-}
-print(^%.priority.type) //Number
-
+someRandomAction("Hey", 3.14)
+someRandomAction(4)
 
 for (define x from 0 to -100 jump 10) print(x)
-
 while (true != false) print({define z = 3, z})
 
+whenever (x > 5) {
+    print(x)
+}
+after ({read("x")} == "6".toNumber()) print("Hey!")
+
 print((5 + (3 - 2)) * 5^2 + 3 * 4 / 4 + 4! + 8 + -2)
+

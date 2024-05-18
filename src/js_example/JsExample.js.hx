@@ -28,9 +28,6 @@ class JsExample {
         var buildDate:SpanElement = cast d.getElementById("build-date");
         var buildNumber:SpanElement = cast d.getElementById("build-number");
 
-        buildNumber.innerText = JsMacro.getBuildCount();
-        buildDate.innerText = JsMacro.getBuildTime();
-
         trace(input, ast, output);
         input.addEventListener("keyup", function(_) {
 			try {

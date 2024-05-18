@@ -256,7 +256,7 @@ class Plugins {
     	@param callback The actual function, which gets an array of the given parameters as reduced little tokens (basic types and `Object`), and returns a value based on them
 		@param returnType The type of the returned value. This exists due to implementation limitations. You can use the `Conversion` class to know which types to put here.
     **/
-    public function registerFunction(functionName:String, ?documentation:String, expectedParameters:EitherType<String, Array<InterpTokens>>, callback:Array<InterpTokens> -> InterpTokens, returnType:String) {
+    public function registerFunction(functionName:String, ?documentation:String, expectedParameters:EitherType<String, Array<InterpTokens>>, callback:Array<{objectValue:InterpTokens, objectTypeName:String, objectAddress:MemoryPointer}> -> InterpTokens, returnType:String) {
         var params = if (expectedParameters is String) {
             Interpreter.convert(...Parser.parse(Lexer.lex(expectedParameters)));
         } else (expectedParameters : Array<InterpTokens>);
@@ -282,7 +282,7 @@ class Plugins {
 
 		var returnTypeToken = Interpreter.convert(...Parser.parse(Lexer.lex(returnType)))[0]; // May be a PropertyAccess or an Identifier
         var token:InterpTokens = FunctionCode(paramMap, Block([
-            FunctionReturn(HaxeExtern(() -> callback(paramMap.keys().toArray().map(key -> Interpreter.evaluate(memory.read(key).objectValue)))), returnTypeToken)
+            FunctionReturn(HaxeExtern(() -> callback(paramMap.keys().toArray().map(key -> memory.read(key)))), returnTypeToken)
         ], returnTypeToken));
         
         var object = memory.externs.createPathFor(memory.externs.globalProperties, ...functionPath);
