@@ -351,24 +351,18 @@ class Interpreter {
 		@return The value given, casted to the type.
 	**/
     public static function typeCast(value:InterpTokens, type:InterpTokens):InterpTokens {
-		if (value.is(NUMBER) && type.parameter(0) == Little.keywords.TYPE_FLOAT) {
-			return Decimal(value.parameter(0));
-		}
-		if (value.is(DECIMAL) && type.parameter(0) == Little.keywords.TYPE_INT) {
-			return Number(Std.int(value.parameter(0)));
-		}
-		if (value.is(NUMBER, DECIMAL) && type.parameter(0) == Little.keywords.TYPE_STRING) {
-			return Characters(Std.string(value.parameter(0)));
-		}
-		if (value.is(TRUE_VALUE, FALSE_VALUE, NULL_VALUE) && type.parameter(0) == Little.keywords.TYPE_STRING) {
-			return Characters(value.is(TRUE_VALUE) ? Little.keywords.TRUE_VALUE : value.is(FALSE_VALUE) ? Little.keywords.FALSE_VALUE : Little.keywords.NULL_VALUE);
-		}
+		var preType = evaluate(value).type().asTokenPath().asStringPath();
+		var postType = evaluate(type).asStringPath();
+
+		preType.push(Little.keywords.TYPE_CAST_FUNCTION_PREFIX + postType.join("_"));
+
+		value = call(preType.join(Little.keywords.PROPERTY_ACCESS_SIGN).asTokenPath(), PartArray([value]));
 
         for (listener in Little.runtime.onTypeCast) {
             listener(value, type.asJoinedStringPath());
         }
 
-        return value; // TODO, needs to be done with types in memory management
+        return value; 
 		
     }
 

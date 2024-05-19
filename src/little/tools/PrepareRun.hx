@@ -56,6 +56,12 @@ class PrepareRun {
 		Little.plugin.registerType(Little.keywords.TYPE_INT, [
 			'public ${Little.keywords.TYPE_STRING} toString ()' => (_, value, _) -> {
 				return Conversion.toLittleValue(Std.string(value.parameter(0)));
+			},
+			'public ${Little.keywords.TYPE_FLOAT} toDecimal ()' => (_, value, _) -> {
+				return Decimal(value.parameter(0));
+			},
+			'public ${Little.keywords.TYPE_BOOLEAN} toBoolean ()' => (_, value, _) -> {
+				return Conversion.toLittleValue(value.parameter(0) != 0);
 			}
 		]);
 
@@ -63,12 +69,42 @@ class PrepareRun {
 			'public ${Little.keywords.TYPE_STRING} toString ()' => (_, value, _) -> {
 				return Conversion.toLittleValue(Std.string(value.parameter(0)));
 			},
+			'public ${Little.keywords.TYPE_INT} toNumber ()' => (_, value, _) -> {
+				return Conversion.toLittleValue(Math.floor(value.parameter(0)));
+			},
+			'public ${Little.keywords.TYPE_BOOLEAN} toBoolean ()' => (_, value, _) -> {
+				return Conversion.toLittleValue(value.parameter(0) != 0);
+			},
 			'public ${Little.keywords.TYPE_BOOLEAN} isWhole ()' => (_, value, _) -> {
 				return Conversion.toLittleValue((value.parameter(0) : Float) % 1 == 0);
 			}
 		]);
 
 		Little.plugin.registerType(Little.keywords.TYPE_STRING, [
+			'public ${Little.keywords.TYPE_STRING} toString ()' => (_, value, _) -> {
+				return Conversion.toLittleValue(Std.string(value.parameter(0)));
+			},
+			'public ${Little.keywords.TYPE_INT} toNumber ()' => (_, value, _) -> {
+				var number = Std.parseInt(value.parameter(0));
+				if (number == null) {
+					Little.runtime.throwError(ErrorMessage('${Little.keywords.TYPE_STRING} instance `"${value.parameter(0)}"` cannot be converted to ${Little.keywords.TYPE_INT}, since it is not a number	'), INTERPRETER);
+				}
+				return Conversion.toLittleValue(number);
+			},
+			'public ${Little.keywords.TYPE_FLOAT} toDecimal ()' => (_, value, _) -> {
+				var number = Std.parseFloat(value.parameter(0));
+				if (number == Math.NaN) {
+					Little.runtime.throwError(ErrorMessage('${Little.keywords.TYPE_STRING} instance `"${value.parameter(0)}"` cannot be converted to ${Little.keywords.TYPE_FLOAT}, since it is not a number	'), INTERPRETER);
+				}
+				return Conversion.toLittleValue(number);
+			},
+			'public ${Little.keywords.TYPE_SIGN} toSign ()' => (_, value, _) -> {
+				return Conversion.toLittleValue(Sign(value.parameter(0)));
+			},
+			'public ${Little.keywords.TYPE_BOOLEAN} toBoolean ()' => (_, value, _) -> {
+				return Conversion.toLittleValue(value.parameter(0) == "true" || (Std.parseFloat(value.parameter(0)) != Math.NaN && Std.parseFloat(value.parameter(0)) != 0));
+			},
+
 			'public ${Little.keywords.TYPE_INT} length' => (_, value) -> {
 				return Conversion.toLittleValue(value.parameter(0).length);
 			},
@@ -115,7 +151,7 @@ class PrepareRun {
 		]);
  
 		Little.plugin.registerType("Object", [
-			'static Object create (define fieldEstimate as ${Little.keywords.TYPE_INT} = 20)' => (params) -> {
+			'static Object create ()' => (params) -> {
 				return Object([], "Object");
 			}
 		]);
@@ -172,7 +208,7 @@ class PrepareRun {
 		// ------------------------RHS-----------------------
 		// --------------------------------------------------
 
-		Little.plugin.registerOperator("+", {
+		Little.plugin.registerOperator(Little.keywords.POSITIVE_SIGN, {
 			rhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			operatorType: RHS_ONLY,
 			priority: "last",
@@ -184,10 +220,10 @@ class PrepareRun {
 			}
 		});
 
-		Little.plugin.registerOperator("-", {
+		Little.plugin.registerOperator(Little.keywords.NEGATE_SIGN, {
 			rhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			operatorType: RHS_ONLY,
-			priority: "with +_",
+			priority: 'with ${Little.keywords.POSITIVE_SIGN}_',
 			singleSidedOperatorCallback: (rhs) -> {
 				var r = Conversion.toHaxeValue(rhs);
 				if (r is Int)
@@ -196,7 +232,7 @@ class PrepareRun {
 			}
 		});
 
-		Little.plugin.registerOperator("√", {
+		Little.plugin.registerOperator(Little.keywords.SQRT_SIGN, {
 			rhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			operatorType: RHS_ONLY,
 			priority: "first",
@@ -207,10 +243,10 @@ class PrepareRun {
 			}
 		});
 
-		Little.plugin.registerOperator("!", {
+		Little.plugin.registerOperator(Little.keywords.NOT_SIGN, {
 			rhsAllowedTypes: [Little.keywords.TYPE_BOOLEAN],
 			operatorType: RHS_ONLY,
-			priority: "with +_",
+			priority: 'with ${Little.keywords.POSITIVE_SIGN}_',
 			singleSidedOperatorCallback: (rhs) -> {
 				var r = Conversion.toHaxeValue(rhs);
 
@@ -222,10 +258,10 @@ class PrepareRun {
 		// ------------------------LHS-----------------------
 		// --------------------------------------------------
 
-		Little.plugin.registerOperator("!", {
+		Little.plugin.registerOperator(Little.keywords.FACTORIAL_SIGN, {
 			lhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			operatorType: LHS_ONLY,
-			priority: "with √_",
+			priority: 'with ${Little.keywords.SQRT_SIGN}_',
 			singleSidedOperatorCallback: (lhs) -> {
 				var l = Conversion.toHaxeValue(lhs);
 				var shifted = Math.pow(10, 10) * l;
@@ -238,11 +274,11 @@ class PrepareRun {
 		// ----------------------STANDARD--------------------
 		// --------------------------------------------------
 
-		Little.plugin.registerOperator("+", {
+		Little.plugin.registerOperator(Little.keywords.ADD_SIGN, {
 			rhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT, Little.keywords.TYPE_STRING],
 			lhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT, Little.keywords.TYPE_STRING],
 			allowedTypeCombos: [{lhs: Little.keywords.TYPE_STRING, rhs: Little.keywords.TYPE_DYNAMIC}, {lhs: Little.keywords.TYPE_DYNAMIC, rhs: Little.keywords.TYPE_STRING}],
-			priority: "with +_",
+			priority: 'with ${Little.keywords.POSITIVE_SIGN}_',
 			callback: (lhs, rhs) -> {
 				lhs = Interpreter.evaluate(lhs); rhs = Interpreter.evaluate(rhs);
 				var l = Conversion.toHaxeValue(lhs),
@@ -257,11 +293,11 @@ class PrepareRun {
 			}
 		});
 
-		Little.plugin.registerOperator("-", {
+		Little.plugin.registerOperator(Little.keywords.SUBTRACT_SIGN, {
 			rhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			lhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			allowedTypeCombos: [{lhs: Little.keywords.TYPE_STRING, rhs: Little.keywords.TYPE_STRING}],
-			priority: "with +",
+			priority: 'with ${Little.keywords.ADD_SIGN}',
 			callback: (lhs, rhs) -> {
 				lhs = Interpreter.evaluate(lhs); rhs = Interpreter.evaluate(rhs);
 				var l:Dynamic = Conversion.toHaxeValue(lhs),
@@ -276,11 +312,11 @@ class PrepareRun {
 			}
 		});
 
-		Little.plugin.registerOperator("*", {
+		Little.plugin.registerOperator(Little.keywords.MULTIPLY_SIGN, {
 			rhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			lhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			allowedTypeCombos: [{lhs: Little.keywords.TYPE_STRING, rhs: Little.keywords.TYPE_INT}],
-			priority: "between + √_",
+			priority: 'between ${Little.keywords.ADD_SIGN} ${Little.keywords.SQRT_SIGN}_',
 			callback: (lhs, rhs) -> {
 				lhs = Interpreter.evaluate(lhs); rhs = Interpreter.evaluate(rhs);
 				var l:Dynamic = Conversion.toHaxeValue(lhs),
@@ -295,10 +331,10 @@ class PrepareRun {
 			}
 		});
 
-		Little.plugin.registerOperator("/", {
+		Little.plugin.registerOperator(Little.keywords.DIVIDE_SIGN, {
 			rhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			lhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
-			priority: "with *",
+			priority: 'with ${Little.keywords.MULTIPLY_SIGN}',
 			callback: (lhs, rhs) -> {
 				var l = Conversion.toHaxeValue(lhs),
 					r = Conversion.toHaxeValue(rhs);
@@ -308,10 +344,10 @@ class PrepareRun {
 			}
 		});
 
-		Little.plugin.registerOperator("^", {
+		Little.plugin.registerOperator(Little.keywords.POW_SIGN, {
 			rhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			lhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
-			priority: "before *",
+			priority: 'before ${Little.keywords.MULTIPLY_SIGN}',
 			callback: (lhs, rhs) -> {
 				lhs = Interpreter.evaluate(lhs); rhs = Interpreter.evaluate(rhs);
 				var l = Conversion.toHaxeValue(lhs),
@@ -322,10 +358,10 @@ class PrepareRun {
 			}
 		});
 
-		Little.plugin.registerOperator("√", {
+		Little.plugin.registerOperator(Little.keywords.SQRT_SIGN, {
 			rhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			lhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
-			priority: "with ^",
+			priority: 'with ${Little.keywords.POW_SIGN}',
 			callback: (lhs, rhs) -> {
 				var l:Float = Conversion.toHaxeValue(lhs),
 					r:Float = Conversion.toHaxeValue(rhs);
@@ -339,40 +375,40 @@ class PrepareRun {
 
 		// Boolean
 
-		Little.plugin.registerOperator("&&", {
+		Little.plugin.registerOperator(Little.keywords.AND_SIGN, {
 			rhsAllowedTypes: [Little.keywords.TYPE_BOOLEAN],
 			lhsAllowedTypes: [Little.keywords.TYPE_BOOLEAN],
 			priority: "last",
 			callback: (lhs, rhs) -> Conversion.toHaxeValue(lhs) && Conversion.toHaxeValue(rhs) ? TrueValue : FalseValue});
 
-		Little.plugin.registerOperator("||", {
+		Little.plugin.registerOperator(Little.keywords.OR_SIGN, {
 			rhsAllowedTypes: [Little.keywords.TYPE_BOOLEAN],
 			lhsAllowedTypes: [Little.keywords.TYPE_BOOLEAN],
-			priority: "with &&",
+			priority: 'with ${Little.keywords.AND_SIGN}',
 			callback: (lhs, rhs) -> Conversion.toHaxeValue(lhs) || Conversion.toHaxeValue(rhs) ? TrueValue : FalseValue});
 
-		Little.plugin.registerOperator("==", {
+		Little.plugin.registerOperator(Little.keywords.EQUALS_SIGN, {
 			priority: "last",
 			callback: (lhs, rhs) -> Conversion.toHaxeValue(lhs) == Conversion.toHaxeValue(rhs) ? TrueValue : FalseValue
 		});
 
-		Little.plugin.registerOperator("!=", {
-			priority: "with ==",
+		Little.plugin.registerOperator(Little.keywords.NOT_EQUALS_SIGN, {
+			priority: 'with ${Little.keywords.EQUALS_SIGN}',
 			callback: (lhs, rhs) -> Conversion.toHaxeValue(lhs) != Conversion.toHaxeValue(rhs) ? TrueValue : FalseValue
 		});
 
-		Little.plugin.registerOperator("^^", {
+		Little.plugin.registerOperator(Little.keywords.XOR_SIGN, {
 			rhsAllowedTypes: [Little.keywords.TYPE_BOOLEAN],
 			lhsAllowedTypes: [Little.keywords.TYPE_BOOLEAN],
-			priority: "with &&",
+			priority: 'with ${Little.keywords.AND_SIGN}',
 			callback: (lhs, rhs) -> Conversion.toHaxeValue(lhs) != Conversion.toHaxeValue(rhs) ? TrueValue : FalseValue
 		});
 
-		Little.plugin.registerOperator(">", {
+		Little.plugin.registerOperator(Little.keywords.LARGER_SIGN, {
 			rhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			lhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			allowedTypeCombos: [{lhs: Little.keywords.TYPE_STRING, rhs: Little.keywords.TYPE_STRING}],
-			priority: "with ==",
+			priority: 'with ${Little.keywords.EQUALS_SIGN}',
 			callback: (lhs, rhs) -> {
 				var l:Dynamic = Conversion.toHaxeValue(lhs),
 					r:Dynamic = Conversion.toHaxeValue(rhs);
@@ -382,11 +418,11 @@ class PrepareRun {
 			}
 		});
 
-		Little.plugin.registerOperator(">=", {
+		Little.plugin.registerOperator(Little.keywords.LARGER_EQUALS_SIGN, {
 			rhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			lhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			allowedTypeCombos: [{lhs: Little.keywords.TYPE_STRING, rhs: Little.keywords.TYPE_STRING}],
-			priority: "with ==",
+			priority: 'with ${Little.keywords.EQUALS_SIGN}',
 			callback: (lhs, rhs) -> {
 				var l:Dynamic = Conversion.toHaxeValue(lhs),
 					r:Dynamic = Conversion.toHaxeValue(rhs);
@@ -396,11 +432,11 @@ class PrepareRun {
 			}
 		});
 
-		Little.plugin.registerOperator("<", {
+		Little.plugin.registerOperator(Little.keywords.SMALLER_SIGN, {
 			rhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			lhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			allowedTypeCombos: [{lhs: Little.keywords.TYPE_STRING, rhs: Little.keywords.TYPE_STRING}],
-			priority: "with ==",
+			priority: 'with ${Little.keywords.EQUALS_SIGN}',
 			callback: (lhs, rhs) -> {
 				var l:Dynamic = Conversion.toHaxeValue(lhs),
 					r:Dynamic = Conversion.toHaxeValue(rhs);
@@ -410,11 +446,11 @@ class PrepareRun {
 			}
 		});
 
-		Little.plugin.registerOperator("<=", {
+		Little.plugin.registerOperator(Little.keywords.SMALLER_EQUALS_SIGN, {
 			rhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			lhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			allowedTypeCombos: [{lhs: Little.keywords.TYPE_STRING, rhs: Little.keywords.TYPE_STRING}],
-			priority: "with ==",
+			priority: 'with ${Little.keywords.EQUALS_SIGN}',
 			callback: (lhs, rhs) -> {
 				var l:Dynamic = Conversion.toHaxeValue(lhs),
 					r:Dynamic = Conversion.toHaxeValue(rhs);
@@ -429,7 +465,7 @@ class PrepareRun {
 	    Adds standard library top-level conditions and loops.
 	**/
 	public static function addConditions() {
-		Little.plugin.registerCondition("while", "A loop that executes code until the condition is not met", (params, body) -> {
+		Little.plugin.registerCondition(Little.keywords.CONDITION__WHILE_LOOP, "A loop that executes code until the condition is not met", (params, body) -> {
 			var val = NullValue;
 			var safetyNet = 0;
 			while (safetyNet < 500000) {
@@ -442,31 +478,31 @@ class PrepareRun {
 					return val;
 				} 
 				else {
-					Little.runtime.throwError(ErrorMessage('While condition must be a ${Little.keywords.TYPE_BOOLEAN} or ${Little.keywords.FALSE_VALUE}'), INTERPRETER);
+					Little.runtime.throwError(ErrorMessage('`${Little.keywords.CONDITION__WHILE_LOOP}` condition must be a ${Little.keywords.TYPE_BOOLEAN} or ${Little.keywords.FALSE_VALUE}'), INTERPRETER);
 					return val;
 				}
 			}
 			if (safetyNet >= 500000) {
-				Little.runtime.throwError(ErrorMessage('Too much iteration (is `${PrettyPrinter.stringifyInterpreter(params)}` forever `${Little.keywords.TRUE_VALUE}`?)'), INTERPRETER);
+				Little.runtime.throwError(ErrorMessage('Too much iteration in `${Little.keywords.CONDITION__WHILE_LOOP}` loop (is `${PrettyPrinter.stringifyInterpreter(params)}` forever `${Little.keywords.TRUE_VALUE}`?)'), INTERPRETER);
 			}
 
 			return val;
 		});
 
-		Little.plugin.registerCondition("if", "Executes the following block of code if the given condition is true.", (params, body) -> {
+		Little.plugin.registerCondition(Little.keywords.CONDITION__IF, "Executes the following block of code if the given condition is true.", (params, body) -> {
 			var val = NullValue;
 			var cond = Conversion.toHaxeValue(Interpreter.calculate(params));
 			if (cond is Bool && cond) {
 				val = Interpreter.run(body);
 			}
 			else if (!(cond is Bool)) {
-				Little.runtime.throwError(ErrorMessage('If condition must be a ${Little.keywords.TYPE_BOOLEAN}'), INTERPRETER);
+				Little.runtime.throwError(ErrorMessage('`${Little.keywords.CONDITION__IF}` condition must be a ${Little.keywords.TYPE_BOOLEAN}'), INTERPRETER);
 			}
 
 			return val;
 		});
 
-		Little.plugin.registerCondition("for", "A loop that executes code while changing a variable, until it meets a condition", (params:Array<InterpTokens>, body) -> {
+		Little.plugin.registerCondition(Little.keywords.CONDITION__FOR_LOOP, "A loop that executes code while changing a variable, until it meets a condition", (params:Array<InterpTokens>, body) -> {
 			var val = NullValue;
 			var fp = [];
 			// Incase one does `from (4 + 2)` and it accidentally parses a function
@@ -494,12 +530,12 @@ class PrepareRun {
 
 			params = fp;
 			if (!params[0].is(VARIABLE_DECLARATION)) {
-				Little.runtime.throwError(ErrorMessage('`for` loop must start with a variable to count on (expected definition/block, found: `${PrettyPrinter.stringifyInterpreter(params[0])}`)'));
+				Little.runtime.throwError(ErrorMessage('`${Little.keywords.CONDITION__FOR_LOOP}` loop must start with a variable to count on (expected definition/block, found: `${PrettyPrinter.stringifyInterpreter(params[0])}`)'));
 				return val;
 			}
 			var typeName = (params[0].parameter(1) : InterpTokens).asJoinedStringPath();
 			if (![Little.keywords.TYPE_INT, Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_DYNAMIC, Little.keywords.TYPE_UNKNOWN].contains(typeName)) {
-				Little.runtime.throwError(ErrorMessage('`for` loop\'s variable must be of type ${Little.keywords.TYPE_INT}, ${Little.keywords.TYPE_FLOAT} or ${Little.keywords.TYPE_DYNAMIC} (given: ${typeName})'));
+				Little.runtime.throwError(ErrorMessage('`${Little.keywords.CONDITION__FOR_LOOP}` loop\'s variable must be of type ${Little.keywords.TYPE_INT}, ${Little.keywords.TYPE_FLOAT} or ${Little.keywords.TYPE_DYNAMIC} (given: ${typeName})'));
 			}
 
 			var from:Null<Float> = null, to:Null<Float> = null, jump:Float = 1;
@@ -511,8 +547,8 @@ class PrepareRun {
 					case Identifier(_ == Little.keywords.FOR_LOOP_FROM => true): {
 						if (currentExpression.length > 0) {
 							switch currentlySet {
-								case -1: Little.runtime.throwError(ErrorMessage('Invalid `for` loop syntax: expected a `${Little.keywords.FOR_LOOP_TO}`, `${Little.keywords.FOR_LOOP_FROM}` or `${Little.keywords.FOR_LOOP_JUMP}` after the variable'));
-								case 0: Little.runtime.throwError(ErrorMessage('Cannot repeat `${Little.keywords.FOR_LOOP_FROM}` tag twice in `for` loop.'));
+								case -1: Little.runtime.throwError(ErrorMessage('Invalid `${Little.keywords.CONDITION__FOR_LOOP}` loop syntax: expected a `${Little.keywords.FOR_LOOP_TO}`, `${Little.keywords.FOR_LOOP_FROM}` or `${Little.keywords.FOR_LOOP_JUMP}` after the variable'));
+								case 0: Little.runtime.throwError(ErrorMessage('Cannot repeat `${Little.keywords.FOR_LOOP_FROM}` tag twice in `${Little.keywords.CONDITION__FOR_LOOP}` loop.'));
 								case 1: to = Conversion.toHaxeValue(Interpreter.calculate(currentExpression));
 								case 2: jump = Conversion.toHaxeValue(Interpreter.calculate(currentExpression));
 							}
@@ -523,9 +559,9 @@ class PrepareRun {
 					case Identifier(_ == Little.keywords.FOR_LOOP_TO => true): {
 						if (currentExpression.length > 0) {
 							switch currentlySet {
-								case -1: Little.runtime.throwError(ErrorMessage('Invalid `for` loop syntax: expected a `${Little.keywords.FOR_LOOP_TO}`, `${Little.keywords.FOR_LOOP_FROM}` or `${Little.keywords.FOR_LOOP_JUMP}` after the variable'));
+								case -1: Little.runtime.throwError(ErrorMessage('Invalid `${Little.keywords.CONDITION__FOR_LOOP}` loop syntax: expected a `${Little.keywords.FOR_LOOP_TO}`, `${Little.keywords.FOR_LOOP_FROM}` or `${Little.keywords.FOR_LOOP_JUMP}` after the variable'));
 								case 0: from = Conversion.toHaxeValue(Interpreter.calculate(currentExpression));
-								case 1: Little.runtime.throwError(ErrorMessage('Cannot repeat `${Little.keywords.FOR_LOOP_TO}` tag twice in `for` loop.'));
+								case 1: Little.runtime.throwError(ErrorMessage('Cannot repeat `${Little.keywords.FOR_LOOP_TO}` tag twice in `${Little.keywords.CONDITION__FOR_LOOP}` loop.'));
 								case 2: jump = Conversion.toHaxeValue(Interpreter.calculate(currentExpression));
 							}
 						}
@@ -535,10 +571,10 @@ class PrepareRun {
 					case Identifier(_ == Little.keywords.FOR_LOOP_JUMP => true): {
 						if (currentExpression.length > 0) {
 							switch currentlySet {
-								case -1: Little.runtime.throwError(ErrorMessage('Invalid `for` loop syntax: expected a `${Little.keywords.FOR_LOOP_TO}`, `${Little.keywords.FOR_LOOP_FROM}` or `${Little.keywords.FOR_LOOP_JUMP}` after the variable'));
+								case -1: Little.runtime.throwError(ErrorMessage('Invalid `${Little.keywords.CONDITION__FOR_LOOP}` loop syntax: expected a `${Little.keywords.FOR_LOOP_TO}`, `${Little.keywords.FOR_LOOP_FROM}` or `${Little.keywords.FOR_LOOP_JUMP}` after the variable'));
 								case 0: from = Conversion.toHaxeValue(Interpreter.calculate(currentExpression));
 								case 1: to = Conversion.toHaxeValue(Interpreter.calculate(currentExpression));
-								case 2: Little.runtime.throwError(ErrorMessage('Cannot repeat `${Little.keywords.FOR_LOOP_JUMP}` tag twice in `for` loop.'));
+								case 2: Little.runtime.throwError(ErrorMessage('Cannot repeat `${Little.keywords.FOR_LOOP_JUMP}` tag twice in `${Little.keywords.CONDITION__FOR_LOOP}` loop.'));
 							}
 						}
 						currentExpression = [];
@@ -548,8 +584,8 @@ class PrepareRun {
 				}
 			}
 			switch currentlySet {
-				case -1: Little.runtime.throwError(ErrorMessage('Invalid `for` loop syntax: expected a `${Little.keywords.FOR_LOOP_TO}`, `${Little.keywords.FOR_LOOP_FROM}` or `${Little.keywords.FOR_LOOP_JUMP}` after the variable'));
-				case 0: Little.runtime.throwError(ErrorMessage('Cannot repeat `${Little.keywords.FOR_LOOP_FROM}` tag twice in `for` loop.'));
+				case -1: Little.runtime.throwError(ErrorMessage('Invalid `${Little.keywords.CONDITION__FOR_LOOP}` loop syntax: expected a `${Little.keywords.FOR_LOOP_TO}`, `${Little.keywords.FOR_LOOP_FROM}` or `${Little.keywords.FOR_LOOP_JUMP}` after the variable'));
+				case 0: Little.runtime.throwError(ErrorMessage('Cannot repeat `${Little.keywords.FOR_LOOP_FROM}` tag twice in `${Little.keywords.CONDITION__FOR_LOOP}` loop.'));
 				case 1: to = Conversion.toHaxeValue(Interpreter.calculate(currentExpression));
 				case 2: jump = Conversion.toHaxeValue(Interpreter.calculate(currentExpression));
 			}
@@ -575,18 +611,18 @@ class PrepareRun {
 			return val;
 		});
 
-		Little.plugin.registerCondition("after", (params:Array<InterpTokens>, body:Array<InterpTokens>) -> {
+		Little.plugin.registerCondition(Little.keywords.CONDITION__AFTER, (params:Array<InterpTokens>, body:Array<InterpTokens>) -> {
 			var val = NullValue;
 			var ident:String = "";
 			if (params[0].is(BLOCK)) {
 				var output = Interpreter.run(params[0].parameter(0));
-				Interpreter.assert(output, [IDENTIFIER, PROPERTY_ACCESS], '`after` condition that starts with a code block must have it\'s code block return an identifier using the `${Little.keywords.READ_FUNCTION_NAME}` function (returned: ${PrettyPrinter.stringifyInterpreter(output)})');
+				Interpreter.assert(output, [IDENTIFIER, PROPERTY_ACCESS], '`${Little.keywords.CONDITION__AFTER}` condition that starts with a code block must have it\'s code block return an identifier using the `${Little.keywords.READ_FUNCTION_NAME}` function (returned: ${PrettyPrinter.stringifyInterpreter(output)})');
 				ident = output.asJoinedStringPath();
 				params[0] = output;
 			} else if (params[0].is(IDENTIFIER, PROPERTY_ACCESS)) {
 				ident = params[0].extractIdentifier();
 			} else {
-				Little.runtime.throwError(ErrorMessage('`after` condition must start with a variable to watch (expected definition, found: `${PrettyPrinter.stringifyInterpreter(params[0])}`)'));
+				Little.runtime.throwError(ErrorMessage('`${Little.keywords.CONDITION__AFTER}` condition must start with a variable to watch (expected definition, found: `${PrettyPrinter.stringifyInterpreter(params[0])}`)'));
 				return val;
 			}
 
@@ -606,17 +642,17 @@ class PrepareRun {
 			return val;
 		});
 
-		Little.plugin.registerCondition("whenever", (params:Array<InterpTokens>, body:Array<InterpTokens>) -> {
+		Little.plugin.registerCondition(Little.keywords.CONDITION__WHENEVER, (params:Array<InterpTokens>, body:Array<InterpTokens>) -> {
 			var val = NullValue;
 			var ident:String = "";
 			if (params[0].is(BLOCK)) {
 				var output = Interpreter.evaluate(params[0]);
-				Interpreter.assert(output, [IDENTIFIER, PROPERTY_ACCESS], '`whenever` condition that starts with a code block must have it\'s code block return a `${Little.keywords.TYPE_STRING}` (returned: ${PrettyPrinter.stringifyInterpreter(output)})');
+				Interpreter.assert(output, [IDENTIFIER, PROPERTY_ACCESS], '`${Little.keywords.CONDITION__WHENEVER}` condition that starts with a code block must have it\'s code block return a `${Little.keywords.TYPE_STRING}` (returned: ${PrettyPrinter.stringifyInterpreter(output)})');
 				ident = Conversion.toHaxeValue(output);
 			} else if (params[0].is(IDENTIFIER, PROPERTY_ACCESS)) {
 				ident = params[0].extractIdentifier();
 			} else {
-				Little.runtime.throwError(ErrorMessage('`whenever` condition must start with a variable to watch (expected definition, found: `${PrettyPrinter.stringifyInterpreter(params[0])}`)'));
+				Little.runtime.throwError(ErrorMessage('`${Little.keywords.CONDITION__WHENEVER}` condition must start with a variable to watch (expected definition, found: `${PrettyPrinter.stringifyInterpreter(params[0])}`)'));
 				return val;
 			}
 			/**

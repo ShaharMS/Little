@@ -116,22 +116,28 @@ class KeywordConfig {
 
 	@:optional public var OBJECT_TYPE_PROPERTY_NAME:String = "type";
 	@:optional public var OBJECT_ADDRESS_PROPERTY_NAME:String = "address";
-	@:optional public var OBJECT_DOC_PROPERTY_NAME:String = "documentation";
+
 	@:optional public var TO_STRING_PROPERTY_NAME:String = "toString";
+
 	@:optional public var PRINT_FUNCTION_NAME:String = "print";
 	@:optional public var RAISE_ERROR_FUNCTION_NAME:String = "error";
 	@:optional public var READ_FUNCTION_NAME:String = "read";
 	@:optional public var RUN_CODE_FUNCTION_NAME:String = "run";
+
 	@:optional public var CONDITION_PATTERN_PARAMETER_NAME:String = "pattern";
 	@:optional public var CONDITION_BODY_PARAMETER_NAME:String = "code";
-	@:optional public var THIS:String = "self";
 
+	@:optional public var CONDITION__FOR_LOOP:String = "for";
+	@:optional public var CONDITION__WHILE_LOOP:String = "while";
+	@:optional public var CONDITION__IF:String = "if";
+	@:optional public var CONDITION__ELSE:String = "else";
+	@:optional public var CONDITION__WHENEVER:String = "whenever";
+	@:optional public var CONDITION__AFTER:String = "after";
 	/**
 		No need to ever change this, this is a parser-only feature
 	**/
 	@:optional public var TYPE_UNKNOWN:String = "Unknown";
 
-	@:optional public var CONDITION_TYPES:Array<String> = [];
 	public var RECOGNIZED_SIGNS:Array<String> = [];
 
 	/**
@@ -148,6 +154,17 @@ class KeywordConfig {
 	@:optional public var XOR_SIGN:String = "^^";
 	@:optional public var OR_SIGN:String = "||";
 	@:optional public var AND_SIGN:String = "&&";
+	@:optional public var NOT_SIGN:String = "!"; //on the left side
+	@:optional public var ADD_SIGN:String = "+";
+	@:optional public var SUBTRACT_SIGN:String = "-";
+	@:optional public var MULTIPLY_SIGN:String = "*";
+	@:optional public var DIVIDE_SIGN:String = "/";
+	@:optional public var MOD_SIGN:String = "%";
+	@:optional public var POW_SIGN:String = "^";
+	@:optional public var FACTORIAL_SIGN:String = "!"; //on the right side
+	@:optional public var SQRT_SIGN:String = "√";
+	@:optional public var NEGATE_SIGN:String = "-";
+	@:optional public var POSITIVE_SIGN:String = "+";
 
 	@:optional public var FOR_LOOP_FROM = "from";
 	@:optional public var FOR_LOOP_TO = "to";
@@ -155,6 +172,5 @@ class KeywordConfig {
 
 	@:optional public var TYPE_CAST_FUNCTION_PREFIX:String = "to";
 
-	@:optional public var ELSE = "else";
 
 }

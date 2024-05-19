@@ -901,7 +901,7 @@ class Parser {
                 case SetLine(line): {setLine(line); post.push(token);}
 				case SetModule(module): {Parser.module = module; post.push(token);}
                 case SplitLine: {nextPart(); post.push(token);}
-                case Identifier(_ == Little.keywords.ELSE => true): {
+                case Identifier(_ == Little.keywords.CONDITION__ELSE => true): {
                     if (post.length == 0 || !post[post.length - 1].is(CONDITION_CALL)) {
                         post.push(token);
                         i++;
@@ -917,11 +917,11 @@ class Parser {
                     var body:ParserTokens = pre[i];
                     switch body {
                         case SplitLine: {
-                            Little.runtime.throwError(ErrorMessage('`${Little.keywords.ELSE}` condition has no body, body cut off by a line split, or does not exist'), PARSER);
+                            Little.runtime.throwError(ErrorMessage('`${Little.keywords.CONDITION__ELSE}` condition has no body, body cut off by a line split, or does not exist'), PARSER);
                             return null;
                         }
                         case SetLine(_) | SetModule(_): {
-                            Little.runtime.throwError(ErrorMessage('`${Little.keywords.ELSE}` condition has no body, body cut off by a new line, or does not exist'), PARSER);
+                            Little.runtime.throwError(ErrorMessage('`${Little.keywords.CONDITION__ELSE}` condition has no body, body cut off by a new line, or does not exist'), PARSER);
                             return null;
                         }
 						case ConditionCall(Identifier("if"), exp2, body): post.push(ConditionCall(Identifier("if"), Expression([exp, Sign("&&"), exp2], null) , !body.is(BLOCK) ? Block([body], null) : body));
