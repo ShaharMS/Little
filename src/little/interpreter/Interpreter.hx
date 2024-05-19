@@ -299,7 +299,7 @@ class Interpreter {
 
 		switch functionCode {
 			case FunctionCode(requiredAndOptionalParams, body): {
-				var given = processedParams;
+				var given = processedParams.length;
 				var resulting:Array<InterpTokens> = [];
 				
                 var required = 0;
@@ -319,9 +319,9 @@ class Interpreter {
 					resulting.push(value);
 					attachment.push(Write([VariableDeclaration(Identifier(name), type, null)], value));
 				}
-
-                if (required > processedParams.length) {
-                    return error('Incorrect number of parameters: Function `$functionName` fully requires $required parameter${required == 1 ? "" : "s"}, but${processedParams.length == 0 ? "" : " only"} ${processedParams.length} ${processedParams.length == 1 ? "was" : "were"} given (parameter${unattained.length == 1 ? "" : "s"} `${unattained.join(", ").replaceLast(",", " &")}` got left out).');
+                if (given > requiredAndOptionalParams.length) required = requiredAndOptionalParams.length; // Better error sensibility.
+                if (required > given || given > requiredAndOptionalParams.length) {
+                    return error('Incorrect number of parameters: Function `$functionName` fully requires $required parameter${required == 1 ? "" : "s"}, but${given == 0 || given > requiredAndOptionalParams.length ? "" : " only"} ${given} ${processedParams.length == 1 ? "was" : "were"} given ${required > given ? '(parameter${unattained.length == 1 ? "" : "s"} `${unattained.join(", ").replaceLast(",", " &")}` got left out).' : ""}');
                 }
 
 				for (listener in Little.runtime.onFunctionCalled) {

@@ -98,6 +98,29 @@ class Memory {
 				var path = token.asStringPath();
 				var cell = read(...path);
 				if (cell.objectValue.passedByValue()) return store(cell.objectValue);
+				if (externs.hasGlobal(...path) && cell.objectValue.is(FUNCTION_CODE)) {
+					// Extern function "call" themselves the EXTERN pointer, but here this is not
+					// valid. A nice, nut still a little hacky solution is to create a function
+					// that references the external function, and store it instead.
+					var params:OrderedMap<String, InterpTokens> = cell.objectValue.parameter(0);
+					var forwardedParams = [];
+					for (key in params.keys()) {
+						forwardedParams.push(Identifier(key));
+						forwardedParams.push(SplitLine);
+					}
+					forwardedParams.pop();
+
+					var fin = FunctionCode(params, 
+						Block([
+							FunctionReturn(
+								FunctionCall(
+									token, PartArray(forwardedParams)
+								)
+							, cell.objectTypeName.asTokenPath())
+						], cell.objectTypeName.asTokenPath())
+					);
+					return store(fin);
+				}
 				return cell.objectAddress;
 			}
 			case Block(_, _) | Expression(_, _): {
