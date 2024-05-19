@@ -468,7 +468,6 @@ class PrepareRun {
 
 		Little.plugin.registerCondition("for", "A loop that executes code while changing a variable, until it meets a condition", (params:Array<InterpTokens>, body) -> {
 			var val = NullValue;
-
 			var fp = [];
 			// Incase one does `from (4 + 2)` and it accidentally parses a function
 			for (p in params) {
@@ -494,7 +493,6 @@ class PrepareRun {
 			}
 
 			params = fp;
-
 			if (!params[0].is(VARIABLE_DECLARATION)) {
 				Little.runtime.throwError(ErrorMessage('`for` loop must start with a variable to count on (expected definition/block, found: `${PrettyPrinter.stringifyInterpreter(params[0])}`)'));
 				return val;

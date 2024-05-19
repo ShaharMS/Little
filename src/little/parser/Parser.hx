@@ -125,6 +125,7 @@ class Parser {
             var token = pre[i];
             switch token {
                 case SetLine(line): {setLine(line); post.push(token);}
+				case SetModule(module): {Parser.module = module; post.push(token);}
                 case SplitLine: {nextPart(); post.push(token);}
                 case Sign("{"): {
                     var blockStartLine = line;
@@ -183,6 +184,7 @@ class Parser {
             var token = pre[i];
             switch token {
                 case SetLine(line): {setLine(line); post.push(token);}
+				case SetModule(module): {Parser.module = module; post.push(token);}
                 case SplitLine: {nextPart(); post.push(token);}
                 case Sign("("): {
                     var expressionStartLine = line;
@@ -242,6 +244,7 @@ class Parser {
             var token = pre[i];
             switch token {
                 case SetLine(line): {setLine(line); post.push(token);}
+				case SetModule(module): {Parser.module = module; post.push(token);}
                 case SplitLine: {nextPart(); post.push(token);}
                 case Sign(_ == Little.keywords.PROPERTY_ACCESS_SIGN => true): {
                     if (i + 1 >= pre.length) {
@@ -254,12 +257,12 @@ class Parser {
                     }
                     var lookbehind = post.pop();
                     switch lookbehind {
-                        case SplitLine | SetLine(_): {
+                        case SplitLine | SetLine(_) | SetModule(_): {
                             Little.runtime.throwError(ErrorMessage("Property access cut off by the start of a line, or by a line split (; or ,)."), Layer.PARSER);
                             return null;
                         }
-                        case _: {
-                            var field = pre[++i];
+                        case Expression(_, _): {
+                            var field = mergePropertyOperations([pre[++i]])[0];
                             // There are multiple cases, either:
                             // - ().something, in which outright parsing is valid
                             // - p().something, in which we need to generate a function call
@@ -273,7 +276,10 @@ class Parser {
                                         beforePropertyCalls.push(last);
                                         break;
                                     }
-                                    case Block(body, type): beforePropertyCalls.push(Block(mergePropertyOperations(body), mergePropertyOperations([type])[0]));
+                                    case Block(body, type): {
+										beforePropertyCalls.push(Block(mergePropertyOperations(body), mergePropertyOperations([type])[0]));
+										break;
+									}
                                     case Expression(parts, type): beforePropertyCalls.push(Expression(mergePropertyOperations(parts), mergePropertyOperations([type])[0]));
                                     case _: {
                                         post.push(last);
@@ -292,7 +298,11 @@ class Parser {
                             }
                             post.push(PropertyAccess(parent, field));
                         }
-                    }
+						case _: {
+							var field = mergePropertyOperations([pre[++i]])[0];
+							post.push(PropertyAccess(lookbehind, field));
+						}
+					}
                 }
                 case Block(body, type): post.push(Block(mergePropertyOperations(body), mergePropertyOperations([type])[0]));
                 case Expression(parts, type): post.push(Expression(mergePropertyOperations(parts), mergePropertyOperations([type])[0]));
@@ -321,6 +331,7 @@ class Parser {
             var token = pre[i];
             switch token {
                 case SetLine(line): {setLine(line); post.push(token);}
+				case SetModule(module): {Parser.module = module; post.push(token);}
                 case SplitLine: {nextPart(); post.push(token);}
                 case Identifier(word): {
                     if (word == Little.keywords.TYPE_DECL_OR_CAST && i + 1 < pre.length) {
@@ -371,6 +382,7 @@ class Parser {
 
             switch token {
                 case SetLine(line): {setLine(line); post.push(token);}
+				case SetModule(module): {Parser.module = module; post.push(token);}
                 case SplitLine: {nextPart(); post.push(token);}
 				case Documentation(doc): currentDoc = token;
                 case Identifier(_ == Little.keywords.VARIABLE_DECLARATION => true): {
@@ -394,7 +406,7 @@ class Parser {
                                 type = typeToken;
                                 break;
                             }
-                            case SetLine(_) | SplitLine | Sign("="): i--; break;
+                            case SetLine(_) | SetModule(_) | SplitLine | Sign("="): i--; break;
                             case Block(body, type): {
                                 if (name == null) name = Block(mergeComplexStructures(body), mergeComplexStructures([type])[0]);
                                 else if (type == null) type = Block(mergeComplexStructures(body), mergeComplexStructures([type])[0]);
@@ -504,7 +516,7 @@ class Parser {
                     while (i < pre.length) {
                         var lookahead = pre[i];
                         switch lookahead {
-                            case SetLine(_) | SplitLine: i--; break;
+                            case SetLine(_) | SetModule(_) | SplitLine: i--; break;
                             case Block(body, type): {
                                 valueToReturn.push(Block(mergeComplexStructures(body), mergeComplexStructures([type])[0]));
                             }
@@ -538,7 +550,7 @@ class Parser {
                         var lookahead = pre[i];
                         switch lookahead {
                             case SetLine(_): {}
-                            case SplitLine: { // Encountering a line split in any place breaks the sequence (if (), {}, if, () {})
+                            case SplitLine | SetModule(_): { // Encountering a hard split in any place breaks the sequence (if (), {}, if, () {})
 							if (exp != null && body != null) break;
 								i = fallback;
 								break;
@@ -568,7 +580,6 @@ class Parser {
                             }
                         }
                         i++;
-                        trace(i, pre.length, post.length, fallback);
                     }
 					if (i == fallback) {
 						post.push(token);
@@ -607,6 +618,7 @@ class Parser {
             var token = pre[i];
             switch token {
                 case SetLine(line): {setLine(line); post.push(token);}
+				case SetModule(module): {Parser.module = module; post.push(token);}
                 case SplitLine: {nextPart(); post.push(token);}
                 case Expression(parts, type): {
                     parts = mergeCalls(parts);
@@ -661,6 +673,11 @@ class Parser {
                     if (potentialAssignee != null) post.push(potentialAssignee);
                     potentialAssignee = token;
                 }
+				case SetModule(module): {
+					Parser.module = module;
+					if (potentialAssignee != null) post.push(potentialAssignee);
+					potentialAssignee = token;
+				}
                 case SplitLine: {
                     nextPart(); 
                     if (potentialAssignee != null) post.push(potentialAssignee);
@@ -685,7 +702,7 @@ class Parser {
                                 assignees.push(assignee);
                                 currentAssignee = [];
                             }
-                            case SplitLine | SetLine(_): break;
+                            case SplitLine | SetLine(_) | SetModule(_): break;
                             case _: currentAssignee.push(lookahead);
                         }
                         i++;
@@ -765,13 +782,14 @@ class Parser {
         if (pre == null) return null;
         if (pre.length == 1 && pre[0] == null) return [null];
 
-        var post:Array<ParserTokens> = [];
+		var post:Array<ParserTokens> = [];
 
         var i = pre.length - 1;
         while (i >= 0) {
             var token = pre[i];
             switch token {
                 case SetLine(line): {setLine(line); post.unshift(token);}
+				case SetModule(module): {Parser.module = module; post.unshift(token);}
                 case SplitLine: {nextPart(); post.unshift(token);}
                 case TypeDeclaration(null, type): {
                     if (i-- <= 0) {
@@ -828,6 +846,7 @@ class Parser {
             var token = pre[i];
             switch token {
                 case SetLine(line): {setLine(line); post.push(token);}
+				case SetModule(module): {Parser.module = module; post.push(token);}
                 case SplitLine: {nextPart(); post.push(token);}
 				case FunctionCall(name, params): {
 					if (i + 1 >= pre.length) {
@@ -837,7 +856,7 @@ class Parser {
 					}
 					var lookahead = pre[i + 1];
 					switch lookahead {
-						case SetLine(_) | SplitLine: {
+						case SetLine(_) | SplitLine | SetModule(_): {
 							post.push(FunctionCall(mergeNonBlockBodies([name])[0], mergeNonBlockBodies([params])[0]));
 						}
 						case _: {
@@ -880,6 +899,7 @@ class Parser {
             var token = pre[i];
             switch token {
                 case SetLine(line): {setLine(line); post.push(token);}
+				case SetModule(module): {Parser.module = module; post.push(token);}
                 case SplitLine: {nextPart(); post.push(token);}
                 case Identifier(_ == Little.keywords.ELSE => true): {
                     if (post.length == 0 || !post[post.length - 1].is(CONDITION_CALL)) {
@@ -900,7 +920,7 @@ class Parser {
                             Little.runtime.throwError(ErrorMessage('`${Little.keywords.ELSE}` condition has no body, body cut off by a line split, or does not exist'), PARSER);
                             return null;
                         }
-                        case SetLine(_): {
+                        case SetLine(_) | SetModule(_): {
                             Little.runtime.throwError(ErrorMessage('`${Little.keywords.ELSE}` condition has no body, body cut off by a new line, or does not exist'), PARSER);
                             return null;
                         }

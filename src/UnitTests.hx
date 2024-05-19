@@ -1,5 +1,5 @@
 package;
-
+#if sys
 import little.interpreter.Interpreter;
 import little.interpreter.Tokens.InterpTokens;
 import sys.io.File;
@@ -71,7 +71,7 @@ class UnitTests {
 		if (allSuccessful) {
 			Sys.println('$GREEN$BOLD🥳 🥳 🥳 All tests passed! 🥳 🥳 🥳$RESET');
 		} else if (unsuccessful < testFunctions.length / 2) {
-			Sys.println('$YELLOW$BOLD⚠️ ⚠️ ⚠️ $unsuccessful out of ${testFunctions.length} tests failed! ⚠️ ⚠️ ⚠️$RESET');
+			Sys.println('$YELLOW$BOLD⚠️  ⚠️  ⚠️  $unsuccessful out of ${testFunctions.length} tests failed! ⚠️  ⚠️  ⚠️$RESET');
 		} else if (unsuccessful >= testFunctions.length / 2) {
 			Sys.println('$RED$BOLD❌ ❌ ❌ $unsuccessful out of ${testFunctions.length} tests failed! ❌ ❌ ❌$RESET');
 		}
@@ -252,7 +252,7 @@ class UnitTests {
 		return {
 			testName: "Type Name Property",
 			success: result.equals(exp),
-			returned: result,ן
+			returned: result,
 			expected: exp,
 			code: code
 		}
@@ -272,3 +272,5 @@ class UnitTests {
 		}
 	}
 }
+
+#end

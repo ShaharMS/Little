@@ -594,6 +594,7 @@ class Interpreter {
                         calculated = Little.operators.call(calculated, sign, val); // standard operator
                     }
                 }
+				case SetModule(module): setModule(module);
                 case _: {
                     if (sign != "" && calculated == null) calculated = Little.operators.call(sign, token);
 					else if (sign == "" && calculated != null) throw 'Unexpected token: $token After calculating $calculated';

@@ -7,9 +7,9 @@
 --library hxOrderedMap
 --resource demoCode.txt@sample
 
---js clients/web/interp.js
-#--interp
-#--define unit
+#--js clients/web/interp.js
+--interp
+--define unit
 #--define parser_debug
 --debug
 # --dce full
