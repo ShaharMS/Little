@@ -287,23 +287,31 @@ class Interpreter {
         if (current.length > 0) processedParams.push(calculate(current));
 
 		switch functionCode {
-			case FunctionCode(requiredParams, body): {
+			case FunctionCode(requiredAndOptionalParams, body): {
 				var given = processedParams;
-				var resulting = [];
+				var resulting:Array<InterpTokens> = [];
 				
-				var attachment = [];
-				for (key => typeCast in requiredParams.keyValueIterator()) {
-					var name = key, value = NullValue, type = Identifier(Little.keywords.TYPE_DYNAMIC);
+                var required = 0;
+                var unattained:Array<String> = [];
+				var attachment:Array<InterpTokens> = [];
+				for (key => typeCast in requiredAndOptionalParams.keyValueIterator()) {
+					var name = key, value = null, type = Identifier(Little.keywords.TYPE_DYNAMIC);
 					switch typeCast {
 						case TypeCast(NullValue, t): type = t; 
 						case TypeCast(v, _.parameter(0) == Little.keywords.TYPE_UNKNOWN => true): value = v;
 						case TypeCast(v, t): type = t; value = v;
 						case _:
 					}
+                    if (value == null) required++;
                     if (processedParams.length > 0) value = processedParams.shift(); // Todo, handle mid-function optional arguments.
+                    else if (value == null && processedParams.length == 0) unattained.push(name);
 					resulting.push(value);
 					attachment.push(Write([VariableDeclaration(Identifier(name), type, null)], value));
 				}
+
+                if (required > processedParams.length) {
+                    return error('Incorrect number of parameters: Function `$functionName` fully requires $required parameter${required == 1 ? "" : "s"}, but${processedParams.length == 0 ? "" : " only"} ${processedParams.length} ${processedParams.length == 1 ? "was" : "were"} given (parameter${unattained.length == 1 ? "" : "s"} `${unattained.join(", ").replaceLast(",", " &")}` got left out).');
+                }
 
 				for (listener in Little.runtime.onFunctionCalled) {
 					listener(functionName, resulting);

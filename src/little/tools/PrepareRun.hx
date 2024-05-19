@@ -157,6 +157,10 @@ class PrepareRun {
 				return POINTER_SIZE == 4 ? Number(address.rawLocation) : Decimal(address.rawLocation);
 			}
 		);
+		// Little.plugin.registerInstanceVariable("token", "Characters", "Anything", 
+		// 	(value:InterpTokens, address:MemoryPointer) -> {
+		// 	return Characters(value.string());
+		// });
 	}
 
 	/**

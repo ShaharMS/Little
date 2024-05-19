@@ -258,14 +258,37 @@ class Parser {
                         }
                         case _: {
                             var field = pre[++i];
-							if (i + 1 < pre.length && pre[i + 1].is(EXPRESSION)) { // For example, the case a.b()
-								// This is a special case in which we have to pre-generate a FunctionCall,
-								// in order to not mess up chains such as a.b().c().d.e
-								var expression = pre[++i];
-								post.push(FunctionCall(PropertyAccess(lookbehind, field), expression));
-							} else {
-								post.push(PropertyAccess(lookbehind, field));
-							}
+                            // There are multiple cases, either:
+                            // - ().something, in which outright parsing is valid
+                            // - p().something, in which we need to generate a function call
+                            // - read()().something, the latter gets a little compilcated.
+                            // Also, need to handle a.b().c()().d type stuff.
+                            var beforePropertyCalls:Array<ParserTokens> = [lookbehind];
+                            while (post.length > 0) {
+                                var last = post.pop();
+                                switch last {
+                                    case Identifier(_) | PropertyAccess(_, _): {
+                                        beforePropertyCalls.push(last);
+                                        break;
+                                    }
+                                    case Block(body, type): beforePropertyCalls.push(Block(mergePropertyOperations(body), mergePropertyOperations([type])[0]));
+                                    case Expression(parts, type): beforePropertyCalls.push(Expression(mergePropertyOperations(parts), mergePropertyOperations([type])[0]));
+                                    case _: {
+                                        post.push(last);
+                                        break;
+                                    }
+                                }
+                            }
+
+                            var parent:ParserTokens = lookbehind;
+
+                            if (beforePropertyCalls.length > 0) {
+                                parent = beforePropertyCalls.pop();
+                                while (beforePropertyCalls.length > 0) {
+                                    parent = FunctionCall(parent, beforePropertyCalls.pop());
+                                }
+                            }
+                            post.push(PropertyAccess(parent, field));
                         }
                     }
                 }
@@ -492,7 +515,7 @@ class Parser {
                     }
                     post.push(Return(if (valueToReturn.length == 1) valueToReturn[0] else Expression(valueToReturn.copy(), null), null));
                 }
-				case Identifier(_): { // Conditions are definable, we need to look for the syntax: Identifier -> Expression -> Block. 
+				case Identifier(_): { // Conditions are definable, or at least, developers can register them dynamically, we need to look for the syntax: Identifier -> Expression -> Block. 
                     i++;
                     if (i + 1>= pre.length) {
                         post.push(token);
@@ -530,6 +553,7 @@ class Parser {
                                 if (exp == null) exp = Expression(mergeComplexStructures(parts), mergeComplexStructures([type])[0]);
                                 else if (body == null) {
 									i = fallback;
+                                    break;
 								}
                                 else break;
                             }
@@ -542,6 +566,7 @@ class Parser {
                             }
                         }
                         i++;
+                        trace(i, pre.length, post.length, fallback);
                     }
 					if (i == fallback) {
 						post.push(token);

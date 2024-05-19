@@ -38,6 +38,7 @@ class TextTools
 	public static function replaceLast(string:String, replace:String, by:String):String
 	{
 		final place = string.lastIndexOf(replace);
+		if (place == -1) return string;
 		var result = string.substring(0, place) + by + string.substring(place + replace.length);
 		return result;
 	}
@@ -53,6 +54,7 @@ class TextTools
 	public static function replaceFirst(string:String, replace:String, by:String):String
 	{
 		final place = string.indexOf(replace);
+		if (place == -1) return string;
 		var result = string.substring(0, place) + by + string.substring(place + replace.length);
 		return result;
 	}

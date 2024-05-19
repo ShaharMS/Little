@@ -3404,11 +3404,17 @@ $hxClasses["little.tools.TextTools"] = little_tools_TextTools;
 little_tools_TextTools.__name__ = "little.tools.TextTools";
 little_tools_TextTools.replaceLast = function(string,replace,by) {
 	var place = string.lastIndexOf(replace);
+	if(place == -1) {
+		return string;
+	}
 	var result = string.substring(0,place) + by + string.substring(place + replace.length);
 	return result;
 };
 little_tools_TextTools.replaceFirst = function(string,replace,by) {
 	var place = string.indexOf(replace);
+	if(place == -1) {
+		return string;
+	}
 	var result = string.substring(0,place) + by + string.substring(place + replace.length);
 	return result;
 };
@@ -8345,18 +8351,20 @@ little_interpreter_Interpreter.call = function(name,params) {
 		processedParams.push(little_interpreter_Interpreter.calculate(current));
 	}
 	if(functionCode._hx_index == 6) {
-		var requiredParams = functionCode.requiredParams;
+		var requiredAndOptionalParams = functionCode.requiredParams;
 		var body = functionCode.body;
 		var given = processedParams;
 		var resulting = [];
+		var required = 0;
+		var unattained = [];
 		var attachment = [];
-		var _g = requiredParams.keyValueIterator();
+		var _g = requiredAndOptionalParams.keyValueIterator();
 		while(_g.hasNext()) {
 			var _g1 = _g.next();
 			var key = _g1.key;
 			var typeCast = _g1.value;
 			var name = key;
-			var value = little_interpreter_InterpTokens.NullValue;
+			var value = null;
 			var type = little_interpreter_InterpTokens.Identifier(little_Little.keywords.TYPE_DYNAMIC);
 			if(typeCast._hx_index == 10) {
 				var _g2 = typeCast.value;
@@ -8374,11 +8382,19 @@ little_interpreter_Interpreter.call = function(name,params) {
 					value = v1;
 				}
 			}
+			if(value == null) {
+				++required;
+			}
 			if(processedParams.length > 0) {
 				value = processedParams.shift();
+			} else if(value == null && processedParams.length == 0) {
+				unattained.push(name);
 			}
 			resulting.push(value);
 			attachment.push(little_interpreter_InterpTokens.Write([little_interpreter_InterpTokens.VariableDeclaration(little_interpreter_InterpTokens.Identifier(name),type,null)],value));
+		}
+		if(required > processedParams.length) {
+			return little_interpreter_Interpreter.error("Incorrect number of parameters: Function `" + functionName + "` fully requires " + required + " parameter" + (required == 1 ? "" : "s") + ", but" + (processedParams.length == 0 ? "" : " only") + " " + processedParams.length + " " + (processedParams.length == 1 ? "was" : "were") + " given (parameter" + (unattained.length == 1 ? "" : "s") + " `" + little_tools_TextTools.replaceLast(unattained.join(", "),","," &") + "` got left out).");
 		}
 		var _g = 0;
 		var _g1 = little_Little.runtime.onFunctionCalled;
@@ -10327,32 +10343,49 @@ little_parser_Parser.mergePropertyOperations = function(pre) {
 				var lookbehind = post.pop();
 				if(lookbehind == null) {
 					var field = pre[++i];
-					var tmp;
-					if(i + 1 < pre.length) {
-						var token1 = pre[i + 1];
-						var _this = [little_tools_ParserTokensSimple.EXPRESSION].slice();
-						var result = new Array(_this.length);
-						var _g = 0;
-						var _g1 = _this.length;
-						while(_g < _g1) {
-							var i1 = _g++;
-							var x = _this[i1];
-							result[i1] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
+					var beforePropertyCalls = [lookbehind];
+					_hx_loop2: while(post.length > 0) {
+						var last = post.pop();
+						if(last == null) {
+							post.push(last);
+							break;
+						} else {
+							switch(last._hx_index) {
+							case 7:
+								var _g = last.word;
+								beforePropertyCalls.push(last);
+								break _hx_loop2;
+							case 11:
+								var parts1 = last.parts;
+								var type2 = last.type;
+								beforePropertyCalls.push(little_parser_ParserTokens.Expression(little_parser_Parser.mergePropertyOperations(parts1),little_parser_Parser.mergePropertyOperations([type2])[0]));
+								break;
+							case 12:
+								var body1 = last.body;
+								var type3 = last.type;
+								beforePropertyCalls.push(little_parser_ParserTokens.Block(little_parser_Parser.mergePropertyOperations(body1),little_parser_Parser.mergePropertyOperations([type3])[0]));
+								break;
+							case 14:
+								var _g1 = last.name;
+								var _g2 = last.property;
+								beforePropertyCalls.push(last);
+								break _hx_loop2;
+							default:
+								post.push(last);
+								break _hx_loop2;
+							}
 						}
-						tmp = result.indexOf($hxEnums[token1.__enum__].__constructs__[token1._hx_index]._hx_name.toLowerCase()) != -1;
-					} else {
-						tmp = false;
 					}
-					if(tmp) {
-						var expression = pre[++i];
-						post.push(little_parser_ParserTokens.FunctionCall(little_parser_ParserTokens.PropertyAccess(lookbehind,field),expression));
-					} else {
-						post.push(little_parser_ParserTokens.PropertyAccess(lookbehind,field));
+					var parent = lookbehind;
+					if(beforePropertyCalls.length > 0) {
+						parent = beforePropertyCalls.pop();
+						while(beforePropertyCalls.length > 0) parent = little_parser_ParserTokens.FunctionCall(parent,beforePropertyCalls.pop());
 					}
+					post.push(little_parser_ParserTokens.PropertyAccess(parent,field));
 				} else {
 					switch(lookbehind._hx_index) {
 					case 0:
-						var _g2 = lookbehind.line;
+						var _g3 = lookbehind.line;
 						little_Little.runtime.throwError(little_interpreter_InterpTokens.ErrorMessage("Property access cut off by the start of a line, or by a line split (; or ,)."),"Parser");
 						return null;
 					case 1:
@@ -10360,28 +10393,45 @@ little_parser_Parser.mergePropertyOperations = function(pre) {
 						return null;
 					default:
 						var field1 = pre[++i];
-						var tmp1;
-						if(i + 1 < pre.length) {
-							var token2 = pre[i + 1];
-							var _this1 = [little_tools_ParserTokensSimple.EXPRESSION].slice();
-							var result1 = new Array(_this1.length);
-							var _g3 = 0;
-							var _g4 = _this1.length;
-							while(_g3 < _g4) {
-								var i2 = _g3++;
-								var x1 = _this1[i2];
-								result1[i2] = little_tools_TextTools.remove($hxEnums[x1.__enum__].__constructs__[x1._hx_index]._hx_name,"_").toLowerCase();
+						var beforePropertyCalls1 = [lookbehind];
+						_hx_loop4: while(post.length > 0) {
+							var last1 = post.pop();
+							if(last1 == null) {
+								post.push(last1);
+								break;
+							} else {
+								switch(last1._hx_index) {
+								case 7:
+									var _g4 = last1.word;
+									beforePropertyCalls1.push(last1);
+									break _hx_loop4;
+								case 11:
+									var parts2 = last1.parts;
+									var type4 = last1.type;
+									beforePropertyCalls1.push(little_parser_ParserTokens.Expression(little_parser_Parser.mergePropertyOperations(parts2),little_parser_Parser.mergePropertyOperations([type4])[0]));
+									break;
+								case 12:
+									var body2 = last1.body;
+									var type5 = last1.type;
+									beforePropertyCalls1.push(little_parser_ParserTokens.Block(little_parser_Parser.mergePropertyOperations(body2),little_parser_Parser.mergePropertyOperations([type5])[0]));
+									break;
+								case 14:
+									var _g5 = last1.name;
+									var _g6 = last1.property;
+									beforePropertyCalls1.push(last1);
+									break _hx_loop4;
+								default:
+									post.push(last1);
+									break _hx_loop4;
+								}
 							}
-							tmp1 = result1.indexOf($hxEnums[token2.__enum__].__constructs__[token2._hx_index]._hx_name.toLowerCase()) != -1;
-						} else {
-							tmp1 = false;
 						}
-						if(tmp1) {
-							var expression1 = pre[++i];
-							post.push(little_parser_ParserTokens.FunctionCall(little_parser_ParserTokens.PropertyAccess(lookbehind,field1),expression1));
-						} else {
-							post.push(little_parser_ParserTokens.PropertyAccess(lookbehind,field1));
+						var parent1 = lookbehind;
+						if(beforePropertyCalls1.length > 0) {
+							parent1 = beforePropertyCalls1.pop();
+							while(beforePropertyCalls1.length > 0) parent1 = little_parser_ParserTokens.FunctionCall(parent1,beforePropertyCalls1.pop());
 						}
+						post.push(little_parser_ParserTokens.PropertyAccess(parent1,field1));
 					}
 				}
 			} else {
@@ -10391,14 +10441,14 @@ little_parser_Parser.mergePropertyOperations = function(pre) {
 		case 24:
 			var name = token.name;
 			var params = token.params;
-			var result2 = new Array(params.length);
-			var _g5 = 0;
-			var _g6 = params.length;
-			while(_g5 < _g6) {
-				var i3 = _g5++;
-				result2[i3] = little_parser_Parser.mergePropertyOperations([params[i3]])[0];
+			var result = new Array(params.length);
+			var _g7 = 0;
+			var _g8 = params.length;
+			while(_g7 < _g8) {
+				var i1 = _g7++;
+				result[i1] = little_parser_Parser.mergePropertyOperations([params[i1]])[0];
 			}
-			post.push(little_parser_ParserTokens.Custom(name,result2));
+			post.push(little_parser_ParserTokens.Custom(name,result));
 			break;
 		default:
 			post.push(token);
@@ -10778,6 +10828,7 @@ little_parser_Parser.mergeComplexStructures = function(pre) {
 									exp = little_parser_ParserTokens.Expression(little_parser_Parser.mergeComplexStructures(parts),little_parser_Parser.mergeComplexStructures([type8])[0]);
 								} else if(body6 == null) {
 									i = fallback;
+									break _hx_loop7;
 								} else {
 									break _hx_loop7;
 								}
@@ -10803,6 +10854,7 @@ little_parser_Parser.mergeComplexStructures = function(pre) {
 								}
 							}
 							++i;
+							haxe_Log.trace(i,{ fileName : "src/little/parser/Parser.hx", lineNumber : 569, className : "little.parser.Parser", methodName : "mergeComplexStructures", customParams : [pre.length,post.length,fallback]});
 						}
 						if(i == fallback) {
 							post.push(token);
@@ -12148,6 +12200,9 @@ little_tools_PrepareRun.addProps = function() {
 	});
 	little_Little.plugin.registerInstanceVariable(little_Little.keywords.OBJECT_ADDRESS_PROPERTY_NAME,little_Little.keywords.TYPE_INT,little_Little.keywords.TYPE_DYNAMIC,"The address of this value",null,function(value,address) {
 		return little_interpreter_InterpTokens.Number(address);
+	});
+	little_Little.plugin.registerInstanceVariable("token","Characters","Anything",null,null,function(value,address) {
+		return little_interpreter_InterpTokens.Characters(Std.string(value));
 	});
 };
 little_tools_PrepareRun.addSigns = function() {
