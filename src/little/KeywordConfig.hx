@@ -86,6 +86,7 @@ class KeywordConfig {
 	@:optional public var TYPE_FLOAT:String = "Decimal";
 	@:optional public var TYPE_BOOLEAN:String = "Boolean";
 	@:optional public var TYPE_STRING:String = "Characters";
+	@:optional public var TYPE_OBJECT:String = "Object";
 
 	/**
 		Represents the main function type.
@@ -166,11 +167,31 @@ class KeywordConfig {
 	@:optional public var NEGATE_SIGN:String = "-";
 	@:optional public var POSITIVE_SIGN:String = "+";
 
+	// Cast functions are done using the `to` keyword and type. They are not here.
+	@:optional public var STDLIB__FLOAT_isWhole = "isWhole";
+
+	@:optional public var STDLIB__STRING_length = "length";
+	@:optional public var STDLIB__STRING_toLowerCase = "toLowerCase";
+	@:optional public var STDLIB__STRING_toUpperCase = "toUpperCase";
+	@:optional public var STDLIB__STRING_trim = "trim";
+	@:optional public var STDLIB__STRING_substring = "substring";
+	@:optional public var STDLIB__STRING_charAt = "charAt";
+	@:optional public var STDLIB__STRING_split = "split";
+	@:optional public var STDLIB__STRING_replace = "replace";
+	@:optional public var STDLIB__STRING_remove = "remove";
+	@:optional public var STDLIB__STRING_contains = "contains";
+	@:optional public var STDLIB__STRING_indexOf = "indexOf";
+	@:optional public var STDLIB__STRING_lastIndexOf = "lastIndexOf";
+	@:optional public var STDLIB__STRING_startsWith = "startsWith";
+	@:optional public var STDLIB__STRING_endsWith = "endsWith";
+	@:optional public var STDLIB__STRING_fromCharCode = "fromCharCode";
+
 	@:optional public var FOR_LOOP_FROM = "from";
 	@:optional public var FOR_LOOP_TO = "to";
 	@:optional public var FOR_LOOP_JUMP = "jump";
 
 	@:optional public var TYPE_CAST_FUNCTION_PREFIX:String = "to";
+	@:optional public var INSTANTIATE_FUNCTION_NAME:String = "create";
 
 
 }

@@ -352,7 +352,8 @@ class Interpreter {
 	**/
     public static function typeCast(value:InterpTokens, type:InterpTokens):InterpTokens {
 		var preType = evaluate(value).type().asTokenPath().asStringPath();
-		var postType = evaluate(type).asStringPath();
+		var postType = type.extractIdentifier().asTokenPath().asStringPath();
+		if (preType.join("") == postType.join("") || postType.join(Little.keywords.PROPERTY_ACCESS_SIGN) == Little.keywords.TYPE_UNKNOWN) return value;
 
 		preType.push(Little.keywords.TYPE_CAST_FUNCTION_PREFIX + postType.join("_"));
 

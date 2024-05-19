@@ -41,118 +41,118 @@ class PrepareRun {
 		Little.plugin.registerType(Little.keywords.TYPE_SIGN, []);
 
 		Little.plugin.registerType(Little.keywords.TYPE_MODULE, [
-			'public ${Little.keywords.TYPE_STRING} toString ()' => (address, _, _) -> {
+			'public ${Little.keywords.TYPE_STRING} ${Little.keywords.TYPE_CAST_FUNCTION_PREFIX}${Little.keywords.TYPE_STRING} ()' => (address, _, _) -> {
 				return Conversion.toLittleValue(Little.memory.getTypeName(address));
 			}
 		]);
 
-		Little.plugin.registerType("Date", [
-			'static ${Little.keywords.TYPE_STRING} now ()' => (_) -> {
-				return Conversion.toLittleValue(Date.now().toString());
-			}
-		]);
+		// Little.plugin.registerType("Date", [
+		// 	'static ${Little.keywords.TYPE_STRING} now ()' => (_) -> {
+		// 		return Conversion.toLittleValue(Date.now().toString());
+		// 	}
+		// ]);
 		
 
 		Little.plugin.registerType(Little.keywords.TYPE_INT, [
-			'public ${Little.keywords.TYPE_STRING} toString ()' => (_, value, _) -> {
+			'public ${Little.keywords.TYPE_STRING} ${Little.keywords.TYPE_CAST_FUNCTION_PREFIX}${Little.keywords.TYPE_STRING} ()' => (_, value, _) -> {
 				return Conversion.toLittleValue(Std.string(value.parameter(0)));
 			},
-			'public ${Little.keywords.TYPE_FLOAT} toDecimal ()' => (_, value, _) -> {
+			'public ${Little.keywords.TYPE_FLOAT} ${Little.keywords.TYPE_CAST_FUNCTION_PREFIX}${Little.keywords.TYPE_FLOAT} ()' => (_, value, _) -> {
 				return Decimal(value.parameter(0));
 			},
-			'public ${Little.keywords.TYPE_BOOLEAN} toBoolean ()' => (_, value, _) -> {
+			'public ${Little.keywords.TYPE_BOOLEAN} ${Little.keywords.TYPE_CAST_FUNCTION_PREFIX}${Little.keywords.TYPE_BOOLEAN} ()' => (_, value, _) -> {
 				return Conversion.toLittleValue(value.parameter(0) != 0);
 			}
 		]);
 
 		Little.plugin.registerType(Little.keywords.TYPE_FLOAT, [
-			'public ${Little.keywords.TYPE_STRING} toString ()' => (_, value, _) -> {
+			'public ${Little.keywords.TYPE_STRING} ${Little.keywords.TYPE_CAST_FUNCTION_PREFIX}${Little.keywords.TYPE_STRING} ()' => (_, value, _) -> {
 				return Conversion.toLittleValue(Std.string(value.parameter(0)));
 			},
-			'public ${Little.keywords.TYPE_INT} toNumber ()' => (_, value, _) -> {
+			'public ${Little.keywords.TYPE_INT} ${Little.keywords.TYPE_CAST_FUNCTION_PREFIX}${Little.keywords.TYPE_INT} ()' => (_, value, _) -> {
 				return Conversion.toLittleValue(Math.floor(value.parameter(0)));
 			},
-			'public ${Little.keywords.TYPE_BOOLEAN} toBoolean ()' => (_, value, _) -> {
+			'public ${Little.keywords.TYPE_BOOLEAN} ${Little.keywords.TYPE_CAST_FUNCTION_PREFIX}${Little.keywords.TYPE_BOOLEAN} ()' => (_, value, _) -> {
 				return Conversion.toLittleValue(value.parameter(0) != 0);
 			},
-			'public ${Little.keywords.TYPE_BOOLEAN} isWhole ()' => (_, value, _) -> {
+			'public ${Little.keywords.TYPE_BOOLEAN} ${Little.keywords.STDLIB__FLOAT_isWhole} ()' => (_, value, _) -> {
 				return Conversion.toLittleValue((value.parameter(0) : Float) % 1 == 0);
 			}
 		]);
 
 		Little.plugin.registerType(Little.keywords.TYPE_STRING, [
-			'public ${Little.keywords.TYPE_STRING} toString ()' => (_, value, _) -> {
+			'public ${Little.keywords.TYPE_STRING} ${Little.keywords.TYPE_CAST_FUNCTION_PREFIX}${Little.keywords.TYPE_STRING} ()' => (_, value, _) -> {
 				return Conversion.toLittleValue(Std.string(value.parameter(0)));
 			},
-			'public ${Little.keywords.TYPE_INT} toNumber ()' => (_, value, _) -> {
+			'public ${Little.keywords.TYPE_INT} ${Little.keywords.TYPE_CAST_FUNCTION_PREFIX}${Little.keywords.TYPE_INT} ()' => (_, value, _) -> {
 				var number = Std.parseInt(value.parameter(0));
 				if (number == null) {
 					Little.runtime.throwError(ErrorMessage('${Little.keywords.TYPE_STRING} instance `"${value.parameter(0)}"` cannot be converted to ${Little.keywords.TYPE_INT}, since it is not a number	'), INTERPRETER);
 				}
 				return Conversion.toLittleValue(number);
 			},
-			'public ${Little.keywords.TYPE_FLOAT} toDecimal ()' => (_, value, _) -> {
+			'public ${Little.keywords.TYPE_FLOAT} ${Little.keywords.TYPE_CAST_FUNCTION_PREFIX}${Little.keywords.TYPE_FLOAT} ()' => (_, value, _) -> {
 				var number = Std.parseFloat(value.parameter(0));
 				if (number == Math.NaN) {
 					Little.runtime.throwError(ErrorMessage('${Little.keywords.TYPE_STRING} instance `"${value.parameter(0)}"` cannot be converted to ${Little.keywords.TYPE_FLOAT}, since it is not a number	'), INTERPRETER);
 				}
 				return Conversion.toLittleValue(number);
 			},
-			'public ${Little.keywords.TYPE_SIGN} toSign ()' => (_, value, _) -> {
+			'public ${Little.keywords.TYPE_SIGN} ${Little.keywords.TYPE_CAST_FUNCTION_PREFIX}${Little.keywords.TYPE_SIGN} ()' => (_, value, _) -> {
 				return Conversion.toLittleValue(Sign(value.parameter(0)));
 			},
-			'public ${Little.keywords.TYPE_BOOLEAN} toBoolean ()' => (_, value, _) -> {
+			'public ${Little.keywords.TYPE_BOOLEAN} ${Little.keywords.TYPE_CAST_FUNCTION_PREFIX}${Little.keywords.TYPE_BOOLEAN} ()' => (_, value, _) -> {
 				return Conversion.toLittleValue(value.parameter(0) == "true" || (Std.parseFloat(value.parameter(0)) != Math.NaN && Std.parseFloat(value.parameter(0)) != 0));
 			},
 
-			'public ${Little.keywords.TYPE_INT} length' => (_, value) -> {
+			'public ${Little.keywords.TYPE_INT} ${Little.keywords.STDLIB__STRING_length}' => (_, value) -> {
 				return Conversion.toLittleValue(value.parameter(0).length);
 			},
-			'public ${Little.keywords.TYPE_STRING} charAt (define index as ${Little.keywords.TYPE_INT})' => (_, value, params) -> {
+			'public ${Little.keywords.TYPE_STRING} ${Little.keywords.STDLIB__STRING_charAt} (define index as ${Little.keywords.TYPE_INT})' => (_, value, params) -> {
 				return Conversion.toLittleValue(value.parameter(0).charAt(Conversion.toHaxeValue(params[0])));
 			},
-			'public ${Little.keywords.TYPE_STRING} substring (define start as ${Little.keywords.TYPE_INT}, define end as ${Little.keywords.TYPE_INT} = -1)' => (_, value, params) -> {
+			'public ${Little.keywords.TYPE_STRING} ${Little.keywords.STDLIB__STRING_substring} (define start as ${Little.keywords.TYPE_INT}, define end as ${Little.keywords.TYPE_INT} = -1)' => (_, value, params) -> {
 				return Characters(value.parameter(0).substring(Conversion.toHaxeValue(params[0]), Conversion.toHaxeValue(params[1])));
 			},
-			'public ${Little.keywords.TYPE_STRING} toLowerCase ()' => (_, value, _) -> {
+			'public ${Little.keywords.TYPE_STRING} ${Little.keywords.STDLIB__STRING_toLowerCase} ()' => (_, value, _) -> {
 				return Characters(value.parameter(0).toLowerCase());
 			},
-			'public ${Little.keywords.TYPE_STRING} toUpperCase ()' => (_, value, _) -> {
+			'public ${Little.keywords.TYPE_STRING} ${Little.keywords.STDLIB__STRING_toUpperCase} ()' => (_, value, _) -> {
 				return Characters(value.parameter(0).toUpperCase());
 			},
-			'public ${Little.keywords.TYPE_STRING} replace (define search as ${Little.keywords.TYPE_STRING}, define replace as ${Little.keywords.TYPE_STRING})' => (_, value, params) -> {
+			'public ${Little.keywords.TYPE_STRING} ${Little.keywords.STDLIB__STRING_replace} (define search as ${Little.keywords.TYPE_STRING}, define replace as ${Little.keywords.TYPE_STRING})' => (_, value, params) -> {
 				return Characters(value.parameter(0).replace(Conversion.toHaxeValue(params[0]), Conversion.toHaxeValue(params[1])));
 			},
-			'public ${Little.keywords.TYPE_STRING} trim ()' => (_, value, _) -> {
+			'public ${Little.keywords.TYPE_STRING} ${Little.keywords.STDLIB__STRING_trim} ()' => (_, value, _) -> {
 				return Characters(value.parameter(0).trim());
 			},
-			'public ${Little.keywords.TYPE_STRING} remove (define search as ${Little.keywords.TYPE_STRING})' => (_, value, params) -> {
+			'public ${Little.keywords.TYPE_STRING} ${Little.keywords.STDLIB__STRING_remove} (define search as ${Little.keywords.TYPE_STRING})' => (_, value, params) -> {
 				return Characters(value.parameter(0).replace(Conversion.toHaxeValue(params[0]), ""));
 			},
-			'public ${Little.keywords.TYPE_BOOLEAN} contains (define search as ${Little.keywords.TYPE_STRING})' => (_, value, params) -> {
+			'public ${Little.keywords.TYPE_BOOLEAN} ${Little.keywords.STDLIB__STRING_contains} (define search as ${Little.keywords.TYPE_STRING})' => (_, value, params) -> {
 				return Conversion.toLittleValue(value.parameter(0).contains(Conversion.toHaxeValue(params[0])));
 			},
-			'public ${Little.keywords.TYPE_INT} indexOf (define search as ${Little.keywords.TYPE_STRING})' => (_, value, params) -> {
+			'public ${Little.keywords.TYPE_INT} ${Little.keywords.STDLIB__STRING_indexOf} (define search as ${Little.keywords.TYPE_STRING})' => (_, value, params) -> {
 				return Conversion.toLittleValue(value.parameter(0).indexOf(Conversion.toHaxeValue(params[0])));
 			},
-			'public ${Little.keywords.TYPE_INT} lastIndexOf (define search as ${Little.keywords.TYPE_STRING})' => (_, value, params) -> {
+			'public ${Little.keywords.TYPE_INT} ${Little.keywords.STDLIB__STRING_lastIndexOf} (define search as ${Little.keywords.TYPE_STRING})' => (_, value, params) -> {
 				return Conversion.toLittleValue(value.parameter(0).lastIndexOf(Conversion.toHaxeValue(params[0])));
 			},
-			'public ${Little.keywords.TYPE_BOOLEAN} startsWith (define prefix as ${Little.keywords.TYPE_STRING})' => (_, value, params) -> {
+			'public ${Little.keywords.TYPE_BOOLEAN} ${Little.keywords.STDLIB__STRING_startsWith} (define prefix as ${Little.keywords.TYPE_STRING})' => (_, value, params) -> {
 				return Conversion.toLittleValue(value.parameter(0).indexOf(Conversion.toHaxeValue(params[0]) == 0));
 			},
-			'public ${Little.keywords.TYPE_BOOLEAN} endsWith (define postfix as ${Little.keywords.TYPE_STRING})' => (_, value, params) -> {
+			'public ${Little.keywords.TYPE_BOOLEAN} ${Little.keywords.STDLIB__STRING_endsWith} (define postfix as ${Little.keywords.TYPE_STRING})' => (_, value, params) -> {
 				return Conversion.toLittleValue(value.parameter(0).indexOf(Conversion.toHaxeValue(params[0])) == value.parameter(0).length - Conversion.toHaxeValue(params[0]).length);
 			},
 
-			'static ${Little.keywords.TYPE_STRING} fromCharCode (define code as ${Little.keywords.TYPE_INT})' => (_, value, params) -> {
+			'static ${Little.keywords.TYPE_STRING} ${Little.keywords.STDLIB__STRING_fromCharCode} (define code as ${Little.keywords.TYPE_INT})' => (_, value, params) -> {
 				return Conversion.toLittleValue(String.fromCharCode(Conversion.toHaxeValue(params[0])));
 			}
 		]);
  
-		Little.plugin.registerType("Object", [
-			'static Object create ()' => (params) -> {
-				return Object([], "Object");
+		Little.plugin.registerType(Little.keywords.TYPE_OBJECT, [
+			'static ${Little.keywords.TYPE_OBJECT} ${Little.keywords.INSTANTIATE_FUNCTION_NAME} ()' => (params) -> {
+				return Object([], Little.keywords.TYPE_OBJECT);
 			}
 		]);
 

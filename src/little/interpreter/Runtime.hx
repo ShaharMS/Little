@@ -193,7 +193,7 @@ class Runtime {
         errorThrown = true;        
         for (func in onErrorThrown) func(mod, line, reason);
 
-        throw "Quitting..."; // Currently, no flag exists that disables immediate quitting, so this is fine.
+        throw token; // Currently, no flag exists that disables immediate quitting, so this is fine.
 
         return token;
     }

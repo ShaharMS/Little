@@ -259,7 +259,7 @@ class UnitTests {
 	}
 
 	public static function test14():UnitTestResult {
-		var code = 'define a = Object.create(), define b = a, print(a.address == b.address)\ndefine c = 502, define d = c, print(c.address == d.address)\nprint(a.address, b.address, c.address, d.address)';
+		var code = 'define a = Object.create(), define b = a, print(a.address == b.address)\ndefine c = 502, define d = c, print(c.address == d.address)';
 		Little.run(code);
 		var result = PartArray(Little.runtime.stdout.stdoutTokens.slice(0, 2));
 		var exp = PartArray([TrueValue, FalseValue]);
