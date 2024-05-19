@@ -185,6 +185,7 @@ class Extensions {
 
 enum ParserTokensSimple {
 	SET_LINE;
+	SET_MODULE;
 	SPLIT_LINE;
 	VARIABLE;
 	FUNCTION;
@@ -217,6 +218,7 @@ enum ParserTokensSimple {
 enum InterpTokensSimple {
 	
     SET_LINE;
+	SET_MODULE;
 	SPLIT_LINE;
 	VARIABLE_DECLARATION;
 	FUNCTION_DECLARATION;

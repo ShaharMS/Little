@@ -36,6 +36,8 @@ class Parser {
     public static dynamic function parse(lexerTokens:Array<LexerTokens>):Array<ParserTokens> {
         var tokens = convert(lexerTokens);
 
+        tokens.unshift(SetModule(module));
+
         #if parser_debug trace("before:", PrettyPrinter.printParserAst(tokens)); #end
         tokens = mergeBlocks(tokens);
         #if parser_debug trace("blocks:", PrettyPrinter.printParserAst(tokens)); #end
@@ -126,7 +128,7 @@ class Parser {
                 case SplitLine: {nextPart(); post.push(token);}
                 case Sign("{"): {
                     var blockStartLine = line;
-                    var blockBody:Array<ParserTokens> = [];
+                    var blockBody:Array<ParserTokens> = [SetModule(module), SetLine(blockStartLine)];
                     var blockStack = 1; // Open and close the block on the correct curly bracket
                     while (i + 1 < pre.length) {
                         var lookahead = pre[i + 1];
@@ -613,7 +615,7 @@ class Parser {
                     } else {
                         var lookbehind = pre[i - 1];
                         switch lookbehind {
-                            case Sign(_) | SplitLine | SetLine(_): post.push(Expression(parts, type));
+                            case Sign(_) | SplitLine | SetLine(_) | SetModule(_): post.push(Expression(parts, type));
                             case _: {
                                 var previous = post.pop(); // When parsing a function that returns a function, this handles the "nested call" correctly
                                 token = PartArray(parts);
@@ -778,7 +780,7 @@ class Parser {
                     }
                     var lookbehind = pre[i];
                     switch lookbehind {
-                        case SplitLine | SetLine(_): {
+                        case SplitLine | SetLine(_) | SetModule(_): {
                             Little.runtime.throwError(ErrorMessage("Value's type declaration access cut off by the start of a line, or by a line split (; or ,)."), Layer.PARSER);
                             return null;
                         }
@@ -937,6 +939,9 @@ class Parser {
     static var line(get, set):Int;
     /** Parser.line getter **/ static function get_line() return Little.runtime.line;
     /** Parser.line setter **/ static function set_line(l:Int) return Little.runtime.line = l;
+    static var module(get, set):String;
+    /** Parser.module getter **/ static function get_module() return Little.runtime.module;
+    /** Parser.module setter **/ static function set_module(l:String) return Little.runtime.module = l;
     static var linePart:Int = 0;
     
 	/**

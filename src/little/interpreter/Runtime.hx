@@ -59,6 +59,16 @@ class Runtime {
         @param line The line the interpreter just finished running.
     **/
     public var onLineChanged:Array<Int -> Void> = [];
+
+	/**
+	    Dispatches right after the interpreter switches between running module.
+
+        This can happen when code from another file is suddenly ran, for example, 
+        from a function call.
+
+        @param previous The module the interpreter just switched from.
+	**/
+    public var onModuleChanged:Array<String -> Void> = [];
 	
 	/**
 		Dispatches every time the interpreter finds a line splitter (`,` or `;`)

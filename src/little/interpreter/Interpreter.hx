@@ -22,6 +22,7 @@ class Interpreter {
 		for (item in pre) {
 			post.push(switch item {
 				case SetLine(line): SetLine(line);
+                case SetModule(module): SetModule(module);
 				case SplitLine: SplitLine;
 				case Variable(name, type, doc): VariableDeclaration(convert(name)[0], type == null ? Little.keywords.TYPE_UNKNOWN.asTokenPath() : convert(type)[0], doc == null ? Characters("") : convert(doc)[0]);
 				case Function(name, params, type, doc): FunctionDeclaration(convert(name)[0], convert(params)[0], type == null ? Little.keywords.TYPE_UNKNOWN.asTokenPath() : convert(type)[0], doc == null ? Characters("") : convert(doc)[0]);
@@ -91,6 +92,16 @@ class Interpreter {
         Little.runtime.line = l;
 
         for (listener in Little.runtime.onLineChanged) listener(o);
+    }
+
+    /**
+        Set the current module of the program
+    **/
+    public static function setModule(m:String) {
+        var o = Little.runtime.module;
+        Little.runtime.module = m;
+
+        if (o != m) for (listener in Little.runtime.onModuleChanged) listener(o);
     }
 
     /**
@@ -380,6 +391,7 @@ class Interpreter {
                 case SetLine(line): {
                     setLine(line);
                 }
+                case SetModule(module): setModule(module);
                 case SplitLine: splitLine();
                 case VariableDeclaration(name, type, doc): {
                     declareVariable(name.is(BLOCK) ? evaluate(name) : name, type.is(BLOCK) ? evaluate(type) : type, doc != null ? evaluate(doc) : Characters(""));
@@ -451,6 +463,10 @@ class Interpreter {
             }
             case SetLine(line): {
                 setLine(line);
+                return NullValue;
+            }
+            case SetModule(module): {
+                setModule(module);
                 return NullValue;
             }
             case SplitLine: {

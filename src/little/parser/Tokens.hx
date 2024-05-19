@@ -3,6 +3,7 @@ package little.parser;
 enum ParserTokens {
 
     SetLine(line:Int);
+    SetModule(module:String);
     SplitLine;
 
     Variable(name:ParserTokens, type:ParserTokens, ?doc:ParserTokens);

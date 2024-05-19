@@ -100,6 +100,7 @@ class PrettyPrinter {
 			return ''; //'${prefixFA(prefix)}$t$d SetLine($line)\n'
 		switch root {
 			case SetLine(line): return '${prefixFA(prefix)}$t$d SetLine($line)\n';
+			case SetModule(module): return '${prefixFA(prefix)}$t$d SetModule($module)\n';			
             case SplitLine: return '${prefixFA(prefix)}$t$d SplitLine\n';
             case Characters(string): return '${prefixFA(prefix)}$t$d "$string"\n';
 			case ErrorMessage(name): return '${prefixFA(prefix)}$t$d Error: $name\n';
@@ -349,6 +350,7 @@ class PrettyPrinter {
 		for (token in code) {
 			switch token {
 				case SetLine(line):s += '\n$indent';
+				case SetModule(_): // Do Nothing, this is not syntax dependent.
 				case SplitLine: s += ", ";
 				case Variable(name, type): s += '${Little.keywords.VARIABLE_DECLARATION} $name ${if (type != null) '${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyParser(type)}' else ''}';
 				case Function(name, params, type): s += '${Little.keywords.FUNCTION_DECLARATION} ${stringifyParser(name)}(${stringifyParser(params)}) ${if (type != null) '${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyParser(type)}' else ''}';

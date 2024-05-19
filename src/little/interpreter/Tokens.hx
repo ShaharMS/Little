@@ -5,6 +5,7 @@ import little.interpreter.memory.MemoryPointer;
 enum InterpTokens {
 	
     SetLine(line:Int);
+	SetModule(module:String);
     SplitLine;
 
     /**
