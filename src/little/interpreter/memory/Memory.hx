@@ -486,6 +486,19 @@ class Memory {
 		return storage.storeBytes(size);
 	}
 	
+	/**
+		Free `size` bytes of memory at `pointer`.
+	    @param pointer The address of the memory to free
+	    @param size The number of bytes to free
+	**/
+	public function free(pointer:MemoryPointer, size:Int) {
+		if (pointer.toInt() < 0) Little.runtime.throwError(ErrorMessage('Cannot free bytes at negative address ${pointer}'));
+		if (pointer.toInt() < constants.capacity) Little.runtime.throwError(ErrorMessage('Cannot free bytes from the constant pool (addresses 0 to ${constants.capacity}, attempted to free address ${pointer})'));
+		if (pointer.toInt() >= currentMemorySize) Little.runtime.throwError(ErrorMessage('Cannot free bytes at an address greater than the current memory size (${pointer} requested but ${currentMemorySize} addresses exist)'));
+		if (size <= 0) Little.runtime.throwError(ErrorMessage('Cannot free ${size} bytes'));
+		if (pointer.toInt() + size > currentMemorySize) Little.runtime.throwError(ErrorMessage('Cannot free bytes: The requested free overflows the current memory size (${pointer} + ${size} requested but ${currentMemorySize} addresses exist)'));
+		storage.freeBytes(pointer, size);
+	}
 
 	/**
 		Returns information about types in Little at runtime.

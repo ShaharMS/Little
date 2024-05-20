@@ -428,6 +428,7 @@ class PrettyPrinter {
 				case TrueValue: s += Little.keywords.TRUE_VALUE;
 				case FalseValue: s += Little.keywords.FALSE_VALUE;
 				case ClassPointer(pointer): s += Little.memory != null ? Little.memory.getTypeName(pointer) : throw "No memory for ClassPointer token " + pointer;
+				case FunctionCode(_, body) : s += stringifyInterpreter(body);
 				case _: throw 'Stringifying token $token does not make sense, as it is represented by other tokens on parse time, and thus cannot appear in a non-manipulated InterpTokens AST';
 			}
 			s += " ";

@@ -156,6 +156,29 @@ class PrepareRun {
 			}
 		]);
 
+		Little.plugin.registerType(Little.keywords.TYPE_MEMORY, [
+			'static ${Little.keywords.TYPE_INT} ${Little.keywords.STDLIB__MEMORY_allocate} (define amount as ${Little.keywords.TYPE_INT})' => (params) -> {
+				return Conversion.toLittleValue(Little.memory.allocate(Conversion.toHaxeValue(params[0])));
+			},
+			'static ${Little.keywords.TYPE_DYNAMIC} ${Little.keywords.STDLIB__MEMORY_free} (define address as ${Little.keywords.TYPE_INT}, define amount as ${Little.keywords.TYPE_INT})' => (params) -> {
+				Little.memory.free(Conversion.toHaxeValue(params[0]), Conversion.toHaxeValue(params[1]));
+				return NullValue;
+			},
+			// 'static ${Little.keywords.TYPE_DYNAMIC} ${Little.keywords.STDLIB__MEMORY_read} (define address as ${Little.keywords.TYPE_INT}, define amount as ${Little.keywords.TYPE_INT})' => (params) -> {
+			// 	return Conversion.toLittleValue(Little.memory.read(Conversion.toHaxeValue(params[0]), Conversion.toHaxeValue(params[1])));
+			// },
+			'static ${Little.keywords.TYPE_DYNAMIC} ${Little.keywords.STDLIB__MEMORY_write} (define address as ${Little.keywords.TYPE_INT}, define amount as ${Little.keywords.TYPE_INT})' => (params) -> {
+				Little.memory.storage.setBytes(Conversion.toHaxeValue(params[0]), Conversion.toHaxeValue(params[1]));	
+				return NullValue;
+			},
+			'static ${Little.keywords.TYPE_INT} ${Little.keywords.STDLIB__MEMORY_size}' => () -> {
+				return Conversion.toLittleValue(Little.memory.currentMemorySize);	
+			},
+			'static ${Little.keywords.TYPE_INT} ${Little.keywords.STDLIB__MEMORY_maxSize}' => () -> {
+				return Conversion.toLittleValue(Little.memory.maxMemorySize);	
+			}
+		]);
+
 	}
 	
 	/**

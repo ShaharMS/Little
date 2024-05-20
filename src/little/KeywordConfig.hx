@@ -87,6 +87,10 @@ class KeywordConfig {
 	@:optional public var TYPE_BOOLEAN:String = "Boolean";
 	@:optional public var TYPE_STRING:String = "Characters";
 	@:optional public var TYPE_OBJECT:String = "Object";
+	@:optional public var TYPE_MEMORY:String = "Memory";
+	@:optional public var TYPE_MEMORYPOINTER:String = "MemoryPointer";
+	
+	
 
 	/**
 		Represents the main function type.
@@ -185,6 +189,13 @@ class KeywordConfig {
 	@:optional public var STDLIB__STRING_startsWith = "startsWith";
 	@:optional public var STDLIB__STRING_endsWith = "endsWith";
 	@:optional public var STDLIB__STRING_fromCharCode = "fromCharCode";
+
+	@:optional public var STDLIB__MEMORY_allocate = "allocate";
+	@:optional public var STDLIB__MEMORY_free = "free";
+	@:optional public var STDLIB__MEMORY_read = "read";
+	@:optional public var STDLIB__MEMORY_write = "write";
+	@:optional public var STDLIB__MEMORY_size = "size";
+	@:optional public var STDLIB__MEMORY_maxSize = "maxSize";
 
 	@:optional public var FOR_LOOP_FROM = "from";
 	@:optional public var FOR_LOOP_TO = "to";

@@ -77,4 +77,8 @@ abstract MemoryPointer(Int) {
 		}
 		return bytes;
 	}
+
+    public function toInt():Int {
+        return this;        
+    }
 }
