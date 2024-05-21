@@ -97,4 +97,32 @@ class ConstantPool {
 	public function hasPointer(pointer:MemoryPointer):Bool {
 		return pointer.rawLocation < capacity && pointer.rawLocation >= 0;
 	}
+
+	/**
+		Checks if a type exists in the constant pool.
+		@param typeName The type to check
+	**/
+	public function hasType(typeName:String) {
+		switch typeName {
+			case (_ == (Little.keywords.TYPE_INT) => true): return true;
+			case (_ == (Little.keywords.TYPE_FLOAT) => true): return true;
+			case (_ == (Little.keywords.TYPE_BOOLEAN) => true): return true;
+			case (_ == (Little.keywords.TYPE_DYNAMIC) => true): return true;
+			case (_ == (Little.keywords.TYPE_MODULE) => true): return true;
+			case (_ == (Little.keywords.TYPE_UNKNOWN) => true): return true;
+			case _: return false;
+		}
+	}
+
+	public function getType(typeName:String):MemoryPointer {
+		return switch typeName {
+			case (_ == (Little.keywords.TYPE_INT) => true): INT;
+			case (_ == (Little.keywords.TYPE_FLOAT) => true): FLOAT;
+			case (_ == (Little.keywords.TYPE_BOOLEAN) => true): BOOL;
+			case (_ == (Little.keywords.TYPE_DYNAMIC) => true): DYNAMIC;
+			case (_ == (Little.keywords.TYPE_MODULE) => true): TYPE;
+			case (_ == (Little.keywords.TYPE_UNKNOWN) => true): UNKNOWN;
+			case _: throw new ArgumentException("typeName", '${typeName} does not exist in the constant pool');
+		}
+	}
 }

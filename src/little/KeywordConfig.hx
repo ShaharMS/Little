@@ -88,7 +88,7 @@ class KeywordConfig {
 	@:optional public var TYPE_STRING:String = "Characters";
 	@:optional public var TYPE_OBJECT:String = "Object";
 	@:optional public var TYPE_MEMORY:String = "Memory";
-	@:optional public var TYPE_MEMORYPOINTER:String = "MemoryPointer";
+	@:optional public var TYPE_ARRAY:String = "Array";
 	
 	
 
@@ -172,8 +172,11 @@ class KeywordConfig {
 	@:optional public var POSITIVE_SIGN:String = "+";
 
 	// Cast functions are done using the `to` keyword and type. They are not here.
+
+	//Float: DONE
 	@:optional public var STDLIB__FLOAT_isWhole = "isWhole";
 
+	//String: DONE
 	@:optional public var STDLIB__STRING_length = "length";
 	@:optional public var STDLIB__STRING_toLowerCase = "toLowerCase";
 	@:optional public var STDLIB__STRING_toUpperCase = "toUpperCase";
@@ -189,6 +192,13 @@ class KeywordConfig {
 	@:optional public var STDLIB__STRING_startsWith = "startsWith";
 	@:optional public var STDLIB__STRING_endsWith = "endsWith";
 	@:optional public var STDLIB__STRING_fromCharCode = "fromCharCode";
+
+	//Array: DONE
+	@:optional public var STDLIB__ARRAY_length = "length";
+	@:optional public var STDLIB__ARRAY_elementType = "elementType";
+	@:optional public var STDLIB__ARRAY_get = "get";
+	@:optional public var STDLIB__ARRAY_set = "set";
+
 
 	@:optional public var STDLIB__MEMORY_allocate = "allocate";
 	@:optional public var STDLIB__MEMORY_free = "free";

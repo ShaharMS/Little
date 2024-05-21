@@ -41,7 +41,7 @@ class UnitTests {
 
 	public static function run(bulk:Bool = false) {
 		var testFunctions = [
-			test1, test2, test3, test4, test5, test6, test7, test8, test9, test10, test11, test12, test13, test14
+			test1, test2, test3, test4, test5, test6, test7, test8, test9, test10, test11, test12, test13, test14, test15
 		];
 		var allSuccessful = true;
 		var unsuccessful = 0;
@@ -268,6 +268,19 @@ class UnitTests {
 			success: !Lambda.has([for (i in 0...2) Type.enumEq(exp.parameter(0)[i], result.parameter(0)[i])], false),
 			returned: result,
 			expected: exp,
+			code: code
+		}
+	}
+
+	public static function test15():UnitTestResult {
+		var code = 'define a = Array.create(Number, 10), a.set(5, 172482), print(a.get(5)), print(a.elementType), print(a.length)';
+		Little.run(code);
+		var result = PartArray(Little.runtime.stdout.stdoutTokens);
+		return {
+			testName: "Arrays",
+			success: !Lambda.has([for (i in 0...3) Type.enumEq(result.parameter(0)[i], result.parameter(0)[i])], false),
+			returned: result,
+			expected: PartArray([Number(172482), ClassPointer(Little.memory.constants.INT), Number(10)]),
 			code: code
 		}
 	}

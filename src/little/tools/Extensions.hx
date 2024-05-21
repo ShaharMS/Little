@@ -1,5 +1,6 @@
 package little.tools;
 
+import little.interpreter.memory.MemoryPointer;
 import little.parser.Parser;
 import little.lexer.Tokens.LexerTokens;
 import little.lexer.Lexer;
@@ -138,6 +139,16 @@ class Extensions {
 		}
 	}
 
+	public static function asObjectToken(o:Map<String, InterpTokens>, typeName:String):InterpTokens {
+		var map = [for (k => v in o) k => {documentation: "", value: v}];
+		map[Little.keywords.OBJECT_TYPE_PROPERTY_NAME] = {documentation: 'The type of this object, as a ${Little.keywords.TYPE_STRING}.', value: InterpTokens.Characters(typeName)};
+		return Object(map, typeName);
+	}
+
+	public static function asEmptyObject(a:Array<Dynamic>, typeName:String):InterpTokens {
+		return Object([Little.keywords.OBJECT_TYPE_PROPERTY_NAME => {value: Characters(typeName), documentation: 'The type of this object, as a ${Little.keywords.TYPE_STRING}.'}], typeName);
+	}
+
 	/**
 	    The reverse of `asJoinedStringPath()`.
 	**/
@@ -145,6 +156,40 @@ class Extensions {
 		var path = string.split(Little.keywords.PROPERTY_ACCESS_SIGN);
 		if (path.length == 1) return Identifier(path[0]);
 		else return PropertyAccess(asTokenPath(path.slice(0, path.length - 1).join(Little.keywords.PROPERTY_ACCESS_SIGN)), Identifier(path.pop()));
+	}
+
+	public static function extractValue(address:MemoryPointer, type:String):InterpTokens {
+		return switch type {
+			case (_ == Little.keywords.TYPE_STRING => true): Characters(Little.memory.storage.readString(address));
+			case (_ == Little.keywords.TYPE_INT => true): Number(Little.memory.storage.readInt32(address));
+			case (_ == Little.keywords.TYPE_FLOAT => true): Decimal(Little.memory.storage.readDouble(address));
+			case (_ == Little.keywords.TYPE_BOOLEAN => true): Little.memory.constants.getFromPointer(address);
+			case (_ == Little.keywords.TYPE_FUNCTION => true): Little.memory.storage.readCodeBlock(address);
+			case (_ == Little.keywords.TYPE_CONDITION => true): Little.memory.storage.readCondition(address);
+			case (_ == Little.keywords.TYPE_MODULE => true): ClassPointer(address);
+			// Because of the way we store lone nulls (as type dynamic), 
+			// they might get confused with objects of type dynamic, so we need to do this:
+			case ((_ == Little.keywords.TYPE_DYNAMIC || _ == Little.keywords.TYPE_UNKNOWN) && Little.memory.constants.hasPointer(address) && Little.memory.constants.getFromPointer(address).equals(NullValue) => true): NullValue;
+			case (_ == Little.keywords.TYPE_SIGN => true): Little.memory.storage.readSign(address);
+			case (_ == Little.keywords.TYPE_UNKNOWN => true): throw 'Cannot extract value of unknown type';
+				// Not sure how someone can even get to the error above, but it's better to be safe than sorry - maybe a developer generates an extern field of type Unknown or something...
+			case _: Little.memory.storage.readObject(address);
+		}
+	}
+
+	public static function writeInPlace(address:MemoryPointer, value:InterpTokens) {
+		var type = type(value);
+		switch type {
+			case (_ == Little.keywords.TYPE_STRING => true): Little.memory.storage.setString(address, parameter(value, 0));
+			case (_ == Little.keywords.TYPE_INT => true): Little.memory.storage.setInt32(address, parameter(value, 0));
+			case (_ == Little.keywords.TYPE_FLOAT => true): Little.memory.storage.setDouble(address, parameter(value, 0));
+			case (_ == Little.keywords.TYPE_FUNCTION => true): Little.memory.storage.setCodeBlock(address, parameter(value, 0));
+			case (_ == Little.keywords.TYPE_CONDITION => true): Little.memory.storage.setCondition(address, parameter(value, 0));
+			case (_ == Little.keywords.TYPE_MODULE => true): Little.memory.storage.setPointer(address, parameter(value, 0));
+			case (_ == Little.keywords.TYPE_SIGN => true): Little.memory.storage.setSign(address, parameter(value, 0));
+			case (_ == Little.keywords.TYPE_UNKNOWN => true): throw 'Cannot extract value of unknown type';
+			case _: Little.memory.storage.setObject(address, parameter(value, 0));
+		}
 	}
 
 	/**

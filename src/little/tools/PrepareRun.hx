@@ -1,5 +1,6 @@
 package little.tools;
 
+import little.interpreter.memory.Memory;
 import little.interpreter.memory.HashTables;
 import little.interpreter.memory.MemoryPointer;
 import little.interpreter.memory.MemoryPointer.POINTER_SIZE;
@@ -152,7 +153,49 @@ class PrepareRun {
  
 		Little.plugin.registerType(Little.keywords.TYPE_OBJECT, [
 			'static ${Little.keywords.TYPE_OBJECT} ${Little.keywords.INSTANTIATE_FUNCTION_NAME} ()' => (params) -> {
-				return Object([], Little.keywords.TYPE_OBJECT);
+				return [].asEmptyObject(Little.keywords.TYPE_OBJECT);
+			}
+		]);
+
+		Little.plugin.registerType(Little.keywords.TYPE_ARRAY, [
+			'static ${Little.keywords.TYPE_ARRAY} ${Little.keywords.INSTANTIATE_FUNCTION_NAME} (define type as ${Little.keywords.TYPE_MODULE}, define length as ${Little.keywords.TYPE_INT)})' => (params) -> {
+				var arrayType:String = Conversion.toHaxeValue(params[0]);
+				var size = Little.memory.getTypeInformation(arrayType).defaultInstanceSize;
+				var length:Int = Conversion.toHaxeValue(params[1]);
+				var byteArray = Little.memory.storage.storeArray(length, size);
+				return ["__p" => Number(byteArray.toInt()), "__t" => params[0]].asObjectToken(Little.keywords.TYPE_ARRAY);
+			},
+			'public ${Little.keywords.TYPE_INT} ${Little.keywords.STDLIB__ARRAY_length}' => (address, value) -> {
+				var pointer:Int = Conversion.toHaxeValue(untyped value.parameter(0).get("__p").value);
+				return {
+					value: Number(Little.memory.storage.readInt32(pointer)),
+					address: MemoryPointer.fromInt(pointer)
+				}
+			}, 
+			'public ${Little.keywords.TYPE_MODULE} ${Little.keywords.STDLIB__ARRAY_elementType}' => (address, value) -> {
+				var typeToken:InterpTokens = untyped value.parameter(0).get("__t").value;
+				return {
+					value: typeToken,
+					address: typeToken.parameter(0)
+				}
+			}, 
+			'public ${Little.keywords.TYPE_DYNAMIC} ${Little.keywords.STDLIB__ARRAY_get} (define index as ${Little.keywords.TYPE_INT})' => (address, value, params) -> {
+				var pointer:Int = Conversion.toHaxeValue(untyped value.parameter(0).get("__p").value);
+				var elementType:String = Conversion.toHaxeValue(untyped value.parameter(0).get("__t").value);
+				var index = Conversion.toHaxeValue(params[0]);
+				var elementSize = Little.memory.storage.readInt32(pointer + 4);
+				var specificElement = pointer + 4 /* array length*/ + 4 /* array element size */ + index * elementSize;
+				return MemoryPointer.fromInt(specificElement).extractValue(elementType);
+			},
+			'public ${Little.keywords.TYPE_DYNAMIC} ${Little.keywords.STDLIB__ARRAY_set} (define index as ${Little.keywords.TYPE_INT}, define value as ${Little.keywords.TYPE_DYNAMIC})' => (address, value, params) -> {
+				var pointer:Int = Conversion.toHaxeValue(untyped value.parameter(0).get("__p").value);
+				var index = Conversion.toHaxeValue(params[0]);
+				var elementSize = Little.memory.storage.readInt32(pointer + 4);
+				var specificElement = pointer + 4 /* array length*/ + 4 /* array element size */ + index * elementSize;
+				
+				MemoryPointer.fromInt(specificElement).writeInPlace(params[1]);
+
+				return NullValue;
 			}
 		]);
 
@@ -164,9 +207,9 @@ class PrepareRun {
 				Little.memory.free(Conversion.toHaxeValue(params[0]), Conversion.toHaxeValue(params[1]));
 				return NullValue;
 			},
-			// 'static ${Little.keywords.TYPE_DYNAMIC} ${Little.keywords.STDLIB__MEMORY_read} (define address as ${Little.keywords.TYPE_INT}, define amount as ${Little.keywords.TYPE_INT})' => (params) -> {
-			// 	return Conversion.toLittleValue(Little.memory.read(Conversion.toHaxeValue(params[0]), Conversion.toHaxeValue(params[1])));
-			// },
+			'static ${Little.keywords.TYPE_DYNAMIC} ${Little.keywords.STDLIB__MEMORY_read} (define address as ${Little.keywords.TYPE_INT}, define type as ${Little.keywords.TYPE_MODULE})' => (params) -> {
+				return MemoryPointer.fromInt(params[0].parameter(0)).extractValue(Conversion.toHaxeValue(params[1]));
+			},
 			'static ${Little.keywords.TYPE_DYNAMIC} ${Little.keywords.STDLIB__MEMORY_write} (define address as ${Little.keywords.TYPE_INT}, define amount as ${Little.keywords.TYPE_INT})' => (params) -> {
 				Little.memory.storage.setBytes(Conversion.toHaxeValue(params[0]), Conversion.toHaxeValue(params[1]));	
 				return NullValue;
@@ -529,6 +572,7 @@ class PrepareRun {
 			var val = NullValue;
 			var fp = [];
 			// Incase one does `from (4 + 2)` and it accidentally parses a function
+			trace(params);
 			for (p in params) {
 				switch p {
 					case FunctionCall(_.parameter(0) == Little.keywords.FOR_LOOP_FROM => true, params): {

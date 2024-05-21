@@ -143,7 +143,7 @@ class Parser {
                         } else blockBody.push(lookahead);
                         i++;
                     }
-
+					if (blockBody.length >= 3 && blockBody[3].is(SET_LINE)) blockBody.remove(blockBody[2]);
                     // Throw error for unclosed blocks;
                     if (i + 1 == pre.length) {
                         Little.runtime.throwError(ErrorMessage('Unclosed code block, starting at line ' + blockStartLine));

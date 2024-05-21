@@ -107,6 +107,7 @@ class Storage {
 		if (i >= reserved.length - size) {
             requestMemory();
             i += size; // Will leave some empty space, Todo.
+			while (i + size > reserved.length) requestMemory();
         }
 
         for (j in 0...size) {
@@ -165,16 +166,17 @@ class Storage {
     	@param defaultElement An optional default element to store at each index
 		@return The address of the array.
     **/
-    public function storeArray(length:Int, elementSize:Int, defaultElement:ByteArray):MemoryPointer {
+    public function storeArray(length:Int, elementSize:Int, ?defaultElement:ByteArray):MemoryPointer {
         var size = elementSize * length;
-        var bytes = new ByteArray(size + 4); // First 4 bytes are the length of the array
-        if (!defaultElement.isEmpty()) {
+        var bytes = new ByteArray(size + 4 + 4); // First 4 bytes are the length of the array, the other 4 bytes are for element size.
+        if (defaultElement != null) {
             for (i in 0...length) {
                 bytes.setBytes(i + 4, defaultElement);
             }
         }
 
         bytes.setInt32(0, length);
+		bytes.setInt32(4, elementSize);
 
         return storeBytes(bytes.length, bytes);
     }
@@ -528,8 +530,8 @@ class Storage {
 		@return The address at which the string is stored
 	**/
 	public function storeString(b:String):MemoryPointer {
-		if (b == "") return parent.constants.ZERO;
-		#if !static if (b == null) return parent.constants.NULL; #end
+		if (b == "") return parent.constants.EMPTY_STRING;
+		if (b == null) return parent.constants.NULL;
 
         // Convert the string into bytes
 		var stringBytes = Bytes.ofString(b, UTF8);
@@ -542,7 +544,8 @@ class Storage {
         while (i < reserved.length - bytes.length && !reserved.getBytes(i, bytes.length).isEmpty()) i++;
 		if (i >= reserved.length - bytes.length) {
             requestMemory();
-            i += bytes.length; // leaves empty bytes Todo.
+            i += bytes.length; // leaves empty bytes, intentional.
+			while (i + bytes.length > reserved.length) requestMemory();
         }
 
 		// Each character in this string should be UTF-8 encoded
@@ -716,6 +719,7 @@ class Storage {
 			case Decimal(num): return storeDouble(num);
 			case Characters(string): return storeString(string);
             case Sign(sign): return storeSign(sign);
+			case ClassPointer(pointer): return pointer;
             case _: throw new ArgumentException("token", '${token} cannot be statically stored to the storage');
 		}
 	}
@@ -768,6 +772,7 @@ class Storage {
                         case TrueValue | FalseValue: parent.getTypeInformation(Little.keywords.TYPE_BOOLEAN).pointer;
                         case NullValue: parent.getTypeInformation(Little.keywords.TYPE_DYNAMIC).pointer;
                         case FunctionCode(_, _): parent.getTypeInformation(Little.keywords.TYPE_FUNCTION).pointer;
+						case ClassPointer(_): parent.getTypeInformation(Little.keywords.TYPE_MODULE).pointer;
                         case Object(_, t): parent.getTypeInformation(t).pointer;
                         case _: throw "Property value must be a static value, a code block or an object (given: `" + v + "`)";
                     }
@@ -789,32 +794,84 @@ class Storage {
     }
 
 	/**
+		Stores an object at a specific address using 3 parts:
+		
+		- POINTER_SIZE + 4 Bytes directly at the site of storage, including:
+		  - Byte 0 to 4: The length of the object's hashtable
+		  - Byte 4 to POINTER_SIZE + 4: A pointer to the object's hashtable
+		- The object's hashtable, at another location. The hashtable can be moved around, and when this
+		  is done, the data at the object's address changes.
+		
+    **/
+	public function setObject(address:MemoryPointer, object:InterpTokens) {
+		if (object.is(NULL_VALUE)) return parent.constants.NULL;
+        if (!object.is(OBJECT)) throw new ArgumentException("object", '${object} is not a dynamic object');
+
+		switch object {
+			case Object(props, typeName): {
+                var quintuples = new Array<{key:String, keyPointer:MemoryPointer, value:MemoryPointer, type:MemoryPointer, doc:MemoryPointer}>();
+
+                var propsC = props.copy();
+
+                propsC[Little.keywords.OBJECT_TYPE_PROPERTY_NAME] = {
+                    value: Characters(typeName),
+                    documentation: 'The type of this object, as a ${Little.keywords.TYPE_STRING}.',
+                }
+
+                for (k => v in propsC) {
+                    var key = k;
+                    var keyPointer = storeString(key);
+                    var value = switch v.value {
+                        case Object(_, _): storeObject(v.value);
+                        case FunctionCode(_, _): storeCodeBlock(v.value);
+                        case _: storeStatic(v.value);
+                    }
+                    var type = switch v.value {
+                        case Number(_): parent.getTypeInformation(Little.keywords.TYPE_INT).pointer;
+                        case Decimal(_): parent.getTypeInformation(Little.keywords.TYPE_FLOAT).pointer;
+                        case Characters(_): parent.getTypeInformation(Little.keywords.TYPE_STRING).pointer;
+                        case TrueValue | FalseValue: parent.getTypeInformation(Little.keywords.TYPE_BOOLEAN).pointer;
+                        case NullValue: parent.getTypeInformation(Little.keywords.TYPE_DYNAMIC).pointer;
+                        case FunctionCode(_, _): parent.getTypeInformation(Little.keywords.TYPE_FUNCTION).pointer;
+						case ClassPointer(_): parent.getTypeInformation(Little.keywords.TYPE_MODULE).pointer;
+                        case Object(_, t): parent.getTypeInformation(t).pointer;
+                        case _: throw "Property value must be a static value, a code block or an object (given: `" + v + "`)";
+                    }
+
+                    quintuples.push({key: key, keyPointer: keyPointer, value: value, type: type, doc: storeString(v.documentation) /*Todo, not a good solution, docs will some out of classes most of the time.*/});
+                }
+
+                var bytes = HashTables.generateObjectHashTable(quintuples);
+                var bytesLength = ByteArray.from(bytes.length);
+                var bytesPointer = storeBytes(bytes.length, bytes);
+
+                setBytes(address, ByteArray.from(bytes.length).concat(ByteArray.from(bytesPointer.rawLocation)));
+            }
+			case _:
+                throw new ArgumentException("object", '${object} must be an `Interpreter.Object`');
+		}
+
+        throw "How did you get here?";
+	}
+
+	/**
 		Reads an object.
 		@param pointer The address of the object
 		@return A token representing the object (of type `InterpTokens.Object`)
 	**/
 	public function readObject(pointer:MemoryPointer):InterpTokens {
         if (pointer == parent.constants.NULL) return null;
+		if (parent.constants.hasPointer(readPointer(pointer.rawLocation + 4))) throw "HashTable pointer is not valid";
         var hashTableBytes = readBytes(readPointer(pointer.rawLocation + 4), readInt32(pointer));
         var table = HashTables.readObjectHashTable(hashTableBytes, this);
         var map = new Map<String, {value:InterpTokens, documentation:String}>();
         for (entry in table) {
+			map[entry.key] = 
             map[entry.key] = {
-                value: switch parent.getTypeName(entry.type) {
-                        case (_ == Little.keywords.TYPE_STRING => true): Characters(readString(entry.value));
-                        case (_ == Little.keywords.TYPE_INT => true): Number(readInt32(entry.value));
-                        case (_ == Little.keywords.TYPE_FLOAT => true): Decimal(readDouble(entry.value));
-                        case (_ == Little.keywords.TYPE_BOOLEAN => true): readByte(entry.value) == 1 ? TrueValue : FalseValue;
-                        case (_ == Little.keywords.TYPE_FUNCTION => true): readCodeBlock(entry.value);
-                        // Because of the way we store lone nulls (as type dynamic), 
-                        // they might get confused with objects of type dynamic, so we need to do this:
-                        case (_ == Little.keywords.TYPE_DYNAMIC && parent.constants.getFromPointer(entry.value).equals(NullValue) => true): NullValue;
-                        case _: readObject(entry.value);
-                        },
+                value: @:privateAccess parent.valueFromType(entry.value, parent.getTypeName(entry.type), ["<object>"]),
                 documentation: readString(entry.doc) 
             }
         }
-
         return Object(
             map, 
             map[Little.keywords.OBJECT_TYPE_PROPERTY_NAME].value.parameter(0) /* This value is a `Characters`, so it first param is a `String`.*/
@@ -907,6 +964,83 @@ class Storage {
 		instancesHashMap = ByteArray.from(instancesHashMap.length).concat(instancesHashMap);
 		bytes = bytes.concat(staticHashMap).concat(instancesHashMap);
 		return storeBytes(bytes.length, bytes);
+	}
+
+
+	/**
+		stores a type, and all its statics and instance fields at a specific address.
+		@param address The address of the type
+		@param name The name of the type
+		@param statics It's static fields
+		@param instances It's instance fields
+	**/
+	public function setType(address:MemoryPointer, name:String, statics:Map<String, {value:InterpTokens, documentation:String, type:String}>, instances:Map<String, {documentation:String, type:String}>) {
+		var bytes = ByteArray.from(storeString(name).rawLocation);
+		var cellSize = POINTER_SIZE * 4;
+
+		// We'll create each map with some extra space to avoid frequent collisions. more overhead? yes. faster? also probably yes.
+		cellSize = POINTER_SIZE * 4;
+		var staticsLength = statics.keys().toArray().length;
+		var staticHashMap = new ByteArray(MathTools.floor(staticsLength * cellSize /*field name, value, type, doc*/ * 3 / 2));
+
+		var instancesLength = instances.keys().toArray().length;
+		var instancesHashMap = new ByteArray(MathTools.floor(instancesLength * (cellSize - POINTER_SIZE) /*field name, type, doc*/ * 3 / 2));
+
+		for (__item in [{a: staticsLength, b: staticHashMap, c:statics }, {a: instancesLength, b: instancesHashMap, c:instances}]) {
+			var elements = __item.a;
+			var hashTable = __item.b;
+			var fields:Map<String, Dynamic> = __item.c;
+
+			for (k => v in fields) {
+				var keyHash = Murmur1.hash(Bytes.ofString(k));
+				// Make sure divisibility by cellSize is possible. see HashTables.generateObjectHashTable for more info
+				var khI64 = Int64.make(0, keyHash);
+				var keyIndex = ((khI64 * cellSize) % elements).low;
+	
+				if (hashTable.getInt32(keyIndex) == 0) {
+					var address = keyIndex;
+					hashTable.setInt32(address, storeString(k).rawLocation);
+					address += POINTER_SIZE;
+					if (fields == statics) {
+						hashTable.setInt32(address, parent.store(v.value).rawLocation);
+						address += POINTER_SIZE;
+					}
+					hashTable.setInt32(address, parent.getTypeInformation(v.type).pointer.rawLocation);
+					address += POINTER_SIZE;
+					hashTable.setInt32(keyIndex, storeString(v.documentation).rawLocation);
+				} else {
+					
+					var incrementation = 0;
+					var i = keyIndex;
+					while (hashTable.getInt32(i) != 0) {
+						i += cellSize;
+						incrementation += cellSize;
+						if (i >= hashTable.length) {
+							i = 0;
+						}
+						if (incrementation >= hashTable.length) {
+							throw 'Object hash table did not generate. This should never happen. Initial length may be incorrect.';
+						}
+					}
+					var address = keyIndex;
+					hashTable.setInt32(address, storeString(k).rawLocation);
+					address += POINTER_SIZE;
+					if (fields == statics) {
+						hashTable.setInt32(address, parent.store(v.value).rawLocation);
+						address += POINTER_SIZE;
+					}
+					hashTable.setInt32(address, parent.getTypeInformation(v.type).pointer.rawLocation);
+					address += POINTER_SIZE;
+					hashTable.setInt32(keyIndex, storeString(v.documentation).rawLocation);
+				}
+			}
+
+			cellSize -= POINTER_SIZE;
+		}
+		staticHashMap = ByteArray.from(staticHashMap.length).concat(staticHashMap);
+		instancesHashMap = ByteArray.from(instancesHashMap.length).concat(instancesHashMap);
+		bytes = bytes.concat(staticHashMap).concat(instancesHashMap);
+		return setBytes(address, bytes);
 	}
 
 	/**

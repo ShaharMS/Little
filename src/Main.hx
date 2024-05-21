@@ -37,6 +37,9 @@ class Main {
 		new JsExample();
 		#elseif unit
 		UnitTests.run(true);
+		Sys.print(Resource.getString("sample"));
+		Sys.println(PrettyPrinter.printInterpreterAst(Little.compile(Resource.getString("sample"))));
+		Sys.print(PrettyPrinter.stringifyInterpreter(Little.compile(Resource.getString("sample"))));
 		#elseif sys
 
 		var preDefInput:String = null;

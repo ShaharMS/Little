@@ -63,13 +63,19 @@ class Plugins {
         instances.type = statics.type = memory.getTypeInformation(Little.keywords.TYPE_MODULE).pointer;
 
         if (__noTypeCreation) __noTypeCreation = false;
-        else {
+        else if (!memory.externs.externToPointer.exists(typeName) && !memory.constants.hasType(typeName)) {
             memory.externs.externToPointer[typeName] = memory.storage.storeByte(1);
             statics.getter = (_, _) -> {
                 objectValue: ClassPointer(memory.externs.externToPointer[typeName]),
                 objectAddress: memory.externs.externToPointer[typeName]
             }
-        }
+		} else if (memory.constants.hasType(typeName) && !memory.externs.externToPointer.exists(typeName)) {
+			memory.externs.externToPointer[typeName] = memory.constants.getType(typeName);
+			statics.getter = (_, _) -> {
+				objectValue: ClassPointer(memory.externs.externToPointer[typeName]),
+				objectAddress: memory.externs.externToPointer[typeName]
+			}
+		}
 
         for (key => field in fields) {
             switch key.split(" ") {
@@ -80,7 +86,7 @@ class Plugins {
                         // We can't optimize for the two cases outside of the callback, since haxe doesn't support
                         // type checking on function types.
                         try {
-                            var result = untyped field(value, address);
+                            var result = untyped field(address, value);
                             if (result is InterpTokens) {
                                 return {
                                     objectValue: result,

@@ -397,28 +397,33 @@ class PrettyPrinter {
 	public static function stringifyInterpreter(?code:Array<InterpTokens>, ?token:InterpTokens) {
 		if (token != null) code = [token];
 		var s = "";
-		
+		var currentLine = -1;
 		for (token in code) {
 			switch token {
-				case SetLine(line): s += '\n$indent';
+				case SetLine(line): {
+					if (currentLine != line) s += '\n$indent';
+					currentLine = line;
+				}
 				case SetModule(module): // Do Nothing.
-				case SplitLine: s += ", ";
-				case VariableDeclaration(name, type, doc): s += '${Little.keywords.VARIABLE_DECLARATION} ${stringifyInterpreter(name)} ${if (type != null  && type.asJoinedStringPath() != Little.keywords.TYPE_UNKNOWN) '${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyInterpreter(type)}' else ''}';
-				case FunctionDeclaration(name, params, type, doc): s += '${Little.keywords.FUNCTION_DECLARATION} ${stringifyInterpreter(name)}(${stringifyInterpreter(params)}) ${if (type != null && type.asJoinedStringPath() != Little.keywords.TYPE_UNKNOWN) '${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyInterpreter(type)}' else ''}';
-				case Write(assignees, value): s += assignees.concat([value]).map(t -> stringifyInterpreter(t)).join(" = ");
+				case SplitLine: 
+					s += ",";
+				case VariableDeclaration(name, type, doc): s += '${Little.keywords.VARIABLE_DECLARATION} ${stringifyInterpreter(name)}${if (type != null  && type.asJoinedStringPath() != Little.keywords.TYPE_UNKNOWN) ' ${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyInterpreter(type)}' else ''}';
+				case FunctionDeclaration(name, params, type, doc): s += '${Little.keywords.FUNCTION_DECLARATION} ${stringifyInterpreter(name)}(${stringifyInterpreter(params).replace(' ,', ',')})${if (type != null && type.asJoinedStringPath() != Little.keywords.TYPE_UNKNOWN) ' ${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyInterpreter(type)}' else ''}';
+				case Write(assignees, value): s += assignees.concat([value]).map(t -> stringifyInterpreter(t)).join(" = ").replace("  =", " =");
 				case Identifier(word): s += word;
 				case TypeCast(value, type): s += '${stringifyInterpreter(value)} ${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyInterpreter(type)}';
-				case FunctionCall(name, params): s += '${stringifyInterpreter(name)}(${stringifyInterpreter(params)})';
-				case ConditionCall(name, exp, body): s += '${stringifyInterpreter(name)} (${stringifyInterpreter(exp)}) \n${stringifyInterpreter(body)}';
+				case FunctionCall(name, params): s += '${stringifyInterpreter(name)}(${stringifyInterpreter(params).replace(' ,', ',')})';
+				case ConditionCall(name, exp, body): s += '${stringifyInterpreter(name)} (${stringifyInterpreter(exp)}) ${stringifyInterpreter(body)}';
 				case FunctionReturn(value, type): s += '${Little.keywords.FUNCTION_RETURN} ${stringifyInterpreter(value)}';
 				case Expression(parts, type): s += stringifyInterpreter(parts);
 				case Block(body, type): 
-					indent += "	";
+					indent += "\t";
 					s += '{${stringifyInterpreter(body)}} ${if (type != null && type.asJoinedStringPath() != Little.keywords.TYPE_UNKNOWN) '${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyInterpreter(type)}' else ''}';
-					indent = indent.subtract("	");
+					s.replaceLast('\t}', "}");
+					indent = indent.replaceLast("\t", "");
 				case PartArray(parts): s += stringifyInterpreter(parts);
 				case PropertyAccess(name, property): s += '${stringifyInterpreter(name)}${Little.keywords.PROPERTY_ACCESS_SIGN}${stringifyInterpreter(property)}';
-				case Sign(sign): s += sign;
+				case Sign(sign): s += '$sign';
 				case Number(num): s += num;
 				case Decimal(num): s += num;
 				case Characters(string): s += '"' + string + '"';

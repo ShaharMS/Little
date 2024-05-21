@@ -114,6 +114,9 @@ class Conversion {
 
                 obj;
             }
+			case ClassPointer(pointer): {
+				return Little.memory.getTypeName(pointer);
+			}
 			case FunctionCode(_, _): {
 				return null;
 			}

@@ -99,7 +99,6 @@ class HashTables {
                 type: type,
                 doc: doc
             });
-
             i += OBJECT_HASH_TABLE_CELL_SIZE;
         }
 
