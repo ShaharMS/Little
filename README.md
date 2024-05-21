@@ -1,3 +1,7 @@
+
+NOTICE: progress is currently being made on the branch `branch/functional-programming`.
+
+---
 # Little
 
 ### What is it?
