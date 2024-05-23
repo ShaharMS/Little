@@ -53,7 +53,7 @@ class Conversion {
                         documentation: ""
                     }
                 }
-                map[Little.keywords.TO_STRING_PROPERTY_NAME] = {
+                map[Little.keywords.TYPE_CAST_FUNCTION_PREFIX + Little.keywords.TYPE_STRING] = {
                     value: Block(
                         [FunctionReturn(Characters(Std.string(val)), Identifier(Little.keywords.TYPE_STRING))], Identifier(Little.keywords.TYPE_STRING)),
                     documentation: "The function that will be used to convert this object to a string."
@@ -108,7 +108,7 @@ class Conversion {
             case Object(props, typeName): {
                 var obj:Dynamic = {};
                 for (key => value in props) {
-                    if (key == Little.keywords.TO_STRING_PROPERTY_NAME) continue;
+                    if (key == Little.keywords.TYPE_CAST_FUNCTION_PREFIX + Little.keywords.TYPE_STRING) continue;
                     obj.key = toHaxeValue(value.value);
                 }
 

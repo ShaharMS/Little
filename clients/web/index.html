@@ -58,7 +58,7 @@
         p .cmt .str,
         p .cmt .type,
         p .cmt .func {
-            color: #5e5e5e
+            color: #5e5e5e !important
         }
 
         p .last-modified {
@@ -73,7 +73,7 @@
             box-sizing: border-box;
             color: #fefefe;
         }
-        
+
         hr {
             color: #616161;
             background-color: #616161;
@@ -93,7 +93,9 @@
             margin-block: -20px;
         }
 
-        #version, #build-number, #build-date {
+        #version,
+        #build-number,
+        #build-date {
             font-family: 'Courier New', Courier, monospace;
             background-color: #2b2a33;
             border: solid 1px;
@@ -102,7 +104,8 @@
             font-size: 0.8em;
         }
 
-        button, input {
+        button,
+        input {
             background-color: #2b2a33;
             border: solid 1px;
             border-radius: 2px;
@@ -158,7 +161,7 @@
             justify-content: center;
         }
 
-        #k-table-body {  
+        #k-table-body {
             display: block;
             height: 45vh;
             overflow-y: auto;
@@ -194,7 +197,7 @@
         }
 
         #keywords input {
-            width: 100%; 
+            width: 100%;
             text-align: center;
         }
 
@@ -203,6 +206,7 @@
                 display: flex;
                 flex-direction: column;
             }
+
             #code-row {
                 width: 100vw;
                 height: 50vh;
@@ -212,12 +216,13 @@
                 width: 90vw;
                 margin-inline: auto;
             }
+
             div .collapsed {
                 height: 13%;
             }
 
-            #k-table-body {  
-                display: block; 
+            #k-table-body {
+                display: block;
                 height: max-content;
             }
 
@@ -236,12 +241,15 @@
                 height: 96vh;
                 margin-block: 2vh;
             }
+
             #ast {
                 display: none;
             }
+
             #second-container {
                 display: none;
             }
+
             button {
                 display: none;
             }
@@ -275,15 +283,16 @@ Ast
         <table id="keywords">
             <tbody id="k-table-body">
                 <tr>
-                <th>Usage</th>
-                <th>Keyword/Name</th>
-                <th>In Code</th>
+                    <th>Usage</th>
+                    <th>Keyword/Name</th>
+                    <th>In Code</th>
                 </tr>
             </tbody>
         </table>
         <hr>
         <div id="data">
-            <p>Version <span id="version">alpha-1.1.0</span>, Last built in <span id="build-date"></span>, Build number <span id="build-number"></p>
+            <p id="casing">Version <span id="version"></span></p>
+            <!-- , Last built in <span id="build-date"></span>, Build number <span id="build-number"> -->
         </div>
         <hr>
         <div id="guide">
@@ -308,11 +317,11 @@ Ast
 
         Highlighter.syntaxHighlight = function (html) {
             var idents = new RegExp("(?!&)\\b(\\w+)\\b(?!;)(?!\\s*\\()", "g");
-            var keywords1 = ["as", "if", "while", "for", "after", "whenever", "return"];
+            var keywords1 = ["as", "if", "else", "while", "for", "after", "whenever", "return", "from", "to", "jump"];
             var keywords1EReg = new RegExp("\\b(" + keywords1.join("|") + ")\\b", "g");
             var keywords2 = ["nothing", "true", "false", "action", "define"];
             var keywords2EReg = new RegExp("\\b(" + keywords2.join("|") + ")\\b", "g");
-            var basicTypes = ["Number", "Decimal", "Characters", "Boolean", "Anything", "Sign", "Type"].concat(types); 
+            var basicTypes = ["Number", "Decimal", "Characters", "Boolean", "Anything", "Sign", "Type", "Array", "Memory", "Object"].concat(types);
             var basicTypesEReg = new RegExp("\\b(" + basicTypes.join("|") + ")\\b", "g");
             var functions = new RegExp("\\b([a-zA-Z0-9_]+)\\s*\\(", "g");
             var nums = new RegExp("\\b([0-9]+\.?[0-9]*)\\b", "g");
@@ -322,14 +331,13 @@ Ast
             html = html.replace(keywords1EReg, "<span class='kwd'>$1</span>");
             html = html.replace(basicTypesEReg, "<span class='type'>$1</span>");
             html = html.replace(functions, "<span class='func'>$1</span>(");
-            html = html.replace(new RegExp("(\"[^\"]*\")", "g"), "<span class='str'>$1</span>");
-            html = html.replace(new RegExp("(//.+?)(\n|$)", "g"), "<span class='cmt'>$1</span>$2");
-            html = html.replace(new RegExp("(/\\*\\*?(.|\n)+?\\*?\\*/)", "g"), "<span class='cmt'>$1</span>");
-            html = html.replace(nums, "<span class='nums'>$1</span>")
+            html = html.replace(/("""[\s\S]*?""")/gm, "<span class='cmt'>$1</span>");
+            html = html.replace(/(\"[^\"]*\")/g, "<span class='str'>$1</span>");
+            html = html.replace(nums, "<span class='nums'>$1</span>");
             return html;
         };
 
-        Highlighter.registerOnParagraphs = function() {
+        Highlighter.registerOnParagraphs = function () {
             var ps = document.getElementById('keywords').getElementsByTagName("p");
             for (let i = 0; i < ps.length; i++) {
                 ps.item(i).onchange = () => ps.item(i).innerHTML = Highlighter.syntaxHighlight(ps.item(i).innerText)
@@ -372,6 +380,25 @@ Ast
             }
             button.adjust();
             buttons.push(button);
+
+            if (i == 0) { // Formatter 
+                let formatter = document.createElement('button');
+                formatter.textContent = "Format";
+                box.parentElement.append(formatter);
+                formatter.style.position = "absolute";
+
+                formatter.onclick = () => {
+                    let code = document.getElementById("input");
+                    code.value = Little.format(code.value);
+                }
+                formatter.adjust = () => {
+                    let rect = box.getBoundingClientRect();
+                    formatter.style.top = rect.top + 5 + "px";
+                    formatter.style.left = `calc(${rect.right}px - ${button.getBoundingClientRect().width}px - 4px - ${formatter.getBoundingClientRect().width}px - 5px)`;
+                }
+                formatter.adjust();
+                buttons.push(formatter);
+            }
         }
 
         window.addEventListener("resize", (_) => { for (let j = 0; j < buttons.length; j++) buttons[j].adjust(); });

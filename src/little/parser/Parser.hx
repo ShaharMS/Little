@@ -538,14 +538,14 @@ class Parser {
 					var fallback = i - 1; // Reason for -1 here is because of the lookahead - if this isn't a condition, i-1 is pushed and i is the next token.
 
                     while (true) {
+                        if (body != null) break;
                         if (i >= pre.length) {
                             i = fallback;
                             break;
                         }
                         var lookahead = pre[i];
                         switch lookahead {
-                            case SetLine(_): {}
-                            case SplitLine | SetModule(_): { // Encountering a hard split in any place breaks the sequence (if (), {}, if, () {})
+                            case SplitLine | SetModule(_) | SetLine(_): { // Encountering a hard split in any place breaks the sequence (if (), {}, if, () {})
 							if (exp != null && body != null) break;
 								i = fallback;
 								break;
@@ -555,8 +555,7 @@ class Parser {
 									i = fallback;
 									break;
 								}
-                                else if (body == null) body = Block(mergeComplexStructures(b), mergeComplexStructures([type])[0])
-                                else break;
+                                else if (body == null) body = Block(mergeComplexStructures(b), mergeComplexStructures([type])[0]);
                             }
                             case Expression(parts, type): {
                                 if (exp == null) exp = PartArray(mergeComplexStructures(parts));
@@ -564,14 +563,12 @@ class Parser {
 									i = fallback;
                                     break;
 								}
-                                else break;
                             }
                             case _: {
                                 if (exp == null || body == null) {
 									i = fallback;
 									break;
 								}
-                                else break;
                             }
                         }
                         i++;
@@ -579,7 +576,7 @@ class Parser {
 					if (i == fallback) {
 						post.push(token);
 					} else {
-						i -= 2;
+						i -= 1;
 						post.push(ConditionCall(name, exp, body));
 						currentDoc = null;
 					}

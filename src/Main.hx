@@ -4,7 +4,6 @@ import haxe.Resource;
 import little.interpreter.memory.Memory;
 import little.tools.PrepareRun;
 import little.tools.PrettyOutput;
-import haxe.SysTools;
 import haxe.Log;
 import vision.tools.MathTools;
 import haxe.io.Path;
@@ -20,6 +19,7 @@ import js_example.JsExample;
 #elseif sys
 import sys.FileSystem;
 import sys.io.File;
+import haxe.SysTools;
 #end
 import little.parser.Parser;
 import little.lexer.Lexer;
@@ -37,9 +37,8 @@ class Main {
 		new JsExample();
 		#elseif unit
 		UnitTests.run(true);
-		Sys.print(Resource.getString("sample"));
-		Sys.println(PrettyPrinter.printInterpreterAst(Little.compile(Resource.getString("sample"))));
-		Sys.print(PrettyPrinter.stringifyInterpreter(Little.compile(Resource.getString("sample"))));
+		#elseif formatting
+		File.saveContent("formatted.txt", Little.format(Resource.getString("sample")));
 		#elseif sys
 
 		var preDefInput:String = null;

@@ -1,5 +1,6 @@
 package little;
 
+import little.interpreter.Tokens.InterpTokens;
 import vision.ds.Queue;
 import vision.helpers.VisionThread;
 import little.tools.PrettyPrinter;
@@ -14,7 +15,7 @@ import little.interpreter.memory.Operators;
 
 @:access(little.interpreter.Interpreter)
 @:access(little.interpreter.Runtime)
-@:expose
+@:expose("Little")
 class Little {
     
     /**
@@ -159,10 +160,14 @@ class Little {
 
         @param code 
     **/
-    public static function compile(code:String) {
+    public static function compile(code:String):Array<InterpTokens> {
         return Interpreter.convert(...Parser.parse(Lexer.lex(code)));
     }
 
+    public static function format(code:String):String {
+        trace(PrettyPrinter.printParserAst(Parser.parse(Lexer.lex(code))));
+        return PrettyPrinter.stringifyParser(Parser.parse(Lexer.lex(code)));
+    }
 	/**
 	    Resets all runtime details.
 	**/

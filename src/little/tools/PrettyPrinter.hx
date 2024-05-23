@@ -350,42 +350,48 @@ class PrettyPrinter {
 
 		for (token in code) {
 			switch token {
-				case SetLine(line):s += '\n$indent';
-				case SetModule(_): // Do Nothing, this is not syntax dependent.
-				case SplitLine: s += ", ";
-				case Variable(name, type): s += '${Little.keywords.VARIABLE_DECLARATION} $name ${if (type != null) '${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyParser(type)}' else ''}';
-				case Function(name, params, type): s += '${Little.keywords.FUNCTION_DECLARATION} ${stringifyParser(name)}(${stringifyParser(params)}) ${if (type != null) '${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyParser(type)}' else ''}';
-				case ConditionCall(name, exp, body): 
-					indent += "	";
-					s += '${stringifyParser(name)} (${stringifyParser(exp)}) \n${stringifyParser(body)}';
-					indent = indent.subtract("	");
+				case SetLine(line):s += '\n$indent'; continue;
+				case SetModule(_): continue; // Do Nothing, this is not syntax dependent.
+				case SplitLine: {
+					if (s.charAt(s.length - 1).isSpace(0)) s = s.substring(0, s.length - 1);
+					s += ",";
+				}
+				case Variable(name, type): s += '${Little.keywords.VARIABLE_DECLARATION} ${stringifyParser(name)}${if (type != null  && Interpreter.convert(type)[0].asJoinedStringPath() != Little.keywords.TYPE_UNKNOWN) ' ${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyParser(type)}' else ''}';
+				case Function(name, params, type): s += '${Little.keywords.FUNCTION_DECLARATION} ${stringifyParser(name)}(${stringifyParser(params).replace(" ,", ",")})${if (type != null  && Interpreter.convert(type)[0].asJoinedStringPath() != Little.keywords.TYPE_UNKNOWN) ' ${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyParser(type)}' else ''}';
+				case ConditionCall(name, exp, body): s += '${stringifyParser(name)} (${stringifyParser(exp)}) ${stringifyParser(body)}';
 				case Read(name): s += stringifyParser(name);
-				case Write(assignees, value): s += [assignees.concat([value]).map(t -> stringifyParser(t)).join(" = ")];
+				case Write(assignees, value): s += assignees.concat([value]).map(t -> stringifyParser(t)).join(" = ").replace("  =", " =");
 				case Identifier(word): s += word;
 				case TypeDeclaration(value, type): s += '${stringifyParser(value)} ${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyParser(type)}';
-				case FunctionCall(name, params): s += '${stringifyParser(name)}(${stringifyParser(params)})';
+				case FunctionCall(name, params): s += '${stringifyParser(name)}(${stringifyParser(params).replace(" ,", ",")})';
 				case Return(value, type): s += '${Little.keywords.FUNCTION_RETURN} ${stringifyParser(value)}';
 				case Expression(parts, type): s += stringifyParser(parts);
-				case Block(body, type): 
-					indent += "	";
-					s += '{${stringifyParser(body)}} ${if (type != null) '${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyParser(type)}' else ''}';
-					indent = indent.subtract("	");
+				case Block(body, type): {					
+					indent += "\t";
+					if (body[0].is(SET_MODULE)) body.shift();
+					if (body[0].is(SET_LINE)) body.shift();
+					s += '{${stringifyParser(body)}} ${if (type != null && Interpreter.convert(type)[0].asJoinedStringPath() != Little.keywords.TYPE_UNKNOWN) '${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyParser(type)}' else ''}';
+					s = s.replaceLast('\t} ', "}");
+					indent = indent.replaceLast("\t", "");
+				}
 				case PartArray(parts): s += stringifyParser(parts);
 				case PropertyAccess(name, property): s += '${stringifyParser(name)}${Little.keywords.PROPERTY_ACCESS_SIGN}${stringifyParser(property)}';
-				case Sign(sign): s += " " + sign + " ";
+				case Sign(sign): s += sign;
 				case Number(num): s += num;
 				case Decimal(num): s += num;
 				case Characters(string): s += '"' + string + '"';
 				case Documentation(doc): s += '"""' + doc + '"""';
-				case ErrorMessage(msg):
+				case ErrorMessage(msg): continue;
 				case NullValue: s += Little.keywords.NULL_VALUE;
 				case TrueValue: s += Little.keywords.TRUE_VALUE;
 				case FalseValue: s += Little.keywords.FALSE_VALUE;
 				case Custom(_, _): throw 'Custom tokens cannot be stringified, as they dont represent any output syntax (found $token)';
 			}
+			s += " ";
 		}
 
-		return s;
+		return s.ltrim().replaceLast(" ", "");
+
 	}
 
 	/**
@@ -402,10 +408,13 @@ class PrettyPrinter {
 			switch token {
 				case SetLine(line): {
 					s += '\n$indent';
+					continue;
 				}
-				case SetModule(module): // Do Nothing.
-				case SplitLine: 
+				case SetModule(module): continue; // Do Nothing.
+				case SplitLine: {
+					if (s.charAt(s.length - 1).isSpace(0)) s = s.substring(0, s.length - 1);
 					s += ",";
+				}
 				case VariableDeclaration(name, type, doc): s += '${Little.keywords.VARIABLE_DECLARATION} ${stringifyInterpreter(name)}${if (type != null  && type.asJoinedStringPath() != Little.keywords.TYPE_UNKNOWN) ' ${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyInterpreter(type)}' else ''}';
 				case FunctionDeclaration(name, params, type, doc): s += '${Little.keywords.FUNCTION_DECLARATION} ${stringifyInterpreter(name)}(${stringifyInterpreter(params).replace(' ,', ',')})${if (type != null && type.asJoinedStringPath() != Little.keywords.TYPE_UNKNOWN) ' ${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyInterpreter(type)}' else ''}';
 				case Write(assignees, value): s += assignees.concat([value]).map(t -> stringifyInterpreter(t)).join(" = ").replace("  =", " =");
@@ -420,11 +429,11 @@ class PrettyPrinter {
 					if (body[0].is(SET_MODULE)) body.shift();
 					if (body[0].is(SET_LINE)) body.shift();
 					s += '{${stringifyInterpreter(body)}} ${if (type != null && type.asJoinedStringPath() != Little.keywords.TYPE_UNKNOWN) '${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyInterpreter(type)}' else ''}';
-					s.replaceLast('\t}', "}");
+					s = s.replaceLast('\t}', "}");
 					indent = indent.replaceLast("\t", "");
 				case PartArray(parts): s += stringifyInterpreter(parts);
 				case PropertyAccess(name, property): s += '${stringifyInterpreter(name)}${Little.keywords.PROPERTY_ACCESS_SIGN}${stringifyInterpreter(property)}';
-				case Sign(sign): s += '$sign';
+				case Sign(sign): s += sign;
 				case Number(num): s += num;
 				case Decimal(num): s += num;
 				case Characters(string): s += '"' + string + '"';
@@ -440,7 +449,7 @@ class PrettyPrinter {
 			s += " ";
 		}
 
-		return s.replaceLast(" ", "");
+		return s.ltrim().replaceLast(" ", "");
 	}
 
 	/**

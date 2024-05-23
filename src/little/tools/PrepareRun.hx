@@ -1,5 +1,6 @@
 package little.tools;
 
+import vision.ds.ByteArray;
 import little.interpreter.memory.Memory;
 import little.interpreter.memory.HashTables;
 import little.interpreter.memory.MemoryPointer;
@@ -210,8 +211,17 @@ class PrepareRun {
 			'static ${Little.keywords.TYPE_DYNAMIC} ${Little.keywords.STDLIB__MEMORY_read} (define address as ${Little.keywords.TYPE_INT}, define type as ${Little.keywords.TYPE_MODULE})' => (params) -> {
 				return MemoryPointer.fromInt(params[0].parameter(0)).extractValue(Conversion.toHaxeValue(params[1]));
 			},
-			'static ${Little.keywords.TYPE_DYNAMIC} ${Little.keywords.STDLIB__MEMORY_write} (define address as ${Little.keywords.TYPE_INT}, define amount as ${Little.keywords.TYPE_INT})' => (params) -> {
-				Little.memory.storage.setBytes(Conversion.toHaxeValue(params[0]), Conversion.toHaxeValue(params[1]));	
+			'static ${Little.keywords.TYPE_DYNAMIC} ${Little.keywords.STDLIB__MEMORY_write} (define address as ${Little.keywords.TYPE_INT}, define bytes as ${Little.keywords.TYPE_ARRAY})' => (params) -> {
+				var arrayRef = Conversion.toHaxeValue(params[1]).parameter(0);
+				var arrayPointer = MemoryPointer.fromInt(arrayRef.get("__p").value.parameter(0)); // Number(p)
+				var arrayType = arrayRef.get("__t").value.parameter(0); // ClassPointer(p)
+				if (arrayType != Little.memory.constants.INT || arrayType != Little.memory.constants.FLOAT || arrayType != Little.memory.constants.BOOL) {
+					Little.runtime.throwError(ErrorMessage('${Little.keywords.STDLIB__MEMORY_write} only supports  ${Little.keywords.TYPE_INT}, ${Little.keywords.TYPE_FLOAT} or ${Little.keywords.TYPE_BOOLEAN} arrays, as they\'re the only ones able to meaningfully represent bytes.'));
+				}
+				var array = Little.memory.storage.readArray(arrayPointer);
+				var byteArray = new ByteArray(array.length);
+				for (i in 0...array.length) { byteArray.setUInt8(i, array[i].getUInt8(i)); }
+				Little.memory.storage.setBytes(Conversion.toHaxeValue(params[0]), byteArray);	
 				return NullValue;
 			},
 			'static ${Little.keywords.TYPE_INT} ${Little.keywords.STDLIB__MEMORY_size}' => () -> {

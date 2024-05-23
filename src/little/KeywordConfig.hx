@@ -122,8 +122,6 @@ class KeywordConfig {
 	@:optional public var OBJECT_TYPE_PROPERTY_NAME:String = "type";
 	@:optional public var OBJECT_ADDRESS_PROPERTY_NAME:String = "address";
 
-	@:optional public var TO_STRING_PROPERTY_NAME:String = "toString";
-
 	@:optional public var PRINT_FUNCTION_NAME:String = "print";
 	@:optional public var RAISE_ERROR_FUNCTION_NAME:String = "error";
 	@:optional public var READ_FUNCTION_NAME:String = "read";
