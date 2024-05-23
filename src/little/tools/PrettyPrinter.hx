@@ -401,8 +401,7 @@ class PrettyPrinter {
 		for (token in code) {
 			switch token {
 				case SetLine(line): {
-					if (currentLine != line) s += '\n$indent';
-					currentLine = line;
+					s += '\n$indent';
 				}
 				case SetModule(module): // Do Nothing.
 				case SplitLine: 
@@ -418,6 +417,8 @@ class PrettyPrinter {
 				case Expression(parts, type): s += stringifyInterpreter(parts);
 				case Block(body, type): 
 					indent += "\t";
+					if (body[0].is(SET_MODULE)) body.shift();
+					if (body[0].is(SET_LINE)) body.shift();
 					s += '{${stringifyInterpreter(body)}} ${if (type != null && type.asJoinedStringPath() != Little.keywords.TYPE_UNKNOWN) '${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyInterpreter(type)}' else ''}';
 					s.replaceLast('\t}', "}");
 					indent = indent.replaceLast("\t", "");

@@ -158,7 +158,7 @@ class PrepareRun {
 		]);
 
 		Little.plugin.registerType(Little.keywords.TYPE_ARRAY, [
-			'static ${Little.keywords.TYPE_ARRAY} ${Little.keywords.INSTANTIATE_FUNCTION_NAME} (define type as ${Little.keywords.TYPE_MODULE}, define length as ${Little.keywords.TYPE_INT)})' => (params) -> {
+			'static ${Little.keywords.TYPE_ARRAY} ${Little.keywords.INSTANTIATE_FUNCTION_NAME} (define type as ${Little.keywords.TYPE_MODULE}, define length as ${Little.keywords.TYPE_INT})' => (params) -> {
 				var arrayType:String = Conversion.toHaxeValue(params[0]);
 				var size = Little.memory.getTypeInformation(arrayType).defaultInstanceSize;
 				var length:Int = Conversion.toHaxeValue(params[1]);
@@ -572,7 +572,6 @@ class PrepareRun {
 			var val = NullValue;
 			var fp = [];
 			// Incase one does `from (4 + 2)` and it accidentally parses a function
-			trace(params);
 			for (p in params) {
 				switch p {
 					case FunctionCall(_.parameter(0) == Little.keywords.FOR_LOOP_FROM => true, params): {

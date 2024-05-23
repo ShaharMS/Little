@@ -59,7 +59,7 @@ class Parser {
 		#if parser_debug trace("non-block bodies:", PrettyPrinter.printParserAst(tokens)); #end
         for (level in Parser.additionalParsingLevels) {
             tokens = level(tokens);
-            #if parser_debug trace('${level}:', tokens); #end
+            #if parser_debug trace('${level}:', PrettyPrinter.printParserAst(tokens)); #end
         }
         #if parser_debug trace("macros:", PrettyPrinter.printParserAst(tokens)); #end
 
@@ -143,7 +143,6 @@ class Parser {
                         } else blockBody.push(lookahead);
                         i++;
                     }
-					if (blockBody.length >= 3 && blockBody[3].is(SET_LINE)) blockBody.remove(blockBody[2]);
                     // Throw error for unclosed blocks;
                     if (i + 1 == pre.length) {
                         Little.runtime.throwError(ErrorMessage('Unclosed code block, starting at line ' + blockStartLine));
@@ -531,10 +530,6 @@ class Parser {
                 }
 				case Identifier(_): { // Conditions are definable, or at least, developers can register them dynamically, we need to look for the syntax: Identifier -> Expression -> Block. 
                     i++;
-                    if (i + 1>= pre.length) {
-                        post.push(token);
-                        continue;
-                    }
 
                     var name:ParserTokens = Identifier(token.parameter(0));
                     var exp:ParserTokens = null;
@@ -564,7 +559,7 @@ class Parser {
                                 else break;
                             }
                             case Expression(parts, type): {
-                                if (exp == null) exp = Expression(mergeComplexStructures(parts), mergeComplexStructures([type])[0]);
+                                if (exp == null) exp = PartArray(mergeComplexStructures(parts));
                                 else if (body == null) {
 									i = fallback;
                                     break;
@@ -584,7 +579,7 @@ class Parser {
 					if (i == fallback) {
 						post.push(token);
 					} else {
-						i--;
+						i -= 2;
 						post.push(ConditionCall(name, exp, body));
 						currentDoc = null;
 					}
@@ -860,7 +855,7 @@ class Parser {
 							post.push(FunctionCall(mergeNonBlockBodies([name])[0], mergeNonBlockBodies([params])[0]));
 						}
 						case _: {
-							post.push(ConditionCall(mergeNonBlockBodies([name])[0], mergeNonBlockBodies([params])[0], Block(mergeNonBlockBodies([lookahead]), null)));
+							post.push(ConditionCall(mergeNonBlockBodies([name])[0], mergeNonBlockBodies([params])[0], mergeNonBlockBodies([lookahead])[0]));
 							i++; // We consumed the lookahead, so we need to increment to its position, so that the final i++ gets to the next, correct, token.
 						}
 					}
