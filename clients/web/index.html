@@ -92,7 +92,7 @@
             text-align: center;
             margin-block: -20px;
         }
-
+        ic,
         #version,
         #build-number,
         #build-date {
@@ -118,12 +118,15 @@
             flex-direction: row;
             align-items: flex-start;
             background-color: #181a1b;
+            height: 100vh;
+            width: 100vw;
+            overflow-x: hidden;
         }
 
         #code-row {
             display: flex;
             flex-direction: column;
-            height: 100vh;
+            height: 100%;
         }
 
         #ast:not(.collapsed),
@@ -152,6 +155,7 @@
             margin: 0;
             margin: 10px;
             gap: 30px;
+            height: 98vh;
         }
 
         #keywords {
@@ -205,6 +209,7 @@
             body {
                 display: flex;
                 flex-direction: column;
+                height: unset;
             }
 
             #code-row {
@@ -235,6 +240,30 @@
             }
         }
 
+        #guide {
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        #guide h1 {
+            align-self: center;
+            padding-bottom: 20px;
+        }
+
+        #guide h2 {
+            border-left: white 3px solid;
+            padding-left: 10px;
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+        #guide ul>li {
+            margin-left: 40px;
+        }
+        #guide ul {
+            margin-block: 5px;
+        }
+
         @media screen and (max-width: 400px) {
             #code-row {
                 width: 100vw;
@@ -253,16 +282,6 @@
             button {
                 display: none;
             }
-        }
-
-        #guide {
-            display: flex;
-            flex-direction: column;
-        }
-
-        #guide h1 {
-            align-self: center;
-            padding-bottom: 20px;
         }
     </style>
 
@@ -297,7 +316,26 @@ Ast
         <hr>
         <div id="guide">
             <h1>Quickstart</h1>
-            <p>Coming soon :)</p>
+            <p>Welcome! This is the programming language, Little - it is intended to be simple, portable, and quite customizable.</p>
+            <h2>Main Section</h2>
+            <p>At the left side (Or, on tall screens, at the top) of the screen, there are three tabs:</p>
+            <ul>
+                <li>Input - the code you want to run. Runs automatically upon key press.</li>
+                <li>AST - the abstract syntax tree of the code. Updated when the code is ran.</li>
+                <li>Output - the output of the code you just ran.</li>
+            </ul>
+            <p>Each tab is collapsible using the <ic>Collapse</ic> button at it's top-left corner. The input tab also has the 
+                <ic>Format</ic> button, to format the code using the standard formatter.</p>
+            
+            <h2>Keyword Configuration</h2>
+            <p>At the top right corner (or, on tall screens, at the bottom of the page), you have a table, containing every single 
+                configurable character-related option the language can provide. </p>
+            <p>You can leave the fields empty to use the default values, or change 
+                them to either an identifier of some sort, or a sign, 
+                depending on the case.
+            </p>
+            <p>Each keyword also provides an example of how it can be used. I recommend
+                using this if you want to learn about how to program in the language.</p>
         </div>
     </div>
 

@@ -147,7 +147,7 @@ class PrepareRun {
 				return Conversion.toLittleValue(value.parameter(0).indexOf(Conversion.toHaxeValue(params[0])) == value.parameter(0).length - Conversion.toHaxeValue(params[0]).length);
 			},
 
-			'static ${Little.keywords.TYPE_STRING} ${Little.keywords.STDLIB__STRING_fromCharCode} (define code as ${Little.keywords.TYPE_INT})' => (_, value, params) -> {
+			'static ${Little.keywords.TYPE_STRING} ${Little.keywords.STDLIB__STRING_fromCharCode} (define code as ${Little.keywords.TYPE_INT})' => (params) -> {
 				return Conversion.toLittleValue(String.fromCharCode(Conversion.toHaxeValue(params[0])));
 			}
 		]);
@@ -261,7 +261,7 @@ class PrepareRun {
 	public static function addProps() {
 		Little.plugin.registerInstanceVariable(Little.keywords.OBJECT_TYPE_PROPERTY_NAME, Little.keywords.TYPE_STRING, Little.keywords.TYPE_DYNAMIC, 'The name of this value\'s type, as a ${Little.keywords.TYPE_STRING}', 
 			(value, address) -> {
-				return Characters(value.type());
+				return ClassPointer(Little.memory.getTypeInformation(value.type()).pointer);
 			}
 		);
 		Little.plugin.registerInstanceVariable(Little.keywords.OBJECT_ADDRESS_PROPERTY_NAME, POINTER_SIZE == 4 ? Little.keywords.TYPE_INT : Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_DYNAMIC, 'The address of this value',
@@ -269,10 +269,6 @@ class PrepareRun {
 				return POINTER_SIZE == 4 ? Number(address.rawLocation) : Decimal(address.rawLocation);
 			}
 		);
-		// Little.plugin.registerInstanceVariable("token", "Characters", "Anything", 
-		// 	(value:InterpTokens, address:MemoryPointer) -> {
-		// 	return Characters(value.string());
-		// });
 	}
 
 	/**

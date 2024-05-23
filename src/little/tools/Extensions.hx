@@ -85,7 +85,7 @@ class Extensions {
 		If `token` is not an `Identifier` or `Characters` token, it will use the result of `Interpreter.run([token])`.
 	**/
 	public static inline function extractIdentifier(token:InterpTokens):String {
-		return is(token, IDENTIFIER, CHARACTERS) ? parameter(token, 0) : parameter(Interpreter.run([token]), 0);
+		return is(token, IDENTIFIER) ? parameter(token, 0) : parameter(Interpreter.run([token]), 0);
 	}
 
 	/**
@@ -100,10 +100,13 @@ class Extensions {
 					path.unshift(extractIdentifier(property));
 					current = source;
 				}
-				case Identifier(word) | Characters(word): {
+				case Identifier(word): {
 					path.unshift(word);
 					current = null;
 				}
+				case Characters(string):
+					path.unshift('"$string"');
+					current = null;
 				default: {
 					path.unshift(extractIdentifier(current));
 					current = null;

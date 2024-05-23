@@ -68,10 +68,10 @@ class Lexer {
                 }
                 i--;
                 tokens.push(Sign(sign));
-            } else if (~/[^+-.!@#$%%^&*0-9 \t\n\r;,\(\)\[\]\{\}]/.match(char)) {
+            } else if (new EReg('[^${KeywordConfig.recognizedOperators.join("")} \\t\\n\\r;,\\(\\)\\[\\]\\{\\}]', "g").match(char)) {
                 var name = char;
                 i++;
-                while (i < code.length && ~/[^+-.!@#$%%^&* \t\n\r;,\(\)\[\]\{\}]/.match(code.charAt(i))) {
+                while (i < code.length && new EReg('[^${KeywordConfig.recognizedOperators.join("")} \\t\\n\\r;,\\(\\)\\[\\]\\{\\}]', "g").match(code.charAt(i))) {
                     name += code.charAt(i);
                     i++;
                 }

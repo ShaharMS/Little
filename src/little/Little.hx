@@ -165,7 +165,6 @@ class Little {
     }
 
     public static function format(code:String):String {
-        trace(PrettyPrinter.printParserAst(Parser.parse(Lexer.lex(code))));
         return PrettyPrinter.stringifyParser(Parser.parse(Lexer.lex(code)));
     }
 	/**

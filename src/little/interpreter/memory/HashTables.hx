@@ -208,14 +208,12 @@ class HashTables {
                 doc: doc
             });
 
-            trace("Rehashing object: " + object.rawLocation);
 
             var newHashTable = HashTables.generateObjectHashTable(table);
             // Free the old hash table:
             storage.freeBytes(storage.readPointer(object.rawLocation + POINTER_SIZE), hashTableBytes.length);
             // Store the new one, retrieve the pointer to it:
             var tablePointer = storage.storeBytes(newHashTable.length, newHashTable);
-            trace(tablePointer, newHashTable.length);
             // Update the object's hash table pointer:
             storage.setPointer(object.rawLocation + 4, tablePointer);
             // Don't forget, the table length also needs to be replaced

@@ -1,5 +1,6 @@
 package js_example;
 
+import js.html.Event;
 import little.KeywordConfig;
 import js.html.SpanElement;
 import js.html.TableColElement;
@@ -31,15 +32,12 @@ class JsExample {
 		version.innerText = Little.version;
         if (Little.version.endsWith("f")) d.getElementById("casing").innerHTML += " (f - Functional programming only)";
 
-		trace(input, ast, output);
 		input.addEventListener("keyup", function(_) {
 			try {
-				trace(input.value);
 				ast.value = little.tools.PrettyPrinter.printInterpreterAst(little.interpreter.Interpreter.convert(...little.parser.Parser.parse(little.lexer.Lexer.lex(input.value))));
 			} catch (e) {}
 
 			try {
-				trace(input.value);
 				Little.reset();
 				Little.run(input.value, true);
 				output.value = Little.runtime.stdout.output;
@@ -74,9 +72,9 @@ class JsExample {
 				p.innerText = getCodeExample(input.id);
 				p.onchange();
 			}
+            input.dispatchEvent(new Event("keyup"));
 		}
 
-		trace(Type.getInstanceFields(KeywordConfig).map(k -> 'case "$k":\n').join(""));
 		for (keyword in Type.getInstanceFields(KeywordConfig)) {
 			if (keyword == "change")
 				continue;
@@ -112,7 +110,7 @@ class JsExample {
 		}
 
 		Syntax.plainCode("Highlighter.registerOnParagraphs()");
-		Syntax.plainCode('document.getElementById("input").dispatchEvent(new Event("onkeyup"));');
+		Syntax.plainCode('document.getElementById("input").dispatchEvent(new Event("keyup"));');
 
 		update();
 	}

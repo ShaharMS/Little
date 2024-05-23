@@ -10,11 +10,10 @@ using little.tools.Extensions;
 using vision.tools.MathTools;
 
 class Memory {
-
-    public var storage:Storage;
+	public var storage:Storage;
 	public var referrer:Referrer;
 	public var externs:ExternalInterfacing;
-    public var constants:ConstantPool;
+	public var constants:ConstantPool;
 
 	@:noCompletion public var memoryChunkSize:Int = 512; // 512 bytes
 
@@ -28,6 +27,7 @@ class Memory {
 		The current amount of memory allocated, in bytes.
 	**/
 	public var currentMemorySize(get, never):Int;
+
 	/** Memory.currentMemorySize getter **/ @:noCompletion function get_currentMemorySize() {
 		return storage.reserved.length + referrer.bytes.length;
 	}
@@ -80,59 +80,93 @@ class Memory {
 	}
 
 	/**
-	    Similar to the `store` function, but respects pass by value/reference rules.
+		Similar to the `store` function, but respects pass by value/reference rules.
 
 		Whether an object of type `T` is passed by reference or not is dictated by the value of a field
 		named `passedByReference`. This field cannot be changed at runtime for existing types.
 
 		@param token A simple token (for which the returned value will be the same as a `store` call), or an identifiable
-		token (evaluable by `Extensions.extractIdentifier`), specifically ones that return some sort of a "path" to that value. 
+		token (evaluable by `Extensions.asJoinedStringPath`), specifically ones that return some sort of a "path" to that value. 
 		@return A pointer to that location/value.
 	**/
 	public function retrieve(token:InterpTokens):MemoryPointer {
 		switch token {
-			case _ if (token.is(TRUE_VALUE, FALSE_VALUE, NULL_VALUE, OBJECT, FUNCTION_CODE, BLOCK, CONDITION_CODE, CLASS_POINTER) || token.passedByValue()): {
-				return store(token);
-			}
-			case Identifier(_) | PropertyAccess(_, _): {
-				var path = token.asStringPath();
-				var cell = read(...path);
-				if (cell.objectValue.passedByValue()) return store(cell.objectValue);
-				if (externs.hasGlobal(...path) && cell.objectValue.is(FUNCTION_CODE)) {
-					// Extern function "call" themselves the EXTERN pointer, but here this is not
-					// valid. A nice, nut still a little hacky solution is to create a function
-					// that references the external function, and store it instead.
-					var params:OrderedMap<String, InterpTokens> = cell.objectValue.parameter(0);
-					var forwardedParams = [];
-					for (key in params.keys()) {
-						forwardedParams.push(Identifier(key));
-						forwardedParams.push(SplitLine);
-					}
-					forwardedParams.pop();
+			case _ if (token.is(TRUE_VALUE, FALSE_VALUE, NULL_VALUE, OBJECT, FUNCTION_CODE, BLOCK, CONDITION_CODE, CLASS_POINTER)
+				|| token.passedByValue()):
+				{
+					return store(token);
+				}
+			case Identifier(_) | PropertyAccess(_, _):
+				{
+					if (token.is(PROPERTY_ACCESS)) {
+						// Check if it doesnt start in a value
+						var temp = token;
+						while (temp.is(PROPERTY_ACCESS)) {
+							temp = temp.parameter(0);
+						}
 
-					var fin = FunctionCode(params, 
-						Block([
-							FunctionReturn(
-								FunctionCall(
-									token, PartArray(forwardedParams)
-								)
-							, cell.objectTypeName.asTokenPath())
-						], cell.objectTypeName.asTokenPath())
-					);
-					return store(fin);
+						if (temp.is(BLOCK))
+							temp = Interpreter.run(temp.parameter(0));
+						if (temp.is(EXPRESSION))
+							temp = Interpreter.calculate(temp.parameter(0));
+						if (!temp.is(IDENTIFIER)) {
+							var p = store(temp);
+							// This starts with a value, jump to readFrom
+							var path = token.asStringPath();
+							path.shift();
+							var cell = readFrom({objectValue: temp, objectAddress: p}, ...path);
+							if (cell.objectAddress == constants.EXTERN) {
+								var params:OrderedMap<String, InterpTokens> = cell.objectValue.parameter(0);
+								var forwardedParams = [];
+								for (key in params.keys()) {
+									forwardedParams.push(Identifier(key));
+									forwardedParams.push(SplitLine);
+								}
+								forwardedParams.pop();
+
+								var fin = FunctionCode(params, Block([
+									FunctionReturn(FunctionCall(token, PartArray(forwardedParams)), cell.objectTypeName.asTokenPath())
+								], cell.objectTypeName.asTokenPath()));
+								return store(fin);
+							} else {
+								return readFrom({objectValue: temp, objectAddress: p}, ...path).objectAddress;
+							}
+						}
+					}
+					var path = token.asStringPath();
+					var cell = read(...path);
+					if (cell.objectValue.passedByValue())
+						return store(cell.objectValue);
+					if (externs.hasGlobal(...path) && cell.objectValue.is(FUNCTION_CODE)) {
+						// Extern function "call" themselves the EXTERN pointer, but here this is not
+						// valid. A nice, nut still a little hacky solution is to create a function
+						// that references the external function, and store it instead.
+						var params:OrderedMap<String, InterpTokens> = cell.objectValue.parameter(0);
+						var forwardedParams = [];
+						for (key in params.keys()) {
+							forwardedParams.push(Identifier(key));
+							forwardedParams.push(SplitLine);
+						}
+						forwardedParams.pop();
+
+						var fin = FunctionCode(params, Block([
+							FunctionReturn(FunctionCall(token, PartArray(forwardedParams)), cell.objectTypeName.asTokenPath())
+						], cell.objectTypeName.asTokenPath()));
+						return store(fin);
+					}
+					return cell.objectAddress;
 				}
-				return cell.objectAddress;
-			}
-			case Block(_, _) | Expression(_, _): {
-				var result = Interpreter.evaluate(token);
-				switch result {
-					case Identifier(_) | PropertyAccess(_, _): retrieve(result);
-					case _: {
-						Little.runtime.throwError(ErrorMessage('Code block returned a value that cannot be read from (for value: ${PrettyPrinter.stringifyInterpreter(result)})'));
-						throw 'Unable to retrieve a pointer to token $result';
+			case Block(_, _) | Expression(_, _):
+				{
+					var result = Interpreter.evaluate(token);
+					switch result {
+						case Identifier(_) | PropertyAccess(_, _): retrieve(result);
+						case _: {
+								Little.runtime.throwError(ErrorMessage('Code block returned a value that cannot be read from (for value: ${PrettyPrinter.stringifyInterpreter(result)})'));
+								throw 'Unable to retrieve a pointer to token $result';
+							}
 					}
 				}
-			}
 			case _:
 		}
 
@@ -142,20 +176,23 @@ class Memory {
 
 	function valueFromType(address:MemoryPointer, type:String, fullPath:Array<String>, ...currentPath:String) {
 		return switch type {
-			case (_ == Little.keywords.TYPE_STRING => true): Characters(storage.readString(address));
-			case (_ == Little.keywords.TYPE_INT => true): Number(storage.readInt32(address));
-			case (_ == Little.keywords.TYPE_FLOAT => true): Decimal(storage.readDouble(address));
-			case (_ == Little.keywords.TYPE_BOOLEAN => true): constants.getFromPointer(address);
-			case (_ == Little.keywords.TYPE_FUNCTION => true): storage.readCodeBlock(address);
-			case (_ == Little.keywords.TYPE_CONDITION => true): storage.readCondition(address);
-			case (_ == Little.keywords.TYPE_MODULE => true): ClassPointer(address);
-			// Because of the way we store lone nulls (as type dynamic), 
+			case(_ == Little.keywords.TYPE_STRING => true): Characters(storage.readString(address));
+			case(_ == Little.keywords.TYPE_INT => true): Number(storage.readInt32(address));
+			case(_ == Little.keywords.TYPE_FLOAT => true): Decimal(storage.readDouble(address));
+			case(_ == Little.keywords.TYPE_BOOLEAN => true): constants.getFromPointer(address);
+			case(_ == Little.keywords.TYPE_FUNCTION => true): storage.readCodeBlock(address);
+			case(_ == Little.keywords.TYPE_CONDITION => true): storage.readCondition(address);
+			case(_ == Little.keywords.TYPE_MODULE => true): ClassPointer(address);
+			// Because of the way we store lone nulls (as type dynamic),
 			// they might get confused with objects of type dynamic, so we need to do this:
-			case ((_ == Little.keywords.TYPE_DYNAMIC || _ == Little.keywords.TYPE_UNKNOWN) && constants.hasPointer(address) && constants.getFromPointer(address).equals(NullValue) => true): NullValue;
-			case (_ == Little.keywords.TYPE_SIGN => true): storage.readSign(address);
-			case (_ == Little.keywords.TYPE_UNKNOWN => true): 
-				Little.runtime.throwError(ErrorMessage('Could not get the value at ${fullPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)} - field ${currentPath.toArray().join(Little.keywords.PROPERTY_ACCESS_SIGN)} was declared, but has no value/type.'), MEMORY_STORAGE);
-				// Not sure how someone can even get to the error above, but it's better to be safe than sorry - maybe a developer generates an extern field of type Unknown or something...
+			case((_ == Little.keywords.TYPE_DYNAMIC || _ == Little.keywords.TYPE_UNKNOWN)
+				&& constants.hasPointer(address)
+				&& constants.getFromPointer(address).equals(NullValue) => true): NullValue;
+			case(_ == Little.keywords.TYPE_SIGN => true): storage.readSign(address);
+			case(_ == Little.keywords.TYPE_UNKNOWN => true):
+				Little.runtime.throwError(ErrorMessage('Could not get the value at ${fullPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)} - field ${currentPath.toArray().join(Little.keywords.PROPERTY_ACCESS_SIGN)} was declared, but has no value/type.'),
+					MEMORY_STORAGE);
+			// Not sure how someone can even get to the error above, but it's better to be safe than sorry - maybe a developer generates an extern field of type Unknown or something...
 			case _: storage.readObject(address);
 		}
 	}
@@ -207,19 +244,18 @@ class Memory {
 				currentType = getTypeName(externs.createPathFor(externs.globalProperties, ...external).type);
 			}
 		} else {
-
 			// If we didn't find anything on the externs, we look in the current scope.
 			if (!referrer.exists(path[0])) {
 				Little.runtime.throwError(ErrorMessage('Variable `${path[0]}` does not exist'), MEMORY_REFERRER);
 			}
 			var data = referrer.get(path[0]);
 			current = valueFromType(data.address, data.type, path, path[0]);
-			
+
 			currentAddress = data.address;
 			currentType = data.type;
 			wentThroughPath.push(processed.shift()); // We just went through with the first element.
 		}
-		
+
 		while (processed.length > 0) {
 			// Get the current field, and the type of that field as well
 			var identifier = processed.shift();
@@ -228,7 +264,7 @@ class Memory {
 			// By design, the only other way properties are accessible on non-object
 			// values is through externs. So, after the object checks, we only need to look there.
 			// We should notice that, like before, externs are prioritized, so externs are evaluated first.
-		
+
 			// Property check:
 			if (externs.hasInstance(...typeName.split(Little.keywords.PROPERTY_ACCESS_SIGN))) {
 				var classProperties = externs.instanceProperties.properties.get(typeName);
@@ -239,6 +275,21 @@ class Memory {
 					continue;
 				}
 			}
+
+			// It is possible that the current value is also just a plain type:
+			if (current.is(CLASS_POINTER)) {
+				var name = getTypeName(current.parameter(0));
+				if (externs.hasGlobal(...name.split(Little.keywords.PROPERTY_ACCESS_SIGN))) {
+					var classProperties = externs.createPathFor(externs.globalProperties, ...name.split(Little.keywords.PROPERTY_ACCESS_SIGN));
+					if (classProperties.properties.exists(identifier)) {
+						var newCurrent = classProperties.properties.get(identifier).getter(current, currentAddress);
+						current = newCurrent.objectValue;
+						currentAddress = newCurrent.objectAddress;
+						continue;
+					}
+				}
+			}
+
 			// If it doesn't exist on that specific type, it may exist on TYPE_DYNAMIC:
 			if (externs.hasInstance(...Little.keywords.TYPE_DYNAMIC.split(Little.keywords.PROPERTY_ACCESS_SIGN))) {
 				var classProperties = externs.instanceProperties.properties.get(Little.keywords.TYPE_DYNAMIC);
@@ -253,7 +304,7 @@ class Memory {
 			// Then, we check the object's hash table for that field
 			if (current.is(OBJECT)) {
 				var objectHashTableBytes = HashTables.getHashTableOf(currentAddress, storage);
-				
+
 				if (HashTables.hashTableHasKey(objectHashTableBytes, identifier, storage)) {
 					var keyData = HashTables.hashTableGetKey(objectHashTableBytes, identifier, storage);
 					current = valueFromType(keyData.value, getTypeName(keyData.type), path, ...wentThroughPath);
@@ -261,7 +312,6 @@ class Memory {
 					currentAddress = keyData.value;
 				}
 			}
-
 			// If we still don't have a value, we throw an error, cause that means that field doesn't exist.
 			else {
 				wentThroughPath.pop();
@@ -274,7 +324,6 @@ class Memory {
 				}
 			}
 		}
-
 
 		return {
 			objectValue: current,
@@ -303,7 +352,7 @@ class Memory {
 			// By design, the only other way properties are accessible on non-object
 			// values is through externs. So, after the object checks, we only need to look there.
 			// We should notice that, like before, externs are prioritized, so externs are evaluated first.
-		
+
 			// Property check:
 			if (externs.hasInstance(...typeName.split(Little.keywords.PROPERTY_ACCESS_SIGN))) {
 				var classProperties = externs.instanceProperties.properties.get(typeName);
@@ -314,6 +363,21 @@ class Memory {
 					continue;
 				}
 			}
+
+			// It is possible that the current value is also just a plain type:
+			if (current.is(CLASS_POINTER)) {
+				var name = getTypeName(current.parameter(0));
+				if (externs.hasGlobal(...name.split(Little.keywords.PROPERTY_ACCESS_SIGN))) {
+					var classProperties = externs.createPathFor(externs.globalProperties, ...name.split(Little.keywords.PROPERTY_ACCESS_SIGN));
+					if (classProperties.properties.exists(identifier)) {
+						var newCurrent = classProperties.properties.get(identifier).getter(current, currentAddress);
+						current = newCurrent.objectValue;
+						currentAddress = newCurrent.objectAddress;
+						continue;
+					}
+				}
+			}
+
 			// If it doesn't exist on that specific type, it may exist on TYPE_DYNAMIC:
 			if (externs.hasInstance(...Little.keywords.TYPE_DYNAMIC.split(Little.keywords.PROPERTY_ACCESS_SIGN))) {
 				var classProperties = externs.instanceProperties.properties.get(Little.keywords.TYPE_DYNAMIC);
@@ -329,20 +393,21 @@ class Memory {
 			if (current.is(OBJECT)) {
 				var objectHashTableBytesLength = storage.readInt32(currentAddress);
 				var objectHashTableBytes = storage.readBytes(currentAddress.rawLocation + 4, objectHashTableBytesLength);
-				
+
 				if (HashTables.hashTableHasKey(objectHashTableBytes, identifier, storage)) {
 					var keyData = HashTables.hashTableGetKey(objectHashTableBytes, identifier, storage);
-					current = valueFromType(keyData.value, getTypeName(keyData.type), [PrettyPrinter.stringifyInterpreter(value.objectValue)].concat(path), ...wentThroughPath);
+					current = valueFromType(keyData.value, getTypeName(keyData.type), [PrettyPrinter.stringifyInterpreter(value.objectValue)].concat(path),
+						...wentThroughPath);
 
 					currentAddress = keyData.value;
 				}
 			}
-
 			// If we still don't have a value, we throw an error, cause that means that field doesn't exist.
 			else {
 				wentThroughPath.pop();
 				var p = wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN);
-				Little.runtime.throwError(ErrorMessage('Field `$identifier` does not exist on `$p` ${current.is(NULL_VALUE) ? '(`$p` is `${Little.keywords.NULL_VALUE}`)' : ''}'));
+				Little.runtime.throwError(ErrorMessage('Field `$identifier` does not exist on `$p` ${current.is(NULL_VALUE) ? '(`$p` is `${Little.keywords.NULL_VALUE}`)' : ''}'),
+					MEMORY);
 				return {
 					objectValue: NullValue,
 					objectAddress: constants.NULL,
@@ -350,7 +415,6 @@ class Memory {
 				}
 			}
 		}
-
 
 		return {
 			objectValue: current,
@@ -379,7 +443,7 @@ class Memory {
 		/*
 			- The first n-1 elements of the path must exist beforehand, and must be objects
 			- The last element will be a field of the last object
-		*/
+		 */
 
 		if (path.length == 0) {
 			Little.runtime.throwError(ErrorMessage('Cannot write to an empty path'));
@@ -388,7 +452,6 @@ class Memory {
 
 		if (path.length == 1) {
 			referrer.reference(path[0], retrieve(value), type);
-
 		} else {
 			var pathCopy = path.slice(0, path.length - 1);
 			var wentThroughPath = [path[0]];
@@ -412,18 +475,23 @@ class Memory {
 				Little.runtime.throwError(ErrorMessage('Cannot write to a property to values of a static type. Only objects can have dynamic properties (${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)} is `${current.type}`)'));
 			}
 			if (!HashTables.hashTableHasKey(HashTables.getHashTableOf(current.address, storage), path[path.length - 1], storage)) {
-				HashTables.objectAddKey(current.address, path[path.length - 1], retrieve(value), getTypeInformation(type).pointer, storage.storeString(doc), storage);
+				HashTables.objectAddKey(current.address, path[path.length - 1], retrieve(value), getTypeInformation(type).pointer, storage.storeString(doc),
+					storage);
 			} else if (externs.instanceProperties.properties.exists(path[path.length - 1])) {
 				Little.runtime.throwError(ErrorMessage('Cannot write to an extern property (${path[path.length - 1]})'));
 			} else {
-				HashTables.objectSetKey(current.address, path[path.length - 1], {value: value != null ? retrieve(value) : null, type: type != null ? getTypeInformation(type).pointer : null, doc: doc != null ? storage.storeString(doc) : null}, storage);
+				HashTables.objectSetKey(current.address, path[path.length - 1], {
+					value: value != null ? retrieve(value) : null,
+					type: type != null ? getTypeInformation(type).pointer : null,
+					doc: doc != null ? storage.storeString(doc) : null
+				}, storage);
 			}
 		}
 	}
 
 	/**
 		Writes a new value to an **existing** path specified by `path`.
-		
+
 		If any part of the path does not exist, an error will be thrown in `Little`'s runtime.
 
 		@param path An array of strings representing the path to the value
@@ -432,7 +500,6 @@ class Memory {
 		@param doc The documentation of the value. If `null`, the original documentation will be preserved
 	**/
 	public function set(path:Array<String>, ?value:InterpTokens, ?type:String, ?doc:String) {
-
 		if (path.length == 0) {
 			Little.runtime.throwError(ErrorMessage('Cannot set the value of an empty path'));
 			// Does not make sense to have a path of length 0, but still more useful than a quiet return/crash.
@@ -440,7 +507,7 @@ class Memory {
 
 		if (path.length == 1) {
 			if (referrer.exists(path[0])) {
-				referrer.set(path[0], { address: value != null ? retrieve(value) : null, type: type != null ? type : null});
+				referrer.set(path[0], {address: value != null ? retrieve(value) : null, type: type != null ? type : null});
 			} else {
 				Little.runtime.throwError(ErrorMessage('Variable/function ${path[0]} does not exist'));
 			}
@@ -467,7 +534,11 @@ class Memory {
 				Little.runtime.throwError(ErrorMessage('Cannot set properties to values of a static type. Only objects can have dynamic properties (${wentThroughPath.join(Little.keywords.PROPERTY_ACCESS_SIGN)} is `${current.type}`)'));
 			}
 			if (HashTables.hashTableHasKey(HashTables.getHashTableOf(current.address, storage), path[path.length - 1], storage)) {
-				HashTables.objectSetKey(current.address, path[path.length - 1], {value: value != null ? retrieve(value) : null, type: type != null ? getTypeInformation(type).pointer : null, doc: doc != null ? storage.storeString(doc) : null}, storage);
+				HashTables.objectSetKey(current.address, path[path.length - 1], {
+					value: value != null ? retrieve(value) : null,
+					type: type != null ? getTypeInformation(type).pointer : null,
+					doc: doc != null ? storage.storeString(doc) : null
+				}, storage);
 			} else if (externs.instanceProperties.properties.exists(path[path.length - 1])) {
 				Little.runtime.throwError(ErrorMessage('Cannot set an extern property (${path[path.length - 1]})'));
 			} else {
@@ -478,25 +549,31 @@ class Memory {
 
 	/**
 		Allocate `size` bytes of memory.
-	    @param size The number of bytes to allocate
-	    @return A pointer to the allocated memory
+		@param size The number of bytes to allocate
+		@return A pointer to the allocated memory
 	**/
 	public function allocate(size:Int):MemoryPointer {
-		if (size <= 0) Little.runtime.throwError(ErrorMessage('Cannot allocate ${size} bytes'));
+		if (size <= 0)
+			Little.runtime.throwError(ErrorMessage('Cannot allocate ${size} bytes'));
 		return storage.storeBytes(size);
 	}
-	
+
 	/**
 		Free `size` bytes of memory at `pointer`.
-	    @param pointer The address of the memory to free
-	    @param size The number of bytes to free
+		@param pointer The address of the memory to free
+		@param size The number of bytes to free
 	**/
 	public function free(pointer:MemoryPointer, size:Int) {
-		if (pointer.toInt() < 0) Little.runtime.throwError(ErrorMessage('Cannot free bytes at negative address ${pointer}'));
-		if (pointer.toInt() < constants.capacity) Little.runtime.throwError(ErrorMessage('Cannot free bytes from the constant pool (addresses 0 to ${constants.capacity}, attempted to free address ${pointer})'));
-		if (pointer.toInt() >= currentMemorySize) Little.runtime.throwError(ErrorMessage('Cannot free bytes at an address greater than the current memory size (${pointer} requested but ${currentMemorySize} addresses exist)'));
-		if (size <= 0) Little.runtime.throwError(ErrorMessage('Cannot free ${size} bytes'));
-		if (pointer.toInt() + size > currentMemorySize) Little.runtime.throwError(ErrorMessage('Cannot free bytes: The requested free overflows the current memory size (${pointer} + ${size} requested but ${currentMemorySize} addresses exist)'));
+		if (pointer.toInt() < 0)
+			Little.runtime.throwError(ErrorMessage('Cannot free bytes at negative address ${pointer}'));
+		if (pointer.toInt() < constants.capacity)
+			Little.runtime.throwError(ErrorMessage('Cannot free bytes from the constant pool (addresses 0 to ${constants.capacity}, attempted to free address ${pointer})'));
+		if (pointer.toInt() >= currentMemorySize)
+			Little.runtime.throwError(ErrorMessage('Cannot free bytes at an address greater than the current memory size (${pointer} requested but ${currentMemorySize} addresses exist)'));
+		if (size <= 0)
+			Little.runtime.throwError(ErrorMessage('Cannot free ${size} bytes'));
+		if (pointer.toInt() + size > currentMemorySize)
+			Little.runtime.throwError(ErrorMessage('Cannot free bytes: The requested free overflows the current memory size (${pointer} + ${size} requested but ${currentMemorySize} addresses exist)'));
 		storage.freeBytes(pointer, size);
 	}
 
@@ -507,16 +584,15 @@ class Memory {
 		@return An object containing information about the type.
 	**/
 	public function getTypeInformation(name:String):TypeInfo {
-
 		// First, check for primitive types which are pre-allocated
 		// in the constant pool
 		var p = switch name {
-			case (_ == Little.keywords.TYPE_INT => true): constants.INT;
-			case (_ == Little.keywords.TYPE_FLOAT => true): constants.FLOAT;
-			case (_ == Little.keywords.TYPE_BOOLEAN => true): constants.BOOL;
-			case (_ == Little.keywords.TYPE_DYNAMIC => true): constants.DYNAMIC;
-			case (_ == Little.keywords.TYPE_MODULE => true): constants.TYPE;
-			case (_ == Little.keywords.TYPE_UNKNOWN => true): constants.UNKNOWN;
+			case(_ == Little.keywords.TYPE_INT => true): constants.INT;
+			case(_ == Little.keywords.TYPE_FLOAT => true): constants.FLOAT;
+			case(_ == Little.keywords.TYPE_BOOLEAN => true): constants.BOOL;
+			case(_ == Little.keywords.TYPE_DYNAMIC => true): constants.DYNAMIC;
+			case(_ == Little.keywords.TYPE_MODULE => true): constants.TYPE;
+			case(_ == Little.keywords.TYPE_UNKNOWN => true): constants.UNKNOWN;
 			case _: MemoryPointer.fromInt(0);
 		}
 		if (p.rawLocation != 0) {
@@ -550,17 +626,15 @@ class Memory {
 		// If it's not a primitive type, the next priority is external types.
 		// The easiest way to get a valid type is to check the externToPointer map
 		if (externs.externToPointer.exists(name) && externs.getGlobal(name).objectValue.is(CLASS_POINTER)) {
-
 			var instProps = externs.createPathFor(externs.instanceProperties, ...name.split(Little.keywords.PROPERTY_ACCESS_SIGN));
 			var statProps = externs.createPathFor(externs.globalProperties, ...name.split(Little.keywords.PROPERTY_ACCESS_SIGN));
 			var instances = new Map<String, {type:MemoryPointer, doc:MemoryPointer}>();
 			var statics = new Map<String, {type:MemoryPointer, doc:MemoryPointer}>();
 
-			for (key => value in instProps.properties) 
+			for (key => value in instProps.properties)
 				instances[key] = {type: value.type, doc: value.doc};
 			for (key => value in statProps.properties)
 				statics[key] = {type: value.type, doc: value.doc};
-
 
 			return {
 				pointer: externs.externToPointer[name],
@@ -572,7 +646,7 @@ class Memory {
 				defaultInstanceSize: 4 + POINTER_SIZE, // Objects take 8 bytes in-place
 			}
 		}
-		
+
 		var reference = referrer.get(name);
 		var typeInfo = storage.readType(reference.address);
 
@@ -589,11 +663,10 @@ class Memory {
 		var ext = externs.pointerToExtern.get(pointer);
 		if (ext != null && externs.getGlobal(...ext.split(".")).objectValue.is(CLASS_POINTER)) {
 			return externs.pointerToExtern[pointer];
-			
 		}
 		// Then, constants:
 		if (constants.hasPointer(pointer)) {
-			return constants.getFromPointer(pointer).extractIdentifier();
+			return constants.getFromPointer(pointer).asJoinedStringPath();
 		}
 
 		return storage.readType(pointer).typeName;
@@ -609,6 +682,6 @@ typedef TypeInfo = {
 	passedByReference:Bool,
 	isExternal:Bool,
 	instanceFields:Map<String, {type:MemoryPointer, doc:MemoryPointer}>,
-    staticFields:Map<String, {type:MemoryPointer, doc:MemoryPointer}>,
+	staticFields:Map<String, {type:MemoryPointer, doc:MemoryPointer}>,
 	defaultInstanceSize:Int
 }

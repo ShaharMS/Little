@@ -3221,16 +3221,13 @@ var js_$example_JsExample = function() {
 	if(StringTools.endsWith(little_Little.version,"f")) {
 		this.d.getElementById("casing").innerHTML += " (f - Functional programming only)";
 	}
-	haxe_Log.trace(input,{ fileName : "src/js_example/JsExample.js.hx", lineNumber : 34, className : "js_example.JsExample", methodName : "new", customParams : [ast,output]});
 	input.addEventListener("keyup",function(_) {
 		try {
-			haxe_Log.trace(input.value,{ fileName : "src/js_example/JsExample.js.hx", lineNumber : 37, className : "js_example.JsExample", methodName : "new"});
 			var tmp = little_interpreter_Interpreter.convert.apply(null,little_parser_Parser.parse(little_lexer_Lexer.lex(input.value)));
 			ast.value = little_tools_PrettyPrinter.printInterpreterAst(tmp);
 		} catch( _g ) {
 		}
 		try {
-			haxe_Log.trace(input.value,{ fileName : "src/js_example/JsExample.js.hx", lineNumber : 42, className : "js_example.JsExample", methodName : "new"});
 			little_Little.reset();
 			little_Little.run(input.value,true);
 			output.value = little_Little.runtime.stdout.output;
@@ -3259,20 +3256,12 @@ var js_$example_JsExample = function() {
 				continue;
 			}
 			var p = row.getElementsByTagName("p")[0];
-			var input = row.getElementsByTagName("input")[0];
-			p.innerText = _gthis.getCodeExample(input.id);
+			var input1 = row.getElementsByTagName("input")[0];
+			p.innerText = _gthis.getCodeExample(input1.id);
 			p.onchange();
 		}
+		input.dispatchEvent(new Event("keyup"));
 	};
-	var _this = Type.getInstanceFields(little_KeywordConfig);
-	var result = new Array(_this.length);
-	var _g = 0;
-	var _g1 = _this.length;
-	while(_g < _g1) {
-		var i = _g++;
-		result[i] = "case \"" + _this[i] + "\":\n";
-	}
-	haxe_Log.trace(result.join(""),{ fileName : "src/js_example/JsExample.js.hx", lineNumber : 79, className : "js_example.JsExample", methodName : "new"});
 	var _g = 0;
 	var _g1 = Type.getInstanceFields(little_KeywordConfig);
 	while(_g < _g1.length) {
@@ -3308,7 +3297,7 @@ var js_$example_JsExample = function() {
 		keywordTable.appendChild(row);
 	}
 	Highlighter.registerOnParagraphs();
-	document.getElementById("input").dispatchEvent(new Event("onkeyup"));
+	document.getElementById("input").dispatchEvent(new Event("keyup"));
 	update();
 };
 $hxClasses["js_example.JsExample"] = js_$example_JsExample;
@@ -4269,6 +4258,87 @@ little_interpreter_memory_Memory.prototype = {
 			case 15:
 				var _g = token.name;
 				var _g = token.property;
+				var _this = [little_tools_InterpTokensSimple.PROPERTY_ACCESS].slice();
+				var result = new Array(_this.length);
+				var _g = 0;
+				var _g1 = _this.length;
+				while(_g < _g1) {
+					var i = _g++;
+					var x = _this[i];
+					result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
+				}
+				if(result.indexOf($hxEnums[token.__enum__].__constructs__[token._hx_index]._hx_name.toLowerCase()) != -1) {
+					var temp = token;
+					while(true) {
+						var _this = [little_tools_InterpTokensSimple.PROPERTY_ACCESS].slice();
+						var result = new Array(_this.length);
+						var _g = 0;
+						var _g1 = _this.length;
+						while(_g < _g1) {
+							var i = _g++;
+							var x = _this[i];
+							result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
+						}
+						if(!(result.indexOf($hxEnums[temp.__enum__].__constructs__[temp._hx_index]._hx_name.toLowerCase()) != -1)) {
+							break;
+						}
+						temp = Type.enumParameters(temp)[0];
+					}
+					var _this = [little_tools_InterpTokensSimple.BLOCK].slice();
+					var result = new Array(_this.length);
+					var _g = 0;
+					var _g1 = _this.length;
+					while(_g < _g1) {
+						var i = _g++;
+						var x = _this[i];
+						result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
+					}
+					if(result.indexOf($hxEnums[temp.__enum__].__constructs__[temp._hx_index]._hx_name.toLowerCase()) != -1) {
+						temp = little_interpreter_Interpreter.run(Type.enumParameters(temp)[0]);
+					}
+					var _this = [little_tools_InterpTokensSimple.EXPRESSION].slice();
+					var result = new Array(_this.length);
+					var _g = 0;
+					var _g1 = _this.length;
+					while(_g < _g1) {
+						var i = _g++;
+						var x = _this[i];
+						result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
+					}
+					if(result.indexOf($hxEnums[temp.__enum__].__constructs__[temp._hx_index]._hx_name.toLowerCase()) != -1) {
+						temp = little_interpreter_Interpreter.calculate(Type.enumParameters(temp)[0]);
+					}
+					var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
+					var result = new Array(_this.length);
+					var _g = 0;
+					var _g1 = _this.length;
+					while(_g < _g1) {
+						var i = _g++;
+						var x = _this[i];
+						result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
+					}
+					if(result.indexOf($hxEnums[temp.__enum__].__constructs__[temp._hx_index]._hx_name.toLowerCase()) == -1) {
+						var p = this.store(temp);
+						var path = little_tools_Extensions.asStringPath(token);
+						path.shift();
+						var cell = ($_=this,$_.readFrom.apply($_,[{ objectValue : temp, objectAddress : p}].concat(path)));
+						if(cell.objectAddress == this.constants.EXTERN) {
+							var params = Type.enumParameters(cell.objectValue)[0];
+							var forwardedParams = [];
+							var key = params.keys();
+							while(key.hasNext()) {
+								var key1 = key.next();
+								forwardedParams.push(little_interpreter_InterpTokens.Identifier(key1));
+								forwardedParams.push(little_interpreter_InterpTokens.SplitLine);
+							}
+							forwardedParams.pop();
+							var fin = little_interpreter_InterpTokens.FunctionCode(params,little_interpreter_InterpTokens.Block([little_interpreter_InterpTokens.FunctionReturn(little_interpreter_InterpTokens.FunctionCall(token,little_interpreter_InterpTokens.PartArray(forwardedParams)),little_tools_Extensions.asTokenPath(cell.objectTypeName))],little_tools_Extensions.asTokenPath(cell.objectTypeName)));
+							return this.store(fin);
+						} else {
+							return ($_=this,$_.readFrom.apply($_,[{ objectValue : temp, objectAddress : p}].concat(path))).objectAddress;
+						}
+					}
+				}
 				var path = little_tools_Extensions.asStringPath(token);
 				var cell = ($_=this,$_.read.apply($_,path));
 				var token1 = cell.objectValue;
@@ -4316,6 +4386,87 @@ little_interpreter_memory_Memory.prototype = {
 				return cell.objectAddress;
 			case 25:
 				var _g = token.word;
+				var _this = [little_tools_InterpTokensSimple.PROPERTY_ACCESS].slice();
+				var result = new Array(_this.length);
+				var _g = 0;
+				var _g1 = _this.length;
+				while(_g < _g1) {
+					var i = _g++;
+					var x = _this[i];
+					result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
+				}
+				if(result.indexOf($hxEnums[token.__enum__].__constructs__[token._hx_index]._hx_name.toLowerCase()) != -1) {
+					var temp = token;
+					while(true) {
+						var _this = [little_tools_InterpTokensSimple.PROPERTY_ACCESS].slice();
+						var result = new Array(_this.length);
+						var _g = 0;
+						var _g1 = _this.length;
+						while(_g < _g1) {
+							var i = _g++;
+							var x = _this[i];
+							result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
+						}
+						if(!(result.indexOf($hxEnums[temp.__enum__].__constructs__[temp._hx_index]._hx_name.toLowerCase()) != -1)) {
+							break;
+						}
+						temp = Type.enumParameters(temp)[0];
+					}
+					var _this = [little_tools_InterpTokensSimple.BLOCK].slice();
+					var result = new Array(_this.length);
+					var _g = 0;
+					var _g1 = _this.length;
+					while(_g < _g1) {
+						var i = _g++;
+						var x = _this[i];
+						result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
+					}
+					if(result.indexOf($hxEnums[temp.__enum__].__constructs__[temp._hx_index]._hx_name.toLowerCase()) != -1) {
+						temp = little_interpreter_Interpreter.run(Type.enumParameters(temp)[0]);
+					}
+					var _this = [little_tools_InterpTokensSimple.EXPRESSION].slice();
+					var result = new Array(_this.length);
+					var _g = 0;
+					var _g1 = _this.length;
+					while(_g < _g1) {
+						var i = _g++;
+						var x = _this[i];
+						result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
+					}
+					if(result.indexOf($hxEnums[temp.__enum__].__constructs__[temp._hx_index]._hx_name.toLowerCase()) != -1) {
+						temp = little_interpreter_Interpreter.calculate(Type.enumParameters(temp)[0]);
+					}
+					var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
+					var result = new Array(_this.length);
+					var _g = 0;
+					var _g1 = _this.length;
+					while(_g < _g1) {
+						var i = _g++;
+						var x = _this[i];
+						result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
+					}
+					if(result.indexOf($hxEnums[temp.__enum__].__constructs__[temp._hx_index]._hx_name.toLowerCase()) == -1) {
+						var p = this.store(temp);
+						var path = little_tools_Extensions.asStringPath(token);
+						path.shift();
+						var cell = ($_=this,$_.readFrom.apply($_,[{ objectValue : temp, objectAddress : p}].concat(path)));
+						if(cell.objectAddress == this.constants.EXTERN) {
+							var params = Type.enumParameters(cell.objectValue)[0];
+							var forwardedParams = [];
+							var key = params.keys();
+							while(key.hasNext()) {
+								var key1 = key.next();
+								forwardedParams.push(little_interpreter_InterpTokens.Identifier(key1));
+								forwardedParams.push(little_interpreter_InterpTokens.SplitLine);
+							}
+							forwardedParams.pop();
+							var fin = little_interpreter_InterpTokens.FunctionCode(params,little_interpreter_InterpTokens.Block([little_interpreter_InterpTokens.FunctionReturn(little_interpreter_InterpTokens.FunctionCall(token,little_interpreter_InterpTokens.PartArray(forwardedParams)),little_tools_Extensions.asTokenPath(cell.objectTypeName))],little_tools_Extensions.asTokenPath(cell.objectTypeName)));
+							return this.store(fin);
+						} else {
+							return ($_=this,$_.readFrom.apply($_,[{ objectValue : temp, objectAddress : p}].concat(path))).objectAddress;
+						}
+					}
+				}
 				var path = little_tools_Extensions.asStringPath(token);
 				var cell = ($_=this,$_.read.apply($_,path));
 				var token1 = cell.objectValue;
@@ -4483,16 +4634,7 @@ little_interpreter_memory_Memory.prototype = {
 					continue;
 				}
 			}
-			if(($_=this.externs,$_.hasInstance.apply($_,little_Little.keywords.TYPE_DYNAMIC.split(little_Little.keywords.PROPERTY_ACCESS_SIGN)))) {
-				var classProperties1 = this.externs.instanceProperties.properties.h[little_Little.keywords.TYPE_DYNAMIC];
-				if(Object.prototype.hasOwnProperty.call(classProperties1.properties.h,identifier)) {
-					var newCurrent1 = classProperties1.properties.h[identifier].getter(current,currentAddress);
-					current = newCurrent1.objectValue;
-					currentAddress = newCurrent1.objectAddress;
-					continue;
-				}
-			}
-			var _this = [little_tools_InterpTokensSimple.OBJECT].slice();
+			var _this = [little_tools_InterpTokensSimple.CLASS_POINTER].slice();
 			var result = new Array(_this.length);
 			var _g = 0;
 			var _g1 = _this.length;
@@ -4502,6 +4644,36 @@ little_interpreter_memory_Memory.prototype = {
 				result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
 			}
 			if(result.indexOf($hxEnums[current.__enum__].__constructs__[current._hx_index]._hx_name.toLowerCase()) != -1) {
+				var name = this.getTypeName(Type.enumParameters(current)[0]);
+				if(($_=this.externs,$_.hasGlobal.apply($_,name.split(little_Little.keywords.PROPERTY_ACCESS_SIGN)))) {
+					var classProperties1 = ($_=this.externs,$_.createPathFor.apply($_,[this.externs.globalProperties].concat(name.split(little_Little.keywords.PROPERTY_ACCESS_SIGN))));
+					if(Object.prototype.hasOwnProperty.call(classProperties1.properties.h,identifier)) {
+						var newCurrent1 = classProperties1.properties.h[identifier].getter(current,currentAddress);
+						current = newCurrent1.objectValue;
+						currentAddress = newCurrent1.objectAddress;
+						continue;
+					}
+				}
+			}
+			if(($_=this.externs,$_.hasInstance.apply($_,little_Little.keywords.TYPE_DYNAMIC.split(little_Little.keywords.PROPERTY_ACCESS_SIGN)))) {
+				var classProperties2 = this.externs.instanceProperties.properties.h[little_Little.keywords.TYPE_DYNAMIC];
+				if(Object.prototype.hasOwnProperty.call(classProperties2.properties.h,identifier)) {
+					var newCurrent2 = classProperties2.properties.h[identifier].getter(current,currentAddress);
+					current = newCurrent2.objectValue;
+					currentAddress = newCurrent2.objectAddress;
+					continue;
+				}
+			}
+			var _this1 = [little_tools_InterpTokensSimple.OBJECT].slice();
+			var result1 = new Array(_this1.length);
+			var _g2 = 0;
+			var _g3 = _this1.length;
+			while(_g2 < _g3) {
+				var i1 = _g2++;
+				var x1 = _this1[i1];
+				result1[i1] = little_tools_TextTools.remove($hxEnums[x1.__enum__].__constructs__[x1._hx_index]._hx_name,"_").toLowerCase();
+			}
+			if(result1.indexOf($hxEnums[current.__enum__].__constructs__[current._hx_index]._hx_name.toLowerCase()) != -1) {
 				var objectHashTableBytes = little_interpreter_memory_HashTables.getHashTableOf(currentAddress,this.storage);
 				if(little_interpreter_memory_HashTables.hashTableHasKey(objectHashTableBytes,identifier,this.storage)) {
 					var keyData = little_interpreter_memory_HashTables.hashTableGetKey(objectHashTableBytes,identifier,this.storage);
@@ -4513,16 +4685,16 @@ little_interpreter_memory_Memory.prototype = {
 				var p = wentThroughPath.join(little_Little.keywords.PROPERTY_ACCESS_SIGN);
 				var tmp = little_Little.runtime;
 				var tmp1 = "Field `" + identifier + "` does not exist on `" + p + "` ";
-				var _this1 = [little_tools_InterpTokensSimple.NULL_VALUE].slice();
-				var result1 = new Array(_this1.length);
-				var _g2 = 0;
-				var _g3 = _this1.length;
-				while(_g2 < _g3) {
-					var i1 = _g2++;
-					var x1 = _this1[i1];
-					result1[i1] = little_tools_TextTools.remove($hxEnums[x1.__enum__].__constructs__[x1._hx_index]._hx_name,"_").toLowerCase();
+				var _this2 = [little_tools_InterpTokensSimple.NULL_VALUE].slice();
+				var result2 = new Array(_this2.length);
+				var _g4 = 0;
+				var _g5 = _this2.length;
+				while(_g4 < _g5) {
+					var i2 = _g4++;
+					var x2 = _this2[i2];
+					result2[i2] = little_tools_TextTools.remove($hxEnums[x2.__enum__].__constructs__[x2._hx_index]._hx_name,"_").toLowerCase();
 				}
-				tmp.throwError(little_interpreter_InterpTokens.ErrorMessage(tmp1 + (result1.indexOf($hxEnums[current.__enum__].__constructs__[current._hx_index]._hx_name.toLowerCase()) != -1 ? "(`" + p + "` is `" + little_Little.keywords.NULL_VALUE + "`)" : "")));
+				tmp.throwError(little_interpreter_InterpTokens.ErrorMessage(tmp1 + (result2.indexOf($hxEnums[current.__enum__].__constructs__[current._hx_index]._hx_name.toLowerCase()) != -1 ? "(`" + p + "` is `" + little_Little.keywords.NULL_VALUE + "`)" : "")));
 				return { objectValue : little_interpreter_InterpTokens.NullValue, objectAddress : this.constants.NULL, objectTypeName : little_Little.keywords.TYPE_DYNAMIC};
 			}
 		}
@@ -4549,16 +4721,7 @@ little_interpreter_memory_Memory.prototype = {
 					continue;
 				}
 			}
-			if(($_=this.externs,$_.hasInstance.apply($_,little_Little.keywords.TYPE_DYNAMIC.split(little_Little.keywords.PROPERTY_ACCESS_SIGN)))) {
-				var classProperties1 = this.externs.instanceProperties.properties.h[little_Little.keywords.TYPE_DYNAMIC];
-				if(Object.prototype.hasOwnProperty.call(classProperties1.properties.h,identifier)) {
-					var newCurrent1 = classProperties1.properties.h[identifier].getter(current,currentAddress);
-					current = newCurrent1.objectValue;
-					currentAddress = newCurrent1.objectAddress;
-					continue;
-				}
-			}
-			var _this = [little_tools_InterpTokensSimple.OBJECT].slice();
+			var _this = [little_tools_InterpTokensSimple.CLASS_POINTER].slice();
 			var result = new Array(_this.length);
 			var _g = 0;
 			var _g1 = _this.length;
@@ -4568,6 +4731,36 @@ little_interpreter_memory_Memory.prototype = {
 				result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
 			}
 			if(result.indexOf($hxEnums[current.__enum__].__constructs__[current._hx_index]._hx_name.toLowerCase()) != -1) {
+				var name = this.getTypeName(Type.enumParameters(current)[0]);
+				if(($_=this.externs,$_.hasGlobal.apply($_,name.split(little_Little.keywords.PROPERTY_ACCESS_SIGN)))) {
+					var classProperties1 = ($_=this.externs,$_.createPathFor.apply($_,[this.externs.globalProperties].concat(name.split(little_Little.keywords.PROPERTY_ACCESS_SIGN))));
+					if(Object.prototype.hasOwnProperty.call(classProperties1.properties.h,identifier)) {
+						var newCurrent1 = classProperties1.properties.h[identifier].getter(current,currentAddress);
+						current = newCurrent1.objectValue;
+						currentAddress = newCurrent1.objectAddress;
+						continue;
+					}
+				}
+			}
+			if(($_=this.externs,$_.hasInstance.apply($_,little_Little.keywords.TYPE_DYNAMIC.split(little_Little.keywords.PROPERTY_ACCESS_SIGN)))) {
+				var classProperties2 = this.externs.instanceProperties.properties.h[little_Little.keywords.TYPE_DYNAMIC];
+				if(Object.prototype.hasOwnProperty.call(classProperties2.properties.h,identifier)) {
+					var newCurrent2 = classProperties2.properties.h[identifier].getter(current,currentAddress);
+					current = newCurrent2.objectValue;
+					currentAddress = newCurrent2.objectAddress;
+					continue;
+				}
+			}
+			var _this1 = [little_tools_InterpTokensSimple.OBJECT].slice();
+			var result1 = new Array(_this1.length);
+			var _g2 = 0;
+			var _g3 = _this1.length;
+			while(_g2 < _g3) {
+				var i1 = _g2++;
+				var x1 = _this1[i1];
+				result1[i1] = little_tools_TextTools.remove($hxEnums[x1.__enum__].__constructs__[x1._hx_index]._hx_name,"_").toLowerCase();
+			}
+			if(result1.indexOf($hxEnums[current.__enum__].__constructs__[current._hx_index]._hx_name.toLowerCase()) != -1) {
 				var objectHashTableBytesLength = this.storage.readInt32(currentAddress);
 				var objectHashTableBytes = this.storage.readBytes(little_interpreter_memory_MemoryPointer.fromInt(currentAddress + 4),objectHashTableBytesLength);
 				if(little_interpreter_memory_HashTables.hashTableHasKey(objectHashTableBytes,identifier,this.storage)) {
@@ -4580,16 +4773,16 @@ little_interpreter_memory_Memory.prototype = {
 				var p = wentThroughPath.join(little_Little.keywords.PROPERTY_ACCESS_SIGN);
 				var tmp = little_Little.runtime;
 				var tmp1 = "Field `" + identifier + "` does not exist on `" + p + "` ";
-				var _this1 = [little_tools_InterpTokensSimple.NULL_VALUE].slice();
-				var result1 = new Array(_this1.length);
-				var _g2 = 0;
-				var _g3 = _this1.length;
-				while(_g2 < _g3) {
-					var i1 = _g2++;
-					var x1 = _this1[i1];
-					result1[i1] = little_tools_TextTools.remove($hxEnums[x1.__enum__].__constructs__[x1._hx_index]._hx_name,"_").toLowerCase();
+				var _this2 = [little_tools_InterpTokensSimple.NULL_VALUE].slice();
+				var result2 = new Array(_this2.length);
+				var _g4 = 0;
+				var _g5 = _this2.length;
+				while(_g4 < _g5) {
+					var i2 = _g4++;
+					var x2 = _this2[i2];
+					result2[i2] = little_tools_TextTools.remove($hxEnums[x2.__enum__].__constructs__[x2._hx_index]._hx_name,"_").toLowerCase();
 				}
-				tmp.throwError(little_interpreter_InterpTokens.ErrorMessage(tmp1 + (result1.indexOf($hxEnums[current.__enum__].__constructs__[current._hx_index]._hx_name.toLowerCase()) != -1 ? "(`" + p + "` is `" + little_Little.keywords.NULL_VALUE + "`)" : "")));
+				tmp.throwError(little_interpreter_InterpTokens.ErrorMessage(tmp1 + (result2.indexOf($hxEnums[current.__enum__].__constructs__[current._hx_index]._hx_name.toLowerCase()) != -1 ? "(`" + p + "` is `" + little_Little.keywords.NULL_VALUE + "`)" : "")),"Memory");
 				return { objectValue : little_interpreter_InterpTokens.NullValue, objectAddress : this.constants.NULL, objectTypeName : little_Little.keywords.TYPE_DYNAMIC};
 			}
 		}
@@ -4853,21 +5046,7 @@ little_interpreter_memory_Memory.prototype = {
 			return this.externs.get_pointerToExtern().h[pointer];
 		}
 		if(this.constants.hasPointer(pointer)) {
-			var token = this.constants.getFromPointer(pointer);
-			var _this = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
-			var result = new Array(_this.length);
-			var _g = 0;
-			var _g1 = _this.length;
-			while(_g < _g1) {
-				var i = _g++;
-				var x = _this[i];
-				result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
-			}
-			if(result.indexOf($hxEnums[token.__enum__].__constructs__[token._hx_index]._hx_name.toLowerCase()) != -1) {
-				return Type.enumParameters(token)[0];
-			} else {
-				return Type.enumParameters(little_interpreter_Interpreter.run([token]))[0];
-			}
+			return little_tools_Extensions.asJoinedStringPath(this.constants.getFromPointer(pointer));
 		}
 		return this.storage.readType(pointer).typeName;
 	}
@@ -7204,7 +7383,7 @@ little_tools_Plugins.prototype = {
 							var _g6 = entry.doc;
 							if(_g5 == null) {
 								var name2 = _g4;
-								var _this1 = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+								var _this1 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 								var result1 = new Array(_this1.length);
 								var _g7 = 0;
 								var _g8 = _this1.length;
@@ -7219,7 +7398,7 @@ little_tools_Plugins.prototype = {
 							} else {
 								var type2 = _g5;
 								var name3 = _g4;
-								var _this2 = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+								var _this2 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 								var result2 = new Array(_this2.length);
 								var _g9 = 0;
 								var _g10 = _this2.length;
@@ -7243,7 +7422,7 @@ little_tools_Plugins.prototype = {
 								var _g14 = _g11.doc;
 								if(_g13 == null) {
 									var name4 = _g12;
-									var _this3 = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+									var _this3 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 									var result3 = new Array(_this3.length);
 									var _g15 = 0;
 									var _g16 = _this3.length;
@@ -7258,7 +7437,7 @@ little_tools_Plugins.prototype = {
 								} else {
 									var type3 = _g13;
 									var name5 = _g12;
-									var _this4 = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+									var _this4 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 									var result4 = new Array(_this4.length);
 									var _g17 = 0;
 									var _g18 = _this4.length;
@@ -7356,7 +7535,7 @@ little_tools_Plugins.prototype = {
 									var _g24 = entry1.doc;
 									if(_g23 == null) {
 										var name8 = _g22;
-										var _this6 = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+										var _this6 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 										var result6 = new Array(_this6.length);
 										var _g25 = 0;
 										var _g26 = _this6.length;
@@ -7371,7 +7550,7 @@ little_tools_Plugins.prototype = {
 									} else {
 										var type6 = _g23;
 										var name9 = _g22;
-										var _this7 = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+										var _this7 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 										var result7 = new Array(_this7.length);
 										var _g27 = 0;
 										var _g28 = _this7.length;
@@ -7395,7 +7574,7 @@ little_tools_Plugins.prototype = {
 										var _g32 = _g29.doc;
 										if(_g31 == null) {
 											var name10 = _g30;
-											var _this8 = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+											var _this8 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 											var result8 = new Array(_this8.length);
 											var _g33 = 0;
 											var _g34 = _this8.length;
@@ -7410,7 +7589,7 @@ little_tools_Plugins.prototype = {
 										} else {
 											var type7 = _g31;
 											var name11 = _g30;
-											var _this9 = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+											var _this9 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 											var result9 = new Array(_this9.length);
 											var _g35 = 0;
 											var _g36 = _this9.length;
@@ -7501,7 +7680,7 @@ little_tools_Plugins.prototype = {
 				var _g5 = entry.doc;
 				if(_g4 == null) {
 					var name = _g3;
-					var _this1 = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+					var _this1 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 					var result1 = new Array(_this1.length);
 					var _g6 = 0;
 					var _g7 = _this1.length;
@@ -7516,7 +7695,7 @@ little_tools_Plugins.prototype = {
 				} else {
 					var type = _g4;
 					var name1 = _g3;
-					var _this2 = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+					var _this2 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 					var result2 = new Array(_this2.length);
 					var _g8 = 0;
 					var _g9 = _this2.length;
@@ -7540,7 +7719,7 @@ little_tools_Plugins.prototype = {
 					var _g13 = _g10.doc;
 					if(_g12 == null) {
 						var name2 = _g11;
-						var _this3 = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+						var _this3 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 						var result3 = new Array(_this3.length);
 						var _g14 = 0;
 						var _g15 = _this3.length;
@@ -7555,7 +7734,7 @@ little_tools_Plugins.prototype = {
 					} else {
 						var type1 = _g12;
 						var name3 = _g11;
-						var _this4 = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+						var _this4 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 						var result4 = new Array(_this4.length);
 						var _g16 = 0;
 						var _g17 = _this4.length;
@@ -7648,7 +7827,7 @@ little_tools_Plugins.prototype = {
 				var _g5 = entry.doc;
 				if(_g4 == null) {
 					var name = _g3;
-					var _this1 = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+					var _this1 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 					var result1 = new Array(_this1.length);
 					var _g6 = 0;
 					var _g7 = _this1.length;
@@ -7663,7 +7842,7 @@ little_tools_Plugins.prototype = {
 				} else {
 					var type = _g4;
 					var name1 = _g3;
-					var _this2 = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+					var _this2 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 					var result2 = new Array(_this2.length);
 					var _g8 = 0;
 					var _g9 = _this2.length;
@@ -7687,7 +7866,7 @@ little_tools_Plugins.prototype = {
 					var _g13 = _g10.doc;
 					if(_g12 == null) {
 						var name2 = _g11;
-						var _this3 = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+						var _this3 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 						var result3 = new Array(_this3.length);
 						var _g14 = 0;
 						var _g15 = _this3.length;
@@ -7702,7 +7881,7 @@ little_tools_Plugins.prototype = {
 					} else {
 						var type1 = _g12;
 						var name3 = _g11;
-						var _this4 = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+						var _this4 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 						var result4 = new Array(_this4.length);
 						var _g16 = 0;
 						var _g17 = _this4.length;
@@ -7765,7 +7944,7 @@ little_tools_Plugins.prototype = {
 					if(info.lhsAllowedTypes.indexOf(lType) == -1) {
 						var callbackFunc = little_Little.runtime;
 						var callbackFunc1 = "Cannot preform " + lType + "(";
-						var _this = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+						var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 						var result = new Array(_this.length);
 						var _g = 0;
 						var _g1 = _this.length;
@@ -7775,7 +7954,7 @@ little_tools_Plugins.prototype = {
 							result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
 						}
 						var callbackFunc2 = callbackFunc1 + (result.indexOf($hxEnums[lhs.__enum__].__constructs__[lhs._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(lhs)[0] : Type.enumParameters(little_interpreter_Interpreter.run([lhs]))[0]) + ") " + symbol + " " + rType + "(";
-						var _this = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+						var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 						var result = new Array(_this.length);
 						var _g = 0;
 						var _g1 = _this.length;
@@ -7795,7 +7974,7 @@ little_tools_Plugins.prototype = {
 					if(info.rhsAllowedTypes.indexOf(rType) == -1) {
 						var callbackFunc = little_Little.runtime;
 						var callbackFunc1 = "Cannot preform " + lType + "(";
-						var _this = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+						var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 						var result = new Array(_this.length);
 						var _g = 0;
 						var _g1 = _this.length;
@@ -7805,7 +7984,7 @@ little_tools_Plugins.prototype = {
 							result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
 						}
 						var callbackFunc2 = callbackFunc1 + (result.indexOf($hxEnums[lhs.__enum__].__constructs__[lhs._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(lhs)[0] : Type.enumParameters(little_interpreter_Interpreter.run([lhs]))[0]) + ") " + symbol + " " + rType + "(";
-						var _this = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+						var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 						var result = new Array(_this.length);
 						var _g = 0;
 						var _g1 = _this.length;
@@ -7825,7 +8004,7 @@ little_tools_Plugins.prototype = {
 					if(info.rhsAllowedTypes.indexOf(rType) == -1) {
 						var callbackFunc = little_Little.runtime;
 						var callbackFunc1 = "Cannot preform " + lType + "(";
-						var _this = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+						var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 						var result = new Array(_this.length);
 						var _g = 0;
 						var _g1 = _this.length;
@@ -7835,7 +8014,7 @@ little_tools_Plugins.prototype = {
 							result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
 						}
 						var callbackFunc2 = callbackFunc1 + (result.indexOf($hxEnums[lhs.__enum__].__constructs__[lhs._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(lhs)[0] : Type.enumParameters(little_interpreter_Interpreter.run([lhs]))[0]) + ") " + symbol + " " + rType + "(";
-						var _this = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+						var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 						var result = new Array(_this.length);
 						var _g = 0;
 						var _g1 = _this.length;
@@ -7849,7 +8028,7 @@ little_tools_Plugins.prototype = {
 					if(info.rhsAllowedTypes.indexOf(lType) == -1) {
 						var callbackFunc = little_Little.runtime;
 						var callbackFunc1 = "Cannot preform " + lType + "(";
-						var _this = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+						var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 						var result = new Array(_this.length);
 						var _g = 0;
 						var _g1 = _this.length;
@@ -7859,7 +8038,7 @@ little_tools_Plugins.prototype = {
 							result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
 						}
 						var callbackFunc2 = callbackFunc1 + (result.indexOf($hxEnums[lhs.__enum__].__constructs__[lhs._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(lhs)[0] : Type.enumParameters(little_interpreter_Interpreter.run([lhs]))[0]) + ") " + symbol + " " + rType + "(";
-						var _this = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+						var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 						var result = new Array(_this.length);
 						var _g = 0;
 						var _g1 = _this.length;
@@ -7879,7 +8058,7 @@ little_tools_Plugins.prototype = {
 					if(info.lhsAllowedTypes.indexOf(lType) == -1 && !little_tools_Plugins.containsCombo(info.allowedTypeCombos,lType,rType)) {
 						var callbackFunc = little_Little.runtime;
 						var callbackFunc1 = "Cannot preform " + lType + "(";
-						var _this = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+						var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 						var result = new Array(_this.length);
 						var _g = 0;
 						var _g1 = _this.length;
@@ -7889,7 +8068,7 @@ little_tools_Plugins.prototype = {
 							result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
 						}
 						var callbackFunc2 = callbackFunc1 + (result.indexOf($hxEnums[lhs.__enum__].__constructs__[lhs._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(lhs)[0] : Type.enumParameters(little_interpreter_Interpreter.run([lhs]))[0]) + ") " + symbol + " " + rType + "(";
-						var _this = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+						var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 						var result = new Array(_this.length);
 						var _g = 0;
 						var _g1 = _this.length;
@@ -7919,7 +8098,7 @@ little_tools_Plugins.prototype = {
 					if(info.rhsAllowedTypes.indexOf(rType) == -1 && !little_tools_Plugins.containsCombo(info.allowedTypeCombos,lType,rType)) {
 						var callbackFunc = little_Little.runtime;
 						var callbackFunc1 = "Cannot preform " + lType + "(";
-						var _this = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+						var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 						var result = new Array(_this.length);
 						var _g = 0;
 						var _g1 = _this.length;
@@ -7929,7 +8108,7 @@ little_tools_Plugins.prototype = {
 							result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
 						}
 						var callbackFunc2 = callbackFunc1 + (result.indexOf($hxEnums[lhs.__enum__].__constructs__[lhs._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(lhs)[0] : Type.enumParameters(little_interpreter_Interpreter.run([lhs]))[0]) + ") " + symbol + " " + rType + "(";
-						var _this = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+						var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 						var result = new Array(_this.length);
 						var _g = 0;
 						var _g1 = _this.length;
@@ -7959,7 +8138,7 @@ little_tools_Plugins.prototype = {
 					if(info.rhsAllowedTypes.indexOf(rType) == -1 && !little_tools_Plugins.containsCombo(info.allowedTypeCombos,lType,rType)) {
 						var callbackFunc = little_Little.runtime;
 						var callbackFunc1 = "Cannot preform " + lType + "(";
-						var _this = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+						var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 						var result = new Array(_this.length);
 						var _g = 0;
 						var _g1 = _this.length;
@@ -7969,7 +8148,7 @@ little_tools_Plugins.prototype = {
 							result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
 						}
 						var callbackFunc2 = callbackFunc1 + (result.indexOf($hxEnums[lhs.__enum__].__constructs__[lhs._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(lhs)[0] : Type.enumParameters(little_interpreter_Interpreter.run([lhs]))[0]) + ") " + symbol + " " + rType + "(";
-						var _this = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+						var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 						var result = new Array(_this.length);
 						var _g = 0;
 						var _g1 = _this.length;
@@ -7993,7 +8172,7 @@ little_tools_Plugins.prototype = {
 					if(info.rhsAllowedTypes.indexOf(lType) == -1 && !little_tools_Plugins.containsCombo(info.allowedTypeCombos,lType,rType)) {
 						var callbackFunc = little_Little.runtime;
 						var callbackFunc1 = "Cannot preform " + lType + "(";
-						var _this = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+						var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 						var result = new Array(_this.length);
 						var _g = 0;
 						var _g1 = _this.length;
@@ -8003,7 +8182,7 @@ little_tools_Plugins.prototype = {
 							result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
 						}
 						var callbackFunc2 = callbackFunc1 + (result.indexOf($hxEnums[lhs.__enum__].__constructs__[lhs._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(lhs)[0] : Type.enumParameters(little_interpreter_Interpreter.run([lhs]))[0]) + ") " + symbol + " " + rType + "(";
-						var _this = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+						var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 						var result = new Array(_this.length);
 						var _g = 0;
 						var _g1 = _this.length;
@@ -8044,7 +8223,7 @@ little_tools_Plugins.prototype = {
 					if(info.lhsAllowedTypes.indexOf(lType) == -1) {
 						var callbackFunc = little_Little.runtime;
 						var callbackFunc1 = "Cannot perform " + lType + "(";
-						var _this = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+						var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 						var result = new Array(_this.length);
 						var _g = 0;
 						var _g1 = _this.length;
@@ -8063,7 +8242,7 @@ little_tools_Plugins.prototype = {
 					if(info.rhsAllowedTypes.indexOf(rType) == -1) {
 						var callbackFunc = little_Little.runtime;
 						var callbackFunc1 = "Cannot perform " + symbol + rType + "(";
-						var _this = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+						var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 						var result = new Array(_this.length);
 						var _g = 0;
 						var _g1 = _this.length;
@@ -8321,7 +8500,6 @@ little_Little.compile = function(code) {
 	return little_interpreter_Interpreter.convert.apply(null,little_parser_Parser.parse(little_lexer_Lexer.lex(code)));
 };
 little_Little.format = function(code) {
-	haxe_Log.trace(little_tools_PrettyPrinter.printParserAst(little_parser_Parser.parse(little_lexer_Lexer.lex(code))),{ fileName : "src/little/Little.hx", lineNumber : 168, className : "little.Little", methodName : "format"});
 	return little_tools_PrettyPrinter.stringifyParser(little_parser_Parser.parse(little_lexer_Lexer.lex(code)));
 };
 little_Little.reset = function() {
@@ -8564,7 +8742,7 @@ little_interpreter_Interpreter.splitLine = function() {
 little_interpreter_Interpreter.declareVariable = function(name,type,doc) {
 	var path = little_tools_Extensions.asStringPath(name);
 	var tmp = little_Little.memory;
-	var _this = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+	var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 	var result = new Array(_this.length);
 	var _g = 0;
 	var _g1 = _this.length;
@@ -8577,7 +8755,7 @@ little_interpreter_Interpreter.declareVariable = function(name,type,doc) {
 	var tmp2;
 	if(doc != null) {
 		var token = little_interpreter_Interpreter.evaluate(doc);
-		var _this = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+		var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 		var result = new Array(_this.length);
 		var _g = 0;
 		var _g1 = _this.length;
@@ -8626,7 +8804,7 @@ little_interpreter_Interpreter.declareFunction = function(name,params,doc) {
 			var _g5 = entry.doc;
 			if(_g4 == null) {
 				var name1 = _g3;
-				var _this1 = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+				var _this1 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 				var result1 = new Array(_this1.length);
 				var _g6 = 0;
 				var _g7 = _this1.length;
@@ -8641,7 +8819,7 @@ little_interpreter_Interpreter.declareFunction = function(name,params,doc) {
 			} else {
 				var type = _g4;
 				var name2 = _g3;
-				var _this2 = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+				var _this2 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 				var result2 = new Array(_this2.length);
 				var _g8 = 0;
 				var _g9 = _this2.length;
@@ -8664,7 +8842,7 @@ little_interpreter_Interpreter.declareFunction = function(name,params,doc) {
 				var _g13 = _g10.doc;
 				if(_g12 == null) {
 					var name3 = _g11;
-					var _this3 = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+					var _this3 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 					var result3 = new Array(_this3.length);
 					var _g14 = 0;
 					var _g15 = _this3.length;
@@ -8679,7 +8857,7 @@ little_interpreter_Interpreter.declareFunction = function(name,params,doc) {
 				} else {
 					var type1 = _g12;
 					var name4 = _g11;
-					var _this4 = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+					var _this4 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 					var result4 = new Array(_this4.length);
 					var _g16 = 0;
 					var _g17 = _this4.length;
@@ -8702,7 +8880,7 @@ little_interpreter_Interpreter.declareFunction = function(name,params,doc) {
 	var tmp3;
 	if(doc != null) {
 		var token = little_interpreter_Interpreter.evaluate(doc);
-		var _this = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+		var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 		var result = new Array(_this.length);
 		var _g = 0;
 		var _g1 = _this.length;
@@ -9026,7 +9204,7 @@ little_interpreter_Interpreter.write = function(assignees,value) {
 		while(_g2 < _g3) {
 			var i = _g2++;
 			var x = vars[i];
-			var _this = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+			var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 			var result1 = new Array(_this.length);
 			var _g4 = 0;
 			var _g5 = _this.length;
@@ -9044,7 +9222,7 @@ little_interpreter_Interpreter.write = function(assignees,value) {
 		while(_g6 < _g7) {
 			var i2 = _g6++;
 			var x2 = funcs[i2];
-			var _this1 = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+			var _this1 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 			var result3 = new Array(_this1.length);
 			var _g8 = 0;
 			var _g9 = _this1.length;
@@ -9154,7 +9332,7 @@ little_interpreter_Interpreter.read = function(name) {
 };
 little_interpreter_Interpreter.typeCast = function(value,type) {
 	var preType = little_tools_Extensions.asStringPath(little_tools_Extensions.asTokenPath(little_tools_Extensions.type(little_interpreter_Interpreter.evaluate(value))));
-	var _this = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+	var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 	var result = new Array(_this.length);
 	var _g = 0;
 	var _g1 = _this.length;
@@ -9520,7 +9698,7 @@ little_interpreter_Interpreter.evaluate = function(exp,dontThrow) {
 				while(_g < _g1) {
 					var i = _g++;
 					var token = _this[i];
-					var _this1 = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+					var _this1 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 					var result1 = new Array(_this1.length);
 					var _g2 = 0;
 					var _g3 = _this1.length;
@@ -10376,11 +10554,9 @@ little_interpreter_memory_HashTables.objectAddKey = function(object,key,value,ty
 	var occupied = table.length * little_interpreter_memory_HashTables.OBJECT_HASH_TABLE_CELL_SIZE;
 	if(occupied / tableSize >= 0.7) {
 		table.push({ key : key, keyPointer : storage.storeString(key), value : value, type : type, doc : doc});
-		haxe_Log.trace("Rehashing object: " + object,{ fileName : "src/little/interpreter/memory/HashTables.hx", lineNumber : 211, className : "little.interpreter.memory.HashTables", methodName : "objectAddKey"});
 		var newHashTable = little_interpreter_memory_HashTables.generateObjectHashTable(table);
 		storage.freeBytes(storage.readPointer(little_interpreter_memory_MemoryPointer.fromInt(object + 4)),hashTableBytes.length);
 		var tablePointer = storage.storeBytes(newHashTable.length,newHashTable);
-		haxe_Log.trace(tablePointer == null ? "null" : little_interpreter_memory_MemoryPointer.toString(tablePointer),{ fileName : "src/little/interpreter/memory/HashTables.hx", lineNumber : 218, className : "little.interpreter.memory.HashTables", methodName : "objectAddKey", customParams : [newHashTable.length]});
 		storage.setPointer(little_interpreter_memory_MemoryPointer.fromInt(object + 4),tablePointer);
 		storage.setInt32(little_interpreter_memory_MemoryPointer.fromInt(object),newHashTable.length);
 		return;
@@ -10624,10 +10800,10 @@ little_lexer_Lexer.lex = function(code) {
 			}
 			--i;
 			tokens.push(little_lexer_LexerTokens.Sign(sign));
-		} else if(new EReg("[^+-.!@#$%%^&*0-9 \t\n\r;,\\(\\)\\[\\]\\{\\}]","").match(char)) {
+		} else if(new EReg("[^" + little_KeywordConfig.recognizedOperators.join("") + " \\t\\n\\r;,\\(\\)\\[\\]\\{\\}]","g").match(char)) {
 			var name = char;
 			++i;
-			while(i < code.length && new EReg("[^+-.!@#$%%^&* \t\n\r;,\\(\\)\\[\\]\\{\\}]","").match(code.charAt(i))) {
+			while(i < code.length && new EReg("[^" + little_KeywordConfig.recognizedOperators.join("") + " \\t\\n\\r;,\\(\\)\\[\\]\\{\\}]","g").match(code.charAt(i))) {
 				name += code.charAt(i);
 				++i;
 			}
@@ -12615,7 +12791,7 @@ little_tools_Extensions.staticallyStorable = function(token) {
 	}
 };
 little_tools_Extensions.extractIdentifier = function(token) {
-	var _this = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+	var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 	var result = new Array(_this.length);
 	var _g = 0;
 	var _g1 = _this.length;
@@ -12637,7 +12813,7 @@ little_tools_Extensions.asStringPath = function(token) {
 	case 15:
 		var source = current.name;
 		var property = current.property;
-		var _this = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+		var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 		var result = new Array(_this.length);
 		var _g = 0;
 		var _g1 = _this.length;
@@ -12650,17 +12826,17 @@ little_tools_Extensions.asStringPath = function(token) {
 		current = source;
 		break;
 	case 18:
-		var word = current.string;
-		path.unshift(word);
+		var string = current.string;
+		path.unshift("\"" + string + "\"");
 		current = null;
 		break;
 	case 25:
-		var word1 = current.word;
-		path.unshift(word1);
+		var word = current.word;
+		path.unshift(word);
 		current = null;
 		break;
 	default:
-		var _this1 = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+		var _this1 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 		var result1 = new Array(_this1.length);
 		var _g2 = 0;
 		var _g3 = _this1.length;
@@ -13072,7 +13248,7 @@ little_tools_PrepareRun.addTypes = function() {
 	_g.h["public " + little_Little.keywords.TYPE_BOOLEAN + " " + little_Little.keywords.STDLIB__STRING_endsWith + " (define postfix as " + little_Little.keywords.TYPE_STRING + ")"] = function(_,value,params) {
 		return little_tools_Conversion.toLittleValue(Type.enumParameters(value)[0].indexOf(little_tools_Conversion.toHaxeValue(params[0])) == Type.enumParameters(value)[0].length - little_tools_Conversion.toHaxeValue(params[0]).length);
 	};
-	_g.h["static " + little_Little.keywords.TYPE_STRING + " " + little_Little.keywords.STDLIB__STRING_fromCharCode + " (define code as " + little_Little.keywords.TYPE_INT + ")"] = function(_,value,params) {
+	_g.h["static " + little_Little.keywords.TYPE_STRING + " " + little_Little.keywords.STDLIB__STRING_fromCharCode + " (define code as " + little_Little.keywords.TYPE_INT + ")"] = function(params) {
 		var code = little_tools_Conversion.toHaxeValue(params[0]);
 		return little_tools_Conversion.toLittleValue(String.fromCodePoint(code));
 	};
@@ -13208,7 +13384,7 @@ little_tools_PrepareRun.addFunctions = function() {
 };
 little_tools_PrepareRun.addProps = function() {
 	little_Little.plugin.registerInstanceVariable(little_Little.keywords.OBJECT_TYPE_PROPERTY_NAME,little_Little.keywords.TYPE_STRING,little_Little.keywords.TYPE_DYNAMIC,"The name of this value's type, as a " + little_Little.keywords.TYPE_STRING,null,function(value,address) {
-		return little_interpreter_InterpTokens.Characters(little_tools_Extensions.type(value));
+		return little_interpreter_InterpTokens.ClassPointer(little_Little.memory.getTypeInformation(little_tools_Extensions.type(value)).pointer);
 	});
 	little_Little.plugin.registerInstanceVariable(little_Little.keywords.OBJECT_ADDRESS_PROPERTY_NAME,little_Little.keywords.TYPE_INT,little_Little.keywords.TYPE_DYNAMIC,"The address of this value",null,function(value,address) {
 		return little_interpreter_InterpTokens.Number(address);
@@ -13680,7 +13856,7 @@ little_tools_PrepareRun.addConditions = function() {
 			}
 			if(result.indexOf($hxEnums[token.__enum__].__constructs__[token._hx_index]._hx_name.toLowerCase()) != -1) {
 				var token = params[0];
-				var _this = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+				var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 				var result = new Array(_this.length);
 				var _g = 0;
 				var _g1 = _this.length;
@@ -13736,7 +13912,7 @@ little_tools_PrepareRun.addConditions = function() {
 			}
 			if(result.indexOf($hxEnums[token.__enum__].__constructs__[token._hx_index]._hx_name.toLowerCase()) != -1) {
 				var token = params[0];
-				var _this = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.CHARACTERS].slice();
+				var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
 				var result = new Array(_this.length);
 				var _g = 0;
 				var _g1 = _this.length;

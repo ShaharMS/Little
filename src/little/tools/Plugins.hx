@@ -199,7 +199,7 @@ class Plugins {
                         return {
                             objectValue: FunctionCode(paramMap, Block([
                                 FunctionReturn(HaxeExtern(() -> {
-                                    var result = (field : (Array<InterpTokens>) -> InterpTokens)(paramMap.keys().toArray().map(key -> Interpreter.evaluate(memory.read(key).objectValue)));
+                                    var result = untyped field(paramMap.keys().toArray().map(key -> Interpreter.evaluate(memory.read(key).objectValue)));
                                     return result;
                                 }), returnType)
                             ], returnType)),
