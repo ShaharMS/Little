@@ -44,6 +44,20 @@ class TextTools
 	}
 
 	/**
+	 * replaces the last occurrence of `replace` in `string` with `by`, if its at the end of the string.
+	 * 
+	 * @param string the string to replace in
+	 * @param replace the string to replace
+	 * @param by the replacement string
+	 * @return the string with the last occurrence of `replace` replaced by `by`
+	 */
+	 public static function replaceIfLast(string:String, replace:String, by:String):String
+		{
+			if (string.endsWith(replace)) return replaceLast(string, replace, by);
+			return string;
+		}
+
+	/**
 	 * replaces the first occurrence of `replace` in `string` with `by`.
 	 * 
 	 * @param string the string to replace in

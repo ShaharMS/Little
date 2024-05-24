@@ -90,6 +90,7 @@ class Interpreter {
     public static function setLine(l:Int) {
         var o = Little.runtime.line;
         Little.runtime.line = l;
+        Little.runtime.linePart = 0;
 
         for (listener in Little.runtime.onLineChanged) listener(o);
     }
@@ -108,6 +109,7 @@ class Interpreter {
         Split the current line. In other words, create a new line, but keep the old line number.
     **/
     public static function splitLine() {
+        Little.runtime.linePart++;
         for (listener in Little.runtime.onLineSplit) listener();
     }
 
@@ -328,7 +330,13 @@ class Interpreter {
 					listener(functionName, resulting);
 				}
 
-				return run(attachment.concat(body.parameter(0)));
+                Little.runtime.callStack.push({module: Little.runtime.module, line: Little.runtime.line, linePart: Little.runtime.linePart, token: FunctionCall(name, params)});
+
+				var t = run(attachment.concat(body.parameter(0)));
+
+                Little.runtime.callStack.pop();
+
+                return t;
 			}
 			case _: return null;
 		}
@@ -452,6 +460,7 @@ class Interpreter {
 
         switch exp {
             case Number(_) | Decimal(_) | Characters(_) | TrueValue | FalseValue | NullValue | Sign(_) | FunctionCode(_, _) | Object(_, _) | ClassPointer(_): return exp;
+            case ConditionCode(callers): return Characters("<condition>");
             case ErrorMessage(msg): {
                 if (!dontThrow) Little.runtime.throwError(exp, INTERPRETER_VALUE_EVALUATOR);
                 return exp;

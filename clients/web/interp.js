@@ -3622,6 +3622,12 @@ little_tools_TextTools.replaceLast = function(string,replace,by) {
 	var result = string.substring(0,place) + by + string.substring(place + replace.length);
 	return result;
 };
+little_tools_TextTools.replaceIfLast = function(string,replace,by) {
+	if(StringTools.endsWith(string,replace)) {
+		return little_tools_TextTools.replaceLast(string,replace,by);
+	}
+	return string;
+};
 little_tools_TextTools.replaceFirst = function(string,replace,by) {
 	var place = string.indexOf(replace);
 	if(place == -1) {
@@ -8347,12 +8353,14 @@ var little_interpreter_Runtime = function() {
 	this.errorThrown = false;
 	this.exitCode = 0;
 	this.currentToken = null;
+	this.linePart = 0;
 	this.line = 0;
 };
 $hxClasses["little.interpreter.Runtime"] = little_interpreter_Runtime;
 little_interpreter_Runtime.__name__ = "little.interpreter.Runtime";
 little_interpreter_Runtime.prototype = {
 	line: null
+	,linePart: null
 	,currentToken: null
 	,module: null
 	,previousToken: null
@@ -8376,12 +8384,24 @@ little_interpreter_Runtime.prototype = {
 		if(layer == null) {
 			layer = "Interpreter";
 		}
-		this.callStack.push(token);
 		var mod = this.module;
 		var reason = little_tools_TextTools.replaceLast(little_tools_TextTools.remove(Std.string(token),$hxEnums[token.__enum__].__constructs__[token._hx_index]._hx_name).substring(1),")","");
 		var content = "" + (little_Little.debug ? layer.toUpperCase() + ": " : "") + "ERROR: Module " + this.module + ", Line " + this.line + ":  " + reason;
-		this.stdout.output += "\n" + content;
+		this.stdout.output += "\n" + content + "\n";
+		var fh = this.stdout;
+		var fh1 = fh.output;
+		var _this = this.callStack;
+		var result = new Array(_this.length);
+		var _g = 0;
+		var _g1 = _this.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var obj = _this[i];
+			result[i] = "\tCalled from Module " + obj.module + ", Line " + obj.line + " (part " + obj.linePart + "): " + little_tools_PrettyPrinter.stringifyInterpreter(null,obj.token);
+		}
+		fh.output = fh1 + result.join("\n");
 		this.stdout.stdoutTokens.push(token);
+		this.callStack.push({ module : this.module, line : this.line, linePart : this.linePart, token : token});
 		this.exitCode = little_tools_Layer.getIndexOf(layer);
 		this.errorToken = token;
 		this.errorThrown = true;
@@ -8398,7 +8418,7 @@ little_interpreter_Runtime.prototype = {
 		if(layer == null) {
 			layer = "Interpreter";
 		}
-		this.callStack.push(token);
+		this.callStack.push({ module : this.module, line : this.line, linePart : this.linePart, token : token});
 		var reason = little_tools_TextTools.replaceLast(little_tools_TextTools.remove(Std.string(token),$hxEnums[token.__enum__].__constructs__[token._hx_index]._hx_name).substring(1),")","");
 		var content = "" + (little_Little.debug ? layer.toUpperCase() + ": " : "") + "WARNING: Module " + this.module + ", Line " + this.line + ":  " + reason;
 		this.stdout.output += "\n" + content;
@@ -8488,12 +8508,6 @@ little_Little.run = function(code,debug) {
 			little_Little.debug = previous;
 		}
 	} catch( _g ) {
-		var e = haxe_Exception.caught(_g);
-		if(e.get_message() == "Quitting...") {
-			haxe_Log.trace(e.get_message(),{ fileName : "src/little/Little.hx", lineNumber : 144, className : "little.Little", methodName : "run"});
-		} else {
-			haxe_Log.trace(e.details(),{ fileName : "src/little/Little.hx", lineNumber : 144, className : "little.Little", methodName : "run"});
-		}
 	}
 };
 little_Little.compile = function(code) {
@@ -8709,6 +8723,7 @@ little_interpreter_Interpreter.assert = function(token,isType,errorMessage) {
 little_interpreter_Interpreter.setLine = function(l) {
 	var o = little_Little.runtime.line;
 	little_Little.runtime.line = l;
+	little_Little.runtime.linePart = 0;
 	var _g = 0;
 	var _g1 = little_Little.runtime.onLineChanged;
 	while(_g < _g1.length) {
@@ -8731,6 +8746,7 @@ little_interpreter_Interpreter.setModule = function(m) {
 	}
 };
 little_interpreter_Interpreter.splitLine = function() {
+	little_Little.runtime.linePart++;
 	var _g = 0;
 	var _g1 = little_Little.runtime.onLineSplit;
 	while(_g < _g1.length) {
@@ -9276,7 +9292,7 @@ little_interpreter_Interpreter.call = function(name,params) {
 			var _g1 = _g.next();
 			var key = _g1.key;
 			var typeCast = _g1.value;
-			var name = key;
+			var name1 = key;
 			var value = null;
 			var type = little_interpreter_InterpTokens.Identifier(little_Little.keywords.TYPE_DYNAMIC);
 			if(typeCast._hx_index == 11) {
@@ -9301,10 +9317,10 @@ little_interpreter_Interpreter.call = function(name,params) {
 			if(processedParams.length > 0) {
 				value = processedParams.shift();
 			} else if(value == null && processedParams.length == 0) {
-				unattained.push(name);
+				unattained.push(name1);
 			}
 			resulting.push(value);
-			attachment.push(little_interpreter_InterpTokens.Write([little_interpreter_InterpTokens.VariableDeclaration(little_interpreter_InterpTokens.Identifier(name),type,null)],value));
+			attachment.push(little_interpreter_InterpTokens.Write([little_interpreter_InterpTokens.VariableDeclaration(little_interpreter_InterpTokens.Identifier(name1),type,null)],value));
 		}
 		if(given > requiredAndOptionalParams.get_length()) {
 			required = requiredAndOptionalParams.get_length();
@@ -9322,7 +9338,10 @@ little_interpreter_Interpreter.call = function(name,params) {
 			++_g;
 			listener(functionName,resulting);
 		}
-		return little_interpreter_Interpreter.run(attachment.concat(Type.enumParameters(body)[0]));
+		little_Little.runtime.callStack.push({ module : little_Little.runtime.module, line : little_Little.runtime.line, linePart : little_Little.runtime.linePart, token : little_interpreter_InterpTokens.FunctionCall(name,params)});
+		var t = little_interpreter_Interpreter.run(attachment.concat(Type.enumParameters(body)[0]));
+		little_Little.runtime.callStack.pop();
+		return t;
 	} else {
 		return null;
 	}
@@ -9573,6 +9592,9 @@ little_interpreter_Interpreter.evaluate = function(exp,dontThrow) {
 		}
 		little_interpreter_Interpreter.declareFunction(result.indexOf($hxEnums[name.__enum__].__constructs__[name._hx_index]._hx_name.toLowerCase()) != -1 ? little_interpreter_Interpreter.evaluate(name) : name,params,little_interpreter_Interpreter.evaluate(doc));
 		return little_interpreter_InterpTokens.NullValue;
+	case 5:
+		var callers = exp.callers;
+		return little_interpreter_InterpTokens.Characters("<condition>");
 	case 6:
 		var name = exp.name;
 		var exp1 = exp.exp;
@@ -12855,6 +12877,9 @@ little_tools_Extensions.asJoinedStringPath = function(token) {
 };
 little_tools_Extensions.type = function(token) {
 	switch(token._hx_index) {
+	case 5:
+		var callers = token.callers;
+		return little_Little.keywords.TYPE_CONDITION;
 	case 7:
 		var requiredParams = token.requiredParams;
 		var body = token.body;
@@ -14533,7 +14558,7 @@ little_tools_PrettyPrinter.stringifyParser = function(code,token) {
 		case 10:
 			var name4 = token.name;
 			var params1 = token.params;
-			s += "" + little_tools_PrettyPrinter.stringifyParser(null,name4) + "(" + little_tools_TextTools.replace(little_tools_PrettyPrinter.stringifyParser(null,params1)," ,",",") + ")";
+			s += little_tools_TextTools.replaceIfLast("" + little_tools_PrettyPrinter.stringifyParser(null,name4) + "(" + little_tools_TextTools.replace(little_tools_PrettyPrinter.stringifyParser(null,params1)," ,",",") + ")"," )",")");
 			break;
 		case 11:
 			var value2 = token.value;
@@ -14680,7 +14705,7 @@ little_tools_PrettyPrinter.stringifyInterpreter = function(code,token) {
 		case 8:
 			var name3 = token.name;
 			var params1 = token.params;
-			s += "" + little_tools_PrettyPrinter.stringifyInterpreter(null,name3) + "(" + little_tools_TextTools.replace(little_tools_PrettyPrinter.stringifyInterpreter(null,params1)," ,",",") + ")";
+			s += little_tools_TextTools.replaceIfLast("" + little_tools_PrettyPrinter.stringifyInterpreter(null,name3) + "(" + little_tools_TextTools.replace(little_tools_PrettyPrinter.stringifyInterpreter(null,params1)," ,",",") + ")"," )",")");
 			break;
 		case 9:
 			var value = token.value;

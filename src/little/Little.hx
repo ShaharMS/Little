@@ -140,8 +140,8 @@ class Little {
 			}
             if (debug != null) Little.debug = previous;
         } catch (e) {
-            
-            e.message == "Quitting..." ? trace(e.message) : trace(e.details());
+            // e.message == "Quitting..." ? trace(e.message) : trace(e.details());
+            // Do nothing
         }
     }
 

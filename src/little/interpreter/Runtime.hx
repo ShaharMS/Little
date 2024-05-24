@@ -1,5 +1,6 @@
 package little.interpreter;
 
+import little.tools.PrettyPrinter;
 import little.interpreter.Tokens.InterpTokens;
 import little.tools.Layer;
 
@@ -19,6 +20,11 @@ class Runtime {
     	The line currently interpreted.
     **/
     public var line(default, null):Int = 0;
+
+    /**
+        The currently interpreted part of a line, split by `,` or `;`
+    **/
+    public var linePart(default, null):Int = 0;
 
     /**
         The next token to be interpreted
@@ -121,7 +127,7 @@ class Runtime {
     public var onWriteValue:Array<Array<String> -> Void> = [];
 
     /**
-    	Dispatches right before a function is called.
+    	Dispatches right before a function is called, and before it is added to the callstack.
 
 		Useful when used with the `line`, `linePart` and `module` properties.
 			
@@ -167,7 +173,7 @@ class Runtime {
     /**
     	Contains every function call interpreted during the program's runtime.
     **/
-    public var callStack:Array<InterpTokens> = [];
+    public var callStack:Array<{module:String, line:Int, linePart:Int, token:InterpTokens}> = [];
 
     /**
     	Stops the execution of the program, and prints an error message to the console. Dispatches `onErrorThrown`.
@@ -177,7 +183,6 @@ class Runtime {
         **/
     public function throwError(token:InterpTokens, ?layer:Layer = INTERPRETER):InterpTokens {
 
-        callStack.push(token);
         
         var mod:String = module, reason:String;
         var content = switch token {
@@ -186,8 +191,12 @@ class Runtime {
                 '${if (Little.debug) (layer : String).toUpperCase() + ": " else ""}ERROR: Module ${module}, Line $line:  ${reason}';
             }
         }
-        stdout.output += '\n$content';
+        stdout.output += '\n$content\n';
+        stdout.output += callStack.map(obj -> '\tCalled from Module ${obj.module}, Line ${obj.line} (part ${obj.linePart}): ${PrettyPrinter.stringifyInterpreter(obj.token)}').join('\n');
 		stdout.stdoutTokens.push(token);
+
+        callStack.push({module: module, line: line, linePart: linePart, token: token});
+
         exitCode = Layer.getIndexOf(layer);
         errorToken = token;
         errorThrown = true;        
@@ -204,7 +213,7 @@ class Runtime {
         @param layer the "stage" from which the error was called
     **/
     public function warn(token:InterpTokens, ?layer:Layer = INTERPRETER) {
-        callStack.push(token);
+        callStack.push({module: module, line: line, linePart: linePart, token: token});
         
         var reason:String;
         var content = switch token {

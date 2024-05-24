@@ -135,6 +135,7 @@ class Extensions {
 			case TrueValue | FalseValue: return Little.keywords.TYPE_BOOLEAN;
 			case NullValue: return Little.keywords.TYPE_DYNAMIC;
 			case FunctionCode(requiredParams, body): return Little.keywords.TYPE_FUNCTION;
+			case ConditionCode(callers): return Little.keywords.TYPE_CONDITION;
 			case Sign(sign): return Little.keywords.TYPE_SIGN;
 			case Object(_, typeName): return typeName;
 			case ClassPointer(pointer): return Little.keywords.TYPE_MODULE;

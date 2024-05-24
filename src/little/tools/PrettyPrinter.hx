@@ -363,7 +363,7 @@ class PrettyPrinter {
 				case Write(assignees, value): s += assignees.concat([value]).map(t -> stringifyParser(t)).join(" = ").replace("  =", " =");
 				case Identifier(word): s += word;
 				case TypeDeclaration(value, type): s += '${stringifyParser(value)} ${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyParser(type)}';
-				case FunctionCall(name, params): s += '${stringifyParser(name)}(${stringifyParser(params).replace(" ,", ",")})';
+				case FunctionCall(name, params): s += '${stringifyParser(name)}(${stringifyParser(params).replace(" ,", ",")})'.replaceIfLast(" )", ")");
 				case Return(value, type): s += '${Little.keywords.FUNCTION_RETURN} ${stringifyParser(value)}';
 				case Expression(parts, type): s += stringifyParser(parts);
 				case Block(body, type): {					
@@ -420,7 +420,7 @@ class PrettyPrinter {
 				case Write(assignees, value): s += assignees.concat([value]).map(t -> stringifyInterpreter(t)).join(" = ").replace("  =", " =");
 				case Identifier(word): s += word;
 				case TypeCast(value, type): s += '${stringifyInterpreter(value)} ${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyInterpreter(type)}';
-				case FunctionCall(name, params): s += '${stringifyInterpreter(name)}(${stringifyInterpreter(params).replace(' ,', ',')})';
+				case FunctionCall(name, params): s += '${stringifyInterpreter(name)}(${stringifyInterpreter(params).replace(' ,', ',')})'.replaceIfLast(" )", ")");
 				case ConditionCall(name, exp, body): s += '${stringifyInterpreter(name)} (${stringifyInterpreter(exp)}) ${stringifyInterpreter(body)}';
 				case FunctionReturn(value, type): s += '${Little.keywords.FUNCTION_RETURN} ${stringifyInterpreter(value)}';
 				case Expression(parts, type): s += stringifyInterpreter(parts);
