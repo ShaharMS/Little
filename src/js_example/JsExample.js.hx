@@ -22,7 +22,7 @@ class JsExample {
 
 	public function new() {
 		var input:TextAreaElement = cast d.getElementById("input");
-		var ast:TextAreaElement = cast d.getElementById("ast");
+		var ast:TextAreaElement   = cast d.getElementById("ast");
 		var output:TextAreaElement = cast d.getElementById("output");
 
 		var version:SpanElement = cast d.getElementById("version");
@@ -60,6 +60,9 @@ class JsExample {
 
 		var keywordTable:TableElement = cast d.getElementById("k-table-body");
 
+		/**
+		    Update tables
+		**/
 		function update() {
 			var firstRow = true;
 			for (row in keywordTable.rows) {

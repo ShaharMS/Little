@@ -18,7 +18,7 @@ using StringTools;
 class Operators {
 
 	/**
-		Instantiates the `Little.operators` class.
+		Instantiates the `Little.memory.operators` class.
 	**/
 	public function new() {}
 
@@ -26,7 +26,7 @@ class Operators {
 		A map containing the priority of each operator, sorted by index to an array of operand-position-dependent operators.
 		for example:
 
-		| Priority | Little.operators |
+		| Priority | Little.memory.operators |
 		| :---: | :---: |
 		| 0 | `{sign: "+", side: STANDARD}`, `{sign: "-", side: STANDARD}` |
 		| 1 | `{sign: "*", side: STANDARD}`, `{sign: "/", side: STANDARD}` |
@@ -35,7 +35,7 @@ class Operators {
 	public var priority:Map<Int, Array<{sign:String, side:OperatorType}>> = [];
 
 	/**
-		Little.operators that require two sides to work, for example:
+		Little.memory.operators that require two sides to work, for example:
 		| Operator | Code |
 		| :---: | :---: |
 		| Add | `5 + 5` |
@@ -46,7 +46,7 @@ class Operators {
 	public var standard:Map<String, (lhs:InterpTokens, rhs:InterpTokens) -> InterpTokens> = new Map();
 
 	/**
-		Little.operators that require just the right side of the equations, for example:
+		Little.memory.operators that require just the right side of the equations, for example:
 		| Operator | Code |
 		| :---: | :---: |
 		| Negate | `-5` |
@@ -57,7 +57,7 @@ class Operators {
 	public var rhsOnly:Map<String, (InterpTokens) -> InterpTokens> = new Map();
 
 	/**
-		Little.operators that require just the left side of the equations, for example:
+		Little.memory.operators that require just the left side of the equations, for example:
 		| Operator | Code |
 		| :---: | :---: |
 		| Post Increment | `5++` |
@@ -78,7 +78,7 @@ class Operators {
 		| `first` | Inserts the operator at the first priority level (index `0`). | `first` |
 		| `last` | Inserts the operator at the last priority level (index `priority.length - 1`). | `last` |
 		| `with _<sign>_` | Inserts the operator at the same priority level as the given sign. The sign is surrounded by underscores, which means the sign is of type `LHS_RHS`.| `with _+_`, `with _*_`|
-		| `between <sign1> <sign2>` | Inserts the operator between the two signs. the signs are **not** surrounded by **any underscores**, which means these signs are of type `LHS_RHS`.| `between ^ +`, ` between * -`|
+		| `between <sign1> <sign2>` | Inserts the operator between the two signs. the signs are **not** surrounded by **any underscores**, which means these signs are of type `LHS_RHS`.| `between ^ +_`, ` between _*_ -`|
 		| `before _<sign>` | Inserts the operator before the sign. the sign is surrounded by underscores, which means the sign is of type `LHS_ONLY`.| `before _!`|
 		| `after <sign>_` | Inserts the operator after the sign. the has only one underscore to the right of it, which means the sign is of type `RHS_ONLY`.| `after -_`, `after +_`|
 
@@ -226,7 +226,7 @@ class Operators {
 		@param operatorType  **STANDARD** - operator that works with both sides of the equation, for example: `5 + 5` or `5 - 5`.  
 		**LHS_ONLY** - operator that only works with the left side of the equation, for example: `5++` or `5--`.  
 		**RHS_ONLY** - operator that only works with the right side of the equation, for example: `-5` or `++5`.  
-		@param priority a string indicating the priority of the operator using positional info/actual index. see `Little.operators.setPriority`
+		@param priority a string indicating the priority of the operator using positional info/actual index. see `Little.memory.operators.setPriority`
 		@param callback depending on the operatorType, either a function that takes two arguments (lhs, rhs) or a function that takes one argument (lhs) or (rhs).
 	**/
 	public function add(op:String, operatorType:OperatorType, priority:String,
@@ -301,7 +301,7 @@ class Operators {
 
 	/**
 		Converts shortened `_+_` syntax that includes both the operator and it's side to a sign-`OperatorType` pair.
-		@param signPos a string containing the operator and it's sides. see `Little.operators.setPriority` for syntax
+		@param signPos a string containing the operator and it's sides. see `Little.memory.operators.setPriority` for syntax
 		@return a sign-`OperatorType` pair
 	**/
 	function signPosToObject(signPos:String):{sign:String, side:OperatorType} {

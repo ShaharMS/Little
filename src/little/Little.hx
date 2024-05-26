@@ -46,10 +46,6 @@ class Little {
     **/
     public static var plugin(default, null):Plugins = new Plugins(Little.memory);
 
-    /**
-		Another form of external interfacing, focused on operators.
-    **/
-    public static var operators(default, null):Operators = new Operators();
 
     /**
         Used to store code that is currently being ran/queued for running right before the main module using
@@ -79,6 +75,7 @@ class Little {
 
         @param code a string containing code written in Little.
         @param name a name to call the module, so it would be easily identifiable
+        @param debug when runRightBeforeMain is set to false, this temporarily overrides default `Little.debug`. 
         @param runRightBeforeMain When set to true, instead of parsing and running the code right after this function is called, 
             we wait for `Little.run()` to get called, and then we parse and run this module right before the main module. Defaults to false.
     **/
@@ -90,7 +87,7 @@ class Little {
 			Little.queue.enqueue(code);
         } else {
             final previous = Little.debug;
-            if (debug != null) Little.debug = debug;
+            #if !static if (debug != null) #end Little.debug = debug;
             if (!PrepareRun.prepared) {
                 PrepareRun.addTypes();
 				PrepareRun.addSigns();
@@ -99,7 +96,7 @@ class Little {
                 PrepareRun.addProps();
             }
             Interpreter.run(Interpreter.convert(...Parser.parse(Lexer.lex(code))));
-            if (debug != null) Little.debug = previous;
+            #if !static if (debug != null) #end Little.debug = previous;
         }
     }
 
@@ -172,10 +169,6 @@ class Little {
 	**/
 	public static function reset() {
         runtime = new Runtime();
-		Little.operators.lhsOnly.clear();
-		Little.operators.rhsOnly.clear();
-		Little.operators.standard.clear();
-		Little.operators.priority.clear();
 		Little.memory.reset();
 		Little.queue = new Queue();
 	}

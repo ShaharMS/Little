@@ -19,7 +19,7 @@ using little.tools.TextTools;
 using little.tools.Extensions;
 
 
-@:access(little.interpreter.Little.operators)
+
 @:access(little.interpreter.Runtime)
 /**
     Contains `Little`'s standard library, as a group of functions, each adding different types of features.
@@ -353,15 +353,15 @@ class PrepareRun {
 			priority: 'with ${Little.keywords.POSITIVE_SIGN}_',
 			callback: (lhs, rhs) -> {
 				lhs = Interpreter.evaluate(lhs); rhs = Interpreter.evaluate(rhs);
-				var l = Conversion.toHaxeValue(lhs),
-					r = Conversion.toHaxeValue(rhs);
+				var l:Dynamic = Conversion.toHaxeValue(lhs),
+					r:Dynamic = Conversion.toHaxeValue(rhs);
 				if (l is String || r is String) {
 					l ??= Little.keywords.NULL_VALUE; r ??= Little.keywords.NULL_VALUE;
 					return Characters("" + l + r);
 				}
-				if (lhs.type() == Little.keywords.TYPE_INT && rhs.type() == Little.keywords.TYPE_INT)
-					return Number(cast l + r);
-				return Decimal(cast l + r);
+				if (l is Int && r is Int)
+					return Number(l + r);
+				return Decimal(#if static untyped #else cast #end l + r);
 			}
 		});
 
@@ -379,8 +379,8 @@ class PrepareRun {
 					return Characters(TextTools.subtract(l, r));
 				}
 				if (lhs.type() == Little.keywords.TYPE_INT && rhs.type() == Little.keywords.TYPE_INT)
-					return Number(cast l - r);
-				return Decimal(cast l - r);
+					return Number(untyped l - r);
+				return Decimal(#if static untyped #else cast #end l - r);
 			}
 		});
 
@@ -398,8 +398,8 @@ class PrepareRun {
 					return Characters(TextTools.multiply(l, r));
 				}
 				if (lhs.type() == Little.keywords.TYPE_INT && rhs.type() == Little.keywords.TYPE_INT)
-					return Number(cast l * r);
-				return Decimal(l * r);
+					return Number(untyped l * r);
+				return Decimal(#if static untyped #else cast #end l * r);
 			}
 		});
 
@@ -408,8 +408,8 @@ class PrepareRun {
 			lhsAllowedTypes: [Little.keywords.TYPE_FLOAT, Little.keywords.TYPE_INT],
 			priority: 'with ${Little.keywords.MULTIPLY_SIGN}',
 			callback: (lhs, rhs) -> {
-				var l = Conversion.toHaxeValue(lhs),
-					r = Conversion.toHaxeValue(rhs);
+				var l:Float = Conversion.toHaxeValue(lhs),
+					r:Float = Conversion.toHaxeValue(rhs);
 				if (r == 0)
 					Little.runtime.throwError(ErrorMessage('Cannot divide by 0'));
 				return Decimal(l / r);
@@ -422,8 +422,8 @@ class PrepareRun {
 			priority: 'before ${Little.keywords.MULTIPLY_SIGN}',
 			callback: (lhs, rhs) -> {
 				lhs = Interpreter.evaluate(lhs); rhs = Interpreter.evaluate(rhs);
-				var l = Conversion.toHaxeValue(lhs),
-					r = Conversion.toHaxeValue(rhs);
+				var l:Float = Conversion.toHaxeValue(lhs),
+					r:Float = Conversion.toHaxeValue(rhs);
 				if (lhs.type() == Little.keywords.TYPE_INT && rhs.type() == Little.keywords.TYPE_INT)
 					return Number(Math.pow(l, r).int());
 				return Decimal(Math.pow(l, r));
@@ -662,7 +662,6 @@ class PrepareRun {
 				case 2: jump = Conversion.toHaxeValue(Interpreter.calculate(currentExpression));
 			}
 
-			jump ??= 1;
 			if (from < to) {
 				while (from < to) {
 					val = Interpreter.run([

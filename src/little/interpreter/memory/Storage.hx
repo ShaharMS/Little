@@ -278,7 +278,7 @@ class Storage {
     	@return The 16-bit integer as a 32 bit haxe integer
     **/
     public function readInt16(address:MemoryPointer):Int {
-        if (address == parent.constants.NULL) return null;
+        if (address == parent.constants.NULL) return #if static 0 #else null #end;
         // Dont forget to make the number negative if needed.
         return (storage[address.rawLocation] + (storage[address.rawLocation + 1] << 8)) - 32767;
         
@@ -378,7 +378,7 @@ class Storage {
 		@return The 32-bit integer
 	**/
     public function readInt32(address:MemoryPointer):Int {
-        if (address == parent.constants.NULL) return null;
+        if (address == parent.constants.NULL) return #if static 0 #else null #end;
         return (storage[address.rawLocation] + (storage[address.rawLocation + 1] << 8) + (storage[address.rawLocation + 2] << 16) + (storage[address.rawLocation + 3] << 24));
     }
 
@@ -474,7 +474,7 @@ class Storage {
     	@return The 64-bit floating point number
     **/
     public function readDouble(address:MemoryPointer):Float {
-        if (address == parent.constants.NULL) return null;
+        if (address == parent.constants.NULL) return #if static 0.0 #else null #end;
         return storage.getDouble(address.rawLocation);
     }
 
@@ -628,6 +628,14 @@ class Storage {
     **/
     public function readCodeBlock(address:MemoryPointer):InterpTokens {
         return ByteCode.decompile(readString(address.rawLocation))[0];
+    }
+
+	/**
+	    Frees a function value.
+        @param address The address of the function value
+	**/
+    public function freeCodeBlock(address:MemoryPointer) {
+        freeString(address);
     }
 
 	/**

@@ -117,7 +117,6 @@ class KeywordConfig {
 	@:optional public var TYPE_SIGN:String = "Sign";
 
 	@:optional public var MAIN_MODULE_NAME:String = "Main";
-	@:optional public var REGISTERED_MODULE_NAME:String = "Registered";
 
 	@:optional public var OBJECT_TYPE_PROPERTY_NAME:String = "type";
 	@:optional public var OBJECT_ADDRESS_PROPERTY_NAME:String = "address";
@@ -172,42 +171,42 @@ class KeywordConfig {
 	// Cast functions are done using the `to` keyword and type. They are not here.
 
 	//Float: DONE
-	@:optional public var STDLIB__FLOAT_isWhole = "isWhole";
+	@:optional public var STDLIB__FLOAT_isWhole:String = "isWhole";
 
 	//String: DONE
-	@:optional public var STDLIB__STRING_length = "length";
-	@:optional public var STDLIB__STRING_toLowerCase = "toLowerCase";
-	@:optional public var STDLIB__STRING_toUpperCase = "toUpperCase";
-	@:optional public var STDLIB__STRING_trim = "trim";
-	@:optional public var STDLIB__STRING_substring = "substring";
-	@:optional public var STDLIB__STRING_charAt = "charAt";
-	@:optional public var STDLIB__STRING_split = "split";
-	@:optional public var STDLIB__STRING_replace = "replace";
-	@:optional public var STDLIB__STRING_remove = "remove";
-	@:optional public var STDLIB__STRING_contains = "contains";
-	@:optional public var STDLIB__STRING_indexOf = "indexOf";
-	@:optional public var STDLIB__STRING_lastIndexOf = "lastIndexOf";
-	@:optional public var STDLIB__STRING_startsWith = "startsWith";
-	@:optional public var STDLIB__STRING_endsWith = "endsWith";
-	@:optional public var STDLIB__STRING_fromCharCode = "fromCharCode";
+	@:optional public var STDLIB__STRING_length:String = "length";
+	@:optional public var STDLIB__STRING_toLowerCase:String = "toLowerCase";
+	@:optional public var STDLIB__STRING_toUpperCase:String = "toUpperCase";
+	@:optional public var STDLIB__STRING_trim:String = "trim";
+	@:optional public var STDLIB__STRING_substring:String = "substring";
+	@:optional public var STDLIB__STRING_charAt:String = "charAt";
+	@:optional public var STDLIB__STRING_split:String = "split";
+	@:optional public var STDLIB__STRING_replace:String = "replace";
+	@:optional public var STDLIB__STRING_remove:String = "remove";
+	@:optional public var STDLIB__STRING_contains:String = "contains";
+	@:optional public var STDLIB__STRING_indexOf:String = "indexOf";
+	@:optional public var STDLIB__STRING_lastIndexOf:String = "lastIndexOf";
+	@:optional public var STDLIB__STRING_startsWith:String = "startsWith";
+	@:optional public var STDLIB__STRING_endsWith:String = "endsWith";
+	@:optional public var STDLIB__STRING_fromCharCode:String = "fromCharCode";
 
 	//Array: DONE
-	@:optional public var STDLIB__ARRAY_length = "length";
-	@:optional public var STDLIB__ARRAY_elementType = "elementType";
-	@:optional public var STDLIB__ARRAY_get = "get";
-	@:optional public var STDLIB__ARRAY_set = "set";
+	@:optional public var STDLIB__ARRAY_length:String = "length";
+	@:optional public var STDLIB__ARRAY_elementType:String = "elementType";
+	@:optional public var STDLIB__ARRAY_get:String = "get";
+	@:optional public var STDLIB__ARRAY_set:String = "set";
 
 
-	@:optional public var STDLIB__MEMORY_allocate = "allocate";
-	@:optional public var STDLIB__MEMORY_free = "free";
-	@:optional public var STDLIB__MEMORY_read = "read";
-	@:optional public var STDLIB__MEMORY_write = "write";
-	@:optional public var STDLIB__MEMORY_size = "size";
-	@:optional public var STDLIB__MEMORY_maxSize = "maxSize";
+	@:optional public var STDLIB__MEMORY_allocate:String = "allocate";
+	@:optional public var STDLIB__MEMORY_free:String = "free";
+	@:optional public var STDLIB__MEMORY_read:String = "read";
+	@:optional public var STDLIB__MEMORY_write:String = "write";
+	@:optional public var STDLIB__MEMORY_size:String = "size";
+	@:optional public var STDLIB__MEMORY_maxSize:String = "maxSize";
 
-	@:optional public var FOR_LOOP_FROM = "from";
-	@:optional public var FOR_LOOP_TO = "to";
-	@:optional public var FOR_LOOP_JUMP = "jump";
+	@:optional public var FOR_LOOP_FROM:String = "from";
+	@:optional public var FOR_LOOP_TO:String = "to";
+	@:optional public var FOR_LOOP_JUMP:String = "jump";
 
 	@:optional public var TYPE_CAST_FUNCTION_PREFIX:String = "to";
 	@:optional public var INSTANTIATE_FUNCTION_NAME:String = "create";

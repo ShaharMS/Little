@@ -1,0 +1,21 @@
+{
+  "name": "little-color-theme",
+  "displayName": "Little Color Theme",
+  "description": "Provides syntax highlighting for little source files",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.89.0"
+  },
+  "categories": [
+    "Themes"
+  ],
+  "contributes": {
+    "themes": [
+      {
+        "label": "Default",
+        "uiTheme": "vs-dark",
+        "path": "./themes/Default-color-theme.json"
+      }
+    ]
+  }
+}

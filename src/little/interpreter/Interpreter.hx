@@ -93,6 +93,7 @@ class Interpreter {
         Little.runtime.linePart = 0;
 
         for (listener in Little.runtime.onLineChanged) listener(o);
+        for (listener in Little.runtime.onLineSplit) listener();
     }
 
     /**
@@ -577,35 +578,35 @@ class Interpreter {
         for (token in tokens) {
             switch token {
                 case PartArray(parts): {
-                    if (sign != "" && calculated == null) calculated = Little.operators.call(sign, calculate(parts)); // RHS operator
+                    if (sign != "" && calculated == null) calculated = Little.memory.operators.call(sign, calculate(parts)); // RHS operator
                     else if (calculated == null) calculated = calculate(parts);
                     else if (sign == "") error('Two values cannot come one after the other ($calculated, $token). At least one of them should be an operator, or, put an operator in between.');
                     else {
-                        calculated = Little.operators.call(calculated, sign, calculate(parts)); // standard operator
+                        calculated = Little.memory.operators.call(calculated, sign, calculate(parts)); // standard operator
                     }
                 }
                 case Sign(s): {
                     sign = s;
                     if (tokens.length == 1) return token;
-                    if (tokens[tokens.length - 1].equals(token)) calculated = Little.operators.call(calculated, sign); //LHS operator
+                    if (tokens[tokens.length - 1].equals(token)) calculated = Little.memory.operators.call(calculated, sign); //LHS operator
                 }
                 case Expression(parts, t): {
                     var val = t != null ? typeCast(calculate(parts), t) : calculate(parts);
-                    if (sign != "" && calculated == null) calculated = Little.operators.call(sign, val); // RHS operator
+                    if (sign != "" && calculated == null) calculated = Little.memory.operators.call(sign, val); // RHS operator
                     else if (calculated == null) calculated = val;
                     else if (sign == "") error('Two values cannot come one after the other ($calculated, $token). At least one of them should be an operator, or, put an operator in between.');
                     else {
-                        calculated = Little.operators.call(calculated, sign, val); // standard operator
+                        calculated = Little.memory.operators.call(calculated, sign, val); // standard operator
                     }
                 }
 				case SetModule(module): setModule(module);
                 case _: {
-                    if (sign != "" && calculated == null) calculated = Little.operators.call(sign, token);
+                    if (sign != "" && calculated == null) calculated = Little.memory.operators.call(sign, token);
 					else if (sign == "" && calculated != null) throw 'Unexpected token: $token After calculating $calculated';
                     else if (calculated == null) calculated = token;
                     else if (sign == "") error('Two values cannot come one after the other ($calculated, $token). At least one of them should be an operator, or, put an operator in between.');
                     else {
-                        calculated = Little.operators.call(calculated, sign, token);
+                        calculated = Little.memory.operators.call(calculated, sign, token);
                     }
                 }
             }
@@ -620,7 +621,7 @@ class Interpreter {
 		var post = tokens;
 		var pre = [];
 
-		for (operatorGroup in Little.operators.iterateByPriority()) {
+		for (operatorGroup in Little.memory.operators.iterateByPriority()) {
             pre = post.copy();
             post = [];
 			// We'll group everything by only recognizing specific signs each "stage" - 
@@ -646,31 +647,7 @@ class Interpreter {
                         var lookbehind = post.length > 0 ? post[post.length - 1] /* Post has only evaluated tokens */ : Sign("_"); // Just an arbitrary "sign" to not have null here
                         var lookahead = pre[i + 1].is(IDENTIFIER, BLOCK) ? evaluate(pre[i + 1]) : pre[i + 1];
 
-                        if (lookbehind.is(SIGN) && operatorGroup.filter(x -> x.sign == lookbehind.parameter(1)).length > 0) { // Because of our check above, valid for the start of an expression too.
-                            if (lookahead.is(SIGN)) {
-                                i++;
-                                // Look ahead until we run out of signs. Then, group the iterated signs and the final operand into an array,
-                                // and pass it onto "group()". Pay attention - this only groups signs with the current priority level.
-                                if (i + 1 >= pre.length) error("Expression ended with an operator, when an operand was expected.");
-                                var lookahead2 = pre[i + 1].is(IDENTIFIER, BLOCK) ? evaluate(pre[i + 1]) : pre[i + 1];
-                                var g = [];
-                                while (lookahead2.is(SIGN) && operatorGroup.filter(x -> x.sign == lookahead2.parameter(1) && x.side == RHS_ONLY).length > 0) {
-                                    g.push(lookahead2);
-                                    i++;
-                                    if (i + 1 >= pre.length) error("Expression ended with an operator, when an operand was expected.");
-                                    lookahead2 = pre[i + 1].is(IDENTIFIER, BLOCK) ? evaluate(pre[i + 1]) : pre[i + 1];
-                                } 
-                                // Last token is an operand
-                                g.push(lookahead2);
-                                post.push(PartArray([token, PartArray(group(g))]));
-                                i++; // +1 because we consumed lookahead2 for the PartArray arg
-
-                            } else if (lookahead.is(EXPRESSION)) {
-                                post.push(PartArray([token, Expression(group(lookahead.parameter(0)), lookahead.parameter(1))]));
-                            } else {
-                                post.push(PartArray([token, lookahead]));
-                            }
-                        } else if (lookahead.is(SIGN) && operatorGroup.filter(x -> x.sign == lookahead.parameter(0)).length > 0) {
+                        if (lookahead.is(SIGN) && operatorGroup.filter(x -> x.sign == lookahead.parameter(0)).length > 0) {
                             /* This can be one of two cases:
                             - were working on a binary operator before a unary operator (1 or more)
                             - were working on a unary operator (1 or more) before a binary operator

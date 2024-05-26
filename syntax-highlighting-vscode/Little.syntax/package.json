@@ -1,0 +1,25 @@
+{
+  "name": "little-highlighter",
+  "displayName": "Little Highlighter",
+  "description": "Hgihlighter for the Little programming language",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.89.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [{
+      "id": "little",
+      "aliases": ["Little", "little"],
+      "extensions": ["ltl"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "little",
+      "scopeName": "source.little",
+      "path": "./syntaxes/little.tmLanguage.json"
+    }]
+  }
+}

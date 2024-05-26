@@ -77,7 +77,8 @@ class Runtime {
     public var onModuleChanged:Array<String -> Void> = [];
 	
 	/**
-		Dispatches every time the interpreter finds a line splitter (`,` or `;`)
+		Dispatches every time the interpreter finds a line splitter (`,` or `;`), or, right after
+        a line-change event.
 
 		@param line The line the interpreter just finished running.
 	**/

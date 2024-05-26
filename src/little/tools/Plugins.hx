@@ -390,7 +390,7 @@ class Plugins {
 		@param callback The actual function, which gets 3 parameters: the value of the object, the address of the object in memory, and an array of the given parameters, exactly as the user gave them (which means they might require further evaluation). The function should return something at the end, or a `VoidValue`.
 		@param returnType The type of the returned value. This exists due to implementation limitations. You can use the `Conversion` class to know which types to put here.
 	**/
-	public function registerInstanceFunction(propertyName:String, onType:String, ?documentation:String, expectedParameters:EitherType<String, Array<InterpTokens>>, callback:(objectValue:InterpTokens, objectAddress:MemoryPointer, params:Array<InterpTokens>) -> InterpTokens, returnType:String) {
+	public function registerInstanceFunction(propertyName:String, onType:String, ?documentation:String, expectedParameters:EitherType<String, Array<InterpTokens>>, callback:(objectValue:InterpTokens, objectAddress:MemoryPointer, params:Array<{objectValue:InterpTokens, objectTypeName:String, objectAddress:MemoryPointer}>) -> InterpTokens, returnType:String) {
 		var params = if (expectedParameters is String) {
             Interpreter.convert(...Parser.parse(Lexer.lex(expectedParameters)));
         } else (expectedParameters : Array<InterpTokens>);
@@ -422,7 +422,7 @@ class Plugins {
 			return try {
 				{
 					objectValue: FunctionCode(paramMap, Block([
-						FunctionReturn(HaxeExtern(() -> callback(v, a, paramMap.keys().toArray().map(key -> Interpreter.evaluate(memory.read(key).objectValue)))), returnTypeToken)
+						FunctionReturn(HaxeExtern(() -> callback(v, a, paramMap.keys().toArray().map(key -> memory.read(key)))), returnTypeToken)
 					], returnTypeToken)),
 					objectAddress: memory.constants.EXTERN,
 					// objectDoc: documentation ?? ""
@@ -527,7 +527,7 @@ class Plugins {
                 }
             } else callbackFunc = info.callback;
 
-			Little.operators.add(symbol, LHS_RHS, info.priority, callbackFunc);
+			Little.memory.operators.add(symbol, LHS_RHS, info.priority, callbackFunc);
         } else { // One sided operator
 			if (info.singleSidedOperatorCallback == null && info.callback != null) 
                 throw new ArgumentException("singleSidedOperatorCallback", 'Incorrect callback given for operator type ${info.operatorType} - `callback` was given, when `singleSidedOperatorCallback` was expected');
@@ -556,7 +556,7 @@ class Plugins {
 				}
 			} 
 
-			Little.operators.add(symbol, info.operatorType, info.priority, callbackFunc);
+			Little.memory.operators.add(symbol, info.operatorType, info.priority, callbackFunc);
         }
     }
 
@@ -601,7 +601,7 @@ typedef OperatorInfo = {
     ?singleSidedOperatorCallback:InterpTokens -> InterpTokens,
     ?operatorType:OperatorType,
 	/**
-		@see Little.operators.setPriority
+		@see Little.memory.operators.setPriority
 	**/
 	?priority:String,
 }
@@ -626,4 +626,4 @@ typedef TypeFields = Map<String, OneOfSeven<
 **/
 abstract OneOfSeven<T1, T2, T3, T4, T5, T6, T7>(Dynamic) 
     from T1 from T2 from T3 from T4 from T5 from T6 from T7
-    to T1 to T2 to T3 to T4 to T5 to T6 to T7{}
+    to T1 to T2 to T3 to T4 to T5 to T6 to T7 {}

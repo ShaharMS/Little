@@ -1,13 +1,15 @@
 {
     "classPath": "src",
-    "name": "little",
-    "version": "0.0.0-alpha",
+    "name": "Little",
+    "version": "1.0.0",
     "url": "https://github.com/ShaharMS/Little",
     "license": "MIT",
     "contributors": ["ShaharMS"],
     "tags": ["language", "dsl"],
-    "releasenote": "not yet",
+    "releasenote": "Little - Functional programming version (1.0.0-f)",
     "dependencies": {
-        "formula": ""
+        "vision": "",
+        "hash": "",
+        "hxOrderedMap": ""
     }
 }

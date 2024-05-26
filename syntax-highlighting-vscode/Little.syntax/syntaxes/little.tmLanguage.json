@@ -1,0 +1,104 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "Little",
+	"patterns": [
+		{
+			"include": "#documentation"
+		},
+		{
+			"include": "#strings"
+		},
+		{
+			"include": "#keywords2"
+		},
+		{
+			"include": "#keywords"			
+		},
+		{
+			"include": "#functions"
+		},
+		{
+			"include": "#types"
+		},
+		{
+			"include": "#numbers"
+		},
+		{
+			"include": "#identifiers"
+		}
+	],
+	"repository": {
+		"numbers": {
+			"patterns": [
+				{
+					"name": "constant.numeric.little",
+					"match": "\\b([0-9]+(?:\\.[0-9]+)?)\\b"
+				}
+			]
+		},
+		"identifiers": {
+			"patterns": [
+				{
+					"name": "variable.other.little",
+					"match": "\\b(\\w+)\\b"
+				}
+			]
+		},
+		"keywords2": {
+			"patterns": [
+				{
+					"name": "storage.type",
+					"match": "\\b(define|action|class|sign|condition|true|false|nothing)\\b"
+				}
+			]
+		},
+		"keywords": {
+			"patterns": [
+				{
+					"name": "keyword.control.conditioning.little",
+					"match": "\\b(if|while|for|return|after|whenever|as|return|from|to|jump)\\b"
+				}
+			]
+			
+		},
+		"types": {
+			"patterns": [
+				{
+					"name": "support.type.little",
+					"match": "\\b(Number|Boolean|Decimal|Characters|Memory|Array|Object|Anything|Unknown|Action|Condition|Sign|Type)\\b"
+				}
+			]
+		},
+		"functions": {
+			"patterns": [
+				{
+					"name": "support.function.little",
+					"match": "\\b([a-zA-Z0-9_]+)\\s*\\("
+				}
+			]
+		},
+		"strings": {
+			"name": "string.quoted.double.little",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.little",
+					"match": "\\\\."
+				}
+			]
+		},
+		"documentation": {
+			"name": "comment.block.documentation.little",
+			"begin": "\"\"\"",
+			"end": "\"\"\"",
+			"patterns": [
+				{
+					"name": "constant.comment.escape.little",
+					"match": "\\\\."
+				}
+			]
+		}
+	},
+	"scopeName": "source.little"
+}

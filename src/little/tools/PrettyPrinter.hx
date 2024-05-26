@@ -453,7 +453,7 @@ class PrettyPrinter {
 	}
 
 	/**
-	    Pretty prints the operator priority. Little.operators are registered through plugins.
+	    Pretty prints the operator priority. Little.memory.operators are registered through plugins.
 	    @param priority The priority map to print.
 	**/
 	public static function prettyPrintOperatorPriority(priority:Map<Int, Array<{sign:String, side:OperatorType}>>) {

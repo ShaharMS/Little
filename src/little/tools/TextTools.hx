@@ -470,7 +470,7 @@ class TextTools
 		Parses a boolean from a given string
 	**/
     public static function parseBool(string:String):Bool {
-        return if (string == "true" || Std.parseFloat(string) != null && Std.parseFloat(string) != 0) true else if (string == "false") false else null;
+        return if (string == "true" #if !static || Std.parseFloat(string) != null && Std.parseFloat(string) != 0 #end) true else #if !static if (string == "false") #end false #if !static else null #end;
     }
 
 	/**

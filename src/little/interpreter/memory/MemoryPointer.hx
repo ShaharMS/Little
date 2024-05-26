@@ -33,13 +33,6 @@ abstract MemoryPointer(Int) {
 		return new MemoryPointer(i);
 	}
 
-	/**
-		Converts an `Int64` to a `MemoryPointer`.
-	**/
-    @:from public static function fromInt64(i:Int64) {
-        return new MemoryPointer(i.low);
-    }
-
     /**
     	Returns a string representation of this address.
     **/

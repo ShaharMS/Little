@@ -14,14 +14,14 @@ class Memory {
 	public var referrer:Referrer;
 	public var externs:ExternalInterfacing;
 	public var constants:ConstantPool;
+	public var operators:Operators;
 
 	@:noCompletion public var memoryChunkSize:Int = 512; // 512 bytes
 
 	/**
 		The maximum amount of memory that can be allocated, by bytes.
-		By default, this is 2GB.
 	**/
-	public var maxMemorySize:Int = 1024 * 1024 * 2;
+	public var maxMemorySize:Int = 1024 * 1024 * 1024 * 2;
 
 	/**
 		The current amount of memory allocated, in bytes.
@@ -40,6 +40,7 @@ class Memory {
 		referrer = new Referrer(this);
 		constants = new ConstantPool(this);
 		externs = new ExternalInterfacing(this);
+		operators = new Operators();
 	}
 
 	/**
@@ -50,6 +51,10 @@ class Memory {
 		referrer = new Referrer(this);
 		externs = new ExternalInterfacing(this);
 		// Constants don't need to be reset
+		operators.lhsOnly.clear();
+		operators.rhsOnly.clear();
+		operators.standard.clear();
+		operators.priority.clear();
 	}
 
 	/**
@@ -209,12 +214,12 @@ class Memory {
 			return {
 				objectValue: null,
 				objectTypeName: null,
-				objectAddress: null,
+				objectAddress: -1,
 			}
 		}
 
 		var current:InterpTokens = null;
-		var currentAddress:MemoryPointer = null;
+		var currentAddress:MemoryPointer = -1;
 		var currentType:String = null;
 
 		var processed = path.toArray();

@@ -1,0 +1,94 @@
+{
+	"name": "Default",
+	"colors": {
+		"editor.background": "#263238",
+		"editor.foreground": "#eeffff",
+		"activityBarBadge.background": "#007acc",
+		"sideBarTitle.foreground": "#bbbbbb"
+	},
+	"tokenColors": [
+		{
+			"name": "Numbers",
+			"scope": [
+				"constant.numeric.little"
+			],
+			"settings": {
+				"foreground": "#b5cea8"
+			}
+		},
+		{
+			"name": "identifiers",
+			"scope": [
+				"variable.other.little"
+			],
+			"settings": {
+				"foreground": "#9cdcfe"
+			}
+		},
+		{
+			"name": "Keywords2",
+			"scope": [
+				"storage.type"
+			],
+			"settings": {
+				"foreground": "#569cd6"
+			}
+		}
+		{
+			"name": "Keywords1",
+			"scope": [
+				"keyword.control.conditioning.little"
+			],
+			"settings": {
+				"foreground": "#c586c0"
+			}
+		},,
+		{
+			"name": "Default Types",
+			"scope": [
+				"support.type.little"
+			],
+			"settings": {
+				"foreground": "#44c9b0"
+			}
+		},
+		{
+			"name": "Function Call",
+			"scope": [
+				"support.function.little"
+			],
+			"settings": {
+				"foreground": "#dcdcaa"
+			}
+		},
+		{
+			"name": "Invalid",
+			"scope": [
+				"invalid",
+				"invalid.illegal"
+			],
+			"settings": {
+				"foreground": "#FF5370"
+			}
+		},
+		{
+			"name": "Strings",
+			"scope": [
+				"string.quoted.double.little"
+			],
+			"settings": {
+				"foreground": "#ff5e00"
+			}
+		},
+		{
+			"name": "comment.block.documentation.little",
+			"scope": [
+				"comment.block.documentation.little"
+			],
+			"settings": {
+				"fontStyle": "italic",
+				"foreground": "#5e5e5e"
+			}
+		}
+	]
+}

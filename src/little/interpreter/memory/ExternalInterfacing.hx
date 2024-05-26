@@ -137,7 +137,7 @@ class ExternalInterfacing {
 			handle = handle.properties[ident];
 		}
 
-		return handle.getter(null, null); // Static externs are not tied to any runtime object, so this makes sense
+		return handle.getter(null, -1); // Static externs are not tied to any runtime object, so this makes sense
 	}
 }
 

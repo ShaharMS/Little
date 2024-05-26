@@ -300,7 +300,7 @@ class HashTables {
     	@param key The key to look up
     	@param storage Must be provided in order to access the object.
     **/
-    public static function objectGetKey(object:MemoryPointer, key:String, storage:Storage) {
+    public static function objectGetKey(object:MemoryPointer, key:String, storage:Storage):{key:String, keyPointer:MemoryPointer, value:MemoryPointer, type:MemoryPointer, doc:MemoryPointer} {
         var hashTableBytes = storage.readBytes(storage.readPointer(object.rawLocation + POINTER_SIZE), storage.readInt32(object.rawLocation));
         return hashTableGetKey(hashTableBytes, key, storage);
     }
@@ -310,7 +310,7 @@ class HashTables {
 		@param objectPointer A pointer to an object
 		@param storage Must be provided in order to access the object.
 	**/
-	public static function getHashTableOf(objectPointer:MemoryPointer, storage:Storage) {
+	public static function getHashTableOf(objectPointer:MemoryPointer, storage:Storage):ByteArray {
 		var bytesLength = storage.readInt32(objectPointer.rawLocation);
 		var bytesPointer = storage.readPointer(objectPointer.rawLocation + 4);
 		return storage.readBytes(bytesPointer, bytesLength);
