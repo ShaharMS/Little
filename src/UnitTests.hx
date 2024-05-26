@@ -91,7 +91,7 @@ class UnitTests {
 	}
 
 	public static function test2():UnitTestResult {
-		var code = 'define x as Number = 3, define y as Decimal, define z\nprint(x + ", " + y.type + ", " + z.type + ", " + z)';
+		var code = 'define x as Number = 3, define y as Decimal, define z\nprint(x + ", " + y.type.toCharacters() + ", " + z.type.toCharacters() + ", " + z)';
 		Little.run(code);
 		var result = Little.runtime.stdout.stdoutTokens.pop();
 		return {
@@ -245,7 +245,7 @@ class UnitTests {
 	}
 
 	public static function test13():UnitTestResult {
-		var code = 'print(5.type + 5.5.type + true.type + nothing.type + +.type + Number.type)';
+		var code = 'print(5.type.toCharacters() + 5.5.type.toCharacters() + true.type.toCharacters() + nothing.type.toCharacters() + +.type.toCharacters() + Number.type)';
 		Little.run(code);
 		var result = Little.runtime.stdout.stdoutTokens.pop();
 		var exp = Characters("NumberDecimalBooleanAnythingSignType");

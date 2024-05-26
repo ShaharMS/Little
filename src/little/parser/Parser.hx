@@ -848,7 +848,7 @@ class Parser {
 					}
 					var lookahead = pre[i + 1];
 					switch lookahead {
-						case SetLine(_) | SplitLine | SetModule(_): {
+						case SetLine(_) | SplitLine | SetModule(_) | Sign(_): {
 							post.push(FunctionCall(mergeNonBlockBodies([name])[0], mergeNonBlockBodies([params])[0]));
 						}
 						case _: {

@@ -84,8 +84,6 @@ class Referrer {
 
 		// Update the start of the scope. Also, -4 is for the header, since we need to point to its start.
 		bytes.setInt32(0, currentScopePosition - previousScopeLength * KEY_SIZE - 4);
-
-		// Todo: garbage collector.
 	}
 
 	/**

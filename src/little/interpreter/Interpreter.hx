@@ -554,7 +554,7 @@ class Interpreter {
 		@return The result of the expression
 	**/
     public static function calculate(p:Array<InterpTokens>):InterpTokens {
-
+		trace(p);
         while (p.length == 1 && p[0].parameter(0) is Array && !p[0].is(BLOCK)) p = p[0].parameter(0);
 
 		var tokens = group(p);

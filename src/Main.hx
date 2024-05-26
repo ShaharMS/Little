@@ -1,5 +1,6 @@
 package;
 
+import little.interpreter.ByteCode;
 import little.interpreter.memory.Storage;
 import haxe.Resource;
 import little.interpreter.memory.Memory;
