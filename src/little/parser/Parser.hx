@@ -53,7 +53,7 @@ class Parser {
         #if parser_debug trace("calls:", PrettyPrinter.printParserAst(tokens)); #end
         tokens = mergeWrites(tokens);
         #if parser_debug trace("writes:", PrettyPrinter.printParserAst(tokens)); #end
-        tokens = mergeValuesWithTypeDeclarations(tokens);
+        tokens = mergeValuesWithTypeDecls(tokens);
         #if parser_debug trace("casts:", PrettyPrinter.printParserAst(tokens)); #end
 		tokens = mergeNonBlockBodies(tokens);
 		#if parser_debug trace("non-block bodies:", PrettyPrinter.printParserAst(tokens)); #end
@@ -769,7 +769,7 @@ class Parser {
     /**
         Merges `<token>, TypeDeclaration(null, <type>)` into `TypeDeclaration(<token>, <type>)`
     **/
-    public static function mergeValuesWithTypeDeclarations(pre:Array<ParserTokens>) :Array<ParserTokens> {
+    public static function mergeValuesWithTypeDecls(pre:Array<ParserTokens>) :Array<ParserTokens> {
 
         if (pre == null) return null;
         if (pre.length == 1 && pre[0] == null) return [null];
@@ -799,17 +799,17 @@ class Parser {
                         }
                     }
                 }
-                case Block(body, type): post.unshift(Block(mergeValuesWithTypeDeclarations(body), mergeValuesWithTypeDeclarations([type])[0]));
-                case Expression(parts, type): post.unshift(Expression(mergeValuesWithTypeDeclarations(parts), mergeValuesWithTypeDeclarations([type])[0]));
-                case Variable(name, type, doc): post.unshift(Variable(mergeValuesWithTypeDeclarations([name])[0], mergeValuesWithTypeDeclarations([type])[0], mergeValuesWithTypeDeclarations([doc])[0]));
-                case Function(name, params, type, doc): post.unshift(Function(mergeValuesWithTypeDeclarations([name])[0], mergeValuesWithTypeDeclarations([params])[0], mergeValuesWithTypeDeclarations([type])[0], mergeValuesWithTypeDeclarations([doc])[0]));
-                case ConditionCall(name, exp, body): post.unshift(ConditionCall(mergeValuesWithTypeDeclarations([name])[0], mergeValuesWithTypeDeclarations([exp])[0], mergeValuesWithTypeDeclarations([body])[0]));
-                case Return(value, type): post.unshift(Return(mergeValuesWithTypeDeclarations([value])[0], mergeValuesWithTypeDeclarations([type])[0]));
-                case PartArray(parts): post.unshift(PartArray(mergeValuesWithTypeDeclarations(parts)));
-                case FunctionCall(name, params): post.unshift(FunctionCall(mergeValuesWithTypeDeclarations([name])[0], mergeValuesWithTypeDeclarations([params])[0]));
-                case Write(assignees, value): post.unshift(Write(mergeValuesWithTypeDeclarations(assignees), mergeValuesWithTypeDeclarations([value])[0]));
-                case PropertyAccess(name, property): post.unshift(PropertyAccess(mergeValuesWithTypeDeclarations([name])[0], mergeValuesWithTypeDeclarations([property])[0]));
-				case Custom(name, params): post.unshift(Custom(name, params.map(x -> mergeValuesWithTypeDeclarations([x])[0])));
+                case Block(body, type): post.unshift(Block(mergeValuesWithTypeDecls(body), mergeValuesWithTypeDecls([type])[0]));
+                case Expression(parts, type): post.unshift(Expression(mergeValuesWithTypeDecls(parts), mergeValuesWithTypeDecls([type])[0]));
+                case Variable(name, type, doc): post.unshift(Variable(mergeValuesWithTypeDecls([name])[0], mergeValuesWithTypeDecls([type])[0], mergeValuesWithTypeDecls([doc])[0]));
+                case Function(name, params, type, doc): post.unshift(Function(mergeValuesWithTypeDecls([name])[0], mergeValuesWithTypeDecls([params])[0], mergeValuesWithTypeDecls([type])[0], mergeValuesWithTypeDecls([doc])[0]));
+                case ConditionCall(name, exp, body): post.unshift(ConditionCall(mergeValuesWithTypeDecls([name])[0], mergeValuesWithTypeDecls([exp])[0], mergeValuesWithTypeDecls([body])[0]));
+                case Return(value, type): post.unshift(Return(mergeValuesWithTypeDecls([value])[0], mergeValuesWithTypeDecls([type])[0]));
+                case PartArray(parts): post.unshift(PartArray(mergeValuesWithTypeDecls(parts)));
+                case FunctionCall(name, params): post.unshift(FunctionCall(mergeValuesWithTypeDecls([name])[0], mergeValuesWithTypeDecls([params])[0]));
+                case Write(assignees, value): post.unshift(Write(mergeValuesWithTypeDecls(assignees), mergeValuesWithTypeDecls([value])[0]));
+                case PropertyAccess(name, property): post.unshift(PropertyAccess(mergeValuesWithTypeDecls([name])[0], mergeValuesWithTypeDecls([property])[0]));
+				case Custom(name, params): post.unshift(Custom(name, params.map(x -> mergeValuesWithTypeDecls([x])[0])));
 				case _: post.unshift(token);
             }
             i--;

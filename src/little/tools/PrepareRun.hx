@@ -240,6 +240,7 @@ class PrepareRun {
 	public static function addFunctions() {
 		Little.plugin.registerFunction(Little.keywords.PRINT_FUNCTION_NAME, null, [VariableDeclaration(Identifier("item"), null)], (params) -> {
 			var eval = params[0].objectValue;
+			trace(eval, params[0]);
 			Little.runtime.__print(eval.is(OBJECT) ? @:privateAccess PrettyPrinter.printInterpreterAst([eval]).split("\n").slice(1).map(s -> s.substring(6)).join("\n") : PrettyPrinter.stringifyInterpreter(eval), eval);
 			return NullValue;
 		}, Little.keywords.TYPE_DYNAMIC);
@@ -410,9 +411,10 @@ class PrepareRun {
 			callback: (lhs, rhs) -> {
 				var l:Float = Conversion.toHaxeValue(lhs),
 					r:Float = Conversion.toHaxeValue(rhs);
+				trace(l, r, Decimal(l / r));
 				if (r == 0)
-					Little.runtime.throwError(ErrorMessage('Cannot divide by 0'));
-				return Decimal(l / r);
+					return Little.runtime.throwError(ErrorMessage('Cannot divide by 0'));
+				return Decimal(#if static untyped #else cast #end l / r);
 			}
 		});
 
@@ -562,6 +564,7 @@ class PrepareRun {
 		});
 
 		Little.plugin.registerCondition(Little.keywords.CONDITION__IF, "Executes the following block of code if the given condition is true.", (params, body) -> {
+			trace(params);
 			var val = NullValue;
 			var cond = Conversion.toHaxeValue(Interpreter.calculate(params));
 			if (cond is Bool && cond) {

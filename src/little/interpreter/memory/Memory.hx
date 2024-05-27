@@ -1,5 +1,6 @@
 package little.interpreter.memory;
 
+import little.tools.OrderedMap;
 import little.tools.PrettyPrinter;
 import little.interpreter.memory.MemoryPointer.POINTER_SIZE;
 import little.tools.TextTools;
@@ -580,6 +581,39 @@ class Memory {
 		if (pointer.toInt() + size > currentMemorySize)
 			Little.runtime.throwError(ErrorMessage('Cannot free bytes: The requested free overflows the current memory size (${pointer} + ${size} requested but ${currentMemorySize} addresses exist)'));
 		storage.freeBytes(pointer, size);
+	}
+
+	/**
+		Returns the size of the object pointed to by `pointer`.
+		@param pointer The pointer to the object
+		@param type The type of the object
+		@return The size of the object
+	**/
+	public function sizeOf(pointer:MemoryPointer, type:String):Null<Int> {
+		switch type {
+			case (_ == Little.keywords.TYPE_INT => true): return 4;
+			case (_ == Little.keywords.TYPE_FLOAT => true): return 8;
+			case (_ == Little.keywords.TYPE_BOOLEAN => true): return 1;
+			case (_ == Little.keywords.TYPE_DYNAMIC => true): return null;
+			case (_ == Little.keywords.TYPE_UNKNOWN => true): return null;
+			case (_ == Little.keywords.TYPE_MODULE => true): {
+				if (externs.externToPointer.exists(type)) return 1;
+				else return 16; // 2 * 4 bytes for hashtable lengths, 2 * 4 bytes for the pointers
+			}
+			case (_ == Little.keywords.TYPE_STRING => true) | 
+				 (_ == Little.keywords.TYPE_SIGN => true) | 
+				 (_ == Little.keywords.TYPE_CONDITION => true) | 
+				 (_ == Little.keywords.TYPE_FUNCTION => true): {
+				var length = storage.readInt32(pointer);
+				return 4 + length; // 4 bytes for the length
+			}
+			case (_ == Little.keywords.TYPE_ARRAY => true): {
+				var length = storage.readInt32(pointer);
+				var elementSize = storage.readInt32(pointer.rawLocation + 4);
+				return 8 + length * elementSize; // 4 bytes for the length, 4 bytes for element size.
+			}
+			default: return 8; // Probably an object, so 4 bytes for the pointer, 4 bytes for the length
+		}
 	}
 
 	/**

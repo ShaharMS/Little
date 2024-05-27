@@ -2,14 +2,13 @@
 --main Main
 --library vision
 --library hash
---library hxOrderedMap
 --resource demoCode.ltl@sample
 
 #--js clients/web/interp.js
 --interp
 
 
---define unit
+#--define unit
 #--define formatting
 #--define parser_debug
 --debug

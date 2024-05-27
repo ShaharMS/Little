@@ -1,5 +1,6 @@
 package;
 
+import little.KeywordConfig;
 import little.interpreter.ByteCode;
 import little.interpreter.memory.Storage;
 import haxe.Resource;
@@ -56,6 +57,7 @@ class Main {
 		#elseif formatting
 		File.saveContent("formatted.txt", Little.format(Resource.getString("sample")));
 		#elseif sys
+		trace(Type.getInstanceFields(KeywordConfig).length);
 		try {
 			var preDefInput:String = null;
 

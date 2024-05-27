@@ -3,8 +3,6 @@
 
 --library vision
 --library hash
---library hxOrderedMap
 --resource demoCode.ltl@sample
 
 --cpp clients/windows-hxcpp/source
---define static_link

@@ -245,7 +245,7 @@ class UnitTests {
 	}
 
 	public static function test13():UnitTestResult {
-		var code = 'print(5.type.toCharacters() + 5.5.type.toCharacters() + true.type.toCharacters() + nothing.type.toCharacters() + +.type.toCharacters() + Number.type)';
+		var code = 'print(5.type.toCharacters() + 5.5.type.toCharacters() + true.type.toCharacters() + nothing.type.toCharacters() + +.type.toCharacters() + Number.type.toCharacters())';
 		Little.run(code);
 		var result = Little.runtime.stdout.stdoutTokens.pop();
 		var exp = Characters("NumberDecimalBooleanAnythingSignType");

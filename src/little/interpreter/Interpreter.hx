@@ -6,6 +6,7 @@ import little.tools.PrettyPrinter;
 import little.tools.Layer;
 import little.Little.memory;
 import haxe.extern.EitherType;
+import little.tools.OrderedMap;
 
 
 using StringTools;
@@ -76,6 +77,12 @@ class Interpreter {
         return ErrorMessage(message);
     }
 
+	/**
+		If `token` is not of type `isType`, throw an error.
+		@param token the token to check
+		@param isType the type to check for
+		@param errorMessage the error message to throw if `token` is not of type `isType`
+	**/
 	public static function assert(token:InterpTokens, isType:EitherType<InterpTokensSimple, Array<InterpTokensSimple>>, ?errorMessage:String = null) {
 		if ((isType is InterpTokensSimple && !token.is(isType)) || (isType is Array && !isType.containsAny(a -> token.is(a)))) {
 			Little.runtime.throwError(errorMessage != null ? ErrorMessage(errorMessage) : ErrorMessage('Assertion failed, token $token is not of type $isType'), INTERPRETER);
@@ -170,8 +177,8 @@ class Interpreter {
 	**/
     public static function condition(name:InterpTokens, pattern:InterpTokens, body:InterpTokens):InterpTokens {
         var conditionToken = memory.read(...name.asStringPath());
+		trace(conditionToken, name.asStringPath(), body);
 		assert(conditionToken.objectValue, CONDITION_CODE, '${name.asStringPath()} is not a condition.');
-
 		var patterns:Map<Array<InterpTokens>, InterpTokens> = conditionToken.objectValue.parameter(0);
 		var givenPattern = pattern.parameter(0);
 		function fit(given:Array<InterpTokens>, pattern:Array<InterpTokens>, currentlyFits:Bool = true):Bool {
@@ -210,10 +217,9 @@ class Interpreter {
 
 			return currentlyFits;
 		}
-
 		var patternString = PrettyPrinter.stringifyInterpreter(pattern);
 		// We might want to attach stuff to the body, so we need to make it so it doesn't create a new scope & strip type info from it
-		var bodyString = PrettyPrinter.stringifyInterpreter(body.parameter(0)); 
+		var bodyString = PrettyPrinter.stringifyInterpreter(body); 
 
 		for (_pattern => caller in patterns) {
 			if (_pattern == null || fit(givenPattern, _pattern)) { // As per the docs, a null pattern means any pattern
@@ -554,7 +560,6 @@ class Interpreter {
 		@return The result of the expression
 	**/
     public static function calculate(p:Array<InterpTokens>):InterpTokens {
-		trace(p);
         while (p.length == 1 && p[0].parameter(0) is Array && !p[0].is(BLOCK)) p = p[0].parameter(0);
 
 		var tokens = group(p);
@@ -607,16 +612,24 @@ class Interpreter {
                     else if (sign == "") error('Two values cannot come one after the other ($calculated, $token). At least one of them should be an operator, or, put an operator in between.');
                     else {
                         calculated = Little.memory.operators.call(calculated, sign, token);
+						trace(calculated, sign, token);
                     }
                 }
             }
-        }
 
-        if (castType != null) return typeCast(calculated, castType);
+			trace(calculated, castType);
+
+        }
+        if (castType != null) {
+			return typeCast(calculated, castType);
+		}
         return calculated;
 
     }
 
+	/**
+		Sorts out order of operations.
+	**/
 	public static function group(tokens:Array<InterpTokens>):Array<InterpTokens> {
 		var post = tokens;
 		var pre = [];
