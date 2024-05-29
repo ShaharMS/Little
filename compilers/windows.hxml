@@ -4,5 +4,16 @@
 --library vision
 --library hash
 --resource demoCode.ltl@sample
+--define HAXE_OUTPUT_FILE=Little
 
---cpp clients/windows-hxcpp/source
+--each
+
+--library hashlink
+--hl clients/windows-hl-c/Little.c
+--cmd gcc -O3 -o clients/windows-hl-c/Little.exe -std=c11 -I out clients/windows-hl-c/Little.c -lhl -LC:\HaxeToolkit\hl-1.14.0-win\include
+--cmd rcedit-x64.exe clients/windows-hashlink/Little.exe --set-icon Logo.ico
+
+--next
+
+--cpp clients/windows-hxcpp
+--cmd rcedit-x64.exe clients/windows-hxcpp/Little.exe --set-icon Logo.ico

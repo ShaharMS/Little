@@ -401,6 +401,7 @@ class PrettyPrinter {
 	    @param token If you jeu need to stringify a single token, give this instead.
 	**/
 	public static function stringifyInterpreter(?code:Array<InterpTokens>, ?token:InterpTokens) {
+		if ((token == null && code == null) || (code != null && code.length == 1 && code[0] == null)) return "";
 		if (token != null) code = [token];
 		var s = "";
 		var currentLine = -1;
@@ -416,12 +417,12 @@ class PrettyPrinter {
 					s += ",";
 				}
 				case VariableDeclaration(name, type, doc): s += '${Little.keywords.VARIABLE_DECLARATION} ${stringifyInterpreter(name)}${if (type != null  && type.asJoinedStringPath() != Little.keywords.TYPE_UNKNOWN) ' ${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyInterpreter(type)}' else ''}';
-				case FunctionDeclaration(name, params, type, doc): s += '${Little.keywords.FUNCTION_DECLARATION} ${stringifyInterpreter(name)}(${stringifyInterpreter(params).replace(' ,', ',')})${if (type != null && type.asJoinedStringPath() != Little.keywords.TYPE_UNKNOWN) ' ${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyInterpreter(type)}' else ''}';
+				case FunctionDeclaration(name, params, type, doc): s += '${Little.keywords.FUNCTION_DECLARATION} ${stringifyInterpreter(name)}${params != null ? '(${stringifyInterpreter(params).replace(' ,', ',')})' : ''}${if (type != null && type.asJoinedStringPath() != Little.keywords.TYPE_UNKNOWN) ' ${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyInterpreter(type)}' else ''}';
 				case Write(assignees, value): s += assignees.concat([value]).map(t -> stringifyInterpreter(t)).join(" = ").replace("  =", " =");
 				case Identifier(word): s += word;
 				case TypeCast(value, type): s += '${stringifyInterpreter(value)} ${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyInterpreter(type)}';
 				case FunctionCall(name, params): s += '${stringifyInterpreter(name)}(${stringifyInterpreter(params).replace(' ,', ',')})'.replaceIfLast(" )", ")");
-				case ConditionCall(name, exp, body): s += '${stringifyInterpreter(name)} (${stringifyInterpreter(exp)}) ${stringifyInterpreter(body)}';
+				case ConditionCall(name, exp, body): s += '${stringifyInterpreter(name)} ${exp != null ? '(${stringifyInterpreter(exp)})' : ''} ${stringifyInterpreter(body)}';
 				case FunctionReturn(value, type): s += '${Little.keywords.FUNCTION_RETURN} ${stringifyInterpreter(value)}';
 				case Expression(parts, type): s += stringifyInterpreter(parts);
 				case Block(body, type): 

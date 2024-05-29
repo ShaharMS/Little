@@ -1,5 +1,6 @@
 package little.parser;
 
+import little.interpreter.Interpreter;
 import little.tools.Layer;
 import little.tools.PrettyPrinter;
 import little.parser.Tokens.ParserTokens;
@@ -246,17 +247,20 @@ class Parser {
 				case SetModule(module): {Parser.module = module; post.push(token);}
                 case SplitLine: {nextPart(); post.push(token);}
                 case Sign(_ == Little.keywords.PROPERTY_ACCESS_SIGN => true): {
-                    if (i + 1 >= pre.length) {
-                        Little.runtime.throwError(ErrorMessage("Property access cut off by the end of file, block or expression."), Layer.PARSER);
+                    if (post.length == 0) {
+						Little.runtime.callStack.unshift({module: Parser.module, line: line, linePart: linePart, token: PropertyAccess(Identifier(""), Identifier(""))});
+                        Little.runtime.throwError(ErrorMessage("Property access cut off by the start of file, block or expression."), Layer.PARSER);
                         return null;
                     }
-                    if (post.length == 0) {
-                        Little.runtime.throwError(ErrorMessage("Property access cut off by the start of file, block or expression."), Layer.PARSER);
+                    if (i + 1 >= pre.length) {
+						Little.runtime.callStack.unshift({module: Parser.module, line: line, linePart: linePart, token: PropertyAccess(Interpreter.convert(post.pop())[0], Identifier(""))});
+                        Little.runtime.throwError(ErrorMessage("Property access cut off by the end of file, block or expression."), Layer.PARSER);
                         return null;
                     }
                     var lookbehind = post.pop();
                     switch lookbehind {
                         case SplitLine | SetLine(_) | SetModule(_): {
+							Little.runtime.callStack.unshift({module: Parser.module, line: line, linePart: linePart, token: PropertyAccess(Interpreter.convert(lookbehind)[0], Identifier(""))});
                             Little.runtime.throwError(ErrorMessage("Property access cut off by the start of a line, or by a line split (; or ,)."), Layer.PARSER);
                             return null;
                         }
@@ -340,6 +344,7 @@ class Parser {
                     } else if (word == Little.keywords.TYPE_DECL_OR_CAST) {
                         // Throw error for incomplete type declarations;
                     if (i + 1 == pre.length) {
+						Little.runtime.callStack.unshift({module: Parser.module, line: line, linePart: linePart, token: TypeCast(Identifier(""), Identifier(""))});
                         Little.runtime.throwError(ErrorMessage('Incomplete type declaration, make sure to input a type after the `${Little.keywords.TYPE_DECL_OR_CAST}`.'));
                         return null;
                     }
@@ -387,6 +392,7 @@ class Parser {
                 case Identifier(_ == Little.keywords.VARIABLE_DECLARATION => true): {
                     i++;
                     if (i >= pre.length) {
+						Little.runtime.callStack.unshift({module: Parser.module, line: line, linePart: linePart, token: VariableDeclaration(Identifier(""), null)});
                         Little.runtime.throwError(ErrorMessage("Missing variable name, variable is cut off by the end of the file, block or expression."), Layer.PARSER);
                         return null;
                     }
@@ -399,6 +405,7 @@ class Parser {
                         switch lookahead {
                             case TypeDeclaration(_, typeToken): {
                                 if (name == null) {
+									Little.runtime.callStack.unshift({module: Parser.module, line: line, linePart: linePart, token: VariableDeclaration(Identifier(""), Interpreter.convert(typeToken)[0])});
                                     Little.runtime.throwError(ErrorMessage("Missing variable name before type declaration."), Layer.PARSER);
                                     return null;
                                 }
@@ -433,8 +440,11 @@ class Parser {
                         }
                         i++;
                     }
-                    if (name == null) 
+                    if (name == null) {
+						Little.runtime.callStack.unshift({module: Parser.module, line: line, linePart: linePart, token: VariableDeclaration(Identifier(""), null)});
                         Little.runtime.throwError(ErrorMessage("Missing variable name, variable is cut off by the end of the file, block or expression."), Layer.PARSER);
+						return null;
+					}
                     
                     post.push(Variable(name, type, currentDoc));
 					currentDoc = null;
@@ -442,10 +452,12 @@ class Parser {
                 case Identifier(_ == Little.keywords.FUNCTION_DECLARATION => true): {
                     i++;
                     if (i >= pre.length) {
+						Little.runtime.callStack.unshift({module: Parser.module, line: line, linePart: linePart, token: FunctionDeclaration(Identifier(""), null, null)});
                         Little.runtime.throwError(ErrorMessage("Missing function name, function is cut off by the end of the file, block or expression."), Layer.PARSER);
                         return null;
                     }
                     if (i + 1 >= pre.length) {
+						Little.runtime.callStack.unshift({module: Parser.module, line: line, linePart: linePart, token: FunctionDeclaration(Interpreter.convert(pre[i])[0], null, null)});
                         Little.runtime.throwError(ErrorMessage("Missing function parameter body, function is cut off by the end of the file, block or expression."), Layer.PARSER);
                         return null;
                     }
@@ -458,10 +470,12 @@ class Parser {
                         switch lookahead {
                             case TypeDeclaration(_, typeToken): {
                                 if (name == null) {
+									Little.runtime.callStack.unshift({module: Parser.module, line: line, linePart: linePart, token: FunctionDeclaration(Identifier(""), null, Interpreter.convert(typeToken)[0])});
                                     Little.runtime.throwError(ErrorMessage("Missing function name and parameters before type declaration."), Layer.PARSER);
                                     return null;
                                 }
                                 else if (params == null) {
+									Little.runtime.callStack.unshift({module: Parser.module, line: line, linePart: linePart, token: FunctionDeclaration(Interpreter.convert(name)[0], null, Interpreter.convert(typeToken)[0])});
                                     Little.runtime.throwError(ErrorMessage("Missing function parameters before type declaration."), Layer.PARSER);
                                     return null;
                                 }
@@ -496,17 +510,22 @@ class Parser {
                         }
                         i++;
                     }
-                    if (name == null) 
+                    if (name == null) {
+						Little.runtime.callStack.unshift({module: Parser.module, line: line, linePart: linePart, token: FunctionDeclaration(Identifier(""), null, null)});
                         Little.runtime.throwError(ErrorMessage("Missing function name and parameters, function is cut off by the end of the file, block or expression."), Layer.PARSER);
-                    else if (params == null)
+						return null;
+					} else if (params == null) {
+						Little.runtime.callStack.unshift({module: Parser.module, line: line, linePart: linePart, token: FunctionDeclaration(Interpreter.convert(name)[0], null, null)});
                         Little.runtime.throwError(ErrorMessage("Missing function parameters, function is cut off by the end of the file, block or expression."), Layer.PARSER);
-
+						return null;
+					}
                     post.push(Function(name, params, type, currentDoc));
 					currentDoc = null;
                 }
                 case Identifier(_ == Little.keywords.FUNCTION_RETURN => true): {
                     i++;
                     if (i >= pre.length) {
+						Little.runtime.callStack.unshift({module: Parser.module, line: line, linePart: linePart, token: FunctionReturn(Identifier(""), null)});
                         Little.runtime.throwError(ErrorMessage("Missing return value, value is cut off by the end of the file, block or expression."), Layer.PARSER);
                         return null;
                     }
@@ -648,123 +667,73 @@ class Parser {
     /**
         Merges a chain of single tokens separated by a `=` into a `Write([<sequence>], <end of sequence>)`
     **/
-    public static function mergeWrites(pre:Array<ParserTokens>):Array<ParserTokens> {
+	public static function mergeWrites(pre:Array<ParserTokens>) :Array<ParserTokens> {
+		if (pre == null) return null;
+		if (pre.length == 1 && pre[0] == null) return [null];
 
-        if (pre == null) return null;
-        if (pre.length == 1 && pre[0] == null) return [null];
+		var post:Array<ParserTokens> = [];
 
-        var post:Array<ParserTokens> = [];
-
-        var potentialAssignee:ParserTokens = NullValue;
-        var i = 0;
-        while (i < pre.length) {
-            var token = pre[i];
-            switch token {
-                case SetLine(line): {
-                    setLine(line); 
-                    if (potentialAssignee != null) post.push(potentialAssignee);
-                    potentialAssignee = token;
-                }
+		var i = 0;
+		while (i < pre.length) {
+			var token = pre[i];
+			switch token {
+				case SetLine(line): {
+					setLine(line); 
+					post.push(token);
+				}
 				case SetModule(module): {
-					Parser.module = module;
-					if (potentialAssignee != null) post.push(potentialAssignee);
-					potentialAssignee = token;
+					Parser.module = module; 
+					post.push(token);
 				}
-                case SplitLine: {
-                    nextPart(); 
-                    if (potentialAssignee != null) post.push(potentialAssignee);
-                    potentialAssignee = token;
-                }
-                case Sign("="): {
-                    if (i + 1 >= pre.length) {
-                        Little.runtime.throwError(ErrorMessage("Missing value after the `=`"), Layer.PARSER);
-                        return null;
-                    }
-
-                    var currentAssignee:Array<ParserTokens> = [potentialAssignee];
-                    var assignees = [currentAssignee.length == 1 ? currentAssignee[0] : Expression(currentAssignee.copy(), null)];
-                    currentAssignee = [];
-                    var value:ParserTokens;
-                    while (i + 1 < pre.length) {
-                        var lookahead = pre[i + 1];
-                        switch lookahead {
-
-                            case Sign("="): {
-                                var assignee = currentAssignee.length == 1 ? currentAssignee[0] : Expression(currentAssignee.copy(), null);
-                                assignees.push(assignee);
-                                currentAssignee = [];
-                            }
-                            case SplitLine | SetLine(_) | SetModule(_): break;
-                            case _: currentAssignee.push(lookahead);
-                        }
-                        i++;
-                    }
-                    if (currentAssignee.length == 0) {
-                        Little.runtime.throwError(ErrorMessage("Missing value after the last `=`"), Layer.PARSER);
-                        return null;
-                    }
-                    // The last currentAssignee is the value;
-                    value = if (currentAssignee.length == 1) currentAssignee[0] else Expression(currentAssignee, null);
-                    var fValue = mergeWrites([value]);
-                    var v = if (fValue.length == 1) fValue[0] else Expression(fValue, null);
-                    post.push(Write(assignees, v));
-                    potentialAssignee = null;
-                }
-                case Expression(parts, type): {
-                    if (potentialAssignee != null) post.push(potentialAssignee);
-                    potentialAssignee = Expression(mergeWrites(parts), mergeWrites([type])[0]);
-                }
-                case PartArray(parts): {
-                    if (potentialAssignee != null) post.push(potentialAssignee);
-                    potentialAssignee = PartArray(mergeWrites(parts));
-                }
-                case Block(body, type): {
-                    if (potentialAssignee != null) post.push(potentialAssignee);
-                    potentialAssignee = Block(mergeWrites(body), mergeWrites([type])[0]);
-                }
-                case Variable(name, type, doc): {
-                    if (potentialAssignee != null) post.push(potentialAssignee);
-                    potentialAssignee = Variable(mergeWrites([name])[0], mergeWrites([type])[0], mergeWrites([doc])[0]);
-                }
-                case Function(name, params, type, doc): {
-                    if (potentialAssignee != null) post.push(potentialAssignee);
-                    potentialAssignee = Function(mergeWrites([name])[0], mergeWrites([params])[0], mergeWrites([type])[0], mergeWrites([doc])[0]);
-                }
-                case ConditionCall(name, exp, body): {
-                    if (potentialAssignee != null) post.push(potentialAssignee);
-                    potentialAssignee = ConditionCall(mergeWrites([name])[0], mergeWrites([exp])[0], mergeWrites([body])[0]);
-                }
-                case Return(value, type): {
-                    if (potentialAssignee != null) post.push(potentialAssignee);
-                    potentialAssignee = Return(mergeWrites([value])[0], mergeWrites([type])[0]);
-                }
-                case FunctionCall(name, params): {
-                    if (potentialAssignee != null) post.push(potentialAssignee);
-                    potentialAssignee = FunctionCall(mergeWrites([name])[0], mergeWrites([params])[0]);
-                }
-                case PropertyAccess(name, property): {
-                    if (potentialAssignee != null) post.push(potentialAssignee);
-                    potentialAssignee = PropertyAccess(mergeWrites([name])[0], mergeWrites([property])[0]);
-                }
-				case Custom(name, params): {
-					if (potentialAssignee != null) post.push(potentialAssignee);
-					potentialAssignee = Custom(name, params.map(x -> mergeWrites([x])[0]));
+				case SplitLine: {
+					nextPart();
+					post.push(token); 
 				}
-                case _: {
-                    if (potentialAssignee != null) post.push(potentialAssignee);
-                    potentialAssignee = token;
-                }
-                
-            }
+				case Sign("="): {
+					if (post.length == 0) {
+						Little.runtime.callStack.unshift({module: Parser.module, line: line, linePart: linePart, token: Write(null, null)});
+						Little.runtime.throwError(ErrorMessage("Missing assignee before `=`"), Layer.PARSER);
+						return null;
+					}
+					var assignee = post.pop();
+					if (assignee.is(SET_MODULE, SPLIT_LINE, SET_LINE)) {
+						Little.runtime.callStack.unshift({module: Parser.module, line: line, linePart: linePart, token: Write(Interpreter.convert(assignee), null)});
+						Little.runtime.throwError(ErrorMessage("Missing assignee before `=`, assigning operation is cut off by a line split, a new file or a line."), Layer.PARSER);
+					}
+					if (i + 1 >= pre.length) {
+						Little.runtime.callStack.unshift({module: Parser.module, line: line, linePart: linePart, token: Write(Interpreter.convert(assignee), null)});
+						Little.runtime.throwError(ErrorMessage("Missing value after the last `=`"), Layer.PARSER);
+						return null;
+					}
+					var lookahead = mergeWrites([pre[i + 1]])[0];
+					if (assignee.is(WRITE)) {
+						var previousAssignees = assignee.parameter(0);
+						previousAssignees.push(assignee.parameter(1));
+						post.push(Write(previousAssignees, lookahead));
+					}
+					else post.push(Write([assignee], lookahead));
+				}
+				case Variable(name, type, doc): post.push(Variable(mergeWrites([name])[0], mergeWrites([type])[0], mergeWrites([doc])[0]));
+				case Function(name, params, type, doc): post.push(Function(mergeWrites([name])[0], mergeWrites([params])[0], mergeWrites([type])[0], mergeWrites([doc])[0]));
+				case ConditionCall(name, exp, body): post.push(ConditionCall(mergeWrites([name])[0], mergeWrites([exp])[0], mergeWrites([body])[0]));
+				case Read(name): post.push(Read(mergeWrites([name])[0]));
+				case TypeDeclaration(value, type): post.push(TypeDeclaration(mergeWrites([value])[0], mergeWrites([type])[0]));
+				case FunctionCall(name, params): post.push(FunctionCall(mergeWrites([name])[0], mergeWrites([params])[0]));
+				case Return(value, type): post.push(Return(mergeWrites([value])[0], mergeWrites([type])[0]));
+				case Expression(parts, type): post.push(Expression(mergeWrites(parts), mergeWrites([type])[0]));
+				case Block(body, type):  post.push(Block(mergeWrites(body), mergeWrites([type])[0]));
+				case PartArray(parts): post.push(PartArray(mergeWrites(parts)));
+				case PropertyAccess(name, property): post.push(PropertyAccess(mergeWrites([name])[0], mergeWrites([property])[0]));
+				case Write(assignees, value): post.push(Write(mergeWrites(assignees), mergeWrites([value])[0]));
+				case Custom(name, params): post.push(Custom(name, params.map(x -> mergeWrites([x])[0])));
+				case _: post.push(token);
+			}
 
-            i++;
-        }
-        if (potentialAssignee != null) post.push(potentialAssignee);
-        post.shift();
+			i++;
+		}
 
-        resetLines();
-        return post;
-    }
+		return post;
+	}
 
     /**
         Merges `<token>, TypeDeclaration(null, <type>)` into `TypeDeclaration(<token>, <type>)`
@@ -785,12 +754,14 @@ class Parser {
                 case SplitLine: {nextPart(); post.unshift(token);}
                 case TypeDeclaration(null, type): {
                     if (i-- <= 0) {
+						Little.runtime.callStack.unshift({module: Parser.module, line: line, linePart: linePart, token: TypeCast(null, Interpreter.convert(type)[0])});
                         Little.runtime.throwError(ErrorMessage("Value's type declaration cut off by the start of file, block or expression."), Layer.PARSER);
                         return null;
                     }
                     var lookbehind = pre[i];
                     switch lookbehind {
                         case SplitLine | SetLine(_) | SetModule(_): {
+							Little.runtime.callStack.unshift({module: Parser.module, line: line, linePart: linePart, token: TypeCast(Interpreter.convert(lookbehind)[0], Interpreter.convert(type)[0])});
                             Little.runtime.throwError(ErrorMessage("Value's type declaration access cut off by the start of a line, or by a line split (; or ,)."), Layer.PARSER);
                             return null;
                         }
@@ -900,7 +871,8 @@ class Parser {
                         continue;
                     }
                     if (i + 1 >= pre.length) {
-                        Little.runtime.throwError(ErrorMessage('Condition has no body, body may be cut off by the end of file, block or expression.'), PARSER);
+						Little.runtime.callStack.unshift({module: Parser.module, line: line, linePart: linePart, token: ConditionCall(Identifier(Little.keywords.CONDITION__ELSE), null, Identifier(""))});
+                        Little.runtime.throwError(ErrorMessage('`${Little.keywords.CONDITION__ELSE}` condition has no body, body may be cut off by the end of file, block or expression.'), PARSER);
                         return null;
                     }
                     var exp:ParserTokens = post[post.length - 1].parameter(1); //Condition(name:ParserTokens, ->exp:ParserTokens<-, body:ParserTokens, type:ParserTokens)
@@ -909,10 +881,12 @@ class Parser {
                     var body:ParserTokens = pre[i];
                     switch body {
                         case SplitLine: {
+							Little.runtime.callStack.unshift({module: Parser.module, line: line, linePart: linePart, token: ConditionCall(Identifier(Little.keywords.CONDITION__ELSE), null, Interpreter.convert(body)[0])});
                             Little.runtime.throwError(ErrorMessage('`${Little.keywords.CONDITION__ELSE}` condition has no body, body cut off by a line split, or does not exist'), PARSER);
                             return null;
                         }
                         case SetLine(_) | SetModule(_): {
+							Little.runtime.callStack.unshift({module: Parser.module, line: line, linePart: linePart, token: ConditionCall(Identifier(Little.keywords.CONDITION__ELSE), null, Interpreter.convert(body)[0])});
                             Little.runtime.throwError(ErrorMessage('`${Little.keywords.CONDITION__ELSE}` condition has no body, body cut off by a new line, or does not exist'), PARSER);
                             return null;
                         }

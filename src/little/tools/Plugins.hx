@@ -53,7 +53,8 @@ class Plugins {
         
         **Notice 2** - for function parameters, syntax follows Little function parameter syntax - multiple parameter declarations, with optional type and optional default values, separated by a comma.
         
-        @param typeName The name of the class. May be nested inside other "packages" using a `.` (for example. my_pack.MyClass)
+        @param typeName The name of the class. May be nested inside other "packages" using a `.`, and not specifically the defined `PROPERTY_ACCESS_SIGN` (for example. my_pack.MyClass). Don't use other signs
+						in the name, as they are not valid. 
         @param fields A string map that has key-value pairs of certain types. Refer to the table above for more information.
     **/
     public function registerType(typeName:String, fields:TypeFields) {
@@ -80,7 +81,7 @@ class Plugins {
         for (key => field in fields) {
             switch key.split(" ") {
                 case (_[0] == "public" && _.length == 3) => true: {
-                    var name = key.split(" ")[2];
+					var name = key.split(" ")[2].replace(Little.keywords.PROPERTY_ACCESS_SIGN, "_");
                     var type = memory.getTypeInformation(key.split(" ")[1]).pointer;
                     instances.properties[name] = new ExtTree(type, (value, address) -> {
                         // We can't optimize for the two cases outside of the callback, since haxe doesn't support
@@ -107,7 +108,7 @@ class Plugins {
                     });
                 }
                 case (_[0] == "public") => true: {
-                    var name = key.split(" ")[2];
+					var name = key.split(" ")[2].replace(Little.keywords.PROPERTY_ACCESS_SIGN, "_");
                     var type = memory.getTypeInformation(key.split(" ")[1]);
                     var params = Interpreter.convert(...Parser.parse(Lexer.lex(key.replaceFirst('public function $name ', "").replaceFirst("(", "").replaceLast(")", ""))));
 
@@ -143,7 +144,7 @@ class Plugins {
                 }
 
                 case (_[0] == "static" && _.length == 3) => true: {
-                    var name = key.split(" ")[2];
+                    var name = key.split(" ")[2].replace(Little.keywords.PROPERTY_ACCESS_SIGN, "_");
                     var type = memory.getTypeInformation(key.split(" ")[1]).pointer;
                     if (field is StringMap) {
                         __noTypeCreation = true;
@@ -174,7 +175,7 @@ class Plugins {
                     });
                 }
                 case (_[0] == "static") => true: {
-                    var name = key.split(" ")[2];
+					var name = key.split(" ")[2].replace(Little.keywords.PROPERTY_ACCESS_SIGN, "_");
                     var type = memory.getTypeInformation(key.split(" ")[1]);
                     var params = Interpreter.convert(...Parser.parse(Lexer.lex(key.replaceFirst('static function $name ', "").replaceFirst("(", "").replaceLast(")", ""))));
                     var paramMap = new OrderedMap<String, InterpTokens>();
@@ -216,7 +217,7 @@ class Plugins {
     /**
         registers a haxe value/property inside Little code.
 
-        @param variableName the name of the variable, for usage in Little code. If you want it nested in some kind of path, use `.` (e.g. `mother.varName`)
+        @param variableName the name of the variable, for usage in Little code. If you want it nested in some kind of path, use `.`, and not specifically the defined `PROPERTY_ACCESS_SIGN` (e.g. `mother.varName`). 
         @param variableType the type of the variable, in little. Use `Conversion.toLittleType` for haxe basic types if needed.       
         @param documentation documentation for this variable.
         @param staticValue **Option 1** - a static value to assign to this variable
@@ -248,7 +249,7 @@ class Plugins {
     /**
     	Allows usage of a function written in haxe inside Little code.
 
-    	@param actionName The name by which to identify the function. If you want this nested in some kind of path, use `.` (e.g. `mother.funcName`)
+    	@param actionName The name by which to identify the function. If you want this nested in some kind of path, use `.`, and not specifically the defined `PROPERTY_ACCESS_SIGN` (e.g. `mother.funcName`)
     	@param documentation documentation for this function.
     	@param expectedParameters an `Array<InterpTokens>` consisting of `InterpTokens.Variable`s which contain the names & types of the parameters that should be passed on to the function. For example:
             ```
@@ -311,7 +312,7 @@ class Plugins {
 				<body>
 			}
 		
-		@param conditionName The name by which to identify the condition. If you want this nested in some kind of path, use `.` (e.g. `mother.conditionName`)
+		@param conditionName The name by which to identify the condition. If you want this nested in some kind of path, use `.`, and not specifically the defined `PROPERTY_ACCESS_SIGN` (e.g. `mother.conditionName`)
 		@param documentation documentation for this condition.
 		@param callback The actual function, which gets an array of the given parameters, exactly as given (which means they might require further evaluation), 
 			and another array representing the block of code right after the condition, and return an outcome token of the condition. 
@@ -341,9 +342,10 @@ class Plugins {
 		Registers a haxe-property-like variable on a little class found at `onType`.
 
 
-		@param propertyName The name of the property, must not include property access sign.
+		@param propertyName The name of the property, must not include signs.
         @param propertyType The type of the property. Must be a little class. 
-		@param onType The type of the object the property is on. Must be a little class, and if the class is nested within an object, a full path must be specified.
+		@param onType The type of the object the property is on. Must be a little class, and if the class is nested within an object, a full path must be specified. 
+		If the class is nested within other objects, provide a dot-based path, not one split specifically by little's `PROPERTY_ACCESS_SIGN`.
 		@param documentation The documentation of the property
 		@param staticValue **Option 1**. A static value this property always returns.
 		@param valueGetter **Option 2**. A function that returns the value of the property. It takes in the value of the parent object, and it's address in memory.
@@ -375,8 +377,9 @@ class Plugins {
 	/**
 		Registers a method on every object of the given type, that can be called from Little.
 
-		@param propertyName The name of the property, must not include property access sign.
+		@param propertyName The name of the property, must not include signs.
 		@param onType The type of the object the property is on. Must be a little class, and if the class is nested within an object, a full path must be specified.
+					  If the class is nested within other objects, provide a dot-based path, not one split specifically by little's `PROPERTY_ACCESS_SIGN`.
 		@param documentation The documentation of the property
 		@param expectedParameters an `Array<InterpTokens>` consisting of `InterpTokens.Variable`s which contain the names & types of the parameters that should be passed on to the function. For example:
             ```

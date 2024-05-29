@@ -240,7 +240,6 @@ class PrepareRun {
 	public static function addFunctions() {
 		Little.plugin.registerFunction(Little.keywords.PRINT_FUNCTION_NAME, null, [VariableDeclaration(Identifier("item"), null)], (params) -> {
 			var eval = params[0].objectValue;
-			trace(eval, params[0]);
 			Little.runtime.__print(eval.is(OBJECT) ? @:privateAccess PrettyPrinter.printInterpreterAst([eval]).split("\n").slice(1).map(s -> s.substring(6)).join("\n") : PrettyPrinter.stringifyInterpreter(eval), eval);
 			return NullValue;
 		}, Little.keywords.TYPE_DYNAMIC);
@@ -287,7 +286,7 @@ class PrepareRun {
 			priority: "last",
 			singleSidedOperatorCallback: (rhs) -> {
 				var r = Conversion.toHaxeValue(rhs);
-				if (r is Int)
+				if (rhs.type() == Little.keywords.TYPE_INT)
 					return Number(r);
 				return Decimal(r);
 			}
@@ -299,7 +298,7 @@ class PrepareRun {
 			priority: 'with ${Little.keywords.POSITIVE_SIGN}_',
 			singleSidedOperatorCallback: (rhs) -> {
 				var r = Conversion.toHaxeValue(rhs);
-				if (r is Int)
+				if (rhs.type() == Little.keywords.TYPE_INT)
 					return Number(-r);
 				return Decimal(-r);
 			}
@@ -338,7 +337,7 @@ class PrepareRun {
 			singleSidedOperatorCallback: (lhs) -> {
 				var l = Conversion.toHaxeValue(lhs);
 				var shifted = Math.pow(10, 10) * l;
-				if (shifted != Math.floor(shifted)) return Number(Math.round(MathTools.factorial(l)));
+				if (shifted != Math.floor(shifted) && lhs.type() == Little.keywords.TYPE_INT) return Number(Math.round(MathTools.factorial(l)));
 				return Decimal(MathTools.factorial(l));
 			}
 		});
@@ -356,11 +355,11 @@ class PrepareRun {
 				lhs = Interpreter.evaluate(lhs); rhs = Interpreter.evaluate(rhs);
 				var l:Dynamic = Conversion.toHaxeValue(lhs),
 					r:Dynamic = Conversion.toHaxeValue(rhs);
-				if (l is String || r is String) {
+				if (lhs.type() == Little.keywords.TYPE_STRING || rhs.type() == Little.keywords.TYPE_STRING) {
 					l ??= Little.keywords.NULL_VALUE; r ??= Little.keywords.NULL_VALUE;
 					return Characters("" + l + r);
 				}
-				if (l is Int && r is Int)
+				if (lhs.type() == Little.keywords.TYPE_INT && rhs.type() == Little.keywords.TYPE_INT)
 					return Number(l + r);
 				return Decimal(#if static untyped #else cast #end l + r);
 			}
@@ -375,7 +374,7 @@ class PrepareRun {
 				lhs = Interpreter.evaluate(lhs); rhs = Interpreter.evaluate(rhs);
 				var l:Dynamic = Conversion.toHaxeValue(lhs),
 					r:Dynamic = Conversion.toHaxeValue(rhs);
-				if (l is String) {
+				if (lhs.type() == Little.keywords.TYPE_STRING) {
 					l ??= Little.keywords.NULL_VALUE; r ??= Little.keywords.NULL_VALUE;
 					return Characters(TextTools.subtract(l, r));
 				}
@@ -394,7 +393,7 @@ class PrepareRun {
 				lhs = Interpreter.evaluate(lhs); rhs = Interpreter.evaluate(rhs);
 				var l:Dynamic = Conversion.toHaxeValue(lhs),
 					r:Dynamic = Conversion.toHaxeValue(rhs);
-				if (l is String) {
+				if (lhs.type() == Little.keywords.TYPE_STRING) {
 					l ??= Little.keywords.NULL_VALUE;
 					return Characters(TextTools.multiply(l, r));
 				}
@@ -411,7 +410,6 @@ class PrepareRun {
 			callback: (lhs, rhs) -> {
 				var l:Float = Conversion.toHaxeValue(lhs),
 					r:Float = Conversion.toHaxeValue(rhs);
-				trace(l, r, Decimal(l / r));
 				if (r == 0)
 					return Little.runtime.throwError(ErrorMessage('Cannot divide by 0'));
 				return Decimal(#if static untyped #else cast #end l / r);
@@ -486,7 +484,7 @@ class PrepareRun {
 			callback: (lhs, rhs) -> {
 				var l:Dynamic = Conversion.toHaxeValue(lhs),
 					r:Dynamic = Conversion.toHaxeValue(rhs);
-				if (l is String)
+				if (lhs.type() == Little.keywords.TYPE_STRING)
 					return l.length > r.length ? TrueValue : FalseValue;
 				return l > r ? TrueValue : FalseValue;
 			}
@@ -500,7 +498,7 @@ class PrepareRun {
 			callback: (lhs, rhs) -> {
 				var l:Dynamic = Conversion.toHaxeValue(lhs),
 					r:Dynamic = Conversion.toHaxeValue(rhs);
-				if (l is String)
+				if (lhs.type() == Little.keywords.TYPE_STRING)
 					return l.length >= r.length ? TrueValue : FalseValue;
 				return l >= r ? TrueValue : FalseValue;
 			}
@@ -514,7 +512,7 @@ class PrepareRun {
 			callback: (lhs, rhs) -> {
 				var l:Dynamic = Conversion.toHaxeValue(lhs),
 					r:Dynamic = Conversion.toHaxeValue(rhs);
-				if (l is String)
+				if (lhs.type() == Little.keywords.TYPE_STRING)
 					return l.length < r.length ? TrueValue : FalseValue;
 				return l < r ? TrueValue : FalseValue;
 			}
@@ -528,7 +526,7 @@ class PrepareRun {
 			callback: (lhs, rhs) -> {
 				var l:Dynamic = Conversion.toHaxeValue(lhs),
 					r:Dynamic = Conversion.toHaxeValue(rhs);
-				if (l is String)
+				if (lhs.type() == Little.keywords.TYPE_STRING)
 					return l.length <= r.length ? TrueValue : FalseValue;
 				return l <= r ? TrueValue : FalseValue;
 			}
@@ -564,7 +562,6 @@ class PrepareRun {
 		});
 
 		Little.plugin.registerCondition(Little.keywords.CONDITION__IF, "Executes the following block of code if the given condition is true.", (params, body) -> {
-			trace(params);
 			var val = NullValue;
 			var cond = Conversion.toHaxeValue(Interpreter.calculate(params));
 			if (cond is Bool && cond) {

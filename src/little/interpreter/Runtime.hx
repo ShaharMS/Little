@@ -184,7 +184,6 @@ class Runtime {
         **/
     public function throwError(token:InterpTokens, ?layer:Layer = INTERPRETER):InterpTokens {
 
-        
         var mod:String = module, reason:String;
         var content = switch token {
             case _: {
@@ -196,7 +195,7 @@ class Runtime {
         stdout.output += callStack.map(obj -> '\tCalled from Module ${obj.module}, Line ${obj.line} (part ${obj.linePart}): ${PrettyPrinter.stringifyInterpreter(obj.token)}').join('\n');
 		stdout.stdoutTokens.push(token);
 
-        callStack.push({module: module, line: line, linePart: linePart, token: token});
+        callStack.unshift({module: module, line: line, linePart: linePart, token: token});
 
         exitCode = Layer.getIndexOf(layer);
         errorToken = token;
@@ -214,7 +213,7 @@ class Runtime {
         @param layer the "stage" from which the error was called
     **/
     public function warn(token:InterpTokens, ?layer:Layer = INTERPRETER) {
-        callStack.push({module: module, line: line, linePart: linePart, token: token});
+        callStack.unshift({module: module, line: line, linePart: linePart, token: token});
         
         var reason:String;
         var content = switch token {

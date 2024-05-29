@@ -6,7 +6,6 @@ import little.interpreter.memory.Storage;
 import haxe.Resource;
 import little.interpreter.memory.Memory;
 import little.tools.PrepareRun;
-import little.tools.PrettyOutput;
 import haxe.Log;
 import vision.tools.MathTools;
 import haxe.io.Path;
@@ -53,11 +52,10 @@ class Main {
 		#elseif js
 		new JsExample();
 		#elseif unit
-		UnitTests.run(true);
+		UnitTests.run();
 		#elseif formatting
 		File.saveContent("formatted.txt", Little.format(Resource.getString("sample")));
 		#elseif sys
-		trace(Type.getInstanceFields(KeywordConfig).length);
 		try {
 			var preDefInput:String = null;
 
@@ -83,8 +81,8 @@ class Main {
 						var input = Sys.stdin().readLine();
 						if (input == "run!") {
 							Little.run(code, true);
-							trace(PrettyPrinter.printInterpreterAst(Interpreter.convert(...Parser.parse(Lexer.lex(code)))));
-							trace(Little.runtime.stdout.output);
+							Sys.println("Output:");
+							Sys.println(Little.runtime.stdout.output + "\n");
 							Little.reset();
 							Sys.print(code.replaceFirst("\n", "  >> ").replace("\n", "\n  >> ") + "\n");
 						} else if (input == "default!") {
@@ -125,7 +123,8 @@ class Main {
 							continue;
 						}
 						try {
-							Sys.println(PrettyPrinter.printInterpreterAst(Interpreter.convert(...Parser.parse(Lexer.lex(input)))));
+							Sys.println("Output:");
+							Sys.println(PrettyPrinter.printInterpreterAst(Interpreter.convert(...Parser.parse(Lexer.lex(input)))) + "\n");
 						} catch (e) {}
 					}
 				} else if (input == "printSample!") {
@@ -134,8 +133,8 @@ class Main {
 					Sys.println("\n-------------SINGLE-LINE MODE--------------\n");
 				} else {
 					Little.run(input, true);
-					// trace(PrettyPrinter.printInterpreterAst(Interpreter.convert(...Parser.parse(Lexer.lex(input)))));
-					trace(Little.runtime.stdout.output);
+					Sys.println("Output:");
+					Sys.println(Little.runtime.stdout.output + "\n");
 					Little.reset();
 				}
 				preDefInput = null;

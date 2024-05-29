@@ -20,9 +20,9 @@ class Memory {
 	@:noCompletion public var memoryChunkSize:Int = 512; // 512 bytes
 
 	/**
-		The maximum amount of memory that can be allocated, by bytes.
+		The maximum amount of memory that can be allocated, in bytes.
 	**/
-	public var maxMemorySize:Int = 1024 * 1024 * 1024 * 2;
+	public var maxMemorySize:Int = 1024 * 1024 * 1024 * 2 - 1;
 
 	/**
 		The current amount of memory allocated, in bytes.

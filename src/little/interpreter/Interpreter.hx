@@ -177,7 +177,6 @@ class Interpreter {
 	**/
     public static function condition(name:InterpTokens, pattern:InterpTokens, body:InterpTokens):InterpTokens {
         var conditionToken = memory.read(...name.asStringPath());
-		trace(conditionToken, name.asStringPath(), body);
 		assert(conditionToken.objectValue, CONDITION_CODE, '${name.asStringPath()} is not a condition.');
 		var patterns:Map<Array<InterpTokens>, InterpTokens> = conditionToken.objectValue.parameter(0);
 		var givenPattern = pattern.parameter(0);
@@ -337,11 +336,11 @@ class Interpreter {
 					listener(functionName, resulting);
 				}
 
-                Little.runtime.callStack.push({module: Little.runtime.module, line: Little.runtime.line, linePart: Little.runtime.linePart, token: FunctionCall(name, params)});
+                Little.runtime.callStack.unshift({module: Little.runtime.module, line: Little.runtime.line, linePart: Little.runtime.linePart, token: FunctionCall(name, params)});
 
 				var t = run(attachment.concat(body.parameter(0)));
 
-                Little.runtime.callStack.pop();
+                Little.runtime.callStack.shift();
 
                 return t;
 			}
@@ -368,10 +367,9 @@ class Interpreter {
     public static function typeCast(value:InterpTokens, type:InterpTokens):InterpTokens {
 		var preType = evaluate(value).type().asTokenPath().asStringPath();
 		var postType = type.extractIdentifier().asTokenPath().asStringPath();
-		if (preType.join("") == postType.join("") || postType.join(Little.keywords.PROPERTY_ACCESS_SIGN) == Little.keywords.TYPE_UNKNOWN) return value;
+		if (preType.join(Little.keywords.PROPERTY_ACCESS_SIGN) == postType.join(Little.keywords.PROPERTY_ACCESS_SIGN) || postType.join(Little.keywords.PROPERTY_ACCESS_SIGN) == Little.keywords.TYPE_UNKNOWN) return value;
 
 		preType.push(Little.keywords.TYPE_CAST_FUNCTION_PREFIX + postType.join("_"));
-
 		value = call(preType.join(Little.keywords.PROPERTY_ACCESS_SIGN).asTokenPath(), PartArray([value]));
 
         for (listener in Little.runtime.onTypeCast) {
@@ -612,12 +610,10 @@ class Interpreter {
                     else if (sign == "") error('Two values cannot come one after the other ($calculated, $token). At least one of them should be an operator, or, put an operator in between.');
                     else {
                         calculated = Little.memory.operators.call(calculated, sign, token);
-						trace(calculated, sign, token);
                     }
                 }
             }
 
-			trace(calculated, castType);
 
         }
         if (castType != null) {

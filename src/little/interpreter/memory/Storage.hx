@@ -43,6 +43,7 @@ class Storage {
 	**/
 	function requestMemory() {
 		if (storage.length > parent.maxMemorySize) {
+			trace(storage.length, parent.maxMemorySize);
 			Little.runtime.throwError(ErrorMessage('Out of memory'), MEMORY_STORAGE);
 		}
 		storage.resize(storage.length + parent.memoryChunkSize);

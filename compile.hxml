@@ -3,15 +3,19 @@
 --library vision
 --library hash
 --resource demoCode.ltl@sample
+--debug
 
-#--js clients/web/interp.js
+--each
+
+--js clients/web/interp.js
+
+--next
+
 --interp
-
-
 #--define unit
 #--define formatting
-#--define parser_debug
---debug
-# --dce full
-
+--define parser_debug
 #--define special
+
+
+
