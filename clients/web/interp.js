@@ -5687,7 +5687,7 @@ little_interpreter_memory_Referrer.prototype = {
 var little_interpreter_memory_ConstantPool = function(memory) {
 	this.EMPTY_STRING = little_interpreter_memory_MemoryPointer.fromInt(19);
 	this.EXTERN = little_interpreter_memory_MemoryPointer.fromInt(18);
-	this.ERROR = little_interpreter_memory_MemoryPointer.fromInt(17);
+	this.ERROR_TOKEN = little_interpreter_memory_MemoryPointer.fromInt(17);
 	this.UNKNOWN = little_interpreter_memory_MemoryPointer.fromInt(16);
 	this.TYPE = little_interpreter_memory_MemoryPointer.fromInt(15);
 	this.DYNAMIC = little_interpreter_memory_MemoryPointer.fromInt(14);
@@ -5721,7 +5721,7 @@ little_interpreter_memory_ConstantPool.prototype = {
 	,DYNAMIC: null
 	,TYPE: null
 	,UNKNOWN: null
-	,ERROR: null
+	,ERROR_TOKEN: null
 	,EXTERN: null
 	,EMPTY_STRING: null
 	,get: function(token) {
@@ -5943,7 +5943,7 @@ little_interpreter_memory_ConstantPool.prototype = {
 								if(_hx_tmp == true) {
 									return this.UNKNOWN;
 								} else {
-									return this.ERROR;
+									return this.ERROR_TOKEN;
 								}
 							}
 						}
@@ -6597,7 +6597,7 @@ little_tools_Plugins.prototype = {
 							return { objectValue : result.value, objectAddress : result.address};
 						} catch( _g ) {
 							var e = haxe_Exception.caught(_g);
-							return { objectValue : little_interpreter_InterpTokens.ErrorMessage("External Variable Error: " + e.details()), objectAddress : _gthis.memory.constants.ERROR};
+							return { objectValue : little_interpreter_InterpTokens.ErrorMessage("External Variable Error: " + e.details()), objectAddress : _gthis.memory.constants.ERROR_TOKEN};
 						}
 					};
 				})(field));
@@ -6745,7 +6745,7 @@ little_tools_Plugins.prototype = {
 									return { objectValue : result.value, objectAddress : result.address};
 								} catch( _g ) {
 									var e = haxe_Exception.caught(_g);
-									return { objectValue : little_interpreter_InterpTokens.ErrorMessage("External Variable Error: " + e.details()), objectAddress : _gthis.memory.constants.ERROR};
+									return { objectValue : little_interpreter_InterpTokens.ErrorMessage("External Variable Error: " + e.details()), objectAddress : _gthis.memory.constants.ERROR_TOKEN};
 								}
 							};
 						})(field));
@@ -6889,7 +6889,7 @@ little_tools_Plugins.prototype = {
 				return { objectValue : value, objectAddress : _gthis.memory.store(value)};
 			} catch( _g ) {
 				var e = haxe_Exception.caught(_g);
-				return { objectValue : little_interpreter_InterpTokens.ErrorMessage("External Variable Error: " + e.details()), objectAddress : _gthis.memory.constants.ERROR};
+				return { objectValue : little_interpreter_InterpTokens.ErrorMessage("External Variable Error: " + e.details()), objectAddress : _gthis.memory.constants.ERROR_TOKEN};
 			}
 		};
 	}
@@ -7033,7 +7033,7 @@ little_tools_Plugins.prototype = {
 				return { objectValue : value, objectAddress : _gthis.memory.store(value)};
 			} catch( _g ) {
 				var e = haxe_Exception.caught(_g);
-				return { objectValue : little_interpreter_InterpTokens.ErrorMessage("External Function Error: " + e.details()), objectAddress : _gthis.memory.constants.ERROR};
+				return { objectValue : little_interpreter_InterpTokens.ErrorMessage("External Function Error: " + e.details()), objectAddress : _gthis.memory.constants.ERROR_TOKEN};
 			}
 		};
 	}
@@ -7156,7 +7156,7 @@ little_tools_Plugins.prototype = {
 				return { objectValue : little_interpreter_InterpTokens.FunctionCode(paramMap,tmp), objectAddress : _gthis.memory.constants.EXTERN};
 			} catch( _g ) {
 				var e = haxe_Exception.caught(_g);
-				return { objectValue : little_interpreter_InterpTokens.ErrorMessage("External Function Error: " + e.details()), objectAddress : _gthis.memory.constants.ERROR};
+				return { objectValue : little_interpreter_InterpTokens.ErrorMessage("External Function Error: " + e.details()), objectAddress : _gthis.memory.constants.ERROR_TOKEN};
 			}
 		};
 	}
@@ -10411,7 +10411,7 @@ little_parser_Parser.parse = function(lexerTokens) {
 	tokens = little_parser_Parser.mergeTypeDecls(tokens);
 	tokens = little_parser_Parser.mergeComplexStructures(tokens);
 	tokens = little_parser_Parser.mergeCalls(tokens);
-	tokens = little_parser_Parser.mergeWrites2(tokens);
+	tokens = little_parser_Parser.mergeWrites(tokens);
 	tokens = little_parser_Parser.mergeValuesWithTypeDecls(tokens);
 	tokens = little_parser_Parser.mergeNonBlockBodies(tokens);
 	var _g = 0;
@@ -11395,220 +11395,6 @@ little_parser_Parser.mergeWrites = function(pre) {
 		return [null];
 	}
 	var post = [];
-	var potentialAssignee = null;
-	var i = 0;
-	while(i < pre.length) {
-		var token = pre[i];
-		switch(token._hx_index) {
-		case 0:
-			var line = token.line;
-			little_parser_Parser.setLine(line);
-			if(potentialAssignee != null) {
-				post.push(potentialAssignee);
-			}
-			potentialAssignee = token;
-			break;
-		case 1:
-			var module = token.module;
-			little_parser_Parser.set_module(module);
-			if(potentialAssignee != null) {
-				post.push(potentialAssignee);
-			}
-			potentialAssignee = token;
-			break;
-		case 2:
-			little_parser_Parser.nextPart();
-			if(potentialAssignee != null) {
-				post.push(potentialAssignee);
-			}
-			potentialAssignee = token;
-			break;
-		case 3:
-			var name = token.name;
-			var type = token.type;
-			var doc = token.doc;
-			if(potentialAssignee != null) {
-				post.push(potentialAssignee);
-			}
-			potentialAssignee = little_parser_ParserTokens.Variable(little_parser_Parser.mergeWrites([name])[0],little_parser_Parser.mergeWrites([type])[0],little_parser_Parser.mergeWrites([doc])[0]);
-			break;
-		case 4:
-			var name1 = token.name;
-			var params = token.params;
-			var type1 = token.type;
-			var doc1 = token.doc;
-			if(potentialAssignee != null) {
-				post.push(potentialAssignee);
-			}
-			potentialAssignee = little_parser_ParserTokens.Function(little_parser_Parser.mergeWrites([name1])[0],little_parser_Parser.mergeWrites([params])[0],little_parser_Parser.mergeWrites([type1])[0],little_parser_Parser.mergeWrites([doc1])[0]);
-			break;
-		case 5:
-			var name2 = token.name;
-			var exp = token.exp;
-			var body = token.body;
-			if(potentialAssignee != null) {
-				post.push(potentialAssignee);
-			}
-			potentialAssignee = little_parser_ParserTokens.ConditionCall(little_parser_Parser.mergeWrites([name2])[0],little_parser_Parser.mergeWrites([exp])[0],little_parser_Parser.mergeWrites([body])[0]);
-			break;
-		case 10:
-			var name3 = token.name;
-			var params1 = token.params;
-			if(potentialAssignee != null) {
-				post.push(potentialAssignee);
-			}
-			potentialAssignee = little_parser_ParserTokens.FunctionCall(little_parser_Parser.mergeWrites([name3])[0],little_parser_Parser.mergeWrites([params1])[0]);
-			break;
-		case 11:
-			var value = token.value;
-			var type2 = token.type;
-			if(potentialAssignee != null) {
-				post.push(potentialAssignee);
-			}
-			potentialAssignee = little_parser_ParserTokens.Return(little_parser_Parser.mergeWrites([value])[0],little_parser_Parser.mergeWrites([type2])[0]);
-			break;
-		case 12:
-			var parts = token.parts;
-			var type3 = token.type;
-			if(potentialAssignee != null) {
-				post.push(potentialAssignee);
-			}
-			potentialAssignee = little_parser_ParserTokens.Expression(little_parser_Parser.mergeWrites(parts),little_parser_Parser.mergeWrites([type3])[0]);
-			break;
-		case 13:
-			var body1 = token.body;
-			var type4 = token.type;
-			if(potentialAssignee != null) {
-				post.push(potentialAssignee);
-			}
-			potentialAssignee = little_parser_ParserTokens.Block(little_parser_Parser.mergeWrites(body1),little_parser_Parser.mergeWrites([type4])[0]);
-			break;
-		case 14:
-			var parts1 = token.parts;
-			if(potentialAssignee != null) {
-				post.push(potentialAssignee);
-			}
-			potentialAssignee = little_parser_ParserTokens.PartArray(little_parser_Parser.mergeWrites(parts1));
-			break;
-		case 15:
-			var name4 = token.name;
-			var property = token.property;
-			if(potentialAssignee != null) {
-				post.push(potentialAssignee);
-			}
-			potentialAssignee = little_parser_ParserTokens.PropertyAccess(little_parser_Parser.mergeWrites([name4])[0],little_parser_Parser.mergeWrites([property])[0]);
-			break;
-		case 16:
-			if(token.sign == "=") {
-				haxe_Log.trace(pre,{ fileName : "src/little/parser/Parser.hx", lineNumber : 698, className : "little.parser.Parser", methodName : "mergeWrites", customParams : [potentialAssignee]});
-				var tmp;
-				if(potentialAssignee != null) {
-					var _this = [little_tools_ParserTokensSimple.SET_LINE,little_tools_ParserTokensSimple.SET_MODULE,little_tools_ParserTokensSimple.SPLIT_LINE].slice();
-					var result = new Array(_this.length);
-					var _g = 0;
-					var _g1 = _this.length;
-					while(_g < _g1) {
-						var i1 = _g++;
-						var x = _this[i1];
-						result[i1] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
-					}
-					tmp = result.indexOf($hxEnums[potentialAssignee.__enum__].__constructs__[potentialAssignee._hx_index]._hx_name.toLowerCase()) != -1;
-				} else {
-					tmp = true;
-				}
-				if(tmp) {
-					little_Little.runtime.callStack.unshift({ module : little_parser_Parser.get_module(), line : little_parser_Parser.get_line(), linePart : little_parser_Parser.linePart, token : little_interpreter_InterpTokens.Write([little_interpreter_InterpTokens.Identifier("<nothing>")],little_interpreter_InterpTokens.Identifier(""))});
-					little_Little.runtime.throwError(little_interpreter_InterpTokens.ErrorMessage("Missing assignee before `=`"),"Parser");
-					return null;
-				}
-				if(i + 1 >= pre.length) {
-					little_Little.runtime.callStack.unshift({ module : little_parser_Parser.get_module(), line : little_parser_Parser.get_line(), linePart : little_parser_Parser.linePart, token : little_interpreter_InterpTokens.Write([little_interpreter_Interpreter.convert(potentialAssignee)[0]],little_interpreter_InterpTokens.Identifier(""))});
-					little_Little.runtime.throwError(little_interpreter_InterpTokens.ErrorMessage("Missing value after the `=`"),"Parser");
-					return null;
-				}
-				var currentAssignee = [potentialAssignee];
-				var assignees = [currentAssignee.length == 1 ? currentAssignee[0] : little_parser_ParserTokens.Expression(currentAssignee.slice(),null)];
-				currentAssignee = [];
-				_hx_loop3: while(i + 1 < pre.length) {
-					var lookahead = pre[i + 1];
-					switch(lookahead._hx_index) {
-					case 0:
-						var _g2 = lookahead.line;
-						break _hx_loop3;
-					case 1:
-						var _g3 = lookahead.module;
-						break _hx_loop3;
-					case 2:
-						break _hx_loop3;
-					case 16:
-						if(lookahead.sign == "=") {
-							var assignee = currentAssignee.length == 1 ? currentAssignee[0] : little_parser_ParserTokens.Expression(currentAssignee.slice(),null);
-							assignees.push(assignee);
-							currentAssignee = [];
-						} else {
-							currentAssignee.push(lookahead);
-						}
-						break;
-					default:
-						currentAssignee.push(lookahead);
-					}
-					++i;
-				}
-				if(currentAssignee.length == 0) {
-					little_Little.runtime.callStack.unshift({ module : little_parser_Parser.get_module(), line : little_parser_Parser.get_line(), linePart : little_parser_Parser.linePart, token : little_interpreter_InterpTokens.Write(little_interpreter_Interpreter.convert.apply(null,assignees),little_interpreter_InterpTokens.Identifier(""))});
-					little_Little.runtime.throwError(little_interpreter_InterpTokens.ErrorMessage("Missing value after the last `=`"),"Parser");
-					return null;
-				}
-				var value1 = currentAssignee.length == 1 ? currentAssignee[0] : little_parser_ParserTokens.Expression(currentAssignee,null);
-				var fValue = little_parser_Parser.mergeWrites([value1]);
-				var v = fValue.length == 1 ? fValue[0] : little_parser_ParserTokens.Expression(fValue,null);
-				post.push(little_parser_ParserTokens.Write(assignees,v));
-				potentialAssignee = null;
-			} else {
-				if(potentialAssignee != null) {
-					post.push(potentialAssignee);
-				}
-				potentialAssignee = token;
-			}
-			break;
-		case 25:
-			var name5 = token.name;
-			var params2 = token.params;
-			if(potentialAssignee != null) {
-				post.push(potentialAssignee);
-			}
-			var result1 = new Array(params2.length);
-			var _g4 = 0;
-			var _g5 = params2.length;
-			while(_g4 < _g5) {
-				var i2 = _g4++;
-				result1[i2] = little_parser_Parser.mergeWrites([params2[i2]])[0];
-			}
-			potentialAssignee = little_parser_ParserTokens.Custom(name5,result1);
-			break;
-		default:
-			if(potentialAssignee != null) {
-				post.push(potentialAssignee);
-			}
-			potentialAssignee = token;
-		}
-		++i;
-	}
-	if(potentialAssignee != null) {
-		post.push(potentialAssignee);
-	}
-	post.shift();
-	little_parser_Parser.resetLines();
-	return post;
-};
-little_parser_Parser.mergeWrites2 = function(pre) {
-	if(pre == null) {
-		return null;
-	}
-	if(pre.length == 1 && pre[0] == null) {
-		return [null];
-	}
-	var post = [];
 	var i = 0;
 	while(i < pre.length) {
 		var token = pre[i];
@@ -11631,63 +11417,63 @@ little_parser_Parser.mergeWrites2 = function(pre) {
 			var name = token.name;
 			var type = token.type;
 			var doc = token.doc;
-			post.push(little_parser_ParserTokens.Variable(little_parser_Parser.mergeWrites2([name])[0],little_parser_Parser.mergeWrites2([type])[0],little_parser_Parser.mergeWrites2([doc])[0]));
+			post.push(little_parser_ParserTokens.Variable(little_parser_Parser.mergeWrites([name])[0],little_parser_Parser.mergeWrites([type])[0],little_parser_Parser.mergeWrites([doc])[0]));
 			break;
 		case 4:
 			var name1 = token.name;
 			var params = token.params;
 			var type1 = token.type;
 			var doc1 = token.doc;
-			post.push(little_parser_ParserTokens.Function(little_parser_Parser.mergeWrites2([name1])[0],little_parser_Parser.mergeWrites2([params])[0],little_parser_Parser.mergeWrites2([type1])[0],little_parser_Parser.mergeWrites2([doc1])[0]));
+			post.push(little_parser_ParserTokens.Function(little_parser_Parser.mergeWrites([name1])[0],little_parser_Parser.mergeWrites([params])[0],little_parser_Parser.mergeWrites([type1])[0],little_parser_Parser.mergeWrites([doc1])[0]));
 			break;
 		case 5:
 			var name2 = token.name;
 			var exp = token.exp;
 			var body = token.body;
-			post.push(little_parser_ParserTokens.ConditionCall(little_parser_Parser.mergeWrites2([name2])[0],little_parser_Parser.mergeWrites2([exp])[0],little_parser_Parser.mergeWrites2([body])[0]));
+			post.push(little_parser_ParserTokens.ConditionCall(little_parser_Parser.mergeWrites([name2])[0],little_parser_Parser.mergeWrites([exp])[0],little_parser_Parser.mergeWrites([body])[0]));
 			break;
 		case 6:
 			var name3 = token.name;
-			post.push(little_parser_ParserTokens.Read(little_parser_Parser.mergeWrites2([name3])[0]));
+			post.push(little_parser_ParserTokens.Read(little_parser_Parser.mergeWrites([name3])[0]));
 			break;
 		case 7:
 			var assignees = token.assignees;
 			var value = token.value;
-			post.push(little_parser_ParserTokens.Write(little_parser_Parser.mergeWrites2(assignees),little_parser_Parser.mergeWrites2([value])[0]));
+			post.push(little_parser_ParserTokens.Write(little_parser_Parser.mergeWrites(assignees),little_parser_Parser.mergeWrites([value])[0]));
 			break;
 		case 9:
 			var value1 = token.value;
 			var type2 = token.type;
-			post.push(little_parser_ParserTokens.TypeDeclaration(little_parser_Parser.mergeWrites2([value1])[0],little_parser_Parser.mergeWrites2([type2])[0]));
+			post.push(little_parser_ParserTokens.TypeDeclaration(little_parser_Parser.mergeWrites([value1])[0],little_parser_Parser.mergeWrites([type2])[0]));
 			break;
 		case 10:
 			var name4 = token.name;
 			var params1 = token.params;
-			post.push(little_parser_ParserTokens.FunctionCall(little_parser_Parser.mergeWrites2([name4])[0],little_parser_Parser.mergeWrites2([params1])[0]));
+			post.push(little_parser_ParserTokens.FunctionCall(little_parser_Parser.mergeWrites([name4])[0],little_parser_Parser.mergeWrites([params1])[0]));
 			break;
 		case 11:
 			var value2 = token.value;
 			var type3 = token.type;
-			post.push(little_parser_ParserTokens.Return(little_parser_Parser.mergeWrites2([value2])[0],little_parser_Parser.mergeWrites2([type3])[0]));
+			post.push(little_parser_ParserTokens.Return(little_parser_Parser.mergeWrites([value2])[0],little_parser_Parser.mergeWrites([type3])[0]));
 			break;
 		case 12:
 			var parts = token.parts;
 			var type4 = token.type;
-			post.push(little_parser_ParserTokens.Expression(little_parser_Parser.mergeWrites2(parts),little_parser_Parser.mergeWrites2([type4])[0]));
+			post.push(little_parser_ParserTokens.Expression(little_parser_Parser.mergeWrites(parts),little_parser_Parser.mergeWrites([type4])[0]));
 			break;
 		case 13:
 			var body1 = token.body;
 			var type5 = token.type;
-			post.push(little_parser_ParserTokens.Block(little_parser_Parser.mergeWrites2(body1),little_parser_Parser.mergeWrites2([type5])[0]));
+			post.push(little_parser_ParserTokens.Block(little_parser_Parser.mergeWrites(body1),little_parser_Parser.mergeWrites([type5])[0]));
 			break;
 		case 14:
 			var parts1 = token.parts;
-			post.push(little_parser_ParserTokens.PartArray(little_parser_Parser.mergeWrites2(parts1)));
+			post.push(little_parser_ParserTokens.PartArray(little_parser_Parser.mergeWrites(parts1)));
 			break;
 		case 15:
 			var name5 = token.name;
 			var property = token.property;
-			post.push(little_parser_ParserTokens.PropertyAccess(little_parser_Parser.mergeWrites2([name5])[0],little_parser_Parser.mergeWrites2([property])[0]));
+			post.push(little_parser_ParserTokens.PropertyAccess(little_parser_Parser.mergeWrites([name5])[0],little_parser_Parser.mergeWrites([property])[0]));
 			break;
 		case 16:
 			if(token.sign == "=") {
@@ -11715,7 +11501,7 @@ little_parser_Parser.mergeWrites2 = function(pre) {
 					little_Little.runtime.throwError(little_interpreter_InterpTokens.ErrorMessage("Missing value after the last `=`"),"Parser");
 					return null;
 				}
-				var lookahead = little_parser_Parser.mergeWrites2([pre[i + 1]])[0];
+				var lookahead = little_parser_Parser.mergeWrites([pre[i + 1]])[0];
 				var _this1 = [little_tools_ParserTokensSimple.WRITE].slice();
 				var result1 = new Array(_this1.length);
 				var _g2 = 0;
@@ -11744,7 +11530,7 @@ little_parser_Parser.mergeWrites2 = function(pre) {
 			var _g5 = params2.length;
 			while(_g4 < _g5) {
 				var i3 = _g4++;
-				result2[i3] = little_parser_Parser.mergeWrites2([params2[i3]])[0];
+				result2[i3] = little_parser_Parser.mergeWrites([params2[i3]])[0];
 			}
 			post.push(little_parser_ParserTokens.Custom(name6,result2));
 			break;

@@ -101,7 +101,7 @@ class Plugins {
                         } catch (e) {
                             return {
                                 objectValue: ErrorMessage('External Variable Error: ' + e.details()),
-                                objectAddress: memory.constants.ERROR
+                                objectAddress: memory.constants.ERROR_TOKEN
                             }
                         }
                         
@@ -169,7 +169,7 @@ class Plugins {
                             } catch (e) {
                                 return {
                                     objectValue: ErrorMessage('External Variable Error: ' + e.details()),
-                                    objectAddress: memory.constants.ERROR
+                                    objectAddress: memory.constants.ERROR_TOKEN
                                 }
                             }
                     });
@@ -239,7 +239,7 @@ class Plugins {
             } catch (e) {
                 {
                     objectValue: ErrorMessage('External Variable Error: ' + e.details()),
-                    objectAddress: memory.constants.ERROR,
+                    objectAddress: memory.constants.ERROR_TOKEN,
                     // objectDoc: ""
                 }
             }
@@ -367,7 +367,7 @@ class Plugins {
 			} catch (e) {
 				{
 					objectValue: ErrorMessage('External Function Error: ' + e.details()),
-					objectAddress: memory.constants.ERROR,
+					objectAddress: memory.constants.ERROR_TOKEN,
 					// objectDoc: ""
 				}
 			}
@@ -433,7 +433,7 @@ class Plugins {
 			} catch (e) {
 				{
 					objectValue: ErrorMessage('External Function Error: ' + e.details()),
-					objectAddress: memory.constants.ERROR,
+					objectAddress: memory.constants.ERROR_TOKEN,
 					// objectDoc: ""
 				}
 			}

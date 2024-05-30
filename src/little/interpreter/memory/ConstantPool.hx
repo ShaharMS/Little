@@ -27,7 +27,7 @@ class ConstantPool {
 	public var DYNAMIC:MemoryPointer = 14; // Dynamic type
 	public var TYPE:MemoryPointer = 15;
 	public var UNKNOWN:MemoryPointer = 16; // Unknown type, used for in-place type inference
-	public var ERROR:MemoryPointer = 17; // A thrown error has this pointer
+	public var ERROR_TOKEN:MemoryPointer = 17; // A thrown error has this pointer
 	public var EXTERN:MemoryPointer = 18; // An extern function pointer, uses a haxeExtern token and thus cant be stored normally.
 	public var EMPTY_STRING:MemoryPointer = 19; // size: 4 bytes
 
@@ -58,7 +58,7 @@ class ConstantPool {
 			case (_.equals(Identifier(Little.keywords.TYPE_DYNAMIC)) => true): return DYNAMIC;
 			case (_.equals(Identifier(Little.keywords.TYPE_MODULE)) => true): return TYPE;
 			case (_.equals(Identifier(Little.keywords.TYPE_UNKNOWN)) => true): return UNKNOWN;
-			case ErrorMessage(_): return ERROR;
+			case ErrorMessage(_): return ERROR_TOKEN;
 			case FunctionCode(p, _.parameter(0).filter(x -> x.is(HAXE_EXTERN)) => true): return EXTERN;
 			case _: throw new ArgumentException("token", '${token} does not exist in the constant pool');
 		}

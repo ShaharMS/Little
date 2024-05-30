@@ -11,17 +11,15 @@
 --hl clients/linux-hl-bytecode/Little.hl
 --cmd copy "C:\HaxeToolkit\linux\hl-latest-linux\hl" "clients\linux-hl-bytecode\Little"
 --cmd copy "C:\HaxeToolkit\linux\hl-latest-linux\libhl.so" "clients\linux-hl-bytecode\libhl.so"
---cmd rename "clients\linux-hl-bytecode\Little.hl" hlboot.dat
+--cmd move "clients\linux-hl-bytecode\Little.hl" "clients\linux-hl-bytecode\hlboot.dat"
 
---cmd copy ".\Logo.png" "clients\linux-hl-bytecode\Logo.png" 
+--cmd xcopy ".\Logo.png" "clients\linux-hl-bytecode\Logo.png" /q /y
 
---cmd echo -e "[Desktop Entry]\nType=Application\nName=Little\nExec=./Little\nIcon=./Logo.png\nTerminal=true" > Little.desktop
+--cmd echo -e "[Desktop Entry]\nType=Application\nName=Little\nExec=./Little\nIcon=./Logo.png\nTerminal=true" > clients/linux-hl-bytecode/Little.desktop
 
 --next
 
 --define linux
-
--D linux
 --cpp clients/linux-hxcpp 
 
 --cmd copy ".\Logo.png" "clients\linux-hxcpp\Logo.png" 
