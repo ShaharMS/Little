@@ -8,12 +8,19 @@
 
 --each
 
+# --hl clients/windows-hl-bytecode/Little.hl
+# --cmd copy "C:\HaxeToolkit\hl-1.14.0-win\hl.exe" "clients\windows-hl-bytecode\Little.exe"
+# --cmd rename clients\windows-hl-bytecode\Little.hl hlboot.dat
+# --cmd rcedit-x64.exe clients\windows-hl-bytecode\Little.exe --set-icon Logo.ico
+
+# --next
+
 --library hashlink
 --hl clients/windows-hl-c/Little.c
---cmd gcc -O3 -o clients/windows-hl-c/Little.exe -std=c11 -I out clients/windows-hl-c/Little.c -lhl -LC:\HaxeToolkit\hl-1.14.0-win\include
+--cmd gcc -O3 -o clients/windows-hl-c/Little.exe -std=c11 -I out clients/windows-hl-c/Little.c -lhl -IC:\HaxeToolkit\hl-1.14.0-win\include
 --cmd rcedit-x64.exe clients/windows-hashlink/Little.exe --set-icon Logo.ico
 
---next
+# --next
 
---cpp clients/windows-hxcpp
---cmd rcedit-x64.exe clients/windows-hxcpp/Little.exe --set-icon Logo.ico
+# --cpp clients/windows-hxcpp
+# --cmd rcedit-x64.exe clients/windows-hxcpp/Little.exe --set-icon Logo.ico
