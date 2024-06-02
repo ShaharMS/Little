@@ -13851,6 +13851,7 @@ little_tools_PrettyPrinter.stringifyParser = function(code,token) {
 	return little_tools_TextTools.replaceLast(StringTools.ltrim(s)," ","");
 };
 little_tools_PrettyPrinter.stringifyInterpreter = function(code,token) {
+	haxe_Log.trace("stringifyInterpreter",{ fileName : "src/little/tools/PrettyPrinter.hx", lineNumber : 405, className : "little.tools.PrettyPrinter", methodName : "stringifyInterpreter", customParams : [code,token]});
 	if(token == null && code == null || code != null && code.length == 1 && code[0] == null) {
 		return "";
 	}
@@ -13858,7 +13859,6 @@ little_tools_PrettyPrinter.stringifyInterpreter = function(code,token) {
 		code = [token];
 	}
 	var s = "";
-	var currentLine = -1;
 	var _g = 0;
 	while(_g < code.length) {
 		var token = code[_g];
@@ -13866,6 +13866,7 @@ little_tools_PrettyPrinter.stringifyInterpreter = function(code,token) {
 		switch(token._hx_index) {
 		case 0:
 			var line = token.line;
+			little_tools_PrettyPrinter._curLine = line;
 			s += "\n" + little_tools_PrettyPrinter.indent;
 			continue;
 		case 1:
@@ -13951,6 +13952,7 @@ little_tools_PrettyPrinter.stringifyInterpreter = function(code,token) {
 			if(result1.indexOf($hxEnums[token1.__enum__].__constructs__[token1._hx_index]._hx_name.toLowerCase()) != -1) {
 				body2.shift();
 			}
+			haxe_Log.trace(body2[0],{ fileName : "src/little/tools/PrettyPrinter.hx", lineNumber : 433, className : "little.tools.PrettyPrinter", methodName : "stringifyInterpreter"});
 			var token2 = body2[0];
 			var _this2 = [little_tools_InterpTokensSimple.SET_LINE].slice();
 			var result2 = new Array(_this2.length);
@@ -13961,7 +13963,7 @@ little_tools_PrettyPrinter.stringifyInterpreter = function(code,token) {
 				var x1 = _this2[i2];
 				result2[i2] = little_tools_TextTools.remove($hxEnums[x1.__enum__].__constructs__[x1._hx_index]._hx_name,"_").toLowerCase();
 			}
-			if(result2.indexOf($hxEnums[token2.__enum__].__constructs__[token2._hx_index]._hx_name.toLowerCase()) != -1) {
+			if(result2.indexOf($hxEnums[token2.__enum__].__constructs__[token2._hx_index]._hx_name.toLowerCase()) != -1 && Type.enumParameters(body2[0])[0] == little_tools_PrettyPrinter._curLine) {
 				body2.shift();
 			}
 			s += "{" + little_tools_PrettyPrinter.stringifyInterpreter(body2) + "} " + (type5 != null && little_tools_Extensions.asJoinedStringPath(type5) != little_Little.keywords.TYPE_UNKNOWN ? "" + little_Little.keywords.TYPE_DECL_OR_CAST + " " + little_tools_PrettyPrinter.stringifyInterpreter(null,type5) : "");
@@ -40096,6 +40098,7 @@ little_tools_PrepareRun.prepared = false;
 little_tools_PrettyPrinter.s = "";
 little_tools_PrettyPrinter.l = 0;
 little_tools_PrettyPrinter.indent = "";
+little_tools_PrettyPrinter._curLine = 0;
 vision_ds_Color.TRANSPARENT = 0;
 vision_ds_Color.WHITE = -1;
 vision_ds_Color.GRAY = -8355712;

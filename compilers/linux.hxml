@@ -16,12 +16,3 @@
 --cmd xcopy ".\Logo.png" "clients\linux-hl-bytecode\Logo.png" /q /y
 
 --cmd echo -e "[Desktop Entry]\nType=Application\nName=Little\nExec=./Little\nIcon=./Logo.png\nTerminal=true" > clients/linux-hl-bytecode/Little.desktop
-
---next
-
---define linux
---cpp clients/linux-hxcpp 
-
---cmd copy ".\Logo.png" "clients\linux-hxcpp\Logo.png" 
-
---cmd echo -e "[Desktop Entry]\nType=Application\nName=Little\nExec=./Little\nIcon=./Logo.png\nTerminal=true" > Little.desktop

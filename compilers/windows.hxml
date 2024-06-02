@@ -8,16 +8,16 @@
 
 --each
 
-# --hl clients/windows-hl-bytecode/Little.hl
-# --cmd copy "C:/HaxeToolkit/hl-1.14.0-win/hl.exe" "clients/windows-hl-bytecode/Little.exe"
-# --cmd rename clients/windows-hl-bytecode/Little.hl hlboot.dat
-# --cmd rcedit-x64.exe clients/windows-hl-bytecode/Little.exe --set-icon Logo.ico
+--hl clients/windows-hl-bytecode/Little.hl
+--cmd copy "C:/HaxeToolkit/hl-1.14.0-win/hl.exe" "clients/windows-hl-bytecode/Little.exe"
+--cmd rename clients/windows-hl-bytecode/Little.hl hlboot.dat
+--cmd rcedit-x64.exe clients/windows-hl-bytecode/Little.exe --set-icon Logo.ico
 
 # --next
 --dce full
 --debug
 --library hashlink
- -D HL_MINGW 
+--define HL_MINGW 
 --hl clients/windows-hl-c/Little.c
 --cmd cd clients
 --cmd gcc windows-hl-c/Little.c -o windows-hl-c/Little.exe -std=c11 C:/HaxeToolkit/hl-1.14.0-win/libhl.dll -I windows-hl-c -I C:/HaxeToolkit/hl-1.14.0-win/include C:/Windows/System32/dbghelp.dll -municode -Wimplicit-function-declaration
@@ -26,6 +26,6 @@
 
 # --next
 
-# --cpp clients/windows-hxcpp
-# --cmd rcedit-x64.exe clients/windows-hxcpp/Little.exe --set-icon Logo.ico
+--cpp clients/windows-hxcpp
+--cmd rcedit-x64.exe clients/windows-hxcpp/Little.exe --set-icon Logo.ico
 
