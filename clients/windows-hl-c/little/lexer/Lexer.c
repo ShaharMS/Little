@@ -43,10 +43,10 @@ hl__types__ArrayObj little_lexer_Lexer_separateBooleanIdentifiers(hl__types__Arr
 hl__types__ArrayObj little_lexer_Lexer_mergeOrSplitKnownSigns(hl__types__ArrayObj);
 #include <little/Little.h>
 #include <hl/types/ArrayDyn.h>
-extern hl_type t$_dyn;
 extern little__$Little g$_little_Little;
 hl__types__ArrayDyn Type_enumParameters(vdynamic*);
 extern hl_type t$String;
+extern hl_type t$_dyn;
 extern venum* g$a078821;
 hl__types__ArrayObj hl_types_ArrayObj_concat(hl__types__ArrayObj,hl__types__ArrayObj);
 hl__types__ArrayObj little_tools_TextTools_sortByLength(hl__types__ArrayObj);
@@ -347,19 +347,16 @@ hl__types__ArrayObj little_lexer_Lexer_separateBooleanIdentifiers(hl__types__Arr
 	label$3e05b2c_2_6:
 	if( r5 == NULL ) hl_null_access();
 	r7 = r5->length;
-	if( r4 >= r7 ) goto label$3e05b2c_2_55;
+	if( r4 >= r7 ) goto label$3e05b2c_2_52;
 	r7 = r5->length;
 	if( ((unsigned)r4) < ((unsigned)r7) ) goto label$3e05b2c_2_14;
 	r8 = NULL;
-	goto label$3e05b2c_2_20;
+	goto label$3e05b2c_2_17;
 	label$3e05b2c_2_14:
 	r2 = r5->array;
 	r9 = ((vdynamic**)(r2 + 1))[r4];
 	r8 = (venum*)r9;
-	r10 = (venum*)hl_dyn_castp(&r9,&t$_dyn,&t$little_lexer_LexerTokens);
-	if( r8 == r10 ) goto label$3e05b2c_2_20;
-	hl_assert();
-	label$3e05b2c_2_20:
+	label$3e05b2c_2_17:
 	++r4;
 	if( r1 == NULL ) hl_null_access();
 	r15 = (little__$Little)g$_little_Little;
@@ -369,7 +366,7 @@ hl__types__ArrayObj little_lexer_Lexer_separateBooleanIdentifiers(hl__types__Arr
 	r12 = hl_alloc_enum(&t$little_lexer_LexerTokens,0);
 	((little_lexer_LexerTokens_Identifier*)r12)->p0 = r13;
 	r11 = hl_type_enum_eq(((vdynamic*)r8),((vdynamic*)r12));
-	if( r11 ) goto label$3e05b2c_2_36;
+	if( r11 ) goto label$3e05b2c_2_33;
 	r15 = (little__$Little)g$_little_Little;
 	r14 = r15->keywords;
 	if( r14 == NULL ) hl_null_access();
@@ -377,8 +374,8 @@ hl__types__ArrayObj little_lexer_Lexer_separateBooleanIdentifiers(hl__types__Arr
 	r12 = hl_alloc_enum(&t$little_lexer_LexerTokens,0);
 	((little_lexer_LexerTokens_Identifier*)r12)->p0 = r13;
 	r11 = hl_type_enum_eq(((vdynamic*)r8),((vdynamic*)r12));
-	if( !r11 ) goto label$3e05b2c_2_43;
-	label$3e05b2c_2_36:
+	if( !r11 ) goto label$3e05b2c_2_40;
+	label$3e05b2c_2_33:
 	r16 = Type_enumParameters(((vdynamic*)r8));
 	if( r16 == NULL ) hl_null_access();
 	r6 = 0;
@@ -386,8 +383,8 @@ hl__types__ArrayObj little_lexer_Lexer_separateBooleanIdentifiers(hl__types__Arr
 	r13 = (String)hl_dyn_castp(&r9,&t$_dyn,&t$String);
 	r10 = hl_alloc_enum(&t$little_lexer_LexerTokens,3);
 	((little_lexer_LexerTokens_Boolean*)r10)->p0 = r13;
-	goto label$3e05b2c_2_53;
-	label$3e05b2c_2_43:
+	goto label$3e05b2c_2_50;
+	label$3e05b2c_2_40:
 	r15 = (little__$Little)g$_little_Little;
 	r14 = r15->keywords;
 	if( r14 == NULL ) hl_null_access();
@@ -395,15 +392,15 @@ hl__types__ArrayObj little_lexer_Lexer_separateBooleanIdentifiers(hl__types__Arr
 	r12 = hl_alloc_enum(&t$little_lexer_LexerTokens,0);
 	((little_lexer_LexerTokens_Identifier*)r12)->p0 = r13;
 	r11 = hl_type_enum_eq(((vdynamic*)r8),((vdynamic*)r12));
-	if( !r11 ) goto label$3e05b2c_2_52;
+	if( !r11 ) goto label$3e05b2c_2_49;
 	r10 = (venum*)g$a078821;
-	goto label$3e05b2c_2_53;
-	label$3e05b2c_2_52:
+	goto label$3e05b2c_2_50;
+	label$3e05b2c_2_49:
 	r10 = r8;
-	label$3e05b2c_2_53:
+	label$3e05b2c_2_50:
 	r6 = hl_types_ArrayObj_push(r1,((vdynamic*)r10));
 	goto label$3e05b2c_2_6;
-	label$3e05b2c_2_55:
+	label$3e05b2c_2_52:
 	return r1;
 }
 
@@ -426,23 +423,20 @@ hl__types__ArrayObj little_lexer_Lexer_mergeOrSplitKnownSigns(hl__types__ArrayOb
 	label$3e05b2c_3_5:
 	if( r0 == NULL ) hl_null_access();
 	r7 = r0->length;
-	if( r4 >= r7 ) goto label$3e05b2c_3_100;
+	if( r4 >= r7 ) goto label$3e05b2c_3_94;
 	r7 = r0->length;
 	if( ((unsigned)r4) < ((unsigned)r7) ) goto label$3e05b2c_3_13;
 	r9 = NULL;
-	goto label$3e05b2c_3_19;
+	goto label$3e05b2c_3_16;
 	label$3e05b2c_3_13:
 	r2 = r0->array;
 	r10 = ((vdynamic**)(r2 + 1))[r4];
 	r9 = (venum*)r10;
-	r11 = (venum*)hl_dyn_castp(&r10,&t$_dyn,&t$little_lexer_LexerTokens);
-	if( r9 == r11 ) goto label$3e05b2c_3_19;
-	hl_assert();
-	label$3e05b2c_3_19:
+	label$3e05b2c_3_16:
 	if( r9 == NULL ) hl_null_access();
 	r6 = HL__ENUM_INDEX__(r9);
 	r7 = 1;
-	if( r6 != r7 ) goto label$3e05b2c_3_96;
+	if( r6 != r7 ) goto label$3e05b2c_3_90;
 	r12 = ((little_lexer_LexerTokens_Sign*)r9)->p0;
 	r14 = (little__$Little)g$_little_Little;
 	r13 = r14->keywords;
@@ -464,33 +458,30 @@ hl__types__ArrayObj little_lexer_Lexer_mergeOrSplitKnownSigns(hl__types__ArrayOb
 	if( r8 == NULL ) hl_null_access();
 	hl_types_ArrayObj_reverse(r8);
 	r17 = false;
-	label$3e05b2c_3_44:
+	label$3e05b2c_3_41:
 	if( r12 == NULL ) hl_null_access();
 	r6 = r12->length;
 	r7 = 0;
-	if( r7 >= r6 ) goto label$3e05b2c_3_95;
+	if( r7 >= r6 ) goto label$3e05b2c_3_89;
 	r18 = false;
 	r17 = r18;
 	r6 = 0;
-	label$3e05b2c_3_52:
+	label$3e05b2c_3_49:
 	if( r8 == NULL ) hl_null_access();
 	r19 = r8->length;
-	if( r6 >= r19 ) goto label$3e05b2c_3_82;
+	if( r6 >= r19 ) goto label$3e05b2c_3_76;
 	r19 = r8->length;
-	if( ((unsigned)r6) < ((unsigned)r19) ) goto label$3e05b2c_3_60;
+	if( ((unsigned)r6) < ((unsigned)r19) ) goto label$3e05b2c_3_57;
 	r16 = NULL;
-	goto label$3e05b2c_3_66;
-	label$3e05b2c_3_60:
+	goto label$3e05b2c_3_60;
+	label$3e05b2c_3_57:
 	r2 = r8->array;
 	r10 = ((vdynamic**)(r2 + 1))[r6];
 	r16 = (String)r10;
-	r20 = (String)hl_dyn_castp(&r10,&t$_dyn,&t$String);
-	if( r16 == r20 || (r16 && r20 && String___compare(r16,(vdynamic*)r20) == 0) ) goto label$3e05b2c_3_66;
-	hl_assert();
-	label$3e05b2c_3_66:
+	label$3e05b2c_3_60:
 	++r6;
 	r18 = StringTools_startsWith(r12,r16);
-	if( !r18 ) goto label$3e05b2c_3_81;
+	if( !r18 ) goto label$3e05b2c_3_75;
 	if( r12 == NULL ) hl_null_access();
 	if( r16 == NULL ) hl_null_access();
 	r7 = r16->length;
@@ -503,13 +494,13 @@ hl__types__ArrayObj little_lexer_Lexer_mergeOrSplitKnownSigns(hl__types__ArrayOb
 	r7 = hl_types_ArrayObj_push(r1,((vdynamic*)r11));
 	r18 = true;
 	r17 = r18;
-	goto label$3e05b2c_3_82;
-	label$3e05b2c_3_81:
-	goto label$3e05b2c_3_52;
-	label$3e05b2c_3_82:
-	if( !r17 ) goto label$3e05b2c_3_84;
-	goto label$3e05b2c_3_44;
-	label$3e05b2c_3_84:
+	goto label$3e05b2c_3_76;
+	label$3e05b2c_3_75:
+	goto label$3e05b2c_3_49;
+	label$3e05b2c_3_76:
+	if( !r17 ) goto label$3e05b2c_3_78;
+	goto label$3e05b2c_3_41;
+	label$3e05b2c_3_78:
 	if( r1 == NULL ) hl_null_access();
 	if( r12 == NULL ) hl_null_access();
 	r6 = 0;
@@ -521,16 +512,16 @@ hl__types__ArrayObj little_lexer_Lexer_mergeOrSplitKnownSigns(hl__types__ArrayOb
 	r21 = NULL;
 	r16 = String_substring(r12,r6,r21);
 	r12 = r16;
-	goto label$3e05b2c_3_44;
-	label$3e05b2c_3_95:
-	goto label$3e05b2c_3_98;
-	label$3e05b2c_3_96:
+	goto label$3e05b2c_3_41;
+	label$3e05b2c_3_89:
+	goto label$3e05b2c_3_92;
+	label$3e05b2c_3_90:
 	if( r1 == NULL ) hl_null_access();
 	r6 = hl_types_ArrayObj_push(r1,((vdynamic*)r9));
-	label$3e05b2c_3_98:
+	label$3e05b2c_3_92:
 	++r4;
 	goto label$3e05b2c_3_5;
-	label$3e05b2c_3_100:
+	label$3e05b2c_3_94:
 	return r1;
 }
 

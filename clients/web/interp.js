@@ -11501,22 +11501,45 @@ little_parser_Parser.mergeWrites = function(pre) {
 					little_Little.runtime.throwError(little_interpreter_InterpTokens.ErrorMessage("Missing value after the last `=`"),"Parser");
 					return null;
 				}
-				var lookahead = little_parser_Parser.mergeWrites([pre[i + 1]])[0];
+				var value3 = [];
+				_hx_loop3: while(i + 1 < pre.length) {
+					var lookahead = pre[i + 1];
+					switch(lookahead._hx_index) {
+					case 0:
+						var _g2 = lookahead.line;
+						break _hx_loop3;
+					case 1:
+						var _g3 = lookahead.module;
+						break _hx_loop3;
+					case 2:
+						break _hx_loop3;
+					case 16:
+						if(lookahead.sign == "=") {
+							break _hx_loop3;
+						} else {
+							value3.push(lookahead);
+						}
+						break;
+					default:
+						value3.push(lookahead);
+					}
+					++i;
+				}
+				var token1 = value3.length == 1 ? little_parser_Parser.mergeWrites([value3[0]])[0] : little_parser_ParserTokens.Expression(little_parser_Parser.mergeWrites(value3),null);
 				var _this1 = [little_tools_ParserTokensSimple.WRITE].slice();
 				var result1 = new Array(_this1.length);
-				var _g2 = 0;
-				var _g3 = _this1.length;
-				while(_g2 < _g3) {
-					var i2 = _g2++;
+				var _g4 = 0;
+				var _g5 = _this1.length;
+				while(_g4 < _g5) {
+					var i2 = _g4++;
 					var x1 = _this1[i2];
 					result1[i2] = little_tools_TextTools.remove($hxEnums[x1.__enum__].__constructs__[x1._hx_index]._hx_name,"_").toLowerCase();
 				}
 				if(result1.indexOf($hxEnums[assignee.__enum__].__constructs__[assignee._hx_index]._hx_name.toLowerCase()) != -1) {
-					var previousAssignees = Type.enumParameters(assignee)[0];
-					previousAssignees.push(Type.enumParameters(assignee)[1]);
-					post.push(little_parser_ParserTokens.Write(previousAssignees,lookahead));
+					var assignees1 = Type.enumParameters(assignee)[0].push(Type.enumParameters(assignee)[1]);
+					post.push(little_parser_ParserTokens.Write(assignees1,token1));
 				} else {
-					post.push(little_parser_ParserTokens.Write([assignee],lookahead));
+					post.push(little_parser_ParserTokens.Write([assignee],token1));
 				}
 			} else {
 				post.push(token);
@@ -11526,10 +11549,10 @@ little_parser_Parser.mergeWrites = function(pre) {
 			var name6 = token.name;
 			var params2 = token.params;
 			var result2 = new Array(params2.length);
-			var _g4 = 0;
-			var _g5 = params2.length;
-			while(_g4 < _g5) {
-				var i3 = _g4++;
+			var _g6 = 0;
+			var _g7 = params2.length;
+			while(_g6 < _g7) {
+				var i3 = _g6++;
 				result2[i3] = little_parser_Parser.mergeWrites([params2[i3]])[0];
 			}
 			post.push(little_parser_ParserTokens.Custom(name6,result2));
@@ -13851,7 +13874,6 @@ little_tools_PrettyPrinter.stringifyParser = function(code,token) {
 	return little_tools_TextTools.replaceLast(StringTools.ltrim(s)," ","");
 };
 little_tools_PrettyPrinter.stringifyInterpreter = function(code,token) {
-	haxe_Log.trace("stringifyInterpreter",{ fileName : "src/little/tools/PrettyPrinter.hx", lineNumber : 405, className : "little.tools.PrettyPrinter", methodName : "stringifyInterpreter", customParams : [code,token]});
 	if(token == null && code == null || code != null && code.length == 1 && code[0] == null) {
 		return "";
 	}
@@ -13859,6 +13881,7 @@ little_tools_PrettyPrinter.stringifyInterpreter = function(code,token) {
 		code = [token];
 	}
 	var s = "";
+	var currentLine = -1;
 	var _g = 0;
 	while(_g < code.length) {
 		var token = code[_g];
@@ -13866,7 +13889,6 @@ little_tools_PrettyPrinter.stringifyInterpreter = function(code,token) {
 		switch(token._hx_index) {
 		case 0:
 			var line = token.line;
-			little_tools_PrettyPrinter._curLine = line;
 			s += "\n" + little_tools_PrettyPrinter.indent;
 			continue;
 		case 1:
@@ -13952,7 +13974,6 @@ little_tools_PrettyPrinter.stringifyInterpreter = function(code,token) {
 			if(result1.indexOf($hxEnums[token1.__enum__].__constructs__[token1._hx_index]._hx_name.toLowerCase()) != -1) {
 				body2.shift();
 			}
-			haxe_Log.trace(body2[0],{ fileName : "src/little/tools/PrettyPrinter.hx", lineNumber : 433, className : "little.tools.PrettyPrinter", methodName : "stringifyInterpreter"});
 			var token2 = body2[0];
 			var _this2 = [little_tools_InterpTokensSimple.SET_LINE].slice();
 			var result2 = new Array(_this2.length);
@@ -13963,7 +13984,7 @@ little_tools_PrettyPrinter.stringifyInterpreter = function(code,token) {
 				var x1 = _this2[i2];
 				result2[i2] = little_tools_TextTools.remove($hxEnums[x1.__enum__].__constructs__[x1._hx_index]._hx_name,"_").toLowerCase();
 			}
-			if(result2.indexOf($hxEnums[token2.__enum__].__constructs__[token2._hx_index]._hx_name.toLowerCase()) != -1 && Type.enumParameters(body2[0])[0] == little_tools_PrettyPrinter._curLine) {
+			if(result2.indexOf($hxEnums[token2.__enum__].__constructs__[token2._hx_index]._hx_name.toLowerCase()) != -1) {
 				body2.shift();
 			}
 			s += "{" + little_tools_PrettyPrinter.stringifyInterpreter(body2) + "} " + (type5 != null && little_tools_Extensions.asJoinedStringPath(type5) != little_Little.keywords.TYPE_UNKNOWN ? "" + little_Little.keywords.TYPE_DECL_OR_CAST + " " + little_tools_PrettyPrinter.stringifyInterpreter(null,type5) : "");
@@ -35697,6 +35718,20 @@ vision_ds_Image.removeView = function(this1) {
 	this1.b[vision_ds_Image.WIDTH_BYTES + vision_ds_Image.VIEW_XY_BYTES + vision_ds_Image.VIEW_WH_BYTES] = 0;
 	return this1;
 };
+vision_ds_Image.copyViewFrom = function(this1,from) {
+	var _g = from.getUInt16(vision_ds_Image.WIDTH_BYTES);
+	var _g1 = from.getUInt16(vision_ds_Image.WIDTH_BYTES + vision_ds_Image.DATA_GAP);
+	var _g2 = from.getUInt16(vision_ds_Image.WIDTH_BYTES + vision_ds_Image.VIEW_XY_BYTES);
+	var from1 = from.b;
+	var view = vision_ds_Image.WIDTH_BYTES + vision_ds_Image.VIEW_XY_BYTES + vision_ds_Image.VIEW_WH_BYTES;
+	var view1 = new vision_ds_ImageView(_g,_g1,_g2,from.getUInt16(vision_ds_Image.WIDTH_BYTES + vision_ds_Image.VIEW_XY_BYTES + vision_ds_Image.DATA_GAP),from1[view]);
+	this1.setUInt16(vision_ds_Image.WIDTH_BYTES,view1.x);
+	this1.setUInt16(vision_ds_Image.WIDTH_BYTES + vision_ds_Image.DATA_GAP,view1.y);
+	this1.setUInt16(vision_ds_Image.WIDTH_BYTES + vision_ds_Image.VIEW_XY_BYTES,view1.width);
+	this1.setUInt16(vision_ds_Image.WIDTH_BYTES + vision_ds_Image.VIEW_XY_BYTES + vision_ds_Image.DATA_GAP,view1.height);
+	this1.b[vision_ds_Image.WIDTH_BYTES + vision_ds_Image.VIEW_XY_BYTES + vision_ds_Image.VIEW_WH_BYTES] = view1.shape;
+	return this1;
+};
 vision_ds_Image.hasPixelInView = function(this1,x,y,v) {
 	if(!(this1.getUInt16(vision_ds_Image.WIDTH_BYTES) != 0 || this1.getUInt16(vision_ds_Image.WIDTH_BYTES + vision_ds_Image.DATA_GAP) != 0 || this1.getUInt16(vision_ds_Image.WIDTH_BYTES + vision_ds_Image.VIEW_XY_BYTES) != 0 || this1.getUInt16(vision_ds_Image.WIDTH_BYTES + vision_ds_Image.VIEW_XY_BYTES + vision_ds_Image.DATA_GAP) != 0 || this1.b[vision_ds_Image.WIDTH_BYTES + vision_ds_Image.VIEW_XY_BYTES + vision_ds_Image.VIEW_WH_BYTES] != 0) && v == null) {
 		if(x >= 0 && y >= 0 && x < this1.getUInt16(0)) {
@@ -38224,7 +38259,7 @@ var vision_exceptions_LibraryRequired = function(library,dependencies,classDotFi
 	if(fieldType == null) {
 		fieldType = "function";
 	}
-	vision_exceptions_VisionException.call(this,"The " + fieldType + " " + classDotField + " requires the " + library + " haxelib.\n\tMake sure " + (library + (dependencies.length > 0 ? " and it's dependencies are" : " is")) + " installed & included:\n\n" + vision_exceptions_LibraryRequired.getInclusionMethod([library].concat(dependencies)),"Missing Library Required");
+	vision_exceptions_VisionException.call(this,"The " + fieldType + " " + classDotField + " requires the `" + library + "` haxelib.\n\tMake sure " + (library + (dependencies.length > 0 ? " and it's dependencies are" : " is")) + " installed & included:\n\n" + vision_exceptions_LibraryRequired.getInclusionMethod([library].concat(dependencies)),"Missing Library Required");
 };
 $hxClasses["vision.exceptions.LibraryRequired"] = vision_exceptions_LibraryRequired;
 vision_exceptions_LibraryRequired.__name__ = "vision.exceptions.LibraryRequired";
@@ -40098,9 +40133,10 @@ little_tools_PrepareRun.prepared = false;
 little_tools_PrettyPrinter.s = "";
 little_tools_PrettyPrinter.l = 0;
 little_tools_PrettyPrinter.indent = "";
-little_tools_PrettyPrinter._curLine = 0;
 vision_ds_Color.TRANSPARENT = 0;
+vision_ds_Color.TRANSPARENT_COLOR = 0;
 vision_ds_Color.WHITE = -1;
+vision_ds_Color.OFFWHITE = -28;
 vision_ds_Color.GRAY = -8355712;
 vision_ds_Color.BLACK = -16777216;
 vision_ds_Color.GREEN = -16711936;
@@ -40110,6 +40146,7 @@ vision_ds_Color.RED = -65536;
 vision_ds_Color.PURPLE = -8388480;
 vision_ds_Color.BLUE = -16776961;
 vision_ds_Color.BROWN = -7650029;
+vision_ds_Color.SEPIA = -9420268;
 vision_ds_Color.PINK = -16181;
 vision_ds_Color.MAGENTA = -65281;
 vision_ds_Color.CYAN = -16711681;
@@ -40128,6 +40165,73 @@ vision_ds_Color.ONYX = -13289415;
 vision_ds_Color.JET = -13355980;
 vision_ds_Color.JET_BLACK = -15856112;
 vision_ds_Color.ROYAL_BLUE = -12490271;
+vision_ds_Color.CHARTREUSE = -8388864;
+vision_ds_Color.CERULEAN = -16745561;
+vision_ds_Color.PERIWINKLE = -3355393;
+vision_ds_Color.VERMILION = -1883596;
+vision_ds_Color.MAUVE = -2051841;
+vision_ds_Color.AZURE = -16744449;
+vision_ds_Color.TANGERINE = -883456;
+vision_ds_Color.INDIGO = -11861886;
+vision_ds_Color.MARIGOLD = -1400287;
+vision_ds_Color.COBALT = -16758869;
+vision_ds_Color.LAVENDER = -1644806;
+vision_ds_Color.TURQUOISE = -12525360;
+vision_ds_Color.OCHRE = -3377374;
+vision_ds_Color.AQUAMARINE = -8388652;
+vision_ds_Color.RUSSET = -8370661;
+vision_ds_Color.TOPAZ = -14212;
+vision_ds_Color.APRICOT = -274767;
+vision_ds_Color.AMETHYST = -6723892;
+vision_ds_Color.SAFFRON = -736208;
+vision_ds_Color.LILAC = -3628344;
+vision_ds_Color.CRIMSON = -2354116;
+vision_ds_Color.SLATE = -9404272;
+vision_ds_Color.JADE = -16734101;
+vision_ds_Color.CORAL = -32944;
+vision_ds_Color.BURGUNDY = -8388576;
+vision_ds_Color.SIENNA = -7852777;
+vision_ds_Color.IVORY = -16;
+vision_ds_Color.MULBERRY = -3847284;
+vision_ds_Color.SANDALWOOD = -5599889;
+vision_ds_Color.GARNET = -9226699;
+vision_ds_Color.PEWTER = -7624521;
+vision_ds_Color.CARNATION = -22839;
+vision_ds_Color.CITRINE = -1781750;
+vision_ds_Color.CELADON = -5447249;
+vision_ds_Color.HELIOTROPE = -2132993;
+vision_ds_Color.PUCE = -3372903;
+vision_ds_Color.CINNABAR = -1883596;
+vision_ds_Color.VIRIDIAN = -12549523;
+vision_ds_Color.ECRU = -4017536;
+vision_ds_Color.ALABASTER = -1185056;
+vision_ds_Color.SAPPHIRE = -15772998;
+vision_ds_Color.PEARL = -1384248;
+vision_ds_Color.SALMON = -360334;
+vision_ds_Color.UMBER = -10268345;
+vision_ds_Color.TURMERIC = -1781750;
+vision_ds_Color.MAHOGANY = -4177920;
+vision_ds_Color.PERSIMMON = -40121;
+vision_ds_Color.ROSEWOOD = -10158069;
+vision_ds_Color.CARAMEL = -10496;
+vision_ds_Color.DANDELION = -990928;
+vision_ds_Color.FERN = -9323400;
+vision_ds_Color.LAPIS = -14261860;
+vision_ds_Color.DENIM = -15376195;
+vision_ds_Color.SABLE = -7443077;
+vision_ds_Color.ORCHID = -2461482;
+vision_ds_Color.TAWNY = -3320064;
+vision_ds_Color.PINE = -16680593;
+vision_ds_Color.LEMON = -2304;
+vision_ds_Color.SCARLET = -56320;
+vision_ds_Color.TAUPE = -12043214;
+vision_ds_Color.CERISE = -2215581;
+vision_ds_Color.AMBER = -16640;
+vision_ds_Color.CINNAMON = -2987746;
+vision_ds_Color.SADDLE_BROWN = -7650029;
+vision_ds_Color.TOMATO = -40121;
+vision_ds_Color.CORNSILK = -9543;
+vision_ds_Color.VIOLET = -8453889;
 vision_ds_Color.COLOR_REGEX = new EReg("^(0x|#)(([A-F0-9]{2}){3,4})$","i");
 vision_ds_Image.OFFSET = 11;
 vision_ds_Image.WIDTH_BYTES = 2;

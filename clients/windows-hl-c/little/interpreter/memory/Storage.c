@@ -1583,7 +1583,7 @@ void little_interpreter_memory_Storage_setCodeBlock(little__interpreter__memory_
 venum* little_interpreter_memory_Storage_readCodeBlock(little__interpreter__memory__Storage r0,int r1) {
 	String r3;
 	hl__types__ArrayObj r2;
-	venum *r6, *r9;
+	venum *r6;
 	vdynamic *r7;
 	varray *r8;
 	int r4, r5;
@@ -1595,15 +1595,12 @@ venum* little_interpreter_memory_Storage_readCodeBlock(little__interpreter__memo
 	r5 = r2->length;
 	if( ((unsigned)r4) < ((unsigned)r5) ) goto label$4a464f8_24_9;
 	r6 = NULL;
-	goto label$4a464f8_24_15;
+	goto label$4a464f8_24_12;
 	label$4a464f8_24_9:
 	r8 = r2->array;
 	r7 = ((vdynamic**)(r8 + 1))[r4];
 	r6 = (venum*)r7;
-	r9 = (venum*)hl_dyn_castp(&r7,&t$_dyn,&t$little_interpreter_InterpTokens);
-	if( r6 == r9 ) goto label$4a464f8_24_15;
-	hl_assert();
-	label$4a464f8_24_15:
+	label$4a464f8_24_12:
 	return r6;
 }
 
@@ -1718,7 +1715,7 @@ void little_interpreter_memory_Storage_setCondition(little__interpreter__memory_
 venum* little_interpreter_memory_Storage_readCondition(little__interpreter__memory__Storage r0,int r1) {
 	String r3;
 	hl__types__ArrayObj r2;
-	venum *r6, *r9;
+	venum *r6;
 	vdynamic *r7;
 	varray *r8;
 	int r4, r5;
@@ -1730,15 +1727,12 @@ venum* little_interpreter_memory_Storage_readCondition(little__interpreter__memo
 	r5 = r2->length;
 	if( ((unsigned)r4) < ((unsigned)r5) ) goto label$4a464f8_27_9;
 	r6 = NULL;
-	goto label$4a464f8_27_15;
+	goto label$4a464f8_27_12;
 	label$4a464f8_27_9:
 	r8 = r2->array;
 	r7 = ((vdynamic**)(r8 + 1))[r4];
 	r6 = (venum*)r7;
-	r9 = (venum*)hl_dyn_castp(&r7,&t$_dyn,&t$little_interpreter_InterpTokens);
-	if( r6 == r9 ) goto label$4a464f8_27_15;
-	hl_assert();
-	label$4a464f8_27_15:
+	label$4a464f8_27_12:
 	return r6;
 }
 
@@ -1856,24 +1850,24 @@ int little_interpreter_memory_Storage_storeStatic(little__interpreter__memory__S
 }
 
 int little_interpreter_memory_Storage_storeObject(little__interpreter__memory__Storage r0,venum* r1) {
-	String r14, r15, r21, r35, r39;
-	little__$Little r29;
-	haxe__ds__StringMap r25, r26, r30;
-	vvirtual *r23, *r24, *r27, *r31, *r32, *r33, *r34, *r41, *r44;
+	String r13, r14, r20, r34, r38;
+	little__$Little r28;
+	haxe__ds__StringMap r24, r25, r29;
+	vvirtual *r22, *r23, *r26, *r30, *r31, *r32, *r33, *r40, *r43;
 	hl__types__ArrayObj r2, r7, r11;
-	little__interpreter__memory__Memory r19;
-	venum *r9, *r13, *r17, *r36, *r38;
+	little__interpreter__memory__Memory r18;
+	venum *r9, *r16, *r35, *r37;
 	hl_type *r4;
-	haxe__io__Bytes r45, r46, r47, r49, r50;
-	bool r16;
-	little__tools__BaseOrderedMap r37;
-	little__KeywordConfig r28;
-	double r43;
-	haxe__exceptions__ArgumentException r20;
-	haxe__Exception r22;
-	little__interpreter__memory__ConstantPool r18;
+	haxe__io__Bytes r44, r45, r46, r48, r49;
+	bool r15;
+	little__tools__BaseOrderedMap r36;
+	little__KeywordConfig r27;
+	double r42;
+	haxe__exceptions__ArgumentException r19;
+	haxe__Exception r21;
+	little__interpreter__memory__ConstantPool r17;
 	vdynamic *r12;
-	int r5, r8, r10, r40, r42, r48;
+	int r5, r8, r10, r39, r41, r47;
 	varray *r3;
 	r4 = &t$String;
 	r5 = 0;
@@ -1892,42 +1886,39 @@ int little_interpreter_memory_Storage_storeObject(little__interpreter__memory__S
 	label$4a464f8_32_14:
 	if( r7 == NULL ) hl_null_access();
 	r10 = r7->length;
-	if( r5 >= r10 ) goto label$4a464f8_32_37;
+	if( r5 >= r10 ) goto label$4a464f8_32_34;
 	r10 = r7->length;
 	if( ((unsigned)r5) < ((unsigned)r10) ) goto label$4a464f8_32_22;
 	r9 = NULL;
-	goto label$4a464f8_32_28;
+	goto label$4a464f8_32_25;
 	label$4a464f8_32_22:
 	r3 = r7->array;
 	r12 = ((vdynamic**)(r3 + 1))[r5];
 	r9 = (venum*)r12;
-	r13 = (venum*)hl_dyn_castp(&r12,&t$_dyn,&t$little_tools_InterpTokensSimple);
-	if( r9 == r13 ) goto label$4a464f8_32_28;
-	hl_assert();
-	label$4a464f8_32_28:
+	label$4a464f8_32_25:
 	++r5;
 	if( r2 == NULL ) hl_null_access();
-	r14 = Type_enumConstructor(((vdynamic*)r9));
-	r15 = (String)s$b14a7b8;
-	r14 = little_tools_TextTools_remove(r14,r15);
-	if( r14 == NULL ) hl_null_access();
-	r14 = String_toLowerCase(r14);
-	r8 = hl_types_ArrayObj_push(r2,((vdynamic*)r14));
+	r13 = Type_enumConstructor(((vdynamic*)r9));
+	r14 = (String)s$b14a7b8;
+	r13 = little_tools_TextTools_remove(r13,r14);
+	if( r13 == NULL ) hl_null_access();
+	r13 = String_toLowerCase(r13);
+	r8 = hl_types_ArrayObj_push(r2,((vdynamic*)r13));
 	goto label$4a464f8_32_14;
-	label$4a464f8_32_37:
+	label$4a464f8_32_34:
 	if( r2 == NULL ) hl_null_access();
-	r14 = Type_enumConstructor(((vdynamic*)r1));
-	if( r14 == NULL ) hl_null_access();
-	r14 = String_toLowerCase(r14);
-	r16 = hl_types_ArrayObj_contains(r2,((vdynamic*)r14));
-	if( !r16 ) goto label$4a464f8_32_49;
-	r19 = r0->parent;
-	if( r19 == NULL ) hl_null_access();
-	r18 = r19->constants;
+	r13 = Type_enumConstructor(((vdynamic*)r1));
+	if( r13 == NULL ) hl_null_access();
+	r13 = String_toLowerCase(r13);
+	r15 = hl_types_ArrayObj_contains(r2,((vdynamic*)r13));
+	if( !r15 ) goto label$4a464f8_32_46;
+	r18 = r0->parent;
 	if( r18 == NULL ) hl_null_access();
-	r5 = r18->_hx_NULL;
+	r17 = r18->constants;
+	if( r17 == NULL ) hl_null_access();
+	r5 = r17->_hx_NULL;
 	return r5;
-	label$4a464f8_32_49:
+	label$4a464f8_32_46:
 	r4 = &t$String;
 	r5 = 0;
 	r3 = hl_alloc_array(r4,r5);
@@ -1942,125 +1933,122 @@ int little_interpreter_memory_Storage_storeObject(little__interpreter__memory__S
 	r11 = hl_types_ArrayObj_alloc(r3);
 	if( r11 == NULL ) hl_null_access();
 	r11 = hl_types_ArrayObj_copy(r11);
-	label$4a464f8_32_63:
+	label$4a464f8_32_60:
 	if( r11 == NULL ) hl_null_access();
 	r10 = r11->length;
-	if( r5 >= r10 ) goto label$4a464f8_32_86;
+	if( r5 >= r10 ) goto label$4a464f8_32_80;
 	r10 = r11->length;
-	if( ((unsigned)r5) < ((unsigned)r10) ) goto label$4a464f8_32_71;
+	if( ((unsigned)r5) < ((unsigned)r10) ) goto label$4a464f8_32_68;
 	r9 = NULL;
-	goto label$4a464f8_32_77;
-	label$4a464f8_32_71:
+	goto label$4a464f8_32_71;
+	label$4a464f8_32_68:
 	r3 = r11->array;
 	r12 = ((vdynamic**)(r3 + 1))[r5];
 	r9 = (venum*)r12;
-	r13 = (venum*)hl_dyn_castp(&r12,&t$_dyn,&t$little_tools_InterpTokensSimple);
-	if( r9 == r13 ) goto label$4a464f8_32_77;
-	hl_assert();
-	label$4a464f8_32_77:
+	label$4a464f8_32_71:
 	++r5;
 	if( r7 == NULL ) hl_null_access();
-	r14 = Type_enumConstructor(((vdynamic*)r9));
-	r15 = (String)s$b14a7b8;
-	r14 = little_tools_TextTools_remove(r14,r15);
-	if( r14 == NULL ) hl_null_access();
-	r14 = String_toLowerCase(r14);
-	r8 = hl_types_ArrayObj_push(r7,((vdynamic*)r14));
-	goto label$4a464f8_32_63;
-	label$4a464f8_32_86:
+	r13 = Type_enumConstructor(((vdynamic*)r9));
+	r14 = (String)s$b14a7b8;
+	r13 = little_tools_TextTools_remove(r13,r14);
+	if( r13 == NULL ) hl_null_access();
+	r13 = String_toLowerCase(r13);
+	r8 = hl_types_ArrayObj_push(r7,((vdynamic*)r13));
+	goto label$4a464f8_32_60;
+	label$4a464f8_32_80:
 	if( r7 == NULL ) hl_null_access();
-	r14 = Type_enumConstructor(((vdynamic*)r1));
-	if( r14 == NULL ) hl_null_access();
-	r14 = String_toLowerCase(r14);
-	r16 = hl_types_ArrayObj_contains(r7,((vdynamic*)r14));
-	if( r16 ) goto label$4a464f8_32_112;
-	r20 = (haxe__exceptions__ArgumentException)hl_alloc_obj(&t$haxe_exceptions_ArgumentException);
-	r14 = (String)s$object;
-	r15 = (String)s$;
-	r21 = Std_string(((vdynamic*)r1));
-	r15 = String___add__(r15,r21);
-	r21 = (String)s$_is_not_a_dynamic_object;
-	r15 = String___add__(r15,r21);
-	r22 = NULL;
-	r23 = hl_alloc_virtual(&t$vrt_329ffa8);
-	r21 = (String)s$a142922;
-	if( hl_vfields(r23)[1] ) *(String*)(hl_vfields(r23)[1]) = (String)r21; else hl_dyn_setp(r23->value,37969014/*fileName*/,&t$String,r21);
+	r13 = Type_enumConstructor(((vdynamic*)r1));
+	if( r13 == NULL ) hl_null_access();
+	r13 = String_toLowerCase(r13);
+	r15 = hl_types_ArrayObj_contains(r7,((vdynamic*)r13));
+	if( r15 ) goto label$4a464f8_32_106;
+	r19 = (haxe__exceptions__ArgumentException)hl_alloc_obj(&t$haxe_exceptions_ArgumentException);
+	r13 = (String)s$object;
+	r14 = (String)s$;
+	r20 = Std_string(((vdynamic*)r1));
+	r14 = String___add__(r14,r20);
+	r20 = (String)s$_is_not_a_dynamic_object;
+	r14 = String___add__(r14,r20);
+	r21 = NULL;
+	r22 = hl_alloc_virtual(&t$vrt_329ffa8);
+	r20 = (String)s$a142922;
+	if( hl_vfields(r22)[1] ) *(String*)(hl_vfields(r22)[1]) = (String)r20; else hl_dyn_setp(r22->value,37969014/*fileName*/,&t$String,r20);
 	r5 = 751;
-	if( hl_vfields(r23)[2] ) *(int*)(hl_vfields(r23)[2]) = (int)r5; else hl_dyn_seti(r23->value,371360620/*lineNumber*/,&t$_i32,r5);
-	r21 = (String)s$951eba8;
-	if( hl_vfields(r23)[0] ) *(String*)(hl_vfields(r23)[0]) = (String)r21; else hl_dyn_setp(r23->value,-63073762/*className*/,&t$String,r21);
-	r21 = (String)s$storeObject;
-	if( hl_vfields(r23)[3] ) *(String*)(hl_vfields(r23)[3]) = (String)r21; else hl_dyn_setp(r23->value,302979532/*methodName*/,&t$String,r21);
-	r24 = hl_to_virtual(&t$vrt_eaa6a3b,(vdynamic*)r23);
-	haxe_exceptions_ArgumentException_new(r20,r14,r15,r22,r24);
-	hl_throw((vdynamic*)r20);
-	label$4a464f8_32_112:
+	if( hl_vfields(r22)[2] ) *(int*)(hl_vfields(r22)[2]) = (int)r5; else hl_dyn_seti(r22->value,371360620/*lineNumber*/,&t$_i32,r5);
+	r20 = (String)s$951eba8;
+	if( hl_vfields(r22)[0] ) *(String*)(hl_vfields(r22)[0]) = (String)r20; else hl_dyn_setp(r22->value,-63073762/*className*/,&t$String,r20);
+	r20 = (String)s$storeObject;
+	if( hl_vfields(r22)[3] ) *(String*)(hl_vfields(r22)[3]) = (String)r20; else hl_dyn_setp(r22->value,302979532/*methodName*/,&t$String,r20);
+	r23 = hl_to_virtual(&t$vrt_eaa6a3b,(vdynamic*)r22);
+	haxe_exceptions_ArgumentException_new(r19,r13,r14,r21,r23);
+	hl_throw((vdynamic*)r19);
+	label$4a464f8_32_106:
 	if( r1 == NULL ) hl_null_access();
 	r5 = HL__ENUM_INDEX__(r1);
 	r8 = 26;
-	if( r5 != r8 ) goto label$4a464f8_32_341;
-	r25 = ((little_interpreter_InterpTokens_Object*)r1)->p0;
-	r14 = ((little_interpreter_InterpTokens_Object*)r1)->p1;
+	if( r5 != r8 ) goto label$4a464f8_32_335;
+	r24 = ((little_interpreter_InterpTokens_Object*)r1)->p0;
+	r13 = ((little_interpreter_InterpTokens_Object*)r1)->p1;
 	r11 = (hl__types__ArrayObj)hl_alloc_obj(&t$hl_types_ArrayObj);
 	hl_types_ArrayObj_new(r11);
-	if( r25 == NULL ) hl_null_access();
-	r26 = haxe_ds_StringMap_copy(r25);
-	r27 = hl_alloc_virtual(&t$vrt_069b1ae);
-	r17 = hl_alloc_enum(&t$little_interpreter_InterpTokens,18);
-	((little_interpreter_InterpTokens_Characters*)r17)->p0 = r14;
-	if( hl_vfields(r27)[1] ) *(venum**)(hl_vfields(r27)[1]) = (venum*)r17; else hl_dyn_setp(r27->value,297304054/*value*/,&t$little_interpreter_InterpTokens,r17);
-	r15 = (String)s$The_type_of_this_object_as_a_;
-	r29 = (little__$Little)g$_little_Little;
-	r28 = r29->keywords;
-	if( r28 == NULL ) hl_null_access();
-	r21 = r28->TYPE_STRING;
-	r15 = String___add__(r15,r21);
-	r21 = (String)s$5058f1a;
-	r15 = String___add__(r15,r21);
-	if( hl_vfields(r27)[0] ) *(String*)(hl_vfields(r27)[0]) = (String)r15; else hl_dyn_setp(r27->value,23626436/*documentation*/,&t$String,r15);
-	if( r26 == NULL ) hl_null_access();
-	r29 = (little__$Little)g$_little_Little;
-	r28 = r29->keywords;
-	if( r28 == NULL ) hl_null_access();
-	r15 = r28->OBJECT_TYPE_PROPERTY_NAME;
-	haxe_ds_StringMap_set(r26,r15,((vdynamic*)r27));
-	if( r26 ) goto label$4a464f8_32_143;
-	r31 = NULL;
-	goto label$4a464f8_32_147;
-	label$4a464f8_32_143:
-	r31 = r26->f$1;
-	if( r31 ) goto label$4a464f8_32_147;
-	r31 = hl_to_virtual(&t$vrt_e3ef9ba,(vdynamic*)r26);
-	r26->f$1 = r31;
-	label$4a464f8_32_147:
-	r32 = r31;
-	if( r31 == NULL ) hl_null_access();
-	if( hl_vfields(r31)[0] ) r33 = ((vvirtual* (*)(vdynamic*))hl_vfields(r31)[0])(r31->value); else {
-		r33 = (vvirtual*)hl_dyn_call_obj(r31->value,&t$fun_eb2fdfb,117891838/*keys*/,NULL,NULL);
-	}
-	r34 = hl_to_virtual(&t$vrt_0a81a53,(vdynamic*)r33);
-	label$4a464f8_32_151:
-	if( r34 == NULL ) hl_null_access();
-	if( hl_vfields(r34)[0] ) r16 = ((bool (*)(vdynamic*))hl_vfields(r34)[0])(r34->value); else {
-		vdynamic ret;
-		hl_dyn_call_obj(r34->value,&t$fun_bf7849e,407283053/*hasNext*/,NULL,&ret);
-		r16 = (bool)ret.v.i;
-	}
-	if( !r16 ) goto label$4a464f8_32_292;
-	if( hl_vfields(r34)[1] ) r15 = ((String (*)(vdynamic*))hl_vfields(r34)[1])(r34->value); else {
-		r15 = (String)hl_dyn_call_obj(r34->value,&t$fun_820f49a,151160317/*next*/,NULL,NULL);
-	}
-	if( r32 == NULL ) hl_null_access();
-	if( hl_vfields(r32)[1] ) r12 = ((vdynamic* (*)(vdynamic*,String))hl_vfields(r32)[1])(r32->value,r15); else {
-		void *args[] = {r15};
-		r12 = (vdynamic*)hl_dyn_call_obj(r32->value,&t$fun_555f5cd,5144726/*get*/,args,NULL);
-	}
-	r27 = hl_to_virtual(&t$vrt_069b1ae,(vdynamic*)r12);
-	r5 = little_interpreter_memory_Storage_storeString(r0,r15);
+	if( r24 == NULL ) hl_null_access();
+	r25 = haxe_ds_StringMap_copy(r24);
+	r26 = hl_alloc_virtual(&t$vrt_069b1ae);
+	r16 = hl_alloc_enum(&t$little_interpreter_InterpTokens,18);
+	((little_interpreter_InterpTokens_Characters*)r16)->p0 = r13;
+	if( hl_vfields(r26)[1] ) *(venum**)(hl_vfields(r26)[1]) = (venum*)r16; else hl_dyn_setp(r26->value,297304054/*value*/,&t$little_interpreter_InterpTokens,r16);
+	r14 = (String)s$The_type_of_this_object_as_a_;
+	r28 = (little__$Little)g$_little_Little;
+	r27 = r28->keywords;
 	if( r27 == NULL ) hl_null_access();
-	r17 = hl_vfields(r27)[1] ? (*(venum**)(hl_vfields(r27)[1])) : (venum*)hl_dyn_getp(r27->value,297304054/*value*/,&t$little_interpreter_InterpTokens);
-	if( r17 == NULL ) hl_null_access();
-	r8 = HL__ENUM_INDEX__(r17);
+	r20 = r27->TYPE_STRING;
+	r14 = String___add__(r14,r20);
+	r20 = (String)s$5058f1a;
+	r14 = String___add__(r14,r20);
+	if( hl_vfields(r26)[0] ) *(String*)(hl_vfields(r26)[0]) = (String)r14; else hl_dyn_setp(r26->value,23626436/*documentation*/,&t$String,r14);
+	if( r25 == NULL ) hl_null_access();
+	r28 = (little__$Little)g$_little_Little;
+	r27 = r28->keywords;
+	if( r27 == NULL ) hl_null_access();
+	r14 = r27->OBJECT_TYPE_PROPERTY_NAME;
+	haxe_ds_StringMap_set(r25,r14,((vdynamic*)r26));
+	if( r25 ) goto label$4a464f8_32_137;
+	r30 = NULL;
+	goto label$4a464f8_32_141;
+	label$4a464f8_32_137:
+	r30 = r25->f$1;
+	if( r30 ) goto label$4a464f8_32_141;
+	r30 = hl_to_virtual(&t$vrt_e3ef9ba,(vdynamic*)r25);
+	r25->f$1 = r30;
+	label$4a464f8_32_141:
+	r31 = r30;
+	if( r30 == NULL ) hl_null_access();
+	if( hl_vfields(r30)[0] ) r32 = ((vvirtual* (*)(vdynamic*))hl_vfields(r30)[0])(r30->value); else {
+		r32 = (vvirtual*)hl_dyn_call_obj(r30->value,&t$fun_eb2fdfb,117891838/*keys*/,NULL,NULL);
+	}
+	r33 = hl_to_virtual(&t$vrt_0a81a53,(vdynamic*)r32);
+	label$4a464f8_32_145:
+	if( r33 == NULL ) hl_null_access();
+	if( hl_vfields(r33)[0] ) r15 = ((bool (*)(vdynamic*))hl_vfields(r33)[0])(r33->value); else {
+		vdynamic ret;
+		hl_dyn_call_obj(r33->value,&t$fun_bf7849e,407283053/*hasNext*/,NULL,&ret);
+		r15 = (bool)ret.v.i;
+	}
+	if( !r15 ) goto label$4a464f8_32_286;
+	if( hl_vfields(r33)[1] ) r14 = ((String (*)(vdynamic*))hl_vfields(r33)[1])(r33->value); else {
+		r14 = (String)hl_dyn_call_obj(r33->value,&t$fun_820f49a,151160317/*next*/,NULL,NULL);
+	}
+	if( r31 == NULL ) hl_null_access();
+	if( hl_vfields(r31)[1] ) r12 = ((vdynamic* (*)(vdynamic*,String))hl_vfields(r31)[1])(r31->value,r14); else {
+		void *args[] = {r14};
+		r12 = (vdynamic*)hl_dyn_call_obj(r31->value,&t$fun_555f5cd,5144726/*get*/,args,NULL);
+	}
+	r26 = hl_to_virtual(&t$vrt_069b1ae,(vdynamic*)r12);
+	r5 = little_interpreter_memory_Storage_storeString(r0,r14);
+	if( r26 == NULL ) hl_null_access();
+	r16 = hl_vfields(r26)[1] ? (*(venum**)(hl_vfields(r26)[1])) : (venum*)hl_dyn_getp(r26->value,297304054/*value*/,&t$little_interpreter_InterpTokens);
+	if( r16 == NULL ) hl_null_access();
+	r8 = HL__ENUM_INDEX__(r16);
 	switch(r8) {
 		default:
 		case 0:
@@ -2088,29 +2076,490 @@ int little_interpreter_memory_Storage_storeObject(little__interpreter__memory__S
 		case 23:
 		case 24:
 		case 25:
-			r36 = hl_vfields(r27)[1] ? (*(venum**)(hl_vfields(r27)[1])) : (venum*)hl_dyn_getp(r27->value,297304054/*value*/,&t$little_interpreter_InterpTokens);
-			r10 = little_interpreter_memory_Storage_storeStatic(r0,r36);
+			r35 = hl_vfields(r26)[1] ? (*(venum**)(hl_vfields(r26)[1])) : (venum*)hl_dyn_getp(r26->value,297304054/*value*/,&t$little_interpreter_InterpTokens);
+			r10 = little_interpreter_memory_Storage_storeStatic(r0,r35);
 			r8 = r10;
-			goto label$4a464f8_32_180;
+			goto label$4a464f8_32_174;
+		case 7:
+			r36 = ((little_interpreter_InterpTokens_FunctionCode*)r16)->p0;
+			r35 = ((little_interpreter_InterpTokens_FunctionCode*)r16)->p1;
+			r37 = hl_vfields(r26)[1] ? (*(venum**)(hl_vfields(r26)[1])) : (venum*)hl_dyn_getp(r26->value,297304054/*value*/,&t$little_interpreter_InterpTokens);
+			r10 = little_interpreter_memory_Storage_storeCodeBlock(r0,r37);
+			r8 = r10;
+			goto label$4a464f8_32_174;
+		case 26:
+			r29 = ((little_interpreter_InterpTokens_Object*)r16)->p0;
+			r34 = ((little_interpreter_InterpTokens_Object*)r16)->p1;
+			r35 = hl_vfields(r26)[1] ? (*(venum**)(hl_vfields(r26)[1])) : (venum*)hl_dyn_getp(r26->value,297304054/*value*/,&t$little_interpreter_InterpTokens);
+			r10 = little_interpreter_memory_Storage_storeObject(r0,r35);
+			r8 = r10;
+	}
+	label$4a464f8_32_174:
+	r35 = hl_vfields(r26)[1] ? (*(venum**)(hl_vfields(r26)[1])) : (venum*)hl_dyn_getp(r26->value,297304054/*value*/,&t$little_interpreter_InterpTokens);
+	if( r35 == NULL ) hl_null_access();
+	r10 = HL__ENUM_INDEX__(r35);
+	switch(r10) {
+		default:
+		case 0:
+		case 1:
+		case 2:
+		case 3:
+		case 4:
+		case 5:
+		case 6:
+		case 8:
+		case 9:
+		case 10:
+		case 11:
+		case 12:
+		case 13:
+		case 14:
+		case 15:
+		case 19:
+		case 21:
+		case 25:
+			r34 = (String)s$f50568c;
+			r38 = Std_string(((vdynamic*)r26));
+			r34 = String___add__(r34,r38);
+			r38 = (String)s$454edeb;
+			r34 = String___add__(r34,r38);
+			hl_throw((vdynamic*)r34);
+		case 7:
+			r36 = ((little_interpreter_InterpTokens_FunctionCode*)r35)->p0;
+			r37 = ((little_interpreter_InterpTokens_FunctionCode*)r35)->p1;
+			r18 = r0->parent;
+			if( r18 == NULL ) hl_null_access();
+			r28 = (little__$Little)g$_little_Little;
+			r27 = r28->keywords;
+			if( r27 == NULL ) hl_null_access();
+			r34 = r27->TYPE_FUNCTION;
+			r40 = little_interpreter_memory_Memory_getTypeInformation(r18,r34);
+			if( r40 == NULL ) hl_null_access();
+			r39 = hl_vfields(r40)[4] ? (*(int*)(hl_vfields(r40)[4])) : (int)hl_dyn_geti(r40->value,287424967/*pointer*/,&t$_i32);
+			r10 = r39;
+			goto label$4a464f8_32_275;
+		case 16:
+			r39 = ((little_interpreter_InterpTokens_Number*)r35)->p0;
+			r18 = r0->parent;
+			if( r18 == NULL ) hl_null_access();
+			r28 = (little__$Little)g$_little_Little;
+			r27 = r28->keywords;
+			if( r27 == NULL ) hl_null_access();
+			r34 = r27->TYPE_INT;
+			r40 = little_interpreter_memory_Memory_getTypeInformation(r18,r34);
+			if( r40 == NULL ) hl_null_access();
+			r41 = hl_vfields(r40)[4] ? (*(int*)(hl_vfields(r40)[4])) : (int)hl_dyn_geti(r40->value,287424967/*pointer*/,&t$_i32);
+			r10 = r41;
+			goto label$4a464f8_32_275;
+		case 17:
+			r42 = ((little_interpreter_InterpTokens_Decimal*)r35)->p0;
+			r18 = r0->parent;
+			if( r18 == NULL ) hl_null_access();
+			r28 = (little__$Little)g$_little_Little;
+			r27 = r28->keywords;
+			if( r27 == NULL ) hl_null_access();
+			r34 = r27->TYPE_FLOAT;
+			r40 = little_interpreter_memory_Memory_getTypeInformation(r18,r34);
+			if( r40 == NULL ) hl_null_access();
+			r39 = hl_vfields(r40)[4] ? (*(int*)(hl_vfields(r40)[4])) : (int)hl_dyn_geti(r40->value,287424967/*pointer*/,&t$_i32);
+			r10 = r39;
+			goto label$4a464f8_32_275;
+		case 18:
+			r34 = ((little_interpreter_InterpTokens_Characters*)r35)->p0;
+			r18 = r0->parent;
+			if( r18 == NULL ) hl_null_access();
+			r28 = (little__$Little)g$_little_Little;
+			r27 = r28->keywords;
+			if( r27 == NULL ) hl_null_access();
+			r38 = r27->TYPE_STRING;
+			r40 = little_interpreter_memory_Memory_getTypeInformation(r18,r38);
+			if( r40 == NULL ) hl_null_access();
+			r39 = hl_vfields(r40)[4] ? (*(int*)(hl_vfields(r40)[4])) : (int)hl_dyn_geti(r40->value,287424967/*pointer*/,&t$_i32);
+			r10 = r39;
+			goto label$4a464f8_32_275;
+		case 20:
+			r39 = ((little_interpreter_InterpTokens_ClassPointer*)r35)->p0;
+			r18 = r0->parent;
+			if( r18 == NULL ) hl_null_access();
+			r28 = (little__$Little)g$_little_Little;
+			r27 = r28->keywords;
+			if( r27 == NULL ) hl_null_access();
+			r34 = r27->TYPE_MODULE;
+			r40 = little_interpreter_memory_Memory_getTypeInformation(r18,r34);
+			if( r40 == NULL ) hl_null_access();
+			r41 = hl_vfields(r40)[4] ? (*(int*)(hl_vfields(r40)[4])) : (int)hl_dyn_geti(r40->value,287424967/*pointer*/,&t$_i32);
+			r10 = r41;
+			goto label$4a464f8_32_275;
+		case 22:
+			r18 = r0->parent;
+			if( r18 == NULL ) hl_null_access();
+			r28 = (little__$Little)g$_little_Little;
+			r27 = r28->keywords;
+			if( r27 == NULL ) hl_null_access();
+			r34 = r27->TYPE_DYNAMIC;
+			r40 = little_interpreter_memory_Memory_getTypeInformation(r18,r34);
+			if( r40 == NULL ) hl_null_access();
+			r39 = hl_vfields(r40)[4] ? (*(int*)(hl_vfields(r40)[4])) : (int)hl_dyn_geti(r40->value,287424967/*pointer*/,&t$_i32);
+			r10 = r39;
+			goto label$4a464f8_32_275;
+		case 23:
+		case 24:
+			r18 = r0->parent;
+			if( r18 == NULL ) hl_null_access();
+			r28 = (little__$Little)g$_little_Little;
+			r27 = r28->keywords;
+			if( r27 == NULL ) hl_null_access();
+			r34 = r27->TYPE_BOOLEAN;
+			r40 = little_interpreter_memory_Memory_getTypeInformation(r18,r34);
+			if( r40 == NULL ) hl_null_access();
+			r39 = hl_vfields(r40)[4] ? (*(int*)(hl_vfields(r40)[4])) : (int)hl_dyn_geti(r40->value,287424967/*pointer*/,&t$_i32);
+			r10 = r39;
+			goto label$4a464f8_32_275;
+		case 26:
+			r29 = ((little_interpreter_InterpTokens_Object*)r35)->p0;
+			r34 = ((little_interpreter_InterpTokens_Object*)r35)->p1;
+			r18 = r0->parent;
+			if( r18 == NULL ) hl_null_access();
+			r40 = little_interpreter_memory_Memory_getTypeInformation(r18,r34);
+			if( r40 == NULL ) hl_null_access();
+			r39 = hl_vfields(r40)[4] ? (*(int*)(hl_vfields(r40)[4])) : (int)hl_dyn_geti(r40->value,287424967/*pointer*/,&t$_i32);
+			r10 = r39;
+	}
+	label$4a464f8_32_275:
+	if( r11 == NULL ) hl_null_access();
+	r43 = hl_alloc_virtual(&t$vrt_23bdd2f);
+	if( hl_vfields(r43)[1] ) *(String*)(hl_vfields(r43)[1]) = (String)r14; else hl_dyn_setp(r43->value,5343647/*key*/,&t$String,r14);
+	if( hl_vfields(r43)[2] ) *(int*)(hl_vfields(r43)[2]) = (int)r5; else hl_dyn_seti(r43->value,-5677100/*keyPointer*/,&t$_i32,r5);
+	if( hl_vfields(r43)[4] ) *(int*)(hl_vfields(r43)[4]) = (int)r8; else hl_dyn_seti(r43->value,297304054/*value*/,&t$_i32,r8);
+	if( hl_vfields(r43)[3] ) *(int*)(hl_vfields(r43)[3]) = (int)r10; else hl_dyn_seti(r43->value,218690500/*type*/,&t$_i32,r10);
+	r34 = hl_vfields(r26)[0] ? (*(String*)(hl_vfields(r26)[0])) : (String)hl_dyn_getp(r26->value,23626436/*documentation*/,&t$String);
+	r39 = little_interpreter_memory_Storage_storeString(r0,r34);
+	if( hl_vfields(r43)[0] ) *(int*)(hl_vfields(r43)[0]) = (int)r39; else hl_dyn_seti(r43->value,4997752/*doc*/,&t$_i32,r39);
+	r39 = hl_types_ArrayObj_push(r11,((vdynamic*)r43));
+	goto label$4a464f8_32_145;
+	label$4a464f8_32_286:
+	r44 = little_interpreter_memory_HashTables_generateObjectHashTable(r11);
+	if( r44 == NULL ) hl_null_access();
+	r5 = r44->length;
+	r8 = 4;
+	r45 = haxe_io_Bytes_alloc(r8);
+	if( r45 == NULL ) hl_null_access();
+	r8 = 0;
+	r10 = 4;
+	r39 = 0;
+	haxe_io_Bytes_fill(r45,r8,r10,r39);
+	r8 = 0;
+	haxe_io_Bytes_setInt32(r45,r8,r5);
+	r8 = r44->length;
+	r8 = little_interpreter_memory_Storage_storeBytes(r0,r8,r44);
+	r10 = r44->length;
+	r39 = 4;
+	r46 = haxe_io_Bytes_alloc(r39);
+	if( r46 == NULL ) hl_null_access();
+	r39 = 0;
+	r41 = 4;
+	r47 = 0;
+	haxe_io_Bytes_fill(r46,r39,r41,r47);
+	r39 = 0;
+	haxe_io_Bytes_setInt32(r46,r39,r10);
+	r39 = 4;
+	r48 = haxe_io_Bytes_alloc(r39);
+	if( r48 == NULL ) hl_null_access();
+	r39 = 0;
+	r41 = 4;
+	r47 = 0;
+	haxe_io_Bytes_fill(r48,r39,r41,r47);
+	r39 = 0;
+	haxe_io_Bytes_setInt32(r48,r39,r8);
+	r39 = r46->length;
+	r41 = r48->length;
+	r39 = r39 + r41;
+	r49 = haxe_io_Bytes_alloc(r39);
+	if( r49 == NULL ) hl_null_access();
+	r39 = 0;
+	r41 = 0;
+	r47 = r46->length;
+	haxe_io_Bytes_blit(r49,r39,r46,r41,r47);
+	r39 = r46->length;
+	r41 = 0;
+	r47 = r48->length;
+	haxe_io_Bytes_blit(r49,r39,r48,r41,r47);
+	r39 = 8;
+	r39 = little_interpreter_memory_Storage_storeBytes(r0,r39,r49);
+	return r39;
+	label$4a464f8_32_335:
+	r19 = (haxe__exceptions__ArgumentException)hl_alloc_obj(&t$haxe_exceptions_ArgumentException);
+	r13 = (String)s$object;
+	r14 = (String)s$;
+	r20 = Std_string(((vdynamic*)r1));
+	r14 = String___add__(r14,r20);
+	r20 = (String)s$_must_be_an_Interpreter_Object_;
+	r14 = String___add__(r14,r20);
+	r21 = NULL;
+	r22 = hl_alloc_virtual(&t$vrt_329ffa8);
+	r20 = (String)s$a142922;
+	if( hl_vfields(r22)[1] ) *(String*)(hl_vfields(r22)[1]) = (String)r20; else hl_dyn_setp(r22->value,37969014/*fileName*/,&t$String,r20);
+	r5 = 801;
+	if( hl_vfields(r22)[2] ) *(int*)(hl_vfields(r22)[2]) = (int)r5; else hl_dyn_seti(r22->value,371360620/*lineNumber*/,&t$_i32,r5);
+	r20 = (String)s$951eba8;
+	if( hl_vfields(r22)[0] ) *(String*)(hl_vfields(r22)[0]) = (String)r20; else hl_dyn_setp(r22->value,-63073762/*className*/,&t$String,r20);
+	r20 = (String)s$storeObject;
+	if( hl_vfields(r22)[3] ) *(String*)(hl_vfields(r22)[3]) = (String)r20; else hl_dyn_setp(r22->value,302979532/*methodName*/,&t$String,r20);
+	r23 = hl_to_virtual(&t$vrt_eaa6a3b,(vdynamic*)r22);
+	haxe_exceptions_ArgumentException_new(r19,r13,r14,r21,r23);
+	hl_throw((vdynamic*)r19);
+}
+
+int little_interpreter_memory_Storage_setObject(little__interpreter__memory__Storage r0,int r1,venum* r2) {
+	String r14, r15, r21, r35, r39;
+	little__$Little r29;
+	haxe__ds__StringMap r25, r26, r30;
+	vvirtual *r23, *r24, *r27, *r31, *r32, *r33, *r34, *r41, *r44;
+	hl__types__ArrayObj r3, r8, r12;
+	little__interpreter__memory__Memory r19;
+	venum *r10, *r17, *r36, *r38;
+	hl_type *r5;
+	haxe__io__Bytes r45, r46, r47, r49, r50;
+	bool r16;
+	little__tools__BaseOrderedMap r37;
+	little__KeywordConfig r28;
+	double r43;
+	haxe__exceptions__ArgumentException r20;
+	haxe__Exception r22;
+	little__interpreter__memory__ConstantPool r18;
+	vdynamic *r13;
+	int r6, r9, r11, r40, r42, r48;
+	varray *r4;
+	r5 = &t$String;
+	r6 = 0;
+	r4 = hl_alloc_array(r5,r6);
+	r3 = hl_types_ArrayObj_alloc(r4);
+	r6 = 0;
+	r5 = &t$little_tools_InterpTokensSimple;
+	r9 = 1;
+	r4 = hl_alloc_array(r5,r9);
+	r10 = (venum*)g$683025e;
+	r9 = 0;
+	((venum**)(r4 + 1))[r9] = r10;
+	r8 = hl_types_ArrayObj_alloc(r4);
+	if( r8 == NULL ) hl_null_access();
+	r8 = hl_types_ArrayObj_copy(r8);
+	label$4a464f8_33_14:
+	if( r8 == NULL ) hl_null_access();
+	r11 = r8->length;
+	if( r6 >= r11 ) goto label$4a464f8_33_34;
+	r11 = r8->length;
+	if( ((unsigned)r6) < ((unsigned)r11) ) goto label$4a464f8_33_22;
+	r10 = NULL;
+	goto label$4a464f8_33_25;
+	label$4a464f8_33_22:
+	r4 = r8->array;
+	r13 = ((vdynamic**)(r4 + 1))[r6];
+	r10 = (venum*)r13;
+	label$4a464f8_33_25:
+	++r6;
+	if( r3 == NULL ) hl_null_access();
+	r14 = Type_enumConstructor(((vdynamic*)r10));
+	r15 = (String)s$b14a7b8;
+	r14 = little_tools_TextTools_remove(r14,r15);
+	if( r14 == NULL ) hl_null_access();
+	r14 = String_toLowerCase(r14);
+	r9 = hl_types_ArrayObj_push(r3,((vdynamic*)r14));
+	goto label$4a464f8_33_14;
+	label$4a464f8_33_34:
+	if( r3 == NULL ) hl_null_access();
+	r14 = Type_enumConstructor(((vdynamic*)r2));
+	if( r14 == NULL ) hl_null_access();
+	r14 = String_toLowerCase(r14);
+	r16 = hl_types_ArrayObj_contains(r3,((vdynamic*)r14));
+	if( !r16 ) goto label$4a464f8_33_46;
+	r19 = r0->parent;
+	if( r19 == NULL ) hl_null_access();
+	r18 = r19->constants;
+	if( r18 == NULL ) hl_null_access();
+	r6 = r18->_hx_NULL;
+	return r6;
+	label$4a464f8_33_46:
+	r5 = &t$String;
+	r6 = 0;
+	r4 = hl_alloc_array(r5,r6);
+	r8 = hl_types_ArrayObj_alloc(r4);
+	r6 = 0;
+	r5 = &t$little_tools_InterpTokensSimple;
+	r9 = 1;
+	r4 = hl_alloc_array(r5,r9);
+	r10 = (venum*)g$b162cae;
+	r9 = 0;
+	((venum**)(r4 + 1))[r9] = r10;
+	r12 = hl_types_ArrayObj_alloc(r4);
+	if( r12 == NULL ) hl_null_access();
+	r12 = hl_types_ArrayObj_copy(r12);
+	label$4a464f8_33_60:
+	if( r12 == NULL ) hl_null_access();
+	r11 = r12->length;
+	if( r6 >= r11 ) goto label$4a464f8_33_80;
+	r11 = r12->length;
+	if( ((unsigned)r6) < ((unsigned)r11) ) goto label$4a464f8_33_68;
+	r10 = NULL;
+	goto label$4a464f8_33_71;
+	label$4a464f8_33_68:
+	r4 = r12->array;
+	r13 = ((vdynamic**)(r4 + 1))[r6];
+	r10 = (venum*)r13;
+	label$4a464f8_33_71:
+	++r6;
+	if( r8 == NULL ) hl_null_access();
+	r14 = Type_enumConstructor(((vdynamic*)r10));
+	r15 = (String)s$b14a7b8;
+	r14 = little_tools_TextTools_remove(r14,r15);
+	if( r14 == NULL ) hl_null_access();
+	r14 = String_toLowerCase(r14);
+	r9 = hl_types_ArrayObj_push(r8,((vdynamic*)r14));
+	goto label$4a464f8_33_60;
+	label$4a464f8_33_80:
+	if( r8 == NULL ) hl_null_access();
+	r14 = Type_enumConstructor(((vdynamic*)r2));
+	if( r14 == NULL ) hl_null_access();
+	r14 = String_toLowerCase(r14);
+	r16 = hl_types_ArrayObj_contains(r8,((vdynamic*)r14));
+	if( r16 ) goto label$4a464f8_33_106;
+	r20 = (haxe__exceptions__ArgumentException)hl_alloc_obj(&t$haxe_exceptions_ArgumentException);
+	r14 = (String)s$object;
+	r15 = (String)s$;
+	r21 = Std_string(((vdynamic*)r2));
+	r15 = String___add__(r15,r21);
+	r21 = (String)s$_is_not_a_dynamic_object;
+	r15 = String___add__(r15,r21);
+	r22 = NULL;
+	r23 = hl_alloc_virtual(&t$vrt_329ffa8);
+	r21 = (String)s$a142922;
+	if( hl_vfields(r23)[1] ) *(String*)(hl_vfields(r23)[1]) = (String)r21; else hl_dyn_setp(r23->value,37969014/*fileName*/,&t$String,r21);
+	r6 = 819;
+	if( hl_vfields(r23)[2] ) *(int*)(hl_vfields(r23)[2]) = (int)r6; else hl_dyn_seti(r23->value,371360620/*lineNumber*/,&t$_i32,r6);
+	r21 = (String)s$951eba8;
+	if( hl_vfields(r23)[0] ) *(String*)(hl_vfields(r23)[0]) = (String)r21; else hl_dyn_setp(r23->value,-63073762/*className*/,&t$String,r21);
+	r21 = (String)s$setObject;
+	if( hl_vfields(r23)[3] ) *(String*)(hl_vfields(r23)[3]) = (String)r21; else hl_dyn_setp(r23->value,302979532/*methodName*/,&t$String,r21);
+	r24 = hl_to_virtual(&t$vrt_eaa6a3b,(vdynamic*)r23);
+	haxe_exceptions_ArgumentException_new(r20,r14,r15,r22,r24);
+	hl_throw((vdynamic*)r20);
+	label$4a464f8_33_106:
+	if( r2 == NULL ) hl_null_access();
+	r6 = HL__ENUM_INDEX__(r2);
+	r9 = 26;
+	if( r6 != r9 ) goto label$4a464f8_33_334;
+	r25 = ((little_interpreter_InterpTokens_Object*)r2)->p0;
+	r14 = ((little_interpreter_InterpTokens_Object*)r2)->p1;
+	r12 = (hl__types__ArrayObj)hl_alloc_obj(&t$hl_types_ArrayObj);
+	hl_types_ArrayObj_new(r12);
+	if( r25 == NULL ) hl_null_access();
+	r26 = haxe_ds_StringMap_copy(r25);
+	r27 = hl_alloc_virtual(&t$vrt_069b1ae);
+	r17 = hl_alloc_enum(&t$little_interpreter_InterpTokens,18);
+	((little_interpreter_InterpTokens_Characters*)r17)->p0 = r14;
+	if( hl_vfields(r27)[1] ) *(venum**)(hl_vfields(r27)[1]) = (venum*)r17; else hl_dyn_setp(r27->value,297304054/*value*/,&t$little_interpreter_InterpTokens,r17);
+	r15 = (String)s$The_type_of_this_object_as_a_;
+	r29 = (little__$Little)g$_little_Little;
+	r28 = r29->keywords;
+	if( r28 == NULL ) hl_null_access();
+	r21 = r28->TYPE_STRING;
+	r15 = String___add__(r15,r21);
+	r21 = (String)s$5058f1a;
+	r15 = String___add__(r15,r21);
+	if( hl_vfields(r27)[0] ) *(String*)(hl_vfields(r27)[0]) = (String)r15; else hl_dyn_setp(r27->value,23626436/*documentation*/,&t$String,r15);
+	if( r26 == NULL ) hl_null_access();
+	r29 = (little__$Little)g$_little_Little;
+	r28 = r29->keywords;
+	if( r28 == NULL ) hl_null_access();
+	r15 = r28->OBJECT_TYPE_PROPERTY_NAME;
+	haxe_ds_StringMap_set(r26,r15,((vdynamic*)r27));
+	if( r26 ) goto label$4a464f8_33_137;
+	r31 = NULL;
+	goto label$4a464f8_33_141;
+	label$4a464f8_33_137:
+	r31 = r26->f$1;
+	if( r31 ) goto label$4a464f8_33_141;
+	r31 = hl_to_virtual(&t$vrt_e3ef9ba,(vdynamic*)r26);
+	r26->f$1 = r31;
+	label$4a464f8_33_141:
+	r32 = r31;
+	if( r31 == NULL ) hl_null_access();
+	if( hl_vfields(r31)[0] ) r33 = ((vvirtual* (*)(vdynamic*))hl_vfields(r31)[0])(r31->value); else {
+		r33 = (vvirtual*)hl_dyn_call_obj(r31->value,&t$fun_eb2fdfb,117891838/*keys*/,NULL,NULL);
+	}
+	r34 = hl_to_virtual(&t$vrt_0a81a53,(vdynamic*)r33);
+	label$4a464f8_33_145:
+	if( r34 == NULL ) hl_null_access();
+	if( hl_vfields(r34)[0] ) r16 = ((bool (*)(vdynamic*))hl_vfields(r34)[0])(r34->value); else {
+		vdynamic ret;
+		hl_dyn_call_obj(r34->value,&t$fun_bf7849e,407283053/*hasNext*/,NULL,&ret);
+		r16 = (bool)ret.v.i;
+	}
+	if( !r16 ) goto label$4a464f8_33_286;
+	if( hl_vfields(r34)[1] ) r15 = ((String (*)(vdynamic*))hl_vfields(r34)[1])(r34->value); else {
+		r15 = (String)hl_dyn_call_obj(r34->value,&t$fun_820f49a,151160317/*next*/,NULL,NULL);
+	}
+	if( r32 == NULL ) hl_null_access();
+	if( hl_vfields(r32)[1] ) r13 = ((vdynamic* (*)(vdynamic*,String))hl_vfields(r32)[1])(r32->value,r15); else {
+		void *args[] = {r15};
+		r13 = (vdynamic*)hl_dyn_call_obj(r32->value,&t$fun_555f5cd,5144726/*get*/,args,NULL);
+	}
+	r27 = hl_to_virtual(&t$vrt_069b1ae,(vdynamic*)r13);
+	r6 = little_interpreter_memory_Storage_storeString(r0,r15);
+	if( r27 == NULL ) hl_null_access();
+	r17 = hl_vfields(r27)[1] ? (*(venum**)(hl_vfields(r27)[1])) : (venum*)hl_dyn_getp(r27->value,297304054/*value*/,&t$little_interpreter_InterpTokens);
+	if( r17 == NULL ) hl_null_access();
+	r9 = HL__ENUM_INDEX__(r17);
+	switch(r9) {
+		default:
+		case 0:
+		case 1:
+		case 2:
+		case 3:
+		case 4:
+		case 5:
+		case 6:
+		case 8:
+		case 9:
+		case 10:
+		case 11:
+		case 12:
+		case 13:
+		case 14:
+		case 15:
+		case 16:
+		case 17:
+		case 18:
+		case 19:
+		case 20:
+		case 21:
+		case 22:
+		case 23:
+		case 24:
+		case 25:
+			r36 = hl_vfields(r27)[1] ? (*(venum**)(hl_vfields(r27)[1])) : (venum*)hl_dyn_getp(r27->value,297304054/*value*/,&t$little_interpreter_InterpTokens);
+			r11 = little_interpreter_memory_Storage_storeStatic(r0,r36);
+			r9 = r11;
+			goto label$4a464f8_33_174;
 		case 7:
 			r37 = ((little_interpreter_InterpTokens_FunctionCode*)r17)->p0;
 			r36 = ((little_interpreter_InterpTokens_FunctionCode*)r17)->p1;
 			r38 = hl_vfields(r27)[1] ? (*(venum**)(hl_vfields(r27)[1])) : (venum*)hl_dyn_getp(r27->value,297304054/*value*/,&t$little_interpreter_InterpTokens);
-			r10 = little_interpreter_memory_Storage_storeCodeBlock(r0,r38);
-			r8 = r10;
-			goto label$4a464f8_32_180;
+			r11 = little_interpreter_memory_Storage_storeCodeBlock(r0,r38);
+			r9 = r11;
+			goto label$4a464f8_33_174;
 		case 26:
 			r30 = ((little_interpreter_InterpTokens_Object*)r17)->p0;
 			r35 = ((little_interpreter_InterpTokens_Object*)r17)->p1;
 			r36 = hl_vfields(r27)[1] ? (*(venum**)(hl_vfields(r27)[1])) : (venum*)hl_dyn_getp(r27->value,297304054/*value*/,&t$little_interpreter_InterpTokens);
-			r10 = little_interpreter_memory_Storage_storeObject(r0,r36);
-			r8 = r10;
+			r11 = little_interpreter_memory_Storage_storeObject(r0,r36);
+			r9 = r11;
 	}
-	label$4a464f8_32_180:
+	label$4a464f8_33_174:
 	r36 = hl_vfields(r27)[1] ? (*(venum**)(hl_vfields(r27)[1])) : (venum*)hl_dyn_getp(r27->value,297304054/*value*/,&t$little_interpreter_InterpTokens);
 	if( r36 == NULL ) hl_null_access();
-	r10 = HL__ENUM_INDEX__(r36);
-	switch(r10) {
+	r11 = HL__ENUM_INDEX__(r36);
+	switch(r11) {
 		default:
 		case 0:
 		case 1:
@@ -2148,8 +2597,8 @@ int little_interpreter_memory_Storage_storeObject(little__interpreter__memory__S
 			r41 = little_interpreter_memory_Memory_getTypeInformation(r19,r35);
 			if( r41 == NULL ) hl_null_access();
 			r40 = hl_vfields(r41)[4] ? (*(int*)(hl_vfields(r41)[4])) : (int)hl_dyn_geti(r41->value,287424967/*pointer*/,&t$_i32);
-			r10 = r40;
-			goto label$4a464f8_32_281;
+			r11 = r40;
+			goto label$4a464f8_33_275;
 		case 16:
 			r40 = ((little_interpreter_InterpTokens_Number*)r36)->p0;
 			r19 = r0->parent;
@@ -2161,8 +2610,8 @@ int little_interpreter_memory_Storage_storeObject(little__interpreter__memory__S
 			r41 = little_interpreter_memory_Memory_getTypeInformation(r19,r35);
 			if( r41 == NULL ) hl_null_access();
 			r42 = hl_vfields(r41)[4] ? (*(int*)(hl_vfields(r41)[4])) : (int)hl_dyn_geti(r41->value,287424967/*pointer*/,&t$_i32);
-			r10 = r42;
-			goto label$4a464f8_32_281;
+			r11 = r42;
+			goto label$4a464f8_33_275;
 		case 17:
 			r43 = ((little_interpreter_InterpTokens_Decimal*)r36)->p0;
 			r19 = r0->parent;
@@ -2174,8 +2623,8 @@ int little_interpreter_memory_Storage_storeObject(little__interpreter__memory__S
 			r41 = little_interpreter_memory_Memory_getTypeInformation(r19,r35);
 			if( r41 == NULL ) hl_null_access();
 			r40 = hl_vfields(r41)[4] ? (*(int*)(hl_vfields(r41)[4])) : (int)hl_dyn_geti(r41->value,287424967/*pointer*/,&t$_i32);
-			r10 = r40;
-			goto label$4a464f8_32_281;
+			r11 = r40;
+			goto label$4a464f8_33_275;
 		case 18:
 			r35 = ((little_interpreter_InterpTokens_Characters*)r36)->p0;
 			r19 = r0->parent;
@@ -2187,8 +2636,8 @@ int little_interpreter_memory_Storage_storeObject(little__interpreter__memory__S
 			r41 = little_interpreter_memory_Memory_getTypeInformation(r19,r39);
 			if( r41 == NULL ) hl_null_access();
 			r40 = hl_vfields(r41)[4] ? (*(int*)(hl_vfields(r41)[4])) : (int)hl_dyn_geti(r41->value,287424967/*pointer*/,&t$_i32);
-			r10 = r40;
-			goto label$4a464f8_32_281;
+			r11 = r40;
+			goto label$4a464f8_33_275;
 		case 20:
 			r40 = ((little_interpreter_InterpTokens_ClassPointer*)r36)->p0;
 			r19 = r0->parent;
@@ -2200,8 +2649,8 @@ int little_interpreter_memory_Storage_storeObject(little__interpreter__memory__S
 			r41 = little_interpreter_memory_Memory_getTypeInformation(r19,r35);
 			if( r41 == NULL ) hl_null_access();
 			r42 = hl_vfields(r41)[4] ? (*(int*)(hl_vfields(r41)[4])) : (int)hl_dyn_geti(r41->value,287424967/*pointer*/,&t$_i32);
-			r10 = r42;
-			goto label$4a464f8_32_281;
+			r11 = r42;
+			goto label$4a464f8_33_275;
 		case 22:
 			r19 = r0->parent;
 			if( r19 == NULL ) hl_null_access();
@@ -2212,8 +2661,8 @@ int little_interpreter_memory_Storage_storeObject(little__interpreter__memory__S
 			r41 = little_interpreter_memory_Memory_getTypeInformation(r19,r35);
 			if( r41 == NULL ) hl_null_access();
 			r40 = hl_vfields(r41)[4] ? (*(int*)(hl_vfields(r41)[4])) : (int)hl_dyn_geti(r41->value,287424967/*pointer*/,&t$_i32);
-			r10 = r40;
-			goto label$4a464f8_32_281;
+			r11 = r40;
+			goto label$4a464f8_33_275;
 		case 23:
 		case 24:
 			r19 = r0->parent;
@@ -2225,8 +2674,8 @@ int little_interpreter_memory_Storage_storeObject(little__interpreter__memory__S
 			r41 = little_interpreter_memory_Memory_getTypeInformation(r19,r35);
 			if( r41 == NULL ) hl_null_access();
 			r40 = hl_vfields(r41)[4] ? (*(int*)(hl_vfields(r41)[4])) : (int)hl_dyn_geti(r41->value,287424967/*pointer*/,&t$_i32);
-			r10 = r40;
-			goto label$4a464f8_32_281;
+			r11 = r40;
+			goto label$4a464f8_33_275;
 		case 26:
 			r30 = ((little_interpreter_InterpTokens_Object*)r36)->p0;
 			r35 = ((little_interpreter_InterpTokens_Object*)r36)->p1;
@@ -2235,36 +2684,36 @@ int little_interpreter_memory_Storage_storeObject(little__interpreter__memory__S
 			r41 = little_interpreter_memory_Memory_getTypeInformation(r19,r35);
 			if( r41 == NULL ) hl_null_access();
 			r40 = hl_vfields(r41)[4] ? (*(int*)(hl_vfields(r41)[4])) : (int)hl_dyn_geti(r41->value,287424967/*pointer*/,&t$_i32);
-			r10 = r40;
+			r11 = r40;
 	}
-	label$4a464f8_32_281:
-	if( r11 == NULL ) hl_null_access();
+	label$4a464f8_33_275:
+	if( r12 == NULL ) hl_null_access();
 	r44 = hl_alloc_virtual(&t$vrt_23bdd2f);
 	if( hl_vfields(r44)[1] ) *(String*)(hl_vfields(r44)[1]) = (String)r15; else hl_dyn_setp(r44->value,5343647/*key*/,&t$String,r15);
-	if( hl_vfields(r44)[2] ) *(int*)(hl_vfields(r44)[2]) = (int)r5; else hl_dyn_seti(r44->value,-5677100/*keyPointer*/,&t$_i32,r5);
-	if( hl_vfields(r44)[4] ) *(int*)(hl_vfields(r44)[4]) = (int)r8; else hl_dyn_seti(r44->value,297304054/*value*/,&t$_i32,r8);
-	if( hl_vfields(r44)[3] ) *(int*)(hl_vfields(r44)[3]) = (int)r10; else hl_dyn_seti(r44->value,218690500/*type*/,&t$_i32,r10);
+	if( hl_vfields(r44)[2] ) *(int*)(hl_vfields(r44)[2]) = (int)r6; else hl_dyn_seti(r44->value,-5677100/*keyPointer*/,&t$_i32,r6);
+	if( hl_vfields(r44)[4] ) *(int*)(hl_vfields(r44)[4]) = (int)r9; else hl_dyn_seti(r44->value,297304054/*value*/,&t$_i32,r9);
+	if( hl_vfields(r44)[3] ) *(int*)(hl_vfields(r44)[3]) = (int)r11; else hl_dyn_seti(r44->value,218690500/*type*/,&t$_i32,r11);
 	r35 = hl_vfields(r27)[0] ? (*(String*)(hl_vfields(r27)[0])) : (String)hl_dyn_getp(r27->value,23626436/*documentation*/,&t$String);
 	r40 = little_interpreter_memory_Storage_storeString(r0,r35);
 	if( hl_vfields(r44)[0] ) *(int*)(hl_vfields(r44)[0]) = (int)r40; else hl_dyn_seti(r44->value,4997752/*doc*/,&t$_i32,r40);
-	r40 = hl_types_ArrayObj_push(r11,((vdynamic*)r44));
-	goto label$4a464f8_32_151;
-	label$4a464f8_32_292:
-	r45 = little_interpreter_memory_HashTables_generateObjectHashTable(r11);
+	r40 = hl_types_ArrayObj_push(r12,((vdynamic*)r44));
+	goto label$4a464f8_33_145;
+	label$4a464f8_33_286:
+	r45 = little_interpreter_memory_HashTables_generateObjectHashTable(r12);
 	if( r45 == NULL ) hl_null_access();
-	r5 = r45->length;
-	r8 = 4;
-	r46 = haxe_io_Bytes_alloc(r8);
+	r6 = r45->length;
+	r9 = 4;
+	r46 = haxe_io_Bytes_alloc(r9);
 	if( r46 == NULL ) hl_null_access();
-	r8 = 0;
-	r10 = 4;
+	r9 = 0;
+	r11 = 4;
 	r40 = 0;
-	haxe_io_Bytes_fill(r46,r8,r10,r40);
-	r8 = 0;
-	haxe_io_Bytes_setInt32(r46,r8,r5);
-	r8 = r45->length;
-	r8 = little_interpreter_memory_Storage_storeBytes(r0,r8,r45);
-	r10 = r45->length;
+	haxe_io_Bytes_fill(r46,r9,r11,r40);
+	r9 = 0;
+	haxe_io_Bytes_setInt32(r46,r9,r6);
+	r9 = r45->length;
+	r9 = little_interpreter_memory_Storage_storeBytes(r0,r9,r45);
+	r11 = r45->length;
 	r40 = 4;
 	r47 = haxe_io_Bytes_alloc(r40);
 	if( r47 == NULL ) hl_null_access();
@@ -2273,7 +2722,7 @@ int little_interpreter_memory_Storage_storeObject(little__interpreter__memory__S
 	r48 = 0;
 	haxe_io_Bytes_fill(r47,r40,r42,r48);
 	r40 = 0;
-	haxe_io_Bytes_setInt32(r47,r40,r10);
+	haxe_io_Bytes_setInt32(r47,r40,r11);
 	r40 = 4;
 	r49 = haxe_io_Bytes_alloc(r40);
 	if( r49 == NULL ) hl_null_access();
@@ -2282,7 +2731,7 @@ int little_interpreter_memory_Storage_storeObject(little__interpreter__memory__S
 	r48 = 0;
 	haxe_io_Bytes_fill(r49,r40,r42,r48);
 	r40 = 0;
-	haxe_io_Bytes_setInt32(r49,r40,r8);
+	haxe_io_Bytes_setInt32(r49,r40,r9);
 	r40 = r47->length;
 	r42 = r49->length;
 	r40 = r40 + r42;
@@ -2296,14 +2745,13 @@ int little_interpreter_memory_Storage_storeObject(little__interpreter__memory__S
 	r42 = 0;
 	r48 = r49->length;
 	haxe_io_Bytes_blit(r50,r40,r49,r42,r48);
-	r40 = 8;
-	r40 = little_interpreter_memory_Storage_storeBytes(r0,r40,r50);
-	return r40;
-	label$4a464f8_32_341:
+	little_interpreter_memory_Storage_setBytes(r0,r1,r50);
+	goto label$4a464f8_33_354;
+	label$4a464f8_33_334:
 	r20 = (haxe__exceptions__ArgumentException)hl_alloc_obj(&t$haxe_exceptions_ArgumentException);
 	r14 = (String)s$object;
 	r15 = (String)s$;
-	r21 = Std_string(((vdynamic*)r1));
+	r21 = Std_string(((vdynamic*)r2));
 	r15 = String___add__(r15,r21);
 	r21 = (String)s$_must_be_an_Interpreter_Object_;
 	r15 = String___add__(r15,r21);
@@ -2311,484 +2759,18 @@ int little_interpreter_memory_Storage_storeObject(little__interpreter__memory__S
 	r23 = hl_alloc_virtual(&t$vrt_329ffa8);
 	r21 = (String)s$a142922;
 	if( hl_vfields(r23)[1] ) *(String*)(hl_vfields(r23)[1]) = (String)r21; else hl_dyn_setp(r23->value,37969014/*fileName*/,&t$String,r21);
-	r5 = 801;
-	if( hl_vfields(r23)[2] ) *(int*)(hl_vfields(r23)[2]) = (int)r5; else hl_dyn_seti(r23->value,371360620/*lineNumber*/,&t$_i32,r5);
+	r6 = 862;
+	if( hl_vfields(r23)[2] ) *(int*)(hl_vfields(r23)[2]) = (int)r6; else hl_dyn_seti(r23->value,371360620/*lineNumber*/,&t$_i32,r6);
 	r21 = (String)s$951eba8;
 	if( hl_vfields(r23)[0] ) *(String*)(hl_vfields(r23)[0]) = (String)r21; else hl_dyn_setp(r23->value,-63073762/*className*/,&t$String,r21);
-	r21 = (String)s$storeObject;
+	r21 = (String)s$setObject;
 	if( hl_vfields(r23)[3] ) *(String*)(hl_vfields(r23)[3]) = (String)r21; else hl_dyn_setp(r23->value,302979532/*methodName*/,&t$String,r21);
 	r24 = hl_to_virtual(&t$vrt_eaa6a3b,(vdynamic*)r23);
 	haxe_exceptions_ArgumentException_new(r20,r14,r15,r22,r24);
 	hl_throw((vdynamic*)r20);
-}
-
-int little_interpreter_memory_Storage_setObject(little__interpreter__memory__Storage r0,int r1,venum* r2) {
-	String r15, r16, r22, r36, r40;
-	little__$Little r30;
-	haxe__ds__StringMap r26, r27, r31;
-	vvirtual *r24, *r25, *r28, *r32, *r33, *r34, *r35, *r42, *r45;
-	hl__types__ArrayObj r3, r8, r12;
-	little__interpreter__memory__Memory r20;
-	venum *r10, *r14, *r18, *r37, *r39;
-	hl_type *r5;
-	haxe__io__Bytes r46, r47, r48, r50, r51;
-	bool r17;
-	little__tools__BaseOrderedMap r38;
-	little__KeywordConfig r29;
-	double r44;
-	haxe__exceptions__ArgumentException r21;
-	haxe__Exception r23;
-	little__interpreter__memory__ConstantPool r19;
-	vdynamic *r13;
-	int r6, r9, r11, r41, r43, r49;
-	varray *r4;
-	r5 = &t$String;
-	r6 = 0;
-	r4 = hl_alloc_array(r5,r6);
-	r3 = hl_types_ArrayObj_alloc(r4);
-	r6 = 0;
-	r5 = &t$little_tools_InterpTokensSimple;
-	r9 = 1;
-	r4 = hl_alloc_array(r5,r9);
-	r10 = (venum*)g$683025e;
-	r9 = 0;
-	((venum**)(r4 + 1))[r9] = r10;
-	r8 = hl_types_ArrayObj_alloc(r4);
-	if( r8 == NULL ) hl_null_access();
-	r8 = hl_types_ArrayObj_copy(r8);
-	label$4a464f8_33_14:
-	if( r8 == NULL ) hl_null_access();
-	r11 = r8->length;
-	if( r6 >= r11 ) goto label$4a464f8_33_37;
-	r11 = r8->length;
-	if( ((unsigned)r6) < ((unsigned)r11) ) goto label$4a464f8_33_22;
-	r10 = NULL;
-	goto label$4a464f8_33_28;
-	label$4a464f8_33_22:
-	r4 = r8->array;
-	r13 = ((vdynamic**)(r4 + 1))[r6];
-	r10 = (venum*)r13;
-	r14 = (venum*)hl_dyn_castp(&r13,&t$_dyn,&t$little_tools_InterpTokensSimple);
-	if( r10 == r14 ) goto label$4a464f8_33_28;
-	hl_assert();
-	label$4a464f8_33_28:
-	++r6;
-	if( r3 == NULL ) hl_null_access();
-	r15 = Type_enumConstructor(((vdynamic*)r10));
-	r16 = (String)s$b14a7b8;
-	r15 = little_tools_TextTools_remove(r15,r16);
-	if( r15 == NULL ) hl_null_access();
-	r15 = String_toLowerCase(r15);
-	r9 = hl_types_ArrayObj_push(r3,((vdynamic*)r15));
-	goto label$4a464f8_33_14;
-	label$4a464f8_33_37:
-	if( r3 == NULL ) hl_null_access();
-	r15 = Type_enumConstructor(((vdynamic*)r2));
-	if( r15 == NULL ) hl_null_access();
-	r15 = String_toLowerCase(r15);
-	r17 = hl_types_ArrayObj_contains(r3,((vdynamic*)r15));
-	if( !r17 ) goto label$4a464f8_33_49;
-	r20 = r0->parent;
-	if( r20 == NULL ) hl_null_access();
-	r19 = r20->constants;
-	if( r19 == NULL ) hl_null_access();
-	r6 = r19->_hx_NULL;
-	return r6;
-	label$4a464f8_33_49:
-	r5 = &t$String;
-	r6 = 0;
-	r4 = hl_alloc_array(r5,r6);
-	r8 = hl_types_ArrayObj_alloc(r4);
-	r6 = 0;
-	r5 = &t$little_tools_InterpTokensSimple;
-	r9 = 1;
-	r4 = hl_alloc_array(r5,r9);
-	r10 = (venum*)g$b162cae;
-	r9 = 0;
-	((venum**)(r4 + 1))[r9] = r10;
-	r12 = hl_types_ArrayObj_alloc(r4);
-	if( r12 == NULL ) hl_null_access();
-	r12 = hl_types_ArrayObj_copy(r12);
-	label$4a464f8_33_63:
-	if( r12 == NULL ) hl_null_access();
-	r11 = r12->length;
-	if( r6 >= r11 ) goto label$4a464f8_33_86;
-	r11 = r12->length;
-	if( ((unsigned)r6) < ((unsigned)r11) ) goto label$4a464f8_33_71;
-	r10 = NULL;
-	goto label$4a464f8_33_77;
-	label$4a464f8_33_71:
-	r4 = r12->array;
-	r13 = ((vdynamic**)(r4 + 1))[r6];
-	r10 = (venum*)r13;
-	r14 = (venum*)hl_dyn_castp(&r13,&t$_dyn,&t$little_tools_InterpTokensSimple);
-	if( r10 == r14 ) goto label$4a464f8_33_77;
-	hl_assert();
-	label$4a464f8_33_77:
-	++r6;
-	if( r8 == NULL ) hl_null_access();
-	r15 = Type_enumConstructor(((vdynamic*)r10));
-	r16 = (String)s$b14a7b8;
-	r15 = little_tools_TextTools_remove(r15,r16);
-	if( r15 == NULL ) hl_null_access();
-	r15 = String_toLowerCase(r15);
-	r9 = hl_types_ArrayObj_push(r8,((vdynamic*)r15));
-	goto label$4a464f8_33_63;
-	label$4a464f8_33_86:
-	if( r8 == NULL ) hl_null_access();
-	r15 = Type_enumConstructor(((vdynamic*)r2));
-	if( r15 == NULL ) hl_null_access();
-	r15 = String_toLowerCase(r15);
-	r17 = hl_types_ArrayObj_contains(r8,((vdynamic*)r15));
-	if( r17 ) goto label$4a464f8_33_112;
-	r21 = (haxe__exceptions__ArgumentException)hl_alloc_obj(&t$haxe_exceptions_ArgumentException);
-	r15 = (String)s$object;
-	r16 = (String)s$;
-	r22 = Std_string(((vdynamic*)r2));
-	r16 = String___add__(r16,r22);
-	r22 = (String)s$_is_not_a_dynamic_object;
-	r16 = String___add__(r16,r22);
-	r23 = NULL;
-	r24 = hl_alloc_virtual(&t$vrt_329ffa8);
-	r22 = (String)s$a142922;
-	if( hl_vfields(r24)[1] ) *(String*)(hl_vfields(r24)[1]) = (String)r22; else hl_dyn_setp(r24->value,37969014/*fileName*/,&t$String,r22);
-	r6 = 819;
-	if( hl_vfields(r24)[2] ) *(int*)(hl_vfields(r24)[2]) = (int)r6; else hl_dyn_seti(r24->value,371360620/*lineNumber*/,&t$_i32,r6);
-	r22 = (String)s$951eba8;
-	if( hl_vfields(r24)[0] ) *(String*)(hl_vfields(r24)[0]) = (String)r22; else hl_dyn_setp(r24->value,-63073762/*className*/,&t$String,r22);
-	r22 = (String)s$setObject;
-	if( hl_vfields(r24)[3] ) *(String*)(hl_vfields(r24)[3]) = (String)r22; else hl_dyn_setp(r24->value,302979532/*methodName*/,&t$String,r22);
-	r25 = hl_to_virtual(&t$vrt_eaa6a3b,(vdynamic*)r24);
-	haxe_exceptions_ArgumentException_new(r21,r15,r16,r23,r25);
-	hl_throw((vdynamic*)r21);
-	label$4a464f8_33_112:
-	if( r2 == NULL ) hl_null_access();
-	r6 = HL__ENUM_INDEX__(r2);
-	r9 = 26;
-	if( r6 != r9 ) goto label$4a464f8_33_340;
-	r26 = ((little_interpreter_InterpTokens_Object*)r2)->p0;
-	r15 = ((little_interpreter_InterpTokens_Object*)r2)->p1;
-	r12 = (hl__types__ArrayObj)hl_alloc_obj(&t$hl_types_ArrayObj);
-	hl_types_ArrayObj_new(r12);
-	if( r26 == NULL ) hl_null_access();
-	r27 = haxe_ds_StringMap_copy(r26);
-	r28 = hl_alloc_virtual(&t$vrt_069b1ae);
-	r18 = hl_alloc_enum(&t$little_interpreter_InterpTokens,18);
-	((little_interpreter_InterpTokens_Characters*)r18)->p0 = r15;
-	if( hl_vfields(r28)[1] ) *(venum**)(hl_vfields(r28)[1]) = (venum*)r18; else hl_dyn_setp(r28->value,297304054/*value*/,&t$little_interpreter_InterpTokens,r18);
-	r16 = (String)s$The_type_of_this_object_as_a_;
-	r30 = (little__$Little)g$_little_Little;
-	r29 = r30->keywords;
-	if( r29 == NULL ) hl_null_access();
-	r22 = r29->TYPE_STRING;
-	r16 = String___add__(r16,r22);
-	r22 = (String)s$5058f1a;
-	r16 = String___add__(r16,r22);
-	if( hl_vfields(r28)[0] ) *(String*)(hl_vfields(r28)[0]) = (String)r16; else hl_dyn_setp(r28->value,23626436/*documentation*/,&t$String,r16);
-	if( r27 == NULL ) hl_null_access();
-	r30 = (little__$Little)g$_little_Little;
-	r29 = r30->keywords;
-	if( r29 == NULL ) hl_null_access();
-	r16 = r29->OBJECT_TYPE_PROPERTY_NAME;
-	haxe_ds_StringMap_set(r27,r16,((vdynamic*)r28));
-	if( r27 ) goto label$4a464f8_33_143;
-	r32 = NULL;
-	goto label$4a464f8_33_147;
-	label$4a464f8_33_143:
-	r32 = r27->f$1;
-	if( r32 ) goto label$4a464f8_33_147;
-	r32 = hl_to_virtual(&t$vrt_e3ef9ba,(vdynamic*)r27);
-	r27->f$1 = r32;
-	label$4a464f8_33_147:
-	r33 = r32;
-	if( r32 == NULL ) hl_null_access();
-	if( hl_vfields(r32)[0] ) r34 = ((vvirtual* (*)(vdynamic*))hl_vfields(r32)[0])(r32->value); else {
-		r34 = (vvirtual*)hl_dyn_call_obj(r32->value,&t$fun_eb2fdfb,117891838/*keys*/,NULL,NULL);
-	}
-	r35 = hl_to_virtual(&t$vrt_0a81a53,(vdynamic*)r34);
-	label$4a464f8_33_151:
-	if( r35 == NULL ) hl_null_access();
-	if( hl_vfields(r35)[0] ) r17 = ((bool (*)(vdynamic*))hl_vfields(r35)[0])(r35->value); else {
-		vdynamic ret;
-		hl_dyn_call_obj(r35->value,&t$fun_bf7849e,407283053/*hasNext*/,NULL,&ret);
-		r17 = (bool)ret.v.i;
-	}
-	if( !r17 ) goto label$4a464f8_33_292;
-	if( hl_vfields(r35)[1] ) r16 = ((String (*)(vdynamic*))hl_vfields(r35)[1])(r35->value); else {
-		r16 = (String)hl_dyn_call_obj(r35->value,&t$fun_820f49a,151160317/*next*/,NULL,NULL);
-	}
-	if( r33 == NULL ) hl_null_access();
-	if( hl_vfields(r33)[1] ) r13 = ((vdynamic* (*)(vdynamic*,String))hl_vfields(r33)[1])(r33->value,r16); else {
-		void *args[] = {r16};
-		r13 = (vdynamic*)hl_dyn_call_obj(r33->value,&t$fun_555f5cd,5144726/*get*/,args,NULL);
-	}
-	r28 = hl_to_virtual(&t$vrt_069b1ae,(vdynamic*)r13);
-	r6 = little_interpreter_memory_Storage_storeString(r0,r16);
-	if( r28 == NULL ) hl_null_access();
-	r18 = hl_vfields(r28)[1] ? (*(venum**)(hl_vfields(r28)[1])) : (venum*)hl_dyn_getp(r28->value,297304054/*value*/,&t$little_interpreter_InterpTokens);
-	if( r18 == NULL ) hl_null_access();
-	r9 = HL__ENUM_INDEX__(r18);
-	switch(r9) {
-		default:
-		case 0:
-		case 1:
-		case 2:
-		case 3:
-		case 4:
-		case 5:
-		case 6:
-		case 8:
-		case 9:
-		case 10:
-		case 11:
-		case 12:
-		case 13:
-		case 14:
-		case 15:
-		case 16:
-		case 17:
-		case 18:
-		case 19:
-		case 20:
-		case 21:
-		case 22:
-		case 23:
-		case 24:
-		case 25:
-			r37 = hl_vfields(r28)[1] ? (*(venum**)(hl_vfields(r28)[1])) : (venum*)hl_dyn_getp(r28->value,297304054/*value*/,&t$little_interpreter_InterpTokens);
-			r11 = little_interpreter_memory_Storage_storeStatic(r0,r37);
-			r9 = r11;
-			goto label$4a464f8_33_180;
-		case 7:
-			r38 = ((little_interpreter_InterpTokens_FunctionCode*)r18)->p0;
-			r37 = ((little_interpreter_InterpTokens_FunctionCode*)r18)->p1;
-			r39 = hl_vfields(r28)[1] ? (*(venum**)(hl_vfields(r28)[1])) : (venum*)hl_dyn_getp(r28->value,297304054/*value*/,&t$little_interpreter_InterpTokens);
-			r11 = little_interpreter_memory_Storage_storeCodeBlock(r0,r39);
-			r9 = r11;
-			goto label$4a464f8_33_180;
-		case 26:
-			r31 = ((little_interpreter_InterpTokens_Object*)r18)->p0;
-			r36 = ((little_interpreter_InterpTokens_Object*)r18)->p1;
-			r37 = hl_vfields(r28)[1] ? (*(venum**)(hl_vfields(r28)[1])) : (venum*)hl_dyn_getp(r28->value,297304054/*value*/,&t$little_interpreter_InterpTokens);
-			r11 = little_interpreter_memory_Storage_storeObject(r0,r37);
-			r9 = r11;
-	}
-	label$4a464f8_33_180:
-	r37 = hl_vfields(r28)[1] ? (*(venum**)(hl_vfields(r28)[1])) : (venum*)hl_dyn_getp(r28->value,297304054/*value*/,&t$little_interpreter_InterpTokens);
-	if( r37 == NULL ) hl_null_access();
-	r11 = HL__ENUM_INDEX__(r37);
-	switch(r11) {
-		default:
-		case 0:
-		case 1:
-		case 2:
-		case 3:
-		case 4:
-		case 5:
-		case 6:
-		case 8:
-		case 9:
-		case 10:
-		case 11:
-		case 12:
-		case 13:
-		case 14:
-		case 15:
-		case 19:
-		case 21:
-		case 25:
-			r36 = (String)s$f50568c;
-			r40 = Std_string(((vdynamic*)r28));
-			r36 = String___add__(r36,r40);
-			r40 = (String)s$454edeb;
-			r36 = String___add__(r36,r40);
-			hl_throw((vdynamic*)r36);
-		case 7:
-			r38 = ((little_interpreter_InterpTokens_FunctionCode*)r37)->p0;
-			r39 = ((little_interpreter_InterpTokens_FunctionCode*)r37)->p1;
-			r20 = r0->parent;
-			if( r20 == NULL ) hl_null_access();
-			r30 = (little__$Little)g$_little_Little;
-			r29 = r30->keywords;
-			if( r29 == NULL ) hl_null_access();
-			r36 = r29->TYPE_FUNCTION;
-			r42 = little_interpreter_memory_Memory_getTypeInformation(r20,r36);
-			if( r42 == NULL ) hl_null_access();
-			r41 = hl_vfields(r42)[4] ? (*(int*)(hl_vfields(r42)[4])) : (int)hl_dyn_geti(r42->value,287424967/*pointer*/,&t$_i32);
-			r11 = r41;
-			goto label$4a464f8_33_281;
-		case 16:
-			r41 = ((little_interpreter_InterpTokens_Number*)r37)->p0;
-			r20 = r0->parent;
-			if( r20 == NULL ) hl_null_access();
-			r30 = (little__$Little)g$_little_Little;
-			r29 = r30->keywords;
-			if( r29 == NULL ) hl_null_access();
-			r36 = r29->TYPE_INT;
-			r42 = little_interpreter_memory_Memory_getTypeInformation(r20,r36);
-			if( r42 == NULL ) hl_null_access();
-			r43 = hl_vfields(r42)[4] ? (*(int*)(hl_vfields(r42)[4])) : (int)hl_dyn_geti(r42->value,287424967/*pointer*/,&t$_i32);
-			r11 = r43;
-			goto label$4a464f8_33_281;
-		case 17:
-			r44 = ((little_interpreter_InterpTokens_Decimal*)r37)->p0;
-			r20 = r0->parent;
-			if( r20 == NULL ) hl_null_access();
-			r30 = (little__$Little)g$_little_Little;
-			r29 = r30->keywords;
-			if( r29 == NULL ) hl_null_access();
-			r36 = r29->TYPE_FLOAT;
-			r42 = little_interpreter_memory_Memory_getTypeInformation(r20,r36);
-			if( r42 == NULL ) hl_null_access();
-			r41 = hl_vfields(r42)[4] ? (*(int*)(hl_vfields(r42)[4])) : (int)hl_dyn_geti(r42->value,287424967/*pointer*/,&t$_i32);
-			r11 = r41;
-			goto label$4a464f8_33_281;
-		case 18:
-			r36 = ((little_interpreter_InterpTokens_Characters*)r37)->p0;
-			r20 = r0->parent;
-			if( r20 == NULL ) hl_null_access();
-			r30 = (little__$Little)g$_little_Little;
-			r29 = r30->keywords;
-			if( r29 == NULL ) hl_null_access();
-			r40 = r29->TYPE_STRING;
-			r42 = little_interpreter_memory_Memory_getTypeInformation(r20,r40);
-			if( r42 == NULL ) hl_null_access();
-			r41 = hl_vfields(r42)[4] ? (*(int*)(hl_vfields(r42)[4])) : (int)hl_dyn_geti(r42->value,287424967/*pointer*/,&t$_i32);
-			r11 = r41;
-			goto label$4a464f8_33_281;
-		case 20:
-			r41 = ((little_interpreter_InterpTokens_ClassPointer*)r37)->p0;
-			r20 = r0->parent;
-			if( r20 == NULL ) hl_null_access();
-			r30 = (little__$Little)g$_little_Little;
-			r29 = r30->keywords;
-			if( r29 == NULL ) hl_null_access();
-			r36 = r29->TYPE_MODULE;
-			r42 = little_interpreter_memory_Memory_getTypeInformation(r20,r36);
-			if( r42 == NULL ) hl_null_access();
-			r43 = hl_vfields(r42)[4] ? (*(int*)(hl_vfields(r42)[4])) : (int)hl_dyn_geti(r42->value,287424967/*pointer*/,&t$_i32);
-			r11 = r43;
-			goto label$4a464f8_33_281;
-		case 22:
-			r20 = r0->parent;
-			if( r20 == NULL ) hl_null_access();
-			r30 = (little__$Little)g$_little_Little;
-			r29 = r30->keywords;
-			if( r29 == NULL ) hl_null_access();
-			r36 = r29->TYPE_DYNAMIC;
-			r42 = little_interpreter_memory_Memory_getTypeInformation(r20,r36);
-			if( r42 == NULL ) hl_null_access();
-			r41 = hl_vfields(r42)[4] ? (*(int*)(hl_vfields(r42)[4])) : (int)hl_dyn_geti(r42->value,287424967/*pointer*/,&t$_i32);
-			r11 = r41;
-			goto label$4a464f8_33_281;
-		case 23:
-		case 24:
-			r20 = r0->parent;
-			if( r20 == NULL ) hl_null_access();
-			r30 = (little__$Little)g$_little_Little;
-			r29 = r30->keywords;
-			if( r29 == NULL ) hl_null_access();
-			r36 = r29->TYPE_BOOLEAN;
-			r42 = little_interpreter_memory_Memory_getTypeInformation(r20,r36);
-			if( r42 == NULL ) hl_null_access();
-			r41 = hl_vfields(r42)[4] ? (*(int*)(hl_vfields(r42)[4])) : (int)hl_dyn_geti(r42->value,287424967/*pointer*/,&t$_i32);
-			r11 = r41;
-			goto label$4a464f8_33_281;
-		case 26:
-			r31 = ((little_interpreter_InterpTokens_Object*)r37)->p0;
-			r36 = ((little_interpreter_InterpTokens_Object*)r37)->p1;
-			r20 = r0->parent;
-			if( r20 == NULL ) hl_null_access();
-			r42 = little_interpreter_memory_Memory_getTypeInformation(r20,r36);
-			if( r42 == NULL ) hl_null_access();
-			r41 = hl_vfields(r42)[4] ? (*(int*)(hl_vfields(r42)[4])) : (int)hl_dyn_geti(r42->value,287424967/*pointer*/,&t$_i32);
-			r11 = r41;
-	}
-	label$4a464f8_33_281:
-	if( r12 == NULL ) hl_null_access();
-	r45 = hl_alloc_virtual(&t$vrt_23bdd2f);
-	if( hl_vfields(r45)[1] ) *(String*)(hl_vfields(r45)[1]) = (String)r16; else hl_dyn_setp(r45->value,5343647/*key*/,&t$String,r16);
-	if( hl_vfields(r45)[2] ) *(int*)(hl_vfields(r45)[2]) = (int)r6; else hl_dyn_seti(r45->value,-5677100/*keyPointer*/,&t$_i32,r6);
-	if( hl_vfields(r45)[4] ) *(int*)(hl_vfields(r45)[4]) = (int)r9; else hl_dyn_seti(r45->value,297304054/*value*/,&t$_i32,r9);
-	if( hl_vfields(r45)[3] ) *(int*)(hl_vfields(r45)[3]) = (int)r11; else hl_dyn_seti(r45->value,218690500/*type*/,&t$_i32,r11);
-	r36 = hl_vfields(r28)[0] ? (*(String*)(hl_vfields(r28)[0])) : (String)hl_dyn_getp(r28->value,23626436/*documentation*/,&t$String);
-	r41 = little_interpreter_memory_Storage_storeString(r0,r36);
-	if( hl_vfields(r45)[0] ) *(int*)(hl_vfields(r45)[0]) = (int)r41; else hl_dyn_seti(r45->value,4997752/*doc*/,&t$_i32,r41);
-	r41 = hl_types_ArrayObj_push(r12,((vdynamic*)r45));
-	goto label$4a464f8_33_151;
-	label$4a464f8_33_292:
-	r46 = little_interpreter_memory_HashTables_generateObjectHashTable(r12);
-	if( r46 == NULL ) hl_null_access();
-	r6 = r46->length;
-	r9 = 4;
-	r47 = haxe_io_Bytes_alloc(r9);
-	if( r47 == NULL ) hl_null_access();
-	r9 = 0;
-	r11 = 4;
-	r41 = 0;
-	haxe_io_Bytes_fill(r47,r9,r11,r41);
-	r9 = 0;
-	haxe_io_Bytes_setInt32(r47,r9,r6);
-	r9 = r46->length;
-	r9 = little_interpreter_memory_Storage_storeBytes(r0,r9,r46);
-	r11 = r46->length;
-	r41 = 4;
-	r48 = haxe_io_Bytes_alloc(r41);
-	if( r48 == NULL ) hl_null_access();
-	r41 = 0;
-	r43 = 4;
-	r49 = 0;
-	haxe_io_Bytes_fill(r48,r41,r43,r49);
-	r41 = 0;
-	haxe_io_Bytes_setInt32(r48,r41,r11);
-	r41 = 4;
-	r50 = haxe_io_Bytes_alloc(r41);
-	if( r50 == NULL ) hl_null_access();
-	r41 = 0;
-	r43 = 4;
-	r49 = 0;
-	haxe_io_Bytes_fill(r50,r41,r43,r49);
-	r41 = 0;
-	haxe_io_Bytes_setInt32(r50,r41,r9);
-	r41 = r48->length;
-	r43 = r50->length;
-	r41 = r41 + r43;
-	r51 = haxe_io_Bytes_alloc(r41);
-	if( r51 == NULL ) hl_null_access();
-	r41 = 0;
-	r43 = 0;
-	r49 = r48->length;
-	haxe_io_Bytes_blit(r51,r41,r48,r43,r49);
-	r41 = r48->length;
-	r43 = 0;
-	r49 = r50->length;
-	haxe_io_Bytes_blit(r51,r41,r50,r43,r49);
-	little_interpreter_memory_Storage_setBytes(r0,r1,r51);
-	goto label$4a464f8_33_360;
-	label$4a464f8_33_340:
-	r21 = (haxe__exceptions__ArgumentException)hl_alloc_obj(&t$haxe_exceptions_ArgumentException);
-	r15 = (String)s$object;
-	r16 = (String)s$;
-	r22 = Std_string(((vdynamic*)r2));
-	r16 = String___add__(r16,r22);
-	r22 = (String)s$_must_be_an_Interpreter_Object_;
-	r16 = String___add__(r16,r22);
-	r23 = NULL;
-	r24 = hl_alloc_virtual(&t$vrt_329ffa8);
-	r22 = (String)s$a142922;
-	if( hl_vfields(r24)[1] ) *(String*)(hl_vfields(r24)[1]) = (String)r22; else hl_dyn_setp(r24->value,37969014/*fileName*/,&t$String,r22);
-	r6 = 862;
-	if( hl_vfields(r24)[2] ) *(int*)(hl_vfields(r24)[2]) = (int)r6; else hl_dyn_seti(r24->value,371360620/*lineNumber*/,&t$_i32,r6);
-	r22 = (String)s$951eba8;
-	if( hl_vfields(r24)[0] ) *(String*)(hl_vfields(r24)[0]) = (String)r22; else hl_dyn_setp(r24->value,-63073762/*className*/,&t$String,r22);
-	r22 = (String)s$setObject;
-	if( hl_vfields(r24)[3] ) *(String*)(hl_vfields(r24)[3]) = (String)r22; else hl_dyn_setp(r24->value,302979532/*methodName*/,&t$String,r22);
-	r25 = hl_to_virtual(&t$vrt_eaa6a3b,(vdynamic*)r24);
-	haxe_exceptions_ArgumentException_new(r21,r15,r16,r23,r25);
-	hl_throw((vdynamic*)r21);
-	label$4a464f8_33_360:
-	r15 = (String)s$How_did_you_get_here_;
-	hl_throw((vdynamic*)r15);
+	label$4a464f8_33_354:
+	r14 = (String)s$How_did_you_get_here_;
+	hl_throw((vdynamic*)r14);
 }
 
 venum* little_interpreter_memory_Storage_readObject(little__interpreter__memory__Storage r0,int r1) {

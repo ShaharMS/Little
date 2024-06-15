@@ -10,15 +10,11 @@ extern hl_type t$vrt_0a81a53;
 extern hl_type t$fun_bf7849e;
 extern hl_type t$fun_820f49a;
 extern hl_type t$fun_555f5cd;
-extern hl_type t$nul_i32;
-extern hl_type t$_dyn;
 void haxe_ds_IntMap_set(haxe__ds__IntMap,int,vdynamic*);
 #include <hl/types/ArrayObj.h>
 #include <little/interpreter/InterpTokens.h>
 hl__types__ArrayObj hl_types_ArrayObj_copy(hl__types__ArrayObj);
 vdynamic* hl_types_ArrayObj_shift(hl__types__ArrayObj);
-extern hl_type t$String;
-int String___compare(String,vdynamic*);
 bool haxe_ds_StringMap_exists(haxe__ds__StringMap,String);
 vdynamic* haxe_ds_StringMap_get(haxe__ds__StringMap,String);
 extern hl_type t$little_interpreter_memory_ExtTree;
@@ -35,8 +31,8 @@ haxe__ds__IntMap little_interpreter_memory_ExternalInterfacing_get_pointerToExte
 	haxe__ds__StringMap r3;
 	bool r9;
 	haxe__ds__IntMap r1;
-	vdynamic *r7, *r11, *r12;
-	int r13;
+	vdynamic *r7, *r11;
+	int r12;
 	r1 = (haxe__ds__IntMap)hl_alloc_obj(&t$haxe_ds_IntMap);
 	haxe_ds_IntMap_new(r1);
 	r3 = r0->externToPointer;
@@ -62,7 +58,7 @@ haxe__ds__IntMap little_interpreter_memory_ExternalInterfacing_get_pointerToExte
 		hl_dyn_call_obj(r8->value,&t$fun_bf7849e,407283053/*hasNext*/,NULL,&ret);
 		r9 = (bool)ret.v.i;
 	}
-	if( !r9 ) goto label$a57a63b_1_29;
+	if( !r9 ) goto label$a57a63b_1_26;
 	if( hl_vfields(r8)[1] ) r10 = ((String (*)(vdynamic*))hl_vfields(r8)[1])(r8->value); else {
 		r10 = (String)hl_dyn_call_obj(r8->value,&t$fun_820f49a,151160317/*next*/,NULL,NULL);
 	}
@@ -72,27 +68,23 @@ haxe__ds__IntMap little_interpreter_memory_ExternalInterfacing_get_pointerToExte
 		r7 = (vdynamic*)hl_dyn_call_obj(r5->value,&t$fun_555f5cd,5144726/*get*/,args,NULL);
 	}
 	r11 = (vdynamic*)r7;
-	r12 = (vdynamic*)hl_dyn_castp(&r7,&t$_dyn,&t$nul_i32);
-	if( r11 == r12 || (r11 && r12 && (r11->v.i == r12->v.i)) ) goto label$a57a63b_1_25;
-	hl_assert();
-	label$a57a63b_1_25:
-	r13 = r11 ? r11->v.i : 0;
+	r12 = r11 ? r11->v.i : 0;
 	if( r1 == NULL ) hl_null_access();
-	haxe_ds_IntMap_set(r1,r13,((vdynamic*)r10));
+	haxe_ds_IntMap_set(r1,r12,((vdynamic*)r10));
 	goto label$a57a63b_1_14;
-	label$a57a63b_1_29:
+	label$a57a63b_1_26:
 	return r1;
 }
 
 little__interpreter__memory__ExtTree little_interpreter_memory_ExternalInterfacing_createPathFor(little__interpreter__memory__ExternalInterfacing r0,little__interpreter__memory__ExtTree r1,hl__types__ArrayObj r2) {
-	String r9, r10;
-	vvirtual *r15;
-	haxe__ds__StringMap r12;
-	little__interpreter__memory__ExtTree r5, r13, r14;
+	String r9;
+	vvirtual *r13;
+	haxe__ds__StringMap r11;
+	little__interpreter__memory__ExtTree r5, r12;
 	hl__types__ArrayObj r3;
-	bool r11;
-	vclosure *r17;
-	vdynamic *r8, *r16, *r18;
+	bool r10;
+	vclosure *r15;
+	vdynamic *r8, *r14, *r16;
 	int r6, r7;
 	if( r2 == NULL ) hl_null_access();
 	r3 = hl_types_ArrayObj_copy(r2);
@@ -101,69 +93,57 @@ little__interpreter__memory__ExtTree little_interpreter_memory_ExternalInterfaci
 	if( r3 == NULL ) hl_null_access();
 	r6 = r3->length;
 	r7 = 0;
-	if( r7 >= r6 ) goto label$a57a63b_2_53;
+	if( r7 >= r6 ) goto label$a57a63b_2_44;
 	r8 = hl_types_ArrayObj_shift(r3);
 	r9 = (String)r8;
-	r10 = (String)hl_dyn_castp(&r8,&t$_dyn,&t$String);
-	if( r9 == r10 || (r9 && r10 && String___compare(r9,(vdynamic*)r10) == 0) ) goto label$a57a63b_2_13;
-	hl_assert();
-	label$a57a63b_2_13:
 	if( r5 == NULL ) hl_null_access();
-	r12 = r5->properties;
-	if( r12 == NULL ) hl_null_access();
-	r11 = haxe_ds_StringMap_exists(r12,r9);
-	if( !r11 ) goto label$a57a63b_2_27;
-	r12 = r5->properties;
-	if( r12 == NULL ) hl_null_access();
-	r8 = haxe_ds_StringMap_get(r12,r9);
-	r13 = (little__interpreter__memory__ExtTree)r8;
-	r14 = (little__interpreter__memory__ExtTree)hl_dyn_castp(&r8,&t$_dyn,&t$little_interpreter_memory_ExtTree);
-	if( r13 == r14 ) goto label$a57a63b_2_25;
-	hl_assert();
+	r11 = r5->properties;
+	if( r11 == NULL ) hl_null_access();
+	r10 = haxe_ds_StringMap_exists(r11,r9);
+	if( !r10 ) goto label$a57a63b_2_21;
+	r11 = r5->properties;
+	if( r11 == NULL ) hl_null_access();
+	r8 = haxe_ds_StringMap_get(r11,r9);
+	r12 = (little__interpreter__memory__ExtTree)r8;
+	r5 = r12;
+	goto label$a57a63b_2_43;
+	label$a57a63b_2_21:
+	r11 = r5->properties;
+	if( r11 ) goto label$a57a63b_2_25;
+	r13 = NULL;
+	goto label$a57a63b_2_29;
 	label$a57a63b_2_25:
-	r5 = r13;
-	goto label$a57a63b_2_52;
-	label$a57a63b_2_27:
-	r12 = r5->properties;
-	if( r12 ) goto label$a57a63b_2_31;
+	r13 = r11->f$1;
+	if( r13 ) goto label$a57a63b_2_29;
+	r13 = hl_to_virtual(&t$vrt_e3ef9ba,(vdynamic*)r11);
+	r11->f$1 = r13;
+	label$a57a63b_2_29:
+	r12 = (little__interpreter__memory__ExtTree)hl_alloc_obj(&t$little_interpreter_memory_ExtTree);
+	r14 = NULL;
 	r15 = NULL;
-	goto label$a57a63b_2_35;
-	label$a57a63b_2_31:
-	r15 = r12->f$1;
-	if( r15 ) goto label$a57a63b_2_35;
-	r15 = hl_to_virtual(&t$vrt_e3ef9ba,(vdynamic*)r12);
-	r12->f$1 = r15;
-	label$a57a63b_2_35:
-	r13 = (little__interpreter__memory__ExtTree)hl_alloc_obj(&t$little_interpreter_memory_ExtTree);
+	r11 = NULL;
 	r16 = NULL;
-	r17 = NULL;
-	r12 = NULL;
-	r18 = NULL;
-	little_interpreter_memory_ExtTree_new(r13,r16,r17,r12,r18);
-	r12 = (haxe__ds__StringMap)hl_dyn_castp(&r15,&t$vrt_e3ef9ba,&t$haxe_ds_StringMap);
-	if( r12 == NULL ) hl_null_access();
-	haxe_ds_StringMap_set(r12,r9,((vdynamic*)r13));
-	r12 = r5->properties;
-	if( r12 == NULL ) hl_null_access();
-	r8 = haxe_ds_StringMap_get(r12,r9);
-	r13 = (little__interpreter__memory__ExtTree)r8;
-	r14 = (little__interpreter__memory__ExtTree)hl_dyn_castp(&r8,&t$_dyn,&t$little_interpreter_memory_ExtTree);
-	if( r13 == r14 ) goto label$a57a63b_2_51;
-	hl_assert();
-	label$a57a63b_2_51:
-	r5 = r13;
-	label$a57a63b_2_52:
+	little_interpreter_memory_ExtTree_new(r12,r14,r15,r11,r16);
+	r11 = (haxe__ds__StringMap)hl_dyn_castp(&r13,&t$vrt_e3ef9ba,&t$haxe_ds_StringMap);
+	if( r11 == NULL ) hl_null_access();
+	haxe_ds_StringMap_set(r11,r9,((vdynamic*)r12));
+	r11 = r5->properties;
+	if( r11 == NULL ) hl_null_access();
+	r8 = haxe_ds_StringMap_get(r11,r9);
+	r12 = (little__interpreter__memory__ExtTree)r8;
+	r5 = r12;
+	label$a57a63b_2_43:
 	goto label$a57a63b_2_3;
-	label$a57a63b_2_53:
+	label$a57a63b_2_44:
 	return r5;
 }
 
 bool little_interpreter_memory_ExternalInterfacing_hasGlobal(little__interpreter__memory__ExternalInterfacing r0,hl__types__ArrayObj r1) {
-	String r7, r8;
-	haxe__ds__StringMap r10;
-	little__interpreter__memory__ExtTree r3, r11, r12;
+	String r7;
+	haxe__ds__StringMap r9;
+	little__interpreter__memory__ExtTree r3, r10;
 	hl__types__ArrayObj r2;
-	bool r9;
+	bool r8;
 	vdynamic *r6;
 	int r4, r5;
 	if( r1 == NULL ) hl_null_access();
@@ -173,44 +153,36 @@ bool little_interpreter_memory_ExternalInterfacing_hasGlobal(little__interpreter
 	if( r2 == NULL ) hl_null_access();
 	r4 = r2->length;
 	r5 = 0;
-	if( r5 >= r4 ) goto label$a57a63b_3_30;
+	if( r5 >= r4 ) goto label$a57a63b_3_24;
 	r6 = hl_types_ArrayObj_shift(r2);
 	r7 = (String)r6;
-	r8 = (String)hl_dyn_castp(&r6,&t$_dyn,&t$String);
-	if( r7 == r8 || (r7 && r8 && String___compare(r7,(vdynamic*)r8) == 0) ) goto label$a57a63b_3_13;
-	hl_assert();
-	label$a57a63b_3_13:
 	if( r3 == NULL ) hl_null_access();
-	r10 = r3->properties;
-	if( r10 == NULL ) hl_null_access();
-	r9 = haxe_ds_StringMap_exists(r10,r7);
-	if( !r9 ) goto label$a57a63b_3_27;
-	r10 = r3->properties;
-	if( r10 == NULL ) hl_null_access();
-	r6 = haxe_ds_StringMap_get(r10,r7);
-	r11 = (little__interpreter__memory__ExtTree)r6;
-	r12 = (little__interpreter__memory__ExtTree)hl_dyn_castp(&r6,&t$_dyn,&t$little_interpreter_memory_ExtTree);
-	if( r11 == r12 ) goto label$a57a63b_3_25;
-	hl_assert();
-	label$a57a63b_3_25:
-	r3 = r11;
-	goto label$a57a63b_3_29;
-	label$a57a63b_3_27:
-	r9 = false;
-	return r9;
-	label$a57a63b_3_29:
+	r9 = r3->properties;
+	if( r9 == NULL ) hl_null_access();
+	r8 = haxe_ds_StringMap_exists(r9,r7);
+	if( !r8 ) goto label$a57a63b_3_21;
+	r9 = r3->properties;
+	if( r9 == NULL ) hl_null_access();
+	r6 = haxe_ds_StringMap_get(r9,r7);
+	r10 = (little__interpreter__memory__ExtTree)r6;
+	r3 = r10;
+	goto label$a57a63b_3_23;
+	label$a57a63b_3_21:
+	r8 = false;
+	return r8;
+	label$a57a63b_3_23:
 	goto label$a57a63b_3_3;
-	label$a57a63b_3_30:
-	r9 = true;
-	return r9;
+	label$a57a63b_3_24:
+	r8 = true;
+	return r8;
 }
 
 bool little_interpreter_memory_ExternalInterfacing_hasInstance(little__interpreter__memory__ExternalInterfacing r0,hl__types__ArrayObj r1) {
-	String r7, r8;
-	haxe__ds__StringMap r10;
-	little__interpreter__memory__ExtTree r3, r11, r12;
+	String r7;
+	haxe__ds__StringMap r9;
+	little__interpreter__memory__ExtTree r3, r10;
 	hl__types__ArrayObj r2;
-	bool r9;
+	bool r8;
 	vdynamic *r6;
 	int r4, r5;
 	if( r1 == NULL ) hl_null_access();
@@ -220,46 +192,38 @@ bool little_interpreter_memory_ExternalInterfacing_hasInstance(little__interpret
 	if( r2 == NULL ) hl_null_access();
 	r4 = r2->length;
 	r5 = 0;
-	if( r5 >= r4 ) goto label$a57a63b_4_30;
+	if( r5 >= r4 ) goto label$a57a63b_4_24;
 	r6 = hl_types_ArrayObj_shift(r2);
 	r7 = (String)r6;
-	r8 = (String)hl_dyn_castp(&r6,&t$_dyn,&t$String);
-	if( r7 == r8 || (r7 && r8 && String___compare(r7,(vdynamic*)r8) == 0) ) goto label$a57a63b_4_13;
-	hl_assert();
-	label$a57a63b_4_13:
 	if( r3 == NULL ) hl_null_access();
-	r10 = r3->properties;
-	if( r10 == NULL ) hl_null_access();
-	r9 = haxe_ds_StringMap_exists(r10,r7);
-	if( !r9 ) goto label$a57a63b_4_27;
-	r10 = r3->properties;
-	if( r10 == NULL ) hl_null_access();
-	r6 = haxe_ds_StringMap_get(r10,r7);
-	r11 = (little__interpreter__memory__ExtTree)r6;
-	r12 = (little__interpreter__memory__ExtTree)hl_dyn_castp(&r6,&t$_dyn,&t$little_interpreter_memory_ExtTree);
-	if( r11 == r12 ) goto label$a57a63b_4_25;
-	hl_assert();
-	label$a57a63b_4_25:
-	r3 = r11;
-	goto label$a57a63b_4_29;
-	label$a57a63b_4_27:
-	r9 = false;
-	return r9;
-	label$a57a63b_4_29:
+	r9 = r3->properties;
+	if( r9 == NULL ) hl_null_access();
+	r8 = haxe_ds_StringMap_exists(r9,r7);
+	if( !r8 ) goto label$a57a63b_4_21;
+	r9 = r3->properties;
+	if( r9 == NULL ) hl_null_access();
+	r6 = haxe_ds_StringMap_get(r9,r7);
+	r10 = (little__interpreter__memory__ExtTree)r6;
+	r3 = r10;
+	goto label$a57a63b_4_23;
+	label$a57a63b_4_21:
+	r8 = false;
+	return r8;
+	label$a57a63b_4_23:
 	goto label$a57a63b_4_3;
-	label$a57a63b_4_30:
-	r9 = true;
-	return r9;
+	label$a57a63b_4_24:
+	r8 = true;
+	return r8;
 }
 
 vvirtual* little_interpreter_memory_ExternalInterfacing_getGlobal(little__interpreter__memory__ExternalInterfacing r0,hl__types__ArrayObj r1) {
-	String r6, r9;
-	vvirtual *r13;
-	haxe__ds__StringMap r10;
-	little__interpreter__memory__ExtTree r3, r11, r12;
+	String r6;
+	vvirtual *r11;
+	haxe__ds__StringMap r9;
+	little__interpreter__memory__ExtTree r3, r10;
 	hl__types__ArrayObj r2;
-	venum *r15;
-	vclosure *r14;
+	venum *r13;
+	vclosure *r12;
 	vdynamic *r7;
 	varray *r8;
 	int r4, r5;
@@ -270,40 +234,33 @@ vvirtual* little_interpreter_memory_ExternalInterfacing_getGlobal(little__interp
 	label$a57a63b_5_4:
 	if( r2 == NULL ) hl_null_access();
 	r5 = r2->length;
-	if( r4 >= r5 ) goto label$a57a63b_5_29;
+	if( r4 >= r5 ) goto label$a57a63b_5_23;
 	r5 = r2->length;
 	if( ((unsigned)r4) < ((unsigned)r5) ) goto label$a57a63b_5_12;
 	r6 = NULL;
-	goto label$a57a63b_5_18;
+	goto label$a57a63b_5_15;
 	label$a57a63b_5_12:
 	r8 = r2->array;
 	r7 = ((vdynamic**)(r8 + 1))[r4];
 	r6 = (String)r7;
-	r9 = (String)hl_dyn_castp(&r7,&t$_dyn,&t$String);
-	if( r6 == r9 || (r6 && r9 && String___compare(r6,(vdynamic*)r9) == 0) ) goto label$a57a63b_5_18;
-	hl_assert();
-	label$a57a63b_5_18:
+	label$a57a63b_5_15:
 	++r4;
 	if( r3 == NULL ) hl_null_access();
-	r10 = r3->properties;
-	if( r10 == NULL ) hl_null_access();
-	r7 = haxe_ds_StringMap_get(r10,r6);
-	r11 = (little__interpreter__memory__ExtTree)r7;
-	r12 = (little__interpreter__memory__ExtTree)hl_dyn_castp(&r7,&t$_dyn,&t$little_interpreter_memory_ExtTree);
-	if( r11 == r12 ) goto label$a57a63b_5_27;
-	hl_assert();
-	label$a57a63b_5_27:
-	r3 = r11;
+	r9 = r3->properties;
+	if( r9 == NULL ) hl_null_access();
+	r7 = haxe_ds_StringMap_get(r9,r6);
+	r10 = (little__interpreter__memory__ExtTree)r7;
+	r3 = r10;
 	goto label$a57a63b_5_4;
-	label$a57a63b_5_29:
+	label$a57a63b_5_23:
 	if( r3 == NULL ) hl_null_access();
-	r14 = r3->getter;
-	if( r14 == NULL ) hl_null_access();
-	r15 = NULL;
+	r12 = r3->getter;
+	if( r12 == NULL ) hl_null_access();
+	r13 = NULL;
 	r4 = -1;
 	r4 = little_interpreter_memory__MemoryPointer_MemoryPointer_Impl__fromInt(r4);
-	r13 = r14->hasValue ? ((vvirtual* (*)(vdynamic*,venum*,int))r14->fun)((vdynamic*)r14->value,r15,r4) : ((vvirtual* (*)(venum*,int))r14->fun)(r15,r4);
-	return r13;
+	r11 = r12->hasValue ? ((vvirtual* (*)(vdynamic*,venum*,int))r12->fun)((vdynamic*)r12->value,r13,r4) : ((vvirtual* (*)(venum*,int))r12->fun)(r13,r4);
+	return r11;
 }
 
 void little_interpreter_memory_ExternalInterfacing_new(little__interpreter__memory__ExternalInterfacing r0,little__interpreter__memory__Memory r1) {

@@ -24,7 +24,6 @@ hl__Class Type_getClass(vdynamic*);
 extern hl_type t$haxe_ds_StringMap;
 void haxe_ds_StringMap_new(haxe__ds__StringMap);
 hl__types__ArrayObj Type_getInstanceFields(hl__Class);
-int String___compare(String,vdynamic*);
 extern hl_type t$vrt_069b1ae;
 vdynamic* Reflect_getProperty(vdynamic*,String);
 extern String s$;
@@ -54,6 +53,7 @@ extern hl_type t$vrt_0a81a53;
 extern hl_type t$fun_bf7849e;
 extern hl_type t$fun_820f49a;
 extern hl_type t$fun_555f5cd;
+int String___compare(String,vdynamic*);
 extern haxe__$Log g$_haxe_Log;
 extern String s$WARNING_;
 extern String s$_Returning_null;
@@ -64,11 +64,11 @@ extern hl_type t$vrt_eaa6a3b;
 
 venum* little_tools_Conversion_toLittleValue(vdynamic* r0) {
 	hl__BaseType r23;
-	String r6, r15, r21;
+	String r6, r16, r21;
 	$String r5;
 	hl__Class r10;
 	little__$Little r18;
-	vvirtual *r16;
+	vvirtual *r15;
 	hl__types__ArrayObj r12;
 	haxe__ds__StringMap r11;
 	hl_type *r19;
@@ -97,7 +97,7 @@ venum* little_tools_Conversion_toLittleValue(vdynamic* r0) {
 	r8 = HL__ENUM_INDEX__(r7);
 	switch(r8) {
 		default:
-			goto label$a4dce2d_1_174;
+			goto label$a4dce2d_1_168;
 		case 0:
 			r3 = (venum*)g$03d4bf9;
 			return r3;
@@ -121,7 +121,7 @@ venum* little_tools_Conversion_toLittleValue(vdynamic* r0) {
 			return r3;
 		case 4:
 			r10 = Type_getClass(r0);
-			if( !r10 ) goto label$a4dce2d_1_129;
+			if( !r10 ) goto label$a4dce2d_1_126;
 			r11 = (haxe__ds__StringMap)hl_alloc_obj(&t$haxe_ds_StringMap);
 			haxe_ds_StringMap_new(r11);
 			r8 = 0;
@@ -130,30 +130,27 @@ venum* little_tools_Conversion_toLittleValue(vdynamic* r0) {
 			label$a4dce2d_1_35:
 			if( r12 == NULL ) hl_null_access();
 			r13 = r12->length;
-			if( r8 >= r13 ) goto label$a4dce2d_1_59;
+			if( r8 >= r13 ) goto label$a4dce2d_1_56;
 			r13 = r12->length;
 			if( ((unsigned)r8) < ((unsigned)r13) ) goto label$a4dce2d_1_43;
 			r6 = NULL;
-			goto label$a4dce2d_1_49;
+			goto label$a4dce2d_1_46;
 			label$a4dce2d_1_43:
 			r14 = r12->array;
 			r2 = ((vdynamic**)(r14 + 1))[r8];
 			r6 = (String)r2;
-			r15 = (String)hl_dyn_castp(&r2,&t$_dyn,&t$String);
-			if( r6 == r15 || (r6 && r15 && String___compare(r6,(vdynamic*)r15) == 0) ) goto label$a4dce2d_1_49;
-			hl_assert();
-			label$a4dce2d_1_49:
+			label$a4dce2d_1_46:
 			++r8;
-			r16 = hl_alloc_virtual(&t$vrt_069b1ae);
+			r15 = hl_alloc_virtual(&t$vrt_069b1ae);
 			r2 = Reflect_getProperty(r0,r6);
 			r3 = little_tools_Conversion_toLittleValue(r2);
-			if( hl_vfields(r16)[1] ) *(venum**)(hl_vfields(r16)[1]) = (venum*)r3; else hl_dyn_setp(r16->value,297304054/*value*/,&t$little_interpreter_InterpTokens,r3);
-			r15 = (String)s$;
-			if( hl_vfields(r16)[0] ) *(String*)(hl_vfields(r16)[0]) = (String)r15; else hl_dyn_setp(r16->value,23626436/*documentation*/,&t$String,r15);
+			if( hl_vfields(r15)[1] ) *(venum**)(hl_vfields(r15)[1]) = (venum*)r3; else hl_dyn_setp(r15->value,297304054/*value*/,&t$little_interpreter_InterpTokens,r3);
+			r16 = (String)s$;
+			if( hl_vfields(r15)[0] ) *(String*)(hl_vfields(r15)[0]) = (String)r16; else hl_dyn_setp(r15->value,23626436/*documentation*/,&t$String,r16);
 			if( r11 == NULL ) hl_null_access();
-			haxe_ds_StringMap_set(r11,r6,((vdynamic*)r16));
+			haxe_ds_StringMap_set(r11,r6,((vdynamic*)r15));
 			goto label$a4dce2d_1_35;
-			label$a4dce2d_1_59:
+			label$a4dce2d_1_56:
 			r18 = (little__$Little)g$_little_Little;
 			r17 = r18->keywords;
 			if( r17 == NULL ) hl_null_access();
@@ -161,21 +158,21 @@ venum* little_tools_Conversion_toLittleValue(vdynamic* r0) {
 			r18 = (little__$Little)g$_little_Little;
 			r17 = r18->keywords;
 			if( r17 == NULL ) hl_null_access();
-			r15 = r17->TYPE_STRING;
-			r6 = String___add__(r6,r15);
-			r16 = hl_alloc_virtual(&t$vrt_069b1ae);
+			r16 = r17->TYPE_STRING;
+			r6 = String___add__(r6,r16);
+			r15 = hl_alloc_virtual(&t$vrt_069b1ae);
 			r19 = &t$little_interpreter_InterpTokens;
 			r8 = 1;
 			r14 = hl_alloc_array(r19,r8);
-			r15 = Std_string(r0);
+			r16 = Std_string(r0);
 			r3 = hl_alloc_enum(&t$little_interpreter_InterpTokens,18);
-			((little_interpreter_InterpTokens_Characters*)r3)->p0 = r15;
+			((little_interpreter_InterpTokens_Characters*)r3)->p0 = r16;
 			r18 = (little__$Little)g$_little_Little;
 			r17 = r18->keywords;
 			if( r17 == NULL ) hl_null_access();
-			r15 = r17->TYPE_STRING;
+			r16 = r17->TYPE_STRING;
 			r20 = hl_alloc_enum(&t$little_interpreter_InterpTokens,25);
-			((little_interpreter_InterpTokens_Identifier*)r20)->p0 = r15;
+			((little_interpreter_InterpTokens_Identifier*)r20)->p0 = r16;
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_interpreter_InterpTokens,9);
 			((little_interpreter_InterpTokens_FunctionReturn*)tmp)->p0 = r3;
@@ -187,48 +184,48 @@ venum* little_tools_Conversion_toLittleValue(vdynamic* r0) {
 			r18 = (little__$Little)g$_little_Little;
 			r17 = r18->keywords;
 			if( r17 == NULL ) hl_null_access();
-			r15 = r17->TYPE_STRING;
+			r16 = r17->TYPE_STRING;
 			r3 = hl_alloc_enum(&t$little_interpreter_InterpTokens,25);
-			((little_interpreter_InterpTokens_Identifier*)r3)->p0 = r15;
+			((little_interpreter_InterpTokens_Identifier*)r3)->p0 = r16;
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_interpreter_InterpTokens,13);
 			((little_interpreter_InterpTokens_Block*)tmp)->p0 = r12;
 			((little_interpreter_InterpTokens_Block*)tmp)->p1 = r3;
 			r3 = tmp; };
-			if( hl_vfields(r16)[1] ) *(venum**)(hl_vfields(r16)[1]) = (venum*)r3; else hl_dyn_setp(r16->value,297304054/*value*/,&t$little_interpreter_InterpTokens,r3);
-			r15 = (String)s$d8ea250;
-			if( hl_vfields(r16)[0] ) *(String*)(hl_vfields(r16)[0]) = (String)r15; else hl_dyn_setp(r16->value,23626436/*documentation*/,&t$String,r15);
+			if( hl_vfields(r15)[1] ) *(venum**)(hl_vfields(r15)[1]) = (venum*)r3; else hl_dyn_setp(r15->value,297304054/*value*/,&t$little_interpreter_InterpTokens,r3);
+			r16 = (String)s$d8ea250;
+			if( hl_vfields(r15)[0] ) *(String*)(hl_vfields(r15)[0]) = (String)r16; else hl_dyn_setp(r15->value,23626436/*documentation*/,&t$String,r16);
 			if( r11 == NULL ) hl_null_access();
-			haxe_ds_StringMap_set(r11,r6,((vdynamic*)r16));
+			haxe_ds_StringMap_set(r11,r6,((vdynamic*)r15));
 			r18 = (little__$Little)g$_little_Little;
 			r17 = r18->keywords;
 			if( r17 == NULL ) hl_null_access();
 			r6 = r17->OBJECT_TYPE_PROPERTY_NAME;
-			r16 = hl_alloc_virtual(&t$vrt_069b1ae);
+			r15 = hl_alloc_virtual(&t$vrt_069b1ae);
 			r10 = (hl__Class)hl_dyn_castp(&r0,&t$_dyn,&t$hl_Class);
-			r15 = Type_getClassName(r10);
-			r15 = little_tools_Conversion_toLittleType(r15);
+			r16 = Type_getClassName(r10);
+			r16 = little_tools_Conversion_toLittleType(r16);
 			r3 = hl_alloc_enum(&t$little_interpreter_InterpTokens,18);
-			((little_interpreter_InterpTokens_Characters*)r3)->p0 = r15;
-			if( hl_vfields(r16)[1] ) *(venum**)(hl_vfields(r16)[1]) = (venum*)r3; else hl_dyn_setp(r16->value,297304054/*value*/,&t$little_interpreter_InterpTokens,r3);
-			r15 = (String)s$The_type_of_this_object_as_a_;
+			((little_interpreter_InterpTokens_Characters*)r3)->p0 = r16;
+			if( hl_vfields(r15)[1] ) *(venum**)(hl_vfields(r15)[1]) = (venum*)r3; else hl_dyn_setp(r15->value,297304054/*value*/,&t$little_interpreter_InterpTokens,r3);
+			r16 = (String)s$The_type_of_this_object_as_a_;
 			r18 = (little__$Little)g$_little_Little;
 			r17 = r18->keywords;
 			if( r17 == NULL ) hl_null_access();
 			r21 = r17->TYPE_STRING;
-			r15 = String___add__(r15,r21);
+			r16 = String___add__(r16,r21);
 			r21 = (String)s$5058f1a;
-			r15 = String___add__(r15,r21);
-			if( hl_vfields(r16)[0] ) *(String*)(hl_vfields(r16)[0]) = (String)r15; else hl_dyn_setp(r16->value,23626436/*documentation*/,&t$String,r15);
-			haxe_ds_StringMap_set(r11,r6,((vdynamic*)r16));
+			r16 = String___add__(r16,r21);
+			if( hl_vfields(r15)[0] ) *(String*)(hl_vfields(r15)[0]) = (String)r16; else hl_dyn_setp(r15->value,23626436/*documentation*/,&t$String,r16);
+			haxe_ds_StringMap_set(r11,r6,((vdynamic*)r15));
 			r18 = (little__$Little)g$_little_Little;
 			r17 = r18->keywords;
 			if( r17 == NULL ) hl_null_access();
 			r6 = r17->OBJECT_TYPE_PROPERTY_NAME;
 			r2 = haxe_ds_StringMap_get(r11,r6);
-			r16 = hl_to_virtual(&t$vrt_069b1ae,(vdynamic*)r2);
-			if( r16 == NULL ) hl_null_access();
-			r3 = hl_vfields(r16)[1] ? (*(venum**)(hl_vfields(r16)[1])) : (venum*)hl_dyn_getp(r16->value,297304054/*value*/,&t$little_interpreter_InterpTokens);
+			r15 = hl_to_virtual(&t$vrt_069b1ae,(vdynamic*)r2);
+			if( r15 == NULL ) hl_null_access();
+			r3 = hl_vfields(r15)[1] ? (*(venum**)(hl_vfields(r15)[1])) : (venum*)hl_dyn_getp(r15->value,297304054/*value*/,&t$little_interpreter_InterpTokens);
 			r22 = Type_enumParameters(((vdynamic*)r3));
 			if( r22 == NULL ) hl_null_access();
 			r8 = 0;
@@ -238,7 +235,7 @@ venum* little_tools_Conversion_toLittleValue(vdynamic* r0) {
 			((little_interpreter_InterpTokens_Object*)r3)->p0 = r11;
 			((little_interpreter_InterpTokens_Object*)r3)->p1 = r6;
 			return r3;
-			label$a4dce2d_1_129:
+			label$a4dce2d_1_126:
 			r18 = (little__$Little)g$_little_Little;
 			r17 = r18->keywords;
 			if( r17 == NULL ) hl_null_access();
@@ -248,33 +245,30 @@ venum* little_tools_Conversion_toLittleValue(vdynamic* r0) {
 			r8 = 0;
 			r10 = Type_getClass(r0);
 			r12 = Type_getInstanceFields(r10);
-			label$a4dce2d_1_138:
+			label$a4dce2d_1_135:
 			if( r12 == NULL ) hl_null_access();
 			r13 = r12->length;
-			if( r8 >= r13 ) goto label$a4dce2d_1_162;
+			if( r8 >= r13 ) goto label$a4dce2d_1_156;
 			r13 = r12->length;
-			if( ((unsigned)r8) < ((unsigned)r13) ) goto label$a4dce2d_1_146;
-			r15 = NULL;
-			goto label$a4dce2d_1_152;
-			label$a4dce2d_1_146:
+			if( ((unsigned)r8) < ((unsigned)r13) ) goto label$a4dce2d_1_143;
+			r16 = NULL;
+			goto label$a4dce2d_1_146;
+			label$a4dce2d_1_143:
 			r14 = r12->array;
 			r2 = ((vdynamic**)(r14 + 1))[r8];
-			r15 = (String)r2;
-			r21 = (String)hl_dyn_castp(&r2,&t$_dyn,&t$String);
-			if( r15 == r21 || (r15 && r21 && String___compare(r15,(vdynamic*)r21) == 0) ) goto label$a4dce2d_1_152;
-			hl_assert();
-			label$a4dce2d_1_152:
+			r16 = (String)r2;
+			label$a4dce2d_1_146:
 			++r8;
-			r16 = hl_alloc_virtual(&t$vrt_069b1ae);
-			r2 = Reflect_getProperty(r0,r15);
+			r15 = hl_alloc_virtual(&t$vrt_069b1ae);
+			r2 = Reflect_getProperty(r0,r16);
 			r3 = little_tools_Conversion_toLittleValue(r2);
-			if( hl_vfields(r16)[1] ) *(venum**)(hl_vfields(r16)[1]) = (venum*)r3; else hl_dyn_setp(r16->value,297304054/*value*/,&t$little_interpreter_InterpTokens,r3);
+			if( hl_vfields(r15)[1] ) *(venum**)(hl_vfields(r15)[1]) = (venum*)r3; else hl_dyn_setp(r15->value,297304054/*value*/,&t$little_interpreter_InterpTokens,r3);
 			r21 = (String)s$;
-			if( hl_vfields(r16)[0] ) *(String*)(hl_vfields(r16)[0]) = (String)r21; else hl_dyn_setp(r16->value,23626436/*documentation*/,&t$String,r21);
+			if( hl_vfields(r15)[0] ) *(String*)(hl_vfields(r15)[0]) = (String)r21; else hl_dyn_setp(r15->value,23626436/*documentation*/,&t$String,r21);
 			if( r11 == NULL ) hl_null_access();
-			haxe_ds_StringMap_set(r11,r15,((vdynamic*)r16));
-			goto label$a4dce2d_1_138;
-			label$a4dce2d_1_162:
+			haxe_ds_StringMap_set(r11,r16,((vdynamic*)r15));
+			goto label$a4dce2d_1_135;
+			label$a4dce2d_1_156:
 			r3 = hl_alloc_enum(&t$little_interpreter_InterpTokens,26);
 			((little_interpreter_InterpTokens_Object*)r3)->p0 = r11;
 			((little_interpreter_InterpTokens_Object*)r3)->p1 = r6;
@@ -294,7 +288,7 @@ venum* little_tools_Conversion_toLittleValue(vdynamic* r0) {
 			r3 = (venum*)g$03d4bf9;
 			return r3;
 	}
-	label$a4dce2d_1_174:
+	label$a4dce2d_1_168:
 	r3 = NULL;
 	return r3;
 }

@@ -705,13 +705,20 @@ class Parser {
 						Little.runtime.throwError(ErrorMessage("Missing value after the last `=`"), Layer.PARSER);
 						return null;
 					}
-					var lookahead = mergeWrites([pre[i + 1]])[0];
-					if (assignee.is(WRITE)) {
-						var previousAssignees = assignee.parameter(0);
-						previousAssignees.push(assignee.parameter(1));
-						post.push(Write(previousAssignees, lookahead));
-					}
-					else post.push(Write([assignee], lookahead));
+                    var value = [];
+                    while (i + 1 < pre.length) {
+                        var lookahead = pre[i + 1];
+                        switch lookahead {
+                            case SetLine(_) | SetModule(_) | SplitLine | Sign("="): break;
+                            case _: value.push(lookahead);
+                        }
+                        i++;
+                    }
+                    var token = value.length == 1 ? mergeWrites([value[0]])[0] : Expression(mergeWrites(value), null);
+                    if (assignee.is(WRITE)) {
+                        var assignees = assignee.parameter(0).push(assignee.parameter(1));
+                        post.push(Write(assignees, token));
+                    } else post.push(Write([assignee], token));
 				}
 				case Variable(name, type, doc): post.push(Variable(mergeWrites([name])[0], mergeWrites([type])[0], mergeWrites([doc])[0]));
 				case Function(name, params, type, doc): post.push(Function(mergeWrites([name])[0], mergeWrites([params])[0], mergeWrites([type])[0], mergeWrites([doc])[0]));

@@ -34,8 +34,6 @@ int hl_types_ArrayObj_push(hl__types__ArrayObj,vdynamic*);
 String hl_types_ArrayObj_join(hl__types__ArrayObj,String);
 void hl_types_ArrayObj_unshift(hl__types__ArrayObj,vdynamic*);
 int little_tools__Layer_Layer_Impl__getIndexOf(String);
-extern hl_type t$fun_46da1f1;
-extern hl_type t$_dyn;
 extern String s$Module_;
 extern hl_type t$little_interpreter_StdOut;
 void little_interpreter_StdOut_new(little__interpreter__StdOut);
@@ -44,6 +42,7 @@ extern hl_type t$fun_b3e6601;
 extern hl_type t$fun_6a5047a;
 extern hl_type t$fun_b8bbe41;
 extern hl_type t$fun_715d8bf;
+extern hl_type t$fun_46da1f1;
 extern hl_type t$fun_5281280;
 extern hl_type t$fun_7b48b4f;
 extern hl_type t$fun_6047e2e;
@@ -57,7 +56,7 @@ venum* little_interpreter_Runtime_throwError(little__interpreter__Runtime r0,ven
 	hl_type *r21;
 	venum *r6;
 	bool r11;
-	vclosure *r28, *r29;
+	vclosure *r28;
 	little__interpreter__StdOut r16, r18;
 	int *r14;
 	vdynamic *r9, *r26;
@@ -198,25 +197,22 @@ venum* little_interpreter_Runtime_throwError(little__interpreter__Runtime r0,ven
 	label$c31901e_1_125:
 	if( r22 == NULL ) hl_null_access();
 	r24 = r22->length;
-	if( r8 >= r24 ) goto label$c31901e_1_144;
+	if( r8 >= r24 ) goto label$c31901e_1_141;
 	r24 = r22->length;
 	if( ((unsigned)r8) < ((unsigned)r24) ) goto label$c31901e_1_133;
 	r28 = NULL;
-	goto label$c31901e_1_139;
+	goto label$c31901e_1_136;
 	label$c31901e_1_133:
 	r20 = r22->array;
 	r26 = ((vdynamic**)(r20 + 1))[r8];
 	r28 = (vclosure*)r26;
-	r29 = (vclosure*)hl_dyn_castp(&r26,&t$_dyn,&t$fun_46da1f1);
-	{ int i = hl_dyn_compare((vdynamic*)r28,(vdynamic*)r29); if( i == 0 ) goto label$c31901e_1_139; };
-	hl_assert();
-	label$c31901e_1_139:
+	label$c31901e_1_136:
 	++r8;
 	if( r28 == NULL ) hl_null_access();
 	r23 = r0->line;
 	r28->hasValue ? ((void (*)(vdynamic*,String,int,String))r28->fun)((vdynamic*)r28->value,r3,r23,r5) : ((void (*)(String,int,String))r28->fun)(r3,r23,r5);
 	goto label$c31901e_1_125;
-	label$c31901e_1_144:
+	label$c31901e_1_141:
 	hl_throw((vdynamic*)r1);
 }
 

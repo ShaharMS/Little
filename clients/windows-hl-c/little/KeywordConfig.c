@@ -92,9 +92,8 @@ extern little__$KeywordConfig g$_little_KeywordConfig;
 hl__types__ArrayObj Type_getInstanceFields(hl__Class);
 extern String s$defaultConfig;
 bool hl_types_ArrayObj_remove(hl__types__ArrayObj,vdynamic*);
-extern hl_type t$_dyn;
-int String___compare(String,vdynamic*);
 vdynamic* Reflect_field(vdynamic*,String);
+extern hl_type t$_dyn;
 extern hl_type t$haxe_exceptions_ArgumentException;
 extern String s$config_;
 String String___add__(String,String);
@@ -318,7 +317,7 @@ void little_KeywordConfig_new(little__KeywordConfig r0,little__KeywordConfig r1,
 	if( r1 ) goto label$176d47f_1_181;
 	return;
 	label$176d47f_1_181:
-	if( !r3 ) goto label$176d47f_1_301;
+	if( !r3 ) goto label$176d47f_1_298;
 	r13 = (little__$KeywordConfig)g$_little_KeywordConfig;
 	r5 = Type_getInstanceFields(((hl__Class)r13));
 	if( r5 == NULL ) hl_null_access();
@@ -328,26 +327,23 @@ void little_KeywordConfig_new(little__KeywordConfig r0,little__KeywordConfig r1,
 	label$176d47f_1_188:
 	if( r5 == NULL ) hl_null_access();
 	r16 = r5->length;
-	if( r8 >= r16 ) goto label$176d47f_1_301;
+	if( r8 >= r16 ) goto label$176d47f_1_298;
 	r16 = r5->length;
 	if( ((unsigned)r8) < ((unsigned)r16) ) goto label$176d47f_1_196;
 	r4 = NULL;
-	goto label$176d47f_1_202;
+	goto label$176d47f_1_199;
 	label$176d47f_1_196:
 	r6 = r5->array;
 	r11 = ((vdynamic**)(r6 + 1))[r8];
 	r4 = (String)r11;
-	r17 = (String)hl_dyn_castp(&r11,&t$_dyn,&t$String);
-	if( r4 == r17 || (r4 && r17 && String___compare(r4,(vdynamic*)r17) == 0) ) goto label$176d47f_1_202;
-	hl_assert();
-	label$176d47f_1_202:
+	label$176d47f_1_199:
 	++r8;
 	r11 = Reflect_field(((vdynamic*)r1),r4);
 	r17 = (String)hl_dyn_castp(&r11,&t$_dyn,&t$String);
 	if( r17 == NULL ) hl_null_access();
 	r15 = r17->length;
 	r16 = 0;
-	if( r15 != r16 ) goto label$176d47f_1_226;
+	if( r15 != r16 ) goto label$176d47f_1_223;
 	r19 = (haxe__exceptions__ArgumentException)hl_alloc_obj(&t$haxe_exceptions_ArgumentException);
 	r18 = (String)s$config_;
 	r18 = String___add__(r18,r4);
@@ -365,10 +361,10 @@ void little_KeywordConfig_new(little__KeywordConfig r0,little__KeywordConfig r1,
 	r24 = hl_to_virtual(&t$vrt_eaa6a3b,(vdynamic*)r22);
 	haxe_exceptions_ArgumentException_new(r19,r18,r20,r21,r24);
 	hl_throw((vdynamic*)r19);
-	label$176d47f_1_226:
+	label$176d47f_1_223:
 	r20 = (String)s$7215ee9;
 	r12 = little_tools_TextTools_contains(r17,r20);
-	if( !r12 ) goto label$176d47f_1_246;
+	if( !r12 ) goto label$176d47f_1_243;
 	r19 = (haxe__exceptions__ArgumentException)hl_alloc_obj(&t$haxe_exceptions_ArgumentException);
 	r18 = (String)s$config_;
 	r18 = String___add__(r18,r4);
@@ -386,11 +382,11 @@ void little_KeywordConfig_new(little__KeywordConfig r0,little__KeywordConfig r1,
 	r24 = hl_to_virtual(&t$vrt_eaa6a3b,(vdynamic*)r22);
 	haxe_exceptions_ArgumentException_new(r19,r18,r20,r21,r24);
 	hl_throw((vdynamic*)r19);
-	label$176d47f_1_246:
+	label$176d47f_1_243:
 	r13 = (little__$KeywordConfig)g$_little_KeywordConfig;
 	r14 = r13->recognizedOperators;
 	r12 = little_tools_TextTools_containsAny(r17,r14);
-	if( !r12 ) goto label$176d47f_1_267;
+	if( !r12 ) goto label$176d47f_1_264;
 	r19 = (haxe__exceptions__ArgumentException)hl_alloc_obj(&t$haxe_exceptions_ArgumentException);
 	r18 = (String)s$config_;
 	r18 = String___add__(r18,r4);
@@ -408,7 +404,7 @@ void little_KeywordConfig_new(little__KeywordConfig r0,little__KeywordConfig r1,
 	r24 = hl_to_virtual(&t$vrt_eaa6a3b,(vdynamic*)r22);
 	haxe_exceptions_ArgumentException_new(r19,r18,r20,r21,r24);
 	hl_throw((vdynamic*)r19);
-	label$176d47f_1_267:
+	label$176d47f_1_264:
 	r25 = (EReg)hl_alloc_obj(&t$EReg);
 	r18 = (String)s$213dc3e;
 	r20 = (String)s$;
@@ -416,7 +412,7 @@ void little_KeywordConfig_new(little__KeywordConfig r0,little__KeywordConfig r1,
 	r15 = 0;
 	r18 = String_charAt(r17,r15);
 	r12 = EReg_match(r25,r18);
-	if( !r12 ) goto label$176d47f_1_292;
+	if( !r12 ) goto label$176d47f_1_289;
 	r19 = (haxe__exceptions__ArgumentException)hl_alloc_obj(&t$haxe_exceptions_ArgumentException);
 	r18 = (String)s$config_;
 	r18 = String___add__(r18,r4);
@@ -434,19 +430,19 @@ void little_KeywordConfig_new(little__KeywordConfig r0,little__KeywordConfig r1,
 	r24 = hl_to_virtual(&t$vrt_eaa6a3b,(vdynamic*)r22);
 	haxe_exceptions_ArgumentException_new(r19,r18,r20,r21,r24);
 	hl_throw((vdynamic*)r19);
-	label$176d47f_1_292:
+	label$176d47f_1_289:
 	r13 = (little__$KeywordConfig)g$_little_KeywordConfig;
 	r10 = r13->defaultConfig;
 	r11 = Reflect_field(((vdynamic*)r10),r4);
-	{ int i = hl_dyn_compare((vdynamic*)r17,(vdynamic*)r11); if( i != 0 ) goto label$176d47f_1_299; };
+	{ int i = hl_dyn_compare((vdynamic*)r17,(vdynamic*)r11); if( i != 0 ) goto label$176d47f_1_296; };
 	r11 = NULL;
 	Reflect_setField(((vdynamic*)r0),r4,r11);
-	goto label$176d47f_1_300;
-	label$176d47f_1_299:
+	goto label$176d47f_1_297;
+	label$176d47f_1_296:
 	Reflect_setField(((vdynamic*)r0),r4,((vdynamic*)r17));
-	label$176d47f_1_300:
+	label$176d47f_1_297:
 	goto label$176d47f_1_188;
-	label$176d47f_1_301:
+	label$176d47f_1_298:
 	return;
 }
 

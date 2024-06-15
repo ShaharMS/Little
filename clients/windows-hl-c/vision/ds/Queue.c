@@ -4,7 +4,6 @@
 #include <vision/ds/Queue.h>
 #include <hl/types/ArrayObj.h>
 extern hl_type t$vision_ds_QueueCell;
-extern hl_type t$_dyn;
 #include <hl/natives.h>
 hl__types__ArrayObj hl_types_ArrayObj_alloc(varray*);
 extern hl_type t$vrt_140055b;
@@ -35,22 +34,19 @@ bool vision_ds_Queue_iterator__$1(hl__types__ArrayObj r0) {
 	r3 = r0->length;
 	if( ((unsigned)r2) < ((unsigned)r3) ) goto label$13d5684_2_6;
 	r4 = NULL;
-	goto label$13d5684_2_12;
+	goto label$13d5684_2_9;
 	label$13d5684_2_6:
 	r6 = r0->array;
 	r5 = ((vdynamic**)(r6 + 1))[r2];
 	r4 = (vision__ds__QueueCell)r5;
-	r7 = (vision__ds__QueueCell)hl_dyn_castp(&r5,&t$_dyn,&t$vision_ds_QueueCell);
-	if( r4 == r7 ) goto label$13d5684_2_12;
-	hl_assert();
-	label$13d5684_2_12:
+	label$13d5684_2_9:
 	r7 = NULL;
-	if( r4 != r7 ) goto label$13d5684_2_16;
+	if( r4 != r7 ) goto label$13d5684_2_13;
 	r1 = false;
-	goto label$13d5684_2_17;
-	label$13d5684_2_16:
+	goto label$13d5684_2_14;
+	label$13d5684_2_13:
 	r1 = true;
-	label$13d5684_2_17:
+	label$13d5684_2_14:
 	return r1;
 }
 
@@ -80,7 +76,7 @@ vvirtual* vision_ds_Queue_iterator(vision__ds__Queue r0) {
 
 vdynamic* vision_ds_Queue_iterator__$2(hl__types__ArrayObj r0) {
 	vdynamic *r4;
-	vision__ds__QueueCell r3, r6;
+	vision__ds__QueueCell r3, r7;
 	varray *r5;
 	int r1, r2;
 	if( r0 == NULL ) hl_null_access();
@@ -88,24 +84,21 @@ vdynamic* vision_ds_Queue_iterator__$2(hl__types__ArrayObj r0) {
 	r2 = r0->length;
 	if( ((unsigned)r1) < ((unsigned)r2) ) goto label$13d5684_4_6;
 	r3 = NULL;
-	goto label$13d5684_4_12;
+	goto label$13d5684_4_9;
 	label$13d5684_4_6:
 	r5 = r0->array;
 	r4 = ((vdynamic**)(r5 + 1))[r1];
 	r3 = (vision__ds__QueueCell)r4;
-	r6 = (vision__ds__QueueCell)hl_dyn_castp(&r4,&t$_dyn,&t$vision_ds_QueueCell);
-	if( r3 == r6 ) goto label$13d5684_4_12;
-	hl_assert();
-	label$13d5684_4_12:
+	label$13d5684_4_9:
 	r1 = 0;
 	if( r3 == NULL ) hl_null_access();
-	r6 = r3->next;
+	r7 = r3->next;
 	r2 = r0->length;
-	if( ((unsigned)r1) < ((unsigned)r2) ) goto label$13d5684_4_18;
+	if( ((unsigned)r1) < ((unsigned)r2) ) goto label$13d5684_4_15;
 	hl_types_ArrayObj___expand(r0,r1);
-	label$13d5684_4_18:
+	label$13d5684_4_15:
 	r5 = r0->array;
-	((vision__ds__QueueCell*)(r5 + 1))[r1] = r6;
+	((vision__ds__QueueCell*)(r5 + 1))[r1] = r7;
 	r4 = r3->value;
 	return r4;
 }

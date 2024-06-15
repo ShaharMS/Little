@@ -17,14 +17,11 @@ hl__types__ArrayObj little_parser_Parser_mergeWrites(hl__types__ArrayObj);
 hl__types__ArrayObj little_parser_Parser_mergeValuesWithTypeDecls(hl__types__ArrayObj);
 hl__types__ArrayObj little_parser_Parser_mergeNonBlockBodies(hl__types__ArrayObj);
 extern little__parser__$Parser g$_little_parser_Parser;
-extern hl_type t$fun_ed49d23;
-extern hl_type t$_dyn;
 #include <little/lexer/LexerTokens.h>
 #include <little/KeywordConfig.h>
 #include <little/Little.h>
 #include <hl/natives.h>
 hl__types__ArrayObj hl_types_ArrayObj_alloc(varray*);
-extern hl_type t$little_lexer_LexerTokens;
 int hl_types_ArrayObj_push(hl__types__ArrayObj,vdynamic*);
 extern String s$5058f1a;
 int little_tools_TextTools_countOccurrencesOf(String,String);
@@ -80,6 +77,7 @@ extern String s$6d77f74;
 extern String s$37e1352;
 extern String s$TypeDeclaration;
 hl__types__ArrayDyn Type_enumParameters(vdynamic*);
+extern hl_type t$_dyn;
 extern String s$72d5a0f;
 extern String s$e3caf89;
 extern String s$3dc5ad1;
@@ -109,7 +107,7 @@ hl__types__ArrayObj little_parser_Parser_parse(hl__types__ArrayObj r0) {
 	String r5;
 	hl__types__ArrayObj r1, r3, r9;
 	venum *r4;
-	vclosure *r10, *r13;
+	vclosure *r10;
 	vdynamic *r11;
 	little__parser__$Parser r7;
 	varray *r12;
@@ -136,35 +134,32 @@ hl__types__ArrayObj little_parser_Parser_parse(hl__types__ArrayObj r0) {
 	label$96e09ea_1_18:
 	if( r3 == NULL ) hl_null_access();
 	r8 = r3->length;
-	if( r6 >= r8 ) goto label$96e09ea_1_37;
+	if( r6 >= r8 ) goto label$96e09ea_1_34;
 	r8 = r3->length;
 	if( ((unsigned)r6) < ((unsigned)r8) ) goto label$96e09ea_1_26;
 	r10 = NULL;
-	goto label$96e09ea_1_32;
+	goto label$96e09ea_1_29;
 	label$96e09ea_1_26:
 	r12 = r3->array;
 	r11 = ((vdynamic**)(r12 + 1))[r6];
 	r10 = (vclosure*)r11;
-	r13 = (vclosure*)hl_dyn_castp(&r11,&t$_dyn,&t$fun_ed49d23);
-	{ int i = hl_dyn_compare((vdynamic*)r10,(vdynamic*)r13); if( i == 0 ) goto label$96e09ea_1_32; };
-	hl_assert();
-	label$96e09ea_1_32:
+	label$96e09ea_1_29:
 	++r6;
 	if( r10 == NULL ) hl_null_access();
 	r9 = r10->hasValue ? ((hl__types__ArrayObj (*)(vdynamic*,hl__types__ArrayObj))r10->fun)((vdynamic*)r10->value,r1) : ((hl__types__ArrayObj (*)(hl__types__ArrayObj))r10->fun)(r1);
 	r1 = r9;
 	goto label$96e09ea_1_18;
-	label$96e09ea_1_37:
+	label$96e09ea_1_34:
 	return r1;
 }
 
 hl__types__ArrayObj little_parser_Parser_convert(hl__types__ArrayObj r0) {
-	String r11, r13;
-	little__$Little r15;
+	String r10, r12;
+	little__$Little r14;
 	hl__types__ArrayObj r1;
-	venum *r8, *r10, *r12;
+	venum *r8, *r11;
 	hl_type *r3;
-	little__KeywordConfig r14;
+	little__KeywordConfig r13;
 	vdynamic *r9;
 	int r4, r5, r6, r7;
 	varray *r2;
@@ -177,133 +172,130 @@ hl__types__ArrayObj little_parser_Parser_convert(hl__types__ArrayObj r0) {
 	label$96e09ea_2_6:
 	if( r0 == NULL ) hl_null_access();
 	r7 = r0->length;
-	if( r5 >= r7 ) goto label$96e09ea_2_94;
+	if( r5 >= r7 ) goto label$96e09ea_2_91;
 	r7 = r0->length;
 	if( ((unsigned)r5) < ((unsigned)r7) ) goto label$96e09ea_2_14;
 	r8 = NULL;
-	goto label$96e09ea_2_20;
+	goto label$96e09ea_2_17;
 	label$96e09ea_2_14:
 	r2 = r0->array;
 	r9 = ((vdynamic**)(r2 + 1))[r5];
 	r8 = (venum*)r9;
-	r10 = (venum*)hl_dyn_castp(&r9,&t$_dyn,&t$little_lexer_LexerTokens);
-	if( r8 == r10 ) goto label$96e09ea_2_20;
-	hl_assert();
-	label$96e09ea_2_20:
+	label$96e09ea_2_17:
 	if( r8 == NULL ) hl_null_access();
 	r6 = HL__ENUM_INDEX__(r8);
 	switch(r6) {
 		default:
-			goto label$96e09ea_2_92;
+			goto label$96e09ea_2_89;
 		case 0:
-			r11 = ((little_lexer_LexerTokens_Identifier*)r8)->p0;
+			r10 = ((little_lexer_LexerTokens_Identifier*)r8)->p0;
 			if( r1 == NULL ) hl_null_access();
-			r12 = hl_alloc_enum(&t$little_parser_ParserTokens,8);
-			((little_parser_ParserTokens_Identifier*)r12)->p0 = r11;
-			r6 = hl_types_ArrayObj_push(r1,((vdynamic*)r12));
-			goto label$96e09ea_2_92;
+			r11 = hl_alloc_enum(&t$little_parser_ParserTokens,8);
+			((little_parser_ParserTokens_Identifier*)r11)->p0 = r10;
+			r6 = hl_types_ArrayObj_push(r1,((vdynamic*)r11));
+			goto label$96e09ea_2_89;
 		case 1:
-			r11 = ((little_lexer_LexerTokens_Sign*)r8)->p0;
+			r10 = ((little_lexer_LexerTokens_Sign*)r8)->p0;
 			if( r1 == NULL ) hl_null_access();
-			r12 = hl_alloc_enum(&t$little_parser_ParserTokens,16);
-			((little_parser_ParserTokens_Sign*)r12)->p0 = r11;
-			r6 = hl_types_ArrayObj_push(r1,((vdynamic*)r12));
-			goto label$96e09ea_2_92;
+			r11 = hl_alloc_enum(&t$little_parser_ParserTokens,16);
+			((little_parser_ParserTokens_Sign*)r11)->p0 = r10;
+			r6 = hl_types_ArrayObj_push(r1,((vdynamic*)r11));
+			goto label$96e09ea_2_89;
 		case 2:
-			r11 = ((little_lexer_LexerTokens_Number*)r8)->p0;
-			r13 = (String)s$5058f1a;
-			r6 = little_tools_TextTools_countOccurrencesOf(r11,r13);
+			r10 = ((little_lexer_LexerTokens_Number*)r8)->p0;
+			r12 = (String)s$5058f1a;
+			r6 = little_tools_TextTools_countOccurrencesOf(r10,r12);
 			r7 = 0;
-			if( r6 != r7 ) goto label$96e09ea_2_43;
+			if( r6 != r7 ) goto label$96e09ea_2_40;
 			if( r1 == NULL ) hl_null_access();
-			r12 = hl_alloc_enum(&t$little_parser_ParserTokens,17);
-			((little_parser_ParserTokens_Number*)r12)->p0 = r11;
-			r6 = hl_types_ArrayObj_push(r1,((vdynamic*)r12));
-			goto label$96e09ea_2_50;
-			label$96e09ea_2_43:
-			r13 = (String)s$5058f1a;
-			r6 = little_tools_TextTools_countOccurrencesOf(r11,r13);
+			r11 = hl_alloc_enum(&t$little_parser_ParserTokens,17);
+			((little_parser_ParserTokens_Number*)r11)->p0 = r10;
+			r6 = hl_types_ArrayObj_push(r1,((vdynamic*)r11));
+			goto label$96e09ea_2_47;
+			label$96e09ea_2_40:
+			r12 = (String)s$5058f1a;
+			r6 = little_tools_TextTools_countOccurrencesOf(r10,r12);
 			r7 = 1;
-			if( r6 != r7 ) goto label$96e09ea_2_50;
+			if( r6 != r7 ) goto label$96e09ea_2_47;
 			if( r1 == NULL ) hl_null_access();
-			r12 = hl_alloc_enum(&t$little_parser_ParserTokens,18);
-			((little_parser_ParserTokens_Decimal*)r12)->p0 = r11;
-			r6 = hl_types_ArrayObj_push(r1,((vdynamic*)r12));
-			label$96e09ea_2_50:
-			goto label$96e09ea_2_92;
+			r11 = hl_alloc_enum(&t$little_parser_ParserTokens,18);
+			((little_parser_ParserTokens_Decimal*)r11)->p0 = r10;
+			r6 = hl_types_ArrayObj_push(r1,((vdynamic*)r11));
+			label$96e09ea_2_47:
+			goto label$96e09ea_2_89;
 		case 3:
-			r11 = ((little_lexer_LexerTokens_Boolean*)r8)->p0;
-			r15 = (little__$Little)g$_little_Little;
-			r14 = r15->keywords;
-			if( r14 == NULL ) hl_null_access();
-			r13 = r14->FALSE_VALUE;
-			if( r11 != r13 && (!r11 || !r13 || String___compare(r11,(vdynamic*)r13) != 0) ) goto label$96e09ea_2_61;
+			r10 = ((little_lexer_LexerTokens_Boolean*)r8)->p0;
+			r14 = (little__$Little)g$_little_Little;
+			r13 = r14->keywords;
+			if( r13 == NULL ) hl_null_access();
+			r12 = r13->FALSE_VALUE;
+			if( r10 != r12 && (!r10 || !r12 || String___compare(r10,(vdynamic*)r12) != 0) ) goto label$96e09ea_2_58;
 			if( r1 == NULL ) hl_null_access();
-			r12 = (venum*)g$607228e;
-			r6 = hl_types_ArrayObj_push(r1,((vdynamic*)r12));
-			goto label$96e09ea_2_69;
-			label$96e09ea_2_61:
-			r15 = (little__$Little)g$_little_Little;
-			r14 = r15->keywords;
-			if( r14 == NULL ) hl_null_access();
-			r13 = r14->TRUE_VALUE;
-			if( r11 != r13 && (!r11 || !r13 || String___compare(r11,(vdynamic*)r13) != 0) ) goto label$96e09ea_2_69;
+			r11 = (venum*)g$607228e;
+			r6 = hl_types_ArrayObj_push(r1,((vdynamic*)r11));
+			goto label$96e09ea_2_66;
+			label$96e09ea_2_58:
+			r14 = (little__$Little)g$_little_Little;
+			r13 = r14->keywords;
+			if( r13 == NULL ) hl_null_access();
+			r12 = r13->TRUE_VALUE;
+			if( r10 != r12 && (!r10 || !r12 || String___compare(r10,(vdynamic*)r12) != 0) ) goto label$96e09ea_2_66;
 			if( r1 == NULL ) hl_null_access();
-			r12 = (venum*)g$ccd42cb;
-			r6 = hl_types_ArrayObj_push(r1,((vdynamic*)r12));
-			label$96e09ea_2_69:
-			goto label$96e09ea_2_92;
+			r11 = (venum*)g$ccd42cb;
+			r6 = hl_types_ArrayObj_push(r1,((vdynamic*)r11));
+			label$96e09ea_2_66:
+			goto label$96e09ea_2_89;
 		case 4:
-			r11 = ((little_lexer_LexerTokens_Characters*)r8)->p0;
+			r10 = ((little_lexer_LexerTokens_Characters*)r8)->p0;
 			if( r1 == NULL ) hl_null_access();
-			r12 = hl_alloc_enum(&t$little_parser_ParserTokens,19);
-			((little_parser_ParserTokens_Characters*)r12)->p0 = r11;
-			r6 = hl_types_ArrayObj_push(r1,((vdynamic*)r12));
-			goto label$96e09ea_2_92;
+			r11 = hl_alloc_enum(&t$little_parser_ParserTokens,19);
+			((little_parser_ParserTokens_Characters*)r11)->p0 = r10;
+			r6 = hl_types_ArrayObj_push(r1,((vdynamic*)r11));
+			goto label$96e09ea_2_89;
 		case 5:
 			if( r1 == NULL ) hl_null_access();
-			r12 = (venum*)g$31ecdba;
-			r6 = hl_types_ArrayObj_push(r1,((vdynamic*)r12));
-			goto label$96e09ea_2_92;
+			r11 = (venum*)g$31ecdba;
+			r6 = hl_types_ArrayObj_push(r1,((vdynamic*)r11));
+			goto label$96e09ea_2_89;
 		case 6:
 			if( r1 == NULL ) hl_null_access();
-			r12 = hl_alloc_enum(&t$little_parser_ParserTokens,0);
-			((little_parser_ParserTokens_SetLine*)r12)->p0 = r4;
-			r6 = hl_types_ArrayObj_push(r1,((vdynamic*)r12));
+			r11 = hl_alloc_enum(&t$little_parser_ParserTokens,0);
+			((little_parser_ParserTokens_SetLine*)r11)->p0 = r4;
+			r6 = hl_types_ArrayObj_push(r1,((vdynamic*)r11));
 			++r4;
-			goto label$96e09ea_2_92;
+			goto label$96e09ea_2_89;
 		case 7:
 			if( r1 == NULL ) hl_null_access();
-			r12 = (venum*)g$f51a8bf;
-			r6 = hl_types_ArrayObj_push(r1,((vdynamic*)r12));
-			goto label$96e09ea_2_92;
+			r11 = (venum*)g$f51a8bf;
+			r6 = hl_types_ArrayObj_push(r1,((vdynamic*)r11));
+			goto label$96e09ea_2_89;
 		case 8:
-			r11 = ((little_lexer_LexerTokens_Documentation*)r8)->p0;
+			r10 = ((little_lexer_LexerTokens_Documentation*)r8)->p0;
 			if( r1 == NULL ) hl_null_access();
-			r12 = hl_alloc_enum(&t$little_parser_ParserTokens,20);
-			((little_parser_ParserTokens_Documentation*)r12)->p0 = r11;
-			r6 = hl_types_ArrayObj_push(r1,((vdynamic*)r12));
+			r11 = hl_alloc_enum(&t$little_parser_ParserTokens,20);
+			((little_parser_ParserTokens_Documentation*)r11)->p0 = r10;
+			r6 = hl_types_ArrayObj_push(r1,((vdynamic*)r11));
 	}
-	label$96e09ea_2_92:
+	label$96e09ea_2_89:
 	++r5;
 	goto label$96e09ea_2_6;
-	label$96e09ea_2_94:
+	label$96e09ea_2_91:
 	return r1;
 }
 
 hl__types__ArrayObj little_parser_Parser_mergeBlocks(hl__types__ArrayObj r0) {
 	String r12, r13;
 	little__$Little r24;
-	hl__types__ArrayObj r2, r11, r14, r16, r17, r27;
-	hl_type *r9;
-	venum *r6, *r8, *r15, *r18, *r22;
-	bool r21;
+	hl__types__ArrayObj r2, r10, r14, r16, r17, r27;
+	hl_type *r8;
+	venum *r6, *r11, *r15, *r21, *r22;
+	bool r20;
 	little__interpreter__Runtime r23;
 	int *r25;
 	vdynamic *r3;
 	vbyte *r26;
 	varray *r7;
-	int r4, r5, r10, r19, r20;
+	int r4, r5, r9, r18, r19;
 	if( r0 ) goto label$96e09ea_3_3;
 	r2 = NULL;
 	return r2;
@@ -311,51 +303,45 @@ hl__types__ArrayObj little_parser_Parser_mergeBlocks(hl__types__ArrayObj r0) {
 	if( r0 == NULL ) hl_null_access();
 	r4 = r0->length;
 	r5 = 1;
-	if( r4 != r5 ) goto label$96e09ea_3_27;
+	if( r4 != r5 ) goto label$96e09ea_3_24;
 	r4 = 0;
 	r5 = r0->length;
 	if( ((unsigned)r4) < ((unsigned)r5) ) goto label$96e09ea_3_12;
 	r6 = NULL;
-	goto label$96e09ea_3_18;
+	goto label$96e09ea_3_15;
 	label$96e09ea_3_12:
 	r7 = r0->array;
 	r3 = ((vdynamic**)(r7 + 1))[r4];
 	r6 = (venum*)r3;
-	r8 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-	if( r6 == r8 ) goto label$96e09ea_3_18;
-	hl_assert();
-	label$96e09ea_3_18:
-	if( r6 ) goto label$96e09ea_3_27;
-	r9 = &t$little_parser_ParserTokens;
+	label$96e09ea_3_15:
+	if( r6 ) goto label$96e09ea_3_24;
+	r8 = &t$little_parser_ParserTokens;
 	r4 = 1;
-	r7 = hl_alloc_array(r9,r4);
+	r7 = hl_alloc_array(r8,r4);
 	r6 = NULL;
 	r4 = 0;
 	((venum**)(r7 + 1))[r4] = r6;
 	r2 = hl_types_ArrayObj_alloc(r7);
 	return r2;
-	label$96e09ea_3_27:
-	r9 = &t$little_parser_ParserTokens;
+	label$96e09ea_3_24:
+	r8 = &t$little_parser_ParserTokens;
 	r4 = 0;
-	r7 = hl_alloc_array(r9,r4);
+	r7 = hl_alloc_array(r8,r4);
 	r2 = hl_types_ArrayObj_alloc(r7);
 	r4 = 0;
-	label$96e09ea_3_32:
+	label$96e09ea_3_29:
 	if( r0 == NULL ) hl_null_access();
-	r10 = r0->length;
-	if( r4 >= r10 ) goto label$96e09ea_3_253;
-	r10 = r0->length;
-	if( ((unsigned)r4) < ((unsigned)r10) ) goto label$96e09ea_3_40;
+	r9 = r0->length;
+	if( r4 >= r9 ) goto label$96e09ea_3_232;
+	r9 = r0->length;
+	if( ((unsigned)r4) < ((unsigned)r9) ) goto label$96e09ea_3_37;
 	r6 = NULL;
-	goto label$96e09ea_3_46;
-	label$96e09ea_3_40:
+	goto label$96e09ea_3_40;
+	label$96e09ea_3_37:
 	r7 = r0->array;
 	r3 = ((vdynamic**)(r7 + 1))[r4];
 	r6 = (venum*)r3;
-	r8 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-	if( r6 == r8 ) goto label$96e09ea_3_46;
-	hl_assert();
-	label$96e09ea_3_46:
+	label$96e09ea_3_40:
 	if( r6 == NULL ) hl_null_access();
 	r5 = HL__ENUM_INDEX__(r6);
 	switch(r5) {
@@ -381,171 +367,162 @@ hl__types__ArrayObj little_parser_Parser_mergeBlocks(hl__types__ArrayObj r0) {
 		case 24:
 			if( r2 == NULL ) hl_null_access();
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
-			goto label$96e09ea_3_251;
+			goto label$96e09ea_3_230;
 		case 0:
 			r5 = ((little_parser_ParserTokens_SetLine*)r6)->p0;
 			little_parser_Parser_setLine(r5);
 			if( r2 == NULL ) hl_null_access();
-			r10 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
-			goto label$96e09ea_3_251;
+			r9 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
+			goto label$96e09ea_3_230;
 		case 1:
 			r12 = ((little_parser_ParserTokens_SetModule*)r6)->p0;
 			r13 = little_parser_Parser_set_module(r12);
 			if( r2 == NULL ) hl_null_access();
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
-			goto label$96e09ea_3_251;
+			goto label$96e09ea_3_230;
 		case 2:
 			little_parser_Parser_nextPart();
 			if( r2 == NULL ) hl_null_access();
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
-			goto label$96e09ea_3_251;
+			goto label$96e09ea_3_230;
 		case 12:
-			r11 = ((little_parser_ParserTokens_Expression*)r6)->p0;
-			r8 = ((little_parser_ParserTokens_Expression*)r6)->p1;
+			r10 = ((little_parser_ParserTokens_Expression*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_Expression*)r6)->p1;
 			if( r2 == NULL ) hl_null_access();
-			r16 = little_parser_Parser_mergeBlocks(r11);
-			r9 = &t$little_parser_ParserTokens;
+			r16 = little_parser_Parser_mergeBlocks(r10);
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeBlocks(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_3_83;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_3_77;
 			r15 = NULL;
-			goto label$96e09ea_3_89;
-			label$96e09ea_3_83:
+			goto label$96e09ea_3_80;
+			label$96e09ea_3_77:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r15 = (venum*)r3;
-			r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r15 == r18 ) goto label$96e09ea_3_89;
-			hl_assert();
-			label$96e09ea_3_89:
+			label$96e09ea_3_80:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,12);
 			((little_parser_ParserTokens_Expression*)tmp)->p0 = r16;
 			((little_parser_ParserTokens_Expression*)tmp)->p1 = r15;
 			r15 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r15));
-			goto label$96e09ea_3_251;
+			goto label$96e09ea_3_230;
 		case 13:
-			r11 = ((little_parser_ParserTokens_Block*)r6)->p0;
-			r8 = ((little_parser_ParserTokens_Block*)r6)->p1;
+			r10 = ((little_parser_ParserTokens_Block*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_Block*)r6)->p1;
 			if( r2 == NULL ) hl_null_access();
-			r16 = little_parser_Parser_mergeBlocks(r11);
-			r9 = &t$little_parser_ParserTokens;
+			r16 = little_parser_Parser_mergeBlocks(r10);
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeBlocks(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_3_109;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_3_100;
 			r15 = NULL;
-			goto label$96e09ea_3_115;
-			label$96e09ea_3_109:
+			goto label$96e09ea_3_103;
+			label$96e09ea_3_100:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r15 = (venum*)r3;
-			r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r15 == r18 ) goto label$96e09ea_3_115;
-			hl_assert();
-			label$96e09ea_3_115:
+			label$96e09ea_3_103:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,13);
 			((little_parser_ParserTokens_Block*)tmp)->p0 = r16;
 			((little_parser_ParserTokens_Block*)tmp)->p1 = r15;
 			r15 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r15));
-			goto label$96e09ea_3_251;
+			goto label$96e09ea_3_230;
 		case 16:
 			r12 = ((little_parser_ParserTokens_Sign*)r6)->p0;
 			r13 = (String)s$f95b70f;
-			if( r12 != r13 && (!r12 || !r13 || String___compare(r12,(vdynamic*)r13) != 0) ) goto label$96e09ea_3_200;
+			if( r12 != r13 && (!r12 || !r13 || String___compare(r12,(vdynamic*)r13) != 0) ) goto label$96e09ea_3_185;
 			r5 = little_parser_Parser_get_line();
-			r9 = &t$little_parser_ParserTokens;
-			r10 = 2;
-			r7 = hl_alloc_array(r9,r10);
+			r8 = &t$little_parser_ParserTokens;
+			r9 = 2;
+			r7 = hl_alloc_array(r8,r9);
 			r12 = little_parser_Parser_get_module();
-			r8 = hl_alloc_enum(&t$little_parser_ParserTokens,1);
-			((little_parser_ParserTokens_SetModule*)r8)->p0 = r12;
-			r10 = 0;
-			((venum**)(r7 + 1))[r10] = r8;
-			r8 = hl_alloc_enum(&t$little_parser_ParserTokens,0);
-			((little_parser_ParserTokens_SetLine*)r8)->p0 = r5;
-			r10 = 1;
-			((venum**)(r7 + 1))[r10] = r8;
-			r11 = hl_types_ArrayObj_alloc(r7);
-			r10 = 1;
-			label$96e09ea_3_134:
-			r20 = 1;
-			r19 = r4 + r20;
+			r11 = hl_alloc_enum(&t$little_parser_ParserTokens,1);
+			((little_parser_ParserTokens_SetModule*)r11)->p0 = r12;
+			r9 = 0;
+			((venum**)(r7 + 1))[r9] = r11;
+			r11 = hl_alloc_enum(&t$little_parser_ParserTokens,0);
+			((little_parser_ParserTokens_SetLine*)r11)->p0 = r5;
+			r9 = 1;
+			((venum**)(r7 + 1))[r9] = r11;
+			r10 = hl_types_ArrayObj_alloc(r7);
+			r9 = 1;
+			label$96e09ea_3_122:
+			r19 = 1;
+			r18 = r4 + r19;
 			if( r0 == NULL ) hl_null_access();
-			r20 = r0->length;
-			if( r19 >= r20 ) goto label$96e09ea_3_175;
-			r20 = 1;
-			r19 = r4 + r20;
-			r20 = r0->length;
-			if( ((unsigned)r19) < ((unsigned)r20) ) goto label$96e09ea_3_146;
-			r8 = NULL;
-			goto label$96e09ea_3_152;
-			label$96e09ea_3_146:
+			r19 = r0->length;
+			if( r18 >= r19 ) goto label$96e09ea_3_160;
+			r19 = 1;
+			r18 = r4 + r19;
+			r19 = r0->length;
+			if( ((unsigned)r18) < ((unsigned)r19) ) goto label$96e09ea_3_134;
+			r11 = NULL;
+			goto label$96e09ea_3_137;
+			label$96e09ea_3_134:
 			r7 = r0->array;
-			r3 = ((vdynamic**)(r7 + 1))[r19];
-			r8 = (venum*)r3;
-			r15 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r8 == r15 ) goto label$96e09ea_3_152;
-			hl_assert();
-			label$96e09ea_3_152:
+			r3 = ((vdynamic**)(r7 + 1))[r18];
+			r11 = (venum*)r3;
+			label$96e09ea_3_137:
 			r12 = (String)s$f95b70f;
-			r18 = hl_alloc_enum(&t$little_parser_ParserTokens,16);
-			((little_parser_ParserTokens_Sign*)r18)->p0 = r12;
-			r21 = hl_type_enum_eq(((vdynamic*)r8),((vdynamic*)r18));
-			if( !r21 ) goto label$96e09ea_3_160;
-			++r10;
-			if( r11 == NULL ) hl_null_access();
-			r19 = hl_types_ArrayObj_push(r11,((vdynamic*)r8));
-			goto label$96e09ea_3_173;
-			label$96e09ea_3_160:
+			r21 = hl_alloc_enum(&t$little_parser_ParserTokens,16);
+			((little_parser_ParserTokens_Sign*)r21)->p0 = r12;
+			r20 = hl_type_enum_eq(((vdynamic*)r11),((vdynamic*)r21));
+			if( !r20 ) goto label$96e09ea_3_145;
+			++r9;
+			if( r10 == NULL ) hl_null_access();
+			r18 = hl_types_ArrayObj_push(r10,((vdynamic*)r11));
+			goto label$96e09ea_3_158;
+			label$96e09ea_3_145:
 			r12 = (String)s$cbb184d;
-			r18 = hl_alloc_enum(&t$little_parser_ParserTokens,16);
-			((little_parser_ParserTokens_Sign*)r18)->p0 = r12;
-			r21 = hl_type_enum_eq(((vdynamic*)r8),((vdynamic*)r18));
-			if( !r21 ) goto label$96e09ea_3_171;
-			--r10;
-			r20 = 0;
-			if( r10 != r20 ) goto label$96e09ea_3_168;
-			goto label$96e09ea_3_175;
-			label$96e09ea_3_168:
-			if( r11 == NULL ) hl_null_access();
-			r19 = hl_types_ArrayObj_push(r11,((vdynamic*)r8));
-			goto label$96e09ea_3_173;
-			label$96e09ea_3_171:
-			if( r11 == NULL ) hl_null_access();
-			r19 = hl_types_ArrayObj_push(r11,((vdynamic*)r8));
-			label$96e09ea_3_173:
+			r21 = hl_alloc_enum(&t$little_parser_ParserTokens,16);
+			((little_parser_ParserTokens_Sign*)r21)->p0 = r12;
+			r20 = hl_type_enum_eq(((vdynamic*)r11),((vdynamic*)r21));
+			if( !r20 ) goto label$96e09ea_3_156;
+			--r9;
+			r19 = 0;
+			if( r9 != r19 ) goto label$96e09ea_3_153;
+			goto label$96e09ea_3_160;
+			label$96e09ea_3_153:
+			if( r10 == NULL ) hl_null_access();
+			r18 = hl_types_ArrayObj_push(r10,((vdynamic*)r11));
+			goto label$96e09ea_3_158;
+			label$96e09ea_3_156:
+			if( r10 == NULL ) hl_null_access();
+			r18 = hl_types_ArrayObj_push(r10,((vdynamic*)r11));
+			label$96e09ea_3_158:
 			++r4;
-			goto label$96e09ea_3_134;
-			label$96e09ea_3_175:
-			r20 = 1;
-			r19 = r4 + r20;
-			r20 = r0->length;
-			if( r19 != r20 ) goto label$96e09ea_3_193;
+			goto label$96e09ea_3_122;
+			label$96e09ea_3_160:
+			r19 = 1;
+			r18 = r4 + r19;
+			r19 = r0->length;
+			if( r18 != r19 ) goto label$96e09ea_3_178;
 			r24 = (little__$Little)g$_little_Little;
 			r23 = r24->runtime;
 			if( r23 == NULL ) hl_null_access();
 			r12 = (String)s$fcb62d3;
-			r19 = r5;
-			r25 = &r19;
-			r26 = hl_itos(r19,r25);
-			r13 = String___alloc__(r26,r19);
+			r18 = r5;
+			r25 = &r18;
+			r26 = hl_itos(r18,r25);
+			r13 = String___alloc__(r26,r18);
 			r12 = String___add__(r12,r13);
 			r22 = hl_alloc_enum(&t$little_interpreter_InterpTokens,27);
 			((little_interpreter_InterpTokens_ErrorMessage*)r22)->p0 = r12;
@@ -553,84 +530,78 @@ hl__types__ArrayObj little_parser_Parser_mergeBlocks(hl__types__ArrayObj r0) {
 			r22 = little_interpreter_Runtime_throwError(r23,r22,r12);
 			r14 = NULL;
 			return r14;
-			label$96e09ea_3_193:
+			label$96e09ea_3_178:
 			if( r2 == NULL ) hl_null_access();
-			r16 = little_parser_Parser_mergeBlocks(r11);
-			r8 = NULL;
+			r16 = little_parser_Parser_mergeBlocks(r10);
+			r11 = NULL;
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,13);
 			((little_parser_ParserTokens_Block*)tmp)->p0 = r16;
-			((little_parser_ParserTokens_Block*)tmp)->p1 = r8;
-			r8 = tmp; };
-			r19 = hl_types_ArrayObj_push(r2,((vdynamic*)r8));
+			((little_parser_ParserTokens_Block*)tmp)->p1 = r11;
+			r11 = tmp; };
+			r18 = hl_types_ArrayObj_push(r2,((vdynamic*)r11));
 			++r4;
-			goto label$96e09ea_3_202;
-			label$96e09ea_3_200:
+			goto label$96e09ea_3_187;
+			label$96e09ea_3_185:
 			if( r2 == NULL ) hl_null_access();
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
-			label$96e09ea_3_202:
-			goto label$96e09ea_3_251;
+			label$96e09ea_3_187:
+			goto label$96e09ea_3_230;
 		case 25:
 			r12 = ((little_parser_ParserTokens_Custom*)r6)->p0;
-			r11 = ((little_parser_ParserTokens_Custom*)r6)->p1;
-			r9 = &t$little_parser_ParserTokens;
+			r10 = ((little_parser_ParserTokens_Custom*)r6)->p1;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 0;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r14 = hl_types_ArrayObj_alloc(r7);
 			r5 = 0;
-			r16 = r11;
-			label$96e09ea_3_211:
+			r16 = r10;
+			label$96e09ea_3_196:
 			if( r16 == NULL ) hl_null_access();
-			r19 = r16->length;
-			if( r5 >= r19 ) goto label$96e09ea_3_248;
-			r19 = r16->length;
-			if( ((unsigned)r5) < ((unsigned)r19) ) goto label$96e09ea_3_219;
-			r8 = NULL;
-			goto label$96e09ea_3_225;
-			label$96e09ea_3_219:
+			r18 = r16->length;
+			if( r5 >= r18 ) goto label$96e09ea_3_227;
+			r18 = r16->length;
+			if( ((unsigned)r5) < ((unsigned)r18) ) goto label$96e09ea_3_204;
+			r11 = NULL;
+			goto label$96e09ea_3_207;
+			label$96e09ea_3_204:
 			r7 = r16->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
-			r8 = (venum*)r3;
-			r15 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r8 == r15 ) goto label$96e09ea_3_225;
-			hl_assert();
-			label$96e09ea_3_225:
+			r11 = (venum*)r3;
+			label$96e09ea_3_207:
 			++r5;
 			if( r14 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
-			r10 = 1;
-			r7 = hl_alloc_array(r9,r10);
-			r10 = 0;
-			((venum**)(r7 + 1))[r10] = r8;
+			r8 = &t$little_parser_ParserTokens;
+			r9 = 1;
+			r7 = hl_alloc_array(r8,r9);
+			r9 = 0;
+			((venum**)(r7 + 1))[r9] = r11;
 			r27 = hl_types_ArrayObj_alloc(r7);
 			r27 = little_parser_Parser_mergeBlocks(r27);
 			if( r27 == NULL ) hl_null_access();
-			r10 = 0;
-			r19 = r27->length;
-			if( ((unsigned)r10) < ((unsigned)r19) ) goto label$96e09ea_3_240;
+			r9 = 0;
+			r18 = r27->length;
+			if( ((unsigned)r9) < ((unsigned)r18) ) goto label$96e09ea_3_222;
 			r15 = NULL;
-			goto label$96e09ea_3_246;
-			label$96e09ea_3_240:
+			goto label$96e09ea_3_225;
+			label$96e09ea_3_222:
 			r7 = r27->array;
-			r3 = ((vdynamic**)(r7 + 1))[r10];
+			r3 = ((vdynamic**)(r7 + 1))[r9];
 			r15 = (venum*)r3;
-			r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r15 == r18 ) goto label$96e09ea_3_246;
-			hl_assert();
-			label$96e09ea_3_246:
-			r10 = hl_types_ArrayObj_push(r14,((vdynamic*)r15));
-			goto label$96e09ea_3_211;
-			label$96e09ea_3_248:
+			label$96e09ea_3_225:
+			r9 = hl_types_ArrayObj_push(r14,((vdynamic*)r15));
+			goto label$96e09ea_3_196;
+			label$96e09ea_3_227:
 			if( r2 == NULL ) hl_null_access();
-			r8 = hl_alloc_enum(&t$little_parser_ParserTokens,25);
-			((little_parser_ParserTokens_Custom*)r8)->p0 = r12;
-			((little_parser_ParserTokens_Custom*)r8)->p1 = r14;
-			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r8));
+			r11 = hl_alloc_enum(&t$little_parser_ParserTokens,25);
+			((little_parser_ParserTokens_Custom*)r11)->p0 = r12;
+			((little_parser_ParserTokens_Custom*)r11)->p1 = r14;
+			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r11));
 	}
-	label$96e09ea_3_251:
+	label$96e09ea_3_230:
 	++r4;
-	goto label$96e09ea_3_32;
-	label$96e09ea_3_253:
+	goto label$96e09ea_3_29;
+	label$96e09ea_3_232:
 	little_parser_Parser_resetLines();
 	return r2;
 }
@@ -638,16 +609,16 @@ hl__types__ArrayObj little_parser_Parser_mergeBlocks(hl__types__ArrayObj r0) {
 hl__types__ArrayObj little_parser_Parser_mergeExpressions(hl__types__ArrayObj r0) {
 	String r12, r13;
 	little__$Little r24;
-	hl__types__ArrayObj r2, r11, r14, r16, r17, r27;
-	hl_type *r9;
-	venum *r6, *r8, *r15, *r18, *r22;
-	bool r21;
+	hl__types__ArrayObj r2, r10, r14, r16, r17, r27;
+	hl_type *r8;
+	venum *r6, *r11, *r15, *r21, *r22;
+	bool r20;
 	little__interpreter__Runtime r23;
 	int *r25;
 	vdynamic *r3;
 	vbyte *r26;
 	varray *r7;
-	int r4, r5, r10, r19, r20;
+	int r4, r5, r9, r18, r19;
 	if( r0 ) goto label$96e09ea_4_3;
 	r2 = NULL;
 	return r2;
@@ -655,51 +626,45 @@ hl__types__ArrayObj little_parser_Parser_mergeExpressions(hl__types__ArrayObj r0
 	if( r0 == NULL ) hl_null_access();
 	r4 = r0->length;
 	r5 = 1;
-	if( r4 != r5 ) goto label$96e09ea_4_27;
+	if( r4 != r5 ) goto label$96e09ea_4_24;
 	r4 = 0;
 	r5 = r0->length;
 	if( ((unsigned)r4) < ((unsigned)r5) ) goto label$96e09ea_4_12;
 	r6 = NULL;
-	goto label$96e09ea_4_18;
+	goto label$96e09ea_4_15;
 	label$96e09ea_4_12:
 	r7 = r0->array;
 	r3 = ((vdynamic**)(r7 + 1))[r4];
 	r6 = (venum*)r3;
-	r8 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-	if( r6 == r8 ) goto label$96e09ea_4_18;
-	hl_assert();
-	label$96e09ea_4_18:
-	if( r6 ) goto label$96e09ea_4_27;
-	r9 = &t$little_parser_ParserTokens;
+	label$96e09ea_4_15:
+	if( r6 ) goto label$96e09ea_4_24;
+	r8 = &t$little_parser_ParserTokens;
 	r4 = 1;
-	r7 = hl_alloc_array(r9,r4);
+	r7 = hl_alloc_array(r8,r4);
 	r6 = NULL;
 	r4 = 0;
 	((venum**)(r7 + 1))[r4] = r6;
 	r2 = hl_types_ArrayObj_alloc(r7);
 	return r2;
-	label$96e09ea_4_27:
-	r9 = &t$little_parser_ParserTokens;
+	label$96e09ea_4_24:
+	r8 = &t$little_parser_ParserTokens;
 	r4 = 0;
-	r7 = hl_alloc_array(r9,r4);
+	r7 = hl_alloc_array(r8,r4);
 	r2 = hl_types_ArrayObj_alloc(r7);
 	r4 = 0;
-	label$96e09ea_4_32:
+	label$96e09ea_4_29:
 	if( r0 == NULL ) hl_null_access();
-	r10 = r0->length;
-	if( r4 >= r10 ) goto label$96e09ea_4_246;
-	r10 = r0->length;
-	if( ((unsigned)r4) < ((unsigned)r10) ) goto label$96e09ea_4_40;
+	r9 = r0->length;
+	if( r4 >= r9 ) goto label$96e09ea_4_225;
+	r9 = r0->length;
+	if( ((unsigned)r4) < ((unsigned)r9) ) goto label$96e09ea_4_37;
 	r6 = NULL;
-	goto label$96e09ea_4_46;
-	label$96e09ea_4_40:
+	goto label$96e09ea_4_40;
+	label$96e09ea_4_37:
 	r7 = r0->array;
 	r3 = ((vdynamic**)(r7 + 1))[r4];
 	r6 = (venum*)r3;
-	r8 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-	if( r6 == r8 ) goto label$96e09ea_4_46;
-	hl_assert();
-	label$96e09ea_4_46:
+	label$96e09ea_4_40:
 	if( r6 == NULL ) hl_null_access();
 	r5 = HL__ENUM_INDEX__(r6);
 	switch(r5) {
@@ -725,162 +690,153 @@ hl__types__ArrayObj little_parser_Parser_mergeExpressions(hl__types__ArrayObj r0
 		case 24:
 			if( r2 == NULL ) hl_null_access();
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
-			goto label$96e09ea_4_244;
+			goto label$96e09ea_4_223;
 		case 0:
 			r5 = ((little_parser_ParserTokens_SetLine*)r6)->p0;
 			little_parser_Parser_setLine(r5);
 			if( r2 == NULL ) hl_null_access();
-			r10 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
-			goto label$96e09ea_4_244;
+			r9 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
+			goto label$96e09ea_4_223;
 		case 1:
 			r12 = ((little_parser_ParserTokens_SetModule*)r6)->p0;
 			r13 = little_parser_Parser_set_module(r12);
 			if( r2 == NULL ) hl_null_access();
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
-			goto label$96e09ea_4_244;
+			goto label$96e09ea_4_223;
 		case 2:
 			little_parser_Parser_nextPart();
 			if( r2 == NULL ) hl_null_access();
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
-			goto label$96e09ea_4_244;
+			goto label$96e09ea_4_223;
 		case 12:
-			r11 = ((little_parser_ParserTokens_Expression*)r6)->p0;
-			r8 = ((little_parser_ParserTokens_Expression*)r6)->p1;
+			r10 = ((little_parser_ParserTokens_Expression*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_Expression*)r6)->p1;
 			if( r2 == NULL ) hl_null_access();
-			r16 = little_parser_Parser_mergeExpressions(r11);
-			r9 = &t$little_parser_ParserTokens;
+			r16 = little_parser_Parser_mergeExpressions(r10);
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeExpressions(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_4_83;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_4_77;
 			r15 = NULL;
-			goto label$96e09ea_4_89;
-			label$96e09ea_4_83:
+			goto label$96e09ea_4_80;
+			label$96e09ea_4_77:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r15 = (venum*)r3;
-			r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r15 == r18 ) goto label$96e09ea_4_89;
-			hl_assert();
-			label$96e09ea_4_89:
+			label$96e09ea_4_80:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,12);
 			((little_parser_ParserTokens_Expression*)tmp)->p0 = r16;
 			((little_parser_ParserTokens_Expression*)tmp)->p1 = r15;
 			r15 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r15));
-			goto label$96e09ea_4_244;
+			goto label$96e09ea_4_223;
 		case 13:
-			r11 = ((little_parser_ParserTokens_Block*)r6)->p0;
-			r8 = ((little_parser_ParserTokens_Block*)r6)->p1;
+			r10 = ((little_parser_ParserTokens_Block*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_Block*)r6)->p1;
 			if( r2 == NULL ) hl_null_access();
-			r16 = little_parser_Parser_mergeExpressions(r11);
-			r9 = &t$little_parser_ParserTokens;
+			r16 = little_parser_Parser_mergeExpressions(r10);
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeExpressions(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_4_109;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_4_100;
 			r15 = NULL;
-			goto label$96e09ea_4_115;
-			label$96e09ea_4_109:
+			goto label$96e09ea_4_103;
+			label$96e09ea_4_100:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r15 = (venum*)r3;
-			r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r15 == r18 ) goto label$96e09ea_4_115;
-			hl_assert();
-			label$96e09ea_4_115:
+			label$96e09ea_4_103:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,13);
 			((little_parser_ParserTokens_Block*)tmp)->p0 = r16;
 			((little_parser_ParserTokens_Block*)tmp)->p1 = r15;
 			r15 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r15));
-			goto label$96e09ea_4_244;
+			goto label$96e09ea_4_223;
 		case 16:
 			r12 = ((little_parser_ParserTokens_Sign*)r6)->p0;
 			r13 = (String)s$84c4047;
-			if( r12 != r13 && (!r12 || !r13 || String___compare(r12,(vdynamic*)r13) != 0) ) goto label$96e09ea_4_193;
+			if( r12 != r13 && (!r12 || !r13 || String___compare(r12,(vdynamic*)r13) != 0) ) goto label$96e09ea_4_178;
 			r5 = little_parser_Parser_get_line();
-			r9 = &t$little_parser_ParserTokens;
-			r10 = 0;
-			r7 = hl_alloc_array(r9,r10);
-			r11 = hl_types_ArrayObj_alloc(r7);
-			r10 = 1;
-			label$96e09ea_4_127:
-			r20 = 1;
-			r19 = r4 + r20;
+			r8 = &t$little_parser_ParserTokens;
+			r9 = 0;
+			r7 = hl_alloc_array(r8,r9);
+			r10 = hl_types_ArrayObj_alloc(r7);
+			r9 = 1;
+			label$96e09ea_4_115:
+			r19 = 1;
+			r18 = r4 + r19;
 			if( r0 == NULL ) hl_null_access();
-			r20 = r0->length;
-			if( r19 >= r20 ) goto label$96e09ea_4_168;
-			r20 = 1;
-			r19 = r4 + r20;
-			r20 = r0->length;
-			if( ((unsigned)r19) < ((unsigned)r20) ) goto label$96e09ea_4_139;
-			r8 = NULL;
-			goto label$96e09ea_4_145;
-			label$96e09ea_4_139:
+			r19 = r0->length;
+			if( r18 >= r19 ) goto label$96e09ea_4_153;
+			r19 = 1;
+			r18 = r4 + r19;
+			r19 = r0->length;
+			if( ((unsigned)r18) < ((unsigned)r19) ) goto label$96e09ea_4_127;
+			r11 = NULL;
+			goto label$96e09ea_4_130;
+			label$96e09ea_4_127:
 			r7 = r0->array;
-			r3 = ((vdynamic**)(r7 + 1))[r19];
-			r8 = (venum*)r3;
-			r15 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r8 == r15 ) goto label$96e09ea_4_145;
-			hl_assert();
-			label$96e09ea_4_145:
+			r3 = ((vdynamic**)(r7 + 1))[r18];
+			r11 = (venum*)r3;
+			label$96e09ea_4_130:
 			r12 = (String)s$84c4047;
-			r18 = hl_alloc_enum(&t$little_parser_ParserTokens,16);
-			((little_parser_ParserTokens_Sign*)r18)->p0 = r12;
-			r21 = hl_type_enum_eq(((vdynamic*)r8),((vdynamic*)r18));
-			if( !r21 ) goto label$96e09ea_4_153;
-			++r10;
-			if( r11 == NULL ) hl_null_access();
-			r19 = hl_types_ArrayObj_push(r11,((vdynamic*)r8));
-			goto label$96e09ea_4_166;
-			label$96e09ea_4_153:
+			r21 = hl_alloc_enum(&t$little_parser_ParserTokens,16);
+			((little_parser_ParserTokens_Sign*)r21)->p0 = r12;
+			r20 = hl_type_enum_eq(((vdynamic*)r11),((vdynamic*)r21));
+			if( !r20 ) goto label$96e09ea_4_138;
+			++r9;
+			if( r10 == NULL ) hl_null_access();
+			r18 = hl_types_ArrayObj_push(r10,((vdynamic*)r11));
+			goto label$96e09ea_4_151;
+			label$96e09ea_4_138:
 			r12 = (String)s$9371d7a;
-			r18 = hl_alloc_enum(&t$little_parser_ParserTokens,16);
-			((little_parser_ParserTokens_Sign*)r18)->p0 = r12;
-			r21 = hl_type_enum_eq(((vdynamic*)r8),((vdynamic*)r18));
-			if( !r21 ) goto label$96e09ea_4_164;
-			--r10;
-			r20 = 0;
-			if( r10 != r20 ) goto label$96e09ea_4_161;
-			goto label$96e09ea_4_168;
-			label$96e09ea_4_161:
-			if( r11 == NULL ) hl_null_access();
-			r19 = hl_types_ArrayObj_push(r11,((vdynamic*)r8));
-			goto label$96e09ea_4_166;
-			label$96e09ea_4_164:
-			if( r11 == NULL ) hl_null_access();
-			r19 = hl_types_ArrayObj_push(r11,((vdynamic*)r8));
-			label$96e09ea_4_166:
+			r21 = hl_alloc_enum(&t$little_parser_ParserTokens,16);
+			((little_parser_ParserTokens_Sign*)r21)->p0 = r12;
+			r20 = hl_type_enum_eq(((vdynamic*)r11),((vdynamic*)r21));
+			if( !r20 ) goto label$96e09ea_4_149;
+			--r9;
+			r19 = 0;
+			if( r9 != r19 ) goto label$96e09ea_4_146;
+			goto label$96e09ea_4_153;
+			label$96e09ea_4_146:
+			if( r10 == NULL ) hl_null_access();
+			r18 = hl_types_ArrayObj_push(r10,((vdynamic*)r11));
+			goto label$96e09ea_4_151;
+			label$96e09ea_4_149:
+			if( r10 == NULL ) hl_null_access();
+			r18 = hl_types_ArrayObj_push(r10,((vdynamic*)r11));
+			label$96e09ea_4_151:
 			++r4;
-			goto label$96e09ea_4_127;
-			label$96e09ea_4_168:
-			r20 = 1;
-			r19 = r4 + r20;
-			r20 = r0->length;
-			if( r19 != r20 ) goto label$96e09ea_4_186;
+			goto label$96e09ea_4_115;
+			label$96e09ea_4_153:
+			r19 = 1;
+			r18 = r4 + r19;
+			r19 = r0->length;
+			if( r18 != r19 ) goto label$96e09ea_4_171;
 			r24 = (little__$Little)g$_little_Little;
 			r23 = r24->runtime;
 			if( r23 == NULL ) hl_null_access();
 			r12 = (String)s$a70d5af;
-			r19 = r5;
-			r25 = &r19;
-			r26 = hl_itos(r19,r25);
-			r13 = String___alloc__(r26,r19);
+			r18 = r5;
+			r25 = &r18;
+			r26 = hl_itos(r18,r25);
+			r13 = String___alloc__(r26,r18);
 			r12 = String___add__(r12,r13);
 			r22 = hl_alloc_enum(&t$little_interpreter_InterpTokens,27);
 			((little_interpreter_InterpTokens_ErrorMessage*)r22)->p0 = r12;
@@ -888,102 +844,96 @@ hl__types__ArrayObj little_parser_Parser_mergeExpressions(hl__types__ArrayObj r0
 			r22 = little_interpreter_Runtime_throwError(r23,r22,r12);
 			r14 = NULL;
 			return r14;
-			label$96e09ea_4_186:
+			label$96e09ea_4_171:
 			if( r2 == NULL ) hl_null_access();
-			r16 = little_parser_Parser_mergeExpressions(r11);
-			r8 = NULL;
+			r16 = little_parser_Parser_mergeExpressions(r10);
+			r11 = NULL;
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,12);
 			((little_parser_ParserTokens_Expression*)tmp)->p0 = r16;
-			((little_parser_ParserTokens_Expression*)tmp)->p1 = r8;
-			r8 = tmp; };
-			r19 = hl_types_ArrayObj_push(r2,((vdynamic*)r8));
+			((little_parser_ParserTokens_Expression*)tmp)->p1 = r11;
+			r11 = tmp; };
+			r18 = hl_types_ArrayObj_push(r2,((vdynamic*)r11));
 			++r4;
-			goto label$96e09ea_4_195;
-			label$96e09ea_4_193:
+			goto label$96e09ea_4_180;
+			label$96e09ea_4_178:
 			if( r2 == NULL ) hl_null_access();
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
-			label$96e09ea_4_195:
-			goto label$96e09ea_4_244;
+			label$96e09ea_4_180:
+			goto label$96e09ea_4_223;
 		case 25:
 			r12 = ((little_parser_ParserTokens_Custom*)r6)->p0;
-			r11 = ((little_parser_ParserTokens_Custom*)r6)->p1;
-			r9 = &t$little_parser_ParserTokens;
+			r10 = ((little_parser_ParserTokens_Custom*)r6)->p1;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 0;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r14 = hl_types_ArrayObj_alloc(r7);
 			r5 = 0;
-			r16 = r11;
-			label$96e09ea_4_204:
+			r16 = r10;
+			label$96e09ea_4_189:
 			if( r16 == NULL ) hl_null_access();
-			r19 = r16->length;
-			if( r5 >= r19 ) goto label$96e09ea_4_241;
-			r19 = r16->length;
-			if( ((unsigned)r5) < ((unsigned)r19) ) goto label$96e09ea_4_212;
-			r8 = NULL;
-			goto label$96e09ea_4_218;
-			label$96e09ea_4_212:
+			r18 = r16->length;
+			if( r5 >= r18 ) goto label$96e09ea_4_220;
+			r18 = r16->length;
+			if( ((unsigned)r5) < ((unsigned)r18) ) goto label$96e09ea_4_197;
+			r11 = NULL;
+			goto label$96e09ea_4_200;
+			label$96e09ea_4_197:
 			r7 = r16->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
-			r8 = (venum*)r3;
-			r15 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r8 == r15 ) goto label$96e09ea_4_218;
-			hl_assert();
-			label$96e09ea_4_218:
+			r11 = (venum*)r3;
+			label$96e09ea_4_200:
 			++r5;
 			if( r14 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
-			r10 = 1;
-			r7 = hl_alloc_array(r9,r10);
-			r10 = 0;
-			((venum**)(r7 + 1))[r10] = r8;
+			r8 = &t$little_parser_ParserTokens;
+			r9 = 1;
+			r7 = hl_alloc_array(r8,r9);
+			r9 = 0;
+			((venum**)(r7 + 1))[r9] = r11;
 			r27 = hl_types_ArrayObj_alloc(r7);
 			r27 = little_parser_Parser_mergeExpressions(r27);
 			if( r27 == NULL ) hl_null_access();
-			r10 = 0;
-			r19 = r27->length;
-			if( ((unsigned)r10) < ((unsigned)r19) ) goto label$96e09ea_4_233;
+			r9 = 0;
+			r18 = r27->length;
+			if( ((unsigned)r9) < ((unsigned)r18) ) goto label$96e09ea_4_215;
 			r15 = NULL;
-			goto label$96e09ea_4_239;
-			label$96e09ea_4_233:
+			goto label$96e09ea_4_218;
+			label$96e09ea_4_215:
 			r7 = r27->array;
-			r3 = ((vdynamic**)(r7 + 1))[r10];
+			r3 = ((vdynamic**)(r7 + 1))[r9];
 			r15 = (venum*)r3;
-			r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r15 == r18 ) goto label$96e09ea_4_239;
-			hl_assert();
-			label$96e09ea_4_239:
-			r10 = hl_types_ArrayObj_push(r14,((vdynamic*)r15));
-			goto label$96e09ea_4_204;
-			label$96e09ea_4_241:
+			label$96e09ea_4_218:
+			r9 = hl_types_ArrayObj_push(r14,((vdynamic*)r15));
+			goto label$96e09ea_4_189;
+			label$96e09ea_4_220:
 			if( r2 == NULL ) hl_null_access();
-			r8 = hl_alloc_enum(&t$little_parser_ParserTokens,25);
-			((little_parser_ParserTokens_Custom*)r8)->p0 = r12;
-			((little_parser_ParserTokens_Custom*)r8)->p1 = r14;
-			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r8));
+			r11 = hl_alloc_enum(&t$little_parser_ParserTokens,25);
+			((little_parser_ParserTokens_Custom*)r11)->p0 = r12;
+			((little_parser_ParserTokens_Custom*)r11)->p1 = r14;
+			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r11));
 	}
-	label$96e09ea_4_244:
+	label$96e09ea_4_223:
 	++r4;
-	goto label$96e09ea_4_32;
-	label$96e09ea_4_246:
+	goto label$96e09ea_4_29;
+	label$96e09ea_4_225:
 	little_parser_Parser_resetLines();
 	return r2;
 }
 
 hl__types__ArrayObj little_parser_Parser_mergePropertyOperations(hl__types__ArrayObj r0) {
 	String r12, r13;
-	vvirtual *r24;
-	little__$Little r21;
-	hl__types__ArrayObj r2, r11, r14, r16, r17, r33, r34;
-	hl_type *r9;
-	venum *r6, *r8, *r15, *r18, *r26, *r27, *r29, *r31, *r32, *r35;
-	bool r19, r22;
-	little__interpreter__Runtime r23;
-	little__KeywordConfig r20;
-	little__parser__$Parser r25;
+	vvirtual *r23;
+	little__$Little r20;
+	hl__types__ArrayObj r2, r10, r14, r16, r17, r33, r34;
+	hl_type *r8;
+	venum *r6, *r11, *r15, *r25, *r26, *r28, *r29, *r31, *r32;
+	bool r18, r21;
+	little__interpreter__Runtime r22;
+	little__KeywordConfig r19;
+	little__parser__$Parser r24;
 	vdynamic *r3;
-	varray *r7, *r28;
-	int r4, r5, r10, r30;
+	varray *r7, *r27;
+	int r4, r5, r9, r30;
 	if( r0 ) goto label$96e09ea_5_3;
 	r2 = NULL;
 	return r2;
@@ -991,51 +941,45 @@ hl__types__ArrayObj little_parser_Parser_mergePropertyOperations(hl__types__Arra
 	if( r0 == NULL ) hl_null_access();
 	r4 = r0->length;
 	r5 = 1;
-	if( r4 != r5 ) goto label$96e09ea_5_27;
+	if( r4 != r5 ) goto label$96e09ea_5_24;
 	r4 = 0;
 	r5 = r0->length;
 	if( ((unsigned)r4) < ((unsigned)r5) ) goto label$96e09ea_5_12;
 	r6 = NULL;
-	goto label$96e09ea_5_18;
+	goto label$96e09ea_5_15;
 	label$96e09ea_5_12:
 	r7 = r0->array;
 	r3 = ((vdynamic**)(r7 + 1))[r4];
 	r6 = (venum*)r3;
-	r8 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-	if( r6 == r8 ) goto label$96e09ea_5_18;
-	hl_assert();
-	label$96e09ea_5_18:
-	if( r6 ) goto label$96e09ea_5_27;
-	r9 = &t$little_parser_ParserTokens;
+	label$96e09ea_5_15:
+	if( r6 ) goto label$96e09ea_5_24;
+	r8 = &t$little_parser_ParserTokens;
 	r4 = 1;
-	r7 = hl_alloc_array(r9,r4);
+	r7 = hl_alloc_array(r8,r4);
 	r6 = NULL;
 	r4 = 0;
 	((venum**)(r7 + 1))[r4] = r6;
 	r2 = hl_types_ArrayObj_alloc(r7);
 	return r2;
-	label$96e09ea_5_27:
-	r9 = &t$little_parser_ParserTokens;
+	label$96e09ea_5_24:
+	r8 = &t$little_parser_ParserTokens;
 	r4 = 0;
-	r7 = hl_alloc_array(r9,r4);
+	r7 = hl_alloc_array(r8,r4);
 	r2 = hl_types_ArrayObj_alloc(r7);
 	r4 = 0;
-	label$96e09ea_5_32:
+	label$96e09ea_5_29:
 	if( r0 == NULL ) hl_null_access();
-	r10 = r0->length;
-	if( r4 >= r10 ) goto label$96e09ea_5_631;
-	r10 = r0->length;
-	if( ((unsigned)r4) < ((unsigned)r10) ) goto label$96e09ea_5_40;
+	r9 = r0->length;
+	if( r4 >= r9 ) goto label$96e09ea_5_562;
+	r9 = r0->length;
+	if( ((unsigned)r4) < ((unsigned)r9) ) goto label$96e09ea_5_37;
 	r6 = NULL;
-	goto label$96e09ea_5_46;
-	label$96e09ea_5_40:
+	goto label$96e09ea_5_40;
+	label$96e09ea_5_37:
 	r7 = r0->array;
 	r3 = ((vdynamic**)(r7 + 1))[r4];
 	r6 = (venum*)r3;
-	r8 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-	if( r6 == r8 ) goto label$96e09ea_5_46;
-	hl_assert();
-	label$96e09ea_5_46:
+	label$96e09ea_5_40:
 	if( r6 == NULL ) hl_null_access();
 	r5 = HL__ENUM_INDEX__(r6);
 	switch(r5) {
@@ -1061,259 +1005,236 @@ hl__types__ArrayObj little_parser_Parser_mergePropertyOperations(hl__types__Arra
 		case 24:
 			if( r2 == NULL ) hl_null_access();
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
-			goto label$96e09ea_5_629;
+			goto label$96e09ea_5_560;
 		case 0:
 			r5 = ((little_parser_ParserTokens_SetLine*)r6)->p0;
 			little_parser_Parser_setLine(r5);
 			if( r2 == NULL ) hl_null_access();
-			r10 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
-			goto label$96e09ea_5_629;
+			r9 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
+			goto label$96e09ea_5_560;
 		case 1:
 			r12 = ((little_parser_ParserTokens_SetModule*)r6)->p0;
 			r13 = little_parser_Parser_set_module(r12);
 			if( r2 == NULL ) hl_null_access();
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
-			goto label$96e09ea_5_629;
+			goto label$96e09ea_5_560;
 		case 2:
 			little_parser_Parser_nextPart();
 			if( r2 == NULL ) hl_null_access();
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
-			goto label$96e09ea_5_629;
+			goto label$96e09ea_5_560;
 		case 12:
-			r11 = ((little_parser_ParserTokens_Expression*)r6)->p0;
-			r8 = ((little_parser_ParserTokens_Expression*)r6)->p1;
+			r10 = ((little_parser_ParserTokens_Expression*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_Expression*)r6)->p1;
 			if( r2 == NULL ) hl_null_access();
-			r16 = little_parser_Parser_mergePropertyOperations(r11);
-			r9 = &t$little_parser_ParserTokens;
+			r16 = little_parser_Parser_mergePropertyOperations(r10);
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergePropertyOperations(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_5_83;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_5_77;
 			r15 = NULL;
-			goto label$96e09ea_5_89;
-			label$96e09ea_5_83:
+			goto label$96e09ea_5_80;
+			label$96e09ea_5_77:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r15 = (venum*)r3;
-			r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r15 == r18 ) goto label$96e09ea_5_89;
-			hl_assert();
-			label$96e09ea_5_89:
+			label$96e09ea_5_80:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,12);
 			((little_parser_ParserTokens_Expression*)tmp)->p0 = r16;
 			((little_parser_ParserTokens_Expression*)tmp)->p1 = r15;
 			r15 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r15));
-			goto label$96e09ea_5_629;
+			goto label$96e09ea_5_560;
 		case 13:
-			r11 = ((little_parser_ParserTokens_Block*)r6)->p0;
-			r8 = ((little_parser_ParserTokens_Block*)r6)->p1;
+			r10 = ((little_parser_ParserTokens_Block*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_Block*)r6)->p1;
 			if( r2 == NULL ) hl_null_access();
-			r16 = little_parser_Parser_mergePropertyOperations(r11);
-			r9 = &t$little_parser_ParserTokens;
+			r16 = little_parser_Parser_mergePropertyOperations(r10);
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergePropertyOperations(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_5_109;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_5_100;
 			r15 = NULL;
-			goto label$96e09ea_5_115;
-			label$96e09ea_5_109:
+			goto label$96e09ea_5_103;
+			label$96e09ea_5_100:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r15 = (venum*)r3;
-			r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r15 == r18 ) goto label$96e09ea_5_115;
-			hl_assert();
-			label$96e09ea_5_115:
+			label$96e09ea_5_103:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,13);
 			((little_parser_ParserTokens_Block*)tmp)->p0 = r16;
 			((little_parser_ParserTokens_Block*)tmp)->p1 = r15;
 			r15 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r15));
-			goto label$96e09ea_5_629;
+			goto label$96e09ea_5_560;
 		case 16:
 			r12 = ((little_parser_ParserTokens_Sign*)r6)->p0;
-			r21 = (little__$Little)g$_little_Little;
-			r20 = r21->keywords;
-			if( r20 == NULL ) hl_null_access();
-			r13 = r20->PROPERTY_ACCESS_SIGN;
-			if( r12 == r13 || (r12 && r13 && String___compare(r12,(vdynamic*)r13) == 0) ) goto label$96e09ea_5_126;
-			r19 = false;
-			goto label$96e09ea_5_127;
-			label$96e09ea_5_126:
-			r19 = true;
-			label$96e09ea_5_127:
-			r22 = true;
-			if( r19 != r22 ) goto label$96e09ea_5_578;
+			r20 = (little__$Little)g$_little_Little;
+			r19 = r20->keywords;
+			if( r19 == NULL ) hl_null_access();
+			r13 = r19->PROPERTY_ACCESS_SIGN;
+			if( r12 == r13 || (r12 && r13 && String___compare(r12,(vdynamic*)r13) == 0) ) goto label$96e09ea_5_114;
+			r18 = false;
+			goto label$96e09ea_5_115;
+			label$96e09ea_5_114:
+			r18 = true;
+			label$96e09ea_5_115:
+			r21 = true;
+			if( r18 != r21 ) goto label$96e09ea_5_515;
 			if( r2 == NULL ) hl_null_access();
 			r5 = r2->length;
-			r10 = 0;
-			if( r5 != r10 ) goto label$96e09ea_5_162;
-			r21 = (little__$Little)g$_little_Little;
-			r23 = r21->runtime;
-			if( r23 == NULL ) hl_null_access();
-			r11 = r23->callStack;
-			if( r11 == NULL ) hl_null_access();
-			r24 = hl_alloc_virtual(&t$vrt_f317fe3);
+			r9 = 0;
+			if( r5 != r9 ) goto label$96e09ea_5_150;
+			r20 = (little__$Little)g$_little_Little;
+			r22 = r20->runtime;
+			if( r22 == NULL ) hl_null_access();
+			r10 = r22->callStack;
+			if( r10 == NULL ) hl_null_access();
+			r23 = hl_alloc_virtual(&t$vrt_f317fe3);
 			r12 = little_parser_Parser_get_module();
-			if( hl_vfields(r24)[2] ) *(String*)(hl_vfields(r24)[2]) = (String)r12; else hl_dyn_setp(r24->value,-523029465/*module*/,&t$String,r12);
+			if( hl_vfields(r23)[2] ) *(String*)(hl_vfields(r23)[2]) = (String)r12; else hl_dyn_setp(r23->value,-523029465/*module*/,&t$String,r12);
 			r5 = little_parser_Parser_get_line();
-			if( hl_vfields(r24)[0] ) *(int*)(hl_vfields(r24)[0]) = (int)r5; else hl_dyn_seti(r24->value,129177854/*line*/,&t$_i32,r5);
-			r25 = (little__parser__$Parser)g$_little_parser_Parser;
-			r5 = r25->linePart;
-			if( hl_vfields(r24)[1] ) *(int*)(hl_vfields(r24)[1]) = (int)r5; else hl_dyn_seti(r24->value,-411357064/*linePart*/,&t$_i32,r5);
+			if( hl_vfields(r23)[0] ) *(int*)(hl_vfields(r23)[0]) = (int)r5; else hl_dyn_seti(r23->value,129177854/*line*/,&t$_i32,r5);
+			r24 = (little__parser__$Parser)g$_little_parser_Parser;
+			r5 = r24->linePart;
+			if( hl_vfields(r23)[1] ) *(int*)(hl_vfields(r23)[1]) = (int)r5; else hl_dyn_seti(r23->value,-411357064/*linePart*/,&t$_i32,r5);
+			r12 = (String)s$;
+			r25 = hl_alloc_enum(&t$little_interpreter_InterpTokens,25);
+			((little_interpreter_InterpTokens_Identifier*)r25)->p0 = r12;
 			r12 = (String)s$;
 			r26 = hl_alloc_enum(&t$little_interpreter_InterpTokens,25);
 			((little_interpreter_InterpTokens_Identifier*)r26)->p0 = r12;
-			r12 = (String)s$;
-			r27 = hl_alloc_enum(&t$little_interpreter_InterpTokens,25);
-			((little_interpreter_InterpTokens_Identifier*)r27)->p0 = r12;
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_interpreter_InterpTokens,15);
-			((little_interpreter_InterpTokens_PropertyAccess*)tmp)->p0 = r26;
-			((little_interpreter_InterpTokens_PropertyAccess*)tmp)->p1 = r27;
-			r26 = tmp; };
-			if( hl_vfields(r24)[3] ) *(venum**)(hl_vfields(r24)[3]) = (venum*)r26; else hl_dyn_setp(r24->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r26);
-			hl_types_ArrayObj_unshift(r11,((vdynamic*)r24));
-			r21 = (little__$Little)g$_little_Little;
-			r23 = r21->runtime;
-			if( r23 == NULL ) hl_null_access();
+			((little_interpreter_InterpTokens_PropertyAccess*)tmp)->p0 = r25;
+			((little_interpreter_InterpTokens_PropertyAccess*)tmp)->p1 = r26;
+			r25 = tmp; };
+			if( hl_vfields(r23)[3] ) *(venum**)(hl_vfields(r23)[3]) = (venum*)r25; else hl_dyn_setp(r23->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r25);
+			hl_types_ArrayObj_unshift(r10,((vdynamic*)r23));
+			r20 = (little__$Little)g$_little_Little;
+			r22 = r20->runtime;
+			if( r22 == NULL ) hl_null_access();
 			r12 = (String)s$895e715;
-			r26 = hl_alloc_enum(&t$little_interpreter_InterpTokens,27);
-			((little_interpreter_InterpTokens_ErrorMessage*)r26)->p0 = r12;
+			r25 = hl_alloc_enum(&t$little_interpreter_InterpTokens,27);
+			((little_interpreter_InterpTokens_ErrorMessage*)r25)->p0 = r12;
 			r12 = (String)s$Parser;
-			r26 = little_interpreter_Runtime_throwError(r23,r26,r12);
-			r11 = NULL;
-			return r11;
-			label$96e09ea_5_162:
-			r10 = 1;
-			r5 = r4 + r10;
-			r10 = r0->length;
-			if( r5 < r10 ) goto label$96e09ea_5_217;
-			r21 = (little__$Little)g$_little_Little;
-			r23 = r21->runtime;
-			if( r23 == NULL ) hl_null_access();
-			r11 = r23->callStack;
-			if( r11 == NULL ) hl_null_access();
-			r24 = hl_alloc_virtual(&t$vrt_f317fe3);
+			r25 = little_interpreter_Runtime_throwError(r22,r25,r12);
+			r10 = NULL;
+			return r10;
+			label$96e09ea_5_150:
+			r9 = 1;
+			r5 = r4 + r9;
+			r9 = r0->length;
+			if( r5 < r9 ) goto label$96e09ea_5_199;
+			r20 = (little__$Little)g$_little_Little;
+			r22 = r20->runtime;
+			if( r22 == NULL ) hl_null_access();
+			r10 = r22->callStack;
+			if( r10 == NULL ) hl_null_access();
+			r23 = hl_alloc_virtual(&t$vrt_f317fe3);
 			r12 = little_parser_Parser_get_module();
-			if( hl_vfields(r24)[2] ) *(String*)(hl_vfields(r24)[2]) = (String)r12; else hl_dyn_setp(r24->value,-523029465/*module*/,&t$String,r12);
+			if( hl_vfields(r23)[2] ) *(String*)(hl_vfields(r23)[2]) = (String)r12; else hl_dyn_setp(r23->value,-523029465/*module*/,&t$String,r12);
 			r5 = little_parser_Parser_get_line();
-			if( hl_vfields(r24)[0] ) *(int*)(hl_vfields(r24)[0]) = (int)r5; else hl_dyn_seti(r24->value,129177854/*line*/,&t$_i32,r5);
-			r25 = (little__parser__$Parser)g$_little_parser_Parser;
-			r5 = r25->linePart;
-			if( hl_vfields(r24)[1] ) *(int*)(hl_vfields(r24)[1]) = (int)r5; else hl_dyn_seti(r24->value,-411357064/*linePart*/,&t$_i32,r5);
-			r9 = &t$little_parser_ParserTokens;
+			if( hl_vfields(r23)[0] ) *(int*)(hl_vfields(r23)[0]) = (int)r5; else hl_dyn_seti(r23->value,129177854/*line*/,&t$_i32,r5);
+			r24 = (little__parser__$Parser)g$_little_parser_Parser;
+			r5 = r24->linePart;
+			if( hl_vfields(r23)[1] ) *(int*)(hl_vfields(r23)[1]) = (int)r5; else hl_dyn_seti(r23->value,-411357064/*linePart*/,&t$_i32,r5);
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r3 = hl_types_ArrayObj_pop(r2);
-			r8 = (venum*)r3;
-			r15 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r8 == r15 ) goto label$96e09ea_5_187;
-			hl_assert();
-			label$96e09ea_5_187:
+			r11 = (venum*)r3;
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r14 = hl_types_ArrayObj_alloc(r7);
 			r14 = little_interpreter_Interpreter_convert(r14);
 			if( r14 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r14->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_5_197;
-			r26 = NULL;
-			goto label$96e09ea_5_203;
-			label$96e09ea_5_197:
+			r9 = r14->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_5_182;
+			r25 = NULL;
+			goto label$96e09ea_5_185;
+			label$96e09ea_5_182:
 			r7 = r14->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
-			r26 = (venum*)r3;
-			r27 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_interpreter_InterpTokens);
-			if( r26 == r27 ) goto label$96e09ea_5_203;
-			hl_assert();
-			label$96e09ea_5_203:
+			r25 = (venum*)r3;
+			label$96e09ea_5_185:
 			r12 = (String)s$;
-			r27 = hl_alloc_enum(&t$little_interpreter_InterpTokens,25);
-			((little_interpreter_InterpTokens_Identifier*)r27)->p0 = r12;
+			r26 = hl_alloc_enum(&t$little_interpreter_InterpTokens,25);
+			((little_interpreter_InterpTokens_Identifier*)r26)->p0 = r12;
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_interpreter_InterpTokens,15);
-			((little_interpreter_InterpTokens_PropertyAccess*)tmp)->p0 = r26;
-			((little_interpreter_InterpTokens_PropertyAccess*)tmp)->p1 = r27;
-			r26 = tmp; };
-			if( hl_vfields(r24)[3] ) *(venum**)(hl_vfields(r24)[3]) = (venum*)r26; else hl_dyn_setp(r24->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r26);
-			hl_types_ArrayObj_unshift(r11,((vdynamic*)r24));
-			r21 = (little__$Little)g$_little_Little;
-			r23 = r21->runtime;
-			if( r23 == NULL ) hl_null_access();
+			((little_interpreter_InterpTokens_PropertyAccess*)tmp)->p0 = r25;
+			((little_interpreter_InterpTokens_PropertyAccess*)tmp)->p1 = r26;
+			r25 = tmp; };
+			if( hl_vfields(r23)[3] ) *(venum**)(hl_vfields(r23)[3]) = (venum*)r25; else hl_dyn_setp(r23->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r25);
+			hl_types_ArrayObj_unshift(r10,((vdynamic*)r23));
+			r20 = (little__$Little)g$_little_Little;
+			r22 = r20->runtime;
+			if( r22 == NULL ) hl_null_access();
 			r12 = (String)s$aa4a617;
-			r26 = hl_alloc_enum(&t$little_interpreter_InterpTokens,27);
-			((little_interpreter_InterpTokens_ErrorMessage*)r26)->p0 = r12;
+			r25 = hl_alloc_enum(&t$little_interpreter_InterpTokens,27);
+			((little_interpreter_InterpTokens_ErrorMessage*)r25)->p0 = r12;
 			r12 = (String)s$Parser;
-			r26 = little_interpreter_Runtime_throwError(r23,r26,r12);
-			r11 = NULL;
-			return r11;
-			label$96e09ea_5_217:
+			r25 = little_interpreter_Runtime_throwError(r22,r25,r12);
+			r10 = NULL;
+			return r10;
+			label$96e09ea_5_199:
 			r3 = hl_types_ArrayObj_pop(r2);
-			r8 = (venum*)r3;
-			r15 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r8 == r15 ) goto label$96e09ea_5_222;
-			hl_assert();
-			label$96e09ea_5_222:
-			if( r8 ) goto label$96e09ea_5_256;
-			r9 = &t$little_parser_ParserTokens;
+			r11 = (venum*)r3;
+			if( r11 ) goto label$96e09ea_5_229;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			++r4;
 			r5 = r0->length;
-			if( ((unsigned)r4) < ((unsigned)r5) ) goto label$96e09ea_5_231;
+			if( ((unsigned)r4) < ((unsigned)r5) ) goto label$96e09ea_5_210;
 			r15 = NULL;
-			goto label$96e09ea_5_237;
-			label$96e09ea_5_231:
-			r28 = r0->array;
-			r3 = ((vdynamic**)(r28 + 1))[r4];
+			goto label$96e09ea_5_213;
+			label$96e09ea_5_210:
+			r27 = r0->array;
+			r3 = ((vdynamic**)(r27 + 1))[r4];
 			r15 = (venum*)r3;
-			r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r15 == r18 ) goto label$96e09ea_5_237;
-			hl_assert();
-			label$96e09ea_5_237:
+			label$96e09ea_5_213:
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r15;
-			r11 = hl_types_ArrayObj_alloc(r7);
-			r11 = little_parser_Parser_mergePropertyOperations(r11);
-			if( r11 == NULL ) hl_null_access();
+			r10 = hl_types_ArrayObj_alloc(r7);
+			r10 = little_parser_Parser_mergePropertyOperations(r10);
+			if( r10 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r11->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_5_247;
+			r9 = r10->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_5_223;
 			r15 = NULL;
-			goto label$96e09ea_5_253;
-			label$96e09ea_5_247:
-			r7 = r11->array;
+			goto label$96e09ea_5_226;
+			label$96e09ea_5_223:
+			r7 = r10->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r15 = (venum*)r3;
-			r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r15 == r18 ) goto label$96e09ea_5_253;
-			hl_assert();
-			label$96e09ea_5_253:
-			r18 = hl_alloc_enum(&t$little_parser_ParserTokens,15);
-			((little_parser_ParserTokens_PropertyAccess*)r18)->p0 = r8;
-			((little_parser_ParserTokens_PropertyAccess*)r18)->p1 = r15;
-			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r18));
-			goto label$96e09ea_5_577;
-			label$96e09ea_5_256:
-			if( r8 == NULL ) hl_null_access();
-			r5 = HL__ENUM_INDEX__(r8);
+			label$96e09ea_5_226:
+			r28 = hl_alloc_enum(&t$little_parser_ParserTokens,15);
+			((little_parser_ParserTokens_PropertyAccess*)r28)->p0 = r11;
+			((little_parser_ParserTokens_PropertyAccess*)r28)->p1 = r15;
+			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r28));
+			goto label$96e09ea_5_514;
+			label$96e09ea_5_229:
+			if( r11 == NULL ) hl_null_access();
+			r5 = HL__ENUM_INDEX__(r11);
 			switch(r5) {
 				default:
 				case 3:
@@ -1325,270 +1246,245 @@ hl__types__ArrayObj little_parser_Parser_mergePropertyOperations(hl__types__Arra
 				case 9:
 				case 10:
 				case 11:
-					r9 = &t$little_parser_ParserTokens;
+					r8 = &t$little_parser_ParserTokens;
 					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
+					r7 = hl_alloc_array(r8,r5);
 					++r4;
 					r5 = r0->length;
-					if( ((unsigned)r4) < ((unsigned)r5) ) goto label$96e09ea_5_267;
+					if( ((unsigned)r4) < ((unsigned)r5) ) goto label$96e09ea_5_240;
 					r15 = NULL;
-					goto label$96e09ea_5_273;
-					label$96e09ea_5_267:
-					r28 = r0->array;
-					r3 = ((vdynamic**)(r28 + 1))[r4];
+					goto label$96e09ea_5_243;
+					label$96e09ea_5_240:
+					r27 = r0->array;
+					r3 = ((vdynamic**)(r27 + 1))[r4];
 					r15 = (venum*)r3;
-					r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-					if( r15 == r18 ) goto label$96e09ea_5_273;
-					hl_assert();
-					label$96e09ea_5_273:
+					label$96e09ea_5_243:
 					r5 = 0;
 					((venum**)(r7 + 1))[r5] = r15;
-					r11 = hl_types_ArrayObj_alloc(r7);
-					r11 = little_parser_Parser_mergePropertyOperations(r11);
-					if( r11 == NULL ) hl_null_access();
+					r10 = hl_types_ArrayObj_alloc(r7);
+					r10 = little_parser_Parser_mergePropertyOperations(r10);
+					if( r10 == NULL ) hl_null_access();
 					r5 = 0;
-					r10 = r11->length;
-					if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_5_283;
+					r9 = r10->length;
+					if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_5_253;
 					r15 = NULL;
-					goto label$96e09ea_5_289;
-					label$96e09ea_5_283:
-					r7 = r11->array;
+					goto label$96e09ea_5_256;
+					label$96e09ea_5_253:
+					r7 = r10->array;
 					r3 = ((vdynamic**)(r7 + 1))[r5];
 					r15 = (venum*)r3;
-					r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-					if( r15 == r18 ) goto label$96e09ea_5_289;
-					hl_assert();
-					label$96e09ea_5_289:
-					r18 = hl_alloc_enum(&t$little_parser_ParserTokens,15);
-					((little_parser_ParserTokens_PropertyAccess*)r18)->p0 = r8;
-					((little_parser_ParserTokens_PropertyAccess*)r18)->p1 = r15;
-					r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r18));
-					goto label$96e09ea_5_577;
+					label$96e09ea_5_256:
+					r28 = hl_alloc_enum(&t$little_parser_ParserTokens,15);
+					((little_parser_ParserTokens_PropertyAccess*)r28)->p0 = r11;
+					((little_parser_ParserTokens_PropertyAccess*)r28)->p1 = r15;
+					r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r28));
+					goto label$96e09ea_5_514;
 				case 0:
-					r5 = ((little_parser_ParserTokens_SetLine*)r8)->p0;
-					r21 = (little__$Little)g$_little_Little;
-					r23 = r21->runtime;
-					if( r23 == NULL ) hl_null_access();
-					r11 = r23->callStack;
-					if( r11 == NULL ) hl_null_access();
-					r24 = hl_alloc_virtual(&t$vrt_f317fe3);
+					r5 = ((little_parser_ParserTokens_SetLine*)r11)->p0;
+					r20 = (little__$Little)g$_little_Little;
+					r22 = r20->runtime;
+					if( r22 == NULL ) hl_null_access();
+					r10 = r22->callStack;
+					if( r10 == NULL ) hl_null_access();
+					r23 = hl_alloc_virtual(&t$vrt_f317fe3);
 					r12 = little_parser_Parser_get_module();
-					if( hl_vfields(r24)[2] ) *(String*)(hl_vfields(r24)[2]) = (String)r12; else hl_dyn_setp(r24->value,-523029465/*module*/,&t$String,r12);
-					r10 = little_parser_Parser_get_line();
-					if( hl_vfields(r24)[0] ) *(int*)(hl_vfields(r24)[0]) = (int)r10; else hl_dyn_seti(r24->value,129177854/*line*/,&t$_i32,r10);
-					r25 = (little__parser__$Parser)g$_little_parser_Parser;
-					r10 = r25->linePart;
-					if( hl_vfields(r24)[1] ) *(int*)(hl_vfields(r24)[1]) = (int)r10; else hl_dyn_seti(r24->value,-411357064/*linePart*/,&t$_i32,r10);
-					r9 = &t$little_parser_ParserTokens;
-					r10 = 1;
-					r7 = hl_alloc_array(r9,r10);
-					r10 = 0;
-					((venum**)(r7 + 1))[r10] = r8;
+					if( hl_vfields(r23)[2] ) *(String*)(hl_vfields(r23)[2]) = (String)r12; else hl_dyn_setp(r23->value,-523029465/*module*/,&t$String,r12);
+					r9 = little_parser_Parser_get_line();
+					if( hl_vfields(r23)[0] ) *(int*)(hl_vfields(r23)[0]) = (int)r9; else hl_dyn_seti(r23->value,129177854/*line*/,&t$_i32,r9);
+					r24 = (little__parser__$Parser)g$_little_parser_Parser;
+					r9 = r24->linePart;
+					if( hl_vfields(r23)[1] ) *(int*)(hl_vfields(r23)[1]) = (int)r9; else hl_dyn_seti(r23->value,-411357064/*linePart*/,&t$_i32,r9);
+					r8 = &t$little_parser_ParserTokens;
+					r9 = 1;
+					r7 = hl_alloc_array(r8,r9);
+					r9 = 0;
+					((venum**)(r7 + 1))[r9] = r11;
 					r14 = hl_types_ArrayObj_alloc(r7);
 					r14 = little_interpreter_Interpreter_convert(r14);
 					if( r14 == NULL ) hl_null_access();
-					r10 = 0;
+					r9 = 0;
 					r30 = r14->length;
-					if( ((unsigned)r10) < ((unsigned)r30) ) goto label$96e09ea_5_319;
-					r26 = NULL;
-					goto label$96e09ea_5_325;
-					label$96e09ea_5_319:
+					if( ((unsigned)r9) < ((unsigned)r30) ) goto label$96e09ea_5_286;
+					r25 = NULL;
+					goto label$96e09ea_5_289;
+					label$96e09ea_5_286:
 					r7 = r14->array;
-					r3 = ((vdynamic**)(r7 + 1))[r10];
-					r26 = (venum*)r3;
-					r27 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_interpreter_InterpTokens);
-					if( r26 == r27 ) goto label$96e09ea_5_325;
-					hl_assert();
-					label$96e09ea_5_325:
+					r3 = ((vdynamic**)(r7 + 1))[r9];
+					r25 = (venum*)r3;
+					label$96e09ea_5_289:
 					r12 = (String)s$;
-					r27 = hl_alloc_enum(&t$little_interpreter_InterpTokens,25);
-					((little_interpreter_InterpTokens_Identifier*)r27)->p0 = r12;
+					r26 = hl_alloc_enum(&t$little_interpreter_InterpTokens,25);
+					((little_interpreter_InterpTokens_Identifier*)r26)->p0 = r12;
 					{ venum *tmp;
 					tmp = hl_alloc_enum(&t$little_interpreter_InterpTokens,15);
-					((little_interpreter_InterpTokens_PropertyAccess*)tmp)->p0 = r26;
-					((little_interpreter_InterpTokens_PropertyAccess*)tmp)->p1 = r27;
-					r26 = tmp; };
-					if( hl_vfields(r24)[3] ) *(venum**)(hl_vfields(r24)[3]) = (venum*)r26; else hl_dyn_setp(r24->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r26);
-					hl_types_ArrayObj_unshift(r11,((vdynamic*)r24));
-					r21 = (little__$Little)g$_little_Little;
-					r23 = r21->runtime;
-					if( r23 == NULL ) hl_null_access();
+					((little_interpreter_InterpTokens_PropertyAccess*)tmp)->p0 = r25;
+					((little_interpreter_InterpTokens_PropertyAccess*)tmp)->p1 = r26;
+					r25 = tmp; };
+					if( hl_vfields(r23)[3] ) *(venum**)(hl_vfields(r23)[3]) = (venum*)r25; else hl_dyn_setp(r23->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r25);
+					hl_types_ArrayObj_unshift(r10,((vdynamic*)r23));
+					r20 = (little__$Little)g$_little_Little;
+					r22 = r20->runtime;
+					if( r22 == NULL ) hl_null_access();
 					r12 = (String)s$948a87b;
-					r26 = hl_alloc_enum(&t$little_interpreter_InterpTokens,27);
-					((little_interpreter_InterpTokens_ErrorMessage*)r26)->p0 = r12;
+					r25 = hl_alloc_enum(&t$little_interpreter_InterpTokens,27);
+					((little_interpreter_InterpTokens_ErrorMessage*)r25)->p0 = r12;
 					r12 = (String)s$Parser;
-					r26 = little_interpreter_Runtime_throwError(r23,r26,r12);
-					r11 = NULL;
-					return r11;
+					r25 = little_interpreter_Runtime_throwError(r22,r25,r12);
+					r10 = NULL;
+					return r10;
 				case 1:
-					r12 = ((little_parser_ParserTokens_SetModule*)r8)->p0;
-					r21 = (little__$Little)g$_little_Little;
-					r23 = r21->runtime;
-					if( r23 == NULL ) hl_null_access();
-					r11 = r23->callStack;
-					if( r11 == NULL ) hl_null_access();
-					r24 = hl_alloc_virtual(&t$vrt_f317fe3);
+					r12 = ((little_parser_ParserTokens_SetModule*)r11)->p0;
+					r20 = (little__$Little)g$_little_Little;
+					r22 = r20->runtime;
+					if( r22 == NULL ) hl_null_access();
+					r10 = r22->callStack;
+					if( r10 == NULL ) hl_null_access();
+					r23 = hl_alloc_virtual(&t$vrt_f317fe3);
 					r13 = little_parser_Parser_get_module();
-					if( hl_vfields(r24)[2] ) *(String*)(hl_vfields(r24)[2]) = (String)r13; else hl_dyn_setp(r24->value,-523029465/*module*/,&t$String,r13);
+					if( hl_vfields(r23)[2] ) *(String*)(hl_vfields(r23)[2]) = (String)r13; else hl_dyn_setp(r23->value,-523029465/*module*/,&t$String,r13);
 					r5 = little_parser_Parser_get_line();
-					if( hl_vfields(r24)[0] ) *(int*)(hl_vfields(r24)[0]) = (int)r5; else hl_dyn_seti(r24->value,129177854/*line*/,&t$_i32,r5);
-					r25 = (little__parser__$Parser)g$_little_parser_Parser;
-					r5 = r25->linePart;
-					if( hl_vfields(r24)[1] ) *(int*)(hl_vfields(r24)[1]) = (int)r5; else hl_dyn_seti(r24->value,-411357064/*linePart*/,&t$_i32,r5);
-					r9 = &t$little_parser_ParserTokens;
+					if( hl_vfields(r23)[0] ) *(int*)(hl_vfields(r23)[0]) = (int)r5; else hl_dyn_seti(r23->value,129177854/*line*/,&t$_i32,r5);
+					r24 = (little__parser__$Parser)g$_little_parser_Parser;
+					r5 = r24->linePart;
+					if( hl_vfields(r23)[1] ) *(int*)(hl_vfields(r23)[1]) = (int)r5; else hl_dyn_seti(r23->value,-411357064/*linePart*/,&t$_i32,r5);
+					r8 = &t$little_parser_ParserTokens;
 					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
+					r7 = hl_alloc_array(r8,r5);
 					r5 = 0;
-					((venum**)(r7 + 1))[r5] = r8;
+					((venum**)(r7 + 1))[r5] = r11;
 					r14 = hl_types_ArrayObj_alloc(r7);
 					r14 = little_interpreter_Interpreter_convert(r14);
 					if( r14 == NULL ) hl_null_access();
 					r5 = 0;
-					r10 = r14->length;
-					if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_5_366;
-					r26 = NULL;
-					goto label$96e09ea_5_372;
-					label$96e09ea_5_366:
+					r9 = r14->length;
+					if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_5_330;
+					r25 = NULL;
+					goto label$96e09ea_5_333;
+					label$96e09ea_5_330:
 					r7 = r14->array;
 					r3 = ((vdynamic**)(r7 + 1))[r5];
-					r26 = (venum*)r3;
-					r27 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_interpreter_InterpTokens);
-					if( r26 == r27 ) goto label$96e09ea_5_372;
-					hl_assert();
-					label$96e09ea_5_372:
+					r25 = (venum*)r3;
+					label$96e09ea_5_333:
 					r13 = (String)s$;
-					r27 = hl_alloc_enum(&t$little_interpreter_InterpTokens,25);
-					((little_interpreter_InterpTokens_Identifier*)r27)->p0 = r13;
+					r26 = hl_alloc_enum(&t$little_interpreter_InterpTokens,25);
+					((little_interpreter_InterpTokens_Identifier*)r26)->p0 = r13;
 					{ venum *tmp;
 					tmp = hl_alloc_enum(&t$little_interpreter_InterpTokens,15);
-					((little_interpreter_InterpTokens_PropertyAccess*)tmp)->p0 = r26;
-					((little_interpreter_InterpTokens_PropertyAccess*)tmp)->p1 = r27;
-					r26 = tmp; };
-					if( hl_vfields(r24)[3] ) *(venum**)(hl_vfields(r24)[3]) = (venum*)r26; else hl_dyn_setp(r24->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r26);
-					hl_types_ArrayObj_unshift(r11,((vdynamic*)r24));
-					r21 = (little__$Little)g$_little_Little;
-					r23 = r21->runtime;
-					if( r23 == NULL ) hl_null_access();
+					((little_interpreter_InterpTokens_PropertyAccess*)tmp)->p0 = r25;
+					((little_interpreter_InterpTokens_PropertyAccess*)tmp)->p1 = r26;
+					r25 = tmp; };
+					if( hl_vfields(r23)[3] ) *(venum**)(hl_vfields(r23)[3]) = (venum*)r25; else hl_dyn_setp(r23->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r25);
+					hl_types_ArrayObj_unshift(r10,((vdynamic*)r23));
+					r20 = (little__$Little)g$_little_Little;
+					r22 = r20->runtime;
+					if( r22 == NULL ) hl_null_access();
 					r13 = (String)s$948a87b;
-					r26 = hl_alloc_enum(&t$little_interpreter_InterpTokens,27);
-					((little_interpreter_InterpTokens_ErrorMessage*)r26)->p0 = r13;
+					r25 = hl_alloc_enum(&t$little_interpreter_InterpTokens,27);
+					((little_interpreter_InterpTokens_ErrorMessage*)r25)->p0 = r13;
 					r13 = (String)s$Parser;
-					r26 = little_interpreter_Runtime_throwError(r23,r26,r13);
-					r11 = NULL;
-					return r11;
+					r25 = little_interpreter_Runtime_throwError(r22,r25,r13);
+					r10 = NULL;
+					return r10;
 				case 2:
-					r21 = (little__$Little)g$_little_Little;
-					r23 = r21->runtime;
-					if( r23 == NULL ) hl_null_access();
-					r11 = r23->callStack;
-					if( r11 == NULL ) hl_null_access();
-					r24 = hl_alloc_virtual(&t$vrt_f317fe3);
+					r20 = (little__$Little)g$_little_Little;
+					r22 = r20->runtime;
+					if( r22 == NULL ) hl_null_access();
+					r10 = r22->callStack;
+					if( r10 == NULL ) hl_null_access();
+					r23 = hl_alloc_virtual(&t$vrt_f317fe3);
 					r12 = little_parser_Parser_get_module();
-					if( hl_vfields(r24)[2] ) *(String*)(hl_vfields(r24)[2]) = (String)r12; else hl_dyn_setp(r24->value,-523029465/*module*/,&t$String,r12);
+					if( hl_vfields(r23)[2] ) *(String*)(hl_vfields(r23)[2]) = (String)r12; else hl_dyn_setp(r23->value,-523029465/*module*/,&t$String,r12);
 					r5 = little_parser_Parser_get_line();
-					if( hl_vfields(r24)[0] ) *(int*)(hl_vfields(r24)[0]) = (int)r5; else hl_dyn_seti(r24->value,129177854/*line*/,&t$_i32,r5);
-					r25 = (little__parser__$Parser)g$_little_parser_Parser;
-					r5 = r25->linePart;
-					if( hl_vfields(r24)[1] ) *(int*)(hl_vfields(r24)[1]) = (int)r5; else hl_dyn_seti(r24->value,-411357064/*linePart*/,&t$_i32,r5);
-					r9 = &t$little_parser_ParserTokens;
+					if( hl_vfields(r23)[0] ) *(int*)(hl_vfields(r23)[0]) = (int)r5; else hl_dyn_seti(r23->value,129177854/*line*/,&t$_i32,r5);
+					r24 = (little__parser__$Parser)g$_little_parser_Parser;
+					r5 = r24->linePart;
+					if( hl_vfields(r23)[1] ) *(int*)(hl_vfields(r23)[1]) = (int)r5; else hl_dyn_seti(r23->value,-411357064/*linePart*/,&t$_i32,r5);
+					r8 = &t$little_parser_ParserTokens;
 					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
+					r7 = hl_alloc_array(r8,r5);
 					r5 = 0;
-					((venum**)(r7 + 1))[r5] = r8;
+					((venum**)(r7 + 1))[r5] = r11;
 					r14 = hl_types_ArrayObj_alloc(r7);
 					r14 = little_interpreter_Interpreter_convert(r14);
 					if( r14 == NULL ) hl_null_access();
 					r5 = 0;
-					r10 = r14->length;
-					if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_5_412;
-					r26 = NULL;
-					goto label$96e09ea_5_418;
-					label$96e09ea_5_412:
+					r9 = r14->length;
+					if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_5_373;
+					r25 = NULL;
+					goto label$96e09ea_5_376;
+					label$96e09ea_5_373:
 					r7 = r14->array;
 					r3 = ((vdynamic**)(r7 + 1))[r5];
-					r26 = (venum*)r3;
-					r27 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_interpreter_InterpTokens);
-					if( r26 == r27 ) goto label$96e09ea_5_418;
-					hl_assert();
-					label$96e09ea_5_418:
+					r25 = (venum*)r3;
+					label$96e09ea_5_376:
 					r12 = (String)s$;
-					r27 = hl_alloc_enum(&t$little_interpreter_InterpTokens,25);
-					((little_interpreter_InterpTokens_Identifier*)r27)->p0 = r12;
+					r26 = hl_alloc_enum(&t$little_interpreter_InterpTokens,25);
+					((little_interpreter_InterpTokens_Identifier*)r26)->p0 = r12;
 					{ venum *tmp;
 					tmp = hl_alloc_enum(&t$little_interpreter_InterpTokens,15);
-					((little_interpreter_InterpTokens_PropertyAccess*)tmp)->p0 = r26;
-					((little_interpreter_InterpTokens_PropertyAccess*)tmp)->p1 = r27;
-					r26 = tmp; };
-					if( hl_vfields(r24)[3] ) *(venum**)(hl_vfields(r24)[3]) = (venum*)r26; else hl_dyn_setp(r24->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r26);
-					hl_types_ArrayObj_unshift(r11,((vdynamic*)r24));
-					r21 = (little__$Little)g$_little_Little;
-					r23 = r21->runtime;
-					if( r23 == NULL ) hl_null_access();
+					((little_interpreter_InterpTokens_PropertyAccess*)tmp)->p0 = r25;
+					((little_interpreter_InterpTokens_PropertyAccess*)tmp)->p1 = r26;
+					r25 = tmp; };
+					if( hl_vfields(r23)[3] ) *(venum**)(hl_vfields(r23)[3]) = (venum*)r25; else hl_dyn_setp(r23->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r25);
+					hl_types_ArrayObj_unshift(r10,((vdynamic*)r23));
+					r20 = (little__$Little)g$_little_Little;
+					r22 = r20->runtime;
+					if( r22 == NULL ) hl_null_access();
 					r12 = (String)s$948a87b;
-					r26 = hl_alloc_enum(&t$little_interpreter_InterpTokens,27);
-					((little_interpreter_InterpTokens_ErrorMessage*)r26)->p0 = r12;
+					r25 = hl_alloc_enum(&t$little_interpreter_InterpTokens,27);
+					((little_interpreter_InterpTokens_ErrorMessage*)r25)->p0 = r12;
 					r12 = (String)s$Parser;
-					r26 = little_interpreter_Runtime_throwError(r23,r26,r12);
-					r11 = NULL;
-					return r11;
+					r25 = little_interpreter_Runtime_throwError(r22,r25,r12);
+					r10 = NULL;
+					return r10;
 				case 12:
-					r11 = ((little_parser_ParserTokens_Expression*)r8)->p0;
-					r15 = ((little_parser_ParserTokens_Expression*)r8)->p1;
-					r9 = &t$little_parser_ParserTokens;
+					r10 = ((little_parser_ParserTokens_Expression*)r11)->p0;
+					r15 = ((little_parser_ParserTokens_Expression*)r11)->p1;
+					r8 = &t$little_parser_ParserTokens;
 					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
+					r7 = hl_alloc_array(r8,r5);
 					++r4;
 					r5 = r0->length;
-					if( ((unsigned)r4) < ((unsigned)r5) ) goto label$96e09ea_5_442;
-					r18 = NULL;
-					goto label$96e09ea_5_448;
-					label$96e09ea_5_442:
-					r28 = r0->array;
-					r3 = ((vdynamic**)(r28 + 1))[r4];
-					r18 = (venum*)r3;
-					r29 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-					if( r18 == r29 ) goto label$96e09ea_5_448;
-					hl_assert();
-					label$96e09ea_5_448:
+					if( ((unsigned)r4) < ((unsigned)r5) ) goto label$96e09ea_5_400;
+					r28 = NULL;
+					goto label$96e09ea_5_403;
+					label$96e09ea_5_400:
+					r27 = r0->array;
+					r3 = ((vdynamic**)(r27 + 1))[r4];
+					r28 = (venum*)r3;
+					label$96e09ea_5_403:
 					r5 = 0;
-					((venum**)(r7 + 1))[r5] = r18;
+					((venum**)(r7 + 1))[r5] = r28;
 					r14 = hl_types_ArrayObj_alloc(r7);
 					r14 = little_parser_Parser_mergePropertyOperations(r14);
 					if( r14 == NULL ) hl_null_access();
 					r5 = 0;
-					r10 = r14->length;
-					if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_5_458;
-					r18 = NULL;
-					goto label$96e09ea_5_464;
-					label$96e09ea_5_458:
+					r9 = r14->length;
+					if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_5_413;
+					r28 = NULL;
+					goto label$96e09ea_5_416;
+					label$96e09ea_5_413:
 					r7 = r14->array;
 					r3 = ((vdynamic**)(r7 + 1))[r5];
-					r18 = (venum*)r3;
-					r29 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-					if( r18 == r29 ) goto label$96e09ea_5_464;
-					hl_assert();
-					label$96e09ea_5_464:
-					r9 = &t$little_parser_ParserTokens;
+					r28 = (venum*)r3;
+					label$96e09ea_5_416:
+					r8 = &t$little_parser_ParserTokens;
 					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
+					r7 = hl_alloc_array(r8,r5);
 					r5 = 0;
-					((venum**)(r7 + 1))[r5] = r8;
+					((venum**)(r7 + 1))[r5] = r11;
 					r14 = hl_types_ArrayObj_alloc(r7);
-					label$96e09ea_5_470:
+					label$96e09ea_5_422:
 					if( r2 == NULL ) hl_null_access();
 					r5 = r2->length;
-					r10 = 0;
-					if( r10 >= r5 ) goto label$96e09ea_5_550;
+					r9 = 0;
+					if( r9 >= r5 ) goto label$96e09ea_5_493;
 					r3 = hl_types_ArrayObj_pop(r2);
 					r29 = (venum*)r3;
-					r31 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-					if( r29 == r31 ) goto label$96e09ea_5_480;
-					hl_assert();
-					label$96e09ea_5_480:
-					if( r29 ) goto label$96e09ea_5_483;
+					if( r29 ) goto label$96e09ea_5_432;
 					r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r29));
-					goto label$96e09ea_5_550;
-					label$96e09ea_5_483:
+					goto label$96e09ea_5_493;
+					label$96e09ea_5_432:
 					if( r29 == NULL ) hl_null_access();
 					r5 = HL__ENUM_INDEX__(r29);
 					switch(r5) {
@@ -1606,208 +1502,188 @@ hl__types__ArrayObj little_parser_Parser_mergePropertyOperations(hl__types__Arra
 						case 11:
 						case 14:
 							r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r29));
-							goto label$96e09ea_5_550;
+							goto label$96e09ea_5_493;
 						case 8:
 							r12 = ((little_parser_ParserTokens_Identifier*)r29)->p0;
 							if( r14 == NULL ) hl_null_access();
 							r5 = hl_types_ArrayObj_push(r14,((vdynamic*)r29));
-							goto label$96e09ea_5_550;
+							goto label$96e09ea_5_493;
 						case 12:
 							r16 = ((little_parser_ParserTokens_Expression*)r29)->p0;
 							r31 = ((little_parser_ParserTokens_Expression*)r29)->p1;
 							if( r14 == NULL ) hl_null_access();
 							r33 = little_parser_Parser_mergePropertyOperations(r16);
-							r9 = &t$little_parser_ParserTokens;
+							r8 = &t$little_parser_ParserTokens;
 							r5 = 1;
-							r7 = hl_alloc_array(r9,r5);
+							r7 = hl_alloc_array(r8,r5);
 							r5 = 0;
 							((venum**)(r7 + 1))[r5] = r31;
 							r34 = hl_types_ArrayObj_alloc(r7);
 							r34 = little_parser_Parser_mergePropertyOperations(r34);
 							if( r34 == NULL ) hl_null_access();
 							r5 = 0;
-							r10 = r34->length;
-							if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_5_509;
+							r9 = r34->length;
+							if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_5_458;
 							r32 = NULL;
-							goto label$96e09ea_5_515;
-							label$96e09ea_5_509:
+							goto label$96e09ea_5_461;
+							label$96e09ea_5_458:
 							r7 = r34->array;
 							r3 = ((vdynamic**)(r7 + 1))[r5];
 							r32 = (venum*)r3;
-							r35 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-							if( r32 == r35 ) goto label$96e09ea_5_515;
-							hl_assert();
-							label$96e09ea_5_515:
+							label$96e09ea_5_461:
 							{ venum *tmp;
 							tmp = hl_alloc_enum(&t$little_parser_ParserTokens,12);
 							((little_parser_ParserTokens_Expression*)tmp)->p0 = r33;
 							((little_parser_ParserTokens_Expression*)tmp)->p1 = r32;
 							r32 = tmp; };
 							r5 = hl_types_ArrayObj_push(r14,((vdynamic*)r32));
-							goto label$96e09ea_5_549;
+							goto label$96e09ea_5_492;
 						case 13:
 							r16 = ((little_parser_ParserTokens_Block*)r29)->p0;
 							r31 = ((little_parser_ParserTokens_Block*)r29)->p1;
 							if( r14 == NULL ) hl_null_access();
 							r33 = little_parser_Parser_mergePropertyOperations(r16);
-							r9 = &t$little_parser_ParserTokens;
+							r8 = &t$little_parser_ParserTokens;
 							r5 = 1;
-							r7 = hl_alloc_array(r9,r5);
+							r7 = hl_alloc_array(r8,r5);
 							r5 = 0;
 							((venum**)(r7 + 1))[r5] = r31;
 							r34 = hl_types_ArrayObj_alloc(r7);
 							r34 = little_parser_Parser_mergePropertyOperations(r34);
 							if( r34 == NULL ) hl_null_access();
 							r5 = 0;
-							r10 = r34->length;
-							if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_5_535;
+							r9 = r34->length;
+							if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_5_481;
 							r32 = NULL;
-							goto label$96e09ea_5_541;
-							label$96e09ea_5_535:
+							goto label$96e09ea_5_484;
+							label$96e09ea_5_481:
 							r7 = r34->array;
 							r3 = ((vdynamic**)(r7 + 1))[r5];
 							r32 = (venum*)r3;
-							r35 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-							if( r32 == r35 ) goto label$96e09ea_5_541;
-							hl_assert();
-							label$96e09ea_5_541:
+							label$96e09ea_5_484:
 							{ venum *tmp;
 							tmp = hl_alloc_enum(&t$little_parser_ParserTokens,13);
 							((little_parser_ParserTokens_Block*)tmp)->p0 = r33;
 							((little_parser_ParserTokens_Block*)tmp)->p1 = r32;
 							r32 = tmp; };
 							r5 = hl_types_ArrayObj_push(r14,((vdynamic*)r32));
-							goto label$96e09ea_5_550;
+							goto label$96e09ea_5_493;
 						case 15:
 							r31 = ((little_parser_ParserTokens_PropertyAccess*)r29)->p0;
 							r32 = ((little_parser_ParserTokens_PropertyAccess*)r29)->p1;
 							if( r14 == NULL ) hl_null_access();
 							r5 = hl_types_ArrayObj_push(r14,((vdynamic*)r29));
-							goto label$96e09ea_5_550;
+							goto label$96e09ea_5_493;
 					}
-					label$96e09ea_5_549:
-					goto label$96e09ea_5_470;
-					label$96e09ea_5_550:
-					r29 = r8;
+					label$96e09ea_5_492:
+					goto label$96e09ea_5_422;
+					label$96e09ea_5_493:
+					r29 = r11;
 					if( r14 == NULL ) hl_null_access();
 					r5 = r14->length;
-					r10 = 0;
-					if( r10 >= r5 ) goto label$96e09ea_5_574;
+					r9 = 0;
+					if( r9 >= r5 ) goto label$96e09ea_5_511;
 					r3 = hl_types_ArrayObj_pop(r14);
 					r31 = (venum*)r3;
-					r32 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-					if( r31 == r32 ) goto label$96e09ea_5_560;
-					hl_assert();
-					label$96e09ea_5_560:
 					r29 = r31;
-					label$96e09ea_5_561:
+					label$96e09ea_5_501:
 					if( r14 == NULL ) hl_null_access();
 					r5 = r14->length;
-					r10 = 0;
-					if( r10 >= r5 ) goto label$96e09ea_5_574;
+					r9 = 0;
+					if( r9 >= r5 ) goto label$96e09ea_5_511;
 					r3 = hl_types_ArrayObj_pop(r14);
 					r32 = (venum*)r3;
-					r35 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-					if( r32 == r35 ) goto label$96e09ea_5_571;
-					hl_assert();
-					label$96e09ea_5_571:
 					r31 = hl_alloc_enum(&t$little_parser_ParserTokens,10);
 					((little_parser_ParserTokens_FunctionCall*)r31)->p0 = r29;
 					((little_parser_ParserTokens_FunctionCall*)r31)->p1 = r32;
 					r29 = r31;
-					goto label$96e09ea_5_561;
-					label$96e09ea_5_574:
+					goto label$96e09ea_5_501;
+					label$96e09ea_5_511:
 					if( r2 == NULL ) hl_null_access();
 					r31 = hl_alloc_enum(&t$little_parser_ParserTokens,15);
 					((little_parser_ParserTokens_PropertyAccess*)r31)->p0 = r29;
-					((little_parser_ParserTokens_PropertyAccess*)r31)->p1 = r18;
+					((little_parser_ParserTokens_PropertyAccess*)r31)->p1 = r28;
 					r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r31));
 			}
-			label$96e09ea_5_577:
-			goto label$96e09ea_5_580;
-			label$96e09ea_5_578:
+			label$96e09ea_5_514:
+			goto label$96e09ea_5_517;
+			label$96e09ea_5_515:
 			if( r2 == NULL ) hl_null_access();
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
-			label$96e09ea_5_580:
-			goto label$96e09ea_5_629;
+			label$96e09ea_5_517:
+			goto label$96e09ea_5_560;
 		case 25:
 			r12 = ((little_parser_ParserTokens_Custom*)r6)->p0;
-			r11 = ((little_parser_ParserTokens_Custom*)r6)->p1;
-			r9 = &t$little_parser_ParserTokens;
+			r10 = ((little_parser_ParserTokens_Custom*)r6)->p1;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 0;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r14 = hl_types_ArrayObj_alloc(r7);
 			r5 = 0;
-			r16 = r11;
-			label$96e09ea_5_589:
+			r16 = r10;
+			label$96e09ea_5_526:
 			if( r16 == NULL ) hl_null_access();
 			r30 = r16->length;
-			if( r5 >= r30 ) goto label$96e09ea_5_626;
+			if( r5 >= r30 ) goto label$96e09ea_5_557;
 			r30 = r16->length;
-			if( ((unsigned)r5) < ((unsigned)r30) ) goto label$96e09ea_5_597;
-			r8 = NULL;
-			goto label$96e09ea_5_603;
-			label$96e09ea_5_597:
+			if( ((unsigned)r5) < ((unsigned)r30) ) goto label$96e09ea_5_534;
+			r11 = NULL;
+			goto label$96e09ea_5_537;
+			label$96e09ea_5_534:
 			r7 = r16->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
-			r8 = (venum*)r3;
-			r15 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r8 == r15 ) goto label$96e09ea_5_603;
-			hl_assert();
-			label$96e09ea_5_603:
+			r11 = (venum*)r3;
+			label$96e09ea_5_537:
 			++r5;
 			if( r14 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
-			r10 = 1;
-			r7 = hl_alloc_array(r9,r10);
-			r10 = 0;
-			((venum**)(r7 + 1))[r10] = r8;
+			r8 = &t$little_parser_ParserTokens;
+			r9 = 1;
+			r7 = hl_alloc_array(r8,r9);
+			r9 = 0;
+			((venum**)(r7 + 1))[r9] = r11;
 			r33 = hl_types_ArrayObj_alloc(r7);
 			r33 = little_parser_Parser_mergePropertyOperations(r33);
 			if( r33 == NULL ) hl_null_access();
-			r10 = 0;
+			r9 = 0;
 			r30 = r33->length;
-			if( ((unsigned)r10) < ((unsigned)r30) ) goto label$96e09ea_5_618;
+			if( ((unsigned)r9) < ((unsigned)r30) ) goto label$96e09ea_5_552;
 			r15 = NULL;
-			goto label$96e09ea_5_624;
-			label$96e09ea_5_618:
+			goto label$96e09ea_5_555;
+			label$96e09ea_5_552:
 			r7 = r33->array;
-			r3 = ((vdynamic**)(r7 + 1))[r10];
+			r3 = ((vdynamic**)(r7 + 1))[r9];
 			r15 = (venum*)r3;
-			r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r15 == r18 ) goto label$96e09ea_5_624;
-			hl_assert();
-			label$96e09ea_5_624:
-			r10 = hl_types_ArrayObj_push(r14,((vdynamic*)r15));
-			goto label$96e09ea_5_589;
-			label$96e09ea_5_626:
+			label$96e09ea_5_555:
+			r9 = hl_types_ArrayObj_push(r14,((vdynamic*)r15));
+			goto label$96e09ea_5_526;
+			label$96e09ea_5_557:
 			if( r2 == NULL ) hl_null_access();
-			r8 = hl_alloc_enum(&t$little_parser_ParserTokens,25);
-			((little_parser_ParserTokens_Custom*)r8)->p0 = r12;
-			((little_parser_ParserTokens_Custom*)r8)->p1 = r14;
-			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r8));
+			r11 = hl_alloc_enum(&t$little_parser_ParserTokens,25);
+			((little_parser_ParserTokens_Custom*)r11)->p0 = r12;
+			((little_parser_ParserTokens_Custom*)r11)->p1 = r14;
+			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r11));
 	}
-	label$96e09ea_5_629:
+	label$96e09ea_5_560:
 	++r4;
-	goto label$96e09ea_5_32;
-	label$96e09ea_5_631:
+	goto label$96e09ea_5_29;
+	label$96e09ea_5_562:
 	little_parser_Parser_resetLines();
 	return r2;
 }
 
 hl__types__ArrayObj little_parser_Parser_mergeTypeDecls(hl__types__ArrayObj r0) {
 	String r12, r13, r14;
-	vvirtual *r22;
+	vvirtual *r21;
 	little__$Little r16;
-	hl__types__ArrayObj r2, r11, r18, r26, r27, r30;
-	hl_type *r9;
-	venum *r6, *r8, *r17, *r19, *r20, *r24, *r25, *r28;
-	little__interpreter__Runtime r21;
+	hl__types__ArrayObj r2, r10, r18, r25, r26, r29;
+	hl_type *r8;
+	venum *r6, *r11, *r17, *r19, *r23, *r24, *r27;
+	little__interpreter__Runtime r20;
 	little__KeywordConfig r15;
-	little__parser__$Parser r23;
+	little__parser__$Parser r22;
 	vdynamic *r3;
 	varray *r7;
-	int r4, r5, r10, r29;
+	int r4, r5, r9, r28;
 	if( r0 ) goto label$96e09ea_6_3;
 	r2 = NULL;
 	return r2;
@@ -1815,51 +1691,45 @@ hl__types__ArrayObj little_parser_Parser_mergeTypeDecls(hl__types__ArrayObj r0) 
 	if( r0 == NULL ) hl_null_access();
 	r4 = r0->length;
 	r5 = 1;
-	if( r4 != r5 ) goto label$96e09ea_6_27;
+	if( r4 != r5 ) goto label$96e09ea_6_24;
 	r4 = 0;
 	r5 = r0->length;
 	if( ((unsigned)r4) < ((unsigned)r5) ) goto label$96e09ea_6_12;
 	r6 = NULL;
-	goto label$96e09ea_6_18;
+	goto label$96e09ea_6_15;
 	label$96e09ea_6_12:
 	r7 = r0->array;
 	r3 = ((vdynamic**)(r7 + 1))[r4];
 	r6 = (venum*)r3;
-	r8 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-	if( r6 == r8 ) goto label$96e09ea_6_18;
-	hl_assert();
-	label$96e09ea_6_18:
-	if( r6 ) goto label$96e09ea_6_27;
-	r9 = &t$little_parser_ParserTokens;
+	label$96e09ea_6_15:
+	if( r6 ) goto label$96e09ea_6_24;
+	r8 = &t$little_parser_ParserTokens;
 	r4 = 1;
-	r7 = hl_alloc_array(r9,r4);
+	r7 = hl_alloc_array(r8,r4);
 	r6 = NULL;
 	r4 = 0;
 	((venum**)(r7 + 1))[r4] = r6;
 	r2 = hl_types_ArrayObj_alloc(r7);
 	return r2;
-	label$96e09ea_6_27:
-	r9 = &t$little_parser_ParserTokens;
+	label$96e09ea_6_24:
+	r8 = &t$little_parser_ParserTokens;
 	r4 = 0;
-	r7 = hl_alloc_array(r9,r4);
+	r7 = hl_alloc_array(r8,r4);
 	r2 = hl_types_ArrayObj_alloc(r7);
 	r4 = 0;
-	label$96e09ea_6_32:
+	label$96e09ea_6_29:
 	if( r0 == NULL ) hl_null_access();
-	r10 = r0->length;
-	if( r4 >= r10 ) goto label$96e09ea_6_308;
-	r10 = r0->length;
-	if( ((unsigned)r4) < ((unsigned)r10) ) goto label$96e09ea_6_40;
+	r9 = r0->length;
+	if( r4 >= r9 ) goto label$96e09ea_6_278;
+	r9 = r0->length;
+	if( ((unsigned)r4) < ((unsigned)r9) ) goto label$96e09ea_6_37;
 	r6 = NULL;
-	goto label$96e09ea_6_46;
-	label$96e09ea_6_40:
+	goto label$96e09ea_6_40;
+	label$96e09ea_6_37:
 	r7 = r0->array;
 	r3 = ((vdynamic**)(r7 + 1))[r4];
 	r6 = (venum*)r3;
-	r8 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-	if( r6 == r8 ) goto label$96e09ea_6_46;
-	hl_assert();
-	label$96e09ea_6_46:
+	label$96e09ea_6_40:
 	if( r6 == NULL ) hl_null_access();
 	r5 = HL__ENUM_INDEX__(r6);
 	switch(r5) {
@@ -1884,72 +1754,66 @@ hl__types__ArrayObj little_parser_Parser_mergeTypeDecls(hl__types__ArrayObj r0) 
 		case 24:
 			if( r2 == NULL ) hl_null_access();
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
-			goto label$96e09ea_6_306;
+			goto label$96e09ea_6_276;
 		case 0:
 			r5 = ((little_parser_ParserTokens_SetLine*)r6)->p0;
 			little_parser_Parser_setLine(r5);
 			if( r2 == NULL ) hl_null_access();
-			r10 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
-			goto label$96e09ea_6_306;
+			r9 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
+			goto label$96e09ea_6_276;
 		case 1:
 			r12 = ((little_parser_ParserTokens_SetModule*)r6)->p0;
 			r13 = little_parser_Parser_set_module(r12);
 			if( r2 == NULL ) hl_null_access();
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
-			goto label$96e09ea_6_306;
+			goto label$96e09ea_6_276;
 		case 2:
 			little_parser_Parser_nextPart();
 			if( r2 == NULL ) hl_null_access();
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
-			goto label$96e09ea_6_306;
+			goto label$96e09ea_6_276;
 		case 8:
 			r12 = ((little_parser_ParserTokens_Identifier*)r6)->p0;
 			r16 = (little__$Little)g$_little_Little;
 			r15 = r16->keywords;
 			if( r15 == NULL ) hl_null_access();
 			r14 = r15->TYPE_DECL_OR_CAST;
-			if( r12 != r14 && (!r12 || !r14 || String___compare(r12,(vdynamic*)r14) != 0) ) goto label$96e09ea_6_113;
-			r10 = 1;
-			r5 = r4 + r10;
-			r10 = r0->length;
-			if( r5 >= r10 ) goto label$96e09ea_6_113;
-			r10 = 1;
-			r5 = r4 + r10;
-			r10 = r0->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_6_82;
-			r8 = NULL;
-			goto label$96e09ea_6_88;
-			label$96e09ea_6_82:
+			if( r12 != r14 && (!r12 || !r14 || String___compare(r12,(vdynamic*)r14) != 0) ) goto label$96e09ea_6_101;
+			r9 = 1;
+			r5 = r4 + r9;
+			r9 = r0->length;
+			if( r5 >= r9 ) goto label$96e09ea_6_101;
+			r9 = 1;
+			r5 = r4 + r9;
+			r9 = r0->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_6_76;
+			r11 = NULL;
+			goto label$96e09ea_6_79;
+			label$96e09ea_6_76:
 			r7 = r0->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
-			r8 = (venum*)r3;
-			r17 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r8 == r17 ) goto label$96e09ea_6_88;
-			hl_assert();
-			label$96e09ea_6_88:
+			r11 = (venum*)r3;
+			label$96e09ea_6_79:
 			if( r2 == NULL ) hl_null_access();
 			r17 = NULL;
-			r9 = &t$little_parser_ParserTokens;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r18 = hl_types_ArrayObj_alloc(r7);
 			r18 = little_parser_Parser_mergeTypeDecls(r18);
 			if( r18 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r18->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_6_103;
+			r9 = r18->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_6_94;
 			r19 = NULL;
-			goto label$96e09ea_6_109;
-			label$96e09ea_6_103:
+			goto label$96e09ea_6_97;
+			label$96e09ea_6_94:
 			r7 = r18->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r19 = (venum*)r3;
-			r20 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r19 == r20 ) goto label$96e09ea_6_109;
-			hl_assert();
-			label$96e09ea_6_109:
+			label$96e09ea_6_97:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,9);
 			((little_parser_ParserTokens_TypeDeclaration*)tmp)->p0 = r17;
@@ -1957,46 +1821,46 @@ hl__types__ArrayObj little_parser_Parser_mergeTypeDecls(hl__types__ArrayObj r0) 
 			r17 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r17));
 			++r4;
-			goto label$96e09ea_6_161;
-			label$96e09ea_6_113:
+			goto label$96e09ea_6_149;
+			label$96e09ea_6_101:
 			r16 = (little__$Little)g$_little_Little;
 			r15 = r16->keywords;
 			if( r15 == NULL ) hl_null_access();
 			r14 = r15->TYPE_DECL_OR_CAST;
-			if( r12 != r14 && (!r12 || !r14 || String___compare(r12,(vdynamic*)r14) != 0) ) goto label$96e09ea_6_159;
-			r10 = 1;
-			r5 = r4 + r10;
-			r10 = r0->length;
-			if( r5 != r10 ) goto label$96e09ea_6_158;
+			if( r12 != r14 && (!r12 || !r14 || String___compare(r12,(vdynamic*)r14) != 0) ) goto label$96e09ea_6_147;
+			r9 = 1;
+			r5 = r4 + r9;
+			r9 = r0->length;
+			if( r5 != r9 ) goto label$96e09ea_6_146;
 			r16 = (little__$Little)g$_little_Little;
-			r21 = r16->runtime;
-			if( r21 == NULL ) hl_null_access();
-			r11 = r21->callStack;
-			if( r11 == NULL ) hl_null_access();
-			r22 = hl_alloc_virtual(&t$vrt_f317fe3);
+			r20 = r16->runtime;
+			if( r20 == NULL ) hl_null_access();
+			r10 = r20->callStack;
+			if( r10 == NULL ) hl_null_access();
+			r21 = hl_alloc_virtual(&t$vrt_f317fe3);
 			r13 = little_parser_Parser_get_module();
-			if( hl_vfields(r22)[2] ) *(String*)(hl_vfields(r22)[2]) = (String)r13; else hl_dyn_setp(r22->value,-523029465/*module*/,&t$String,r13);
+			if( hl_vfields(r21)[2] ) *(String*)(hl_vfields(r21)[2]) = (String)r13; else hl_dyn_setp(r21->value,-523029465/*module*/,&t$String,r13);
 			r5 = little_parser_Parser_get_line();
-			if( hl_vfields(r22)[0] ) *(int*)(hl_vfields(r22)[0]) = (int)r5; else hl_dyn_seti(r22->value,129177854/*line*/,&t$_i32,r5);
-			r23 = (little__parser__$Parser)g$_little_parser_Parser;
-			r5 = r23->linePart;
-			if( hl_vfields(r22)[1] ) *(int*)(hl_vfields(r22)[1]) = (int)r5; else hl_dyn_seti(r22->value,-411357064/*linePart*/,&t$_i32,r5);
+			if( hl_vfields(r21)[0] ) *(int*)(hl_vfields(r21)[0]) = (int)r5; else hl_dyn_seti(r21->value,129177854/*line*/,&t$_i32,r5);
+			r22 = (little__parser__$Parser)g$_little_parser_Parser;
+			r5 = r22->linePart;
+			if( hl_vfields(r21)[1] ) *(int*)(hl_vfields(r21)[1]) = (int)r5; else hl_dyn_seti(r21->value,-411357064/*linePart*/,&t$_i32,r5);
+			r13 = (String)s$;
+			r23 = hl_alloc_enum(&t$little_interpreter_InterpTokens,25);
+			((little_interpreter_InterpTokens_Identifier*)r23)->p0 = r13;
 			r13 = (String)s$;
 			r24 = hl_alloc_enum(&t$little_interpreter_InterpTokens,25);
 			((little_interpreter_InterpTokens_Identifier*)r24)->p0 = r13;
-			r13 = (String)s$;
-			r25 = hl_alloc_enum(&t$little_interpreter_InterpTokens,25);
-			((little_interpreter_InterpTokens_Identifier*)r25)->p0 = r13;
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_interpreter_InterpTokens,11);
-			((little_interpreter_InterpTokens_TypeCast*)tmp)->p0 = r24;
-			((little_interpreter_InterpTokens_TypeCast*)tmp)->p1 = r25;
-			r24 = tmp; };
-			if( hl_vfields(r22)[3] ) *(venum**)(hl_vfields(r22)[3]) = (venum*)r24; else hl_dyn_setp(r22->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r24);
-			hl_types_ArrayObj_unshift(r11,((vdynamic*)r22));
+			((little_interpreter_InterpTokens_TypeCast*)tmp)->p0 = r23;
+			((little_interpreter_InterpTokens_TypeCast*)tmp)->p1 = r24;
+			r23 = tmp; };
+			if( hl_vfields(r21)[3] ) *(venum**)(hl_vfields(r21)[3]) = (venum*)r23; else hl_dyn_setp(r21->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r23);
+			hl_types_ArrayObj_unshift(r10,((vdynamic*)r21));
 			r16 = (little__$Little)g$_little_Little;
-			r21 = r16->runtime;
-			if( r21 == NULL ) hl_null_access();
+			r20 = r16->runtime;
+			if( r20 == NULL ) hl_null_access();
 			r13 = (String)s$8883c2a;
 			r16 = (little__$Little)g$_little_Little;
 			r15 = r16->keywords;
@@ -2005,199 +1869,181 @@ hl__types__ArrayObj little_parser_Parser_mergeTypeDecls(hl__types__ArrayObj r0) 
 			r13 = String___add__(r13,r14);
 			r14 = (String)s$984f26b;
 			r13 = String___add__(r13,r14);
-			r24 = hl_alloc_enum(&t$little_interpreter_InterpTokens,27);
-			((little_interpreter_InterpTokens_ErrorMessage*)r24)->p0 = r13;
+			r23 = hl_alloc_enum(&t$little_interpreter_InterpTokens,27);
+			((little_interpreter_InterpTokens_ErrorMessage*)r23)->p0 = r13;
 			r13 = NULL;
-			r24 = little_interpreter_Runtime_throwError(r21,r24,r13);
-			r11 = NULL;
-			return r11;
-			label$96e09ea_6_158:
-			goto label$96e09ea_6_161;
-			label$96e09ea_6_159:
+			r23 = little_interpreter_Runtime_throwError(r20,r23,r13);
+			r10 = NULL;
+			return r10;
+			label$96e09ea_6_146:
+			goto label$96e09ea_6_149;
+			label$96e09ea_6_147:
 			if( r2 == NULL ) hl_null_access();
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
-			label$96e09ea_6_161:
-			goto label$96e09ea_6_306;
+			label$96e09ea_6_149:
+			goto label$96e09ea_6_276;
 		case 12:
-			r11 = ((little_parser_ParserTokens_Expression*)r6)->p0;
-			r8 = ((little_parser_ParserTokens_Expression*)r6)->p1;
+			r10 = ((little_parser_ParserTokens_Expression*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_Expression*)r6)->p1;
 			if( r2 == NULL ) hl_null_access();
-			r26 = little_parser_Parser_mergeTypeDecls(r11);
-			r9 = &t$little_parser_ParserTokens;
+			r25 = little_parser_Parser_mergeTypeDecls(r10);
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
-			r27 = hl_types_ArrayObj_alloc(r7);
-			r27 = little_parser_Parser_mergeTypeDecls(r27);
-			if( r27 == NULL ) hl_null_access();
+			((venum**)(r7 + 1))[r5] = r11;
+			r26 = hl_types_ArrayObj_alloc(r7);
+			r26 = little_parser_Parser_mergeTypeDecls(r26);
+			if( r26 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r27->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_6_179;
+			r9 = r26->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_6_167;
 			r17 = NULL;
-			goto label$96e09ea_6_185;
-			label$96e09ea_6_179:
-			r7 = r27->array;
+			goto label$96e09ea_6_170;
+			label$96e09ea_6_167:
+			r7 = r26->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r17 = (venum*)r3;
-			r19 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r17 == r19 ) goto label$96e09ea_6_185;
-			hl_assert();
-			label$96e09ea_6_185:
+			label$96e09ea_6_170:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,12);
-			((little_parser_ParserTokens_Expression*)tmp)->p0 = r26;
+			((little_parser_ParserTokens_Expression*)tmp)->p0 = r25;
 			((little_parser_ParserTokens_Expression*)tmp)->p1 = r17;
 			r17 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r17));
-			goto label$96e09ea_6_306;
+			goto label$96e09ea_6_276;
 		case 13:
-			r11 = ((little_parser_ParserTokens_Block*)r6)->p0;
-			r8 = ((little_parser_ParserTokens_Block*)r6)->p1;
+			r10 = ((little_parser_ParserTokens_Block*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_Block*)r6)->p1;
 			if( r2 == NULL ) hl_null_access();
-			r26 = little_parser_Parser_mergeTypeDecls(r11);
-			r9 = &t$little_parser_ParserTokens;
+			r25 = little_parser_Parser_mergeTypeDecls(r10);
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
-			r27 = hl_types_ArrayObj_alloc(r7);
-			r27 = little_parser_Parser_mergeTypeDecls(r27);
-			if( r27 == NULL ) hl_null_access();
+			((venum**)(r7 + 1))[r5] = r11;
+			r26 = hl_types_ArrayObj_alloc(r7);
+			r26 = little_parser_Parser_mergeTypeDecls(r26);
+			if( r26 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r27->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_6_205;
+			r9 = r26->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_6_190;
 			r17 = NULL;
-			goto label$96e09ea_6_211;
-			label$96e09ea_6_205:
-			r7 = r27->array;
+			goto label$96e09ea_6_193;
+			label$96e09ea_6_190:
+			r7 = r26->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r17 = (venum*)r3;
-			r19 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r17 == r19 ) goto label$96e09ea_6_211;
-			hl_assert();
-			label$96e09ea_6_211:
+			label$96e09ea_6_193:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,13);
-			((little_parser_ParserTokens_Block*)tmp)->p0 = r26;
+			((little_parser_ParserTokens_Block*)tmp)->p0 = r25;
 			((little_parser_ParserTokens_Block*)tmp)->p1 = r17;
 			r17 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r17));
-			goto label$96e09ea_6_306;
+			goto label$96e09ea_6_276;
 		case 15:
-			r8 = ((little_parser_ParserTokens_PropertyAccess*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_PropertyAccess*)r6)->p0;
 			r17 = ((little_parser_ParserTokens_PropertyAccess*)r6)->p1;
 			if( r2 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r18 = hl_types_ArrayObj_alloc(r7);
 			r18 = little_parser_Parser_mergeTypeDecls(r18);
 			if( r18 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r18->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_6_230;
+			r9 = r18->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_6_212;
 			r19 = NULL;
-			goto label$96e09ea_6_236;
-			label$96e09ea_6_230:
+			goto label$96e09ea_6_215;
+			label$96e09ea_6_212:
 			r7 = r18->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r19 = (venum*)r3;
-			r20 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r19 == r20 ) goto label$96e09ea_6_236;
-			hl_assert();
-			label$96e09ea_6_236:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_6_215:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r17;
 			r18 = hl_types_ArrayObj_alloc(r7);
 			r18 = little_parser_Parser_mergeTypeDecls(r18);
 			if( r18 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r18->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_6_249;
-			r20 = NULL;
-			goto label$96e09ea_6_255;
-			label$96e09ea_6_249:
+			r9 = r18->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_6_228;
+			r27 = NULL;
+			goto label$96e09ea_6_231;
+			label$96e09ea_6_228:
 			r7 = r18->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
-			r20 = (venum*)r3;
-			r28 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r20 == r28 ) goto label$96e09ea_6_255;
-			hl_assert();
-			label$96e09ea_6_255:
+			r27 = (venum*)r3;
+			label$96e09ea_6_231:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,15);
 			((little_parser_ParserTokens_PropertyAccess*)tmp)->p0 = r19;
-			((little_parser_ParserTokens_PropertyAccess*)tmp)->p1 = r20;
+			((little_parser_ParserTokens_PropertyAccess*)tmp)->p1 = r27;
 			r19 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r19));
-			goto label$96e09ea_6_306;
+			goto label$96e09ea_6_276;
 		case 25:
 			r12 = ((little_parser_ParserTokens_Custom*)r6)->p0;
-			r11 = ((little_parser_ParserTokens_Custom*)r6)->p1;
-			r9 = &t$little_parser_ParserTokens;
+			r10 = ((little_parser_ParserTokens_Custom*)r6)->p1;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 0;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r18 = hl_types_ArrayObj_alloc(r7);
 			r5 = 0;
-			r26 = r11;
-			label$96e09ea_6_266:
-			if( r26 == NULL ) hl_null_access();
-			r29 = r26->length;
-			if( r5 >= r29 ) goto label$96e09ea_6_303;
-			r29 = r26->length;
-			if( ((unsigned)r5) < ((unsigned)r29) ) goto label$96e09ea_6_274;
-			r8 = NULL;
-			goto label$96e09ea_6_280;
-			label$96e09ea_6_274:
-			r7 = r26->array;
+			r25 = r10;
+			label$96e09ea_6_242:
+			if( r25 == NULL ) hl_null_access();
+			r28 = r25->length;
+			if( r5 >= r28 ) goto label$96e09ea_6_273;
+			r28 = r25->length;
+			if( ((unsigned)r5) < ((unsigned)r28) ) goto label$96e09ea_6_250;
+			r11 = NULL;
+			goto label$96e09ea_6_253;
+			label$96e09ea_6_250:
+			r7 = r25->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
-			r8 = (venum*)r3;
-			r17 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r8 == r17 ) goto label$96e09ea_6_280;
-			hl_assert();
-			label$96e09ea_6_280:
+			r11 = (venum*)r3;
+			label$96e09ea_6_253:
 			++r5;
 			if( r18 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
-			r10 = 1;
-			r7 = hl_alloc_array(r9,r10);
-			r10 = 0;
-			((venum**)(r7 + 1))[r10] = r8;
-			r30 = hl_types_ArrayObj_alloc(r7);
-			r30 = little_parser_Parser_mergeTypeDecls(r30);
-			if( r30 == NULL ) hl_null_access();
-			r10 = 0;
-			r29 = r30->length;
-			if( ((unsigned)r10) < ((unsigned)r29) ) goto label$96e09ea_6_295;
+			r8 = &t$little_parser_ParserTokens;
+			r9 = 1;
+			r7 = hl_alloc_array(r8,r9);
+			r9 = 0;
+			((venum**)(r7 + 1))[r9] = r11;
+			r29 = hl_types_ArrayObj_alloc(r7);
+			r29 = little_parser_Parser_mergeTypeDecls(r29);
+			if( r29 == NULL ) hl_null_access();
+			r9 = 0;
+			r28 = r29->length;
+			if( ((unsigned)r9) < ((unsigned)r28) ) goto label$96e09ea_6_268;
 			r17 = NULL;
-			goto label$96e09ea_6_301;
-			label$96e09ea_6_295:
-			r7 = r30->array;
-			r3 = ((vdynamic**)(r7 + 1))[r10];
+			goto label$96e09ea_6_271;
+			label$96e09ea_6_268:
+			r7 = r29->array;
+			r3 = ((vdynamic**)(r7 + 1))[r9];
 			r17 = (venum*)r3;
-			r19 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r17 == r19 ) goto label$96e09ea_6_301;
-			hl_assert();
-			label$96e09ea_6_301:
-			r10 = hl_types_ArrayObj_push(r18,((vdynamic*)r17));
-			goto label$96e09ea_6_266;
-			label$96e09ea_6_303:
+			label$96e09ea_6_271:
+			r9 = hl_types_ArrayObj_push(r18,((vdynamic*)r17));
+			goto label$96e09ea_6_242;
+			label$96e09ea_6_273:
 			if( r2 == NULL ) hl_null_access();
-			r8 = hl_alloc_enum(&t$little_parser_ParserTokens,25);
-			((little_parser_ParserTokens_Custom*)r8)->p0 = r12;
-			((little_parser_ParserTokens_Custom*)r8)->p1 = r18;
-			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r8));
+			r11 = hl_alloc_enum(&t$little_parser_ParserTokens,25);
+			((little_parser_ParserTokens_Custom*)r11)->p0 = r12;
+			((little_parser_ParserTokens_Custom*)r11)->p1 = r18;
+			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r11));
 	}
-	label$96e09ea_6_306:
+	label$96e09ea_6_276:
 	++r4;
-	goto label$96e09ea_6_32;
-	label$96e09ea_6_308:
+	goto label$96e09ea_6_29;
+	label$96e09ea_6_278:
 	little_parser_Parser_resetLines();
 	return r2;
 }
@@ -2206,17 +2052,17 @@ hl__types__ArrayObj little_parser_Parser_mergeComplexStructures(hl__types__Array
 	String r13, r14, r16;
 	vvirtual *r21;
 	little__$Little r18;
-	hl__types__ArrayObj r2, r11, r29, r32, r43, r44;
-	hl_type *r9;
-	venum *r6, *r8, *r12, *r23, *r24, *r25, *r26, *r27, *r28, *r30, *r33, *r34, *r35, *r37, *r40, *r41;
-	bool r15, r19, r36, r42;
+	hl__types__ArrayObj r2, r10, r29, r32, r41, r42;
+	hl_type *r8;
+	venum *r6, *r11, *r12, *r23, *r24, *r25, *r26, *r27, *r28, *r30, *r33, *r34, *r36, *r39;
+	bool r15, r19, r35, r40;
 	little__interpreter__Runtime r20;
 	little__KeywordConfig r17;
-	hl__types__ArrayDyn r39;
+	hl__types__ArrayDyn r38;
 	little__parser__$Parser r22;
 	vdynamic *r3;
-	varray *r7, *r38;
-	int r4, r5, r10, r31;
+	varray *r7, *r37;
+	int r4, r5, r9, r31;
 	if( r0 ) goto label$96e09ea_7_3;
 	r2 = NULL;
 	return r2;
@@ -2224,54 +2070,48 @@ hl__types__ArrayObj little_parser_Parser_mergeComplexStructures(hl__types__Array
 	if( r0 == NULL ) hl_null_access();
 	r4 = r0->length;
 	r5 = 1;
-	if( r4 != r5 ) goto label$96e09ea_7_27;
+	if( r4 != r5 ) goto label$96e09ea_7_24;
 	r4 = 0;
 	r5 = r0->length;
 	if( ((unsigned)r4) < ((unsigned)r5) ) goto label$96e09ea_7_12;
 	r6 = NULL;
-	goto label$96e09ea_7_18;
+	goto label$96e09ea_7_15;
 	label$96e09ea_7_12:
 	r7 = r0->array;
 	r3 = ((vdynamic**)(r7 + 1))[r4];
 	r6 = (venum*)r3;
-	r8 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-	if( r6 == r8 ) goto label$96e09ea_7_18;
-	hl_assert();
-	label$96e09ea_7_18:
-	if( r6 ) goto label$96e09ea_7_27;
-	r9 = &t$little_parser_ParserTokens;
+	label$96e09ea_7_15:
+	if( r6 ) goto label$96e09ea_7_24;
+	r8 = &t$little_parser_ParserTokens;
 	r4 = 1;
-	r7 = hl_alloc_array(r9,r4);
+	r7 = hl_alloc_array(r8,r4);
 	r6 = NULL;
 	r4 = 0;
 	((venum**)(r7 + 1))[r4] = r6;
 	r2 = hl_types_ArrayObj_alloc(r7);
 	return r2;
-	label$96e09ea_7_27:
-	r9 = &t$little_parser_ParserTokens;
+	label$96e09ea_7_24:
+	r8 = &t$little_parser_ParserTokens;
 	r4 = 0;
-	r7 = hl_alloc_array(r9,r4);
+	r7 = hl_alloc_array(r8,r4);
 	r2 = hl_types_ArrayObj_alloc(r7);
 	r6 = NULL;
 	r4 = 0;
-	label$96e09ea_7_33:
+	label$96e09ea_7_30:
 	if( r0 == NULL ) hl_null_access();
-	r10 = r0->length;
-	if( r4 >= r10 ) goto label$96e09ea_7_1426;
-	r10 = r0->length;
-	if( ((unsigned)r4) < ((unsigned)r10) ) goto label$96e09ea_7_41;
-	r8 = NULL;
-	goto label$96e09ea_7_47;
-	label$96e09ea_7_41:
+	r9 = r0->length;
+	if( r4 >= r9 ) goto label$96e09ea_7_1312;
+	r9 = r0->length;
+	if( ((unsigned)r4) < ((unsigned)r9) ) goto label$96e09ea_7_38;
+	r11 = NULL;
+	goto label$96e09ea_7_41;
+	label$96e09ea_7_38:
 	r7 = r0->array;
 	r3 = ((vdynamic**)(r7 + 1))[r4];
-	r8 = (venum*)r3;
-	r12 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-	if( r8 == r12 ) goto label$96e09ea_7_47;
-	hl_assert();
-	label$96e09ea_7_47:
-	if( r8 == NULL ) hl_null_access();
-	r5 = HL__ENUM_INDEX__(r8);
+	r11 = (venum*)r3;
+	label$96e09ea_7_41:
+	if( r11 == NULL ) hl_null_access();
+	r5 = HL__ENUM_INDEX__(r11);
 	switch(r5) {
 		default:
 		case 3:
@@ -2292,47 +2132,47 @@ hl__types__ArrayObj little_parser_Parser_mergeComplexStructures(hl__types__Array
 		case 23:
 		case 24:
 			if( r2 == NULL ) hl_null_access();
-			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r8));
-			goto label$96e09ea_7_1424;
+			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r11));
+			goto label$96e09ea_7_1310;
 		case 0:
-			r5 = ((little_parser_ParserTokens_SetLine*)r8)->p0;
+			r5 = ((little_parser_ParserTokens_SetLine*)r11)->p0;
 			little_parser_Parser_setLine(r5);
 			if( r2 == NULL ) hl_null_access();
-			r10 = hl_types_ArrayObj_push(r2,((vdynamic*)r8));
-			goto label$96e09ea_7_1424;
+			r9 = hl_types_ArrayObj_push(r2,((vdynamic*)r11));
+			goto label$96e09ea_7_1310;
 		case 1:
-			r13 = ((little_parser_ParserTokens_SetModule*)r8)->p0;
+			r13 = ((little_parser_ParserTokens_SetModule*)r11)->p0;
 			r14 = little_parser_Parser_set_module(r13);
 			if( r2 == NULL ) hl_null_access();
-			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r8));
-			goto label$96e09ea_7_1424;
+			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r11));
+			goto label$96e09ea_7_1310;
 		case 2:
 			little_parser_Parser_nextPart();
 			if( r2 == NULL ) hl_null_access();
-			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r8));
-			goto label$96e09ea_7_1424;
+			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r11));
+			goto label$96e09ea_7_1310;
 		case 8:
-			r13 = ((little_parser_ParserTokens_Identifier*)r8)->p0;
+			r13 = ((little_parser_ParserTokens_Identifier*)r11)->p0;
 			r18 = (little__$Little)g$_little_Little;
 			r17 = r18->keywords;
 			if( r17 == NULL ) hl_null_access();
 			r16 = r17->VARIABLE_DECLARATION;
-			if( r13 == r16 || (r13 && r16 && String___compare(r13,(vdynamic*)r16) == 0) ) goto label$96e09ea_7_75;
+			if( r13 == r16 || (r13 && r16 && String___compare(r13,(vdynamic*)r16) == 0) ) goto label$96e09ea_7_69;
 			r15 = false;
-			goto label$96e09ea_7_76;
-			label$96e09ea_7_75:
+			goto label$96e09ea_7_70;
+			label$96e09ea_7_69:
 			r15 = true;
-			label$96e09ea_7_76:
+			label$96e09ea_7_70:
 			r19 = true;
-			if( r15 != r19 ) goto label$96e09ea_7_443;
+			if( r15 != r19 ) goto label$96e09ea_7_413;
 			++r4;
-			r10 = r0->length;
-			if( r4 < r10 ) goto label$96e09ea_7_110;
+			r9 = r0->length;
+			if( r4 < r9 ) goto label$96e09ea_7_104;
 			r18 = (little__$Little)g$_little_Little;
 			r20 = r18->runtime;
 			if( r20 == NULL ) hl_null_access();
-			r11 = r20->callStack;
-			if( r11 == NULL ) hl_null_access();
+			r10 = r20->callStack;
+			if( r10 == NULL ) hl_null_access();
 			r21 = hl_alloc_virtual(&t$vrt_f317fe3);
 			r14 = little_parser_Parser_get_module();
 			if( hl_vfields(r21)[2] ) *(String*)(hl_vfields(r21)[2]) = (String)r14; else hl_dyn_setp(r21->value,-523029465/*module*/,&t$String,r14);
@@ -2353,7 +2193,7 @@ hl__types__ArrayObj little_parser_Parser_mergeComplexStructures(hl__types__Array
 			((little_interpreter_InterpTokens_VariableDeclaration*)tmp)->p2 = r25;
 			r23 = tmp; };
 			if( hl_vfields(r21)[3] ) *(venum**)(hl_vfields(r21)[3]) = (venum*)r23; else hl_dyn_setp(r21->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r23);
-			hl_types_ArrayObj_unshift(r11,((vdynamic*)r21));
+			hl_types_ArrayObj_unshift(r10,((vdynamic*)r21));
 			r18 = (little__$Little)g$_little_Little;
 			r20 = r18->runtime;
 			if( r20 == NULL ) hl_null_access();
@@ -2362,27 +2202,24 @@ hl__types__ArrayObj little_parser_Parser_mergeComplexStructures(hl__types__Array
 			((little_interpreter_InterpTokens_ErrorMessage*)r23)->p0 = r14;
 			r14 = (String)s$Parser;
 			r23 = little_interpreter_Runtime_throwError(r20,r23,r14);
-			r11 = NULL;
-			return r11;
-			label$96e09ea_7_110:
+			r10 = NULL;
+			return r10;
+			label$96e09ea_7_104:
 			r12 = NULL;
 			r26 = NULL;
-			label$96e09ea_7_112:
+			label$96e09ea_7_106:
 			if( r0 == NULL ) hl_null_access();
-			r10 = r0->length;
-			if( r4 >= r10 ) goto label$96e09ea_7_407;
-			r10 = r0->length;
-			if( ((unsigned)r4) < ((unsigned)r10) ) goto label$96e09ea_7_120;
+			r9 = r0->length;
+			if( r4 >= r9 ) goto label$96e09ea_7_377;
+			r9 = r0->length;
+			if( ((unsigned)r4) < ((unsigned)r9) ) goto label$96e09ea_7_114;
 			r27 = NULL;
-			goto label$96e09ea_7_126;
-			label$96e09ea_7_120:
+			goto label$96e09ea_7_117;
+			label$96e09ea_7_114:
 			r7 = r0->array;
 			r3 = ((vdynamic**)(r7 + 1))[r4];
 			r27 = (venum*)r3;
-			r28 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r27 == r28 ) goto label$96e09ea_7_126;
-			hl_assert();
-			label$96e09ea_7_126:
+			label$96e09ea_7_117:
 			if( r27 == NULL ) hl_null_access();
 			r5 = HL__ENUM_INDEX__(r27);
 			switch(r5) {
@@ -2397,88 +2234,85 @@ hl__types__ArrayObj little_parser_Parser_mergeComplexStructures(hl__types__Array
 				case 11:
 				case 14:
 				case 15:
-					if( r12 ) goto label$96e09ea_7_132;
+					if( r12 ) goto label$96e09ea_7_123;
 					r12 = r27;
-					goto label$96e09ea_7_182;
-					label$96e09ea_7_132:
-					if( r26 ) goto label$96e09ea_7_176;
-					r9 = &t$String;
+					goto label$96e09ea_7_170;
+					label$96e09ea_7_123:
+					if( r26 ) goto label$96e09ea_7_164;
+					r8 = &t$String;
 					r5 = 0;
-					r7 = hl_alloc_array(r9,r5);
-					r11 = hl_types_ArrayObj_alloc(r7);
+					r7 = hl_alloc_array(r8,r5);
+					r10 = hl_types_ArrayObj_alloc(r7);
 					r5 = 0;
-					r9 = &t$little_tools_ParserTokensSimple;
-					r10 = 1;
-					r7 = hl_alloc_array(r9,r10);
+					r8 = &t$little_tools_ParserTokensSimple;
+					r9 = 1;
+					r7 = hl_alloc_array(r8,r9);
 					r30 = (venum*)g$ca8d5e4;
-					r10 = 0;
-					((venum**)(r7 + 1))[r10] = r30;
+					r9 = 0;
+					((venum**)(r7 + 1))[r9] = r30;
 					r29 = hl_types_ArrayObj_alloc(r7);
 					if( r29 == NULL ) hl_null_access();
 					r29 = hl_types_ArrayObj_copy(r29);
-					label$96e09ea_7_147:
+					label$96e09ea_7_138:
 					if( r29 == NULL ) hl_null_access();
 					r31 = r29->length;
-					if( r5 >= r31 ) goto label$96e09ea_7_170;
+					if( r5 >= r31 ) goto label$96e09ea_7_158;
 					r31 = r29->length;
-					if( ((unsigned)r5) < ((unsigned)r31) ) goto label$96e09ea_7_155;
+					if( ((unsigned)r5) < ((unsigned)r31) ) goto label$96e09ea_7_146;
 					r30 = NULL;
-					goto label$96e09ea_7_161;
-					label$96e09ea_7_155:
+					goto label$96e09ea_7_149;
+					label$96e09ea_7_146:
 					r7 = r29->array;
 					r3 = ((vdynamic**)(r7 + 1))[r5];
 					r30 = (venum*)r3;
-					r33 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_tools_ParserTokensSimple);
-					if( r30 == r33 ) goto label$96e09ea_7_161;
-					hl_assert();
-					label$96e09ea_7_161:
+					label$96e09ea_7_149:
 					++r5;
-					if( r11 == NULL ) hl_null_access();
+					if( r10 == NULL ) hl_null_access();
 					r14 = Type_enumConstructor(((vdynamic*)r30));
 					r16 = (String)s$b14a7b8;
 					r14 = little_tools_TextTools_remove(r14,r16);
 					if( r14 == NULL ) hl_null_access();
 					r14 = String_toLowerCase(r14);
-					r10 = hl_types_ArrayObj_push(r11,((vdynamic*)r14));
-					goto label$96e09ea_7_147;
-					label$96e09ea_7_170:
-					if( r11 == NULL ) hl_null_access();
+					r9 = hl_types_ArrayObj_push(r10,((vdynamic*)r14));
+					goto label$96e09ea_7_138;
+					label$96e09ea_7_158:
+					if( r10 == NULL ) hl_null_access();
 					r14 = Type_enumConstructor(((vdynamic*)r27));
 					if( r14 == NULL ) hl_null_access();
 					r14 = String_toLowerCase(r14);
-					r19 = hl_types_ArrayObj_contains(r11,((vdynamic*)r14));
-					goto label$96e09ea_7_177;
-					label$96e09ea_7_176:
+					r19 = hl_types_ArrayObj_contains(r10,((vdynamic*)r14));
+					goto label$96e09ea_7_165;
+					label$96e09ea_7_164:
 					r19 = false;
-					label$96e09ea_7_177:
-					if( !r19 ) goto label$96e09ea_7_180;
+					label$96e09ea_7_165:
+					if( !r19 ) goto label$96e09ea_7_168;
 					r26 = r27;
-					goto label$96e09ea_7_182;
-					label$96e09ea_7_180:
+					goto label$96e09ea_7_170;
+					label$96e09ea_7_168:
 					--r4;
-					goto label$96e09ea_7_407;
-					label$96e09ea_7_182:
-					goto label$96e09ea_7_405;
+					goto label$96e09ea_7_377;
+					label$96e09ea_7_170:
+					goto label$96e09ea_7_375;
 				case 0:
 					r5 = ((little_parser_ParserTokens_SetLine*)r27)->p0;
 					--r4;
-					goto label$96e09ea_7_407;
+					goto label$96e09ea_7_377;
 				case 1:
 					r14 = ((little_parser_ParserTokens_SetModule*)r27)->p0;
 					--r4;
-					goto label$96e09ea_7_407;
+					goto label$96e09ea_7_377;
 				case 2:
 					--r4;
-					goto label$96e09ea_7_407;
+					goto label$96e09ea_7_377;
 				case 9:
 					r28 = ((little_parser_ParserTokens_TypeDeclaration*)r27)->p0;
-					r34 = ((little_parser_ParserTokens_TypeDeclaration*)r27)->p1;
-					if( r12 ) goto label$96e09ea_7_241;
+					r33 = ((little_parser_ParserTokens_TypeDeclaration*)r27)->p1;
+					if( r12 ) goto label$96e09ea_7_226;
 					r18 = (little__$Little)g$_little_Little;
 					r20 = r18->runtime;
 					if( r20 == NULL ) hl_null_access();
-					r11 = r20->callStack;
-					if( r11 == NULL ) hl_null_access();
+					r10 = r20->callStack;
+					if( r10 == NULL ) hl_null_access();
 					r21 = hl_alloc_virtual(&t$vrt_f317fe3);
 					r14 = little_parser_Parser_get_module();
 					if( hl_vfields(r21)[2] ) *(String*)(hl_vfields(r21)[2]) = (String)r14; else hl_dyn_setp(r21->value,-523029465/*module*/,&t$String,r14);
@@ -2490,27 +2324,24 @@ hl__types__ArrayObj little_parser_Parser_mergeComplexStructures(hl__types__Array
 					r14 = (String)s$;
 					r23 = hl_alloc_enum(&t$little_interpreter_InterpTokens,25);
 					((little_interpreter_InterpTokens_Identifier*)r23)->p0 = r14;
-					r9 = &t$little_parser_ParserTokens;
+					r8 = &t$little_parser_ParserTokens;
 					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
+					r7 = hl_alloc_array(r8,r5);
 					r5 = 0;
-					((venum**)(r7 + 1))[r5] = r34;
+					((venum**)(r7 + 1))[r5] = r33;
 					r29 = hl_types_ArrayObj_alloc(r7);
 					r29 = little_interpreter_Interpreter_convert(r29);
 					if( r29 == NULL ) hl_null_access();
 					r5 = 0;
-					r10 = r29->length;
-					if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_7_222;
+					r9 = r29->length;
+					if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_7_210;
 					r24 = NULL;
-					goto label$96e09ea_7_228;
-					label$96e09ea_7_222:
+					goto label$96e09ea_7_213;
+					label$96e09ea_7_210:
 					r7 = r29->array;
 					r3 = ((vdynamic**)(r7 + 1))[r5];
 					r24 = (venum*)r3;
-					r25 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_interpreter_InterpTokens);
-					if( r24 == r25 ) goto label$96e09ea_7_228;
-					hl_assert();
-					label$96e09ea_7_228:
+					label$96e09ea_7_213:
 					r25 = NULL;
 					{ venum *tmp;
 					tmp = hl_alloc_enum(&t$little_interpreter_InterpTokens,3);
@@ -2519,7 +2350,7 @@ hl__types__ArrayObj little_parser_Parser_mergeComplexStructures(hl__types__Array
 					((little_interpreter_InterpTokens_VariableDeclaration*)tmp)->p2 = r25;
 					r23 = tmp; };
 					if( hl_vfields(r21)[3] ) *(venum**)(hl_vfields(r21)[3]) = (venum*)r23; else hl_dyn_setp(r21->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r23);
-					hl_types_ArrayObj_unshift(r11,((vdynamic*)r21));
+					hl_types_ArrayObj_unshift(r10,((vdynamic*)r21));
 					r18 = (little__$Little)g$_little_Little;
 					r20 = r18->runtime;
 					if( r20 == NULL ) hl_null_access();
@@ -2528,225 +2359,210 @@ hl__types__ArrayObj little_parser_Parser_mergeComplexStructures(hl__types__Array
 					((little_interpreter_InterpTokens_ErrorMessage*)r23)->p0 = r14;
 					r14 = (String)s$Parser;
 					r23 = little_interpreter_Runtime_throwError(r20,r23,r14);
-					r11 = NULL;
-					return r11;
-					label$96e09ea_7_241:
-					r26 = r34;
-					goto label$96e09ea_7_407;
+					r10 = NULL;
+					return r10;
+					label$96e09ea_7_226:
+					r26 = r33;
+					goto label$96e09ea_7_377;
 				case 12:
-					r11 = ((little_parser_ParserTokens_Expression*)r27)->p0;
+					r10 = ((little_parser_ParserTokens_Expression*)r27)->p0;
 					r28 = ((little_parser_ParserTokens_Expression*)r27)->p1;
-					if( r12 ) goto label$96e09ea_7_269;
-					r29 = little_parser_Parser_mergeComplexStructures(r11);
-					r9 = &t$little_parser_ParserTokens;
+					if( r12 ) goto label$96e09ea_7_251;
+					r29 = little_parser_Parser_mergeComplexStructures(r10);
+					r8 = &t$little_parser_ParserTokens;
 					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
+					r7 = hl_alloc_array(r8,r5);
 					r5 = 0;
 					((venum**)(r7 + 1))[r5] = r28;
 					r32 = hl_types_ArrayObj_alloc(r7);
 					r32 = little_parser_Parser_mergeComplexStructures(r32);
 					if( r32 == NULL ) hl_null_access();
 					r5 = 0;
-					r10 = r32->length;
-					if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_7_260;
-					r34 = NULL;
-					goto label$96e09ea_7_266;
-					label$96e09ea_7_260:
+					r9 = r32->length;
+					if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_7_245;
+					r33 = NULL;
+					goto label$96e09ea_7_248;
+					label$96e09ea_7_245:
 					r7 = r32->array;
 					r3 = ((vdynamic**)(r7 + 1))[r5];
-					r34 = (venum*)r3;
-					r35 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-					if( r34 == r35 ) goto label$96e09ea_7_266;
-					hl_assert();
+					r33 = (venum*)r3;
+					label$96e09ea_7_248:
+					{ venum *tmp;
+					tmp = hl_alloc_enum(&t$little_parser_ParserTokens,12);
+					((little_parser_ParserTokens_Expression*)tmp)->p0 = r29;
+					((little_parser_ParserTokens_Expression*)tmp)->p1 = r33;
+					r33 = tmp; };
+					r12 = r33;
+					goto label$96e09ea_7_273;
+					label$96e09ea_7_251:
+					if( r28 ) goto label$96e09ea_7_271;
+					r29 = little_parser_Parser_mergeComplexStructures(r10);
+					r8 = &t$little_parser_ParserTokens;
+					r5 = 1;
+					r7 = hl_alloc_array(r8,r5);
+					r5 = 0;
+					((venum**)(r7 + 1))[r5] = r28;
+					r32 = hl_types_ArrayObj_alloc(r7);
+					r32 = little_parser_Parser_mergeComplexStructures(r32);
+					if( r32 == NULL ) hl_null_access();
+					r5 = 0;
+					r9 = r32->length;
+					if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_7_266;
+					r33 = NULL;
+					goto label$96e09ea_7_269;
 					label$96e09ea_7_266:
-					{ venum *tmp;
-					tmp = hl_alloc_enum(&t$little_parser_ParserTokens,12);
-					((little_parser_ParserTokens_Expression*)tmp)->p0 = r29;
-					((little_parser_ParserTokens_Expression*)tmp)->p1 = r34;
-					r34 = tmp; };
-					r12 = r34;
-					goto label$96e09ea_7_294;
-					label$96e09ea_7_269:
-					if( r28 ) goto label$96e09ea_7_292;
-					r29 = little_parser_Parser_mergeComplexStructures(r11);
-					r9 = &t$little_parser_ParserTokens;
-					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
-					r5 = 0;
-					((venum**)(r7 + 1))[r5] = r28;
-					r32 = hl_types_ArrayObj_alloc(r7);
-					r32 = little_parser_Parser_mergeComplexStructures(r32);
-					if( r32 == NULL ) hl_null_access();
-					r5 = 0;
-					r10 = r32->length;
-					if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_7_284;
-					r34 = NULL;
-					goto label$96e09ea_7_290;
-					label$96e09ea_7_284:
 					r7 = r32->array;
 					r3 = ((vdynamic**)(r7 + 1))[r5];
-					r34 = (venum*)r3;
-					r35 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-					if( r34 == r35 ) goto label$96e09ea_7_290;
-					hl_assert();
-					label$96e09ea_7_290:
+					r33 = (venum*)r3;
+					label$96e09ea_7_269:
 					{ venum *tmp;
 					tmp = hl_alloc_enum(&t$little_parser_ParserTokens,12);
 					((little_parser_ParserTokens_Expression*)tmp)->p0 = r29;
-					((little_parser_ParserTokens_Expression*)tmp)->p1 = r34;
-					r34 = tmp; };
-					goto label$96e09ea_7_294;
-					label$96e09ea_7_292:
+					((little_parser_ParserTokens_Expression*)tmp)->p1 = r33;
+					r33 = tmp; };
+					goto label$96e09ea_7_273;
+					label$96e09ea_7_271:
 					--r4;
-					goto label$96e09ea_7_407;
-					label$96e09ea_7_294:
-					goto label$96e09ea_7_405;
+					goto label$96e09ea_7_377;
+					label$96e09ea_7_273:
+					goto label$96e09ea_7_375;
 				case 13:
-					r11 = ((little_parser_ParserTokens_Block*)r27)->p0;
+					r10 = ((little_parser_ParserTokens_Block*)r27)->p0;
 					r28 = ((little_parser_ParserTokens_Block*)r27)->p1;
-					if( r12 ) goto label$96e09ea_7_321;
-					r29 = little_parser_Parser_mergeComplexStructures(r11);
-					r9 = &t$little_parser_ParserTokens;
+					if( r12 ) goto label$96e09ea_7_297;
+					r29 = little_parser_Parser_mergeComplexStructures(r10);
+					r8 = &t$little_parser_ParserTokens;
 					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
+					r7 = hl_alloc_array(r8,r5);
 					r5 = 0;
 					((venum**)(r7 + 1))[r5] = r28;
 					r32 = hl_types_ArrayObj_alloc(r7);
 					r32 = little_parser_Parser_mergeComplexStructures(r32);
 					if( r32 == NULL ) hl_null_access();
 					r5 = 0;
-					r10 = r32->length;
-					if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_7_312;
-					r34 = NULL;
-					goto label$96e09ea_7_318;
+					r9 = r32->length;
+					if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_7_291;
+					r33 = NULL;
+					goto label$96e09ea_7_294;
+					label$96e09ea_7_291:
+					r7 = r32->array;
+					r3 = ((vdynamic**)(r7 + 1))[r5];
+					r33 = (venum*)r3;
+					label$96e09ea_7_294:
+					{ venum *tmp;
+					tmp = hl_alloc_enum(&t$little_parser_ParserTokens,13);
+					((little_parser_ParserTokens_Block*)tmp)->p0 = r29;
+					((little_parser_ParserTokens_Block*)tmp)->p1 = r33;
+					r33 = tmp; };
+					r12 = r33;
+					goto label$96e09ea_7_319;
+					label$96e09ea_7_297:
+					if( r28 ) goto label$96e09ea_7_317;
+					r29 = little_parser_Parser_mergeComplexStructures(r10);
+					r8 = &t$little_parser_ParserTokens;
+					r5 = 1;
+					r7 = hl_alloc_array(r8,r5);
+					r5 = 0;
+					((venum**)(r7 + 1))[r5] = r28;
+					r32 = hl_types_ArrayObj_alloc(r7);
+					r32 = little_parser_Parser_mergeComplexStructures(r32);
+					if( r32 == NULL ) hl_null_access();
+					r5 = 0;
+					r9 = r32->length;
+					if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_7_312;
+					r33 = NULL;
+					goto label$96e09ea_7_315;
 					label$96e09ea_7_312:
 					r7 = r32->array;
 					r3 = ((vdynamic**)(r7 + 1))[r5];
-					r34 = (venum*)r3;
-					r35 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-					if( r34 == r35 ) goto label$96e09ea_7_318;
-					hl_assert();
-					label$96e09ea_7_318:
+					r33 = (venum*)r3;
+					label$96e09ea_7_315:
 					{ venum *tmp;
 					tmp = hl_alloc_enum(&t$little_parser_ParserTokens,13);
 					((little_parser_ParserTokens_Block*)tmp)->p0 = r29;
-					((little_parser_ParserTokens_Block*)tmp)->p1 = r34;
-					r34 = tmp; };
-					r12 = r34;
-					goto label$96e09ea_7_346;
-					label$96e09ea_7_321:
-					if( r28 ) goto label$96e09ea_7_344;
-					r29 = little_parser_Parser_mergeComplexStructures(r11);
-					r9 = &t$little_parser_ParserTokens;
-					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
-					r5 = 0;
-					((venum**)(r7 + 1))[r5] = r28;
-					r32 = hl_types_ArrayObj_alloc(r7);
-					r32 = little_parser_Parser_mergeComplexStructures(r32);
-					if( r32 == NULL ) hl_null_access();
-					r5 = 0;
-					r10 = r32->length;
-					if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_7_336;
-					r34 = NULL;
-					goto label$96e09ea_7_342;
-					label$96e09ea_7_336:
-					r7 = r32->array;
-					r3 = ((vdynamic**)(r7 + 1))[r5];
-					r34 = (venum*)r3;
-					r35 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-					if( r34 == r35 ) goto label$96e09ea_7_342;
-					hl_assert();
-					label$96e09ea_7_342:
-					{ venum *tmp;
-					tmp = hl_alloc_enum(&t$little_parser_ParserTokens,13);
-					((little_parser_ParserTokens_Block*)tmp)->p0 = r29;
-					((little_parser_ParserTokens_Block*)tmp)->p1 = r34;
-					r34 = tmp; };
-					goto label$96e09ea_7_346;
-					label$96e09ea_7_344:
+					((little_parser_ParserTokens_Block*)tmp)->p1 = r33;
+					r33 = tmp; };
+					goto label$96e09ea_7_319;
+					label$96e09ea_7_317:
 					--r4;
-					goto label$96e09ea_7_407;
-					label$96e09ea_7_346:
-					goto label$96e09ea_7_405;
+					goto label$96e09ea_7_377;
+					label$96e09ea_7_319:
+					goto label$96e09ea_7_375;
 				case 16:
 					r14 = ((little_parser_ParserTokens_Sign*)r27)->p0;
 					r16 = (String)s$43ec3e5;
-					if( r14 != r16 && (!r14 || !r16 || String___compare(r14,(vdynamic*)r16) != 0) ) goto label$96e09ea_7_352;
+					if( r14 != r16 && (!r14 || !r16 || String___compare(r14,(vdynamic*)r16) != 0) ) goto label$96e09ea_7_325;
 					--r4;
-					goto label$96e09ea_7_407;
-					label$96e09ea_7_352:
-					if( r12 ) goto label$96e09ea_7_355;
+					goto label$96e09ea_7_377;
+					label$96e09ea_7_325:
+					if( r12 ) goto label$96e09ea_7_328;
 					r12 = r27;
-					goto label$96e09ea_7_405;
-					label$96e09ea_7_355:
-					if( r26 ) goto label$96e09ea_7_399;
-					r9 = &t$String;
+					goto label$96e09ea_7_375;
+					label$96e09ea_7_328:
+					if( r26 ) goto label$96e09ea_7_369;
+					r8 = &t$String;
 					r5 = 0;
-					r7 = hl_alloc_array(r9,r5);
-					r11 = hl_types_ArrayObj_alloc(r7);
+					r7 = hl_alloc_array(r8,r5);
+					r10 = hl_types_ArrayObj_alloc(r7);
 					r5 = 0;
-					r9 = &t$little_tools_ParserTokensSimple;
-					r10 = 1;
-					r7 = hl_alloc_array(r9,r10);
+					r8 = &t$little_tools_ParserTokensSimple;
+					r9 = 1;
+					r7 = hl_alloc_array(r8,r9);
 					r30 = (venum*)g$ca8d5e4;
-					r10 = 0;
-					((venum**)(r7 + 1))[r10] = r30;
+					r9 = 0;
+					((venum**)(r7 + 1))[r9] = r30;
 					r29 = hl_types_ArrayObj_alloc(r7);
 					if( r29 == NULL ) hl_null_access();
 					r29 = hl_types_ArrayObj_copy(r29);
-					label$96e09ea_7_370:
+					label$96e09ea_7_343:
 					if( r29 == NULL ) hl_null_access();
 					r31 = r29->length;
-					if( r5 >= r31 ) goto label$96e09ea_7_393;
+					if( r5 >= r31 ) goto label$96e09ea_7_363;
 					r31 = r29->length;
-					if( ((unsigned)r5) < ((unsigned)r31) ) goto label$96e09ea_7_378;
+					if( ((unsigned)r5) < ((unsigned)r31) ) goto label$96e09ea_7_351;
 					r30 = NULL;
-					goto label$96e09ea_7_384;
-					label$96e09ea_7_378:
+					goto label$96e09ea_7_354;
+					label$96e09ea_7_351:
 					r7 = r29->array;
 					r3 = ((vdynamic**)(r7 + 1))[r5];
 					r30 = (venum*)r3;
-					r33 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_tools_ParserTokensSimple);
-					if( r30 == r33 ) goto label$96e09ea_7_384;
-					hl_assert();
-					label$96e09ea_7_384:
+					label$96e09ea_7_354:
 					++r5;
-					if( r11 == NULL ) hl_null_access();
+					if( r10 == NULL ) hl_null_access();
 					r14 = Type_enumConstructor(((vdynamic*)r30));
 					r16 = (String)s$b14a7b8;
 					r14 = little_tools_TextTools_remove(r14,r16);
 					if( r14 == NULL ) hl_null_access();
 					r14 = String_toLowerCase(r14);
-					r10 = hl_types_ArrayObj_push(r11,((vdynamic*)r14));
-					goto label$96e09ea_7_370;
-					label$96e09ea_7_393:
-					if( r11 == NULL ) hl_null_access();
+					r9 = hl_types_ArrayObj_push(r10,((vdynamic*)r14));
+					goto label$96e09ea_7_343;
+					label$96e09ea_7_363:
+					if( r10 == NULL ) hl_null_access();
 					r14 = Type_enumConstructor(((vdynamic*)r27));
 					if( r14 == NULL ) hl_null_access();
 					r14 = String_toLowerCase(r14);
-					r19 = hl_types_ArrayObj_contains(r11,((vdynamic*)r14));
-					goto label$96e09ea_7_400;
-					label$96e09ea_7_399:
+					r19 = hl_types_ArrayObj_contains(r10,((vdynamic*)r14));
+					goto label$96e09ea_7_370;
+					label$96e09ea_7_369:
 					r19 = false;
-					label$96e09ea_7_400:
-					if( !r19 ) goto label$96e09ea_7_403;
+					label$96e09ea_7_370:
+					if( !r19 ) goto label$96e09ea_7_373;
 					r26 = r27;
-					goto label$96e09ea_7_405;
-					label$96e09ea_7_403:
+					goto label$96e09ea_7_375;
+					label$96e09ea_7_373:
 					--r4;
-					goto label$96e09ea_7_407;
+					goto label$96e09ea_7_377;
 			}
-			label$96e09ea_7_405:
+			label$96e09ea_7_375:
 			++r4;
-			goto label$96e09ea_7_112;
-			label$96e09ea_7_407:
-			if( r12 ) goto label$96e09ea_7_437;
+			goto label$96e09ea_7_106;
+			label$96e09ea_7_377:
+			if( r12 ) goto label$96e09ea_7_407;
 			r18 = (little__$Little)g$_little_Little;
 			r20 = r18->runtime;
 			if( r20 == NULL ) hl_null_access();
-			r11 = r20->callStack;
-			if( r11 == NULL ) hl_null_access();
+			r10 = r20->callStack;
+			if( r10 == NULL ) hl_null_access();
 			r21 = hl_alloc_virtual(&t$vrt_f317fe3);
 			r14 = little_parser_Parser_get_module();
 			if( hl_vfields(r21)[2] ) *(String*)(hl_vfields(r21)[2]) = (String)r14; else hl_dyn_setp(r21->value,-523029465/*module*/,&t$String,r14);
@@ -2767,7 +2583,7 @@ hl__types__ArrayObj little_parser_Parser_mergeComplexStructures(hl__types__Array
 			((little_interpreter_InterpTokens_VariableDeclaration*)tmp)->p2 = r25;
 			r23 = tmp; };
 			if( hl_vfields(r21)[3] ) *(venum**)(hl_vfields(r21)[3]) = (venum*)r23; else hl_dyn_setp(r21->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r23);
-			hl_types_ArrayObj_unshift(r11,((vdynamic*)r21));
+			hl_types_ArrayObj_unshift(r10,((vdynamic*)r21));
 			r18 = (little__$Little)g$_little_Little;
 			r20 = r18->runtime;
 			if( r20 == NULL ) hl_null_access();
@@ -2776,9 +2592,9 @@ hl__types__ArrayObj little_parser_Parser_mergeComplexStructures(hl__types__Array
 			((little_interpreter_InterpTokens_ErrorMessage*)r23)->p0 = r14;
 			r14 = (String)s$Parser;
 			r23 = little_interpreter_Runtime_throwError(r20,r23,r14);
-			r11 = NULL;
-			return r11;
-			label$96e09ea_7_437:
+			r10 = NULL;
+			return r10;
+			label$96e09ea_7_407:
 			if( r2 == NULL ) hl_null_access();
 			r27 = hl_alloc_enum(&t$little_parser_ParserTokens,3);
 			((little_parser_ParserTokens_Variable*)r27)->p0 = r12;
@@ -2787,28 +2603,28 @@ hl__types__ArrayObj little_parser_Parser_mergeComplexStructures(hl__types__Array
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r27));
 			r27 = NULL;
 			r6 = r27;
-			goto label$96e09ea_7_1276;
-			label$96e09ea_7_443:
+			goto label$96e09ea_7_1180;
+			label$96e09ea_7_413:
 			r18 = (little__$Little)g$_little_Little;
 			r17 = r18->keywords;
 			if( r17 == NULL ) hl_null_access();
 			r16 = r17->FUNCTION_DECLARATION;
-			if( r13 == r16 || (r13 && r16 && String___compare(r13,(vdynamic*)r16) == 0) ) goto label$96e09ea_7_450;
+			if( r13 == r16 || (r13 && r16 && String___compare(r13,(vdynamic*)r16) == 0) ) goto label$96e09ea_7_420;
 			r19 = false;
-			goto label$96e09ea_7_451;
-			label$96e09ea_7_450:
+			goto label$96e09ea_7_421;
+			label$96e09ea_7_420:
 			r19 = true;
-			label$96e09ea_7_451:
-			r36 = true;
-			if( r19 != r36 ) goto label$96e09ea_7_1022;
+			label$96e09ea_7_421:
+			r35 = true;
+			if( r19 != r35 ) goto label$96e09ea_7_944;
 			++r4;
-			r10 = r0->length;
-			if( r4 < r10 ) goto label$96e09ea_7_486;
+			r9 = r0->length;
+			if( r4 < r9 ) goto label$96e09ea_7_456;
 			r18 = (little__$Little)g$_little_Little;
 			r20 = r18->runtime;
 			if( r20 == NULL ) hl_null_access();
-			r11 = r20->callStack;
-			if( r11 == NULL ) hl_null_access();
+			r10 = r20->callStack;
+			if( r10 == NULL ) hl_null_access();
 			r21 = hl_alloc_virtual(&t$vrt_f317fe3);
 			r14 = little_parser_Parser_get_module();
 			if( hl_vfields(r21)[2] ) *(String*)(hl_vfields(r21)[2]) = (String)r14; else hl_dyn_setp(r21->value,-523029465/*module*/,&t$String,r14);
@@ -2822,16 +2638,16 @@ hl__types__ArrayObj little_parser_Parser_mergeComplexStructures(hl__types__Array
 			((little_interpreter_InterpTokens_Identifier*)r23)->p0 = r14;
 			r24 = NULL;
 			r25 = NULL;
-			r37 = NULL;
+			r36 = NULL;
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_interpreter_InterpTokens,4);
 			((little_interpreter_InterpTokens_FunctionDeclaration*)tmp)->p0 = r23;
 			((little_interpreter_InterpTokens_FunctionDeclaration*)tmp)->p1 = r24;
 			((little_interpreter_InterpTokens_FunctionDeclaration*)tmp)->p2 = r25;
-			((little_interpreter_InterpTokens_FunctionDeclaration*)tmp)->p3 = r37;
+			((little_interpreter_InterpTokens_FunctionDeclaration*)tmp)->p3 = r36;
 			r23 = tmp; };
 			if( hl_vfields(r21)[3] ) *(venum**)(hl_vfields(r21)[3]) = (venum*)r23; else hl_dyn_setp(r21->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r23);
-			hl_types_ArrayObj_unshift(r11,((vdynamic*)r21));
+			hl_types_ArrayObj_unshift(r10,((vdynamic*)r21));
 			r18 = (little__$Little)g$_little_Little;
 			r20 = r18->runtime;
 			if( r20 == NULL ) hl_null_access();
@@ -2840,18 +2656,18 @@ hl__types__ArrayObj little_parser_Parser_mergeComplexStructures(hl__types__Array
 			((little_interpreter_InterpTokens_ErrorMessage*)r23)->p0 = r14;
 			r14 = (String)s$Parser;
 			r23 = little_interpreter_Runtime_throwError(r20,r23,r14);
-			r11 = NULL;
-			return r11;
-			label$96e09ea_7_486:
-			r10 = 1;
-			r5 = r4 + r10;
-			r10 = r0->length;
-			if( r5 < r10 ) goto label$96e09ea_7_547;
+			r10 = NULL;
+			return r10;
+			label$96e09ea_7_456:
+			r9 = 1;
+			r5 = r4 + r9;
+			r9 = r0->length;
+			if( r5 < r9 ) goto label$96e09ea_7_511;
 			r18 = (little__$Little)g$_little_Little;
 			r20 = r18->runtime;
 			if( r20 == NULL ) hl_null_access();
-			r11 = r20->callStack;
-			if( r11 == NULL ) hl_null_access();
+			r10 = r20->callStack;
+			if( r10 == NULL ) hl_null_access();
 			r21 = hl_alloc_virtual(&t$vrt_f317fe3);
 			r14 = little_parser_Parser_get_module();
 			if( hl_vfields(r21)[2] ) *(String*)(hl_vfields(r21)[2]) = (String)r14; else hl_dyn_setp(r21->value,-523029465/*module*/,&t$String,r14);
@@ -2860,51 +2676,45 @@ hl__types__ArrayObj little_parser_Parser_mergeComplexStructures(hl__types__Array
 			r22 = (little__parser__$Parser)g$_little_parser_Parser;
 			r5 = r22->linePart;
 			if( hl_vfields(r21)[1] ) *(int*)(hl_vfields(r21)[1]) = (int)r5; else hl_dyn_seti(r21->value,-411357064/*linePart*/,&t$_i32,r5);
-			r9 = &t$little_parser_ParserTokens;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
-			r10 = r0->length;
-			if( ((unsigned)r4) < ((unsigned)r10) ) goto label$96e09ea_7_510;
+			r7 = hl_alloc_array(r8,r5);
+			r9 = r0->length;
+			if( ((unsigned)r4) < ((unsigned)r9) ) goto label$96e09ea_7_480;
 			r12 = NULL;
-			goto label$96e09ea_7_516;
-			label$96e09ea_7_510:
-			r38 = r0->array;
-			r3 = ((vdynamic**)(r38 + 1))[r4];
+			goto label$96e09ea_7_483;
+			label$96e09ea_7_480:
+			r37 = r0->array;
+			r3 = ((vdynamic**)(r37 + 1))[r4];
 			r12 = (venum*)r3;
-			r26 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r12 == r26 ) goto label$96e09ea_7_516;
-			hl_assert();
-			label$96e09ea_7_516:
+			label$96e09ea_7_483:
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r12;
 			r29 = hl_types_ArrayObj_alloc(r7);
 			r29 = little_interpreter_Interpreter_convert(r29);
 			if( r29 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r29->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_7_526;
+			r9 = r29->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_7_493;
 			r23 = NULL;
-			goto label$96e09ea_7_532;
-			label$96e09ea_7_526:
+			goto label$96e09ea_7_496;
+			label$96e09ea_7_493:
 			r7 = r29->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r23 = (venum*)r3;
-			r24 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_interpreter_InterpTokens);
-			if( r23 == r24 ) goto label$96e09ea_7_532;
-			hl_assert();
-			label$96e09ea_7_532:
+			label$96e09ea_7_496:
 			r24 = NULL;
 			r25 = NULL;
-			r37 = NULL;
+			r36 = NULL;
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_interpreter_InterpTokens,4);
 			((little_interpreter_InterpTokens_FunctionDeclaration*)tmp)->p0 = r23;
 			((little_interpreter_InterpTokens_FunctionDeclaration*)tmp)->p1 = r24;
 			((little_interpreter_InterpTokens_FunctionDeclaration*)tmp)->p2 = r25;
-			((little_interpreter_InterpTokens_FunctionDeclaration*)tmp)->p3 = r37;
+			((little_interpreter_InterpTokens_FunctionDeclaration*)tmp)->p3 = r36;
 			r23 = tmp; };
 			if( hl_vfields(r21)[3] ) *(venum**)(hl_vfields(r21)[3]) = (venum*)r23; else hl_dyn_setp(r21->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r23);
-			hl_types_ArrayObj_unshift(r11,((vdynamic*)r21));
+			hl_types_ArrayObj_unshift(r10,((vdynamic*)r21));
 			r18 = (little__$Little)g$_little_Little;
 			r20 = r18->runtime;
 			if( r20 == NULL ) hl_null_access();
@@ -2913,28 +2723,25 @@ hl__types__ArrayObj little_parser_Parser_mergeComplexStructures(hl__types__Array
 			((little_interpreter_InterpTokens_ErrorMessage*)r23)->p0 = r14;
 			r14 = (String)s$Parser;
 			r23 = little_interpreter_Runtime_throwError(r20,r23,r14);
-			r11 = NULL;
-			return r11;
-			label$96e09ea_7_547:
+			r10 = NULL;
+			return r10;
+			label$96e09ea_7_511:
 			r12 = NULL;
 			r26 = NULL;
 			r27 = NULL;
-			label$96e09ea_7_550:
+			label$96e09ea_7_514:
 			if( r0 == NULL ) hl_null_access();
-			r10 = r0->length;
-			if( r4 >= r10 ) goto label$96e09ea_7_937;
-			r10 = r0->length;
-			if( ((unsigned)r4) < ((unsigned)r10) ) goto label$96e09ea_7_558;
+			r9 = r0->length;
+			if( r4 >= r9 ) goto label$96e09ea_7_862;
+			r9 = r0->length;
+			if( ((unsigned)r4) < ((unsigned)r9) ) goto label$96e09ea_7_522;
 			r28 = NULL;
-			goto label$96e09ea_7_564;
-			label$96e09ea_7_558:
+			goto label$96e09ea_7_525;
+			label$96e09ea_7_522:
 			r7 = r0->array;
 			r3 = ((vdynamic**)(r7 + 1))[r4];
 			r28 = (venum*)r3;
-			r34 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r28 == r34 ) goto label$96e09ea_7_564;
-			hl_assert();
-			label$96e09ea_7_564:
+			label$96e09ea_7_525:
 			if( r28 == NULL ) hl_null_access();
 			r5 = HL__ENUM_INDEX__(r28);
 			switch(r5) {
@@ -2952,59 +2759,56 @@ hl__types__ArrayObj little_parser_Parser_mergeComplexStructures(hl__types__Array
 				case 11:
 				case 14:
 				case 15:
-					if( r12 ) goto label$96e09ea_7_570;
+					if( r12 ) goto label$96e09ea_7_531;
 					r12 = r28;
-					goto label$96e09ea_7_604;
-					label$96e09ea_7_570:
-					if( r26 ) goto label$96e09ea_7_573;
+					goto label$96e09ea_7_562;
+					label$96e09ea_7_531:
+					if( r26 ) goto label$96e09ea_7_534;
 					r26 = r28;
-					goto label$96e09ea_7_604;
-					label$96e09ea_7_573:
-					if( r27 ) goto label$96e09ea_7_603;
+					goto label$96e09ea_7_562;
+					label$96e09ea_7_534:
+					if( r27 ) goto label$96e09ea_7_561;
 					r14 = Type_enumConstructor(((vdynamic*)r28));
 					r16 = (String)s$TypeDeclaration;
-					if( r14 != r16 && (!r14 || !r16 || String___compare(r14,(vdynamic*)r16) != 0) ) goto label$96e09ea_7_603;
-					r9 = &t$little_parser_ParserTokens;
+					if( r14 != r16 && (!r14 || !r16 || String___compare(r14,(vdynamic*)r16) != 0) ) goto label$96e09ea_7_561;
+					r8 = &t$little_parser_ParserTokens;
 					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
-					r39 = Type_enumParameters(((vdynamic*)r28));
-					if( r39 == NULL ) hl_null_access();
+					r7 = hl_alloc_array(r8,r5);
+					r38 = Type_enumParameters(((vdynamic*)r28));
+					if( r38 == NULL ) hl_null_access();
 					r5 = 1;
-					r3 = ((vdynamic* (*)(hl__types__ArrayDyn,int))r39->$type->vobj_proto[0])(r39,r5);
-					r34 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
+					r3 = ((vdynamic* (*)(hl__types__ArrayDyn,int))r38->$type->vobj_proto[0])(r38,r5);
+					r33 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
 					r5 = 0;
-					((venum**)(r7 + 1))[r5] = r34;
-					r11 = hl_types_ArrayObj_alloc(r7);
-					r11 = little_parser_Parser_mergeComplexStructures(r11);
-					if( r11 == NULL ) hl_null_access();
+					((venum**)(r7 + 1))[r5] = r33;
+					r10 = hl_types_ArrayObj_alloc(r7);
+					r10 = little_parser_Parser_mergeComplexStructures(r10);
+					if( r10 == NULL ) hl_null_access();
 					r5 = 0;
-					r10 = r11->length;
-					if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_7_595;
-					r34 = NULL;
-					goto label$96e09ea_7_601;
-					label$96e09ea_7_595:
-					r7 = r11->array;
+					r9 = r10->length;
+					if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_7_556;
+					r33 = NULL;
+					goto label$96e09ea_7_559;
+					label$96e09ea_7_556:
+					r7 = r10->array;
 					r3 = ((vdynamic**)(r7 + 1))[r5];
-					r34 = (venum*)r3;
-					r35 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-					if( r34 == r35 ) goto label$96e09ea_7_601;
-					hl_assert();
-					label$96e09ea_7_601:
-					r27 = r34;
-					goto label$96e09ea_7_604;
-					label$96e09ea_7_603:
-					goto label$96e09ea_7_937;
-					label$96e09ea_7_604:
-					goto label$96e09ea_7_935;
+					r33 = (venum*)r3;
+					label$96e09ea_7_559:
+					r27 = r33;
+					goto label$96e09ea_7_562;
+					label$96e09ea_7_561:
+					goto label$96e09ea_7_862;
+					label$96e09ea_7_562:
+					goto label$96e09ea_7_860;
 				case 9:
-					r34 = ((little_parser_ParserTokens_TypeDeclaration*)r28)->p0;
-					r35 = ((little_parser_ParserTokens_TypeDeclaration*)r28)->p1;
-					if( r12 ) goto label$96e09ea_7_656;
+					r33 = ((little_parser_ParserTokens_TypeDeclaration*)r28)->p0;
+					r34 = ((little_parser_ParserTokens_TypeDeclaration*)r28)->p1;
+					if( r12 ) goto label$96e09ea_7_611;
 					r18 = (little__$Little)g$_little_Little;
 					r20 = r18->runtime;
 					if( r20 == NULL ) hl_null_access();
-					r11 = r20->callStack;
-					if( r11 == NULL ) hl_null_access();
+					r10 = r20->callStack;
+					if( r10 == NULL ) hl_null_access();
 					r21 = hl_alloc_virtual(&t$vrt_f317fe3);
 					r14 = little_parser_Parser_get_module();
 					if( hl_vfields(r21)[2] ) *(String*)(hl_vfields(r21)[2]) = (String)r14; else hl_dyn_setp(r21->value,-523029465/*module*/,&t$String,r14);
@@ -3017,37 +2821,34 @@ hl__types__ArrayObj little_parser_Parser_mergeComplexStructures(hl__types__Array
 					r23 = hl_alloc_enum(&t$little_interpreter_InterpTokens,25);
 					((little_interpreter_InterpTokens_Identifier*)r23)->p0 = r14;
 					r24 = NULL;
-					r9 = &t$little_parser_ParserTokens;
+					r8 = &t$little_parser_ParserTokens;
 					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
+					r7 = hl_alloc_array(r8,r5);
 					r5 = 0;
-					((venum**)(r7 + 1))[r5] = r35;
+					((venum**)(r7 + 1))[r5] = r34;
 					r29 = hl_types_ArrayObj_alloc(r7);
 					r29 = little_interpreter_Interpreter_convert(r29);
 					if( r29 == NULL ) hl_null_access();
 					r5 = 0;
-					r10 = r29->length;
-					if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_7_637;
+					r9 = r29->length;
+					if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_7_595;
 					r25 = NULL;
-					goto label$96e09ea_7_643;
-					label$96e09ea_7_637:
+					goto label$96e09ea_7_598;
+					label$96e09ea_7_595:
 					r7 = r29->array;
 					r3 = ((vdynamic**)(r7 + 1))[r5];
 					r25 = (venum*)r3;
-					r37 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_interpreter_InterpTokens);
-					if( r25 == r37 ) goto label$96e09ea_7_643;
-					hl_assert();
-					label$96e09ea_7_643:
-					r37 = NULL;
+					label$96e09ea_7_598:
+					r36 = NULL;
 					{ venum *tmp;
 					tmp = hl_alloc_enum(&t$little_interpreter_InterpTokens,4);
 					((little_interpreter_InterpTokens_FunctionDeclaration*)tmp)->p0 = r23;
 					((little_interpreter_InterpTokens_FunctionDeclaration*)tmp)->p1 = r24;
 					((little_interpreter_InterpTokens_FunctionDeclaration*)tmp)->p2 = r25;
-					((little_interpreter_InterpTokens_FunctionDeclaration*)tmp)->p3 = r37;
+					((little_interpreter_InterpTokens_FunctionDeclaration*)tmp)->p3 = r36;
 					r23 = tmp; };
 					if( hl_vfields(r21)[3] ) *(venum**)(hl_vfields(r21)[3]) = (venum*)r23; else hl_dyn_setp(r21->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r23);
-					hl_types_ArrayObj_unshift(r11,((vdynamic*)r21));
+					hl_types_ArrayObj_unshift(r10,((vdynamic*)r21));
 					r18 = (little__$Little)g$_little_Little;
 					r20 = r18->runtime;
 					if( r20 == NULL ) hl_null_access();
@@ -3056,15 +2857,15 @@ hl__types__ArrayObj little_parser_Parser_mergeComplexStructures(hl__types__Array
 					((little_interpreter_InterpTokens_ErrorMessage*)r23)->p0 = r14;
 					r14 = (String)s$Parser;
 					r23 = little_interpreter_Runtime_throwError(r20,r23,r14);
-					r11 = NULL;
-					return r11;
-					label$96e09ea_7_656:
-					if( r26 ) goto label$96e09ea_7_722;
+					r10 = NULL;
+					return r10;
+					label$96e09ea_7_611:
+					if( r26 ) goto label$96e09ea_7_671;
 					r18 = (little__$Little)g$_little_Little;
 					r20 = r18->runtime;
 					if( r20 == NULL ) hl_null_access();
-					r11 = r20->callStack;
-					if( r11 == NULL ) hl_null_access();
+					r10 = r20->callStack;
+					if( r10 == NULL ) hl_null_access();
 					r21 = hl_alloc_virtual(&t$vrt_f317fe3);
 					r14 = little_parser_Parser_get_module();
 					if( hl_vfields(r21)[2] ) *(String*)(hl_vfields(r21)[2]) = (String)r14; else hl_dyn_setp(r21->value,-523029465/*module*/,&t$String,r14);
@@ -3073,59 +2874,53 @@ hl__types__ArrayObj little_parser_Parser_mergeComplexStructures(hl__types__Array
 					r22 = (little__parser__$Parser)g$_little_parser_Parser;
 					r5 = r22->linePart;
 					if( hl_vfields(r21)[1] ) *(int*)(hl_vfields(r21)[1]) = (int)r5; else hl_dyn_seti(r21->value,-411357064/*linePart*/,&t$_i32,r5);
-					r9 = &t$little_parser_ParserTokens;
+					r8 = &t$little_parser_ParserTokens;
 					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
+					r7 = hl_alloc_array(r8,r5);
 					r5 = 0;
 					((venum**)(r7 + 1))[r5] = r12;
 					r29 = hl_types_ArrayObj_alloc(r7);
 					r29 = little_interpreter_Interpreter_convert(r29);
 					if( r29 == NULL ) hl_null_access();
 					r5 = 0;
-					r10 = r29->length;
-					if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_7_683;
+					r9 = r29->length;
+					if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_7_638;
 					r23 = NULL;
-					goto label$96e09ea_7_689;
-					label$96e09ea_7_683:
+					goto label$96e09ea_7_641;
+					label$96e09ea_7_638:
 					r7 = r29->array;
 					r3 = ((vdynamic**)(r7 + 1))[r5];
 					r23 = (venum*)r3;
-					r24 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_interpreter_InterpTokens);
-					if( r23 == r24 ) goto label$96e09ea_7_689;
-					hl_assert();
-					label$96e09ea_7_689:
+					label$96e09ea_7_641:
 					r24 = NULL;
-					r9 = &t$little_parser_ParserTokens;
+					r8 = &t$little_parser_ParserTokens;
 					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
+					r7 = hl_alloc_array(r8,r5);
 					r5 = 0;
-					((venum**)(r7 + 1))[r5] = r35;
+					((venum**)(r7 + 1))[r5] = r34;
 					r29 = hl_types_ArrayObj_alloc(r7);
 					r29 = little_interpreter_Interpreter_convert(r29);
 					if( r29 == NULL ) hl_null_access();
 					r5 = 0;
-					r10 = r29->length;
-					if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_7_703;
+					r9 = r29->length;
+					if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_7_655;
 					r25 = NULL;
-					goto label$96e09ea_7_709;
-					label$96e09ea_7_703:
+					goto label$96e09ea_7_658;
+					label$96e09ea_7_655:
 					r7 = r29->array;
 					r3 = ((vdynamic**)(r7 + 1))[r5];
 					r25 = (venum*)r3;
-					r37 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_interpreter_InterpTokens);
-					if( r25 == r37 ) goto label$96e09ea_7_709;
-					hl_assert();
-					label$96e09ea_7_709:
-					r37 = NULL;
+					label$96e09ea_7_658:
+					r36 = NULL;
 					{ venum *tmp;
 					tmp = hl_alloc_enum(&t$little_interpreter_InterpTokens,4);
 					((little_interpreter_InterpTokens_FunctionDeclaration*)tmp)->p0 = r23;
 					((little_interpreter_InterpTokens_FunctionDeclaration*)tmp)->p1 = r24;
 					((little_interpreter_InterpTokens_FunctionDeclaration*)tmp)->p2 = r25;
-					((little_interpreter_InterpTokens_FunctionDeclaration*)tmp)->p3 = r37;
+					((little_interpreter_InterpTokens_FunctionDeclaration*)tmp)->p3 = r36;
 					r23 = tmp; };
 					if( hl_vfields(r21)[3] ) *(venum**)(hl_vfields(r21)[3]) = (venum*)r23; else hl_dyn_setp(r21->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r23);
-					hl_types_ArrayObj_unshift(r11,((vdynamic*)r21));
+					hl_types_ArrayObj_unshift(r10,((vdynamic*)r21));
 					r18 = (little__$Little)g$_little_Little;
 					r20 = r18->runtime;
 					if( r20 == NULL ) hl_null_access();
@@ -3134,288 +2929,264 @@ hl__types__ArrayObj little_parser_Parser_mergeComplexStructures(hl__types__Array
 					((little_interpreter_InterpTokens_ErrorMessage*)r23)->p0 = r14;
 					r14 = (String)s$Parser;
 					r23 = little_interpreter_Runtime_throwError(r20,r23,r14);
-					r11 = NULL;
-					return r11;
-					label$96e09ea_7_722:
-					r9 = &t$little_parser_ParserTokens;
+					r10 = NULL;
+					return r10;
+					label$96e09ea_7_671:
+					r8 = &t$little_parser_ParserTokens;
 					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
+					r7 = hl_alloc_array(r8,r5);
 					r5 = 0;
-					((venum**)(r7 + 1))[r5] = r35;
-					r11 = hl_types_ArrayObj_alloc(r7);
-					r11 = little_parser_Parser_mergeComplexStructures(r11);
-					if( r11 == NULL ) hl_null_access();
+					((venum**)(r7 + 1))[r5] = r34;
+					r10 = hl_types_ArrayObj_alloc(r7);
+					r10 = little_parser_Parser_mergeComplexStructures(r10);
+					if( r10 == NULL ) hl_null_access();
 					r5 = 0;
-					r10 = r11->length;
-					if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_7_735;
-					r40 = NULL;
-					goto label$96e09ea_7_741;
-					label$96e09ea_7_735:
-					r7 = r11->array;
+					r9 = r10->length;
+					if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_7_684;
+					r39 = NULL;
+					goto label$96e09ea_7_687;
+					label$96e09ea_7_684:
+					r7 = r10->array;
 					r3 = ((vdynamic**)(r7 + 1))[r5];
-					r40 = (venum*)r3;
-					r41 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-					if( r40 == r41 ) goto label$96e09ea_7_741;
-					hl_assert();
-					label$96e09ea_7_741:
-					r27 = r40;
-					goto label$96e09ea_7_937;
+					r39 = (venum*)r3;
+					label$96e09ea_7_687:
+					r27 = r39;
+					goto label$96e09ea_7_862;
 				case 12:
-					r11 = ((little_parser_ParserTokens_Expression*)r28)->p0;
-					r34 = ((little_parser_ParserTokens_Expression*)r28)->p1;
-					if( r12 ) goto label$96e09ea_7_769;
-					r29 = little_parser_Parser_mergeComplexStructures(r11);
-					r9 = &t$little_parser_ParserTokens;
+					r10 = ((little_parser_ParserTokens_Expression*)r28)->p0;
+					r33 = ((little_parser_ParserTokens_Expression*)r28)->p1;
+					if( r12 ) goto label$96e09ea_7_712;
+					r29 = little_parser_Parser_mergeComplexStructures(r10);
+					r8 = &t$little_parser_ParserTokens;
 					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
+					r7 = hl_alloc_array(r8,r5);
 					r5 = 0;
-					((venum**)(r7 + 1))[r5] = r34;
+					((venum**)(r7 + 1))[r5] = r33;
 					r32 = hl_types_ArrayObj_alloc(r7);
 					r32 = little_parser_Parser_mergeComplexStructures(r32);
 					if( r32 == NULL ) hl_null_access();
 					r5 = 0;
-					r10 = r32->length;
-					if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_7_760;
-					r35 = NULL;
-					goto label$96e09ea_7_766;
-					label$96e09ea_7_760:
+					r9 = r32->length;
+					if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_7_706;
+					r34 = NULL;
+					goto label$96e09ea_7_709;
+					label$96e09ea_7_706:
 					r7 = r32->array;
 					r3 = ((vdynamic**)(r7 + 1))[r5];
-					r35 = (venum*)r3;
-					r40 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-					if( r35 == r40 ) goto label$96e09ea_7_766;
-					hl_assert();
-					label$96e09ea_7_766:
+					r34 = (venum*)r3;
+					label$96e09ea_7_709:
 					{ venum *tmp;
 					tmp = hl_alloc_enum(&t$little_parser_ParserTokens,12);
 					((little_parser_ParserTokens_Expression*)tmp)->p0 = r29;
-					((little_parser_ParserTokens_Expression*)tmp)->p1 = r35;
-					r35 = tmp; };
-					r12 = r35;
-					goto label$96e09ea_7_817;
-					label$96e09ea_7_769:
-					if( r26 ) goto label$96e09ea_7_793;
-					r29 = little_parser_Parser_mergeComplexStructures(r11);
-					r9 = &t$little_parser_ParserTokens;
+					((little_parser_ParserTokens_Expression*)tmp)->p1 = r34;
+					r34 = tmp; };
+					r12 = r34;
+					goto label$96e09ea_7_754;
+					label$96e09ea_7_712:
+					if( r26 ) goto label$96e09ea_7_733;
+					r29 = little_parser_Parser_mergeComplexStructures(r10);
+					r8 = &t$little_parser_ParserTokens;
 					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
+					r7 = hl_alloc_array(r8,r5);
 					r5 = 0;
-					((venum**)(r7 + 1))[r5] = r34;
+					((venum**)(r7 + 1))[r5] = r33;
 					r32 = hl_types_ArrayObj_alloc(r7);
 					r32 = little_parser_Parser_mergeComplexStructures(r32);
 					if( r32 == NULL ) hl_null_access();
 					r5 = 0;
-					r10 = r32->length;
-					if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_7_784;
-					r35 = NULL;
-					goto label$96e09ea_7_790;
-					label$96e09ea_7_784:
+					r9 = r32->length;
+					if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_7_727;
+					r34 = NULL;
+					goto label$96e09ea_7_730;
+					label$96e09ea_7_727:
 					r7 = r32->array;
 					r3 = ((vdynamic**)(r7 + 1))[r5];
-					r35 = (venum*)r3;
-					r40 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-					if( r35 == r40 ) goto label$96e09ea_7_790;
-					hl_assert();
-					label$96e09ea_7_790:
+					r34 = (venum*)r3;
+					label$96e09ea_7_730:
 					{ venum *tmp;
 					tmp = hl_alloc_enum(&t$little_parser_ParserTokens,12);
 					((little_parser_ParserTokens_Expression*)tmp)->p0 = r29;
-					((little_parser_ParserTokens_Expression*)tmp)->p1 = r35;
-					r35 = tmp; };
-					r26 = r35;
-					goto label$96e09ea_7_817;
-					label$96e09ea_7_793:
-					if( r34 ) goto label$96e09ea_7_816;
-					r29 = little_parser_Parser_mergeComplexStructures(r11);
-					r9 = &t$little_parser_ParserTokens;
+					((little_parser_ParserTokens_Expression*)tmp)->p1 = r34;
+					r34 = tmp; };
+					r26 = r34;
+					goto label$96e09ea_7_754;
+					label$96e09ea_7_733:
+					if( r33 ) goto label$96e09ea_7_753;
+					r29 = little_parser_Parser_mergeComplexStructures(r10);
+					r8 = &t$little_parser_ParserTokens;
 					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
+					r7 = hl_alloc_array(r8,r5);
 					r5 = 0;
-					((venum**)(r7 + 1))[r5] = r34;
+					((venum**)(r7 + 1))[r5] = r33;
 					r32 = hl_types_ArrayObj_alloc(r7);
 					r32 = little_parser_Parser_mergeComplexStructures(r32);
 					if( r32 == NULL ) hl_null_access();
 					r5 = 0;
-					r10 = r32->length;
-					if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_7_808;
-					r35 = NULL;
-					goto label$96e09ea_7_814;
-					label$96e09ea_7_808:
+					r9 = r32->length;
+					if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_7_748;
+					r34 = NULL;
+					goto label$96e09ea_7_751;
+					label$96e09ea_7_748:
 					r7 = r32->array;
 					r3 = ((vdynamic**)(r7 + 1))[r5];
-					r35 = (venum*)r3;
-					r40 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-					if( r35 == r40 ) goto label$96e09ea_7_814;
-					hl_assert();
-					label$96e09ea_7_814:
+					r34 = (venum*)r3;
+					label$96e09ea_7_751:
 					{ venum *tmp;
 					tmp = hl_alloc_enum(&t$little_parser_ParserTokens,12);
 					((little_parser_ParserTokens_Expression*)tmp)->p0 = r29;
-					((little_parser_ParserTokens_Expression*)tmp)->p1 = r35;
-					r35 = tmp; };
-					goto label$96e09ea_7_817;
-					label$96e09ea_7_816:
-					goto label$96e09ea_7_937;
-					label$96e09ea_7_817:
-					goto label$96e09ea_7_935;
+					((little_parser_ParserTokens_Expression*)tmp)->p1 = r34;
+					r34 = tmp; };
+					goto label$96e09ea_7_754;
+					label$96e09ea_7_753:
+					goto label$96e09ea_7_862;
+					label$96e09ea_7_754:
+					goto label$96e09ea_7_860;
 				case 13:
-					r11 = ((little_parser_ParserTokens_Block*)r28)->p0;
-					r34 = ((little_parser_ParserTokens_Block*)r28)->p1;
-					if( r12 ) goto label$96e09ea_7_844;
-					r29 = little_parser_Parser_mergeComplexStructures(r11);
-					r9 = &t$little_parser_ParserTokens;
+					r10 = ((little_parser_ParserTokens_Block*)r28)->p0;
+					r33 = ((little_parser_ParserTokens_Block*)r28)->p1;
+					if( r12 ) goto label$96e09ea_7_778;
+					r29 = little_parser_Parser_mergeComplexStructures(r10);
+					r8 = &t$little_parser_ParserTokens;
 					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
+					r7 = hl_alloc_array(r8,r5);
 					r5 = 0;
-					((venum**)(r7 + 1))[r5] = r34;
+					((venum**)(r7 + 1))[r5] = r33;
 					r32 = hl_types_ArrayObj_alloc(r7);
 					r32 = little_parser_Parser_mergeComplexStructures(r32);
 					if( r32 == NULL ) hl_null_access();
 					r5 = 0;
-					r10 = r32->length;
-					if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_7_835;
-					r35 = NULL;
-					goto label$96e09ea_7_841;
-					label$96e09ea_7_835:
+					r9 = r32->length;
+					if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_7_772;
+					r34 = NULL;
+					goto label$96e09ea_7_775;
+					label$96e09ea_7_772:
 					r7 = r32->array;
 					r3 = ((vdynamic**)(r7 + 1))[r5];
-					r35 = (venum*)r3;
-					r40 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-					if( r35 == r40 ) goto label$96e09ea_7_841;
-					hl_assert();
-					label$96e09ea_7_841:
+					r34 = (venum*)r3;
+					label$96e09ea_7_775:
 					{ venum *tmp;
 					tmp = hl_alloc_enum(&t$little_parser_ParserTokens,13);
 					((little_parser_ParserTokens_Block*)tmp)->p0 = r29;
-					((little_parser_ParserTokens_Block*)tmp)->p1 = r35;
-					r35 = tmp; };
-					r12 = r35;
-					goto label$96e09ea_7_892;
-					label$96e09ea_7_844:
-					if( r26 ) goto label$96e09ea_7_868;
-					r29 = little_parser_Parser_mergeComplexStructures(r11);
-					r9 = &t$little_parser_ParserTokens;
+					((little_parser_ParserTokens_Block*)tmp)->p1 = r34;
+					r34 = tmp; };
+					r12 = r34;
+					goto label$96e09ea_7_820;
+					label$96e09ea_7_778:
+					if( r26 ) goto label$96e09ea_7_799;
+					r29 = little_parser_Parser_mergeComplexStructures(r10);
+					r8 = &t$little_parser_ParserTokens;
 					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
+					r7 = hl_alloc_array(r8,r5);
 					r5 = 0;
-					((venum**)(r7 + 1))[r5] = r34;
+					((venum**)(r7 + 1))[r5] = r33;
 					r32 = hl_types_ArrayObj_alloc(r7);
 					r32 = little_parser_Parser_mergeComplexStructures(r32);
 					if( r32 == NULL ) hl_null_access();
 					r5 = 0;
-					r10 = r32->length;
-					if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_7_859;
-					r35 = NULL;
-					goto label$96e09ea_7_865;
-					label$96e09ea_7_859:
+					r9 = r32->length;
+					if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_7_793;
+					r34 = NULL;
+					goto label$96e09ea_7_796;
+					label$96e09ea_7_793:
 					r7 = r32->array;
 					r3 = ((vdynamic**)(r7 + 1))[r5];
-					r35 = (venum*)r3;
-					r40 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-					if( r35 == r40 ) goto label$96e09ea_7_865;
-					hl_assert();
-					label$96e09ea_7_865:
+					r34 = (venum*)r3;
+					label$96e09ea_7_796:
 					{ venum *tmp;
 					tmp = hl_alloc_enum(&t$little_parser_ParserTokens,13);
 					((little_parser_ParserTokens_Block*)tmp)->p0 = r29;
-					((little_parser_ParserTokens_Block*)tmp)->p1 = r35;
-					r35 = tmp; };
-					r26 = r35;
-					goto label$96e09ea_7_892;
-					label$96e09ea_7_868:
-					if( r34 ) goto label$96e09ea_7_891;
-					r29 = little_parser_Parser_mergeComplexStructures(r11);
-					r9 = &t$little_parser_ParserTokens;
+					((little_parser_ParserTokens_Block*)tmp)->p1 = r34;
+					r34 = tmp; };
+					r26 = r34;
+					goto label$96e09ea_7_820;
+					label$96e09ea_7_799:
+					if( r33 ) goto label$96e09ea_7_819;
+					r29 = little_parser_Parser_mergeComplexStructures(r10);
+					r8 = &t$little_parser_ParserTokens;
 					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
+					r7 = hl_alloc_array(r8,r5);
 					r5 = 0;
-					((venum**)(r7 + 1))[r5] = r34;
+					((venum**)(r7 + 1))[r5] = r33;
 					r32 = hl_types_ArrayObj_alloc(r7);
 					r32 = little_parser_Parser_mergeComplexStructures(r32);
 					if( r32 == NULL ) hl_null_access();
 					r5 = 0;
-					r10 = r32->length;
-					if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_7_883;
-					r35 = NULL;
-					goto label$96e09ea_7_889;
-					label$96e09ea_7_883:
+					r9 = r32->length;
+					if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_7_814;
+					r34 = NULL;
+					goto label$96e09ea_7_817;
+					label$96e09ea_7_814:
 					r7 = r32->array;
 					r3 = ((vdynamic**)(r7 + 1))[r5];
-					r35 = (venum*)r3;
-					r40 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-					if( r35 == r40 ) goto label$96e09ea_7_889;
-					hl_assert();
-					label$96e09ea_7_889:
+					r34 = (venum*)r3;
+					label$96e09ea_7_817:
 					{ venum *tmp;
 					tmp = hl_alloc_enum(&t$little_parser_ParserTokens,13);
 					((little_parser_ParserTokens_Block*)tmp)->p0 = r29;
-					((little_parser_ParserTokens_Block*)tmp)->p1 = r35;
-					r35 = tmp; };
-					goto label$96e09ea_7_892;
-					label$96e09ea_7_891:
-					goto label$96e09ea_7_937;
-					label$96e09ea_7_892:
-					goto label$96e09ea_7_935;
+					((little_parser_ParserTokens_Block*)tmp)->p1 = r34;
+					r34 = tmp; };
+					goto label$96e09ea_7_820;
+					label$96e09ea_7_819:
+					goto label$96e09ea_7_862;
+					label$96e09ea_7_820:
+					goto label$96e09ea_7_860;
 				case 16:
 					r14 = ((little_parser_ParserTokens_Sign*)r28)->p0;
 					r16 = (String)s$43ec3e5;
-					if( r14 != r16 && (!r14 || !r16 || String___compare(r14,(vdynamic*)r16) != 0) ) goto label$96e09ea_7_898;
+					if( r14 != r16 && (!r14 || !r16 || String___compare(r14,(vdynamic*)r16) != 0) ) goto label$96e09ea_7_826;
 					--r4;
-					goto label$96e09ea_7_937;
-					label$96e09ea_7_898:
-					if( r12 ) goto label$96e09ea_7_901;
+					goto label$96e09ea_7_862;
+					label$96e09ea_7_826:
+					if( r12 ) goto label$96e09ea_7_829;
 					r12 = r28;
-					goto label$96e09ea_7_935;
-					label$96e09ea_7_901:
-					if( r26 ) goto label$96e09ea_7_904;
+					goto label$96e09ea_7_860;
+					label$96e09ea_7_829:
+					if( r26 ) goto label$96e09ea_7_832;
 					r26 = r28;
-					goto label$96e09ea_7_935;
-					label$96e09ea_7_904:
-					if( r27 ) goto label$96e09ea_7_934;
+					goto label$96e09ea_7_860;
+					label$96e09ea_7_832:
+					if( r27 ) goto label$96e09ea_7_859;
 					r14 = Type_enumConstructor(((vdynamic*)r28));
 					r16 = (String)s$TypeDeclaration;
-					if( r14 != r16 && (!r14 || !r16 || String___compare(r14,(vdynamic*)r16) != 0) ) goto label$96e09ea_7_934;
-					r9 = &t$little_parser_ParserTokens;
+					if( r14 != r16 && (!r14 || !r16 || String___compare(r14,(vdynamic*)r16) != 0) ) goto label$96e09ea_7_859;
+					r8 = &t$little_parser_ParserTokens;
 					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
-					r39 = Type_enumParameters(((vdynamic*)r28));
-					if( r39 == NULL ) hl_null_access();
+					r7 = hl_alloc_array(r8,r5);
+					r38 = Type_enumParameters(((vdynamic*)r28));
+					if( r38 == NULL ) hl_null_access();
 					r5 = 1;
-					r3 = ((vdynamic* (*)(hl__types__ArrayDyn,int))r39->$type->vobj_proto[0])(r39,r5);
-					r34 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
+					r3 = ((vdynamic* (*)(hl__types__ArrayDyn,int))r38->$type->vobj_proto[0])(r38,r5);
+					r33 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
 					r5 = 0;
-					((venum**)(r7 + 1))[r5] = r34;
-					r11 = hl_types_ArrayObj_alloc(r7);
-					r11 = little_parser_Parser_mergeComplexStructures(r11);
-					if( r11 == NULL ) hl_null_access();
+					((venum**)(r7 + 1))[r5] = r33;
+					r10 = hl_types_ArrayObj_alloc(r7);
+					r10 = little_parser_Parser_mergeComplexStructures(r10);
+					if( r10 == NULL ) hl_null_access();
 					r5 = 0;
-					r10 = r11->length;
-					if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_7_926;
-					r34 = NULL;
-					goto label$96e09ea_7_932;
-					label$96e09ea_7_926:
-					r7 = r11->array;
+					r9 = r10->length;
+					if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_7_854;
+					r33 = NULL;
+					goto label$96e09ea_7_857;
+					label$96e09ea_7_854:
+					r7 = r10->array;
 					r3 = ((vdynamic**)(r7 + 1))[r5];
-					r34 = (venum*)r3;
-					r35 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-					if( r34 == r35 ) goto label$96e09ea_7_932;
-					hl_assert();
-					label$96e09ea_7_932:
-					r27 = r34;
-					goto label$96e09ea_7_935;
-					label$96e09ea_7_934:
-					goto label$96e09ea_7_937;
+					r33 = (venum*)r3;
+					label$96e09ea_7_857:
+					r27 = r33;
+					goto label$96e09ea_7_860;
+					label$96e09ea_7_859:
+					goto label$96e09ea_7_862;
 			}
-			label$96e09ea_7_935:
+			label$96e09ea_7_860:
 			++r4;
-			goto label$96e09ea_7_550;
-			label$96e09ea_7_937:
-			if( r12 ) goto label$96e09ea_7_968;
+			goto label$96e09ea_7_514;
+			label$96e09ea_7_862:
+			if( r12 ) goto label$96e09ea_7_893;
 			r18 = (little__$Little)g$_little_Little;
 			r20 = r18->runtime;
 			if( r20 == NULL ) hl_null_access();
-			r11 = r20->callStack;
-			if( r11 == NULL ) hl_null_access();
+			r10 = r20->callStack;
+			if( r10 == NULL ) hl_null_access();
 			r21 = hl_alloc_virtual(&t$vrt_f317fe3);
 			r14 = little_parser_Parser_get_module();
 			if( hl_vfields(r21)[2] ) *(String*)(hl_vfields(r21)[2]) = (String)r14; else hl_dyn_setp(r21->value,-523029465/*module*/,&t$String,r14);
@@ -3429,16 +3200,16 @@ hl__types__ArrayObj little_parser_Parser_mergeComplexStructures(hl__types__Array
 			((little_interpreter_InterpTokens_Identifier*)r23)->p0 = r14;
 			r24 = NULL;
 			r25 = NULL;
-			r37 = NULL;
+			r36 = NULL;
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_interpreter_InterpTokens,4);
 			((little_interpreter_InterpTokens_FunctionDeclaration*)tmp)->p0 = r23;
 			((little_interpreter_InterpTokens_FunctionDeclaration*)tmp)->p1 = r24;
 			((little_interpreter_InterpTokens_FunctionDeclaration*)tmp)->p2 = r25;
-			((little_interpreter_InterpTokens_FunctionDeclaration*)tmp)->p3 = r37;
+			((little_interpreter_InterpTokens_FunctionDeclaration*)tmp)->p3 = r36;
 			r23 = tmp; };
 			if( hl_vfields(r21)[3] ) *(venum**)(hl_vfields(r21)[3]) = (venum*)r23; else hl_dyn_setp(r21->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r23);
-			hl_types_ArrayObj_unshift(r11,((vdynamic*)r21));
+			hl_types_ArrayObj_unshift(r10,((vdynamic*)r21));
 			r18 = (little__$Little)g$_little_Little;
 			r20 = r18->runtime;
 			if( r20 == NULL ) hl_null_access();
@@ -3447,15 +3218,15 @@ hl__types__ArrayObj little_parser_Parser_mergeComplexStructures(hl__types__Array
 			((little_interpreter_InterpTokens_ErrorMessage*)r23)->p0 = r14;
 			r14 = (String)s$Parser;
 			r23 = little_interpreter_Runtime_throwError(r20,r23,r14);
-			r11 = NULL;
-			return r11;
-			label$96e09ea_7_968:
-			if( r26 ) goto label$96e09ea_7_1016;
+			r10 = NULL;
+			return r10;
+			label$96e09ea_7_893:
+			if( r26 ) goto label$96e09ea_7_938;
 			r18 = (little__$Little)g$_little_Little;
 			r20 = r18->runtime;
 			if( r20 == NULL ) hl_null_access();
-			r11 = r20->callStack;
-			if( r11 == NULL ) hl_null_access();
+			r10 = r20->callStack;
+			if( r10 == NULL ) hl_null_access();
 			r21 = hl_alloc_virtual(&t$vrt_f317fe3);
 			r14 = little_parser_Parser_get_module();
 			if( hl_vfields(r21)[2] ) *(String*)(hl_vfields(r21)[2]) = (String)r14; else hl_dyn_setp(r21->value,-523029465/*module*/,&t$String,r14);
@@ -3464,39 +3235,36 @@ hl__types__ArrayObj little_parser_Parser_mergeComplexStructures(hl__types__Array
 			r22 = (little__parser__$Parser)g$_little_parser_Parser;
 			r5 = r22->linePart;
 			if( hl_vfields(r21)[1] ) *(int*)(hl_vfields(r21)[1]) = (int)r5; else hl_dyn_seti(r21->value,-411357064/*linePart*/,&t$_i32,r5);
-			r9 = &t$little_parser_ParserTokens;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r12;
 			r29 = hl_types_ArrayObj_alloc(r7);
 			r29 = little_interpreter_Interpreter_convert(r29);
 			if( r29 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r29->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_7_995;
+			r9 = r29->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_7_920;
 			r23 = NULL;
-			goto label$96e09ea_7_1001;
-			label$96e09ea_7_995:
+			goto label$96e09ea_7_923;
+			label$96e09ea_7_920:
 			r7 = r29->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r23 = (venum*)r3;
-			r24 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_interpreter_InterpTokens);
-			if( r23 == r24 ) goto label$96e09ea_7_1001;
-			hl_assert();
-			label$96e09ea_7_1001:
+			label$96e09ea_7_923:
 			r24 = NULL;
 			r25 = NULL;
-			r37 = NULL;
+			r36 = NULL;
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_interpreter_InterpTokens,4);
 			((little_interpreter_InterpTokens_FunctionDeclaration*)tmp)->p0 = r23;
 			((little_interpreter_InterpTokens_FunctionDeclaration*)tmp)->p1 = r24;
 			((little_interpreter_InterpTokens_FunctionDeclaration*)tmp)->p2 = r25;
-			((little_interpreter_InterpTokens_FunctionDeclaration*)tmp)->p3 = r37;
+			((little_interpreter_InterpTokens_FunctionDeclaration*)tmp)->p3 = r36;
 			r23 = tmp; };
 			if( hl_vfields(r21)[3] ) *(venum**)(hl_vfields(r21)[3]) = (venum*)r23; else hl_dyn_setp(r21->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r23);
-			hl_types_ArrayObj_unshift(r11,((vdynamic*)r21));
+			hl_types_ArrayObj_unshift(r10,((vdynamic*)r21));
 			r18 = (little__$Little)g$_little_Little;
 			r20 = r18->runtime;
 			if( r20 == NULL ) hl_null_access();
@@ -3505,9 +3273,9 @@ hl__types__ArrayObj little_parser_Parser_mergeComplexStructures(hl__types__Array
 			((little_interpreter_InterpTokens_ErrorMessage*)r23)->p0 = r14;
 			r14 = (String)s$Parser;
 			r23 = little_interpreter_Runtime_throwError(r20,r23,r14);
-			r11 = NULL;
-			return r11;
-			label$96e09ea_7_1016:
+			r10 = NULL;
+			return r10;
+			label$96e09ea_7_938:
 			if( r2 == NULL ) hl_null_access();
 			r28 = hl_alloc_enum(&t$little_parser_ParserTokens,4);
 			((little_parser_ParserTokens_Function*)r28)->p0 = r12;
@@ -3517,28 +3285,28 @@ hl__types__ArrayObj little_parser_Parser_mergeComplexStructures(hl__types__Array
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r28));
 			r28 = NULL;
 			r6 = r28;
-			goto label$96e09ea_7_1276;
-			label$96e09ea_7_1022:
+			goto label$96e09ea_7_1180;
+			label$96e09ea_7_944:
 			r18 = (little__$Little)g$_little_Little;
 			r17 = r18->keywords;
 			if( r17 == NULL ) hl_null_access();
 			r16 = r17->FUNCTION_RETURN;
-			if( r13 == r16 || (r13 && r16 && String___compare(r13,(vdynamic*)r16) == 0) ) goto label$96e09ea_7_1029;
-			r36 = false;
-			goto label$96e09ea_7_1030;
-			label$96e09ea_7_1029:
-			r36 = true;
-			label$96e09ea_7_1030:
-			r42 = true;
-			if( r36 != r42 ) goto label$96e09ea_7_1172;
+			if( r13 == r16 || (r13 && r16 && String___compare(r13,(vdynamic*)r16) == 0) ) goto label$96e09ea_7_951;
+			r35 = false;
+			goto label$96e09ea_7_952;
+			label$96e09ea_7_951:
+			r35 = true;
+			label$96e09ea_7_952:
+			r40 = true;
+			if( r35 != r40 ) goto label$96e09ea_7_1082;
 			++r4;
-			r10 = r0->length;
-			if( r4 < r10 ) goto label$96e09ea_7_1063;
+			r9 = r0->length;
+			if( r4 < r9 ) goto label$96e09ea_7_985;
 			r18 = (little__$Little)g$_little_Little;
 			r20 = r18->runtime;
 			if( r20 == NULL ) hl_null_access();
-			r11 = r20->callStack;
-			if( r11 == NULL ) hl_null_access();
+			r10 = r20->callStack;
+			if( r10 == NULL ) hl_null_access();
 			r21 = hl_alloc_virtual(&t$vrt_f317fe3);
 			r14 = little_parser_Parser_get_module();
 			if( hl_vfields(r21)[2] ) *(String*)(hl_vfields(r21)[2]) = (String)r14; else hl_dyn_setp(r21->value,-523029465/*module*/,&t$String,r14);
@@ -3557,7 +3325,7 @@ hl__types__ArrayObj little_parser_Parser_mergeComplexStructures(hl__types__Array
 			((little_interpreter_InterpTokens_FunctionReturn*)tmp)->p1 = r24;
 			r23 = tmp; };
 			if( hl_vfields(r21)[3] ) *(venum**)(hl_vfields(r21)[3]) = (venum*)r23; else hl_dyn_setp(r21->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r23);
-			hl_types_ArrayObj_unshift(r11,((vdynamic*)r21));
+			hl_types_ArrayObj_unshift(r10,((vdynamic*)r21));
 			r18 = (little__$Little)g$_little_Little;
 			r20 = r18->runtime;
 			if( r20 == NULL ) hl_null_access();
@@ -3566,29 +3334,26 @@ hl__types__ArrayObj little_parser_Parser_mergeComplexStructures(hl__types__Array
 			((little_interpreter_InterpTokens_ErrorMessage*)r23)->p0 = r14;
 			r14 = (String)s$Parser;
 			r23 = little_interpreter_Runtime_throwError(r20,r23,r14);
-			r11 = NULL;
-			return r11;
-			label$96e09ea_7_1063:
-			r9 = &t$little_parser_ParserTokens;
+			r10 = NULL;
+			return r10;
+			label$96e09ea_7_985:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 0;
-			r7 = hl_alloc_array(r9,r5);
-			r11 = hl_types_ArrayObj_alloc(r7);
-			label$96e09ea_7_1067:
+			r7 = hl_alloc_array(r8,r5);
+			r10 = hl_types_ArrayObj_alloc(r7);
+			label$96e09ea_7_989:
 			if( r0 == NULL ) hl_null_access();
-			r10 = r0->length;
-			if( r4 >= r10 ) goto label$96e09ea_7_1148;
-			r10 = r0->length;
-			if( ((unsigned)r4) < ((unsigned)r10) ) goto label$96e09ea_7_1075;
+			r9 = r0->length;
+			if( r4 >= r9 ) goto label$96e09ea_7_1061;
+			r9 = r0->length;
+			if( ((unsigned)r4) < ((unsigned)r9) ) goto label$96e09ea_7_997;
 			r12 = NULL;
-			goto label$96e09ea_7_1081;
-			label$96e09ea_7_1075:
+			goto label$96e09ea_7_1000;
+			label$96e09ea_7_997:
 			r7 = r0->array;
 			r3 = ((vdynamic**)(r7 + 1))[r4];
 			r12 = (venum*)r3;
-			r26 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r12 == r26 ) goto label$96e09ea_7_1081;
-			hl_assert();
-			label$96e09ea_7_1081:
+			label$96e09ea_7_1000:
 			if( r12 == NULL ) hl_null_access();
 			r5 = HL__ENUM_INDEX__(r12);
 			switch(r5) {
@@ -3602,118 +3367,109 @@ hl__types__ArrayObj little_parser_Parser_mergeComplexStructures(hl__types__Array
 				case 9:
 				case 10:
 				case 11:
-					if( r11 == NULL ) hl_null_access();
-					r5 = hl_types_ArrayObj_push(r11,((vdynamic*)r12));
-					goto label$96e09ea_7_1146;
+					if( r10 == NULL ) hl_null_access();
+					r5 = hl_types_ArrayObj_push(r10,((vdynamic*)r12));
+					goto label$96e09ea_7_1059;
 				case 0:
 					r5 = ((little_parser_ParserTokens_SetLine*)r12)->p0;
 					--r4;
-					goto label$96e09ea_7_1148;
+					goto label$96e09ea_7_1061;
 				case 1:
 					r14 = ((little_parser_ParserTokens_SetModule*)r12)->p0;
 					--r4;
-					goto label$96e09ea_7_1148;
+					goto label$96e09ea_7_1061;
 				case 2:
 					--r4;
-					goto label$96e09ea_7_1148;
+					goto label$96e09ea_7_1061;
 				case 12:
 					r29 = ((little_parser_ParserTokens_Expression*)r12)->p0;
 					r26 = ((little_parser_ParserTokens_Expression*)r12)->p1;
-					if( r11 == NULL ) hl_null_access();
-					r43 = little_parser_Parser_mergeComplexStructures(r29);
-					r9 = &t$little_parser_ParserTokens;
+					if( r10 == NULL ) hl_null_access();
+					r41 = little_parser_Parser_mergeComplexStructures(r29);
+					r8 = &t$little_parser_ParserTokens;
 					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
+					r7 = hl_alloc_array(r8,r5);
 					r5 = 0;
 					((venum**)(r7 + 1))[r5] = r26;
-					r44 = hl_types_ArrayObj_alloc(r7);
-					r44 = little_parser_Parser_mergeComplexStructures(r44);
-					if( r44 == NULL ) hl_null_access();
+					r42 = hl_types_ArrayObj_alloc(r7);
+					r42 = little_parser_Parser_mergeComplexStructures(r42);
+					if( r42 == NULL ) hl_null_access();
 					r5 = 0;
-					r10 = r44->length;
-					if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_7_1112;
+					r9 = r42->length;
+					if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_7_1031;
 					r27 = NULL;
-					goto label$96e09ea_7_1118;
-					label$96e09ea_7_1112:
-					r7 = r44->array;
+					goto label$96e09ea_7_1034;
+					label$96e09ea_7_1031:
+					r7 = r42->array;
 					r3 = ((vdynamic**)(r7 + 1))[r5];
 					r27 = (venum*)r3;
-					r28 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-					if( r27 == r28 ) goto label$96e09ea_7_1118;
-					hl_assert();
-					label$96e09ea_7_1118:
+					label$96e09ea_7_1034:
 					{ venum *tmp;
 					tmp = hl_alloc_enum(&t$little_parser_ParserTokens,12);
-					((little_parser_ParserTokens_Expression*)tmp)->p0 = r43;
+					((little_parser_ParserTokens_Expression*)tmp)->p0 = r41;
 					((little_parser_ParserTokens_Expression*)tmp)->p1 = r27;
 					r27 = tmp; };
-					r5 = hl_types_ArrayObj_push(r11,((vdynamic*)r27));
-					goto label$96e09ea_7_1146;
+					r5 = hl_types_ArrayObj_push(r10,((vdynamic*)r27));
+					goto label$96e09ea_7_1059;
 				case 13:
 					r29 = ((little_parser_ParserTokens_Block*)r12)->p0;
 					r26 = ((little_parser_ParserTokens_Block*)r12)->p1;
-					if( r11 == NULL ) hl_null_access();
-					r43 = little_parser_Parser_mergeComplexStructures(r29);
-					r9 = &t$little_parser_ParserTokens;
+					if( r10 == NULL ) hl_null_access();
+					r41 = little_parser_Parser_mergeComplexStructures(r29);
+					r8 = &t$little_parser_ParserTokens;
 					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
+					r7 = hl_alloc_array(r8,r5);
 					r5 = 0;
 					((venum**)(r7 + 1))[r5] = r26;
-					r44 = hl_types_ArrayObj_alloc(r7);
-					r44 = little_parser_Parser_mergeComplexStructures(r44);
-					if( r44 == NULL ) hl_null_access();
+					r42 = hl_types_ArrayObj_alloc(r7);
+					r42 = little_parser_Parser_mergeComplexStructures(r42);
+					if( r42 == NULL ) hl_null_access();
 					r5 = 0;
-					r10 = r44->length;
-					if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_7_1138;
+					r9 = r42->length;
+					if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_7_1054;
 					r27 = NULL;
-					goto label$96e09ea_7_1144;
-					label$96e09ea_7_1138:
-					r7 = r44->array;
+					goto label$96e09ea_7_1057;
+					label$96e09ea_7_1054:
+					r7 = r42->array;
 					r3 = ((vdynamic**)(r7 + 1))[r5];
 					r27 = (venum*)r3;
-					r28 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-					if( r27 == r28 ) goto label$96e09ea_7_1144;
-					hl_assert();
-					label$96e09ea_7_1144:
+					label$96e09ea_7_1057:
 					{ venum *tmp;
 					tmp = hl_alloc_enum(&t$little_parser_ParserTokens,13);
-					((little_parser_ParserTokens_Block*)tmp)->p0 = r43;
+					((little_parser_ParserTokens_Block*)tmp)->p0 = r41;
 					((little_parser_ParserTokens_Block*)tmp)->p1 = r27;
 					r27 = tmp; };
-					r5 = hl_types_ArrayObj_push(r11,((vdynamic*)r27));
+					r5 = hl_types_ArrayObj_push(r10,((vdynamic*)r27));
 			}
-			label$96e09ea_7_1146:
+			label$96e09ea_7_1059:
 			++r4;
-			goto label$96e09ea_7_1067;
-			label$96e09ea_7_1148:
+			goto label$96e09ea_7_989;
+			label$96e09ea_7_1061:
 			if( r2 == NULL ) hl_null_access();
-			if( r11 == NULL ) hl_null_access();
-			r5 = r11->length;
-			r10 = 1;
-			if( r5 != r10 ) goto label$96e09ea_7_1165;
+			if( r10 == NULL ) hl_null_access();
+			r5 = r10->length;
+			r9 = 1;
+			if( r5 != r9 ) goto label$96e09ea_7_1075;
 			r5 = 0;
-			r10 = r11->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_7_1158;
+			r9 = r10->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_7_1071;
 			r12 = NULL;
-			goto label$96e09ea_7_1164;
-			label$96e09ea_7_1158:
-			r7 = r11->array;
+			goto label$96e09ea_7_1074;
+			label$96e09ea_7_1071:
+			r7 = r10->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r12 = (venum*)r3;
-			r26 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r12 == r26 ) goto label$96e09ea_7_1164;
-			hl_assert();
-			label$96e09ea_7_1164:
-			goto label$96e09ea_7_1168;
-			label$96e09ea_7_1165:
-			r32 = hl_types_ArrayObj_copy(r11);
+			label$96e09ea_7_1074:
+			goto label$96e09ea_7_1078;
+			label$96e09ea_7_1075:
+			r32 = hl_types_ArrayObj_copy(r10);
 			r12 = NULL;
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,12);
 			((little_parser_ParserTokens_Expression*)tmp)->p0 = r32;
 			((little_parser_ParserTokens_Expression*)tmp)->p1 = r12;
 			r12 = tmp; };
-			label$96e09ea_7_1168:
+			label$96e09ea_7_1078:
 			r26 = NULL;
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,11);
@@ -3721,43 +3477,40 @@ hl__types__ArrayObj little_parser_Parser_mergeComplexStructures(hl__types__Array
 			((little_parser_ParserTokens_Return*)tmp)->p1 = r26;
 			r12 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r12));
-			goto label$96e09ea_7_1276;
-			label$96e09ea_7_1172:
+			goto label$96e09ea_7_1180;
+			label$96e09ea_7_1082:
 			++r4;
-			r39 = Type_enumParameters(((vdynamic*)r8));
-			if( r39 == NULL ) hl_null_access();
+			r38 = Type_enumParameters(((vdynamic*)r11));
+			if( r38 == NULL ) hl_null_access();
 			r5 = 0;
-			r3 = ((vdynamic* (*)(hl__types__ArrayDyn,int))r39->$type->vobj_proto[0])(r39,r5);
+			r3 = ((vdynamic* (*)(hl__types__ArrayDyn,int))r38->$type->vobj_proto[0])(r38,r5);
 			r14 = (String)hl_dyn_castp(&r3,&t$_dyn,&t$String);
 			r12 = hl_alloc_enum(&t$little_parser_ParserTokens,8);
 			((little_parser_ParserTokens_Identifier*)r12)->p0 = r14;
 			r26 = NULL;
 			r27 = NULL;
-			r10 = 1;
-			r5 = r4 - r10;
-			label$96e09ea_7_1183:
-			if( r27 ) goto label$96e09ea_7_1266;
+			r9 = 1;
+			r5 = r4 - r9;
+			label$96e09ea_7_1093:
+			if( r27 ) goto label$96e09ea_7_1170;
 			if( r0 == NULL ) hl_null_access();
 			r31 = r0->length;
-			if( r4 < r31 ) goto label$96e09ea_7_1190;
+			if( r4 < r31 ) goto label$96e09ea_7_1100;
 			r4 = r5;
-			goto label$96e09ea_7_1266;
-			label$96e09ea_7_1190:
+			goto label$96e09ea_7_1170;
+			label$96e09ea_7_1100:
 			r31 = r0->length;
-			if( ((unsigned)r4) < ((unsigned)r31) ) goto label$96e09ea_7_1194;
+			if( ((unsigned)r4) < ((unsigned)r31) ) goto label$96e09ea_7_1104;
 			r28 = NULL;
-			goto label$96e09ea_7_1200;
-			label$96e09ea_7_1194:
+			goto label$96e09ea_7_1107;
+			label$96e09ea_7_1104:
 			r7 = r0->array;
 			r3 = ((vdynamic**)(r7 + 1))[r4];
 			r28 = (venum*)r3;
-			r34 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r28 == r34 ) goto label$96e09ea_7_1200;
-			hl_assert();
-			label$96e09ea_7_1200:
+			label$96e09ea_7_1107:
 			if( r28 == NULL ) hl_null_access();
-			r10 = HL__ENUM_INDEX__(r28);
-			switch(r10) {
+			r9 = HL__ENUM_INDEX__(r28);
+			switch(r9) {
 				default:
 				case 3:
 				case 4:
@@ -3768,304 +3521,283 @@ hl__types__ArrayObj little_parser_Parser_mergeComplexStructures(hl__types__Array
 				case 9:
 				case 10:
 				case 11:
-					if( !r26 ) goto label$96e09ea_7_1205;
-					if( r27 ) goto label$96e09ea_7_1207;
-					label$96e09ea_7_1205:
+					if( !r26 ) goto label$96e09ea_7_1112;
+					if( r27 ) goto label$96e09ea_7_1114;
+					label$96e09ea_7_1112:
 					r4 = r5;
-					goto label$96e09ea_7_1266;
-					label$96e09ea_7_1207:
-					goto label$96e09ea_7_1264;
+					goto label$96e09ea_7_1170;
+					label$96e09ea_7_1114:
+					goto label$96e09ea_7_1168;
 				case 0:
-					r10 = ((little_parser_ParserTokens_SetLine*)r28)->p0;
-					if( !r26 ) goto label$96e09ea_7_1212;
-					if( !r27 ) goto label$96e09ea_7_1212;
-					goto label$96e09ea_7_1266;
-					label$96e09ea_7_1212:
+					r9 = ((little_parser_ParserTokens_SetLine*)r28)->p0;
+					if( !r26 ) goto label$96e09ea_7_1119;
+					if( !r27 ) goto label$96e09ea_7_1119;
+					goto label$96e09ea_7_1170;
+					label$96e09ea_7_1119:
 					r4 = r5;
-					goto label$96e09ea_7_1266;
+					goto label$96e09ea_7_1170;
 				case 1:
 					r14 = ((little_parser_ParserTokens_SetModule*)r28)->p0;
-					if( !r26 ) goto label$96e09ea_7_1218;
-					if( !r27 ) goto label$96e09ea_7_1218;
-					goto label$96e09ea_7_1266;
-					label$96e09ea_7_1218:
+					if( !r26 ) goto label$96e09ea_7_1125;
+					if( !r27 ) goto label$96e09ea_7_1125;
+					goto label$96e09ea_7_1170;
+					label$96e09ea_7_1125:
 					r4 = r5;
-					goto label$96e09ea_7_1266;
+					goto label$96e09ea_7_1170;
 				case 2:
-					if( !r26 ) goto label$96e09ea_7_1223;
-					if( !r27 ) goto label$96e09ea_7_1223;
-					goto label$96e09ea_7_1266;
-					label$96e09ea_7_1223:
+					if( !r26 ) goto label$96e09ea_7_1130;
+					if( !r27 ) goto label$96e09ea_7_1130;
+					goto label$96e09ea_7_1170;
+					label$96e09ea_7_1130:
 					r4 = r5;
-					goto label$96e09ea_7_1266;
+					goto label$96e09ea_7_1170;
 				case 12:
-					r11 = ((little_parser_ParserTokens_Expression*)r28)->p0;
-					r34 = ((little_parser_ParserTokens_Expression*)r28)->p1;
-					if( r26 ) goto label$96e09ea_7_1232;
-					r29 = little_parser_Parser_mergeComplexStructures(r11);
-					r35 = hl_alloc_enum(&t$little_parser_ParserTokens,14);
-					((little_parser_ParserTokens_PartArray*)r35)->p0 = r29;
-					r26 = r35;
-					goto label$96e09ea_7_1235;
-					label$96e09ea_7_1232:
-					if( r27 ) goto label$96e09ea_7_1235;
+					r10 = ((little_parser_ParserTokens_Expression*)r28)->p0;
+					r33 = ((little_parser_ParserTokens_Expression*)r28)->p1;
+					if( r26 ) goto label$96e09ea_7_1139;
+					r29 = little_parser_Parser_mergeComplexStructures(r10);
+					r34 = hl_alloc_enum(&t$little_parser_ParserTokens,14);
+					((little_parser_ParserTokens_PartArray*)r34)->p0 = r29;
+					r26 = r34;
+					goto label$96e09ea_7_1142;
+					label$96e09ea_7_1139:
+					if( r27 ) goto label$96e09ea_7_1142;
 					r4 = r5;
-					goto label$96e09ea_7_1266;
-					label$96e09ea_7_1235:
-					goto label$96e09ea_7_1264;
+					goto label$96e09ea_7_1170;
+					label$96e09ea_7_1142:
+					goto label$96e09ea_7_1168;
 				case 13:
-					r11 = ((little_parser_ParserTokens_Block*)r28)->p0;
-					r34 = ((little_parser_ParserTokens_Block*)r28)->p1;
-					if( r26 ) goto label$96e09ea_7_1241;
+					r10 = ((little_parser_ParserTokens_Block*)r28)->p0;
+					r33 = ((little_parser_ParserTokens_Block*)r28)->p1;
+					if( r26 ) goto label$96e09ea_7_1148;
 					r4 = r5;
-					goto label$96e09ea_7_1266;
-					label$96e09ea_7_1241:
-					if( r27 ) goto label$96e09ea_7_1264;
-					r29 = little_parser_Parser_mergeComplexStructures(r11);
-					r9 = &t$little_parser_ParserTokens;
-					r10 = 1;
-					r7 = hl_alloc_array(r9,r10);
-					r10 = 0;
-					((venum**)(r7 + 1))[r10] = r34;
+					goto label$96e09ea_7_1170;
+					label$96e09ea_7_1148:
+					if( r27 ) goto label$96e09ea_7_1168;
+					r29 = little_parser_Parser_mergeComplexStructures(r10);
+					r8 = &t$little_parser_ParserTokens;
+					r9 = 1;
+					r7 = hl_alloc_array(r8,r9);
+					r9 = 0;
+					((venum**)(r7 + 1))[r9] = r33;
 					r32 = hl_types_ArrayObj_alloc(r7);
 					r32 = little_parser_Parser_mergeComplexStructures(r32);
 					if( r32 == NULL ) hl_null_access();
-					r10 = 0;
+					r9 = 0;
 					r31 = r32->length;
-					if( ((unsigned)r10) < ((unsigned)r31) ) goto label$96e09ea_7_1256;
-					r35 = NULL;
-					goto label$96e09ea_7_1262;
-					label$96e09ea_7_1256:
+					if( ((unsigned)r9) < ((unsigned)r31) ) goto label$96e09ea_7_1163;
+					r34 = NULL;
+					goto label$96e09ea_7_1166;
+					label$96e09ea_7_1163:
 					r7 = r32->array;
-					r3 = ((vdynamic**)(r7 + 1))[r10];
-					r35 = (venum*)r3;
-					r40 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-					if( r35 == r40 ) goto label$96e09ea_7_1262;
-					hl_assert();
-					label$96e09ea_7_1262:
+					r3 = ((vdynamic**)(r7 + 1))[r9];
+					r34 = (venum*)r3;
+					label$96e09ea_7_1166:
 					{ venum *tmp;
 					tmp = hl_alloc_enum(&t$little_parser_ParserTokens,13);
 					((little_parser_ParserTokens_Block*)tmp)->p0 = r29;
-					((little_parser_ParserTokens_Block*)tmp)->p1 = r35;
-					r35 = tmp; };
-					r27 = r35;
+					((little_parser_ParserTokens_Block*)tmp)->p1 = r34;
+					r34 = tmp; };
+					r27 = r34;
 			}
-			label$96e09ea_7_1264:
+			label$96e09ea_7_1168:
 			++r4;
-			goto label$96e09ea_7_1183;
-			label$96e09ea_7_1266:
-			if( r4 != r5 ) goto label$96e09ea_7_1270;
+			goto label$96e09ea_7_1093;
+			label$96e09ea_7_1170:
+			if( r4 != r5 ) goto label$96e09ea_7_1174;
 			if( r2 == NULL ) hl_null_access();
-			r10 = hl_types_ArrayObj_push(r2,((vdynamic*)r8));
-			goto label$96e09ea_7_1276;
-			label$96e09ea_7_1270:
+			r9 = hl_types_ArrayObj_push(r2,((vdynamic*)r11));
+			goto label$96e09ea_7_1180;
+			label$96e09ea_7_1174:
 			--r4;
 			if( r2 == NULL ) hl_null_access();
 			r28 = hl_alloc_enum(&t$little_parser_ParserTokens,5);
 			((little_parser_ParserTokens_ConditionCall*)r28)->p0 = r12;
 			((little_parser_ParserTokens_ConditionCall*)r28)->p1 = r26;
 			((little_parser_ParserTokens_ConditionCall*)r28)->p2 = r27;
-			r10 = hl_types_ArrayObj_push(r2,((vdynamic*)r28));
+			r9 = hl_types_ArrayObj_push(r2,((vdynamic*)r28));
 			r28 = NULL;
 			r6 = r28;
-			label$96e09ea_7_1276:
-			goto label$96e09ea_7_1424;
+			label$96e09ea_7_1180:
+			goto label$96e09ea_7_1310;
 		case 12:
-			r11 = ((little_parser_ParserTokens_Expression*)r8)->p0;
-			r12 = ((little_parser_ParserTokens_Expression*)r8)->p1;
+			r10 = ((little_parser_ParserTokens_Expression*)r11)->p0;
+			r12 = ((little_parser_ParserTokens_Expression*)r11)->p1;
 			if( r2 == NULL ) hl_null_access();
-			r32 = little_parser_Parser_mergeComplexStructures(r11);
-			r9 = &t$little_parser_ParserTokens;
+			r32 = little_parser_Parser_mergeComplexStructures(r10);
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r12;
-			r43 = hl_types_ArrayObj_alloc(r7);
-			r43 = little_parser_Parser_mergeComplexStructures(r43);
-			if( r43 == NULL ) hl_null_access();
+			r41 = hl_types_ArrayObj_alloc(r7);
+			r41 = little_parser_Parser_mergeComplexStructures(r41);
+			if( r41 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r43->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_7_1294;
+			r9 = r41->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_7_1198;
 			r26 = NULL;
-			goto label$96e09ea_7_1300;
-			label$96e09ea_7_1294:
-			r7 = r43->array;
+			goto label$96e09ea_7_1201;
+			label$96e09ea_7_1198:
+			r7 = r41->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r26 = (venum*)r3;
-			r27 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r26 == r27 ) goto label$96e09ea_7_1300;
-			hl_assert();
-			label$96e09ea_7_1300:
+			label$96e09ea_7_1201:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,12);
 			((little_parser_ParserTokens_Expression*)tmp)->p0 = r32;
 			((little_parser_ParserTokens_Expression*)tmp)->p1 = r26;
 			r26 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r26));
-			goto label$96e09ea_7_1424;
+			goto label$96e09ea_7_1310;
 		case 13:
-			r11 = ((little_parser_ParserTokens_Block*)r8)->p0;
-			r12 = ((little_parser_ParserTokens_Block*)r8)->p1;
+			r10 = ((little_parser_ParserTokens_Block*)r11)->p0;
+			r12 = ((little_parser_ParserTokens_Block*)r11)->p1;
 			if( r2 == NULL ) hl_null_access();
-			r32 = little_parser_Parser_mergeComplexStructures(r11);
-			r9 = &t$little_parser_ParserTokens;
+			r32 = little_parser_Parser_mergeComplexStructures(r10);
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r12;
-			r43 = hl_types_ArrayObj_alloc(r7);
-			r43 = little_parser_Parser_mergeComplexStructures(r43);
-			if( r43 == NULL ) hl_null_access();
+			r41 = hl_types_ArrayObj_alloc(r7);
+			r41 = little_parser_Parser_mergeComplexStructures(r41);
+			if( r41 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r43->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_7_1320;
+			r9 = r41->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_7_1221;
 			r26 = NULL;
-			goto label$96e09ea_7_1326;
-			label$96e09ea_7_1320:
-			r7 = r43->array;
+			goto label$96e09ea_7_1224;
+			label$96e09ea_7_1221:
+			r7 = r41->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r26 = (venum*)r3;
-			r27 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r26 == r27 ) goto label$96e09ea_7_1326;
-			hl_assert();
-			label$96e09ea_7_1326:
+			label$96e09ea_7_1224:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,13);
 			((little_parser_ParserTokens_Block*)tmp)->p0 = r32;
 			((little_parser_ParserTokens_Block*)tmp)->p1 = r26;
 			r26 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r26));
-			goto label$96e09ea_7_1424;
+			goto label$96e09ea_7_1310;
 		case 15:
-			r12 = ((little_parser_ParserTokens_PropertyAccess*)r8)->p0;
-			r26 = ((little_parser_ParserTokens_PropertyAccess*)r8)->p1;
+			r12 = ((little_parser_ParserTokens_PropertyAccess*)r11)->p0;
+			r26 = ((little_parser_ParserTokens_PropertyAccess*)r11)->p1;
 			if( r2 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r12;
 			r29 = hl_types_ArrayObj_alloc(r7);
 			r29 = little_parser_Parser_mergeComplexStructures(r29);
 			if( r29 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r29->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_7_1345;
+			r9 = r29->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_7_1243;
 			r27 = NULL;
-			goto label$96e09ea_7_1351;
-			label$96e09ea_7_1345:
+			goto label$96e09ea_7_1246;
+			label$96e09ea_7_1243:
 			r7 = r29->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r27 = (venum*)r3;
-			r28 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r27 == r28 ) goto label$96e09ea_7_1351;
-			hl_assert();
-			label$96e09ea_7_1351:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_7_1246:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r26;
 			r29 = hl_types_ArrayObj_alloc(r7);
 			r29 = little_parser_Parser_mergeComplexStructures(r29);
 			if( r29 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r29->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_7_1364;
+			r9 = r29->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_7_1259;
 			r28 = NULL;
-			goto label$96e09ea_7_1370;
-			label$96e09ea_7_1364:
+			goto label$96e09ea_7_1262;
+			label$96e09ea_7_1259:
 			r7 = r29->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r28 = (venum*)r3;
-			r34 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r28 == r34 ) goto label$96e09ea_7_1370;
-			hl_assert();
-			label$96e09ea_7_1370:
+			label$96e09ea_7_1262:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,15);
 			((little_parser_ParserTokens_PropertyAccess*)tmp)->p0 = r27;
 			((little_parser_ParserTokens_PropertyAccess*)tmp)->p1 = r28;
 			r27 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r27));
-			goto label$96e09ea_7_1424;
+			goto label$96e09ea_7_1310;
 		case 20:
-			r13 = ((little_parser_ParserTokens_Documentation*)r8)->p0;
-			r6 = r8;
-			goto label$96e09ea_7_1424;
+			r13 = ((little_parser_ParserTokens_Documentation*)r11)->p0;
+			r6 = r11;
+			goto label$96e09ea_7_1310;
 		case 25:
-			r13 = ((little_parser_ParserTokens_Custom*)r8)->p0;
-			r11 = ((little_parser_ParserTokens_Custom*)r8)->p1;
-			r9 = &t$little_parser_ParserTokens;
+			r13 = ((little_parser_ParserTokens_Custom*)r11)->p0;
+			r10 = ((little_parser_ParserTokens_Custom*)r11)->p1;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 0;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r29 = hl_types_ArrayObj_alloc(r7);
 			r5 = 0;
-			r32 = r11;
-			label$96e09ea_7_1384:
+			r32 = r10;
+			label$96e09ea_7_1276:
 			if( r32 == NULL ) hl_null_access();
 			r31 = r32->length;
-			if( r5 >= r31 ) goto label$96e09ea_7_1421;
+			if( r5 >= r31 ) goto label$96e09ea_7_1307;
 			r31 = r32->length;
-			if( ((unsigned)r5) < ((unsigned)r31) ) goto label$96e09ea_7_1392;
+			if( ((unsigned)r5) < ((unsigned)r31) ) goto label$96e09ea_7_1284;
 			r12 = NULL;
-			goto label$96e09ea_7_1398;
-			label$96e09ea_7_1392:
+			goto label$96e09ea_7_1287;
+			label$96e09ea_7_1284:
 			r7 = r32->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r12 = (venum*)r3;
-			r26 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r12 == r26 ) goto label$96e09ea_7_1398;
-			hl_assert();
-			label$96e09ea_7_1398:
+			label$96e09ea_7_1287:
 			++r5;
 			if( r29 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
-			r10 = 1;
-			r7 = hl_alloc_array(r9,r10);
-			r10 = 0;
-			((venum**)(r7 + 1))[r10] = r12;
-			r44 = hl_types_ArrayObj_alloc(r7);
-			r44 = little_parser_Parser_mergeComplexStructures(r44);
-			if( r44 == NULL ) hl_null_access();
-			r10 = 0;
-			r31 = r44->length;
-			if( ((unsigned)r10) < ((unsigned)r31) ) goto label$96e09ea_7_1413;
+			r8 = &t$little_parser_ParserTokens;
+			r9 = 1;
+			r7 = hl_alloc_array(r8,r9);
+			r9 = 0;
+			((venum**)(r7 + 1))[r9] = r12;
+			r42 = hl_types_ArrayObj_alloc(r7);
+			r42 = little_parser_Parser_mergeComplexStructures(r42);
+			if( r42 == NULL ) hl_null_access();
+			r9 = 0;
+			r31 = r42->length;
+			if( ((unsigned)r9) < ((unsigned)r31) ) goto label$96e09ea_7_1302;
 			r26 = NULL;
-			goto label$96e09ea_7_1419;
-			label$96e09ea_7_1413:
-			r7 = r44->array;
-			r3 = ((vdynamic**)(r7 + 1))[r10];
+			goto label$96e09ea_7_1305;
+			label$96e09ea_7_1302:
+			r7 = r42->array;
+			r3 = ((vdynamic**)(r7 + 1))[r9];
 			r26 = (venum*)r3;
-			r27 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r26 == r27 ) goto label$96e09ea_7_1419;
-			hl_assert();
-			label$96e09ea_7_1419:
-			r10 = hl_types_ArrayObj_push(r29,((vdynamic*)r26));
-			goto label$96e09ea_7_1384;
-			label$96e09ea_7_1421:
+			label$96e09ea_7_1305:
+			r9 = hl_types_ArrayObj_push(r29,((vdynamic*)r26));
+			goto label$96e09ea_7_1276;
+			label$96e09ea_7_1307:
 			if( r2 == NULL ) hl_null_access();
 			r12 = hl_alloc_enum(&t$little_parser_ParserTokens,25);
 			((little_parser_ParserTokens_Custom*)r12)->p0 = r13;
 			((little_parser_ParserTokens_Custom*)r12)->p1 = r29;
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r12));
 	}
-	label$96e09ea_7_1424:
+	label$96e09ea_7_1310:
 	++r4;
-	goto label$96e09ea_7_33;
-	label$96e09ea_7_1426:
+	goto label$96e09ea_7_30;
+	label$96e09ea_7_1312:
 	little_parser_Parser_resetLines();
 	return r2;
 }
 
 hl__types__ArrayObj little_parser_Parser_mergeCalls(hl__types__ArrayObj r0) {
 	String r12, r13;
-	hl__types__ArrayObj r2, r11, r17, r23, r24, r26;
-	hl_type *r9;
-	venum *r6, *r8, *r14, *r15, *r16, *r18, *r19, *r20, *r21, *r22;
+	hl__types__ArrayObj r2, r10, r17, r22, r23, r25;
+	hl_type *r8;
+	venum *r6, *r11, *r14, *r15, *r16, *r18, *r19, *r20, *r21;
 	vdynamic *r3;
 	varray *r7;
-	int r4, r5, r10, r25;
+	int r4, r5, r9, r24;
 	if( r0 ) goto label$96e09ea_8_3;
 	r2 = NULL;
 	return r2;
@@ -4073,51 +3805,45 @@ hl__types__ArrayObj little_parser_Parser_mergeCalls(hl__types__ArrayObj r0) {
 	if( r0 == NULL ) hl_null_access();
 	r4 = r0->length;
 	r5 = 1;
-	if( r4 != r5 ) goto label$96e09ea_8_27;
+	if( r4 != r5 ) goto label$96e09ea_8_24;
 	r4 = 0;
 	r5 = r0->length;
 	if( ((unsigned)r4) < ((unsigned)r5) ) goto label$96e09ea_8_12;
 	r6 = NULL;
-	goto label$96e09ea_8_18;
+	goto label$96e09ea_8_15;
 	label$96e09ea_8_12:
 	r7 = r0->array;
 	r3 = ((vdynamic**)(r7 + 1))[r4];
 	r6 = (venum*)r3;
-	r8 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-	if( r6 == r8 ) goto label$96e09ea_8_18;
-	hl_assert();
-	label$96e09ea_8_18:
-	if( r6 ) goto label$96e09ea_8_27;
-	r9 = &t$little_parser_ParserTokens;
+	label$96e09ea_8_15:
+	if( r6 ) goto label$96e09ea_8_24;
+	r8 = &t$little_parser_ParserTokens;
 	r4 = 1;
-	r7 = hl_alloc_array(r9,r4);
+	r7 = hl_alloc_array(r8,r4);
 	r6 = NULL;
 	r4 = 0;
 	((venum**)(r7 + 1))[r4] = r6;
 	r2 = hl_types_ArrayObj_alloc(r7);
 	return r2;
-	label$96e09ea_8_27:
-	r9 = &t$little_parser_ParserTokens;
+	label$96e09ea_8_24:
+	r8 = &t$little_parser_ParserTokens;
 	r4 = 0;
-	r7 = hl_alloc_array(r9,r4);
+	r7 = hl_alloc_array(r8,r4);
 	r2 = hl_types_ArrayObj_alloc(r7);
 	r4 = 0;
-	label$96e09ea_8_32:
+	label$96e09ea_8_29:
 	if( r0 == NULL ) hl_null_access();
-	r10 = r0->length;
-	if( r4 >= r10 ) goto label$96e09ea_8_503;
-	r10 = r0->length;
-	if( ((unsigned)r4) < ((unsigned)r10) ) goto label$96e09ea_8_40;
+	r9 = r0->length;
+	if( r4 >= r9 ) goto label$96e09ea_8_440;
+	r9 = r0->length;
+	if( ((unsigned)r4) < ((unsigned)r9) ) goto label$96e09ea_8_37;
 	r6 = NULL;
-	goto label$96e09ea_8_46;
-	label$96e09ea_8_40:
+	goto label$96e09ea_8_40;
+	label$96e09ea_8_37:
 	r7 = r0->array;
 	r3 = ((vdynamic**)(r7 + 1))[r4];
 	r6 = (venum*)r3;
-	r8 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-	if( r6 == r8 ) goto label$96e09ea_8_46;
-	hl_assert();
-	label$96e09ea_8_46:
+	label$96e09ea_8_40:
 	if( r6 == NULL ) hl_null_access();
 	r5 = HL__ENUM_INDEX__(r6);
 	switch(r5) {
@@ -4138,92 +3864,83 @@ hl__types__ArrayObj little_parser_Parser_mergeCalls(hl__types__ArrayObj r0) {
 		case 24:
 			if( r2 == NULL ) hl_null_access();
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
-			goto label$96e09ea_8_501;
+			goto label$96e09ea_8_438;
 		case 0:
 			r5 = ((little_parser_ParserTokens_SetLine*)r6)->p0;
 			little_parser_Parser_setLine(r5);
 			if( r2 == NULL ) hl_null_access();
-			r10 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
-			goto label$96e09ea_8_501;
+			r9 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
+			goto label$96e09ea_8_438;
 		case 1:
 			r12 = ((little_parser_ParserTokens_SetModule*)r6)->p0;
 			r13 = little_parser_Parser_set_module(r12);
 			if( r2 == NULL ) hl_null_access();
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
-			goto label$96e09ea_8_501;
+			goto label$96e09ea_8_438;
 		case 2:
 			little_parser_Parser_nextPart();
 			if( r2 == NULL ) hl_null_access();
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
-			goto label$96e09ea_8_501;
+			goto label$96e09ea_8_438;
 		case 3:
-			r8 = ((little_parser_ParserTokens_Variable*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_Variable*)r6)->p0;
 			r14 = ((little_parser_ParserTokens_Variable*)r6)->p1;
 			r15 = ((little_parser_ParserTokens_Variable*)r6)->p2;
 			if( r2 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeCalls(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_8_83;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_8_77;
 			r16 = NULL;
-			goto label$96e09ea_8_89;
-			label$96e09ea_8_83:
+			goto label$96e09ea_8_80;
+			label$96e09ea_8_77:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r16 = (venum*)r3;
-			r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r16 == r18 ) goto label$96e09ea_8_89;
-			hl_assert();
-			label$96e09ea_8_89:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_8_80:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r14;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeCalls(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_8_102;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_8_93;
 			r18 = NULL;
-			goto label$96e09ea_8_108;
-			label$96e09ea_8_102:
+			goto label$96e09ea_8_96;
+			label$96e09ea_8_93:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r18 = (venum*)r3;
-			r19 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r18 == r19 ) goto label$96e09ea_8_108;
-			hl_assert();
-			label$96e09ea_8_108:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_8_96:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r15;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeCalls(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_8_121;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_8_109;
 			r19 = NULL;
-			goto label$96e09ea_8_127;
-			label$96e09ea_8_121:
+			goto label$96e09ea_8_112;
+			label$96e09ea_8_109:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r19 = (venum*)r3;
-			r20 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r19 == r20 ) goto label$96e09ea_8_127;
-			hl_assert();
-			label$96e09ea_8_127:
+			label$96e09ea_8_112:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,3);
 			((little_parser_ParserTokens_Variable*)tmp)->p0 = r16;
@@ -4231,97 +3948,85 @@ hl__types__ArrayObj little_parser_Parser_mergeCalls(hl__types__ArrayObj r0) {
 			((little_parser_ParserTokens_Variable*)tmp)->p2 = r19;
 			r16 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r16));
-			goto label$96e09ea_8_501;
+			goto label$96e09ea_8_438;
 		case 4:
-			r8 = ((little_parser_ParserTokens_Function*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_Function*)r6)->p0;
 			r14 = ((little_parser_ParserTokens_Function*)r6)->p1;
 			r15 = ((little_parser_ParserTokens_Function*)r6)->p2;
 			r16 = ((little_parser_ParserTokens_Function*)r6)->p3;
 			if( r2 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeCalls(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_8_148;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_8_133;
 			r18 = NULL;
-			goto label$96e09ea_8_154;
-			label$96e09ea_8_148:
+			goto label$96e09ea_8_136;
+			label$96e09ea_8_133:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r18 = (venum*)r3;
-			r19 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r18 == r19 ) goto label$96e09ea_8_154;
-			hl_assert();
-			label$96e09ea_8_154:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_8_136:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r14;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeCalls(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_8_167;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_8_149;
 			r19 = NULL;
-			goto label$96e09ea_8_173;
-			label$96e09ea_8_167:
+			goto label$96e09ea_8_152;
+			label$96e09ea_8_149:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r19 = (venum*)r3;
-			r20 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r19 == r20 ) goto label$96e09ea_8_173;
-			hl_assert();
-			label$96e09ea_8_173:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_8_152:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r15;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeCalls(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_8_186;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_8_165;
 			r20 = NULL;
-			goto label$96e09ea_8_192;
-			label$96e09ea_8_186:
+			goto label$96e09ea_8_168;
+			label$96e09ea_8_165:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r20 = (venum*)r3;
-			r21 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r20 == r21 ) goto label$96e09ea_8_192;
-			hl_assert();
-			label$96e09ea_8_192:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_8_168:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r16;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeCalls(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_8_205;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_8_181;
 			r21 = NULL;
-			goto label$96e09ea_8_211;
-			label$96e09ea_8_205:
+			goto label$96e09ea_8_184;
+			label$96e09ea_8_181:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r21 = (venum*)r3;
-			r22 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r21 == r22 ) goto label$96e09ea_8_211;
-			hl_assert();
-			label$96e09ea_8_211:
+			label$96e09ea_8_184:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,4);
 			((little_parser_ParserTokens_Function*)tmp)->p0 = r18;
@@ -4330,75 +4035,66 @@ hl__types__ArrayObj little_parser_Parser_mergeCalls(hl__types__ArrayObj r0) {
 			((little_parser_ParserTokens_Function*)tmp)->p3 = r21;
 			r18 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r18));
-			goto label$96e09ea_8_501;
+			goto label$96e09ea_8_438;
 		case 5:
-			r8 = ((little_parser_ParserTokens_ConditionCall*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_ConditionCall*)r6)->p0;
 			r14 = ((little_parser_ParserTokens_ConditionCall*)r6)->p1;
 			r15 = ((little_parser_ParserTokens_ConditionCall*)r6)->p2;
 			if( r2 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeCalls(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_8_231;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_8_204;
 			r16 = NULL;
-			goto label$96e09ea_8_237;
-			label$96e09ea_8_231:
+			goto label$96e09ea_8_207;
+			label$96e09ea_8_204:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r16 = (venum*)r3;
-			r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r16 == r18 ) goto label$96e09ea_8_237;
-			hl_assert();
-			label$96e09ea_8_237:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_8_207:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r14;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeCalls(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_8_250;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_8_220;
 			r18 = NULL;
-			goto label$96e09ea_8_256;
-			label$96e09ea_8_250:
+			goto label$96e09ea_8_223;
+			label$96e09ea_8_220:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r18 = (venum*)r3;
-			r19 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r18 == r19 ) goto label$96e09ea_8_256;
-			hl_assert();
-			label$96e09ea_8_256:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_8_223:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r15;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeCalls(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_8_269;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_8_236;
 			r19 = NULL;
-			goto label$96e09ea_8_275;
-			label$96e09ea_8_269:
+			goto label$96e09ea_8_239;
+			label$96e09ea_8_236:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r19 = (venum*)r3;
-			r20 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r19 == r20 ) goto label$96e09ea_8_275;
-			hl_assert();
-			label$96e09ea_8_275:
+			label$96e09ea_8_239:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,5);
 			((little_parser_ParserTokens_ConditionCall*)tmp)->p0 = r16;
@@ -4406,88 +4102,79 @@ hl__types__ArrayObj little_parser_Parser_mergeCalls(hl__types__ArrayObj r0) {
 			((little_parser_ParserTokens_ConditionCall*)tmp)->p2 = r19;
 			r16 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r16));
-			goto label$96e09ea_8_501;
+			goto label$96e09ea_8_438;
 		case 11:
-			r8 = ((little_parser_ParserTokens_Return*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_Return*)r6)->p0;
 			r14 = ((little_parser_ParserTokens_Return*)r6)->p1;
 			if( r2 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeCalls(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_8_294;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_8_258;
 			r15 = NULL;
-			goto label$96e09ea_8_300;
-			label$96e09ea_8_294:
+			goto label$96e09ea_8_261;
+			label$96e09ea_8_258:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r15 = (venum*)r3;
-			r16 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r15 == r16 ) goto label$96e09ea_8_300;
-			hl_assert();
-			label$96e09ea_8_300:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_8_261:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r14;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeCalls(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_8_313;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_8_274;
 			r16 = NULL;
-			goto label$96e09ea_8_319;
-			label$96e09ea_8_313:
+			goto label$96e09ea_8_277;
+			label$96e09ea_8_274:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r16 = (venum*)r3;
-			r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r16 == r18 ) goto label$96e09ea_8_319;
-			hl_assert();
-			label$96e09ea_8_319:
+			label$96e09ea_8_277:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,11);
 			((little_parser_ParserTokens_Return*)tmp)->p0 = r15;
 			((little_parser_ParserTokens_Return*)tmp)->p1 = r16;
 			r15 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r15));
-			goto label$96e09ea_8_501;
+			goto label$96e09ea_8_438;
 		case 12:
-			r11 = ((little_parser_ParserTokens_Expression*)r6)->p0;
-			r8 = ((little_parser_ParserTokens_Expression*)r6)->p1;
-			r17 = little_parser_Parser_mergeCalls(r11);
-			r11 = r17;
-			r10 = 0;
-			if( r4 != r10 ) goto label$96e09ea_8_332;
+			r10 = ((little_parser_ParserTokens_Expression*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_Expression*)r6)->p1;
+			r17 = little_parser_Parser_mergeCalls(r10);
+			r10 = r17;
+			r9 = 0;
+			if( r4 != r9 ) goto label$96e09ea_8_290;
 			if( r2 == NULL ) hl_null_access();
 			r14 = hl_alloc_enum(&t$little_parser_ParserTokens,12);
-			((little_parser_ParserTokens_Expression*)r14)->p0 = r11;
-			((little_parser_ParserTokens_Expression*)r14)->p1 = r8;
+			((little_parser_ParserTokens_Expression*)r14)->p0 = r10;
+			((little_parser_ParserTokens_Expression*)r14)->p1 = r11;
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r14));
-			goto label$96e09ea_8_376;
-			label$96e09ea_8_332:
-			r10 = 1;
-			r5 = r4 - r10;
-			r10 = r0->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_8_338;
+			goto label$96e09ea_8_328;
+			label$96e09ea_8_290:
+			r9 = 1;
+			r5 = r4 - r9;
+			r9 = r0->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_8_296;
 			r14 = NULL;
-			goto label$96e09ea_8_344;
-			label$96e09ea_8_338:
+			goto label$96e09ea_8_299;
+			label$96e09ea_8_296:
 			r7 = r0->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r14 = (venum*)r3;
-			r15 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r14 == r15 ) goto label$96e09ea_8_344;
-			hl_assert();
-			label$96e09ea_8_344:
+			label$96e09ea_8_299:
 			if( r14 == NULL ) hl_null_access();
 			r5 = HL__ENUM_INDEX__(r14);
 			switch(r5) {
@@ -4508,224 +4195,205 @@ hl__types__ArrayObj little_parser_Parser_mergeCalls(hl__types__ArrayObj r0) {
 					if( r2 == NULL ) hl_null_access();
 					r3 = hl_types_ArrayObj_pop(r2);
 					r15 = (venum*)r3;
-					r16 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-					if( r15 == r16 ) goto label$96e09ea_8_353;
-					hl_assert();
-					label$96e09ea_8_353:
 					r16 = hl_alloc_enum(&t$little_parser_ParserTokens,14);
-					((little_parser_ParserTokens_PartArray*)r16)->p0 = r11;
+					((little_parser_ParserTokens_PartArray*)r16)->p0 = r10;
 					r6 = r16;
 					r16 = hl_alloc_enum(&t$little_parser_ParserTokens,10);
 					((little_parser_ParserTokens_FunctionCall*)r16)->p0 = r15;
 					((little_parser_ParserTokens_FunctionCall*)r16)->p1 = r6;
 					r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r16));
-					goto label$96e09ea_8_376;
+					goto label$96e09ea_8_328;
 				case 0:
 					r5 = ((little_parser_ParserTokens_SetLine*)r14)->p0;
 					if( r2 == NULL ) hl_null_access();
 					r15 = hl_alloc_enum(&t$little_parser_ParserTokens,12);
-					((little_parser_ParserTokens_Expression*)r15)->p0 = r11;
-					((little_parser_ParserTokens_Expression*)r15)->p1 = r8;
-					r10 = hl_types_ArrayObj_push(r2,((vdynamic*)r15));
-					goto label$96e09ea_8_376;
+					((little_parser_ParserTokens_Expression*)r15)->p0 = r10;
+					((little_parser_ParserTokens_Expression*)r15)->p1 = r11;
+					r9 = hl_types_ArrayObj_push(r2,((vdynamic*)r15));
+					goto label$96e09ea_8_328;
 				case 1:
 					r12 = ((little_parser_ParserTokens_SetModule*)r14)->p0;
 					if( r2 == NULL ) hl_null_access();
 					r15 = hl_alloc_enum(&t$little_parser_ParserTokens,12);
-					((little_parser_ParserTokens_Expression*)r15)->p0 = r11;
-					((little_parser_ParserTokens_Expression*)r15)->p1 = r8;
+					((little_parser_ParserTokens_Expression*)r15)->p0 = r10;
+					((little_parser_ParserTokens_Expression*)r15)->p1 = r11;
 					r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r15));
-					goto label$96e09ea_8_376;
+					goto label$96e09ea_8_328;
 				case 2:
 					if( r2 == NULL ) hl_null_access();
 					r15 = hl_alloc_enum(&t$little_parser_ParserTokens,12);
-					((little_parser_ParserTokens_Expression*)r15)->p0 = r11;
-					((little_parser_ParserTokens_Expression*)r15)->p1 = r8;
+					((little_parser_ParserTokens_Expression*)r15)->p0 = r10;
+					((little_parser_ParserTokens_Expression*)r15)->p1 = r11;
 					r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r15));
-					goto label$96e09ea_8_376;
+					goto label$96e09ea_8_328;
 				case 16:
 					r12 = ((little_parser_ParserTokens_Sign*)r14)->p0;
 					if( r2 == NULL ) hl_null_access();
 					r15 = hl_alloc_enum(&t$little_parser_ParserTokens,12);
-					((little_parser_ParserTokens_Expression*)r15)->p0 = r11;
-					((little_parser_ParserTokens_Expression*)r15)->p1 = r8;
+					((little_parser_ParserTokens_Expression*)r15)->p0 = r10;
+					((little_parser_ParserTokens_Expression*)r15)->p1 = r11;
 					r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r15));
 			}
-			label$96e09ea_8_376:
-			goto label$96e09ea_8_501;
+			label$96e09ea_8_328:
+			goto label$96e09ea_8_438;
 		case 13:
-			r11 = ((little_parser_ParserTokens_Block*)r6)->p0;
-			r8 = ((little_parser_ParserTokens_Block*)r6)->p1;
+			r10 = ((little_parser_ParserTokens_Block*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_Block*)r6)->p1;
 			if( r2 == NULL ) hl_null_access();
-			r23 = little_parser_Parser_mergeCalls(r11);
-			r9 = &t$little_parser_ParserTokens;
+			r22 = little_parser_Parser_mergeCalls(r10);
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
-			r24 = hl_types_ArrayObj_alloc(r7);
-			r24 = little_parser_Parser_mergeCalls(r24);
-			if( r24 == NULL ) hl_null_access();
+			((venum**)(r7 + 1))[r5] = r11;
+			r23 = hl_types_ArrayObj_alloc(r7);
+			r23 = little_parser_Parser_mergeCalls(r23);
+			if( r23 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r24->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_8_394;
+			r9 = r23->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_8_346;
 			r14 = NULL;
-			goto label$96e09ea_8_400;
-			label$96e09ea_8_394:
-			r7 = r24->array;
+			goto label$96e09ea_8_349;
+			label$96e09ea_8_346:
+			r7 = r23->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r14 = (venum*)r3;
-			r15 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r14 == r15 ) goto label$96e09ea_8_400;
-			hl_assert();
-			label$96e09ea_8_400:
+			label$96e09ea_8_349:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,13);
-			((little_parser_ParserTokens_Block*)tmp)->p0 = r23;
+			((little_parser_ParserTokens_Block*)tmp)->p0 = r22;
 			((little_parser_ParserTokens_Block*)tmp)->p1 = r14;
 			r14 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r14));
-			goto label$96e09ea_8_501;
+			goto label$96e09ea_8_438;
 		case 14:
-			r11 = ((little_parser_ParserTokens_PartArray*)r6)->p0;
+			r10 = ((little_parser_ParserTokens_PartArray*)r6)->p0;
 			if( r2 == NULL ) hl_null_access();
-			r23 = little_parser_Parser_mergeCalls(r11);
-			r8 = hl_alloc_enum(&t$little_parser_ParserTokens,14);
-			((little_parser_ParserTokens_PartArray*)r8)->p0 = r23;
-			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r8));
-			goto label$96e09ea_8_501;
+			r22 = little_parser_Parser_mergeCalls(r10);
+			r11 = hl_alloc_enum(&t$little_parser_ParserTokens,14);
+			((little_parser_ParserTokens_PartArray*)r11)->p0 = r22;
+			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r11));
+			goto label$96e09ea_8_438;
 		case 15:
-			r8 = ((little_parser_ParserTokens_PropertyAccess*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_PropertyAccess*)r6)->p0;
 			r14 = ((little_parser_ParserTokens_PropertyAccess*)r6)->p1;
 			if( r2 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeCalls(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_8_425;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_8_374;
 			r15 = NULL;
-			goto label$96e09ea_8_431;
-			label$96e09ea_8_425:
+			goto label$96e09ea_8_377;
+			label$96e09ea_8_374:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r15 = (venum*)r3;
-			r16 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r15 == r16 ) goto label$96e09ea_8_431;
-			hl_assert();
-			label$96e09ea_8_431:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_8_377:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r14;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeCalls(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_8_444;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_8_390;
 			r16 = NULL;
-			goto label$96e09ea_8_450;
-			label$96e09ea_8_444:
+			goto label$96e09ea_8_393;
+			label$96e09ea_8_390:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r16 = (venum*)r3;
-			r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r16 == r18 ) goto label$96e09ea_8_450;
-			hl_assert();
-			label$96e09ea_8_450:
+			label$96e09ea_8_393:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,15);
 			((little_parser_ParserTokens_PropertyAccess*)tmp)->p0 = r15;
 			((little_parser_ParserTokens_PropertyAccess*)tmp)->p1 = r16;
 			r15 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r15));
-			goto label$96e09ea_8_501;
+			goto label$96e09ea_8_438;
 		case 25:
 			r12 = ((little_parser_ParserTokens_Custom*)r6)->p0;
-			r11 = ((little_parser_ParserTokens_Custom*)r6)->p1;
-			r9 = &t$little_parser_ParserTokens;
+			r10 = ((little_parser_ParserTokens_Custom*)r6)->p1;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 0;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r5 = 0;
-			r23 = r11;
-			label$96e09ea_8_461:
-			if( r23 == NULL ) hl_null_access();
-			r25 = r23->length;
-			if( r5 >= r25 ) goto label$96e09ea_8_498;
-			r25 = r23->length;
-			if( ((unsigned)r5) < ((unsigned)r25) ) goto label$96e09ea_8_469;
-			r8 = NULL;
-			goto label$96e09ea_8_475;
-			label$96e09ea_8_469:
-			r7 = r23->array;
+			r22 = r10;
+			label$96e09ea_8_404:
+			if( r22 == NULL ) hl_null_access();
+			r24 = r22->length;
+			if( r5 >= r24 ) goto label$96e09ea_8_435;
+			r24 = r22->length;
+			if( ((unsigned)r5) < ((unsigned)r24) ) goto label$96e09ea_8_412;
+			r11 = NULL;
+			goto label$96e09ea_8_415;
+			label$96e09ea_8_412:
+			r7 = r22->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
-			r8 = (venum*)r3;
-			r14 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r8 == r14 ) goto label$96e09ea_8_475;
-			hl_assert();
-			label$96e09ea_8_475:
+			r11 = (venum*)r3;
+			label$96e09ea_8_415:
 			++r5;
 			if( r17 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
-			r10 = 1;
-			r7 = hl_alloc_array(r9,r10);
-			r10 = 0;
-			((venum**)(r7 + 1))[r10] = r8;
-			r26 = hl_types_ArrayObj_alloc(r7);
-			r26 = little_parser_Parser_mergeCalls(r26);
-			if( r26 == NULL ) hl_null_access();
-			r10 = 0;
-			r25 = r26->length;
-			if( ((unsigned)r10) < ((unsigned)r25) ) goto label$96e09ea_8_490;
+			r8 = &t$little_parser_ParserTokens;
+			r9 = 1;
+			r7 = hl_alloc_array(r8,r9);
+			r9 = 0;
+			((venum**)(r7 + 1))[r9] = r11;
+			r25 = hl_types_ArrayObj_alloc(r7);
+			r25 = little_parser_Parser_mergeCalls(r25);
+			if( r25 == NULL ) hl_null_access();
+			r9 = 0;
+			r24 = r25->length;
+			if( ((unsigned)r9) < ((unsigned)r24) ) goto label$96e09ea_8_430;
 			r14 = NULL;
-			goto label$96e09ea_8_496;
-			label$96e09ea_8_490:
-			r7 = r26->array;
-			r3 = ((vdynamic**)(r7 + 1))[r10];
+			goto label$96e09ea_8_433;
+			label$96e09ea_8_430:
+			r7 = r25->array;
+			r3 = ((vdynamic**)(r7 + 1))[r9];
 			r14 = (venum*)r3;
-			r15 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r14 == r15 ) goto label$96e09ea_8_496;
-			hl_assert();
-			label$96e09ea_8_496:
-			r10 = hl_types_ArrayObj_push(r17,((vdynamic*)r14));
-			goto label$96e09ea_8_461;
-			label$96e09ea_8_498:
+			label$96e09ea_8_433:
+			r9 = hl_types_ArrayObj_push(r17,((vdynamic*)r14));
+			goto label$96e09ea_8_404;
+			label$96e09ea_8_435:
 			if( r2 == NULL ) hl_null_access();
-			r8 = hl_alloc_enum(&t$little_parser_ParserTokens,25);
-			((little_parser_ParserTokens_Custom*)r8)->p0 = r12;
-			((little_parser_ParserTokens_Custom*)r8)->p1 = r17;
-			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r8));
+			r11 = hl_alloc_enum(&t$little_parser_ParserTokens,25);
+			((little_parser_ParserTokens_Custom*)r11)->p0 = r12;
+			((little_parser_ParserTokens_Custom*)r11)->p1 = r17;
+			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r11));
 	}
-	label$96e09ea_8_501:
+	label$96e09ea_8_438:
 	++r4;
-	goto label$96e09ea_8_32;
-	label$96e09ea_8_503:
+	goto label$96e09ea_8_29;
+	label$96e09ea_8_440:
 	little_parser_Parser_resetLines();
 	return r2;
 }
 
 hl__types__ArrayObj little_parser_Parser_mergeWrites(hl__types__ArrayObj r0) {
 	String r12, r13;
-	vvirtual *r27;
-	little__$Little r26;
-	hl__types__ArrayObj r2, r11, r17, r23, r24, r36;
-	hl_type *r9;
-	venum *r6, *r8, *r14, *r15, *r16, *r18, *r19, *r20, *r21, *r22, *r29, *r30, *r32;
-	bool r33;
-	little__interpreter__Runtime r25;
-	hl__types__ArrayDyn r35;
-	little__parser__$Parser r28;
-	vdynamic *r3;
-	varray *r7, *r34;
-	int r4, r5, r10, r31;
+	vvirtual *r26;
+	little__$Little r25;
+	hl__types__ArrayObj r2, r10, r17, r22, r23, r33;
+	hl_type *r8;
+	venum *r6, *r11, *r14, *r15, *r16, *r18, *r19, *r20, *r21, *r28, *r29;
+	bool r31;
+	little__interpreter__Runtime r24;
+	hl__types__ArrayDyn r34;
+	little__parser__$Parser r27;
+	vdynamic *r3, *r35;
+	varray *r7, *r32;
+	int r4, r5, r9, r30;
 	if( r0 ) goto label$96e09ea_9_3;
 	r2 = NULL;
 	return r2;
@@ -4733,51 +4401,45 @@ hl__types__ArrayObj little_parser_Parser_mergeWrites(hl__types__ArrayObj r0) {
 	if( r0 == NULL ) hl_null_access();
 	r4 = r0->length;
 	r5 = 1;
-	if( r4 != r5 ) goto label$96e09ea_9_27;
+	if( r4 != r5 ) goto label$96e09ea_9_24;
 	r4 = 0;
 	r5 = r0->length;
 	if( ((unsigned)r4) < ((unsigned)r5) ) goto label$96e09ea_9_12;
 	r6 = NULL;
-	goto label$96e09ea_9_18;
+	goto label$96e09ea_9_15;
 	label$96e09ea_9_12:
 	r7 = r0->array;
 	r3 = ((vdynamic**)(r7 + 1))[r4];
 	r6 = (venum*)r3;
-	r8 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-	if( r6 == r8 ) goto label$96e09ea_9_18;
-	hl_assert();
-	label$96e09ea_9_18:
-	if( r6 ) goto label$96e09ea_9_27;
-	r9 = &t$little_parser_ParserTokens;
+	label$96e09ea_9_15:
+	if( r6 ) goto label$96e09ea_9_24;
+	r8 = &t$little_parser_ParserTokens;
 	r4 = 1;
-	r7 = hl_alloc_array(r9,r4);
+	r7 = hl_alloc_array(r8,r4);
 	r6 = NULL;
 	r4 = 0;
 	((venum**)(r7 + 1))[r4] = r6;
 	r2 = hl_types_ArrayObj_alloc(r7);
 	return r2;
-	label$96e09ea_9_27:
-	r9 = &t$little_parser_ParserTokens;
+	label$96e09ea_9_24:
+	r8 = &t$little_parser_ParserTokens;
 	r4 = 0;
-	r7 = hl_alloc_array(r9,r4);
+	r7 = hl_alloc_array(r8,r4);
 	r2 = hl_types_ArrayObj_alloc(r7);
 	r4 = 0;
-	label$96e09ea_9_32:
+	label$96e09ea_9_29:
 	if( r0 == NULL ) hl_null_access();
-	r10 = r0->length;
-	if( r4 >= r10 ) goto label$96e09ea_9_871;
-	r10 = r0->length;
-	if( ((unsigned)r4) < ((unsigned)r10) ) goto label$96e09ea_9_40;
+	r9 = r0->length;
+	if( r4 >= r9 ) goto label$96e09ea_9_825;
+	r9 = r0->length;
+	if( ((unsigned)r4) < ((unsigned)r9) ) goto label$96e09ea_9_37;
 	r6 = NULL;
-	goto label$96e09ea_9_46;
-	label$96e09ea_9_40:
+	goto label$96e09ea_9_40;
+	label$96e09ea_9_37:
 	r7 = r0->array;
 	r3 = ((vdynamic**)(r7 + 1))[r4];
 	r6 = (venum*)r3;
-	r8 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-	if( r6 == r8 ) goto label$96e09ea_9_46;
-	hl_assert();
-	label$96e09ea_9_46:
+	label$96e09ea_9_40:
 	if( r6 == NULL ) hl_null_access();
 	r5 = HL__ENUM_INDEX__(r6);
 	switch(r5) {
@@ -4793,92 +4455,83 @@ hl__types__ArrayObj little_parser_Parser_mergeWrites(hl__types__ArrayObj r0) {
 		case 24:
 			if( r2 == NULL ) hl_null_access();
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
-			goto label$96e09ea_9_869;
+			goto label$96e09ea_9_823;
 		case 0:
 			r5 = ((little_parser_ParserTokens_SetLine*)r6)->p0;
 			little_parser_Parser_setLine(r5);
 			if( r2 == NULL ) hl_null_access();
-			r10 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
-			goto label$96e09ea_9_869;
+			r9 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
+			goto label$96e09ea_9_823;
 		case 1:
 			r12 = ((little_parser_ParserTokens_SetModule*)r6)->p0;
 			r13 = little_parser_Parser_set_module(r12);
 			if( r2 == NULL ) hl_null_access();
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
-			goto label$96e09ea_9_869;
+			goto label$96e09ea_9_823;
 		case 2:
 			little_parser_Parser_nextPart();
 			if( r2 == NULL ) hl_null_access();
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
-			goto label$96e09ea_9_869;
+			goto label$96e09ea_9_823;
 		case 3:
-			r8 = ((little_parser_ParserTokens_Variable*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_Variable*)r6)->p0;
 			r14 = ((little_parser_ParserTokens_Variable*)r6)->p1;
 			r15 = ((little_parser_ParserTokens_Variable*)r6)->p2;
 			if( r2 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeWrites(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_9_83;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_9_77;
 			r16 = NULL;
-			goto label$96e09ea_9_89;
-			label$96e09ea_9_83:
+			goto label$96e09ea_9_80;
+			label$96e09ea_9_77:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r16 = (venum*)r3;
-			r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r16 == r18 ) goto label$96e09ea_9_89;
-			hl_assert();
-			label$96e09ea_9_89:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_9_80:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r14;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeWrites(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_9_102;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_9_93;
 			r18 = NULL;
-			goto label$96e09ea_9_108;
-			label$96e09ea_9_102:
+			goto label$96e09ea_9_96;
+			label$96e09ea_9_93:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r18 = (venum*)r3;
-			r19 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r18 == r19 ) goto label$96e09ea_9_108;
-			hl_assert();
-			label$96e09ea_9_108:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_9_96:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r15;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeWrites(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_9_121;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_9_109;
 			r19 = NULL;
-			goto label$96e09ea_9_127;
-			label$96e09ea_9_121:
+			goto label$96e09ea_9_112;
+			label$96e09ea_9_109:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r19 = (venum*)r3;
-			r20 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r19 == r20 ) goto label$96e09ea_9_127;
-			hl_assert();
-			label$96e09ea_9_127:
+			label$96e09ea_9_112:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,3);
 			((little_parser_ParserTokens_Variable*)tmp)->p0 = r16;
@@ -4886,97 +4539,85 @@ hl__types__ArrayObj little_parser_Parser_mergeWrites(hl__types__ArrayObj r0) {
 			((little_parser_ParserTokens_Variable*)tmp)->p2 = r19;
 			r16 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r16));
-			goto label$96e09ea_9_869;
+			goto label$96e09ea_9_823;
 		case 4:
-			r8 = ((little_parser_ParserTokens_Function*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_Function*)r6)->p0;
 			r14 = ((little_parser_ParserTokens_Function*)r6)->p1;
 			r15 = ((little_parser_ParserTokens_Function*)r6)->p2;
 			r16 = ((little_parser_ParserTokens_Function*)r6)->p3;
 			if( r2 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeWrites(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_9_148;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_9_133;
 			r18 = NULL;
-			goto label$96e09ea_9_154;
-			label$96e09ea_9_148:
+			goto label$96e09ea_9_136;
+			label$96e09ea_9_133:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r18 = (venum*)r3;
-			r19 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r18 == r19 ) goto label$96e09ea_9_154;
-			hl_assert();
-			label$96e09ea_9_154:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_9_136:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r14;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeWrites(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_9_167;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_9_149;
 			r19 = NULL;
-			goto label$96e09ea_9_173;
-			label$96e09ea_9_167:
+			goto label$96e09ea_9_152;
+			label$96e09ea_9_149:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r19 = (venum*)r3;
-			r20 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r19 == r20 ) goto label$96e09ea_9_173;
-			hl_assert();
-			label$96e09ea_9_173:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_9_152:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r15;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeWrites(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_9_186;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_9_165;
 			r20 = NULL;
-			goto label$96e09ea_9_192;
-			label$96e09ea_9_186:
+			goto label$96e09ea_9_168;
+			label$96e09ea_9_165:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r20 = (venum*)r3;
-			r21 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r20 == r21 ) goto label$96e09ea_9_192;
-			hl_assert();
-			label$96e09ea_9_192:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_9_168:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r16;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeWrites(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_9_205;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_9_181;
 			r21 = NULL;
-			goto label$96e09ea_9_211;
-			label$96e09ea_9_205:
+			goto label$96e09ea_9_184;
+			label$96e09ea_9_181:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r21 = (venum*)r3;
-			r22 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r21 == r22 ) goto label$96e09ea_9_211;
-			hl_assert();
-			label$96e09ea_9_211:
+			label$96e09ea_9_184:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,4);
 			((little_parser_ParserTokens_Function*)tmp)->p0 = r18;
@@ -4985,75 +4626,66 @@ hl__types__ArrayObj little_parser_Parser_mergeWrites(hl__types__ArrayObj r0) {
 			((little_parser_ParserTokens_Function*)tmp)->p3 = r21;
 			r18 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r18));
-			goto label$96e09ea_9_869;
+			goto label$96e09ea_9_823;
 		case 5:
-			r8 = ((little_parser_ParserTokens_ConditionCall*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_ConditionCall*)r6)->p0;
 			r14 = ((little_parser_ParserTokens_ConditionCall*)r6)->p1;
 			r15 = ((little_parser_ParserTokens_ConditionCall*)r6)->p2;
 			if( r2 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeWrites(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_9_231;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_9_204;
 			r16 = NULL;
-			goto label$96e09ea_9_237;
-			label$96e09ea_9_231:
+			goto label$96e09ea_9_207;
+			label$96e09ea_9_204:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r16 = (venum*)r3;
-			r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r16 == r18 ) goto label$96e09ea_9_237;
-			hl_assert();
-			label$96e09ea_9_237:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_9_207:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r14;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeWrites(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_9_250;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_9_220;
 			r18 = NULL;
-			goto label$96e09ea_9_256;
-			label$96e09ea_9_250:
+			goto label$96e09ea_9_223;
+			label$96e09ea_9_220:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r18 = (venum*)r3;
-			r19 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r18 == r19 ) goto label$96e09ea_9_256;
-			hl_assert();
-			label$96e09ea_9_256:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_9_223:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r15;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeWrites(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_9_269;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_9_236;
 			r19 = NULL;
-			goto label$96e09ea_9_275;
-			label$96e09ea_9_269:
+			goto label$96e09ea_9_239;
+			label$96e09ea_9_236:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r19 = (venum*)r3;
-			r20 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r19 == r20 ) goto label$96e09ea_9_275;
-			hl_assert();
-			label$96e09ea_9_275:
+			label$96e09ea_9_239:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,5);
 			((little_parser_ParserTokens_ConditionCall*)tmp)->p0 = r16;
@@ -5061,729 +4693,751 @@ hl__types__ArrayObj little_parser_Parser_mergeWrites(hl__types__ArrayObj r0) {
 			((little_parser_ParserTokens_ConditionCall*)tmp)->p2 = r19;
 			r16 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r16));
-			goto label$96e09ea_9_869;
+			goto label$96e09ea_9_823;
 		case 6:
-			r8 = ((little_parser_ParserTokens_Read*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_Read*)r6)->p0;
 			if( r2 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeWrites(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_9_293;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_9_257;
 			r14 = NULL;
-			goto label$96e09ea_9_299;
-			label$96e09ea_9_293:
+			goto label$96e09ea_9_260;
+			label$96e09ea_9_257:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r14 = (venum*)r3;
-			r15 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r14 == r15 ) goto label$96e09ea_9_299;
-			hl_assert();
-			label$96e09ea_9_299:
+			label$96e09ea_9_260:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,6);
 			((little_parser_ParserTokens_Read*)tmp)->p0 = r14;
 			r14 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r14));
-			goto label$96e09ea_9_869;
+			goto label$96e09ea_9_823;
 		case 7:
-			r11 = ((little_parser_ParserTokens_Write*)r6)->p0;
-			r8 = ((little_parser_ParserTokens_Write*)r6)->p1;
+			r10 = ((little_parser_ParserTokens_Write*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_Write*)r6)->p1;
 			if( r2 == NULL ) hl_null_access();
-			r23 = little_parser_Parser_mergeWrites(r11);
-			r9 = &t$little_parser_ParserTokens;
+			r22 = little_parser_Parser_mergeWrites(r10);
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
-			r24 = hl_types_ArrayObj_alloc(r7);
-			r24 = little_parser_Parser_mergeWrites(r24);
-			if( r24 == NULL ) hl_null_access();
+			((venum**)(r7 + 1))[r5] = r11;
+			r23 = hl_types_ArrayObj_alloc(r7);
+			r23 = little_parser_Parser_mergeWrites(r23);
+			if( r23 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r24->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_9_319;
+			r9 = r23->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_9_280;
 			r14 = NULL;
-			goto label$96e09ea_9_325;
-			label$96e09ea_9_319:
-			r7 = r24->array;
+			goto label$96e09ea_9_283;
+			label$96e09ea_9_280:
+			r7 = r23->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r14 = (venum*)r3;
-			r15 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r14 == r15 ) goto label$96e09ea_9_325;
-			hl_assert();
-			label$96e09ea_9_325:
+			label$96e09ea_9_283:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,7);
-			((little_parser_ParserTokens_Write*)tmp)->p0 = r23;
+			((little_parser_ParserTokens_Write*)tmp)->p0 = r22;
 			((little_parser_ParserTokens_Write*)tmp)->p1 = r14;
 			r14 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r14));
-			goto label$96e09ea_9_869;
+			goto label$96e09ea_9_823;
 		case 9:
-			r8 = ((little_parser_ParserTokens_TypeDeclaration*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_TypeDeclaration*)r6)->p0;
 			r14 = ((little_parser_ParserTokens_TypeDeclaration*)r6)->p1;
 			if( r2 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeWrites(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_9_344;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_9_302;
 			r15 = NULL;
-			goto label$96e09ea_9_350;
-			label$96e09ea_9_344:
+			goto label$96e09ea_9_305;
+			label$96e09ea_9_302:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r15 = (venum*)r3;
-			r16 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r15 == r16 ) goto label$96e09ea_9_350;
-			hl_assert();
-			label$96e09ea_9_350:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_9_305:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r14;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeWrites(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_9_363;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_9_318;
 			r16 = NULL;
-			goto label$96e09ea_9_369;
-			label$96e09ea_9_363:
+			goto label$96e09ea_9_321;
+			label$96e09ea_9_318:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r16 = (venum*)r3;
-			r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r16 == r18 ) goto label$96e09ea_9_369;
-			hl_assert();
-			label$96e09ea_9_369:
+			label$96e09ea_9_321:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,9);
 			((little_parser_ParserTokens_TypeDeclaration*)tmp)->p0 = r15;
 			((little_parser_ParserTokens_TypeDeclaration*)tmp)->p1 = r16;
 			r15 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r15));
-			goto label$96e09ea_9_869;
+			goto label$96e09ea_9_823;
 		case 10:
-			r8 = ((little_parser_ParserTokens_FunctionCall*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_FunctionCall*)r6)->p0;
 			r14 = ((little_parser_ParserTokens_FunctionCall*)r6)->p1;
 			if( r2 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeWrites(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_9_388;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_9_340;
 			r15 = NULL;
-			goto label$96e09ea_9_394;
-			label$96e09ea_9_388:
+			goto label$96e09ea_9_343;
+			label$96e09ea_9_340:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r15 = (venum*)r3;
-			r16 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r15 == r16 ) goto label$96e09ea_9_394;
-			hl_assert();
-			label$96e09ea_9_394:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_9_343:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r14;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeWrites(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_9_407;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_9_356;
 			r16 = NULL;
-			goto label$96e09ea_9_413;
-			label$96e09ea_9_407:
+			goto label$96e09ea_9_359;
+			label$96e09ea_9_356:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r16 = (venum*)r3;
-			r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r16 == r18 ) goto label$96e09ea_9_413;
-			hl_assert();
-			label$96e09ea_9_413:
+			label$96e09ea_9_359:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,10);
 			((little_parser_ParserTokens_FunctionCall*)tmp)->p0 = r15;
 			((little_parser_ParserTokens_FunctionCall*)tmp)->p1 = r16;
 			r15 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r15));
-			goto label$96e09ea_9_869;
+			goto label$96e09ea_9_823;
 		case 11:
-			r8 = ((little_parser_ParserTokens_Return*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_Return*)r6)->p0;
 			r14 = ((little_parser_ParserTokens_Return*)r6)->p1;
 			if( r2 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeWrites(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_9_432;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_9_378;
 			r15 = NULL;
-			goto label$96e09ea_9_438;
-			label$96e09ea_9_432:
+			goto label$96e09ea_9_381;
+			label$96e09ea_9_378:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r15 = (venum*)r3;
-			r16 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r15 == r16 ) goto label$96e09ea_9_438;
-			hl_assert();
-			label$96e09ea_9_438:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_9_381:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r14;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeWrites(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_9_451;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_9_394;
 			r16 = NULL;
-			goto label$96e09ea_9_457;
-			label$96e09ea_9_451:
+			goto label$96e09ea_9_397;
+			label$96e09ea_9_394:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r16 = (venum*)r3;
-			r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r16 == r18 ) goto label$96e09ea_9_457;
-			hl_assert();
-			label$96e09ea_9_457:
+			label$96e09ea_9_397:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,11);
 			((little_parser_ParserTokens_Return*)tmp)->p0 = r15;
 			((little_parser_ParserTokens_Return*)tmp)->p1 = r16;
 			r15 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r15));
-			goto label$96e09ea_9_869;
+			goto label$96e09ea_9_823;
 		case 12:
-			r11 = ((little_parser_ParserTokens_Expression*)r6)->p0;
-			r8 = ((little_parser_ParserTokens_Expression*)r6)->p1;
+			r10 = ((little_parser_ParserTokens_Expression*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_Expression*)r6)->p1;
 			if( r2 == NULL ) hl_null_access();
-			r23 = little_parser_Parser_mergeWrites(r11);
-			r9 = &t$little_parser_ParserTokens;
+			r22 = little_parser_Parser_mergeWrites(r10);
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
-			r24 = hl_types_ArrayObj_alloc(r7);
-			r24 = little_parser_Parser_mergeWrites(r24);
-			if( r24 == NULL ) hl_null_access();
+			((venum**)(r7 + 1))[r5] = r11;
+			r23 = hl_types_ArrayObj_alloc(r7);
+			r23 = little_parser_Parser_mergeWrites(r23);
+			if( r23 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r24->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_9_477;
+			r9 = r23->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_9_417;
 			r14 = NULL;
-			goto label$96e09ea_9_483;
-			label$96e09ea_9_477:
-			r7 = r24->array;
+			goto label$96e09ea_9_420;
+			label$96e09ea_9_417:
+			r7 = r23->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r14 = (venum*)r3;
-			r15 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r14 == r15 ) goto label$96e09ea_9_483;
-			hl_assert();
-			label$96e09ea_9_483:
+			label$96e09ea_9_420:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,12);
-			((little_parser_ParserTokens_Expression*)tmp)->p0 = r23;
+			((little_parser_ParserTokens_Expression*)tmp)->p0 = r22;
 			((little_parser_ParserTokens_Expression*)tmp)->p1 = r14;
 			r14 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r14));
-			goto label$96e09ea_9_869;
+			goto label$96e09ea_9_823;
 		case 13:
-			r11 = ((little_parser_ParserTokens_Block*)r6)->p0;
-			r8 = ((little_parser_ParserTokens_Block*)r6)->p1;
+			r10 = ((little_parser_ParserTokens_Block*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_Block*)r6)->p1;
 			if( r2 == NULL ) hl_null_access();
-			r23 = little_parser_Parser_mergeWrites(r11);
-			r9 = &t$little_parser_ParserTokens;
+			r22 = little_parser_Parser_mergeWrites(r10);
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
-			r24 = hl_types_ArrayObj_alloc(r7);
-			r24 = little_parser_Parser_mergeWrites(r24);
-			if( r24 == NULL ) hl_null_access();
+			((venum**)(r7 + 1))[r5] = r11;
+			r23 = hl_types_ArrayObj_alloc(r7);
+			r23 = little_parser_Parser_mergeWrites(r23);
+			if( r23 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r24->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_9_503;
+			r9 = r23->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_9_440;
 			r14 = NULL;
-			goto label$96e09ea_9_509;
-			label$96e09ea_9_503:
-			r7 = r24->array;
+			goto label$96e09ea_9_443;
+			label$96e09ea_9_440:
+			r7 = r23->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r14 = (venum*)r3;
-			r15 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r14 == r15 ) goto label$96e09ea_9_509;
-			hl_assert();
-			label$96e09ea_9_509:
+			label$96e09ea_9_443:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,13);
-			((little_parser_ParserTokens_Block*)tmp)->p0 = r23;
+			((little_parser_ParserTokens_Block*)tmp)->p0 = r22;
 			((little_parser_ParserTokens_Block*)tmp)->p1 = r14;
 			r14 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r14));
-			goto label$96e09ea_9_869;
+			goto label$96e09ea_9_823;
 		case 14:
-			r11 = ((little_parser_ParserTokens_PartArray*)r6)->p0;
+			r10 = ((little_parser_ParserTokens_PartArray*)r6)->p0;
 			if( r2 == NULL ) hl_null_access();
-			r23 = little_parser_Parser_mergeWrites(r11);
-			r8 = hl_alloc_enum(&t$little_parser_ParserTokens,14);
-			((little_parser_ParserTokens_PartArray*)r8)->p0 = r23;
-			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r8));
-			goto label$96e09ea_9_869;
+			r22 = little_parser_Parser_mergeWrites(r10);
+			r11 = hl_alloc_enum(&t$little_parser_ParserTokens,14);
+			((little_parser_ParserTokens_PartArray*)r11)->p0 = r22;
+			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r11));
+			goto label$96e09ea_9_823;
 		case 15:
-			r8 = ((little_parser_ParserTokens_PropertyAccess*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_PropertyAccess*)r6)->p0;
 			r14 = ((little_parser_ParserTokens_PropertyAccess*)r6)->p1;
 			if( r2 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeWrites(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_9_534;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_9_468;
 			r15 = NULL;
-			goto label$96e09ea_9_540;
-			label$96e09ea_9_534:
+			goto label$96e09ea_9_471;
+			label$96e09ea_9_468:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r15 = (venum*)r3;
-			r16 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r15 == r16 ) goto label$96e09ea_9_540;
-			hl_assert();
-			label$96e09ea_9_540:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_9_471:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r14;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeWrites(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_9_553;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_9_484;
 			r16 = NULL;
-			goto label$96e09ea_9_559;
-			label$96e09ea_9_553:
+			goto label$96e09ea_9_487;
+			label$96e09ea_9_484:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r16 = (venum*)r3;
-			r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r16 == r18 ) goto label$96e09ea_9_559;
-			hl_assert();
-			label$96e09ea_9_559:
+			label$96e09ea_9_487:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,15);
 			((little_parser_ParserTokens_PropertyAccess*)tmp)->p0 = r15;
 			((little_parser_ParserTokens_PropertyAccess*)tmp)->p1 = r16;
 			r15 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r15));
-			goto label$96e09ea_9_869;
+			goto label$96e09ea_9_823;
 		case 16:
 			r12 = ((little_parser_ParserTokens_Sign*)r6)->p0;
 			r13 = (String)s$43ec3e5;
-			if( r12 != r13 && (!r12 || !r13 || String___compare(r12,(vdynamic*)r13) != 0) ) goto label$96e09ea_9_818;
+			if( r12 != r13 && (!r12 || !r13 || String___compare(r12,(vdynamic*)r13) != 0) ) goto label$96e09ea_9_778;
 			if( r2 == NULL ) hl_null_access();
 			r5 = r2->length;
-			r10 = 0;
-			if( r5 != r10 ) goto label$96e09ea_9_596;
-			r26 = (little__$Little)g$_little_Little;
-			r25 = r26->runtime;
-			if( r25 == NULL ) hl_null_access();
-			r11 = r25->callStack;
-			if( r11 == NULL ) hl_null_access();
-			r27 = hl_alloc_virtual(&t$vrt_f317fe3);
+			r9 = 0;
+			if( r5 != r9 ) goto label$96e09ea_9_524;
+			r25 = (little__$Little)g$_little_Little;
+			r24 = r25->runtime;
+			if( r24 == NULL ) hl_null_access();
+			r10 = r24->callStack;
+			if( r10 == NULL ) hl_null_access();
+			r26 = hl_alloc_virtual(&t$vrt_f317fe3);
 			r12 = little_parser_Parser_get_module();
-			if( hl_vfields(r27)[2] ) *(String*)(hl_vfields(r27)[2]) = (String)r12; else hl_dyn_setp(r27->value,-523029465/*module*/,&t$String,r12);
+			if( hl_vfields(r26)[2] ) *(String*)(hl_vfields(r26)[2]) = (String)r12; else hl_dyn_setp(r26->value,-523029465/*module*/,&t$String,r12);
 			r5 = little_parser_Parser_get_line();
-			if( hl_vfields(r27)[0] ) *(int*)(hl_vfields(r27)[0]) = (int)r5; else hl_dyn_seti(r27->value,129177854/*line*/,&t$_i32,r5);
-			r28 = (little__parser__$Parser)g$_little_parser_Parser;
-			r5 = r28->linePart;
-			if( hl_vfields(r27)[1] ) *(int*)(hl_vfields(r27)[1]) = (int)r5; else hl_dyn_seti(r27->value,-411357064/*linePart*/,&t$_i32,r5);
+			if( hl_vfields(r26)[0] ) *(int*)(hl_vfields(r26)[0]) = (int)r5; else hl_dyn_seti(r26->value,129177854/*line*/,&t$_i32,r5);
+			r27 = (little__parser__$Parser)g$_little_parser_Parser;
+			r5 = r27->linePart;
+			if( hl_vfields(r26)[1] ) *(int*)(hl_vfields(r26)[1]) = (int)r5; else hl_dyn_seti(r26->value,-411357064/*linePart*/,&t$_i32,r5);
 			r17 = NULL;
-			r29 = NULL;
+			r28 = NULL;
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_interpreter_InterpTokens,10);
 			((little_interpreter_InterpTokens_Write*)tmp)->p0 = r17;
-			((little_interpreter_InterpTokens_Write*)tmp)->p1 = r29;
-			r29 = tmp; };
-			if( hl_vfields(r27)[3] ) *(venum**)(hl_vfields(r27)[3]) = (venum*)r29; else hl_dyn_setp(r27->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r29);
-			hl_types_ArrayObj_unshift(r11,((vdynamic*)r27));
-			r26 = (little__$Little)g$_little_Little;
-			r25 = r26->runtime;
-			if( r25 == NULL ) hl_null_access();
+			((little_interpreter_InterpTokens_Write*)tmp)->p1 = r28;
+			r28 = tmp; };
+			if( hl_vfields(r26)[3] ) *(venum**)(hl_vfields(r26)[3]) = (venum*)r28; else hl_dyn_setp(r26->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r28);
+			hl_types_ArrayObj_unshift(r10,((vdynamic*)r26));
+			r25 = (little__$Little)g$_little_Little;
+			r24 = r25->runtime;
+			if( r24 == NULL ) hl_null_access();
 			r12 = (String)s$Missing_assignee_before_;
-			r29 = hl_alloc_enum(&t$little_interpreter_InterpTokens,27);
-			((little_interpreter_InterpTokens_ErrorMessage*)r29)->p0 = r12;
+			r28 = hl_alloc_enum(&t$little_interpreter_InterpTokens,27);
+			((little_interpreter_InterpTokens_ErrorMessage*)r28)->p0 = r12;
 			r12 = (String)s$Parser;
-			r29 = little_interpreter_Runtime_throwError(r25,r29,r12);
-			r11 = NULL;
-			return r11;
-			label$96e09ea_9_596:
+			r28 = little_interpreter_Runtime_throwError(r24,r28,r12);
+			r10 = NULL;
+			return r10;
+			label$96e09ea_9_524:
 			r3 = hl_types_ArrayObj_pop(r2);
-			r8 = (venum*)r3;
-			r14 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r8 == r14 ) goto label$96e09ea_9_601;
-			hl_assert();
-			label$96e09ea_9_601:
-			r9 = &t$String;
+			r11 = (venum*)r3;
+			r8 = &t$String;
 			r5 = 0;
-			r7 = hl_alloc_array(r9,r5);
-			r11 = hl_types_ArrayObj_alloc(r7);
+			r7 = hl_alloc_array(r8,r5);
+			r10 = hl_types_ArrayObj_alloc(r7);
 			r5 = 0;
-			r9 = &t$little_tools_ParserTokensSimple;
-			r10 = 3;
-			r7 = hl_alloc_array(r9,r10);
-			r30 = (venum*)g$75148b5;
-			r10 = 0;
-			((venum**)(r7 + 1))[r10] = r30;
-			r30 = (venum*)g$03b6558;
-			r10 = 1;
-			((venum**)(r7 + 1))[r10] = r30;
-			r30 = (venum*)g$8361676;
-			r10 = 2;
-			((venum**)(r7 + 1))[r10] = r30;
+			r8 = &t$little_tools_ParserTokensSimple;
+			r9 = 3;
+			r7 = hl_alloc_array(r8,r9);
+			r29 = (venum*)g$75148b5;
+			r9 = 0;
+			((venum**)(r7 + 1))[r9] = r29;
+			r29 = (venum*)g$03b6558;
+			r9 = 1;
+			((venum**)(r7 + 1))[r9] = r29;
+			r29 = (venum*)g$8361676;
+			r9 = 2;
+			((venum**)(r7 + 1))[r9] = r29;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			if( r17 == NULL ) hl_null_access();
 			r17 = hl_types_ArrayObj_copy(r17);
-			label$96e09ea_9_621:
+			label$96e09ea_9_546:
 			if( r17 == NULL ) hl_null_access();
-			r31 = r17->length;
-			if( r5 >= r31 ) goto label$96e09ea_9_644;
-			r31 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r31) ) goto label$96e09ea_9_629;
-			r30 = NULL;
-			goto label$96e09ea_9_635;
-			label$96e09ea_9_629:
+			r30 = r17->length;
+			if( r5 >= r30 ) goto label$96e09ea_9_566;
+			r30 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r30) ) goto label$96e09ea_9_554;
+			r29 = NULL;
+			goto label$96e09ea_9_557;
+			label$96e09ea_9_554:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
-			r30 = (venum*)r3;
-			r32 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_tools_ParserTokensSimple);
-			if( r30 == r32 ) goto label$96e09ea_9_635;
-			hl_assert();
-			label$96e09ea_9_635:
+			r29 = (venum*)r3;
+			label$96e09ea_9_557:
 			++r5;
-			if( r11 == NULL ) hl_null_access();
-			r12 = Type_enumConstructor(((vdynamic*)r30));
+			if( r10 == NULL ) hl_null_access();
+			r12 = Type_enumConstructor(((vdynamic*)r29));
 			r13 = (String)s$b14a7b8;
 			r12 = little_tools_TextTools_remove(r12,r13);
 			if( r12 == NULL ) hl_null_access();
 			r12 = String_toLowerCase(r12);
-			r10 = hl_types_ArrayObj_push(r11,((vdynamic*)r12));
-			goto label$96e09ea_9_621;
-			label$96e09ea_9_644:
-			if( r11 == NULL ) hl_null_access();
-			r12 = Type_enumConstructor(((vdynamic*)r8));
+			r9 = hl_types_ArrayObj_push(r10,((vdynamic*)r12));
+			goto label$96e09ea_9_546;
+			label$96e09ea_9_566:
+			if( r10 == NULL ) hl_null_access();
+			r12 = Type_enumConstructor(((vdynamic*)r11));
 			if( r12 == NULL ) hl_null_access();
 			r12 = String_toLowerCase(r12);
-			r33 = hl_types_ArrayObj_contains(r11,((vdynamic*)r12));
-			if( !r33 ) goto label$96e09ea_9_681;
-			r26 = (little__$Little)g$_little_Little;
-			r25 = r26->runtime;
-			if( r25 == NULL ) hl_null_access();
-			r17 = r25->callStack;
+			r31 = hl_types_ArrayObj_contains(r10,((vdynamic*)r12));
+			if( !r31 ) goto label$96e09ea_9_603;
+			r25 = (little__$Little)g$_little_Little;
+			r24 = r25->runtime;
+			if( r24 == NULL ) hl_null_access();
+			r17 = r24->callStack;
 			if( r17 == NULL ) hl_null_access();
-			r27 = hl_alloc_virtual(&t$vrt_f317fe3);
+			r26 = hl_alloc_virtual(&t$vrt_f317fe3);
 			r12 = little_parser_Parser_get_module();
-			if( hl_vfields(r27)[2] ) *(String*)(hl_vfields(r27)[2]) = (String)r12; else hl_dyn_setp(r27->value,-523029465/*module*/,&t$String,r12);
+			if( hl_vfields(r26)[2] ) *(String*)(hl_vfields(r26)[2]) = (String)r12; else hl_dyn_setp(r26->value,-523029465/*module*/,&t$String,r12);
 			r5 = little_parser_Parser_get_line();
-			if( hl_vfields(r27)[0] ) *(int*)(hl_vfields(r27)[0]) = (int)r5; else hl_dyn_seti(r27->value,129177854/*line*/,&t$_i32,r5);
-			r28 = (little__parser__$Parser)g$_little_parser_Parser;
-			r5 = r28->linePart;
-			if( hl_vfields(r27)[1] ) *(int*)(hl_vfields(r27)[1]) = (int)r5; else hl_dyn_seti(r27->value,-411357064/*linePart*/,&t$_i32,r5);
-			r9 = &t$little_parser_ParserTokens;
+			if( hl_vfields(r26)[0] ) *(int*)(hl_vfields(r26)[0]) = (int)r5; else hl_dyn_seti(r26->value,129177854/*line*/,&t$_i32,r5);
+			r27 = (little__parser__$Parser)g$_little_parser_Parser;
+			r5 = r27->linePart;
+			if( hl_vfields(r26)[1] ) *(int*)(hl_vfields(r26)[1]) = (int)r5; else hl_dyn_seti(r26->value,-411357064/*linePart*/,&t$_i32,r5);
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
-			r23 = hl_types_ArrayObj_alloc(r7);
-			r23 = little_interpreter_Interpreter_convert(r23);
-			r29 = NULL;
+			((venum**)(r7 + 1))[r5] = r11;
+			r22 = hl_types_ArrayObj_alloc(r7);
+			r22 = little_interpreter_Interpreter_convert(r22);
+			r28 = NULL;
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_interpreter_InterpTokens,10);
-			((little_interpreter_InterpTokens_Write*)tmp)->p0 = r23;
-			((little_interpreter_InterpTokens_Write*)tmp)->p1 = r29;
-			r29 = tmp; };
-			if( hl_vfields(r27)[3] ) *(venum**)(hl_vfields(r27)[3]) = (venum*)r29; else hl_dyn_setp(r27->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r29);
-			hl_types_ArrayObj_unshift(r17,((vdynamic*)r27));
-			r26 = (little__$Little)g$_little_Little;
-			r25 = r26->runtime;
-			if( r25 == NULL ) hl_null_access();
+			((little_interpreter_InterpTokens_Write*)tmp)->p0 = r22;
+			((little_interpreter_InterpTokens_Write*)tmp)->p1 = r28;
+			r28 = tmp; };
+			if( hl_vfields(r26)[3] ) *(venum**)(hl_vfields(r26)[3]) = (venum*)r28; else hl_dyn_setp(r26->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r28);
+			hl_types_ArrayObj_unshift(r17,((vdynamic*)r26));
+			r25 = (little__$Little)g$_little_Little;
+			r24 = r25->runtime;
+			if( r24 == NULL ) hl_null_access();
 			r12 = (String)s$d82761e;
-			r29 = hl_alloc_enum(&t$little_interpreter_InterpTokens,27);
-			((little_interpreter_InterpTokens_ErrorMessage*)r29)->p0 = r12;
+			r28 = hl_alloc_enum(&t$little_interpreter_InterpTokens,27);
+			((little_interpreter_InterpTokens_ErrorMessage*)r28)->p0 = r12;
 			r12 = (String)s$Parser;
-			r29 = little_interpreter_Runtime_throwError(r25,r29,r12);
-			label$96e09ea_9_681:
-			r10 = 1;
-			r5 = r4 + r10;
+			r28 = little_interpreter_Runtime_throwError(r24,r28,r12);
+			label$96e09ea_9_603:
+			r9 = 1;
+			r5 = r4 + r9;
 			if( r0 == NULL ) hl_null_access();
-			r10 = r0->length;
-			if( r5 < r10 ) goto label$96e09ea_9_719;
-			r26 = (little__$Little)g$_little_Little;
-			r25 = r26->runtime;
-			if( r25 == NULL ) hl_null_access();
-			r17 = r25->callStack;
+			r9 = r0->length;
+			if( r5 < r9 ) goto label$96e09ea_9_641;
+			r25 = (little__$Little)g$_little_Little;
+			r24 = r25->runtime;
+			if( r24 == NULL ) hl_null_access();
+			r17 = r24->callStack;
 			if( r17 == NULL ) hl_null_access();
-			r27 = hl_alloc_virtual(&t$vrt_f317fe3);
+			r26 = hl_alloc_virtual(&t$vrt_f317fe3);
 			r12 = little_parser_Parser_get_module();
-			if( hl_vfields(r27)[2] ) *(String*)(hl_vfields(r27)[2]) = (String)r12; else hl_dyn_setp(r27->value,-523029465/*module*/,&t$String,r12);
+			if( hl_vfields(r26)[2] ) *(String*)(hl_vfields(r26)[2]) = (String)r12; else hl_dyn_setp(r26->value,-523029465/*module*/,&t$String,r12);
 			r5 = little_parser_Parser_get_line();
-			if( hl_vfields(r27)[0] ) *(int*)(hl_vfields(r27)[0]) = (int)r5; else hl_dyn_seti(r27->value,129177854/*line*/,&t$_i32,r5);
-			r28 = (little__parser__$Parser)g$_little_parser_Parser;
-			r5 = r28->linePart;
-			if( hl_vfields(r27)[1] ) *(int*)(hl_vfields(r27)[1]) = (int)r5; else hl_dyn_seti(r27->value,-411357064/*linePart*/,&t$_i32,r5);
-			r9 = &t$little_parser_ParserTokens;
+			if( hl_vfields(r26)[0] ) *(int*)(hl_vfields(r26)[0]) = (int)r5; else hl_dyn_seti(r26->value,129177854/*line*/,&t$_i32,r5);
+			r27 = (little__parser__$Parser)g$_little_parser_Parser;
+			r5 = r27->linePart;
+			if( hl_vfields(r26)[1] ) *(int*)(hl_vfields(r26)[1]) = (int)r5; else hl_dyn_seti(r26->value,-411357064/*linePart*/,&t$_i32,r5);
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
-			r23 = hl_types_ArrayObj_alloc(r7);
-			r23 = little_interpreter_Interpreter_convert(r23);
-			r29 = NULL;
+			((venum**)(r7 + 1))[r5] = r11;
+			r22 = hl_types_ArrayObj_alloc(r7);
+			r22 = little_interpreter_Interpreter_convert(r22);
+			r28 = NULL;
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_interpreter_InterpTokens,10);
-			((little_interpreter_InterpTokens_Write*)tmp)->p0 = r23;
-			((little_interpreter_InterpTokens_Write*)tmp)->p1 = r29;
-			r29 = tmp; };
-			if( hl_vfields(r27)[3] ) *(venum**)(hl_vfields(r27)[3]) = (venum*)r29; else hl_dyn_setp(r27->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r29);
-			hl_types_ArrayObj_unshift(r17,((vdynamic*)r27));
-			r26 = (little__$Little)g$_little_Little;
-			r25 = r26->runtime;
-			if( r25 == NULL ) hl_null_access();
+			((little_interpreter_InterpTokens_Write*)tmp)->p0 = r22;
+			((little_interpreter_InterpTokens_Write*)tmp)->p1 = r28;
+			r28 = tmp; };
+			if( hl_vfields(r26)[3] ) *(venum**)(hl_vfields(r26)[3]) = (venum*)r28; else hl_dyn_setp(r26->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r28);
+			hl_types_ArrayObj_unshift(r17,((vdynamic*)r26));
+			r25 = (little__$Little)g$_little_Little;
+			r24 = r25->runtime;
+			if( r24 == NULL ) hl_null_access();
 			r12 = (String)s$Missing_value_after_the_last_;
-			r29 = hl_alloc_enum(&t$little_interpreter_InterpTokens,27);
-			((little_interpreter_InterpTokens_ErrorMessage*)r29)->p0 = r12;
+			r28 = hl_alloc_enum(&t$little_interpreter_InterpTokens,27);
+			((little_interpreter_InterpTokens_ErrorMessage*)r28)->p0 = r12;
 			r12 = (String)s$Parser;
-			r29 = little_interpreter_Runtime_throwError(r25,r29,r12);
+			r28 = little_interpreter_Runtime_throwError(r24,r28,r12);
 			r17 = NULL;
 			return r17;
-			label$96e09ea_9_719:
-			r9 = &t$little_parser_ParserTokens;
-			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
-			r10 = 1;
-			r5 = r4 + r10;
-			r10 = r0->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_9_728;
-			r14 = NULL;
-			goto label$96e09ea_9_734;
-			label$96e09ea_9_728:
-			r34 = r0->array;
-			r3 = ((vdynamic**)(r34 + 1))[r5];
-			r14 = (venum*)r3;
-			r15 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r14 == r15 ) goto label$96e09ea_9_734;
-			hl_assert();
-			label$96e09ea_9_734:
+			label$96e09ea_9_641:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r14;
+			r7 = hl_alloc_array(r8,r5);
 			r17 = hl_types_ArrayObj_alloc(r7);
-			r17 = little_parser_Parser_mergeWrites(r17);
-			if( r17 == NULL ) hl_null_access();
-			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_9_744;
+			label$96e09ea_9_645:
+			r9 = 1;
+			r5 = r4 + r9;
+			if( r0 == NULL ) hl_null_access();
+			r9 = r0->length;
+			if( r5 >= r9 ) goto label$96e09ea_9_679;
+			r9 = 1;
+			r5 = r4 + r9;
+			r9 = r0->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_9_657;
 			r14 = NULL;
-			goto label$96e09ea_9_750;
-			label$96e09ea_9_744:
-			r7 = r17->array;
+			goto label$96e09ea_9_660;
+			label$96e09ea_9_657:
+			r7 = r0->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r14 = (venum*)r3;
-			r15 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r14 == r15 ) goto label$96e09ea_9_750;
-			hl_assert();
-			label$96e09ea_9_750:
-			r9 = &t$String;
+			label$96e09ea_9_660:
+			if( r14 == NULL ) hl_null_access();
+			r5 = HL__ENUM_INDEX__(r14);
+			switch(r5) {
+				default:
+				case 3:
+				case 4:
+				case 5:
+				case 6:
+				case 7:
+				case 8:
+				case 9:
+				case 10:
+				case 11:
+				case 12:
+				case 13:
+				case 14:
+				case 15:
+					if( r17 == NULL ) hl_null_access();
+					r5 = hl_types_ArrayObj_push(r17,((vdynamic*)r14));
+					goto label$96e09ea_9_677;
+				case 0:
+					r5 = ((little_parser_ParserTokens_SetLine*)r14)->p0;
+					goto label$96e09ea_9_679;
+				case 1:
+					r12 = ((little_parser_ParserTokens_SetModule*)r14)->p0;
+					goto label$96e09ea_9_679;
+				case 2:
+					goto label$96e09ea_9_679;
+				case 16:
+					r12 = ((little_parser_ParserTokens_Sign*)r14)->p0;
+					r13 = (String)s$43ec3e5;
+					if( r12 != r13 && (!r12 || !r13 || String___compare(r12,(vdynamic*)r13) != 0) ) goto label$96e09ea_9_675;
+					goto label$96e09ea_9_679;
+					label$96e09ea_9_675:
+					if( r17 == NULL ) hl_null_access();
+					r5 = hl_types_ArrayObj_push(r17,((vdynamic*)r14));
+			}
+			label$96e09ea_9_677:
+			++r4;
+			goto label$96e09ea_9_645;
+			label$96e09ea_9_679:
+			if( r17 == NULL ) hl_null_access();
+			r5 = r17->length;
+			r9 = 1;
+			if( r5 != r9 ) goto label$96e09ea_9_708;
+			r8 = &t$little_parser_ParserTokens;
+			r5 = 1;
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			r7 = hl_alloc_array(r9,r5);
-			r17 = hl_types_ArrayObj_alloc(r7);
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_9_691;
+			r14 = NULL;
+			goto label$96e09ea_9_694;
+			label$96e09ea_9_691:
+			r32 = r17->array;
+			r3 = ((vdynamic**)(r32 + 1))[r5];
+			r14 = (venum*)r3;
+			label$96e09ea_9_694:
 			r5 = 0;
-			r9 = &t$little_tools_ParserTokensSimple;
-			r10 = 1;
-			r7 = hl_alloc_array(r9,r10);
-			r30 = (venum*)g$1041298;
-			r10 = 0;
-			((venum**)(r7 + 1))[r10] = r30;
+			((venum**)(r7 + 1))[r5] = r14;
+			r22 = hl_types_ArrayObj_alloc(r7);
+			r22 = little_parser_Parser_mergeWrites(r22);
+			if( r22 == NULL ) hl_null_access();
+			r5 = 0;
+			r9 = r22->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_9_704;
+			r14 = NULL;
+			goto label$96e09ea_9_707;
+			label$96e09ea_9_704:
+			r7 = r22->array;
+			r3 = ((vdynamic**)(r7 + 1))[r5];
+			r14 = (venum*)r3;
+			label$96e09ea_9_707:
+			goto label$96e09ea_9_711;
+			label$96e09ea_9_708:
+			r22 = little_parser_Parser_mergeWrites(r17);
+			r14 = NULL;
+			{ venum *tmp;
+			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,12);
+			((little_parser_ParserTokens_Expression*)tmp)->p0 = r22;
+			((little_parser_ParserTokens_Expression*)tmp)->p1 = r14;
+			r14 = tmp; };
+			label$96e09ea_9_711:
+			r8 = &t$String;
+			r5 = 0;
+			r7 = hl_alloc_array(r8,r5);
+			r22 = hl_types_ArrayObj_alloc(r7);
+			r5 = 0;
+			r8 = &t$little_tools_ParserTokensSimple;
+			r9 = 1;
+			r7 = hl_alloc_array(r8,r9);
+			r29 = (venum*)g$1041298;
+			r9 = 0;
+			((venum**)(r7 + 1))[r9] = r29;
 			r23 = hl_types_ArrayObj_alloc(r7);
 			if( r23 == NULL ) hl_null_access();
 			r23 = hl_types_ArrayObj_copy(r23);
-			label$96e09ea_9_764:
+			label$96e09ea_9_725:
 			if( r23 == NULL ) hl_null_access();
-			r31 = r23->length;
-			if( r5 >= r31 ) goto label$96e09ea_9_787;
-			r31 = r23->length;
-			if( ((unsigned)r5) < ((unsigned)r31) ) goto label$96e09ea_9_772;
-			r30 = NULL;
-			goto label$96e09ea_9_778;
-			label$96e09ea_9_772:
+			r30 = r23->length;
+			if( r5 >= r30 ) goto label$96e09ea_9_745;
+			r30 = r23->length;
+			if( ((unsigned)r5) < ((unsigned)r30) ) goto label$96e09ea_9_733;
+			r29 = NULL;
+			goto label$96e09ea_9_736;
+			label$96e09ea_9_733:
 			r7 = r23->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
-			r30 = (venum*)r3;
-			r32 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_tools_ParserTokensSimple);
-			if( r30 == r32 ) goto label$96e09ea_9_778;
-			hl_assert();
-			label$96e09ea_9_778:
+			r29 = (venum*)r3;
+			label$96e09ea_9_736:
 			++r5;
-			if( r17 == NULL ) hl_null_access();
-			r12 = Type_enumConstructor(((vdynamic*)r30));
+			if( r22 == NULL ) hl_null_access();
+			r12 = Type_enumConstructor(((vdynamic*)r29));
 			r13 = (String)s$b14a7b8;
 			r12 = little_tools_TextTools_remove(r12,r13);
 			if( r12 == NULL ) hl_null_access();
 			r12 = String_toLowerCase(r12);
-			r10 = hl_types_ArrayObj_push(r17,((vdynamic*)r12));
-			goto label$96e09ea_9_764;
-			label$96e09ea_9_787:
-			if( r17 == NULL ) hl_null_access();
-			r12 = Type_enumConstructor(((vdynamic*)r8));
+			r9 = hl_types_ArrayObj_push(r22,((vdynamic*)r12));
+			goto label$96e09ea_9_725;
+			label$96e09ea_9_745:
+			if( r22 == NULL ) hl_null_access();
+			r12 = Type_enumConstructor(((vdynamic*)r11));
 			if( r12 == NULL ) hl_null_access();
 			r12 = String_toLowerCase(r12);
-			r33 = hl_types_ArrayObj_contains(r17,((vdynamic*)r12));
-			if( !r33 ) goto label$96e09ea_9_808;
-			r35 = Type_enumParameters(((vdynamic*)r8));
-			if( r35 == NULL ) hl_null_access();
+			r31 = hl_types_ArrayObj_contains(r22,((vdynamic*)r12));
+			if( !r31 ) goto label$96e09ea_9_768;
+			r34 = Type_enumParameters(((vdynamic*)r11));
+			if( r34 == NULL ) hl_null_access();
 			r5 = 0;
-			r3 = ((vdynamic* (*)(hl__types__ArrayDyn,int))r35->$type->vobj_proto[0])(r35,r5);
-			r23 = (hl__types__ArrayObj)hl_dyn_castp(&r3,&t$_dyn,&t$hl_types_ArrayObj);
-			if( r23 == NULL ) hl_null_access();
-			r35 = Type_enumParameters(((vdynamic*)r8));
-			if( r35 == NULL ) hl_null_access();
+			r3 = ((vdynamic* (*)(hl__types__ArrayDyn,int))r34->$type->vobj_proto[0])(r34,r5);
+			if( r3 == NULL ) hl_null_access();
+			r3 = (vdynamic*)hl_dyn_getp((vdynamic*)r3,174133988/*push*/,&t$_dyn);
+			if( r3 == NULL ) hl_null_access();
+			r34 = Type_enumParameters(((vdynamic*)r11));
+			if( r34 == NULL ) hl_null_access();
 			r5 = 1;
-			r3 = ((vdynamic* (*)(hl__types__ArrayDyn,int))r35->$type->vobj_proto[0])(r35,r5);
-			r5 = hl_types_ArrayObj_push(r23,r3);
+			r35 = ((vdynamic* (*)(hl__types__ArrayDyn,int))r34->$type->vobj_proto[0])(r34,r5);
+			{
+				vdynamic *args[] = {r35};
+				r3 = (vdynamic*)hl_dyn_call((vclosure*)r3,args,1);
+			}
+			r23 = (hl__types__ArrayObj)hl_dyn_castp(&r3,&t$_dyn,&t$hl_types_ArrayObj);
 			if( r2 == NULL ) hl_null_access();
 			r15 = hl_alloc_enum(&t$little_parser_ParserTokens,7);
 			((little_parser_ParserTokens_Write*)r15)->p0 = r23;
 			((little_parser_ParserTokens_Write*)r15)->p1 = r14;
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r15));
-			goto label$96e09ea_9_817;
-			label$96e09ea_9_808:
+			goto label$96e09ea_9_777;
+			label$96e09ea_9_768:
 			if( r2 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
-			r24 = hl_types_ArrayObj_alloc(r7);
+			((venum**)(r7 + 1))[r5] = r11;
+			r33 = hl_types_ArrayObj_alloc(r7);
 			r15 = hl_alloc_enum(&t$little_parser_ParserTokens,7);
-			((little_parser_ParserTokens_Write*)r15)->p0 = r24;
+			((little_parser_ParserTokens_Write*)r15)->p0 = r33;
 			((little_parser_ParserTokens_Write*)r15)->p1 = r14;
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r15));
-			label$96e09ea_9_817:
-			goto label$96e09ea_9_820;
-			label$96e09ea_9_818:
+			label$96e09ea_9_777:
+			goto label$96e09ea_9_780;
+			label$96e09ea_9_778:
 			if( r2 == NULL ) hl_null_access();
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
-			label$96e09ea_9_820:
-			goto label$96e09ea_9_869;
+			label$96e09ea_9_780:
+			goto label$96e09ea_9_823;
 		case 25:
 			r12 = ((little_parser_ParserTokens_Custom*)r6)->p0;
-			r11 = ((little_parser_ParserTokens_Custom*)r6)->p1;
-			r9 = &t$little_parser_ParserTokens;
+			r10 = ((little_parser_ParserTokens_Custom*)r6)->p1;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 0;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r5 = 0;
-			r23 = r11;
-			label$96e09ea_9_829:
-			if( r23 == NULL ) hl_null_access();
-			r31 = r23->length;
-			if( r5 >= r31 ) goto label$96e09ea_9_866;
-			r31 = r23->length;
-			if( ((unsigned)r5) < ((unsigned)r31) ) goto label$96e09ea_9_837;
-			r8 = NULL;
-			goto label$96e09ea_9_843;
-			label$96e09ea_9_837:
-			r7 = r23->array;
+			r22 = r10;
+			label$96e09ea_9_789:
+			if( r22 == NULL ) hl_null_access();
+			r30 = r22->length;
+			if( r5 >= r30 ) goto label$96e09ea_9_820;
+			r30 = r22->length;
+			if( ((unsigned)r5) < ((unsigned)r30) ) goto label$96e09ea_9_797;
+			r11 = NULL;
+			goto label$96e09ea_9_800;
+			label$96e09ea_9_797:
+			r7 = r22->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
-			r8 = (venum*)r3;
-			r14 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r8 == r14 ) goto label$96e09ea_9_843;
-			hl_assert();
-			label$96e09ea_9_843:
+			r11 = (venum*)r3;
+			label$96e09ea_9_800:
 			++r5;
 			if( r17 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
-			r10 = 1;
-			r7 = hl_alloc_array(r9,r10);
-			r10 = 0;
-			((venum**)(r7 + 1))[r10] = r8;
-			r36 = hl_types_ArrayObj_alloc(r7);
-			r36 = little_parser_Parser_mergeWrites(r36);
-			if( r36 == NULL ) hl_null_access();
-			r10 = 0;
-			r31 = r36->length;
-			if( ((unsigned)r10) < ((unsigned)r31) ) goto label$96e09ea_9_858;
+			r8 = &t$little_parser_ParserTokens;
+			r9 = 1;
+			r7 = hl_alloc_array(r8,r9);
+			r9 = 0;
+			((venum**)(r7 + 1))[r9] = r11;
+			r33 = hl_types_ArrayObj_alloc(r7);
+			r33 = little_parser_Parser_mergeWrites(r33);
+			if( r33 == NULL ) hl_null_access();
+			r9 = 0;
+			r30 = r33->length;
+			if( ((unsigned)r9) < ((unsigned)r30) ) goto label$96e09ea_9_815;
 			r14 = NULL;
-			goto label$96e09ea_9_864;
-			label$96e09ea_9_858:
-			r7 = r36->array;
-			r3 = ((vdynamic**)(r7 + 1))[r10];
+			goto label$96e09ea_9_818;
+			label$96e09ea_9_815:
+			r7 = r33->array;
+			r3 = ((vdynamic**)(r7 + 1))[r9];
 			r14 = (venum*)r3;
-			r15 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r14 == r15 ) goto label$96e09ea_9_864;
-			hl_assert();
-			label$96e09ea_9_864:
-			r10 = hl_types_ArrayObj_push(r17,((vdynamic*)r14));
-			goto label$96e09ea_9_829;
-			label$96e09ea_9_866:
+			label$96e09ea_9_818:
+			r9 = hl_types_ArrayObj_push(r17,((vdynamic*)r14));
+			goto label$96e09ea_9_789;
+			label$96e09ea_9_820:
 			if( r2 == NULL ) hl_null_access();
-			r8 = hl_alloc_enum(&t$little_parser_ParserTokens,25);
-			((little_parser_ParserTokens_Custom*)r8)->p0 = r12;
-			((little_parser_ParserTokens_Custom*)r8)->p1 = r17;
-			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r8));
+			r11 = hl_alloc_enum(&t$little_parser_ParserTokens,25);
+			((little_parser_ParserTokens_Custom*)r11)->p0 = r12;
+			((little_parser_ParserTokens_Custom*)r11)->p1 = r17;
+			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r11));
 	}
-	label$96e09ea_9_869:
+	label$96e09ea_9_823:
 	++r4;
-	goto label$96e09ea_9_32;
-	label$96e09ea_9_871:
+	goto label$96e09ea_9_29;
+	label$96e09ea_9_825:
 	return r2;
 }
 
 hl__types__ArrayObj little_parser_Parser_mergeValuesWithTypeDecls(hl__types__ArrayObj r0) {
 	String r12, r13;
-	vvirtual *r27;
-	little__$Little r26;
-	hl__types__ArrayObj r2, r10, r17, r23, r24, r33;
-	hl_type *r9;
-	venum *r6, *r8, *r14, *r15, *r16, *r18, *r19, *r20, *r21, *r22, *r29, *r30, *r31;
-	little__interpreter__Runtime r25;
-	little__parser__$Parser r28;
+	vvirtual *r26;
+	little__$Little r25;
+	hl__types__ArrayObj r2, r9, r17, r22, r23, r31;
+	hl_type *r8;
+	venum *r6, *r11, *r14, *r15, *r16, *r18, *r19, *r20, *r21, *r28, *r29;
+	little__interpreter__Runtime r24;
+	little__parser__$Parser r27;
 	vdynamic *r3;
 	varray *r7;
-	int r4, r5, r11, r32;
+	int r4, r5, r10, r30;
 	if( r0 ) goto label$96e09ea_10_3;
 	r2 = NULL;
 	return r2;
@@ -5791,53 +5445,47 @@ hl__types__ArrayObj little_parser_Parser_mergeValuesWithTypeDecls(hl__types__Arr
 	if( r0 == NULL ) hl_null_access();
 	r4 = r0->length;
 	r5 = 1;
-	if( r4 != r5 ) goto label$96e09ea_10_27;
+	if( r4 != r5 ) goto label$96e09ea_10_24;
 	r4 = 0;
 	r5 = r0->length;
 	if( ((unsigned)r4) < ((unsigned)r5) ) goto label$96e09ea_10_12;
 	r6 = NULL;
-	goto label$96e09ea_10_18;
+	goto label$96e09ea_10_15;
 	label$96e09ea_10_12:
 	r7 = r0->array;
 	r3 = ((vdynamic**)(r7 + 1))[r4];
 	r6 = (venum*)r3;
-	r8 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-	if( r6 == r8 ) goto label$96e09ea_10_18;
-	hl_assert();
-	label$96e09ea_10_18:
-	if( r6 ) goto label$96e09ea_10_27;
-	r9 = &t$little_parser_ParserTokens;
+	label$96e09ea_10_15:
+	if( r6 ) goto label$96e09ea_10_24;
+	r8 = &t$little_parser_ParserTokens;
 	r4 = 1;
-	r7 = hl_alloc_array(r9,r4);
+	r7 = hl_alloc_array(r8,r4);
 	r6 = NULL;
 	r4 = 0;
 	((venum**)(r7 + 1))[r4] = r6;
 	r2 = hl_types_ArrayObj_alloc(r7);
 	return r2;
-	label$96e09ea_10_27:
-	r9 = &t$little_parser_ParserTokens;
+	label$96e09ea_10_24:
+	r8 = &t$little_parser_ParserTokens;
 	r4 = 0;
-	r7 = hl_alloc_array(r9,r4);
+	r7 = hl_alloc_array(r8,r4);
 	r2 = hl_types_ArrayObj_alloc(r7);
 	r4 = r0->length;
 	r5 = 1;
 	r4 = r4 - r5;
-	label$96e09ea_10_34:
-	r11 = 0;
-	if( r4 < r11 ) goto label$96e09ea_10_810;
+	label$96e09ea_10_31:
+	r10 = 0;
+	if( r4 < r10 ) goto label$96e09ea_10_717;
 	if( r0 == NULL ) hl_null_access();
-	r11 = r0->length;
-	if( ((unsigned)r4) < ((unsigned)r11) ) goto label$96e09ea_10_42;
+	r10 = r0->length;
+	if( ((unsigned)r4) < ((unsigned)r10) ) goto label$96e09ea_10_39;
 	r6 = NULL;
-	goto label$96e09ea_10_48;
-	label$96e09ea_10_42:
+	goto label$96e09ea_10_42;
+	label$96e09ea_10_39:
 	r7 = r0->array;
 	r3 = ((vdynamic**)(r7 + 1))[r4];
 	r6 = (venum*)r3;
-	r8 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-	if( r6 == r8 ) goto label$96e09ea_10_48;
-	hl_assert();
-	label$96e09ea_10_48:
+	label$96e09ea_10_42:
 	if( r6 == NULL ) hl_null_access();
 	r5 = HL__ENUM_INDEX__(r6);
 	switch(r5) {
@@ -5855,92 +5503,83 @@ hl__types__ArrayObj little_parser_Parser_mergeValuesWithTypeDecls(hl__types__Arr
 		case 24:
 			if( r2 == NULL ) hl_null_access();
 			hl_types_ArrayObj_unshift(r2,((vdynamic*)r6));
-			goto label$96e09ea_10_808;
+			goto label$96e09ea_10_715;
 		case 0:
 			r5 = ((little_parser_ParserTokens_SetLine*)r6)->p0;
 			little_parser_Parser_setLine(r5);
 			if( r2 == NULL ) hl_null_access();
 			hl_types_ArrayObj_unshift(r2,((vdynamic*)r6));
-			goto label$96e09ea_10_808;
+			goto label$96e09ea_10_715;
 		case 1:
 			r12 = ((little_parser_ParserTokens_SetModule*)r6)->p0;
 			r13 = little_parser_Parser_set_module(r12);
 			if( r2 == NULL ) hl_null_access();
 			hl_types_ArrayObj_unshift(r2,((vdynamic*)r6));
-			goto label$96e09ea_10_808;
+			goto label$96e09ea_10_715;
 		case 2:
 			little_parser_Parser_nextPart();
 			if( r2 == NULL ) hl_null_access();
 			hl_types_ArrayObj_unshift(r2,((vdynamic*)r6));
-			goto label$96e09ea_10_808;
+			goto label$96e09ea_10_715;
 		case 3:
-			r8 = ((little_parser_ParserTokens_Variable*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_Variable*)r6)->p0;
 			r14 = ((little_parser_ParserTokens_Variable*)r6)->p1;
 			r15 = ((little_parser_ParserTokens_Variable*)r6)->p2;
 			if( r2 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeValuesWithTypeDecls(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r11 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r11) ) goto label$96e09ea_10_85;
+			r10 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_10_79;
 			r16 = NULL;
-			goto label$96e09ea_10_91;
-			label$96e09ea_10_85:
+			goto label$96e09ea_10_82;
+			label$96e09ea_10_79:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r16 = (venum*)r3;
-			r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r16 == r18 ) goto label$96e09ea_10_91;
-			hl_assert();
-			label$96e09ea_10_91:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_10_82:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r14;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeValuesWithTypeDecls(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r11 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r11) ) goto label$96e09ea_10_104;
+			r10 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_10_95;
 			r18 = NULL;
-			goto label$96e09ea_10_110;
-			label$96e09ea_10_104:
+			goto label$96e09ea_10_98;
+			label$96e09ea_10_95:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r18 = (venum*)r3;
-			r19 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r18 == r19 ) goto label$96e09ea_10_110;
-			hl_assert();
-			label$96e09ea_10_110:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_10_98:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r15;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeValuesWithTypeDecls(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r11 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r11) ) goto label$96e09ea_10_123;
+			r10 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_10_111;
 			r19 = NULL;
-			goto label$96e09ea_10_129;
-			label$96e09ea_10_123:
+			goto label$96e09ea_10_114;
+			label$96e09ea_10_111:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r19 = (venum*)r3;
-			r20 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r19 == r20 ) goto label$96e09ea_10_129;
-			hl_assert();
-			label$96e09ea_10_129:
+			label$96e09ea_10_114:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,3);
 			((little_parser_ParserTokens_Variable*)tmp)->p0 = r16;
@@ -5948,97 +5587,85 @@ hl__types__ArrayObj little_parser_Parser_mergeValuesWithTypeDecls(hl__types__Arr
 			((little_parser_ParserTokens_Variable*)tmp)->p2 = r19;
 			r16 = tmp; };
 			hl_types_ArrayObj_unshift(r2,((vdynamic*)r16));
-			goto label$96e09ea_10_808;
+			goto label$96e09ea_10_715;
 		case 4:
-			r8 = ((little_parser_ParserTokens_Function*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_Function*)r6)->p0;
 			r14 = ((little_parser_ParserTokens_Function*)r6)->p1;
 			r15 = ((little_parser_ParserTokens_Function*)r6)->p2;
 			r16 = ((little_parser_ParserTokens_Function*)r6)->p3;
 			if( r2 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeValuesWithTypeDecls(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r11 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r11) ) goto label$96e09ea_10_150;
+			r10 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_10_135;
 			r18 = NULL;
-			goto label$96e09ea_10_156;
-			label$96e09ea_10_150:
+			goto label$96e09ea_10_138;
+			label$96e09ea_10_135:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r18 = (venum*)r3;
-			r19 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r18 == r19 ) goto label$96e09ea_10_156;
-			hl_assert();
-			label$96e09ea_10_156:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_10_138:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r14;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeValuesWithTypeDecls(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r11 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r11) ) goto label$96e09ea_10_169;
+			r10 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_10_151;
 			r19 = NULL;
-			goto label$96e09ea_10_175;
-			label$96e09ea_10_169:
+			goto label$96e09ea_10_154;
+			label$96e09ea_10_151:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r19 = (venum*)r3;
-			r20 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r19 == r20 ) goto label$96e09ea_10_175;
-			hl_assert();
-			label$96e09ea_10_175:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_10_154:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r15;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeValuesWithTypeDecls(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r11 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r11) ) goto label$96e09ea_10_188;
+			r10 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_10_167;
 			r20 = NULL;
-			goto label$96e09ea_10_194;
-			label$96e09ea_10_188:
+			goto label$96e09ea_10_170;
+			label$96e09ea_10_167:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r20 = (venum*)r3;
-			r21 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r20 == r21 ) goto label$96e09ea_10_194;
-			hl_assert();
-			label$96e09ea_10_194:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_10_170:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r16;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeValuesWithTypeDecls(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r11 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r11) ) goto label$96e09ea_10_207;
+			r10 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_10_183;
 			r21 = NULL;
-			goto label$96e09ea_10_213;
-			label$96e09ea_10_207:
+			goto label$96e09ea_10_186;
+			label$96e09ea_10_183:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r21 = (venum*)r3;
-			r22 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r21 == r22 ) goto label$96e09ea_10_213;
-			hl_assert();
-			label$96e09ea_10_213:
+			label$96e09ea_10_186:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,4);
 			((little_parser_ParserTokens_Function*)tmp)->p0 = r18;
@@ -6047,75 +5674,66 @@ hl__types__ArrayObj little_parser_Parser_mergeValuesWithTypeDecls(hl__types__Arr
 			((little_parser_ParserTokens_Function*)tmp)->p3 = r21;
 			r18 = tmp; };
 			hl_types_ArrayObj_unshift(r2,((vdynamic*)r18));
-			goto label$96e09ea_10_808;
+			goto label$96e09ea_10_715;
 		case 5:
-			r8 = ((little_parser_ParserTokens_ConditionCall*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_ConditionCall*)r6)->p0;
 			r14 = ((little_parser_ParserTokens_ConditionCall*)r6)->p1;
 			r15 = ((little_parser_ParserTokens_ConditionCall*)r6)->p2;
 			if( r2 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeValuesWithTypeDecls(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r11 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r11) ) goto label$96e09ea_10_233;
+			r10 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_10_206;
 			r16 = NULL;
-			goto label$96e09ea_10_239;
-			label$96e09ea_10_233:
+			goto label$96e09ea_10_209;
+			label$96e09ea_10_206:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r16 = (venum*)r3;
-			r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r16 == r18 ) goto label$96e09ea_10_239;
-			hl_assert();
-			label$96e09ea_10_239:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_10_209:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r14;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeValuesWithTypeDecls(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r11 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r11) ) goto label$96e09ea_10_252;
+			r10 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_10_222;
 			r18 = NULL;
-			goto label$96e09ea_10_258;
-			label$96e09ea_10_252:
+			goto label$96e09ea_10_225;
+			label$96e09ea_10_222:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r18 = (venum*)r3;
-			r19 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r18 == r19 ) goto label$96e09ea_10_258;
-			hl_assert();
-			label$96e09ea_10_258:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_10_225:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r15;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeValuesWithTypeDecls(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r11 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r11) ) goto label$96e09ea_10_271;
+			r10 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_10_238;
 			r19 = NULL;
-			goto label$96e09ea_10_277;
-			label$96e09ea_10_271:
+			goto label$96e09ea_10_241;
+			label$96e09ea_10_238:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r19 = (venum*)r3;
-			r20 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r19 == r20 ) goto label$96e09ea_10_277;
-			hl_assert();
-			label$96e09ea_10_277:
+			label$96e09ea_10_241:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,5);
 			((little_parser_ParserTokens_ConditionCall*)tmp)->p0 = r16;
@@ -6123,113 +5741,104 @@ hl__types__ArrayObj little_parser_Parser_mergeValuesWithTypeDecls(hl__types__Arr
 			((little_parser_ParserTokens_ConditionCall*)tmp)->p2 = r19;
 			r16 = tmp; };
 			hl_types_ArrayObj_unshift(r2,((vdynamic*)r16));
-			goto label$96e09ea_10_808;
+			goto label$96e09ea_10_715;
 		case 7:
-			r10 = ((little_parser_ParserTokens_Write*)r6)->p0;
-			r8 = ((little_parser_ParserTokens_Write*)r6)->p1;
+			r9 = ((little_parser_ParserTokens_Write*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_Write*)r6)->p1;
 			if( r2 == NULL ) hl_null_access();
-			r23 = little_parser_Parser_mergeValuesWithTypeDecls(r10);
-			r9 = &t$little_parser_ParserTokens;
+			r22 = little_parser_Parser_mergeValuesWithTypeDecls(r9);
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
-			r24 = hl_types_ArrayObj_alloc(r7);
-			r24 = little_parser_Parser_mergeValuesWithTypeDecls(r24);
-			if( r24 == NULL ) hl_null_access();
+			((venum**)(r7 + 1))[r5] = r11;
+			r23 = hl_types_ArrayObj_alloc(r7);
+			r23 = little_parser_Parser_mergeValuesWithTypeDecls(r23);
+			if( r23 == NULL ) hl_null_access();
 			r5 = 0;
-			r11 = r24->length;
-			if( ((unsigned)r5) < ((unsigned)r11) ) goto label$96e09ea_10_297;
+			r10 = r23->length;
+			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_10_261;
 			r14 = NULL;
-			goto label$96e09ea_10_303;
-			label$96e09ea_10_297:
-			r7 = r24->array;
+			goto label$96e09ea_10_264;
+			label$96e09ea_10_261:
+			r7 = r23->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r14 = (venum*)r3;
-			r15 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r14 == r15 ) goto label$96e09ea_10_303;
-			hl_assert();
-			label$96e09ea_10_303:
+			label$96e09ea_10_264:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,7);
-			((little_parser_ParserTokens_Write*)tmp)->p0 = r23;
+			((little_parser_ParserTokens_Write*)tmp)->p0 = r22;
 			((little_parser_ParserTokens_Write*)tmp)->p1 = r14;
 			r14 = tmp; };
 			hl_types_ArrayObj_unshift(r2,((vdynamic*)r14));
-			goto label$96e09ea_10_808;
+			goto label$96e09ea_10_715;
 		case 9:
-			r8 = ((little_parser_ParserTokens_TypeDeclaration*)r6)->p0;
-			if( r8 ) goto label$96e09ea_10_567;
-			r8 = ((little_parser_ParserTokens_TypeDeclaration*)r6)->p1;
+			r11 = ((little_parser_ParserTokens_TypeDeclaration*)r6)->p0;
+			if( r11 ) goto label$96e09ea_10_504;
+			r11 = ((little_parser_ParserTokens_TypeDeclaration*)r6)->p1;
 			r5 = r4;
 			--r4;
-			r11 = 0;
-			if( r11 < r5 ) goto label$96e09ea_10_358;
-			r26 = (little__$Little)g$_little_Little;
-			r25 = r26->runtime;
-			if( r25 == NULL ) hl_null_access();
-			r10 = r25->callStack;
-			if( r10 == NULL ) hl_null_access();
-			r27 = hl_alloc_virtual(&t$vrt_f317fe3);
+			r10 = 0;
+			if( r10 < r5 ) goto label$96e09ea_10_316;
+			r25 = (little__$Little)g$_little_Little;
+			r24 = r25->runtime;
+			if( r24 == NULL ) hl_null_access();
+			r9 = r24->callStack;
+			if( r9 == NULL ) hl_null_access();
+			r26 = hl_alloc_virtual(&t$vrt_f317fe3);
 			r12 = little_parser_Parser_get_module();
-			if( hl_vfields(r27)[2] ) *(String*)(hl_vfields(r27)[2]) = (String)r12; else hl_dyn_setp(r27->value,-523029465/*module*/,&t$String,r12);
+			if( hl_vfields(r26)[2] ) *(String*)(hl_vfields(r26)[2]) = (String)r12; else hl_dyn_setp(r26->value,-523029465/*module*/,&t$String,r12);
 			r5 = little_parser_Parser_get_line();
-			if( hl_vfields(r27)[0] ) *(int*)(hl_vfields(r27)[0]) = (int)r5; else hl_dyn_seti(r27->value,129177854/*line*/,&t$_i32,r5);
-			r28 = (little__parser__$Parser)g$_little_parser_Parser;
-			r5 = r28->linePart;
-			if( hl_vfields(r27)[1] ) *(int*)(hl_vfields(r27)[1]) = (int)r5; else hl_dyn_seti(r27->value,-411357064/*linePart*/,&t$_i32,r5);
-			r29 = NULL;
-			r9 = &t$little_parser_ParserTokens;
+			if( hl_vfields(r26)[0] ) *(int*)(hl_vfields(r26)[0]) = (int)r5; else hl_dyn_seti(r26->value,129177854/*line*/,&t$_i32,r5);
+			r27 = (little__parser__$Parser)g$_little_parser_Parser;
+			r5 = r27->linePart;
+			if( hl_vfields(r26)[1] ) *(int*)(hl_vfields(r26)[1]) = (int)r5; else hl_dyn_seti(r26->value,-411357064/*linePart*/,&t$_i32,r5);
+			r28 = NULL;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_interpreter_Interpreter_convert(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r11 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r11) ) goto label$96e09ea_10_340;
-			r30 = NULL;
-			goto label$96e09ea_10_346;
-			label$96e09ea_10_340:
+			r10 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_10_301;
+			r29 = NULL;
+			goto label$96e09ea_10_304;
+			label$96e09ea_10_301:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
-			r30 = (venum*)r3;
-			r31 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_interpreter_InterpTokens);
-			if( r30 == r31 ) goto label$96e09ea_10_346;
-			hl_assert();
-			label$96e09ea_10_346:
+			r29 = (venum*)r3;
+			label$96e09ea_10_304:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_interpreter_InterpTokens,11);
-			((little_interpreter_InterpTokens_TypeCast*)tmp)->p0 = r29;
-			((little_interpreter_InterpTokens_TypeCast*)tmp)->p1 = r30;
-			r29 = tmp; };
-			if( hl_vfields(r27)[3] ) *(venum**)(hl_vfields(r27)[3]) = (venum*)r29; else hl_dyn_setp(r27->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r29);
-			hl_types_ArrayObj_unshift(r10,((vdynamic*)r27));
-			r26 = (little__$Little)g$_little_Little;
-			r25 = r26->runtime;
-			if( r25 == NULL ) hl_null_access();
+			((little_interpreter_InterpTokens_TypeCast*)tmp)->p0 = r28;
+			((little_interpreter_InterpTokens_TypeCast*)tmp)->p1 = r29;
+			r28 = tmp; };
+			if( hl_vfields(r26)[3] ) *(venum**)(hl_vfields(r26)[3]) = (venum*)r28; else hl_dyn_setp(r26->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r28);
+			hl_types_ArrayObj_unshift(r9,((vdynamic*)r26));
+			r25 = (little__$Little)g$_little_Little;
+			r24 = r25->runtime;
+			if( r24 == NULL ) hl_null_access();
 			r12 = (String)s$e0246e5;
-			r29 = hl_alloc_enum(&t$little_interpreter_InterpTokens,27);
-			((little_interpreter_InterpTokens_ErrorMessage*)r29)->p0 = r12;
+			r28 = hl_alloc_enum(&t$little_interpreter_InterpTokens,27);
+			((little_interpreter_InterpTokens_ErrorMessage*)r28)->p0 = r12;
 			r12 = (String)s$Parser;
-			r29 = little_interpreter_Runtime_throwError(r25,r29,r12);
-			r10 = NULL;
-			return r10;
-			label$96e09ea_10_358:
-			r11 = r0->length;
-			if( ((unsigned)r4) < ((unsigned)r11) ) goto label$96e09ea_10_362;
+			r28 = little_interpreter_Runtime_throwError(r24,r28,r12);
+			r9 = NULL;
+			return r9;
+			label$96e09ea_10_316:
+			r10 = r0->length;
+			if( ((unsigned)r4) < ((unsigned)r10) ) goto label$96e09ea_10_320;
 			r14 = NULL;
-			goto label$96e09ea_10_368;
-			label$96e09ea_10_362:
+			goto label$96e09ea_10_323;
+			label$96e09ea_10_320:
 			r7 = r0->array;
 			r3 = ((vdynamic**)(r7 + 1))[r4];
 			r14 = (venum*)r3;
-			r15 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r14 == r15 ) goto label$96e09ea_10_368;
-			hl_assert();
-			label$96e09ea_10_368:
+			label$96e09ea_10_323:
 			if( r14 == NULL ) hl_null_access();
 			r5 = HL__ENUM_INDEX__(r14);
 			switch(r5) {
@@ -6237,544 +5846,496 @@ hl__types__ArrayObj little_parser_Parser_mergeValuesWithTypeDecls(hl__types__Arr
 					if( r2 == NULL ) hl_null_access();
 					r15 = hl_alloc_enum(&t$little_parser_ParserTokens,9);
 					((little_parser_ParserTokens_TypeDeclaration*)r15)->p0 = r14;
-					((little_parser_ParserTokens_TypeDeclaration*)r15)->p1 = r8;
+					((little_parser_ParserTokens_TypeDeclaration*)r15)->p1 = r11;
 					hl_types_ArrayObj_unshift(r2,((vdynamic*)r15));
-					goto label$96e09ea_10_566;
+					goto label$96e09ea_10_503;
 				case 0:
 					r5 = ((little_parser_ParserTokens_SetLine*)r14)->p0;
-					r26 = (little__$Little)g$_little_Little;
-					r25 = r26->runtime;
-					if( r25 == NULL ) hl_null_access();
-					r10 = r25->callStack;
-					if( r10 == NULL ) hl_null_access();
-					r27 = hl_alloc_virtual(&t$vrt_f317fe3);
+					r25 = (little__$Little)g$_little_Little;
+					r24 = r25->runtime;
+					if( r24 == NULL ) hl_null_access();
+					r9 = r24->callStack;
+					if( r9 == NULL ) hl_null_access();
+					r26 = hl_alloc_virtual(&t$vrt_f317fe3);
 					r12 = little_parser_Parser_get_module();
-					if( hl_vfields(r27)[2] ) *(String*)(hl_vfields(r27)[2]) = (String)r12; else hl_dyn_setp(r27->value,-523029465/*module*/,&t$String,r12);
-					r11 = little_parser_Parser_get_line();
-					if( hl_vfields(r27)[0] ) *(int*)(hl_vfields(r27)[0]) = (int)r11; else hl_dyn_seti(r27->value,129177854/*line*/,&t$_i32,r11);
-					r28 = (little__parser__$Parser)g$_little_parser_Parser;
-					r11 = r28->linePart;
-					if( hl_vfields(r27)[1] ) *(int*)(hl_vfields(r27)[1]) = (int)r11; else hl_dyn_seti(r27->value,-411357064/*linePart*/,&t$_i32,r11);
-					r9 = &t$little_parser_ParserTokens;
-					r11 = 1;
-					r7 = hl_alloc_array(r9,r11);
-					r11 = 0;
-					((venum**)(r7 + 1))[r11] = r14;
+					if( hl_vfields(r26)[2] ) *(String*)(hl_vfields(r26)[2]) = (String)r12; else hl_dyn_setp(r26->value,-523029465/*module*/,&t$String,r12);
+					r10 = little_parser_Parser_get_line();
+					if( hl_vfields(r26)[0] ) *(int*)(hl_vfields(r26)[0]) = (int)r10; else hl_dyn_seti(r26->value,129177854/*line*/,&t$_i32,r10);
+					r27 = (little__parser__$Parser)g$_little_parser_Parser;
+					r10 = r27->linePart;
+					if( hl_vfields(r26)[1] ) *(int*)(hl_vfields(r26)[1]) = (int)r10; else hl_dyn_seti(r26->value,-411357064/*linePart*/,&t$_i32,r10);
+					r8 = &t$little_parser_ParserTokens;
+					r10 = 1;
+					r7 = hl_alloc_array(r8,r10);
+					r10 = 0;
+					((venum**)(r7 + 1))[r10] = r14;
 					r17 = hl_types_ArrayObj_alloc(r7);
 					r17 = little_interpreter_Interpreter_convert(r17);
 					if( r17 == NULL ) hl_null_access();
-					r11 = 0;
-					r32 = r17->length;
-					if( ((unsigned)r11) < ((unsigned)r32) ) goto label$96e09ea_10_402;
+					r10 = 0;
+					r30 = r17->length;
+					if( ((unsigned)r10) < ((unsigned)r30) ) goto label$96e09ea_10_357;
+					r28 = NULL;
+					goto label$96e09ea_10_360;
+					label$96e09ea_10_357:
+					r7 = r17->array;
+					r3 = ((vdynamic**)(r7 + 1))[r10];
+					r28 = (venum*)r3;
+					label$96e09ea_10_360:
+					r8 = &t$little_parser_ParserTokens;
+					r10 = 1;
+					r7 = hl_alloc_array(r8,r10);
+					r10 = 0;
+					((venum**)(r7 + 1))[r10] = r11;
+					r17 = hl_types_ArrayObj_alloc(r7);
+					r17 = little_interpreter_Interpreter_convert(r17);
+					if( r17 == NULL ) hl_null_access();
+					r10 = 0;
+					r30 = r17->length;
+					if( ((unsigned)r10) < ((unsigned)r30) ) goto label$96e09ea_10_373;
 					r29 = NULL;
-					goto label$96e09ea_10_408;
-					label$96e09ea_10_402:
+					goto label$96e09ea_10_376;
+					label$96e09ea_10_373:
 					r7 = r17->array;
-					r3 = ((vdynamic**)(r7 + 1))[r11];
+					r3 = ((vdynamic**)(r7 + 1))[r10];
 					r29 = (venum*)r3;
-					r30 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_interpreter_InterpTokens);
-					if( r29 == r30 ) goto label$96e09ea_10_408;
-					hl_assert();
-					label$96e09ea_10_408:
-					r9 = &t$little_parser_ParserTokens;
-					r11 = 1;
-					r7 = hl_alloc_array(r9,r11);
-					r11 = 0;
-					((venum**)(r7 + 1))[r11] = r8;
-					r17 = hl_types_ArrayObj_alloc(r7);
-					r17 = little_interpreter_Interpreter_convert(r17);
-					if( r17 == NULL ) hl_null_access();
-					r11 = 0;
-					r32 = r17->length;
-					if( ((unsigned)r11) < ((unsigned)r32) ) goto label$96e09ea_10_421;
-					r30 = NULL;
-					goto label$96e09ea_10_427;
-					label$96e09ea_10_421:
-					r7 = r17->array;
-					r3 = ((vdynamic**)(r7 + 1))[r11];
-					r30 = (venum*)r3;
-					r31 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_interpreter_InterpTokens);
-					if( r30 == r31 ) goto label$96e09ea_10_427;
-					hl_assert();
-					label$96e09ea_10_427:
+					label$96e09ea_10_376:
 					{ venum *tmp;
 					tmp = hl_alloc_enum(&t$little_interpreter_InterpTokens,11);
-					((little_interpreter_InterpTokens_TypeCast*)tmp)->p0 = r29;
-					((little_interpreter_InterpTokens_TypeCast*)tmp)->p1 = r30;
-					r29 = tmp; };
-					if( hl_vfields(r27)[3] ) *(venum**)(hl_vfields(r27)[3]) = (venum*)r29; else hl_dyn_setp(r27->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r29);
-					hl_types_ArrayObj_unshift(r10,((vdynamic*)r27));
-					r26 = (little__$Little)g$_little_Little;
-					r25 = r26->runtime;
-					if( r25 == NULL ) hl_null_access();
+					((little_interpreter_InterpTokens_TypeCast*)tmp)->p0 = r28;
+					((little_interpreter_InterpTokens_TypeCast*)tmp)->p1 = r29;
+					r28 = tmp; };
+					if( hl_vfields(r26)[3] ) *(venum**)(hl_vfields(r26)[3]) = (venum*)r28; else hl_dyn_setp(r26->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r28);
+					hl_types_ArrayObj_unshift(r9,((vdynamic*)r26));
+					r25 = (little__$Little)g$_little_Little;
+					r24 = r25->runtime;
+					if( r24 == NULL ) hl_null_access();
 					r12 = (String)s$7bc6c56;
-					r29 = hl_alloc_enum(&t$little_interpreter_InterpTokens,27);
-					((little_interpreter_InterpTokens_ErrorMessage*)r29)->p0 = r12;
+					r28 = hl_alloc_enum(&t$little_interpreter_InterpTokens,27);
+					((little_interpreter_InterpTokens_ErrorMessage*)r28)->p0 = r12;
 					r12 = (String)s$Parser;
-					r29 = little_interpreter_Runtime_throwError(r25,r29,r12);
-					r10 = NULL;
-					return r10;
+					r28 = little_interpreter_Runtime_throwError(r24,r28,r12);
+					r9 = NULL;
+					return r9;
 				case 1:
 					r12 = ((little_parser_ParserTokens_SetModule*)r14)->p0;
-					r26 = (little__$Little)g$_little_Little;
-					r25 = r26->runtime;
-					if( r25 == NULL ) hl_null_access();
-					r10 = r25->callStack;
-					if( r10 == NULL ) hl_null_access();
-					r27 = hl_alloc_virtual(&t$vrt_f317fe3);
+					r25 = (little__$Little)g$_little_Little;
+					r24 = r25->runtime;
+					if( r24 == NULL ) hl_null_access();
+					r9 = r24->callStack;
+					if( r9 == NULL ) hl_null_access();
+					r26 = hl_alloc_virtual(&t$vrt_f317fe3);
 					r13 = little_parser_Parser_get_module();
-					if( hl_vfields(r27)[2] ) *(String*)(hl_vfields(r27)[2]) = (String)r13; else hl_dyn_setp(r27->value,-523029465/*module*/,&t$String,r13);
+					if( hl_vfields(r26)[2] ) *(String*)(hl_vfields(r26)[2]) = (String)r13; else hl_dyn_setp(r26->value,-523029465/*module*/,&t$String,r13);
 					r5 = little_parser_Parser_get_line();
-					if( hl_vfields(r27)[0] ) *(int*)(hl_vfields(r27)[0]) = (int)r5; else hl_dyn_seti(r27->value,129177854/*line*/,&t$_i32,r5);
-					r28 = (little__parser__$Parser)g$_little_parser_Parser;
-					r5 = r28->linePart;
-					if( hl_vfields(r27)[1] ) *(int*)(hl_vfields(r27)[1]) = (int)r5; else hl_dyn_seti(r27->value,-411357064/*linePart*/,&t$_i32,r5);
-					r9 = &t$little_parser_ParserTokens;
+					if( hl_vfields(r26)[0] ) *(int*)(hl_vfields(r26)[0]) = (int)r5; else hl_dyn_seti(r26->value,129177854/*line*/,&t$_i32,r5);
+					r27 = (little__parser__$Parser)g$_little_parser_Parser;
+					r5 = r27->linePart;
+					if( hl_vfields(r26)[1] ) *(int*)(hl_vfields(r26)[1]) = (int)r5; else hl_dyn_seti(r26->value,-411357064/*linePart*/,&t$_i32,r5);
+					r8 = &t$little_parser_ParserTokens;
 					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
+					r7 = hl_alloc_array(r8,r5);
 					r5 = 0;
 					((venum**)(r7 + 1))[r5] = r14;
 					r17 = hl_types_ArrayObj_alloc(r7);
 					r17 = little_interpreter_Interpreter_convert(r17);
 					if( r17 == NULL ) hl_null_access();
 					r5 = 0;
-					r11 = r17->length;
-					if( ((unsigned)r5) < ((unsigned)r11) ) goto label$96e09ea_10_466;
-					r29 = NULL;
-					goto label$96e09ea_10_472;
-					label$96e09ea_10_466:
+					r10 = r17->length;
+					if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_10_415;
+					r28 = NULL;
+					goto label$96e09ea_10_418;
+					label$96e09ea_10_415:
 					r7 = r17->array;
 					r3 = ((vdynamic**)(r7 + 1))[r5];
-					r29 = (venum*)r3;
-					r30 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_interpreter_InterpTokens);
-					if( r29 == r30 ) goto label$96e09ea_10_472;
-					hl_assert();
-					label$96e09ea_10_472:
-					r9 = &t$little_parser_ParserTokens;
+					r28 = (venum*)r3;
+					label$96e09ea_10_418:
+					r8 = &t$little_parser_ParserTokens;
 					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
+					r7 = hl_alloc_array(r8,r5);
 					r5 = 0;
-					((venum**)(r7 + 1))[r5] = r8;
+					((venum**)(r7 + 1))[r5] = r11;
 					r17 = hl_types_ArrayObj_alloc(r7);
 					r17 = little_interpreter_Interpreter_convert(r17);
 					if( r17 == NULL ) hl_null_access();
 					r5 = 0;
-					r11 = r17->length;
-					if( ((unsigned)r5) < ((unsigned)r11) ) goto label$96e09ea_10_485;
-					r30 = NULL;
-					goto label$96e09ea_10_491;
-					label$96e09ea_10_485:
+					r10 = r17->length;
+					if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_10_431;
+					r29 = NULL;
+					goto label$96e09ea_10_434;
+					label$96e09ea_10_431:
 					r7 = r17->array;
 					r3 = ((vdynamic**)(r7 + 1))[r5];
-					r30 = (venum*)r3;
-					r31 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_interpreter_InterpTokens);
-					if( r30 == r31 ) goto label$96e09ea_10_491;
-					hl_assert();
+					r29 = (venum*)r3;
+					label$96e09ea_10_434:
+					{ venum *tmp;
+					tmp = hl_alloc_enum(&t$little_interpreter_InterpTokens,11);
+					((little_interpreter_InterpTokens_TypeCast*)tmp)->p0 = r28;
+					((little_interpreter_InterpTokens_TypeCast*)tmp)->p1 = r29;
+					r28 = tmp; };
+					if( hl_vfields(r26)[3] ) *(venum**)(hl_vfields(r26)[3]) = (venum*)r28; else hl_dyn_setp(r26->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r28);
+					hl_types_ArrayObj_unshift(r9,((vdynamic*)r26));
+					r25 = (little__$Little)g$_little_Little;
+					r24 = r25->runtime;
+					if( r24 == NULL ) hl_null_access();
+					r13 = (String)s$7bc6c56;
+					r28 = hl_alloc_enum(&t$little_interpreter_InterpTokens,27);
+					((little_interpreter_InterpTokens_ErrorMessage*)r28)->p0 = r13;
+					r13 = (String)s$Parser;
+					r28 = little_interpreter_Runtime_throwError(r24,r28,r13);
+					r9 = NULL;
+					return r9;
+				case 2:
+					r25 = (little__$Little)g$_little_Little;
+					r24 = r25->runtime;
+					if( r24 == NULL ) hl_null_access();
+					r9 = r24->callStack;
+					if( r9 == NULL ) hl_null_access();
+					r26 = hl_alloc_virtual(&t$vrt_f317fe3);
+					r12 = little_parser_Parser_get_module();
+					if( hl_vfields(r26)[2] ) *(String*)(hl_vfields(r26)[2]) = (String)r12; else hl_dyn_setp(r26->value,-523029465/*module*/,&t$String,r12);
+					r5 = little_parser_Parser_get_line();
+					if( hl_vfields(r26)[0] ) *(int*)(hl_vfields(r26)[0]) = (int)r5; else hl_dyn_seti(r26->value,129177854/*line*/,&t$_i32,r5);
+					r27 = (little__parser__$Parser)g$_little_parser_Parser;
+					r5 = r27->linePart;
+					if( hl_vfields(r26)[1] ) *(int*)(hl_vfields(r26)[1]) = (int)r5; else hl_dyn_seti(r26->value,-411357064/*linePart*/,&t$_i32,r5);
+					r8 = &t$little_parser_ParserTokens;
+					r5 = 1;
+					r7 = hl_alloc_array(r8,r5);
+					r5 = 0;
+					((venum**)(r7 + 1))[r5] = r14;
+					r17 = hl_types_ArrayObj_alloc(r7);
+					r17 = little_interpreter_Interpreter_convert(r17);
+					if( r17 == NULL ) hl_null_access();
+					r5 = 0;
+					r10 = r17->length;
+					if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_10_472;
+					r28 = NULL;
+					goto label$96e09ea_10_475;
+					label$96e09ea_10_472:
+					r7 = r17->array;
+					r3 = ((vdynamic**)(r7 + 1))[r5];
+					r28 = (venum*)r3;
+					label$96e09ea_10_475:
+					r8 = &t$little_parser_ParserTokens;
+					r5 = 1;
+					r7 = hl_alloc_array(r8,r5);
+					r5 = 0;
+					((venum**)(r7 + 1))[r5] = r11;
+					r17 = hl_types_ArrayObj_alloc(r7);
+					r17 = little_interpreter_Interpreter_convert(r17);
+					if( r17 == NULL ) hl_null_access();
+					r5 = 0;
+					r10 = r17->length;
+					if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_10_488;
+					r29 = NULL;
+					goto label$96e09ea_10_491;
+					label$96e09ea_10_488:
+					r7 = r17->array;
+					r3 = ((vdynamic**)(r7 + 1))[r5];
+					r29 = (venum*)r3;
 					label$96e09ea_10_491:
 					{ venum *tmp;
 					tmp = hl_alloc_enum(&t$little_interpreter_InterpTokens,11);
-					((little_interpreter_InterpTokens_TypeCast*)tmp)->p0 = r29;
-					((little_interpreter_InterpTokens_TypeCast*)tmp)->p1 = r30;
-					r29 = tmp; };
-					if( hl_vfields(r27)[3] ) *(venum**)(hl_vfields(r27)[3]) = (venum*)r29; else hl_dyn_setp(r27->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r29);
-					hl_types_ArrayObj_unshift(r10,((vdynamic*)r27));
-					r26 = (little__$Little)g$_little_Little;
-					r25 = r26->runtime;
-					if( r25 == NULL ) hl_null_access();
-					r13 = (String)s$7bc6c56;
-					r29 = hl_alloc_enum(&t$little_interpreter_InterpTokens,27);
-					((little_interpreter_InterpTokens_ErrorMessage*)r29)->p0 = r13;
-					r13 = (String)s$Parser;
-					r29 = little_interpreter_Runtime_throwError(r25,r29,r13);
-					r10 = NULL;
-					return r10;
-				case 2:
-					r26 = (little__$Little)g$_little_Little;
-					r25 = r26->runtime;
-					if( r25 == NULL ) hl_null_access();
-					r10 = r25->callStack;
-					if( r10 == NULL ) hl_null_access();
-					r27 = hl_alloc_virtual(&t$vrt_f317fe3);
-					r12 = little_parser_Parser_get_module();
-					if( hl_vfields(r27)[2] ) *(String*)(hl_vfields(r27)[2]) = (String)r12; else hl_dyn_setp(r27->value,-523029465/*module*/,&t$String,r12);
-					r5 = little_parser_Parser_get_line();
-					if( hl_vfields(r27)[0] ) *(int*)(hl_vfields(r27)[0]) = (int)r5; else hl_dyn_seti(r27->value,129177854/*line*/,&t$_i32,r5);
-					r28 = (little__parser__$Parser)g$_little_parser_Parser;
-					r5 = r28->linePart;
-					if( hl_vfields(r27)[1] ) *(int*)(hl_vfields(r27)[1]) = (int)r5; else hl_dyn_seti(r27->value,-411357064/*linePart*/,&t$_i32,r5);
-					r9 = &t$little_parser_ParserTokens;
-					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
-					r5 = 0;
-					((venum**)(r7 + 1))[r5] = r14;
-					r17 = hl_types_ArrayObj_alloc(r7);
-					r17 = little_interpreter_Interpreter_convert(r17);
-					if( r17 == NULL ) hl_null_access();
-					r5 = 0;
-					r11 = r17->length;
-					if( ((unsigned)r5) < ((unsigned)r11) ) goto label$96e09ea_10_529;
-					r29 = NULL;
-					goto label$96e09ea_10_535;
-					label$96e09ea_10_529:
-					r7 = r17->array;
-					r3 = ((vdynamic**)(r7 + 1))[r5];
-					r29 = (venum*)r3;
-					r30 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_interpreter_InterpTokens);
-					if( r29 == r30 ) goto label$96e09ea_10_535;
-					hl_assert();
-					label$96e09ea_10_535:
-					r9 = &t$little_parser_ParserTokens;
-					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
-					r5 = 0;
-					((venum**)(r7 + 1))[r5] = r8;
-					r17 = hl_types_ArrayObj_alloc(r7);
-					r17 = little_interpreter_Interpreter_convert(r17);
-					if( r17 == NULL ) hl_null_access();
-					r5 = 0;
-					r11 = r17->length;
-					if( ((unsigned)r5) < ((unsigned)r11) ) goto label$96e09ea_10_548;
-					r30 = NULL;
-					goto label$96e09ea_10_554;
-					label$96e09ea_10_548:
-					r7 = r17->array;
-					r3 = ((vdynamic**)(r7 + 1))[r5];
-					r30 = (venum*)r3;
-					r31 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_interpreter_InterpTokens);
-					if( r30 == r31 ) goto label$96e09ea_10_554;
-					hl_assert();
-					label$96e09ea_10_554:
-					{ venum *tmp;
-					tmp = hl_alloc_enum(&t$little_interpreter_InterpTokens,11);
-					((little_interpreter_InterpTokens_TypeCast*)tmp)->p0 = r29;
-					((little_interpreter_InterpTokens_TypeCast*)tmp)->p1 = r30;
-					r29 = tmp; };
-					if( hl_vfields(r27)[3] ) *(venum**)(hl_vfields(r27)[3]) = (venum*)r29; else hl_dyn_setp(r27->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r29);
-					hl_types_ArrayObj_unshift(r10,((vdynamic*)r27));
-					r26 = (little__$Little)g$_little_Little;
-					r25 = r26->runtime;
-					if( r25 == NULL ) hl_null_access();
+					((little_interpreter_InterpTokens_TypeCast*)tmp)->p0 = r28;
+					((little_interpreter_InterpTokens_TypeCast*)tmp)->p1 = r29;
+					r28 = tmp; };
+					if( hl_vfields(r26)[3] ) *(venum**)(hl_vfields(r26)[3]) = (venum*)r28; else hl_dyn_setp(r26->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r28);
+					hl_types_ArrayObj_unshift(r9,((vdynamic*)r26));
+					r25 = (little__$Little)g$_little_Little;
+					r24 = r25->runtime;
+					if( r24 == NULL ) hl_null_access();
 					r12 = (String)s$7bc6c56;
-					r29 = hl_alloc_enum(&t$little_interpreter_InterpTokens,27);
-					((little_interpreter_InterpTokens_ErrorMessage*)r29)->p0 = r12;
+					r28 = hl_alloc_enum(&t$little_interpreter_InterpTokens,27);
+					((little_interpreter_InterpTokens_ErrorMessage*)r28)->p0 = r12;
 					r12 = (String)s$Parser;
-					r29 = little_interpreter_Runtime_throwError(r25,r29,r12);
-					r10 = NULL;
-					return r10;
+					r28 = little_interpreter_Runtime_throwError(r24,r28,r12);
+					r9 = NULL;
+					return r9;
 			}
-			label$96e09ea_10_566:
-			goto label$96e09ea_10_569;
-			label$96e09ea_10_567:
+			label$96e09ea_10_503:
+			goto label$96e09ea_10_506;
+			label$96e09ea_10_504:
 			if( r2 == NULL ) hl_null_access();
 			hl_types_ArrayObj_unshift(r2,((vdynamic*)r6));
-			label$96e09ea_10_569:
-			goto label$96e09ea_10_808;
+			label$96e09ea_10_506:
+			goto label$96e09ea_10_715;
 		case 10:
-			r8 = ((little_parser_ParserTokens_FunctionCall*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_FunctionCall*)r6)->p0;
 			r14 = ((little_parser_ParserTokens_FunctionCall*)r6)->p1;
 			if( r2 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeValuesWithTypeDecls(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r11 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r11) ) goto label$96e09ea_10_586;
+			r10 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_10_523;
 			r15 = NULL;
-			goto label$96e09ea_10_592;
-			label$96e09ea_10_586:
+			goto label$96e09ea_10_526;
+			label$96e09ea_10_523:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r15 = (venum*)r3;
-			r16 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r15 == r16 ) goto label$96e09ea_10_592;
-			hl_assert();
-			label$96e09ea_10_592:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_10_526:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r14;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeValuesWithTypeDecls(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r11 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r11) ) goto label$96e09ea_10_605;
+			r10 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_10_539;
 			r16 = NULL;
-			goto label$96e09ea_10_611;
-			label$96e09ea_10_605:
+			goto label$96e09ea_10_542;
+			label$96e09ea_10_539:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r16 = (venum*)r3;
-			r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r16 == r18 ) goto label$96e09ea_10_611;
-			hl_assert();
-			label$96e09ea_10_611:
+			label$96e09ea_10_542:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,10);
 			((little_parser_ParserTokens_FunctionCall*)tmp)->p0 = r15;
 			((little_parser_ParserTokens_FunctionCall*)tmp)->p1 = r16;
 			r15 = tmp; };
 			hl_types_ArrayObj_unshift(r2,((vdynamic*)r15));
-			goto label$96e09ea_10_808;
+			goto label$96e09ea_10_715;
 		case 11:
-			r8 = ((little_parser_ParserTokens_Return*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_Return*)r6)->p0;
 			r14 = ((little_parser_ParserTokens_Return*)r6)->p1;
 			if( r2 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeValuesWithTypeDecls(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r11 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r11) ) goto label$96e09ea_10_630;
+			r10 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_10_561;
 			r15 = NULL;
-			goto label$96e09ea_10_636;
-			label$96e09ea_10_630:
+			goto label$96e09ea_10_564;
+			label$96e09ea_10_561:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r15 = (venum*)r3;
-			r16 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r15 == r16 ) goto label$96e09ea_10_636;
-			hl_assert();
-			label$96e09ea_10_636:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_10_564:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r14;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeValuesWithTypeDecls(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r11 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r11) ) goto label$96e09ea_10_649;
+			r10 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_10_577;
 			r16 = NULL;
-			goto label$96e09ea_10_655;
-			label$96e09ea_10_649:
+			goto label$96e09ea_10_580;
+			label$96e09ea_10_577:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r16 = (venum*)r3;
-			r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r16 == r18 ) goto label$96e09ea_10_655;
-			hl_assert();
-			label$96e09ea_10_655:
+			label$96e09ea_10_580:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,11);
 			((little_parser_ParserTokens_Return*)tmp)->p0 = r15;
 			((little_parser_ParserTokens_Return*)tmp)->p1 = r16;
 			r15 = tmp; };
 			hl_types_ArrayObj_unshift(r2,((vdynamic*)r15));
-			goto label$96e09ea_10_808;
+			goto label$96e09ea_10_715;
 		case 12:
-			r10 = ((little_parser_ParserTokens_Expression*)r6)->p0;
-			r8 = ((little_parser_ParserTokens_Expression*)r6)->p1;
+			r9 = ((little_parser_ParserTokens_Expression*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_Expression*)r6)->p1;
 			if( r2 == NULL ) hl_null_access();
-			r23 = little_parser_Parser_mergeValuesWithTypeDecls(r10);
-			r9 = &t$little_parser_ParserTokens;
+			r22 = little_parser_Parser_mergeValuesWithTypeDecls(r9);
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
-			r24 = hl_types_ArrayObj_alloc(r7);
-			r24 = little_parser_Parser_mergeValuesWithTypeDecls(r24);
-			if( r24 == NULL ) hl_null_access();
+			((venum**)(r7 + 1))[r5] = r11;
+			r23 = hl_types_ArrayObj_alloc(r7);
+			r23 = little_parser_Parser_mergeValuesWithTypeDecls(r23);
+			if( r23 == NULL ) hl_null_access();
 			r5 = 0;
-			r11 = r24->length;
-			if( ((unsigned)r5) < ((unsigned)r11) ) goto label$96e09ea_10_675;
+			r10 = r23->length;
+			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_10_600;
 			r14 = NULL;
-			goto label$96e09ea_10_681;
-			label$96e09ea_10_675:
-			r7 = r24->array;
+			goto label$96e09ea_10_603;
+			label$96e09ea_10_600:
+			r7 = r23->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r14 = (venum*)r3;
-			r15 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r14 == r15 ) goto label$96e09ea_10_681;
-			hl_assert();
-			label$96e09ea_10_681:
+			label$96e09ea_10_603:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,12);
-			((little_parser_ParserTokens_Expression*)tmp)->p0 = r23;
+			((little_parser_ParserTokens_Expression*)tmp)->p0 = r22;
 			((little_parser_ParserTokens_Expression*)tmp)->p1 = r14;
 			r14 = tmp; };
 			hl_types_ArrayObj_unshift(r2,((vdynamic*)r14));
-			goto label$96e09ea_10_808;
+			goto label$96e09ea_10_715;
 		case 13:
-			r10 = ((little_parser_ParserTokens_Block*)r6)->p0;
-			r8 = ((little_parser_ParserTokens_Block*)r6)->p1;
+			r9 = ((little_parser_ParserTokens_Block*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_Block*)r6)->p1;
 			if( r2 == NULL ) hl_null_access();
-			r23 = little_parser_Parser_mergeValuesWithTypeDecls(r10);
-			r9 = &t$little_parser_ParserTokens;
+			r22 = little_parser_Parser_mergeValuesWithTypeDecls(r9);
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
-			r24 = hl_types_ArrayObj_alloc(r7);
-			r24 = little_parser_Parser_mergeValuesWithTypeDecls(r24);
-			if( r24 == NULL ) hl_null_access();
+			((venum**)(r7 + 1))[r5] = r11;
+			r23 = hl_types_ArrayObj_alloc(r7);
+			r23 = little_parser_Parser_mergeValuesWithTypeDecls(r23);
+			if( r23 == NULL ) hl_null_access();
 			r5 = 0;
-			r11 = r24->length;
-			if( ((unsigned)r5) < ((unsigned)r11) ) goto label$96e09ea_10_701;
+			r10 = r23->length;
+			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_10_623;
 			r14 = NULL;
-			goto label$96e09ea_10_707;
-			label$96e09ea_10_701:
-			r7 = r24->array;
+			goto label$96e09ea_10_626;
+			label$96e09ea_10_623:
+			r7 = r23->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r14 = (venum*)r3;
-			r15 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r14 == r15 ) goto label$96e09ea_10_707;
-			hl_assert();
-			label$96e09ea_10_707:
+			label$96e09ea_10_626:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,13);
-			((little_parser_ParserTokens_Block*)tmp)->p0 = r23;
+			((little_parser_ParserTokens_Block*)tmp)->p0 = r22;
 			((little_parser_ParserTokens_Block*)tmp)->p1 = r14;
 			r14 = tmp; };
 			hl_types_ArrayObj_unshift(r2,((vdynamic*)r14));
-			goto label$96e09ea_10_808;
+			goto label$96e09ea_10_715;
 		case 14:
-			r10 = ((little_parser_ParserTokens_PartArray*)r6)->p0;
+			r9 = ((little_parser_ParserTokens_PartArray*)r6)->p0;
 			if( r2 == NULL ) hl_null_access();
-			r23 = little_parser_Parser_mergeValuesWithTypeDecls(r10);
-			r8 = hl_alloc_enum(&t$little_parser_ParserTokens,14);
-			((little_parser_ParserTokens_PartArray*)r8)->p0 = r23;
-			hl_types_ArrayObj_unshift(r2,((vdynamic*)r8));
-			goto label$96e09ea_10_808;
+			r22 = little_parser_Parser_mergeValuesWithTypeDecls(r9);
+			r11 = hl_alloc_enum(&t$little_parser_ParserTokens,14);
+			((little_parser_ParserTokens_PartArray*)r11)->p0 = r22;
+			hl_types_ArrayObj_unshift(r2,((vdynamic*)r11));
+			goto label$96e09ea_10_715;
 		case 15:
-			r8 = ((little_parser_ParserTokens_PropertyAccess*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_PropertyAccess*)r6)->p0;
 			r14 = ((little_parser_ParserTokens_PropertyAccess*)r6)->p1;
 			if( r2 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeValuesWithTypeDecls(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r11 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r11) ) goto label$96e09ea_10_732;
+			r10 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_10_651;
 			r15 = NULL;
-			goto label$96e09ea_10_738;
-			label$96e09ea_10_732:
+			goto label$96e09ea_10_654;
+			label$96e09ea_10_651:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r15 = (venum*)r3;
-			r16 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r15 == r16 ) goto label$96e09ea_10_738;
-			hl_assert();
-			label$96e09ea_10_738:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_10_654:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r14;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeValuesWithTypeDecls(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r11 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r11) ) goto label$96e09ea_10_751;
+			r10 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_10_667;
 			r16 = NULL;
-			goto label$96e09ea_10_757;
-			label$96e09ea_10_751:
+			goto label$96e09ea_10_670;
+			label$96e09ea_10_667:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r16 = (venum*)r3;
-			r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r16 == r18 ) goto label$96e09ea_10_757;
-			hl_assert();
-			label$96e09ea_10_757:
+			label$96e09ea_10_670:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,15);
 			((little_parser_ParserTokens_PropertyAccess*)tmp)->p0 = r15;
 			((little_parser_ParserTokens_PropertyAccess*)tmp)->p1 = r16;
 			r15 = tmp; };
 			hl_types_ArrayObj_unshift(r2,((vdynamic*)r15));
-			goto label$96e09ea_10_808;
+			goto label$96e09ea_10_715;
 		case 25:
 			r12 = ((little_parser_ParserTokens_Custom*)r6)->p0;
-			r10 = ((little_parser_ParserTokens_Custom*)r6)->p1;
-			r9 = &t$little_parser_ParserTokens;
+			r9 = ((little_parser_ParserTokens_Custom*)r6)->p1;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 0;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r5 = 0;
-			r23 = r10;
-			label$96e09ea_10_768:
-			if( r23 == NULL ) hl_null_access();
-			r32 = r23->length;
-			if( r5 >= r32 ) goto label$96e09ea_10_805;
-			r32 = r23->length;
-			if( ((unsigned)r5) < ((unsigned)r32) ) goto label$96e09ea_10_776;
-			r8 = NULL;
-			goto label$96e09ea_10_782;
-			label$96e09ea_10_776:
-			r7 = r23->array;
+			r22 = r9;
+			label$96e09ea_10_681:
+			if( r22 == NULL ) hl_null_access();
+			r30 = r22->length;
+			if( r5 >= r30 ) goto label$96e09ea_10_712;
+			r30 = r22->length;
+			if( ((unsigned)r5) < ((unsigned)r30) ) goto label$96e09ea_10_689;
+			r11 = NULL;
+			goto label$96e09ea_10_692;
+			label$96e09ea_10_689:
+			r7 = r22->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
-			r8 = (venum*)r3;
-			r14 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r8 == r14 ) goto label$96e09ea_10_782;
-			hl_assert();
-			label$96e09ea_10_782:
+			r11 = (venum*)r3;
+			label$96e09ea_10_692:
 			++r5;
 			if( r17 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
-			r11 = 1;
-			r7 = hl_alloc_array(r9,r11);
-			r11 = 0;
-			((venum**)(r7 + 1))[r11] = r8;
-			r33 = hl_types_ArrayObj_alloc(r7);
-			r33 = little_parser_Parser_mergeValuesWithTypeDecls(r33);
-			if( r33 == NULL ) hl_null_access();
-			r11 = 0;
-			r32 = r33->length;
-			if( ((unsigned)r11) < ((unsigned)r32) ) goto label$96e09ea_10_797;
+			r8 = &t$little_parser_ParserTokens;
+			r10 = 1;
+			r7 = hl_alloc_array(r8,r10);
+			r10 = 0;
+			((venum**)(r7 + 1))[r10] = r11;
+			r31 = hl_types_ArrayObj_alloc(r7);
+			r31 = little_parser_Parser_mergeValuesWithTypeDecls(r31);
+			if( r31 == NULL ) hl_null_access();
+			r10 = 0;
+			r30 = r31->length;
+			if( ((unsigned)r10) < ((unsigned)r30) ) goto label$96e09ea_10_707;
 			r14 = NULL;
-			goto label$96e09ea_10_803;
-			label$96e09ea_10_797:
-			r7 = r33->array;
-			r3 = ((vdynamic**)(r7 + 1))[r11];
+			goto label$96e09ea_10_710;
+			label$96e09ea_10_707:
+			r7 = r31->array;
+			r3 = ((vdynamic**)(r7 + 1))[r10];
 			r14 = (venum*)r3;
-			r15 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r14 == r15 ) goto label$96e09ea_10_803;
-			hl_assert();
-			label$96e09ea_10_803:
-			r11 = hl_types_ArrayObj_push(r17,((vdynamic*)r14));
-			goto label$96e09ea_10_768;
-			label$96e09ea_10_805:
+			label$96e09ea_10_710:
+			r10 = hl_types_ArrayObj_push(r17,((vdynamic*)r14));
+			goto label$96e09ea_10_681;
+			label$96e09ea_10_712:
 			if( r2 == NULL ) hl_null_access();
-			r8 = hl_alloc_enum(&t$little_parser_ParserTokens,25);
-			((little_parser_ParserTokens_Custom*)r8)->p0 = r12;
-			((little_parser_ParserTokens_Custom*)r8)->p1 = r17;
-			hl_types_ArrayObj_unshift(r2,((vdynamic*)r8));
+			r11 = hl_alloc_enum(&t$little_parser_ParserTokens,25);
+			((little_parser_ParserTokens_Custom*)r11)->p0 = r12;
+			((little_parser_ParserTokens_Custom*)r11)->p1 = r17;
+			hl_types_ArrayObj_unshift(r2,((vdynamic*)r11));
 	}
-	label$96e09ea_10_808:
+	label$96e09ea_10_715:
 	--r4;
-	goto label$96e09ea_10_34;
-	label$96e09ea_10_810:
+	goto label$96e09ea_10_31;
+	label$96e09ea_10_717:
 	little_parser_Parser_resetLines();
 	return r2;
 }
 
 hl__types__ArrayObj little_parser_Parser_mergeNonBlockBodies(hl__types__ArrayObj r0) {
 	String r12, r13;
-	hl__types__ArrayObj r2, r11, r17, r23, r24, r26;
-	hl_type *r9;
-	venum *r6, *r8, *r14, *r15, *r16, *r18, *r19, *r20, *r21, *r22;
+	hl__types__ArrayObj r2, r10, r17, r22, r23, r25;
+	hl_type *r8;
+	venum *r6, *r11, *r14, *r15, *r16, *r18, *r19, *r20, *r21;
 	vdynamic *r3;
 	varray *r7;
-	int r4, r5, r10, r25;
+	int r4, r5, r9, r24;
 	if( r0 ) goto label$96e09ea_11_3;
 	r2 = NULL;
 	return r2;
@@ -6782,51 +6343,45 @@ hl__types__ArrayObj little_parser_Parser_mergeNonBlockBodies(hl__types__ArrayObj
 	if( r0 == NULL ) hl_null_access();
 	r4 = r0->length;
 	r5 = 1;
-	if( r4 != r5 ) goto label$96e09ea_11_27;
+	if( r4 != r5 ) goto label$96e09ea_11_24;
 	r4 = 0;
 	r5 = r0->length;
 	if( ((unsigned)r4) < ((unsigned)r5) ) goto label$96e09ea_11_12;
 	r6 = NULL;
-	goto label$96e09ea_11_18;
+	goto label$96e09ea_11_15;
 	label$96e09ea_11_12:
 	r7 = r0->array;
 	r3 = ((vdynamic**)(r7 + 1))[r4];
 	r6 = (venum*)r3;
-	r8 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-	if( r6 == r8 ) goto label$96e09ea_11_18;
-	hl_assert();
-	label$96e09ea_11_18:
-	if( r6 ) goto label$96e09ea_11_27;
-	r9 = &t$little_parser_ParserTokens;
+	label$96e09ea_11_15:
+	if( r6 ) goto label$96e09ea_11_24;
+	r8 = &t$little_parser_ParserTokens;
 	r4 = 1;
-	r7 = hl_alloc_array(r9,r4);
+	r7 = hl_alloc_array(r8,r4);
 	r6 = NULL;
 	r4 = 0;
 	((venum**)(r7 + 1))[r4] = r6;
 	r2 = hl_types_ArrayObj_alloc(r7);
 	return r2;
-	label$96e09ea_11_27:
-	r9 = &t$little_parser_ParserTokens;
+	label$96e09ea_11_24:
+	r8 = &t$little_parser_ParserTokens;
 	r4 = 0;
-	r7 = hl_alloc_array(r9,r4);
+	r7 = hl_alloc_array(r8,r4);
 	r2 = hl_types_ArrayObj_alloc(r7);
 	r4 = 0;
-	label$96e09ea_11_32:
+	label$96e09ea_11_29:
 	if( r0 == NULL ) hl_null_access();
-	r10 = r0->length;
-	if( r4 >= r10 ) goto label$96e09ea_11_797;
-	r10 = r0->length;
-	if( ((unsigned)r4) < ((unsigned)r10) ) goto label$96e09ea_11_40;
+	r9 = r0->length;
+	if( r4 >= r9 ) goto label$96e09ea_11_692;
+	r9 = r0->length;
+	if( ((unsigned)r4) < ((unsigned)r9) ) goto label$96e09ea_11_37;
 	r6 = NULL;
-	goto label$96e09ea_11_46;
-	label$96e09ea_11_40:
+	goto label$96e09ea_11_40;
+	label$96e09ea_11_37:
 	r7 = r0->array;
 	r3 = ((vdynamic**)(r7 + 1))[r4];
 	r6 = (venum*)r3;
-	r8 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-	if( r6 == r8 ) goto label$96e09ea_11_46;
-	hl_assert();
-	label$96e09ea_11_46:
+	label$96e09ea_11_40:
 	if( r6 == NULL ) hl_null_access();
 	r5 = HL__ENUM_INDEX__(r6);
 	switch(r5) {
@@ -6845,92 +6400,83 @@ hl__types__ArrayObj little_parser_Parser_mergeNonBlockBodies(hl__types__ArrayObj
 		case 24:
 			if( r2 == NULL ) hl_null_access();
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
-			goto label$96e09ea_11_795;
+			goto label$96e09ea_11_690;
 		case 0:
 			r5 = ((little_parser_ParserTokens_SetLine*)r6)->p0;
 			little_parser_Parser_setLine(r5);
 			if( r2 == NULL ) hl_null_access();
-			r10 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
-			goto label$96e09ea_11_795;
+			r9 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
+			goto label$96e09ea_11_690;
 		case 1:
 			r12 = ((little_parser_ParserTokens_SetModule*)r6)->p0;
 			r13 = little_parser_Parser_set_module(r12);
 			if( r2 == NULL ) hl_null_access();
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
-			goto label$96e09ea_11_795;
+			goto label$96e09ea_11_690;
 		case 2:
 			little_parser_Parser_nextPart();
 			if( r2 == NULL ) hl_null_access();
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
-			goto label$96e09ea_11_795;
+			goto label$96e09ea_11_690;
 		case 3:
-			r8 = ((little_parser_ParserTokens_Variable*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_Variable*)r6)->p0;
 			r14 = ((little_parser_ParserTokens_Variable*)r6)->p1;
 			r15 = ((little_parser_ParserTokens_Variable*)r6)->p2;
 			if( r2 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeNonBlockBodies(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_11_83;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_11_77;
 			r16 = NULL;
-			goto label$96e09ea_11_89;
-			label$96e09ea_11_83:
+			goto label$96e09ea_11_80;
+			label$96e09ea_11_77:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r16 = (venum*)r3;
-			r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r16 == r18 ) goto label$96e09ea_11_89;
-			hl_assert();
-			label$96e09ea_11_89:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_11_80:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r14;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeNonBlockBodies(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_11_102;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_11_93;
 			r18 = NULL;
-			goto label$96e09ea_11_108;
-			label$96e09ea_11_102:
+			goto label$96e09ea_11_96;
+			label$96e09ea_11_93:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r18 = (venum*)r3;
-			r19 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r18 == r19 ) goto label$96e09ea_11_108;
-			hl_assert();
-			label$96e09ea_11_108:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_11_96:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r15;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeNonBlockBodies(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_11_121;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_11_109;
 			r19 = NULL;
-			goto label$96e09ea_11_127;
-			label$96e09ea_11_121:
+			goto label$96e09ea_11_112;
+			label$96e09ea_11_109:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r19 = (venum*)r3;
-			r20 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r19 == r20 ) goto label$96e09ea_11_127;
-			hl_assert();
-			label$96e09ea_11_127:
+			label$96e09ea_11_112:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,3);
 			((little_parser_ParserTokens_Variable*)tmp)->p0 = r16;
@@ -6938,97 +6484,85 @@ hl__types__ArrayObj little_parser_Parser_mergeNonBlockBodies(hl__types__ArrayObj
 			((little_parser_ParserTokens_Variable*)tmp)->p2 = r19;
 			r16 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r16));
-			goto label$96e09ea_11_795;
+			goto label$96e09ea_11_690;
 		case 4:
-			r8 = ((little_parser_ParserTokens_Function*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_Function*)r6)->p0;
 			r14 = ((little_parser_ParserTokens_Function*)r6)->p1;
 			r15 = ((little_parser_ParserTokens_Function*)r6)->p2;
 			r16 = ((little_parser_ParserTokens_Function*)r6)->p3;
 			if( r2 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeNonBlockBodies(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_11_148;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_11_133;
 			r18 = NULL;
-			goto label$96e09ea_11_154;
-			label$96e09ea_11_148:
+			goto label$96e09ea_11_136;
+			label$96e09ea_11_133:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r18 = (venum*)r3;
-			r19 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r18 == r19 ) goto label$96e09ea_11_154;
-			hl_assert();
-			label$96e09ea_11_154:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_11_136:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r14;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeNonBlockBodies(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_11_167;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_11_149;
 			r19 = NULL;
-			goto label$96e09ea_11_173;
-			label$96e09ea_11_167:
+			goto label$96e09ea_11_152;
+			label$96e09ea_11_149:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r19 = (venum*)r3;
-			r20 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r19 == r20 ) goto label$96e09ea_11_173;
-			hl_assert();
-			label$96e09ea_11_173:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_11_152:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r15;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeNonBlockBodies(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_11_186;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_11_165;
 			r20 = NULL;
-			goto label$96e09ea_11_192;
-			label$96e09ea_11_186:
+			goto label$96e09ea_11_168;
+			label$96e09ea_11_165:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r20 = (venum*)r3;
-			r21 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r20 == r21 ) goto label$96e09ea_11_192;
-			hl_assert();
-			label$96e09ea_11_192:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_11_168:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r16;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeNonBlockBodies(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_11_205;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_11_181;
 			r21 = NULL;
-			goto label$96e09ea_11_211;
-			label$96e09ea_11_205:
+			goto label$96e09ea_11_184;
+			label$96e09ea_11_181:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r21 = (venum*)r3;
-			r22 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r21 == r22 ) goto label$96e09ea_11_211;
-			hl_assert();
-			label$96e09ea_11_211:
+			label$96e09ea_11_184:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,4);
 			((little_parser_ParserTokens_Function*)tmp)->p0 = r18;
@@ -7037,75 +6571,66 @@ hl__types__ArrayObj little_parser_Parser_mergeNonBlockBodies(hl__types__ArrayObj
 			((little_parser_ParserTokens_Function*)tmp)->p3 = r21;
 			r18 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r18));
-			goto label$96e09ea_11_795;
+			goto label$96e09ea_11_690;
 		case 5:
-			r8 = ((little_parser_ParserTokens_ConditionCall*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_ConditionCall*)r6)->p0;
 			r14 = ((little_parser_ParserTokens_ConditionCall*)r6)->p1;
 			r15 = ((little_parser_ParserTokens_ConditionCall*)r6)->p2;
 			if( r2 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeNonBlockBodies(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_11_231;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_11_204;
 			r16 = NULL;
-			goto label$96e09ea_11_237;
-			label$96e09ea_11_231:
+			goto label$96e09ea_11_207;
+			label$96e09ea_11_204:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r16 = (venum*)r3;
-			r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r16 == r18 ) goto label$96e09ea_11_237;
-			hl_assert();
-			label$96e09ea_11_237:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_11_207:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r14;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeNonBlockBodies(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_11_250;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_11_220;
 			r18 = NULL;
-			goto label$96e09ea_11_256;
-			label$96e09ea_11_250:
+			goto label$96e09ea_11_223;
+			label$96e09ea_11_220:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r18 = (venum*)r3;
-			r19 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r18 == r19 ) goto label$96e09ea_11_256;
-			hl_assert();
-			label$96e09ea_11_256:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_11_223:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r15;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeNonBlockBodies(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_11_269;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_11_236;
 			r19 = NULL;
-			goto label$96e09ea_11_275;
-			label$96e09ea_11_269:
+			goto label$96e09ea_11_239;
+			label$96e09ea_11_236:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r19 = (venum*)r3;
-			r20 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r19 == r20 ) goto label$96e09ea_11_275;
-			hl_assert();
-			label$96e09ea_11_275:
+			label$96e09ea_11_239:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,5);
 			((little_parser_ParserTokens_ConditionCall*)tmp)->p0 = r16;
@@ -7113,90 +6638,81 @@ hl__types__ArrayObj little_parser_Parser_mergeNonBlockBodies(hl__types__ArrayObj
 			((little_parser_ParserTokens_ConditionCall*)tmp)->p2 = r19;
 			r16 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r16));
-			goto label$96e09ea_11_795;
+			goto label$96e09ea_11_690;
 		case 7:
-			r11 = ((little_parser_ParserTokens_Write*)r6)->p0;
-			r8 = ((little_parser_ParserTokens_Write*)r6)->p1;
+			r10 = ((little_parser_ParserTokens_Write*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_Write*)r6)->p1;
 			if( r2 == NULL ) hl_null_access();
-			r23 = little_parser_Parser_mergeNonBlockBodies(r11);
-			r9 = &t$little_parser_ParserTokens;
+			r22 = little_parser_Parser_mergeNonBlockBodies(r10);
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
-			r24 = hl_types_ArrayObj_alloc(r7);
-			r24 = little_parser_Parser_mergeNonBlockBodies(r24);
-			if( r24 == NULL ) hl_null_access();
+			((venum**)(r7 + 1))[r5] = r11;
+			r23 = hl_types_ArrayObj_alloc(r7);
+			r23 = little_parser_Parser_mergeNonBlockBodies(r23);
+			if( r23 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r24->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_11_295;
+			r9 = r23->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_11_259;
 			r14 = NULL;
-			goto label$96e09ea_11_301;
-			label$96e09ea_11_295:
-			r7 = r24->array;
+			goto label$96e09ea_11_262;
+			label$96e09ea_11_259:
+			r7 = r23->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r14 = (venum*)r3;
-			r15 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r14 == r15 ) goto label$96e09ea_11_301;
-			hl_assert();
-			label$96e09ea_11_301:
+			label$96e09ea_11_262:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,7);
-			((little_parser_ParserTokens_Write*)tmp)->p0 = r23;
+			((little_parser_ParserTokens_Write*)tmp)->p0 = r22;
 			((little_parser_ParserTokens_Write*)tmp)->p1 = r14;
 			r14 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r14));
-			goto label$96e09ea_11_795;
+			goto label$96e09ea_11_690;
 		case 10:
-			r8 = ((little_parser_ParserTokens_FunctionCall*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_FunctionCall*)r6)->p0;
 			r14 = ((little_parser_ParserTokens_FunctionCall*)r6)->p1;
-			r10 = 1;
-			r5 = r4 + r10;
-			r10 = r0->length;
-			if( r5 < r10 ) goto label$96e09ea_11_353;
+			r9 = 1;
+			r5 = r4 + r9;
+			r9 = r0->length;
+			if( r5 < r9 ) goto label$96e09ea_11_308;
 			if( r2 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeNonBlockBodies(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_11_324;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_11_285;
 			r15 = NULL;
-			goto label$96e09ea_11_330;
-			label$96e09ea_11_324:
+			goto label$96e09ea_11_288;
+			label$96e09ea_11_285:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r15 = (venum*)r3;
-			r16 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r15 == r16 ) goto label$96e09ea_11_330;
-			hl_assert();
-			label$96e09ea_11_330:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_11_288:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r14;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeNonBlockBodies(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_11_343;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_11_301;
 			r16 = NULL;
-			goto label$96e09ea_11_349;
-			label$96e09ea_11_343:
+			goto label$96e09ea_11_304;
+			label$96e09ea_11_301:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r16 = (venum*)r3;
-			r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r16 == r18 ) goto label$96e09ea_11_349;
-			hl_assert();
-			label$96e09ea_11_349:
+			label$96e09ea_11_304:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,10);
 			((little_parser_ParserTokens_FunctionCall*)tmp)->p0 = r15;
@@ -7204,22 +6720,19 @@ hl__types__ArrayObj little_parser_Parser_mergeNonBlockBodies(hl__types__ArrayObj
 			r15 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r15));
 			++r4;
-			goto label$96e09ea_11_32;
-			label$96e09ea_11_353:
-			r10 = 1;
-			r5 = r4 + r10;
-			r10 = r0->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_11_359;
+			goto label$96e09ea_11_29;
+			label$96e09ea_11_308:
+			r9 = 1;
+			r5 = r4 + r9;
+			r9 = r0->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_11_314;
 			r15 = NULL;
-			goto label$96e09ea_11_365;
-			label$96e09ea_11_359:
+			goto label$96e09ea_11_317;
+			label$96e09ea_11_314:
 			r7 = r0->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r15 = (venum*)r3;
-			r16 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r15 == r16 ) goto label$96e09ea_11_365;
-			hl_assert();
-			label$96e09ea_11_365:
+			label$96e09ea_11_317:
 			if( r15 == NULL ) hl_null_access();
 			r5 = HL__ENUM_INDEX__(r15);
 			switch(r5) {
@@ -7238,69 +6751,60 @@ hl__types__ArrayObj little_parser_Parser_mergeNonBlockBodies(hl__types__ArrayObj
 				case 14:
 				case 15:
 					if( r2 == NULL ) hl_null_access();
-					r9 = &t$little_parser_ParserTokens;
+					r8 = &t$little_parser_ParserTokens;
 					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
+					r7 = hl_alloc_array(r8,r5);
 					r5 = 0;
-					((venum**)(r7 + 1))[r5] = r8;
+					((venum**)(r7 + 1))[r5] = r11;
 					r17 = hl_types_ArrayObj_alloc(r7);
 					r17 = little_parser_Parser_mergeNonBlockBodies(r17);
 					if( r17 == NULL ) hl_null_access();
 					r5 = 0;
-					r10 = r17->length;
-					if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_11_382;
+					r9 = r17->length;
+					if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_11_334;
 					r16 = NULL;
-					goto label$96e09ea_11_388;
-					label$96e09ea_11_382:
+					goto label$96e09ea_11_337;
+					label$96e09ea_11_334:
 					r7 = r17->array;
 					r3 = ((vdynamic**)(r7 + 1))[r5];
 					r16 = (venum*)r3;
-					r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-					if( r16 == r18 ) goto label$96e09ea_11_388;
-					hl_assert();
-					label$96e09ea_11_388:
-					r9 = &t$little_parser_ParserTokens;
+					label$96e09ea_11_337:
+					r8 = &t$little_parser_ParserTokens;
 					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
+					r7 = hl_alloc_array(r8,r5);
 					r5 = 0;
 					((venum**)(r7 + 1))[r5] = r14;
 					r17 = hl_types_ArrayObj_alloc(r7);
 					r17 = little_parser_Parser_mergeNonBlockBodies(r17);
 					if( r17 == NULL ) hl_null_access();
 					r5 = 0;
-					r10 = r17->length;
-					if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_11_401;
+					r9 = r17->length;
+					if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_11_350;
 					r18 = NULL;
-					goto label$96e09ea_11_407;
-					label$96e09ea_11_401:
+					goto label$96e09ea_11_353;
+					label$96e09ea_11_350:
 					r7 = r17->array;
 					r3 = ((vdynamic**)(r7 + 1))[r5];
 					r18 = (venum*)r3;
-					r19 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-					if( r18 == r19 ) goto label$96e09ea_11_407;
-					hl_assert();
-					label$96e09ea_11_407:
-					r9 = &t$little_parser_ParserTokens;
+					label$96e09ea_11_353:
+					r8 = &t$little_parser_ParserTokens;
 					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
+					r7 = hl_alloc_array(r8,r5);
 					r5 = 0;
 					((venum**)(r7 + 1))[r5] = r15;
 					r17 = hl_types_ArrayObj_alloc(r7);
 					r17 = little_parser_Parser_mergeNonBlockBodies(r17);
 					if( r17 == NULL ) hl_null_access();
 					r5 = 0;
-					r10 = r17->length;
-					if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_11_420;
+					r9 = r17->length;
+					if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_11_366;
 					r19 = NULL;
-					goto label$96e09ea_11_426;
-					label$96e09ea_11_420:
+					goto label$96e09ea_11_369;
+					label$96e09ea_11_366:
 					r7 = r17->array;
 					r3 = ((vdynamic**)(r7 + 1))[r5];
 					r19 = (venum*)r3;
-					r20 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-					if( r19 == r20 ) goto label$96e09ea_11_426;
-					hl_assert();
-					label$96e09ea_11_426:
+					label$96e09ea_11_369:
 					{ venum *tmp;
 					tmp = hl_alloc_enum(&t$little_parser_ParserTokens,5);
 					((little_parser_ParserTokens_ConditionCall*)tmp)->p0 = r16;
@@ -7309,207 +6813,183 @@ hl__types__ArrayObj little_parser_Parser_mergeNonBlockBodies(hl__types__ArrayObj
 					r16 = tmp; };
 					r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r16));
 					++r4;
-					goto label$96e09ea_11_600;
+					goto label$96e09ea_11_519;
 				case 0:
 					r5 = ((little_parser_ParserTokens_SetLine*)r15)->p0;
 					if( r2 == NULL ) hl_null_access();
-					r9 = &t$little_parser_ParserTokens;
-					r10 = 1;
-					r7 = hl_alloc_array(r9,r10);
-					r10 = 0;
-					((venum**)(r7 + 1))[r10] = r8;
+					r8 = &t$little_parser_ParserTokens;
+					r9 = 1;
+					r7 = hl_alloc_array(r8,r9);
+					r9 = 0;
+					((venum**)(r7 + 1))[r9] = r11;
 					r17 = hl_types_ArrayObj_alloc(r7);
 					r17 = little_parser_Parser_mergeNonBlockBodies(r17);
 					if( r17 == NULL ) hl_null_access();
-					r10 = 0;
-					r25 = r17->length;
-					if( ((unsigned)r10) < ((unsigned)r25) ) goto label$96e09ea_11_445;
+					r9 = 0;
+					r24 = r17->length;
+					if( ((unsigned)r9) < ((unsigned)r24) ) goto label$96e09ea_11_388;
 					r16 = NULL;
-					goto label$96e09ea_11_451;
-					label$96e09ea_11_445:
+					goto label$96e09ea_11_391;
+					label$96e09ea_11_388:
 					r7 = r17->array;
-					r3 = ((vdynamic**)(r7 + 1))[r10];
+					r3 = ((vdynamic**)(r7 + 1))[r9];
 					r16 = (venum*)r3;
-					r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-					if( r16 == r18 ) goto label$96e09ea_11_451;
-					hl_assert();
-					label$96e09ea_11_451:
-					r9 = &t$little_parser_ParserTokens;
-					r10 = 1;
-					r7 = hl_alloc_array(r9,r10);
-					r10 = 0;
-					((venum**)(r7 + 1))[r10] = r14;
+					label$96e09ea_11_391:
+					r8 = &t$little_parser_ParserTokens;
+					r9 = 1;
+					r7 = hl_alloc_array(r8,r9);
+					r9 = 0;
+					((venum**)(r7 + 1))[r9] = r14;
 					r17 = hl_types_ArrayObj_alloc(r7);
 					r17 = little_parser_Parser_mergeNonBlockBodies(r17);
 					if( r17 == NULL ) hl_null_access();
-					r10 = 0;
-					r25 = r17->length;
-					if( ((unsigned)r10) < ((unsigned)r25) ) goto label$96e09ea_11_464;
+					r9 = 0;
+					r24 = r17->length;
+					if( ((unsigned)r9) < ((unsigned)r24) ) goto label$96e09ea_11_404;
 					r18 = NULL;
-					goto label$96e09ea_11_470;
-					label$96e09ea_11_464:
+					goto label$96e09ea_11_407;
+					label$96e09ea_11_404:
 					r7 = r17->array;
-					r3 = ((vdynamic**)(r7 + 1))[r10];
+					r3 = ((vdynamic**)(r7 + 1))[r9];
 					r18 = (venum*)r3;
-					r19 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-					if( r18 == r19 ) goto label$96e09ea_11_470;
-					hl_assert();
-					label$96e09ea_11_470:
+					label$96e09ea_11_407:
 					{ venum *tmp;
 					tmp = hl_alloc_enum(&t$little_parser_ParserTokens,10);
 					((little_parser_ParserTokens_FunctionCall*)tmp)->p0 = r16;
 					((little_parser_ParserTokens_FunctionCall*)tmp)->p1 = r18;
 					r16 = tmp; };
-					r10 = hl_types_ArrayObj_push(r2,((vdynamic*)r16));
-					goto label$96e09ea_11_600;
+					r9 = hl_types_ArrayObj_push(r2,((vdynamic*)r16));
+					goto label$96e09ea_11_519;
 				case 1:
 					r12 = ((little_parser_ParserTokens_SetModule*)r15)->p0;
 					if( r2 == NULL ) hl_null_access();
-					r9 = &t$little_parser_ParserTokens;
+					r8 = &t$little_parser_ParserTokens;
 					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
+					r7 = hl_alloc_array(r8,r5);
 					r5 = 0;
-					((venum**)(r7 + 1))[r5] = r8;
+					((venum**)(r7 + 1))[r5] = r11;
 					r17 = hl_types_ArrayObj_alloc(r7);
 					r17 = little_parser_Parser_mergeNonBlockBodies(r17);
 					if( r17 == NULL ) hl_null_access();
 					r5 = 0;
-					r10 = r17->length;
-					if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_11_488;
+					r9 = r17->length;
+					if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_11_425;
 					r16 = NULL;
-					goto label$96e09ea_11_494;
-					label$96e09ea_11_488:
+					goto label$96e09ea_11_428;
+					label$96e09ea_11_425:
 					r7 = r17->array;
 					r3 = ((vdynamic**)(r7 + 1))[r5];
 					r16 = (venum*)r3;
-					r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-					if( r16 == r18 ) goto label$96e09ea_11_494;
-					hl_assert();
-					label$96e09ea_11_494:
-					r9 = &t$little_parser_ParserTokens;
+					label$96e09ea_11_428:
+					r8 = &t$little_parser_ParserTokens;
 					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
+					r7 = hl_alloc_array(r8,r5);
 					r5 = 0;
 					((venum**)(r7 + 1))[r5] = r14;
 					r17 = hl_types_ArrayObj_alloc(r7);
 					r17 = little_parser_Parser_mergeNonBlockBodies(r17);
 					if( r17 == NULL ) hl_null_access();
 					r5 = 0;
-					r10 = r17->length;
-					if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_11_507;
+					r9 = r17->length;
+					if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_11_441;
 					r18 = NULL;
-					goto label$96e09ea_11_513;
-					label$96e09ea_11_507:
+					goto label$96e09ea_11_444;
+					label$96e09ea_11_441:
 					r7 = r17->array;
 					r3 = ((vdynamic**)(r7 + 1))[r5];
 					r18 = (venum*)r3;
-					r19 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-					if( r18 == r19 ) goto label$96e09ea_11_513;
-					hl_assert();
-					label$96e09ea_11_513:
+					label$96e09ea_11_444:
 					{ venum *tmp;
 					tmp = hl_alloc_enum(&t$little_parser_ParserTokens,10);
 					((little_parser_ParserTokens_FunctionCall*)tmp)->p0 = r16;
 					((little_parser_ParserTokens_FunctionCall*)tmp)->p1 = r18;
 					r16 = tmp; };
 					r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r16));
-					goto label$96e09ea_11_600;
+					goto label$96e09ea_11_519;
 				case 2:
 					if( r2 == NULL ) hl_null_access();
-					r9 = &t$little_parser_ParserTokens;
+					r8 = &t$little_parser_ParserTokens;
 					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
+					r7 = hl_alloc_array(r8,r5);
 					r5 = 0;
-					((venum**)(r7 + 1))[r5] = r8;
+					((venum**)(r7 + 1))[r5] = r11;
 					r17 = hl_types_ArrayObj_alloc(r7);
 					r17 = little_parser_Parser_mergeNonBlockBodies(r17);
 					if( r17 == NULL ) hl_null_access();
 					r5 = 0;
-					r10 = r17->length;
-					if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_11_530;
+					r9 = r17->length;
+					if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_11_461;
 					r16 = NULL;
-					goto label$96e09ea_11_536;
-					label$96e09ea_11_530:
+					goto label$96e09ea_11_464;
+					label$96e09ea_11_461:
 					r7 = r17->array;
 					r3 = ((vdynamic**)(r7 + 1))[r5];
 					r16 = (venum*)r3;
-					r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-					if( r16 == r18 ) goto label$96e09ea_11_536;
-					hl_assert();
-					label$96e09ea_11_536:
-					r9 = &t$little_parser_ParserTokens;
+					label$96e09ea_11_464:
+					r8 = &t$little_parser_ParserTokens;
 					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
+					r7 = hl_alloc_array(r8,r5);
 					r5 = 0;
 					((venum**)(r7 + 1))[r5] = r14;
 					r17 = hl_types_ArrayObj_alloc(r7);
 					r17 = little_parser_Parser_mergeNonBlockBodies(r17);
 					if( r17 == NULL ) hl_null_access();
 					r5 = 0;
-					r10 = r17->length;
-					if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_11_549;
+					r9 = r17->length;
+					if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_11_477;
 					r18 = NULL;
-					goto label$96e09ea_11_555;
-					label$96e09ea_11_549:
+					goto label$96e09ea_11_480;
+					label$96e09ea_11_477:
 					r7 = r17->array;
 					r3 = ((vdynamic**)(r7 + 1))[r5];
 					r18 = (venum*)r3;
-					r19 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-					if( r18 == r19 ) goto label$96e09ea_11_555;
-					hl_assert();
-					label$96e09ea_11_555:
+					label$96e09ea_11_480:
 					{ venum *tmp;
 					tmp = hl_alloc_enum(&t$little_parser_ParserTokens,10);
 					((little_parser_ParserTokens_FunctionCall*)tmp)->p0 = r16;
 					((little_parser_ParserTokens_FunctionCall*)tmp)->p1 = r18;
 					r16 = tmp; };
 					r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r16));
-					goto label$96e09ea_11_600;
+					goto label$96e09ea_11_519;
 				case 16:
 					r12 = ((little_parser_ParserTokens_Sign*)r15)->p0;
 					if( r2 == NULL ) hl_null_access();
-					r9 = &t$little_parser_ParserTokens;
+					r8 = &t$little_parser_ParserTokens;
 					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
+					r7 = hl_alloc_array(r8,r5);
 					r5 = 0;
-					((venum**)(r7 + 1))[r5] = r8;
+					((venum**)(r7 + 1))[r5] = r11;
 					r17 = hl_types_ArrayObj_alloc(r7);
 					r17 = little_parser_Parser_mergeNonBlockBodies(r17);
 					if( r17 == NULL ) hl_null_access();
 					r5 = 0;
-					r10 = r17->length;
-					if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_11_573;
+					r9 = r17->length;
+					if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_11_498;
 					r16 = NULL;
-					goto label$96e09ea_11_579;
-					label$96e09ea_11_573:
+					goto label$96e09ea_11_501;
+					label$96e09ea_11_498:
 					r7 = r17->array;
 					r3 = ((vdynamic**)(r7 + 1))[r5];
 					r16 = (venum*)r3;
-					r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-					if( r16 == r18 ) goto label$96e09ea_11_579;
-					hl_assert();
-					label$96e09ea_11_579:
-					r9 = &t$little_parser_ParserTokens;
+					label$96e09ea_11_501:
+					r8 = &t$little_parser_ParserTokens;
 					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
+					r7 = hl_alloc_array(r8,r5);
 					r5 = 0;
 					((venum**)(r7 + 1))[r5] = r14;
 					r17 = hl_types_ArrayObj_alloc(r7);
 					r17 = little_parser_Parser_mergeNonBlockBodies(r17);
 					if( r17 == NULL ) hl_null_access();
 					r5 = 0;
-					r10 = r17->length;
-					if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_11_592;
+					r9 = r17->length;
+					if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_11_514;
 					r18 = NULL;
-					goto label$96e09ea_11_598;
-					label$96e09ea_11_592:
+					goto label$96e09ea_11_517;
+					label$96e09ea_11_514:
 					r7 = r17->array;
 					r3 = ((vdynamic**)(r7 + 1))[r5];
 					r18 = (venum*)r3;
-					r19 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-					if( r18 == r19 ) goto label$96e09ea_11_598;
-					hl_assert();
-					label$96e09ea_11_598:
+					label$96e09ea_11_517:
 					{ venum *tmp;
 					tmp = hl_alloc_enum(&t$little_parser_ParserTokens,10);
 					((little_parser_ParserTokens_FunctionCall*)tmp)->p0 = r16;
@@ -7517,268 +6997,244 @@ hl__types__ArrayObj little_parser_Parser_mergeNonBlockBodies(hl__types__ArrayObj
 					r16 = tmp; };
 					r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r16));
 			}
-			label$96e09ea_11_600:
-			goto label$96e09ea_11_795;
+			label$96e09ea_11_519:
+			goto label$96e09ea_11_690;
 		case 11:
-			r8 = ((little_parser_ParserTokens_Return*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_Return*)r6)->p0;
 			r14 = ((little_parser_ParserTokens_Return*)r6)->p1;
 			if( r2 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeNonBlockBodies(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_11_617;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_11_536;
 			r15 = NULL;
-			goto label$96e09ea_11_623;
-			label$96e09ea_11_617:
+			goto label$96e09ea_11_539;
+			label$96e09ea_11_536:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r15 = (venum*)r3;
-			r16 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r15 == r16 ) goto label$96e09ea_11_623;
-			hl_assert();
-			label$96e09ea_11_623:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_11_539:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r14;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeNonBlockBodies(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_11_636;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_11_552;
 			r16 = NULL;
-			goto label$96e09ea_11_642;
-			label$96e09ea_11_636:
+			goto label$96e09ea_11_555;
+			label$96e09ea_11_552:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r16 = (venum*)r3;
-			r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r16 == r18 ) goto label$96e09ea_11_642;
-			hl_assert();
-			label$96e09ea_11_642:
+			label$96e09ea_11_555:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,11);
 			((little_parser_ParserTokens_Return*)tmp)->p0 = r15;
 			((little_parser_ParserTokens_Return*)tmp)->p1 = r16;
 			r15 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r15));
-			goto label$96e09ea_11_795;
+			goto label$96e09ea_11_690;
 		case 12:
-			r11 = ((little_parser_ParserTokens_Expression*)r6)->p0;
-			r8 = ((little_parser_ParserTokens_Expression*)r6)->p1;
+			r10 = ((little_parser_ParserTokens_Expression*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_Expression*)r6)->p1;
 			if( r2 == NULL ) hl_null_access();
-			r23 = little_parser_Parser_mergeNonBlockBodies(r11);
-			r9 = &t$little_parser_ParserTokens;
+			r22 = little_parser_Parser_mergeNonBlockBodies(r10);
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
-			r24 = hl_types_ArrayObj_alloc(r7);
-			r24 = little_parser_Parser_mergeNonBlockBodies(r24);
-			if( r24 == NULL ) hl_null_access();
+			((venum**)(r7 + 1))[r5] = r11;
+			r23 = hl_types_ArrayObj_alloc(r7);
+			r23 = little_parser_Parser_mergeNonBlockBodies(r23);
+			if( r23 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r24->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_11_662;
+			r9 = r23->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_11_575;
 			r14 = NULL;
-			goto label$96e09ea_11_668;
-			label$96e09ea_11_662:
-			r7 = r24->array;
+			goto label$96e09ea_11_578;
+			label$96e09ea_11_575:
+			r7 = r23->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r14 = (venum*)r3;
-			r15 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r14 == r15 ) goto label$96e09ea_11_668;
-			hl_assert();
-			label$96e09ea_11_668:
+			label$96e09ea_11_578:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,12);
-			((little_parser_ParserTokens_Expression*)tmp)->p0 = r23;
+			((little_parser_ParserTokens_Expression*)tmp)->p0 = r22;
 			((little_parser_ParserTokens_Expression*)tmp)->p1 = r14;
 			r14 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r14));
-			goto label$96e09ea_11_795;
+			goto label$96e09ea_11_690;
 		case 13:
-			r11 = ((little_parser_ParserTokens_Block*)r6)->p0;
-			r8 = ((little_parser_ParserTokens_Block*)r6)->p1;
+			r10 = ((little_parser_ParserTokens_Block*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_Block*)r6)->p1;
 			if( r2 == NULL ) hl_null_access();
-			r23 = little_parser_Parser_mergeNonBlockBodies(r11);
-			r9 = &t$little_parser_ParserTokens;
+			r22 = little_parser_Parser_mergeNonBlockBodies(r10);
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
-			r24 = hl_types_ArrayObj_alloc(r7);
-			r24 = little_parser_Parser_mergeNonBlockBodies(r24);
-			if( r24 == NULL ) hl_null_access();
+			((venum**)(r7 + 1))[r5] = r11;
+			r23 = hl_types_ArrayObj_alloc(r7);
+			r23 = little_parser_Parser_mergeNonBlockBodies(r23);
+			if( r23 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r24->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_11_688;
+			r9 = r23->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_11_598;
 			r14 = NULL;
-			goto label$96e09ea_11_694;
-			label$96e09ea_11_688:
-			r7 = r24->array;
+			goto label$96e09ea_11_601;
+			label$96e09ea_11_598:
+			r7 = r23->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r14 = (venum*)r3;
-			r15 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r14 == r15 ) goto label$96e09ea_11_694;
-			hl_assert();
-			label$96e09ea_11_694:
+			label$96e09ea_11_601:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,13);
-			((little_parser_ParserTokens_Block*)tmp)->p0 = r23;
+			((little_parser_ParserTokens_Block*)tmp)->p0 = r22;
 			((little_parser_ParserTokens_Block*)tmp)->p1 = r14;
 			r14 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r14));
-			goto label$96e09ea_11_795;
+			goto label$96e09ea_11_690;
 		case 14:
-			r11 = ((little_parser_ParserTokens_PartArray*)r6)->p0;
+			r10 = ((little_parser_ParserTokens_PartArray*)r6)->p0;
 			if( r2 == NULL ) hl_null_access();
-			r23 = little_parser_Parser_mergeNonBlockBodies(r11);
-			r8 = hl_alloc_enum(&t$little_parser_ParserTokens,14);
-			((little_parser_ParserTokens_PartArray*)r8)->p0 = r23;
-			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r8));
-			goto label$96e09ea_11_795;
+			r22 = little_parser_Parser_mergeNonBlockBodies(r10);
+			r11 = hl_alloc_enum(&t$little_parser_ParserTokens,14);
+			((little_parser_ParserTokens_PartArray*)r11)->p0 = r22;
+			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r11));
+			goto label$96e09ea_11_690;
 		case 15:
-			r8 = ((little_parser_ParserTokens_PropertyAccess*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_PropertyAccess*)r6)->p0;
 			r14 = ((little_parser_ParserTokens_PropertyAccess*)r6)->p1;
 			if( r2 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeNonBlockBodies(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_11_719;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_11_626;
 			r15 = NULL;
-			goto label$96e09ea_11_725;
-			label$96e09ea_11_719:
+			goto label$96e09ea_11_629;
+			label$96e09ea_11_626:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r15 = (venum*)r3;
-			r16 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r15 == r16 ) goto label$96e09ea_11_725;
-			hl_assert();
-			label$96e09ea_11_725:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_11_629:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r14;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeNonBlockBodies(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_11_738;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_11_642;
 			r16 = NULL;
-			goto label$96e09ea_11_744;
-			label$96e09ea_11_738:
+			goto label$96e09ea_11_645;
+			label$96e09ea_11_642:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r16 = (venum*)r3;
-			r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r16 == r18 ) goto label$96e09ea_11_744;
-			hl_assert();
-			label$96e09ea_11_744:
+			label$96e09ea_11_645:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,15);
 			((little_parser_ParserTokens_PropertyAccess*)tmp)->p0 = r15;
 			((little_parser_ParserTokens_PropertyAccess*)tmp)->p1 = r16;
 			r15 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r15));
-			goto label$96e09ea_11_795;
+			goto label$96e09ea_11_690;
 		case 25:
 			r12 = ((little_parser_ParserTokens_Custom*)r6)->p0;
-			r11 = ((little_parser_ParserTokens_Custom*)r6)->p1;
-			r9 = &t$little_parser_ParserTokens;
+			r10 = ((little_parser_ParserTokens_Custom*)r6)->p1;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 0;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r5 = 0;
-			r23 = r11;
-			label$96e09ea_11_755:
-			if( r23 == NULL ) hl_null_access();
-			r25 = r23->length;
-			if( r5 >= r25 ) goto label$96e09ea_11_792;
-			r25 = r23->length;
-			if( ((unsigned)r5) < ((unsigned)r25) ) goto label$96e09ea_11_763;
-			r8 = NULL;
-			goto label$96e09ea_11_769;
-			label$96e09ea_11_763:
-			r7 = r23->array;
+			r22 = r10;
+			label$96e09ea_11_656:
+			if( r22 == NULL ) hl_null_access();
+			r24 = r22->length;
+			if( r5 >= r24 ) goto label$96e09ea_11_687;
+			r24 = r22->length;
+			if( ((unsigned)r5) < ((unsigned)r24) ) goto label$96e09ea_11_664;
+			r11 = NULL;
+			goto label$96e09ea_11_667;
+			label$96e09ea_11_664:
+			r7 = r22->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
-			r8 = (venum*)r3;
-			r14 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r8 == r14 ) goto label$96e09ea_11_769;
-			hl_assert();
-			label$96e09ea_11_769:
+			r11 = (venum*)r3;
+			label$96e09ea_11_667:
 			++r5;
 			if( r17 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
-			r10 = 1;
-			r7 = hl_alloc_array(r9,r10);
-			r10 = 0;
-			((venum**)(r7 + 1))[r10] = r8;
-			r26 = hl_types_ArrayObj_alloc(r7);
-			r26 = little_parser_Parser_mergeNonBlockBodies(r26);
-			if( r26 == NULL ) hl_null_access();
-			r10 = 0;
-			r25 = r26->length;
-			if( ((unsigned)r10) < ((unsigned)r25) ) goto label$96e09ea_11_784;
+			r8 = &t$little_parser_ParserTokens;
+			r9 = 1;
+			r7 = hl_alloc_array(r8,r9);
+			r9 = 0;
+			((venum**)(r7 + 1))[r9] = r11;
+			r25 = hl_types_ArrayObj_alloc(r7);
+			r25 = little_parser_Parser_mergeNonBlockBodies(r25);
+			if( r25 == NULL ) hl_null_access();
+			r9 = 0;
+			r24 = r25->length;
+			if( ((unsigned)r9) < ((unsigned)r24) ) goto label$96e09ea_11_682;
 			r14 = NULL;
-			goto label$96e09ea_11_790;
-			label$96e09ea_11_784:
-			r7 = r26->array;
-			r3 = ((vdynamic**)(r7 + 1))[r10];
+			goto label$96e09ea_11_685;
+			label$96e09ea_11_682:
+			r7 = r25->array;
+			r3 = ((vdynamic**)(r7 + 1))[r9];
 			r14 = (venum*)r3;
-			r15 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r14 == r15 ) goto label$96e09ea_11_790;
-			hl_assert();
-			label$96e09ea_11_790:
-			r10 = hl_types_ArrayObj_push(r17,((vdynamic*)r14));
-			goto label$96e09ea_11_755;
-			label$96e09ea_11_792:
+			label$96e09ea_11_685:
+			r9 = hl_types_ArrayObj_push(r17,((vdynamic*)r14));
+			goto label$96e09ea_11_656;
+			label$96e09ea_11_687:
 			if( r2 == NULL ) hl_null_access();
-			r8 = hl_alloc_enum(&t$little_parser_ParserTokens,25);
-			((little_parser_ParserTokens_Custom*)r8)->p0 = r12;
-			((little_parser_ParserTokens_Custom*)r8)->p1 = r17;
-			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r8));
+			r11 = hl_alloc_enum(&t$little_parser_ParserTokens,25);
+			((little_parser_ParserTokens_Custom*)r11)->p0 = r12;
+			((little_parser_ParserTokens_Custom*)r11)->p1 = r17;
+			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r11));
 	}
-	label$96e09ea_11_795:
+	label$96e09ea_11_690:
 	++r4;
-	goto label$96e09ea_11_32;
-	label$96e09ea_11_797:
+	goto label$96e09ea_11_29;
+	label$96e09ea_11_692:
 	little_parser_Parser_resetLines();
 	return r2;
 }
 
 hl__types__ArrayObj little_parser_Parser_mergeElses(hl__types__ArrayObj r0) {
-	String r12, r13, r40;
-	vvirtual *r33;
-	little__$Little r27;
-	hl__types__ArrayObj r2, r11, r17, r23, r24, r42;
-	hl_type *r9;
-	venum *r6, *r8, *r14, *r15, *r16, *r18, *r19, *r20, *r21, *r22, *r29, *r31, *r35, *r36, *r37, *r39, *r41;
-	bool r25, r28;
-	little__interpreter__Runtime r32;
-	little__KeywordConfig r26;
-	hl__types__ArrayDyn r38;
-	little__parser__$Parser r34;
+	String r12, r13, r37;
+	vvirtual *r31;
+	little__$Little r26;
+	hl__types__ArrayObj r2, r10, r17, r22, r23, r39;
+	hl_type *r8;
+	venum *r6, *r11, *r14, *r15, *r16, *r18, *r19, *r20, *r21, *r28, *r33, *r34, *r35, *r38;
+	bool r24, r27;
+	little__interpreter__Runtime r30;
+	little__KeywordConfig r25;
+	hl__types__ArrayDyn r36;
+	little__parser__$Parser r32;
 	vdynamic *r3;
 	varray *r7;
-	int r4, r5, r10, r30;
+	int r4, r5, r9, r29;
 	if( r0 ) goto label$96e09ea_12_3;
 	r2 = NULL;
 	return r2;
@@ -7786,51 +7242,45 @@ hl__types__ArrayObj little_parser_Parser_mergeElses(hl__types__ArrayObj r0) {
 	if( r0 == NULL ) hl_null_access();
 	r4 = r0->length;
 	r5 = 1;
-	if( r4 != r5 ) goto label$96e09ea_12_27;
+	if( r4 != r5 ) goto label$96e09ea_12_24;
 	r4 = 0;
 	r5 = r0->length;
 	if( ((unsigned)r4) < ((unsigned)r5) ) goto label$96e09ea_12_12;
 	r6 = NULL;
-	goto label$96e09ea_12_18;
+	goto label$96e09ea_12_15;
 	label$96e09ea_12_12:
 	r7 = r0->array;
 	r3 = ((vdynamic**)(r7 + 1))[r4];
 	r6 = (venum*)r3;
-	r8 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-	if( r6 == r8 ) goto label$96e09ea_12_18;
-	hl_assert();
-	label$96e09ea_12_18:
-	if( r6 ) goto label$96e09ea_12_27;
-	r9 = &t$little_parser_ParserTokens;
+	label$96e09ea_12_15:
+	if( r6 ) goto label$96e09ea_12_24;
+	r8 = &t$little_parser_ParserTokens;
 	r4 = 1;
-	r7 = hl_alloc_array(r9,r4);
+	r7 = hl_alloc_array(r8,r4);
 	r6 = NULL;
 	r4 = 0;
 	((venum**)(r7 + 1))[r4] = r6;
 	r2 = hl_types_ArrayObj_alloc(r7);
 	return r2;
-	label$96e09ea_12_27:
-	r9 = &t$little_parser_ParserTokens;
+	label$96e09ea_12_24:
+	r8 = &t$little_parser_ParserTokens;
 	r4 = 0;
-	r7 = hl_alloc_array(r9,r4);
+	r7 = hl_alloc_array(r8,r4);
 	r2 = hl_types_ArrayObj_alloc(r7);
 	r4 = 0;
-	label$96e09ea_12_32:
+	label$96e09ea_12_29:
 	if( r0 == NULL ) hl_null_access();
-	r10 = r0->length;
-	if( r4 >= r10 ) goto label$96e09ea_12_1152;
-	r10 = r0->length;
-	if( ((unsigned)r4) < ((unsigned)r10) ) goto label$96e09ea_12_40;
+	r9 = r0->length;
+	if( r4 >= r9 ) goto label$96e09ea_12_1050;
+	r9 = r0->length;
+	if( ((unsigned)r4) < ((unsigned)r9) ) goto label$96e09ea_12_37;
 	r6 = NULL;
-	goto label$96e09ea_12_46;
-	label$96e09ea_12_40:
+	goto label$96e09ea_12_40;
+	label$96e09ea_12_37:
 	r7 = r0->array;
 	r3 = ((vdynamic**)(r7 + 1))[r4];
 	r6 = (venum*)r3;
-	r8 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-	if( r6 == r8 ) goto label$96e09ea_12_46;
-	hl_assert();
-	label$96e09ea_12_46:
+	label$96e09ea_12_40:
 	if( r6 == NULL ) hl_null_access();
 	r5 = HL__ENUM_INDEX__(r6);
 	switch(r5) {
@@ -7848,92 +7298,83 @@ hl__types__ArrayObj little_parser_Parser_mergeElses(hl__types__ArrayObj r0) {
 		case 24:
 			if( r2 == NULL ) hl_null_access();
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
-			goto label$96e09ea_12_1150;
+			goto label$96e09ea_12_1048;
 		case 0:
 			r5 = ((little_parser_ParserTokens_SetLine*)r6)->p0;
 			little_parser_Parser_setLine(r5);
 			if( r2 == NULL ) hl_null_access();
-			r10 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
-			goto label$96e09ea_12_1150;
+			r9 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
+			goto label$96e09ea_12_1048;
 		case 1:
 			r12 = ((little_parser_ParserTokens_SetModule*)r6)->p0;
 			r13 = little_parser_Parser_set_module(r12);
 			if( r2 == NULL ) hl_null_access();
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
-			goto label$96e09ea_12_1150;
+			goto label$96e09ea_12_1048;
 		case 2:
 			little_parser_Parser_nextPart();
 			if( r2 == NULL ) hl_null_access();
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
-			goto label$96e09ea_12_1150;
+			goto label$96e09ea_12_1048;
 		case 3:
-			r8 = ((little_parser_ParserTokens_Variable*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_Variable*)r6)->p0;
 			r14 = ((little_parser_ParserTokens_Variable*)r6)->p1;
 			r15 = ((little_parser_ParserTokens_Variable*)r6)->p2;
 			if( r2 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeElses(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_12_83;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_12_77;
 			r16 = NULL;
-			goto label$96e09ea_12_89;
-			label$96e09ea_12_83:
+			goto label$96e09ea_12_80;
+			label$96e09ea_12_77:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r16 = (venum*)r3;
-			r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r16 == r18 ) goto label$96e09ea_12_89;
-			hl_assert();
-			label$96e09ea_12_89:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_12_80:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r14;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeElses(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_12_102;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_12_93;
 			r18 = NULL;
-			goto label$96e09ea_12_108;
-			label$96e09ea_12_102:
+			goto label$96e09ea_12_96;
+			label$96e09ea_12_93:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r18 = (venum*)r3;
-			r19 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r18 == r19 ) goto label$96e09ea_12_108;
-			hl_assert();
-			label$96e09ea_12_108:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_12_96:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r15;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeElses(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_12_121;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_12_109;
 			r19 = NULL;
-			goto label$96e09ea_12_127;
-			label$96e09ea_12_121:
+			goto label$96e09ea_12_112;
+			label$96e09ea_12_109:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r19 = (venum*)r3;
-			r20 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r19 == r20 ) goto label$96e09ea_12_127;
-			hl_assert();
-			label$96e09ea_12_127:
+			label$96e09ea_12_112:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,3);
 			((little_parser_ParserTokens_Variable*)tmp)->p0 = r16;
@@ -7941,97 +7382,85 @@ hl__types__ArrayObj little_parser_Parser_mergeElses(hl__types__ArrayObj r0) {
 			((little_parser_ParserTokens_Variable*)tmp)->p2 = r19;
 			r16 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r16));
-			goto label$96e09ea_12_1150;
+			goto label$96e09ea_12_1048;
 		case 4:
-			r8 = ((little_parser_ParserTokens_Function*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_Function*)r6)->p0;
 			r14 = ((little_parser_ParserTokens_Function*)r6)->p1;
 			r15 = ((little_parser_ParserTokens_Function*)r6)->p2;
 			r16 = ((little_parser_ParserTokens_Function*)r6)->p3;
 			if( r2 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeElses(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_12_148;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_12_133;
 			r18 = NULL;
-			goto label$96e09ea_12_154;
-			label$96e09ea_12_148:
+			goto label$96e09ea_12_136;
+			label$96e09ea_12_133:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r18 = (venum*)r3;
-			r19 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r18 == r19 ) goto label$96e09ea_12_154;
-			hl_assert();
-			label$96e09ea_12_154:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_12_136:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r14;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeElses(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_12_167;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_12_149;
 			r19 = NULL;
-			goto label$96e09ea_12_173;
-			label$96e09ea_12_167:
+			goto label$96e09ea_12_152;
+			label$96e09ea_12_149:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r19 = (venum*)r3;
-			r20 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r19 == r20 ) goto label$96e09ea_12_173;
-			hl_assert();
-			label$96e09ea_12_173:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_12_152:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r15;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeElses(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_12_186;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_12_165;
 			r20 = NULL;
-			goto label$96e09ea_12_192;
-			label$96e09ea_12_186:
+			goto label$96e09ea_12_168;
+			label$96e09ea_12_165:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r20 = (venum*)r3;
-			r21 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r20 == r21 ) goto label$96e09ea_12_192;
-			hl_assert();
-			label$96e09ea_12_192:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_12_168:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r16;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeElses(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_12_205;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_12_181;
 			r21 = NULL;
-			goto label$96e09ea_12_211;
-			label$96e09ea_12_205:
+			goto label$96e09ea_12_184;
+			label$96e09ea_12_181:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r21 = (venum*)r3;
-			r22 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r21 == r22 ) goto label$96e09ea_12_211;
-			hl_assert();
-			label$96e09ea_12_211:
+			label$96e09ea_12_184:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,4);
 			((little_parser_ParserTokens_Function*)tmp)->p0 = r18;
@@ -8040,75 +7469,66 @@ hl__types__ArrayObj little_parser_Parser_mergeElses(hl__types__ArrayObj r0) {
 			((little_parser_ParserTokens_Function*)tmp)->p3 = r21;
 			r18 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r18));
-			goto label$96e09ea_12_1150;
+			goto label$96e09ea_12_1048;
 		case 5:
-			r8 = ((little_parser_ParserTokens_ConditionCall*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_ConditionCall*)r6)->p0;
 			r14 = ((little_parser_ParserTokens_ConditionCall*)r6)->p1;
 			r15 = ((little_parser_ParserTokens_ConditionCall*)r6)->p2;
 			if( r2 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeElses(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_12_231;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_12_204;
 			r16 = NULL;
-			goto label$96e09ea_12_237;
-			label$96e09ea_12_231:
+			goto label$96e09ea_12_207;
+			label$96e09ea_12_204:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r16 = (venum*)r3;
-			r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r16 == r18 ) goto label$96e09ea_12_237;
-			hl_assert();
-			label$96e09ea_12_237:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_12_207:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r14;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeElses(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_12_250;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_12_220;
 			r18 = NULL;
-			goto label$96e09ea_12_256;
-			label$96e09ea_12_250:
+			goto label$96e09ea_12_223;
+			label$96e09ea_12_220:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r18 = (venum*)r3;
-			r19 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r18 == r19 ) goto label$96e09ea_12_256;
-			hl_assert();
-			label$96e09ea_12_256:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_12_223:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r15;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeElses(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_12_269;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_12_236;
 			r19 = NULL;
-			goto label$96e09ea_12_275;
-			label$96e09ea_12_269:
+			goto label$96e09ea_12_239;
+			label$96e09ea_12_236:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r19 = (venum*)r3;
-			r20 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r19 == r20 ) goto label$96e09ea_12_275;
-			hl_assert();
-			label$96e09ea_12_275:
+			label$96e09ea_12_239:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,5);
 			((little_parser_ParserTokens_ConditionCall*)tmp)->p0 = r16;
@@ -8116,209 +7536,197 @@ hl__types__ArrayObj little_parser_Parser_mergeElses(hl__types__ArrayObj r0) {
 			((little_parser_ParserTokens_ConditionCall*)tmp)->p2 = r19;
 			r16 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r16));
-			goto label$96e09ea_12_1150;
+			goto label$96e09ea_12_1048;
 		case 7:
-			r11 = ((little_parser_ParserTokens_Write*)r6)->p0;
-			r8 = ((little_parser_ParserTokens_Write*)r6)->p1;
+			r10 = ((little_parser_ParserTokens_Write*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_Write*)r6)->p1;
 			if( r2 == NULL ) hl_null_access();
-			r23 = little_parser_Parser_mergeElses(r11);
-			r9 = &t$little_parser_ParserTokens;
+			r22 = little_parser_Parser_mergeElses(r10);
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
-			r24 = hl_types_ArrayObj_alloc(r7);
-			r24 = little_parser_Parser_mergeElses(r24);
-			if( r24 == NULL ) hl_null_access();
+			((venum**)(r7 + 1))[r5] = r11;
+			r23 = hl_types_ArrayObj_alloc(r7);
+			r23 = little_parser_Parser_mergeElses(r23);
+			if( r23 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r24->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_12_295;
+			r9 = r23->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_12_259;
 			r14 = NULL;
-			goto label$96e09ea_12_301;
-			label$96e09ea_12_295:
-			r7 = r24->array;
+			goto label$96e09ea_12_262;
+			label$96e09ea_12_259:
+			r7 = r23->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r14 = (venum*)r3;
-			r15 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r14 == r15 ) goto label$96e09ea_12_301;
-			hl_assert();
-			label$96e09ea_12_301:
+			label$96e09ea_12_262:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,7);
-			((little_parser_ParserTokens_Write*)tmp)->p0 = r23;
+			((little_parser_ParserTokens_Write*)tmp)->p0 = r22;
 			((little_parser_ParserTokens_Write*)tmp)->p1 = r14;
 			r14 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r14));
-			goto label$96e09ea_12_1150;
+			goto label$96e09ea_12_1048;
 		case 8:
 			r12 = ((little_parser_ParserTokens_Identifier*)r6)->p0;
-			r27 = (little__$Little)g$_little_Little;
-			r26 = r27->keywords;
-			if( r26 == NULL ) hl_null_access();
-			r13 = r26->CONDITION__ELSE;
-			if( r12 == r13 || (r12 && r13 && String___compare(r12,(vdynamic*)r13) == 0) ) goto label$96e09ea_12_312;
-			r25 = false;
-			goto label$96e09ea_12_313;
-			label$96e09ea_12_312:
-			r25 = true;
-			label$96e09ea_12_313:
-			r28 = true;
-			if( r25 != r28 ) goto label$96e09ea_12_909;
+			r26 = (little__$Little)g$_little_Little;
+			r25 = r26->keywords;
+			if( r25 == NULL ) hl_null_access();
+			r13 = r25->CONDITION__ELSE;
+			if( r12 == r13 || (r12 && r13 && String___compare(r12,(vdynamic*)r13) == 0) ) goto label$96e09ea_12_273;
+			r24 = false;
+			goto label$96e09ea_12_274;
+			label$96e09ea_12_273:
+			r24 = true;
+			label$96e09ea_12_274:
+			r27 = true;
+			if( r24 != r27 ) goto label$96e09ea_12_837;
 			if( r2 == NULL ) hl_null_access();
 			r5 = r2->length;
-			r10 = 0;
-			if( r5 == r10 ) goto label$96e09ea_12_376;
+			r9 = 0;
+			if( r5 == r9 ) goto label$96e09ea_12_331;
 			r5 = r2->length;
-			r10 = 1;
-			r5 = r5 - r10;
-			r10 = r2->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_12_326;
-			r8 = NULL;
-			goto label$96e09ea_12_332;
-			label$96e09ea_12_326:
+			r9 = 1;
+			r5 = r5 - r9;
+			r9 = r2->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_12_287;
+			r11 = NULL;
+			goto label$96e09ea_12_290;
+			label$96e09ea_12_287:
 			r7 = r2->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
-			r8 = (venum*)r3;
-			r14 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r8 == r14 ) goto label$96e09ea_12_332;
-			hl_assert();
-			label$96e09ea_12_332:
-			r9 = &t$String;
+			r11 = (venum*)r3;
+			label$96e09ea_12_290:
+			r8 = &t$String;
 			r5 = 0;
-			r7 = hl_alloc_array(r9,r5);
-			r11 = hl_types_ArrayObj_alloc(r7);
+			r7 = hl_alloc_array(r8,r5);
+			r10 = hl_types_ArrayObj_alloc(r7);
 			r5 = 0;
-			r9 = &t$little_tools_ParserTokensSimple;
-			r10 = 1;
-			r7 = hl_alloc_array(r9,r10);
-			r29 = (venum*)g$3bbb156;
-			r10 = 0;
-			((venum**)(r7 + 1))[r10] = r29;
+			r8 = &t$little_tools_ParserTokensSimple;
+			r9 = 1;
+			r7 = hl_alloc_array(r8,r9);
+			r28 = (venum*)g$3bbb156;
+			r9 = 0;
+			((venum**)(r7 + 1))[r9] = r28;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			if( r17 == NULL ) hl_null_access();
 			r17 = hl_types_ArrayObj_copy(r17);
-			label$96e09ea_12_346:
+			label$96e09ea_12_304:
 			if( r17 == NULL ) hl_null_access();
-			r30 = r17->length;
-			if( r5 >= r30 ) goto label$96e09ea_12_369;
-			r30 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r30) ) goto label$96e09ea_12_354;
-			r29 = NULL;
-			goto label$96e09ea_12_360;
-			label$96e09ea_12_354:
+			r29 = r17->length;
+			if( r5 >= r29 ) goto label$96e09ea_12_324;
+			r29 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r29) ) goto label$96e09ea_12_312;
+			r28 = NULL;
+			goto label$96e09ea_12_315;
+			label$96e09ea_12_312:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
-			r29 = (venum*)r3;
-			r31 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_tools_ParserTokensSimple);
-			if( r29 == r31 ) goto label$96e09ea_12_360;
-			hl_assert();
-			label$96e09ea_12_360:
+			r28 = (venum*)r3;
+			label$96e09ea_12_315:
 			++r5;
-			if( r11 == NULL ) hl_null_access();
-			r12 = Type_enumConstructor(((vdynamic*)r29));
+			if( r10 == NULL ) hl_null_access();
+			r12 = Type_enumConstructor(((vdynamic*)r28));
 			r13 = (String)s$b14a7b8;
 			r12 = little_tools_TextTools_remove(r12,r13);
 			if( r12 == NULL ) hl_null_access();
 			r12 = String_toLowerCase(r12);
-			r10 = hl_types_ArrayObj_push(r11,((vdynamic*)r12));
-			goto label$96e09ea_12_346;
-			label$96e09ea_12_369:
-			if( r11 == NULL ) hl_null_access();
-			r12 = Type_enumConstructor(((vdynamic*)r8));
+			r9 = hl_types_ArrayObj_push(r10,((vdynamic*)r12));
+			goto label$96e09ea_12_304;
+			label$96e09ea_12_324:
+			if( r10 == NULL ) hl_null_access();
+			r12 = Type_enumConstructor(((vdynamic*)r11));
 			if( r12 == NULL ) hl_null_access();
 			r12 = String_toLowerCase(r12);
-			r28 = hl_types_ArrayObj_contains(r11,((vdynamic*)r12));
-			r28 = !r28;
-			goto label$96e09ea_12_377;
-			label$96e09ea_12_376:
-			r28 = true;
-			label$96e09ea_12_377:
-			if( !r28 ) goto label$96e09ea_12_382;
+			r27 = hl_types_ArrayObj_contains(r10,((vdynamic*)r12));
+			r27 = !r27;
+			goto label$96e09ea_12_332;
+			label$96e09ea_12_331:
+			r27 = true;
+			label$96e09ea_12_332:
+			if( !r27 ) goto label$96e09ea_12_337;
 			if( r2 == NULL ) hl_null_access();
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
 			++r4;
-			goto label$96e09ea_12_32;
-			label$96e09ea_12_382:
-			r10 = 1;
-			r5 = r4 + r10;
+			goto label$96e09ea_12_29;
+			label$96e09ea_12_337:
+			r9 = 1;
+			r5 = r4 + r9;
 			if( r0 == NULL ) hl_null_access();
-			r10 = r0->length;
-			if( r5 < r10 ) goto label$96e09ea_12_427;
-			r27 = (little__$Little)g$_little_Little;
-			r32 = r27->runtime;
-			if( r32 == NULL ) hl_null_access();
-			r11 = r32->callStack;
-			if( r11 == NULL ) hl_null_access();
-			r33 = hl_alloc_virtual(&t$vrt_f317fe3);
+			r9 = r0->length;
+			if( r5 < r9 ) goto label$96e09ea_12_382;
+			r26 = (little__$Little)g$_little_Little;
+			r30 = r26->runtime;
+			if( r30 == NULL ) hl_null_access();
+			r10 = r30->callStack;
+			if( r10 == NULL ) hl_null_access();
+			r31 = hl_alloc_virtual(&t$vrt_f317fe3);
 			r12 = little_parser_Parser_get_module();
-			if( hl_vfields(r33)[2] ) *(String*)(hl_vfields(r33)[2]) = (String)r12; else hl_dyn_setp(r33->value,-523029465/*module*/,&t$String,r12);
+			if( hl_vfields(r31)[2] ) *(String*)(hl_vfields(r31)[2]) = (String)r12; else hl_dyn_setp(r31->value,-523029465/*module*/,&t$String,r12);
 			r5 = little_parser_Parser_get_line();
-			if( hl_vfields(r33)[0] ) *(int*)(hl_vfields(r33)[0]) = (int)r5; else hl_dyn_seti(r33->value,129177854/*line*/,&t$_i32,r5);
-			r34 = (little__parser__$Parser)g$_little_parser_Parser;
-			r5 = r34->linePart;
-			if( hl_vfields(r33)[1] ) *(int*)(hl_vfields(r33)[1]) = (int)r5; else hl_dyn_seti(r33->value,-411357064/*linePart*/,&t$_i32,r5);
-			r27 = (little__$Little)g$_little_Little;
-			r26 = r27->keywords;
-			if( r26 == NULL ) hl_null_access();
-			r12 = r26->CONDITION__ELSE;
+			if( hl_vfields(r31)[0] ) *(int*)(hl_vfields(r31)[0]) = (int)r5; else hl_dyn_seti(r31->value,129177854/*line*/,&t$_i32,r5);
+			r32 = (little__parser__$Parser)g$_little_parser_Parser;
+			r5 = r32->linePart;
+			if( hl_vfields(r31)[1] ) *(int*)(hl_vfields(r31)[1]) = (int)r5; else hl_dyn_seti(r31->value,-411357064/*linePart*/,&t$_i32,r5);
+			r26 = (little__$Little)g$_little_Little;
+			r25 = r26->keywords;
+			if( r25 == NULL ) hl_null_access();
+			r12 = r25->CONDITION__ELSE;
+			r33 = hl_alloc_enum(&t$little_interpreter_InterpTokens,25);
+			((little_interpreter_InterpTokens_Identifier*)r33)->p0 = r12;
+			r34 = NULL;
+			r12 = (String)s$;
 			r35 = hl_alloc_enum(&t$little_interpreter_InterpTokens,25);
 			((little_interpreter_InterpTokens_Identifier*)r35)->p0 = r12;
-			r36 = NULL;
-			r12 = (String)s$;
-			r37 = hl_alloc_enum(&t$little_interpreter_InterpTokens,25);
-			((little_interpreter_InterpTokens_Identifier*)r37)->p0 = r12;
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_interpreter_InterpTokens,6);
-			((little_interpreter_InterpTokens_ConditionCall*)tmp)->p0 = r35;
-			((little_interpreter_InterpTokens_ConditionCall*)tmp)->p1 = r36;
-			((little_interpreter_InterpTokens_ConditionCall*)tmp)->p2 = r37;
-			r35 = tmp; };
-			if( hl_vfields(r33)[3] ) *(venum**)(hl_vfields(r33)[3]) = (venum*)r35; else hl_dyn_setp(r33->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r35);
-			hl_types_ArrayObj_unshift(r11,((vdynamic*)r33));
-			r27 = (little__$Little)g$_little_Little;
-			r32 = r27->runtime;
-			if( r32 == NULL ) hl_null_access();
+			((little_interpreter_InterpTokens_ConditionCall*)tmp)->p0 = r33;
+			((little_interpreter_InterpTokens_ConditionCall*)tmp)->p1 = r34;
+			((little_interpreter_InterpTokens_ConditionCall*)tmp)->p2 = r35;
+			r33 = tmp; };
+			if( hl_vfields(r31)[3] ) *(venum**)(hl_vfields(r31)[3]) = (venum*)r33; else hl_dyn_setp(r31->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r33);
+			hl_types_ArrayObj_unshift(r10,((vdynamic*)r31));
+			r26 = (little__$Little)g$_little_Little;
+			r30 = r26->runtime;
+			if( r30 == NULL ) hl_null_access();
 			r12 = (String)s$833344d;
-			r27 = (little__$Little)g$_little_Little;
-			r26 = r27->keywords;
-			if( r26 == NULL ) hl_null_access();
-			r13 = r26->CONDITION__ELSE;
+			r26 = (little__$Little)g$_little_Little;
+			r25 = r26->keywords;
+			if( r25 == NULL ) hl_null_access();
+			r13 = r25->CONDITION__ELSE;
 			r12 = String___add__(r12,r13);
 			r13 = (String)s$5678718;
 			r12 = String___add__(r12,r13);
-			r35 = hl_alloc_enum(&t$little_interpreter_InterpTokens,27);
-			((little_interpreter_InterpTokens_ErrorMessage*)r35)->p0 = r12;
+			r33 = hl_alloc_enum(&t$little_interpreter_InterpTokens,27);
+			((little_interpreter_InterpTokens_ErrorMessage*)r33)->p0 = r12;
 			r12 = (String)s$Parser;
-			r35 = little_interpreter_Runtime_throwError(r32,r35,r12);
-			r11 = NULL;
-			return r11;
-			label$96e09ea_12_427:
+			r33 = little_interpreter_Runtime_throwError(r30,r33,r12);
+			r10 = NULL;
+			return r10;
+			label$96e09ea_12_382:
 			if( r2 == NULL ) hl_null_access();
 			r5 = r2->length;
-			r10 = 1;
-			r5 = r5 - r10;
-			r10 = r2->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_12_435;
-			r8 = NULL;
-			goto label$96e09ea_12_441;
-			label$96e09ea_12_435:
+			r9 = 1;
+			r5 = r5 - r9;
+			r9 = r2->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_12_390;
+			r11 = NULL;
+			goto label$96e09ea_12_393;
+			label$96e09ea_12_390:
 			r7 = r2->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
-			r8 = (venum*)r3;
-			r14 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r8 == r14 ) goto label$96e09ea_12_441;
-			hl_assert();
-			label$96e09ea_12_441:
-			r38 = Type_enumParameters(((vdynamic*)r8));
-			if( r38 == NULL ) hl_null_access();
+			r11 = (venum*)r3;
+			label$96e09ea_12_393:
+			r36 = Type_enumParameters(((vdynamic*)r11));
+			if( r36 == NULL ) hl_null_access();
 			r5 = 1;
-			r3 = ((vdynamic* (*)(hl__types__ArrayDyn,int))r38->$type->vobj_proto[0])(r38,r5);
-			r8 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			r9 = &t$little_parser_ParserTokens;
+			r3 = ((vdynamic* (*)(hl__types__ArrayDyn,int))r36->$type->vobj_proto[0])(r36,r5);
+			r11 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 3;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r12 = (String)s$de0219f;
 			r14 = hl_alloc_enum(&t$little_parser_ParserTokens,16);
 			((little_parser_ParserTokens_Sign*)r14)->p0 = r12;
@@ -8327,27 +7735,24 @@ hl__types__ArrayObj little_parser_Parser_mergeElses(hl__types__ArrayObj r0) {
 			r14 = (venum*)g$ccd42cb;
 			r5 = 2;
 			((venum**)(r7 + 1))[r5] = r14;
-			r11 = hl_types_ArrayObj_alloc(r7);
+			r10 = hl_types_ArrayObj_alloc(r7);
 			r14 = NULL;
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,12);
-			((little_parser_ParserTokens_Expression*)tmp)->p0 = r11;
+			((little_parser_ParserTokens_Expression*)tmp)->p0 = r10;
 			((little_parser_ParserTokens_Expression*)tmp)->p1 = r14;
 			r14 = tmp; };
-			r8 = r14;
+			r11 = r14;
 			++r4;
-			r10 = r0->length;
-			if( ((unsigned)r4) < ((unsigned)r10) ) goto label$96e09ea_12_467;
+			r9 = r0->length;
+			if( ((unsigned)r4) < ((unsigned)r9) ) goto label$96e09ea_12_419;
 			r14 = NULL;
-			goto label$96e09ea_12_473;
-			label$96e09ea_12_467:
+			goto label$96e09ea_12_422;
+			label$96e09ea_12_419:
 			r7 = r0->array;
 			r3 = ((vdynamic**)(r7 + 1))[r4];
 			r14 = (venum*)r3;
-			r15 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r14 == r15 ) goto label$96e09ea_12_473;
-			hl_assert();
-			label$96e09ea_12_473:
+			label$96e09ea_12_422:
 			if( r14 == NULL ) hl_null_access();
 			r5 = HL__ENUM_INDEX__(r14);
 			switch(r5) {
@@ -8357,297 +7762,285 @@ hl__types__ArrayObj little_parser_Parser_mergeElses(hl__types__ArrayObj r0) {
 					r12 = (String)s$if;
 					r15 = hl_alloc_enum(&t$little_parser_ParserTokens,8);
 					((little_parser_ParserTokens_Identifier*)r15)->p0 = r12;
-					r9 = &t$String;
+					r8 = &t$String;
 					r5 = 0;
-					r7 = hl_alloc_array(r9,r5);
-					r11 = hl_types_ArrayObj_alloc(r7);
+					r7 = hl_alloc_array(r8,r5);
+					r10 = hl_types_ArrayObj_alloc(r7);
 					r5 = 0;
-					r9 = &t$little_tools_ParserTokensSimple;
-					r10 = 1;
-					r7 = hl_alloc_array(r9,r10);
-					r29 = (venum*)g$f9665c1;
-					r10 = 0;
-					((venum**)(r7 + 1))[r10] = r29;
+					r8 = &t$little_tools_ParserTokensSimple;
+					r9 = 1;
+					r7 = hl_alloc_array(r8,r9);
+					r28 = (venum*)g$f9665c1;
+					r9 = 0;
+					((venum**)(r7 + 1))[r9] = r28;
 					r17 = hl_types_ArrayObj_alloc(r7);
 					if( r17 == NULL ) hl_null_access();
 					r17 = hl_types_ArrayObj_copy(r17);
-					label$96e09ea_12_492:
+					label$96e09ea_12_441:
 					if( r17 == NULL ) hl_null_access();
-					r30 = r17->length;
-					if( r5 >= r30 ) goto label$96e09ea_12_515;
-					r30 = r17->length;
-					if( ((unsigned)r5) < ((unsigned)r30) ) goto label$96e09ea_12_500;
-					r29 = NULL;
-					goto label$96e09ea_12_506;
-					label$96e09ea_12_500:
+					r29 = r17->length;
+					if( r5 >= r29 ) goto label$96e09ea_12_461;
+					r29 = r17->length;
+					if( ((unsigned)r5) < ((unsigned)r29) ) goto label$96e09ea_12_449;
+					r28 = NULL;
+					goto label$96e09ea_12_452;
+					label$96e09ea_12_449:
 					r7 = r17->array;
 					r3 = ((vdynamic**)(r7 + 1))[r5];
-					r29 = (venum*)r3;
-					r31 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_tools_ParserTokensSimple);
-					if( r29 == r31 ) goto label$96e09ea_12_506;
-					hl_assert();
-					label$96e09ea_12_506:
+					r28 = (venum*)r3;
+					label$96e09ea_12_452:
 					++r5;
-					if( r11 == NULL ) hl_null_access();
-					r12 = Type_enumConstructor(((vdynamic*)r29));
+					if( r10 == NULL ) hl_null_access();
+					r12 = Type_enumConstructor(((vdynamic*)r28));
 					r13 = (String)s$b14a7b8;
 					r12 = little_tools_TextTools_remove(r12,r13);
 					if( r12 == NULL ) hl_null_access();
 					r12 = String_toLowerCase(r12);
-					r10 = hl_types_ArrayObj_push(r11,((vdynamic*)r12));
-					goto label$96e09ea_12_492;
-					label$96e09ea_12_515:
+					r9 = hl_types_ArrayObj_push(r10,((vdynamic*)r12));
+					goto label$96e09ea_12_441;
+					label$96e09ea_12_461:
 					if( r2 == NULL ) hl_null_access();
-					if( r11 == NULL ) hl_null_access();
+					if( r10 == NULL ) hl_null_access();
 					r12 = Type_enumConstructor(((vdynamic*)r14));
 					if( r12 == NULL ) hl_null_access();
 					r12 = String_toLowerCase(r12);
-					r28 = hl_types_ArrayObj_contains(r11,((vdynamic*)r12));
-					if( r28 ) goto label$96e09ea_12_531;
-					r9 = &t$little_parser_ParserTokens;
+					r27 = hl_types_ArrayObj_contains(r10,((vdynamic*)r12));
+					if( r27 ) goto label$96e09ea_12_477;
+					r8 = &t$little_parser_ParserTokens;
 					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
+					r7 = hl_alloc_array(r8,r5);
 					r5 = 0;
 					((venum**)(r7 + 1))[r5] = r14;
-					r23 = hl_types_ArrayObj_alloc(r7);
+					r22 = hl_types_ArrayObj_alloc(r7);
 					r19 = NULL;
 					{ venum *tmp;
 					tmp = hl_alloc_enum(&t$little_parser_ParserTokens,13);
-					((little_parser_ParserTokens_Block*)tmp)->p0 = r23;
+					((little_parser_ParserTokens_Block*)tmp)->p0 = r22;
 					((little_parser_ParserTokens_Block*)tmp)->p1 = r19;
 					r19 = tmp; };
-					goto label$96e09ea_12_532;
-					label$96e09ea_12_531:
+					goto label$96e09ea_12_478;
+					label$96e09ea_12_477:
 					r19 = r14;
-					label$96e09ea_12_532:
+					label$96e09ea_12_478:
 					r16 = hl_alloc_enum(&t$little_parser_ParserTokens,5);
 					((little_parser_ParserTokens_ConditionCall*)r16)->p0 = r15;
-					((little_parser_ParserTokens_ConditionCall*)r16)->p1 = r8;
+					((little_parser_ParserTokens_ConditionCall*)r16)->p1 = r11;
 					((little_parser_ParserTokens_ConditionCall*)r16)->p2 = r19;
 					r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r16));
-					goto label$96e09ea_12_908;
+					goto label$96e09ea_12_836;
 				case 0:
 					r5 = ((little_parser_ParserTokens_SetLine*)r14)->p0;
-					r27 = (little__$Little)g$_little_Little;
-					r32 = r27->runtime;
-					if( r32 == NULL ) hl_null_access();
-					r11 = r32->callStack;
-					if( r11 == NULL ) hl_null_access();
-					r33 = hl_alloc_virtual(&t$vrt_f317fe3);
+					r26 = (little__$Little)g$_little_Little;
+					r30 = r26->runtime;
+					if( r30 == NULL ) hl_null_access();
+					r10 = r30->callStack;
+					if( r10 == NULL ) hl_null_access();
+					r31 = hl_alloc_virtual(&t$vrt_f317fe3);
 					r12 = little_parser_Parser_get_module();
-					if( hl_vfields(r33)[2] ) *(String*)(hl_vfields(r33)[2]) = (String)r12; else hl_dyn_setp(r33->value,-523029465/*module*/,&t$String,r12);
-					r10 = little_parser_Parser_get_line();
-					if( hl_vfields(r33)[0] ) *(int*)(hl_vfields(r33)[0]) = (int)r10; else hl_dyn_seti(r33->value,129177854/*line*/,&t$_i32,r10);
-					r34 = (little__parser__$Parser)g$_little_parser_Parser;
-					r10 = r34->linePart;
-					if( hl_vfields(r33)[1] ) *(int*)(hl_vfields(r33)[1]) = (int)r10; else hl_dyn_seti(r33->value,-411357064/*linePart*/,&t$_i32,r10);
-					r27 = (little__$Little)g$_little_Little;
-					r26 = r27->keywords;
-					if( r26 == NULL ) hl_null_access();
-					r12 = r26->CONDITION__ELSE;
-					r35 = hl_alloc_enum(&t$little_interpreter_InterpTokens,25);
-					((little_interpreter_InterpTokens_Identifier*)r35)->p0 = r12;
-					r36 = NULL;
-					r9 = &t$little_parser_ParserTokens;
-					r10 = 1;
-					r7 = hl_alloc_array(r9,r10);
-					r10 = 0;
-					((venum**)(r7 + 1))[r10] = r14;
+					if( hl_vfields(r31)[2] ) *(String*)(hl_vfields(r31)[2]) = (String)r12; else hl_dyn_setp(r31->value,-523029465/*module*/,&t$String,r12);
+					r9 = little_parser_Parser_get_line();
+					if( hl_vfields(r31)[0] ) *(int*)(hl_vfields(r31)[0]) = (int)r9; else hl_dyn_seti(r31->value,129177854/*line*/,&t$_i32,r9);
+					r32 = (little__parser__$Parser)g$_little_parser_Parser;
+					r9 = r32->linePart;
+					if( hl_vfields(r31)[1] ) *(int*)(hl_vfields(r31)[1]) = (int)r9; else hl_dyn_seti(r31->value,-411357064/*linePart*/,&t$_i32,r9);
+					r26 = (little__$Little)g$_little_Little;
+					r25 = r26->keywords;
+					if( r25 == NULL ) hl_null_access();
+					r12 = r25->CONDITION__ELSE;
+					r33 = hl_alloc_enum(&t$little_interpreter_InterpTokens,25);
+					((little_interpreter_InterpTokens_Identifier*)r33)->p0 = r12;
+					r34 = NULL;
+					r8 = &t$little_parser_ParserTokens;
+					r9 = 1;
+					r7 = hl_alloc_array(r8,r9);
+					r9 = 0;
+					((venum**)(r7 + 1))[r9] = r14;
 					r17 = hl_types_ArrayObj_alloc(r7);
 					r17 = little_interpreter_Interpreter_convert(r17);
 					if( r17 == NULL ) hl_null_access();
-					r10 = 0;
-					r30 = r17->length;
-					if( ((unsigned)r10) < ((unsigned)r30) ) goto label$96e09ea_12_568;
-					r37 = NULL;
-					goto label$96e09ea_12_574;
-					label$96e09ea_12_568:
+					r9 = 0;
+					r29 = r17->length;
+					if( ((unsigned)r9) < ((unsigned)r29) ) goto label$96e09ea_12_514;
+					r35 = NULL;
+					goto label$96e09ea_12_517;
+					label$96e09ea_12_514:
 					r7 = r17->array;
-					r3 = ((vdynamic**)(r7 + 1))[r10];
-					r37 = (venum*)r3;
-					r39 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_interpreter_InterpTokens);
-					if( r37 == r39 ) goto label$96e09ea_12_574;
-					hl_assert();
-					label$96e09ea_12_574:
+					r3 = ((vdynamic**)(r7 + 1))[r9];
+					r35 = (venum*)r3;
+					label$96e09ea_12_517:
 					{ venum *tmp;
 					tmp = hl_alloc_enum(&t$little_interpreter_InterpTokens,6);
-					((little_interpreter_InterpTokens_ConditionCall*)tmp)->p0 = r35;
-					((little_interpreter_InterpTokens_ConditionCall*)tmp)->p1 = r36;
-					((little_interpreter_InterpTokens_ConditionCall*)tmp)->p2 = r37;
-					r35 = tmp; };
-					if( hl_vfields(r33)[3] ) *(venum**)(hl_vfields(r33)[3]) = (venum*)r35; else hl_dyn_setp(r33->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r35);
-					hl_types_ArrayObj_unshift(r11,((vdynamic*)r33));
-					r27 = (little__$Little)g$_little_Little;
-					r32 = r27->runtime;
-					if( r32 == NULL ) hl_null_access();
+					((little_interpreter_InterpTokens_ConditionCall*)tmp)->p0 = r33;
+					((little_interpreter_InterpTokens_ConditionCall*)tmp)->p1 = r34;
+					((little_interpreter_InterpTokens_ConditionCall*)tmp)->p2 = r35;
+					r33 = tmp; };
+					if( hl_vfields(r31)[3] ) *(venum**)(hl_vfields(r31)[3]) = (venum*)r33; else hl_dyn_setp(r31->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r33);
+					hl_types_ArrayObj_unshift(r10,((vdynamic*)r31));
+					r26 = (little__$Little)g$_little_Little;
+					r30 = r26->runtime;
+					if( r30 == NULL ) hl_null_access();
 					r12 = (String)s$833344d;
-					r27 = (little__$Little)g$_little_Little;
-					r26 = r27->keywords;
-					if( r26 == NULL ) hl_null_access();
-					r13 = r26->CONDITION__ELSE;
+					r26 = (little__$Little)g$_little_Little;
+					r25 = r26->keywords;
+					if( r25 == NULL ) hl_null_access();
+					r13 = r25->CONDITION__ELSE;
 					r12 = String___add__(r12,r13);
 					r13 = (String)s$833241a;
 					r12 = String___add__(r12,r13);
-					r35 = hl_alloc_enum(&t$little_interpreter_InterpTokens,27);
-					((little_interpreter_InterpTokens_ErrorMessage*)r35)->p0 = r12;
+					r33 = hl_alloc_enum(&t$little_interpreter_InterpTokens,27);
+					((little_interpreter_InterpTokens_ErrorMessage*)r33)->p0 = r12;
 					r12 = (String)s$Parser;
-					r35 = little_interpreter_Runtime_throwError(r32,r35,r12);
-					r11 = NULL;
-					return r11;
+					r33 = little_interpreter_Runtime_throwError(r30,r33,r12);
+					r10 = NULL;
+					return r10;
 				case 1:
 					r12 = ((little_parser_ParserTokens_SetModule*)r14)->p0;
-					r27 = (little__$Little)g$_little_Little;
-					r32 = r27->runtime;
-					if( r32 == NULL ) hl_null_access();
-					r11 = r32->callStack;
-					if( r11 == NULL ) hl_null_access();
-					r33 = hl_alloc_virtual(&t$vrt_f317fe3);
+					r26 = (little__$Little)g$_little_Little;
+					r30 = r26->runtime;
+					if( r30 == NULL ) hl_null_access();
+					r10 = r30->callStack;
+					if( r10 == NULL ) hl_null_access();
+					r31 = hl_alloc_virtual(&t$vrt_f317fe3);
 					r13 = little_parser_Parser_get_module();
-					if( hl_vfields(r33)[2] ) *(String*)(hl_vfields(r33)[2]) = (String)r13; else hl_dyn_setp(r33->value,-523029465/*module*/,&t$String,r13);
+					if( hl_vfields(r31)[2] ) *(String*)(hl_vfields(r31)[2]) = (String)r13; else hl_dyn_setp(r31->value,-523029465/*module*/,&t$String,r13);
 					r5 = little_parser_Parser_get_line();
-					if( hl_vfields(r33)[0] ) *(int*)(hl_vfields(r33)[0]) = (int)r5; else hl_dyn_seti(r33->value,129177854/*line*/,&t$_i32,r5);
-					r34 = (little__parser__$Parser)g$_little_parser_Parser;
-					r5 = r34->linePart;
-					if( hl_vfields(r33)[1] ) *(int*)(hl_vfields(r33)[1]) = (int)r5; else hl_dyn_seti(r33->value,-411357064/*linePart*/,&t$_i32,r5);
-					r27 = (little__$Little)g$_little_Little;
-					r26 = r27->keywords;
-					if( r26 == NULL ) hl_null_access();
-					r13 = r26->CONDITION__ELSE;
-					r35 = hl_alloc_enum(&t$little_interpreter_InterpTokens,25);
-					((little_interpreter_InterpTokens_Identifier*)r35)->p0 = r13;
-					r36 = NULL;
-					r9 = &t$little_parser_ParserTokens;
+					if( hl_vfields(r31)[0] ) *(int*)(hl_vfields(r31)[0]) = (int)r5; else hl_dyn_seti(r31->value,129177854/*line*/,&t$_i32,r5);
+					r32 = (little__parser__$Parser)g$_little_parser_Parser;
+					r5 = r32->linePart;
+					if( hl_vfields(r31)[1] ) *(int*)(hl_vfields(r31)[1]) = (int)r5; else hl_dyn_seti(r31->value,-411357064/*linePart*/,&t$_i32,r5);
+					r26 = (little__$Little)g$_little_Little;
+					r25 = r26->keywords;
+					if( r25 == NULL ) hl_null_access();
+					r13 = r25->CONDITION__ELSE;
+					r33 = hl_alloc_enum(&t$little_interpreter_InterpTokens,25);
+					((little_interpreter_InterpTokens_Identifier*)r33)->p0 = r13;
+					r34 = NULL;
+					r8 = &t$little_parser_ParserTokens;
 					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
+					r7 = hl_alloc_array(r8,r5);
 					r5 = 0;
 					((venum**)(r7 + 1))[r5] = r14;
 					r17 = hl_types_ArrayObj_alloc(r7);
 					r17 = little_interpreter_Interpreter_convert(r17);
 					if( r17 == NULL ) hl_null_access();
 					r5 = 0;
-					r10 = r17->length;
-					if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_12_626;
-					r37 = NULL;
-					goto label$96e09ea_12_632;
-					label$96e09ea_12_626:
+					r9 = r17->length;
+					if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_12_569;
+					r35 = NULL;
+					goto label$96e09ea_12_572;
+					label$96e09ea_12_569:
 					r7 = r17->array;
 					r3 = ((vdynamic**)(r7 + 1))[r5];
-					r37 = (venum*)r3;
-					r39 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_interpreter_InterpTokens);
-					if( r37 == r39 ) goto label$96e09ea_12_632;
-					hl_assert();
-					label$96e09ea_12_632:
+					r35 = (venum*)r3;
+					label$96e09ea_12_572:
 					{ venum *tmp;
 					tmp = hl_alloc_enum(&t$little_interpreter_InterpTokens,6);
-					((little_interpreter_InterpTokens_ConditionCall*)tmp)->p0 = r35;
-					((little_interpreter_InterpTokens_ConditionCall*)tmp)->p1 = r36;
-					((little_interpreter_InterpTokens_ConditionCall*)tmp)->p2 = r37;
-					r35 = tmp; };
-					if( hl_vfields(r33)[3] ) *(venum**)(hl_vfields(r33)[3]) = (venum*)r35; else hl_dyn_setp(r33->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r35);
-					hl_types_ArrayObj_unshift(r11,((vdynamic*)r33));
-					r27 = (little__$Little)g$_little_Little;
-					r32 = r27->runtime;
-					if( r32 == NULL ) hl_null_access();
+					((little_interpreter_InterpTokens_ConditionCall*)tmp)->p0 = r33;
+					((little_interpreter_InterpTokens_ConditionCall*)tmp)->p1 = r34;
+					((little_interpreter_InterpTokens_ConditionCall*)tmp)->p2 = r35;
+					r33 = tmp; };
+					if( hl_vfields(r31)[3] ) *(venum**)(hl_vfields(r31)[3]) = (venum*)r33; else hl_dyn_setp(r31->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r33);
+					hl_types_ArrayObj_unshift(r10,((vdynamic*)r31));
+					r26 = (little__$Little)g$_little_Little;
+					r30 = r26->runtime;
+					if( r30 == NULL ) hl_null_access();
 					r13 = (String)s$833344d;
-					r27 = (little__$Little)g$_little_Little;
-					r26 = r27->keywords;
-					if( r26 == NULL ) hl_null_access();
-					r40 = r26->CONDITION__ELSE;
-					r13 = String___add__(r13,r40);
-					r40 = (String)s$833241a;
-					r13 = String___add__(r13,r40);
-					r35 = hl_alloc_enum(&t$little_interpreter_InterpTokens,27);
-					((little_interpreter_InterpTokens_ErrorMessage*)r35)->p0 = r13;
+					r26 = (little__$Little)g$_little_Little;
+					r25 = r26->keywords;
+					if( r25 == NULL ) hl_null_access();
+					r37 = r25->CONDITION__ELSE;
+					r13 = String___add__(r13,r37);
+					r37 = (String)s$833241a;
+					r13 = String___add__(r13,r37);
+					r33 = hl_alloc_enum(&t$little_interpreter_InterpTokens,27);
+					((little_interpreter_InterpTokens_ErrorMessage*)r33)->p0 = r13;
 					r13 = (String)s$Parser;
-					r35 = little_interpreter_Runtime_throwError(r32,r35,r13);
-					r11 = NULL;
-					return r11;
+					r33 = little_interpreter_Runtime_throwError(r30,r33,r13);
+					r10 = NULL;
+					return r10;
 				case 2:
-					r27 = (little__$Little)g$_little_Little;
-					r32 = r27->runtime;
-					if( r32 == NULL ) hl_null_access();
-					r11 = r32->callStack;
-					if( r11 == NULL ) hl_null_access();
-					r33 = hl_alloc_virtual(&t$vrt_f317fe3);
+					r26 = (little__$Little)g$_little_Little;
+					r30 = r26->runtime;
+					if( r30 == NULL ) hl_null_access();
+					r10 = r30->callStack;
+					if( r10 == NULL ) hl_null_access();
+					r31 = hl_alloc_virtual(&t$vrt_f317fe3);
 					r12 = little_parser_Parser_get_module();
-					if( hl_vfields(r33)[2] ) *(String*)(hl_vfields(r33)[2]) = (String)r12; else hl_dyn_setp(r33->value,-523029465/*module*/,&t$String,r12);
+					if( hl_vfields(r31)[2] ) *(String*)(hl_vfields(r31)[2]) = (String)r12; else hl_dyn_setp(r31->value,-523029465/*module*/,&t$String,r12);
 					r5 = little_parser_Parser_get_line();
-					if( hl_vfields(r33)[0] ) *(int*)(hl_vfields(r33)[0]) = (int)r5; else hl_dyn_seti(r33->value,129177854/*line*/,&t$_i32,r5);
-					r34 = (little__parser__$Parser)g$_little_parser_Parser;
-					r5 = r34->linePart;
-					if( hl_vfields(r33)[1] ) *(int*)(hl_vfields(r33)[1]) = (int)r5; else hl_dyn_seti(r33->value,-411357064/*linePart*/,&t$_i32,r5);
-					r27 = (little__$Little)g$_little_Little;
-					r26 = r27->keywords;
-					if( r26 == NULL ) hl_null_access();
-					r12 = r26->CONDITION__ELSE;
-					r35 = hl_alloc_enum(&t$little_interpreter_InterpTokens,25);
-					((little_interpreter_InterpTokens_Identifier*)r35)->p0 = r12;
-					r36 = NULL;
-					r9 = &t$little_parser_ParserTokens;
+					if( hl_vfields(r31)[0] ) *(int*)(hl_vfields(r31)[0]) = (int)r5; else hl_dyn_seti(r31->value,129177854/*line*/,&t$_i32,r5);
+					r32 = (little__parser__$Parser)g$_little_parser_Parser;
+					r5 = r32->linePart;
+					if( hl_vfields(r31)[1] ) *(int*)(hl_vfields(r31)[1]) = (int)r5; else hl_dyn_seti(r31->value,-411357064/*linePart*/,&t$_i32,r5);
+					r26 = (little__$Little)g$_little_Little;
+					r25 = r26->keywords;
+					if( r25 == NULL ) hl_null_access();
+					r12 = r25->CONDITION__ELSE;
+					r33 = hl_alloc_enum(&t$little_interpreter_InterpTokens,25);
+					((little_interpreter_InterpTokens_Identifier*)r33)->p0 = r12;
+					r34 = NULL;
+					r8 = &t$little_parser_ParserTokens;
 					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
+					r7 = hl_alloc_array(r8,r5);
 					r5 = 0;
 					((venum**)(r7 + 1))[r5] = r14;
 					r17 = hl_types_ArrayObj_alloc(r7);
 					r17 = little_interpreter_Interpreter_convert(r17);
 					if( r17 == NULL ) hl_null_access();
 					r5 = 0;
-					r10 = r17->length;
-					if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_12_683;
-					r37 = NULL;
-					goto label$96e09ea_12_689;
-					label$96e09ea_12_683:
+					r9 = r17->length;
+					if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_12_623;
+					r35 = NULL;
+					goto label$96e09ea_12_626;
+					label$96e09ea_12_623:
 					r7 = r17->array;
 					r3 = ((vdynamic**)(r7 + 1))[r5];
-					r37 = (venum*)r3;
-					r39 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_interpreter_InterpTokens);
-					if( r37 == r39 ) goto label$96e09ea_12_689;
-					hl_assert();
-					label$96e09ea_12_689:
+					r35 = (venum*)r3;
+					label$96e09ea_12_626:
 					{ venum *tmp;
 					tmp = hl_alloc_enum(&t$little_interpreter_InterpTokens,6);
-					((little_interpreter_InterpTokens_ConditionCall*)tmp)->p0 = r35;
-					((little_interpreter_InterpTokens_ConditionCall*)tmp)->p1 = r36;
-					((little_interpreter_InterpTokens_ConditionCall*)tmp)->p2 = r37;
-					r35 = tmp; };
-					if( hl_vfields(r33)[3] ) *(venum**)(hl_vfields(r33)[3]) = (venum*)r35; else hl_dyn_setp(r33->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r35);
-					hl_types_ArrayObj_unshift(r11,((vdynamic*)r33));
-					r27 = (little__$Little)g$_little_Little;
-					r32 = r27->runtime;
-					if( r32 == NULL ) hl_null_access();
+					((little_interpreter_InterpTokens_ConditionCall*)tmp)->p0 = r33;
+					((little_interpreter_InterpTokens_ConditionCall*)tmp)->p1 = r34;
+					((little_interpreter_InterpTokens_ConditionCall*)tmp)->p2 = r35;
+					r33 = tmp; };
+					if( hl_vfields(r31)[3] ) *(venum**)(hl_vfields(r31)[3]) = (venum*)r33; else hl_dyn_setp(r31->value,338395897/*token*/,&t$little_interpreter_InterpTokens,r33);
+					hl_types_ArrayObj_unshift(r10,((vdynamic*)r31));
+					r26 = (little__$Little)g$_little_Little;
+					r30 = r26->runtime;
+					if( r30 == NULL ) hl_null_access();
 					r12 = (String)s$833344d;
-					r27 = (little__$Little)g$_little_Little;
-					r26 = r27->keywords;
-					if( r26 == NULL ) hl_null_access();
-					r13 = r26->CONDITION__ELSE;
+					r26 = (little__$Little)g$_little_Little;
+					r25 = r26->keywords;
+					if( r25 == NULL ) hl_null_access();
+					r13 = r25->CONDITION__ELSE;
 					r12 = String___add__(r12,r13);
 					r13 = (String)s$d215dc3;
 					r12 = String___add__(r12,r13);
-					r35 = hl_alloc_enum(&t$little_interpreter_InterpTokens,27);
-					((little_interpreter_InterpTokens_ErrorMessage*)r35)->p0 = r12;
+					r33 = hl_alloc_enum(&t$little_interpreter_InterpTokens,27);
+					((little_interpreter_InterpTokens_ErrorMessage*)r33)->p0 = r12;
 					r12 = (String)s$Parser;
-					r35 = little_interpreter_Runtime_throwError(r32,r35,r12);
-					r11 = NULL;
-					return r11;
+					r33 = little_interpreter_Runtime_throwError(r30,r33,r12);
+					r10 = NULL;
+					return r10;
 				case 5:
 					r15 = ((little_parser_ParserTokens_ConditionCall*)r14)->p0;
 					if( r15 == NULL ) hl_null_access();
 					r5 = HL__ENUM_INDEX__(r15);
-					r10 = 8;
-					if( r5 != r10 ) goto label$96e09ea_12_850;
+					r9 = 8;
+					if( r5 != r9 ) goto label$96e09ea_12_781;
 					r12 = ((little_parser_ParserTokens_Identifier*)r15)->p0;
 					r13 = (String)s$if;
-					if( r12 != r13 && (!r12 || !r13 || String___compare(r12,(vdynamic*)r13) != 0) ) goto label$96e09ea_12_791;
+					if( r12 != r13 && (!r12 || !r13 || String___compare(r12,(vdynamic*)r13) != 0) ) goto label$96e09ea_12_725;
 					r16 = ((little_parser_ParserTokens_ConditionCall*)r14)->p1;
 					r18 = ((little_parser_ParserTokens_ConditionCall*)r14)->p2;
 					r12 = (String)s$if;
 					r19 = hl_alloc_enum(&t$little_parser_ParserTokens,8);
 					((little_parser_ParserTokens_Identifier*)r19)->p0 = r12;
-					r9 = &t$little_parser_ParserTokens;
+					r8 = &t$little_parser_ParserTokens;
 					r5 = 3;
-					r7 = hl_alloc_array(r9,r5);
+					r7 = hl_alloc_array(r8,r5);
 					r5 = 0;
-					((venum**)(r7 + 1))[r5] = r8;
+					((venum**)(r7 + 1))[r5] = r11;
 					r12 = (String)s$d3e6c58;
 					r20 = hl_alloc_enum(&t$little_parser_ParserTokens,16);
 					((little_parser_ParserTokens_Sign*)r20)->p0 = r12;
@@ -8655,530 +8048,491 @@ hl__types__ArrayObj little_parser_Parser_mergeElses(hl__types__ArrayObj r0) {
 					((venum**)(r7 + 1))[r5] = r20;
 					r5 = 2;
 					((venum**)(r7 + 1))[r5] = r16;
-					r11 = hl_types_ArrayObj_alloc(r7);
+					r10 = hl_types_ArrayObj_alloc(r7);
 					r20 = NULL;
 					{ venum *tmp;
 					tmp = hl_alloc_enum(&t$little_parser_ParserTokens,12);
-					((little_parser_ParserTokens_Expression*)tmp)->p0 = r11;
+					((little_parser_ParserTokens_Expression*)tmp)->p0 = r10;
 					((little_parser_ParserTokens_Expression*)tmp)->p1 = r20;
 					r20 = tmp; };
-					r9 = &t$String;
+					r8 = &t$String;
 					r5 = 0;
-					r7 = hl_alloc_array(r9,r5);
-					r11 = hl_types_ArrayObj_alloc(r7);
+					r7 = hl_alloc_array(r8,r5);
+					r10 = hl_types_ArrayObj_alloc(r7);
 					r5 = 0;
-					r9 = &t$little_tools_ParserTokensSimple;
-					r10 = 1;
-					r7 = hl_alloc_array(r9,r10);
-					r29 = (venum*)g$f9665c1;
-					r10 = 0;
-					((venum**)(r7 + 1))[r10] = r29;
+					r8 = &t$little_tools_ParserTokensSimple;
+					r9 = 1;
+					r7 = hl_alloc_array(r8,r9);
+					r28 = (venum*)g$f9665c1;
+					r9 = 0;
+					((venum**)(r7 + 1))[r9] = r28;
 					r17 = hl_types_ArrayObj_alloc(r7);
 					if( r17 == NULL ) hl_null_access();
 					r17 = hl_types_ArrayObj_copy(r17);
-					label$96e09ea_12_748:
+					label$96e09ea_12_685:
 					if( r17 == NULL ) hl_null_access();
-					r30 = r17->length;
-					if( r5 >= r30 ) goto label$96e09ea_12_771;
-					r30 = r17->length;
-					if( ((unsigned)r5) < ((unsigned)r30) ) goto label$96e09ea_12_756;
-					r29 = NULL;
-					goto label$96e09ea_12_762;
-					label$96e09ea_12_756:
+					r29 = r17->length;
+					if( r5 >= r29 ) goto label$96e09ea_12_705;
+					r29 = r17->length;
+					if( ((unsigned)r5) < ((unsigned)r29) ) goto label$96e09ea_12_693;
+					r28 = NULL;
+					goto label$96e09ea_12_696;
+					label$96e09ea_12_693:
 					r7 = r17->array;
 					r3 = ((vdynamic**)(r7 + 1))[r5];
-					r29 = (venum*)r3;
-					r31 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_tools_ParserTokensSimple);
-					if( r29 == r31 ) goto label$96e09ea_12_762;
-					hl_assert();
-					label$96e09ea_12_762:
+					r28 = (venum*)r3;
+					label$96e09ea_12_696:
 					++r5;
-					if( r11 == NULL ) hl_null_access();
-					r12 = Type_enumConstructor(((vdynamic*)r29));
+					if( r10 == NULL ) hl_null_access();
+					r12 = Type_enumConstructor(((vdynamic*)r28));
 					r13 = (String)s$b14a7b8;
 					r12 = little_tools_TextTools_remove(r12,r13);
 					if( r12 == NULL ) hl_null_access();
 					r12 = String_toLowerCase(r12);
-					r10 = hl_types_ArrayObj_push(r11,((vdynamic*)r12));
-					goto label$96e09ea_12_748;
-					label$96e09ea_12_771:
+					r9 = hl_types_ArrayObj_push(r10,((vdynamic*)r12));
+					goto label$96e09ea_12_685;
+					label$96e09ea_12_705:
 					if( r2 == NULL ) hl_null_access();
-					if( r11 == NULL ) hl_null_access();
+					if( r10 == NULL ) hl_null_access();
 					r12 = Type_enumConstructor(((vdynamic*)r18));
 					if( r12 == NULL ) hl_null_access();
 					r12 = String_toLowerCase(r12);
-					r28 = hl_types_ArrayObj_contains(r11,((vdynamic*)r12));
-					if( r28 ) goto label$96e09ea_12_787;
-					r9 = &t$little_parser_ParserTokens;
+					r27 = hl_types_ArrayObj_contains(r10,((vdynamic*)r12));
+					if( r27 ) goto label$96e09ea_12_721;
+					r8 = &t$little_parser_ParserTokens;
 					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
+					r7 = hl_alloc_array(r8,r5);
 					r5 = 0;
 					((venum**)(r7 + 1))[r5] = r18;
-					r23 = hl_types_ArrayObj_alloc(r7);
-					r41 = NULL;
+					r22 = hl_types_ArrayObj_alloc(r7);
+					r38 = NULL;
 					{ venum *tmp;
 					tmp = hl_alloc_enum(&t$little_parser_ParserTokens,13);
-					((little_parser_ParserTokens_Block*)tmp)->p0 = r23;
-					((little_parser_ParserTokens_Block*)tmp)->p1 = r41;
-					r41 = tmp; };
-					goto label$96e09ea_12_788;
-					label$96e09ea_12_787:
-					r41 = r18;
-					label$96e09ea_12_788:
+					((little_parser_ParserTokens_Block*)tmp)->p0 = r22;
+					((little_parser_ParserTokens_Block*)tmp)->p1 = r38;
+					r38 = tmp; };
+					goto label$96e09ea_12_722;
+					label$96e09ea_12_721:
+					r38 = r18;
+					label$96e09ea_12_722:
 					r21 = hl_alloc_enum(&t$little_parser_ParserTokens,5);
 					((little_parser_ParserTokens_ConditionCall*)r21)->p0 = r19;
 					((little_parser_ParserTokens_ConditionCall*)r21)->p1 = r20;
-					((little_parser_ParserTokens_ConditionCall*)r21)->p2 = r41;
+					((little_parser_ParserTokens_ConditionCall*)r21)->p2 = r38;
 					r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r21));
-					goto label$96e09ea_12_849;
-					label$96e09ea_12_791:
+					goto label$96e09ea_12_780;
+					label$96e09ea_12_725:
 					r12 = (String)s$if;
 					r16 = hl_alloc_enum(&t$little_parser_ParserTokens,8);
 					((little_parser_ParserTokens_Identifier*)r16)->p0 = r12;
-					r9 = &t$String;
+					r8 = &t$String;
 					r5 = 0;
-					r7 = hl_alloc_array(r9,r5);
-					r11 = hl_types_ArrayObj_alloc(r7);
+					r7 = hl_alloc_array(r8,r5);
+					r10 = hl_types_ArrayObj_alloc(r7);
 					r5 = 0;
-					r9 = &t$little_tools_ParserTokensSimple;
-					r10 = 1;
-					r7 = hl_alloc_array(r9,r10);
-					r29 = (venum*)g$f9665c1;
-					r10 = 0;
-					((venum**)(r7 + 1))[r10] = r29;
+					r8 = &t$little_tools_ParserTokensSimple;
+					r9 = 1;
+					r7 = hl_alloc_array(r8,r9);
+					r28 = (venum*)g$f9665c1;
+					r9 = 0;
+					((venum**)(r7 + 1))[r9] = r28;
 					r17 = hl_types_ArrayObj_alloc(r7);
 					if( r17 == NULL ) hl_null_access();
 					r17 = hl_types_ArrayObj_copy(r17);
-					label$96e09ea_12_807:
+					label$96e09ea_12_741:
 					if( r17 == NULL ) hl_null_access();
-					r30 = r17->length;
-					if( r5 >= r30 ) goto label$96e09ea_12_830;
-					r30 = r17->length;
-					if( ((unsigned)r5) < ((unsigned)r30) ) goto label$96e09ea_12_815;
-					r29 = NULL;
-					goto label$96e09ea_12_821;
-					label$96e09ea_12_815:
+					r29 = r17->length;
+					if( r5 >= r29 ) goto label$96e09ea_12_761;
+					r29 = r17->length;
+					if( ((unsigned)r5) < ((unsigned)r29) ) goto label$96e09ea_12_749;
+					r28 = NULL;
+					goto label$96e09ea_12_752;
+					label$96e09ea_12_749:
 					r7 = r17->array;
 					r3 = ((vdynamic**)(r7 + 1))[r5];
-					r29 = (venum*)r3;
-					r31 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_tools_ParserTokensSimple);
-					if( r29 == r31 ) goto label$96e09ea_12_821;
-					hl_assert();
-					label$96e09ea_12_821:
+					r28 = (venum*)r3;
+					label$96e09ea_12_752:
 					++r5;
-					if( r11 == NULL ) hl_null_access();
-					r12 = Type_enumConstructor(((vdynamic*)r29));
+					if( r10 == NULL ) hl_null_access();
+					r12 = Type_enumConstructor(((vdynamic*)r28));
 					r13 = (String)s$b14a7b8;
 					r12 = little_tools_TextTools_remove(r12,r13);
 					if( r12 == NULL ) hl_null_access();
 					r12 = String_toLowerCase(r12);
-					r10 = hl_types_ArrayObj_push(r11,((vdynamic*)r12));
-					goto label$96e09ea_12_807;
-					label$96e09ea_12_830:
+					r9 = hl_types_ArrayObj_push(r10,((vdynamic*)r12));
+					goto label$96e09ea_12_741;
+					label$96e09ea_12_761:
 					if( r2 == NULL ) hl_null_access();
-					if( r11 == NULL ) hl_null_access();
+					if( r10 == NULL ) hl_null_access();
 					r12 = Type_enumConstructor(((vdynamic*)r14));
 					if( r12 == NULL ) hl_null_access();
 					r12 = String_toLowerCase(r12);
-					r28 = hl_types_ArrayObj_contains(r11,((vdynamic*)r12));
-					if( r28 ) goto label$96e09ea_12_846;
-					r9 = &t$little_parser_ParserTokens;
+					r27 = hl_types_ArrayObj_contains(r10,((vdynamic*)r12));
+					if( r27 ) goto label$96e09ea_12_777;
+					r8 = &t$little_parser_ParserTokens;
 					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
+					r7 = hl_alloc_array(r8,r5);
 					r5 = 0;
 					((venum**)(r7 + 1))[r5] = r14;
-					r23 = hl_types_ArrayObj_alloc(r7);
+					r22 = hl_types_ArrayObj_alloc(r7);
 					r20 = NULL;
 					{ venum *tmp;
 					tmp = hl_alloc_enum(&t$little_parser_ParserTokens,13);
-					((little_parser_ParserTokens_Block*)tmp)->p0 = r23;
+					((little_parser_ParserTokens_Block*)tmp)->p0 = r22;
 					((little_parser_ParserTokens_Block*)tmp)->p1 = r20;
 					r20 = tmp; };
-					goto label$96e09ea_12_847;
-					label$96e09ea_12_846:
+					goto label$96e09ea_12_778;
+					label$96e09ea_12_777:
 					r20 = r14;
-					label$96e09ea_12_847:
+					label$96e09ea_12_778:
 					r18 = hl_alloc_enum(&t$little_parser_ParserTokens,5);
 					((little_parser_ParserTokens_ConditionCall*)r18)->p0 = r16;
-					((little_parser_ParserTokens_ConditionCall*)r18)->p1 = r8;
+					((little_parser_ParserTokens_ConditionCall*)r18)->p1 = r11;
 					((little_parser_ParserTokens_ConditionCall*)r18)->p2 = r20;
 					r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r18));
-					label$96e09ea_12_849:
-					goto label$96e09ea_12_908;
-					label$96e09ea_12_850:
+					label$96e09ea_12_780:
+					goto label$96e09ea_12_836;
+					label$96e09ea_12_781:
 					r12 = (String)s$if;
 					r16 = hl_alloc_enum(&t$little_parser_ParserTokens,8);
 					((little_parser_ParserTokens_Identifier*)r16)->p0 = r12;
-					r9 = &t$String;
+					r8 = &t$String;
 					r5 = 0;
-					r7 = hl_alloc_array(r9,r5);
-					r11 = hl_types_ArrayObj_alloc(r7);
+					r7 = hl_alloc_array(r8,r5);
+					r10 = hl_types_ArrayObj_alloc(r7);
 					r5 = 0;
-					r9 = &t$little_tools_ParserTokensSimple;
-					r10 = 1;
-					r7 = hl_alloc_array(r9,r10);
-					r29 = (venum*)g$f9665c1;
-					r10 = 0;
-					((venum**)(r7 + 1))[r10] = r29;
+					r8 = &t$little_tools_ParserTokensSimple;
+					r9 = 1;
+					r7 = hl_alloc_array(r8,r9);
+					r28 = (venum*)g$f9665c1;
+					r9 = 0;
+					((venum**)(r7 + 1))[r9] = r28;
 					r17 = hl_types_ArrayObj_alloc(r7);
 					if( r17 == NULL ) hl_null_access();
 					r17 = hl_types_ArrayObj_copy(r17);
-					label$96e09ea_12_866:
+					label$96e09ea_12_797:
 					if( r17 == NULL ) hl_null_access();
-					r30 = r17->length;
-					if( r5 >= r30 ) goto label$96e09ea_12_889;
-					r30 = r17->length;
-					if( ((unsigned)r5) < ((unsigned)r30) ) goto label$96e09ea_12_874;
-					r29 = NULL;
-					goto label$96e09ea_12_880;
-					label$96e09ea_12_874:
+					r29 = r17->length;
+					if( r5 >= r29 ) goto label$96e09ea_12_817;
+					r29 = r17->length;
+					if( ((unsigned)r5) < ((unsigned)r29) ) goto label$96e09ea_12_805;
+					r28 = NULL;
+					goto label$96e09ea_12_808;
+					label$96e09ea_12_805:
 					r7 = r17->array;
 					r3 = ((vdynamic**)(r7 + 1))[r5];
-					r29 = (venum*)r3;
-					r31 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_tools_ParserTokensSimple);
-					if( r29 == r31 ) goto label$96e09ea_12_880;
-					hl_assert();
-					label$96e09ea_12_880:
+					r28 = (venum*)r3;
+					label$96e09ea_12_808:
 					++r5;
-					if( r11 == NULL ) hl_null_access();
-					r12 = Type_enumConstructor(((vdynamic*)r29));
+					if( r10 == NULL ) hl_null_access();
+					r12 = Type_enumConstructor(((vdynamic*)r28));
 					r13 = (String)s$b14a7b8;
 					r12 = little_tools_TextTools_remove(r12,r13);
 					if( r12 == NULL ) hl_null_access();
 					r12 = String_toLowerCase(r12);
-					r10 = hl_types_ArrayObj_push(r11,((vdynamic*)r12));
-					goto label$96e09ea_12_866;
-					label$96e09ea_12_889:
+					r9 = hl_types_ArrayObj_push(r10,((vdynamic*)r12));
+					goto label$96e09ea_12_797;
+					label$96e09ea_12_817:
 					if( r2 == NULL ) hl_null_access();
-					if( r11 == NULL ) hl_null_access();
+					if( r10 == NULL ) hl_null_access();
 					r12 = Type_enumConstructor(((vdynamic*)r14));
 					if( r12 == NULL ) hl_null_access();
 					r12 = String_toLowerCase(r12);
-					r28 = hl_types_ArrayObj_contains(r11,((vdynamic*)r12));
-					if( r28 ) goto label$96e09ea_12_905;
-					r9 = &t$little_parser_ParserTokens;
+					r27 = hl_types_ArrayObj_contains(r10,((vdynamic*)r12));
+					if( r27 ) goto label$96e09ea_12_833;
+					r8 = &t$little_parser_ParserTokens;
 					r5 = 1;
-					r7 = hl_alloc_array(r9,r5);
+					r7 = hl_alloc_array(r8,r5);
 					r5 = 0;
 					((venum**)(r7 + 1))[r5] = r14;
-					r23 = hl_types_ArrayObj_alloc(r7);
+					r22 = hl_types_ArrayObj_alloc(r7);
 					r20 = NULL;
 					{ venum *tmp;
 					tmp = hl_alloc_enum(&t$little_parser_ParserTokens,13);
-					((little_parser_ParserTokens_Block*)tmp)->p0 = r23;
+					((little_parser_ParserTokens_Block*)tmp)->p0 = r22;
 					((little_parser_ParserTokens_Block*)tmp)->p1 = r20;
 					r20 = tmp; };
-					goto label$96e09ea_12_906;
-					label$96e09ea_12_905:
+					goto label$96e09ea_12_834;
+					label$96e09ea_12_833:
 					r20 = r14;
-					label$96e09ea_12_906:
+					label$96e09ea_12_834:
 					r18 = hl_alloc_enum(&t$little_parser_ParserTokens,5);
 					((little_parser_ParserTokens_ConditionCall*)r18)->p0 = r16;
-					((little_parser_ParserTokens_ConditionCall*)r18)->p1 = r8;
+					((little_parser_ParserTokens_ConditionCall*)r18)->p1 = r11;
 					((little_parser_ParserTokens_ConditionCall*)r18)->p2 = r20;
 					r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r18));
 			}
-			label$96e09ea_12_908:
-			goto label$96e09ea_12_911;
-			label$96e09ea_12_909:
+			label$96e09ea_12_836:
+			goto label$96e09ea_12_839;
+			label$96e09ea_12_837:
 			if( r2 == NULL ) hl_null_access();
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r6));
-			label$96e09ea_12_911:
-			goto label$96e09ea_12_1150;
+			label$96e09ea_12_839:
+			goto label$96e09ea_12_1048;
 		case 10:
-			r8 = ((little_parser_ParserTokens_FunctionCall*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_FunctionCall*)r6)->p0;
 			r14 = ((little_parser_ParserTokens_FunctionCall*)r6)->p1;
 			if( r2 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeElses(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_12_928;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_12_856;
 			r15 = NULL;
-			goto label$96e09ea_12_934;
-			label$96e09ea_12_928:
+			goto label$96e09ea_12_859;
+			label$96e09ea_12_856:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r15 = (venum*)r3;
-			r16 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r15 == r16 ) goto label$96e09ea_12_934;
-			hl_assert();
-			label$96e09ea_12_934:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_12_859:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r14;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeElses(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_12_947;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_12_872;
 			r16 = NULL;
-			goto label$96e09ea_12_953;
-			label$96e09ea_12_947:
+			goto label$96e09ea_12_875;
+			label$96e09ea_12_872:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r16 = (venum*)r3;
-			r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r16 == r18 ) goto label$96e09ea_12_953;
-			hl_assert();
-			label$96e09ea_12_953:
+			label$96e09ea_12_875:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,10);
 			((little_parser_ParserTokens_FunctionCall*)tmp)->p0 = r15;
 			((little_parser_ParserTokens_FunctionCall*)tmp)->p1 = r16;
 			r15 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r15));
-			goto label$96e09ea_12_1150;
+			goto label$96e09ea_12_1048;
 		case 11:
-			r8 = ((little_parser_ParserTokens_Return*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_Return*)r6)->p0;
 			r14 = ((little_parser_ParserTokens_Return*)r6)->p1;
 			if( r2 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeElses(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_12_972;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_12_894;
 			r15 = NULL;
-			goto label$96e09ea_12_978;
-			label$96e09ea_12_972:
+			goto label$96e09ea_12_897;
+			label$96e09ea_12_894:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r15 = (venum*)r3;
-			r16 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r15 == r16 ) goto label$96e09ea_12_978;
-			hl_assert();
-			label$96e09ea_12_978:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_12_897:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r14;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeElses(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_12_991;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_12_910;
 			r16 = NULL;
-			goto label$96e09ea_12_997;
-			label$96e09ea_12_991:
+			goto label$96e09ea_12_913;
+			label$96e09ea_12_910:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r16 = (venum*)r3;
-			r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r16 == r18 ) goto label$96e09ea_12_997;
-			hl_assert();
-			label$96e09ea_12_997:
+			label$96e09ea_12_913:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,11);
 			((little_parser_ParserTokens_Return*)tmp)->p0 = r15;
 			((little_parser_ParserTokens_Return*)tmp)->p1 = r16;
 			r15 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r15));
-			goto label$96e09ea_12_1150;
+			goto label$96e09ea_12_1048;
 		case 12:
-			r11 = ((little_parser_ParserTokens_Expression*)r6)->p0;
-			r8 = ((little_parser_ParserTokens_Expression*)r6)->p1;
+			r10 = ((little_parser_ParserTokens_Expression*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_Expression*)r6)->p1;
 			if( r2 == NULL ) hl_null_access();
-			r23 = little_parser_Parser_mergeElses(r11);
-			r9 = &t$little_parser_ParserTokens;
+			r22 = little_parser_Parser_mergeElses(r10);
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
-			r24 = hl_types_ArrayObj_alloc(r7);
-			r24 = little_parser_Parser_mergeElses(r24);
-			if( r24 == NULL ) hl_null_access();
+			((venum**)(r7 + 1))[r5] = r11;
+			r23 = hl_types_ArrayObj_alloc(r7);
+			r23 = little_parser_Parser_mergeElses(r23);
+			if( r23 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r24->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_12_1017;
+			r9 = r23->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_12_933;
 			r14 = NULL;
-			goto label$96e09ea_12_1023;
-			label$96e09ea_12_1017:
-			r7 = r24->array;
+			goto label$96e09ea_12_936;
+			label$96e09ea_12_933:
+			r7 = r23->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r14 = (venum*)r3;
-			r15 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r14 == r15 ) goto label$96e09ea_12_1023;
-			hl_assert();
-			label$96e09ea_12_1023:
+			label$96e09ea_12_936:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,12);
-			((little_parser_ParserTokens_Expression*)tmp)->p0 = r23;
+			((little_parser_ParserTokens_Expression*)tmp)->p0 = r22;
 			((little_parser_ParserTokens_Expression*)tmp)->p1 = r14;
 			r14 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r14));
-			goto label$96e09ea_12_1150;
+			goto label$96e09ea_12_1048;
 		case 13:
-			r11 = ((little_parser_ParserTokens_Block*)r6)->p0;
-			r8 = ((little_parser_ParserTokens_Block*)r6)->p1;
+			r10 = ((little_parser_ParserTokens_Block*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_Block*)r6)->p1;
 			if( r2 == NULL ) hl_null_access();
-			r23 = little_parser_Parser_mergeElses(r11);
-			r9 = &t$little_parser_ParserTokens;
+			r22 = little_parser_Parser_mergeElses(r10);
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
-			r24 = hl_types_ArrayObj_alloc(r7);
-			r24 = little_parser_Parser_mergeElses(r24);
-			if( r24 == NULL ) hl_null_access();
+			((venum**)(r7 + 1))[r5] = r11;
+			r23 = hl_types_ArrayObj_alloc(r7);
+			r23 = little_parser_Parser_mergeElses(r23);
+			if( r23 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r24->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_12_1043;
+			r9 = r23->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_12_956;
 			r14 = NULL;
-			goto label$96e09ea_12_1049;
-			label$96e09ea_12_1043:
-			r7 = r24->array;
+			goto label$96e09ea_12_959;
+			label$96e09ea_12_956:
+			r7 = r23->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r14 = (venum*)r3;
-			r15 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r14 == r15 ) goto label$96e09ea_12_1049;
-			hl_assert();
-			label$96e09ea_12_1049:
+			label$96e09ea_12_959:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,13);
-			((little_parser_ParserTokens_Block*)tmp)->p0 = r23;
+			((little_parser_ParserTokens_Block*)tmp)->p0 = r22;
 			((little_parser_ParserTokens_Block*)tmp)->p1 = r14;
 			r14 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r14));
-			goto label$96e09ea_12_1150;
+			goto label$96e09ea_12_1048;
 		case 14:
-			r11 = ((little_parser_ParserTokens_PartArray*)r6)->p0;
+			r10 = ((little_parser_ParserTokens_PartArray*)r6)->p0;
 			if( r2 == NULL ) hl_null_access();
-			r23 = little_parser_Parser_mergeElses(r11);
-			r8 = hl_alloc_enum(&t$little_parser_ParserTokens,14);
-			((little_parser_ParserTokens_PartArray*)r8)->p0 = r23;
-			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r8));
-			goto label$96e09ea_12_1150;
+			r22 = little_parser_Parser_mergeElses(r10);
+			r11 = hl_alloc_enum(&t$little_parser_ParserTokens,14);
+			((little_parser_ParserTokens_PartArray*)r11)->p0 = r22;
+			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r11));
+			goto label$96e09ea_12_1048;
 		case 15:
-			r8 = ((little_parser_ParserTokens_PropertyAccess*)r6)->p0;
+			r11 = ((little_parser_ParserTokens_PropertyAccess*)r6)->p0;
 			r14 = ((little_parser_ParserTokens_PropertyAccess*)r6)->p1;
 			if( r2 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
-			((venum**)(r7 + 1))[r5] = r8;
+			((venum**)(r7 + 1))[r5] = r11;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeElses(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_12_1074;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_12_984;
 			r15 = NULL;
-			goto label$96e09ea_12_1080;
-			label$96e09ea_12_1074:
+			goto label$96e09ea_12_987;
+			label$96e09ea_12_984:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r15 = (venum*)r3;
-			r16 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r15 == r16 ) goto label$96e09ea_12_1080;
-			hl_assert();
-			label$96e09ea_12_1080:
-			r9 = &t$little_parser_ParserTokens;
+			label$96e09ea_12_987:
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 1;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r5 = 0;
 			((venum**)(r7 + 1))[r5] = r14;
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r17 = little_parser_Parser_mergeElses(r17);
 			if( r17 == NULL ) hl_null_access();
 			r5 = 0;
-			r10 = r17->length;
-			if( ((unsigned)r5) < ((unsigned)r10) ) goto label$96e09ea_12_1093;
+			r9 = r17->length;
+			if( ((unsigned)r5) < ((unsigned)r9) ) goto label$96e09ea_12_1000;
 			r16 = NULL;
-			goto label$96e09ea_12_1099;
-			label$96e09ea_12_1093:
+			goto label$96e09ea_12_1003;
+			label$96e09ea_12_1000:
 			r7 = r17->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
 			r16 = (venum*)r3;
-			r18 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r16 == r18 ) goto label$96e09ea_12_1099;
-			hl_assert();
-			label$96e09ea_12_1099:
+			label$96e09ea_12_1003:
 			{ venum *tmp;
 			tmp = hl_alloc_enum(&t$little_parser_ParserTokens,15);
 			((little_parser_ParserTokens_PropertyAccess*)tmp)->p0 = r15;
 			((little_parser_ParserTokens_PropertyAccess*)tmp)->p1 = r16;
 			r15 = tmp; };
 			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r15));
-			goto label$96e09ea_12_1150;
+			goto label$96e09ea_12_1048;
 		case 25:
 			r12 = ((little_parser_ParserTokens_Custom*)r6)->p0;
-			r11 = ((little_parser_ParserTokens_Custom*)r6)->p1;
-			r9 = &t$little_parser_ParserTokens;
+			r10 = ((little_parser_ParserTokens_Custom*)r6)->p1;
+			r8 = &t$little_parser_ParserTokens;
 			r5 = 0;
-			r7 = hl_alloc_array(r9,r5);
+			r7 = hl_alloc_array(r8,r5);
 			r17 = hl_types_ArrayObj_alloc(r7);
 			r5 = 0;
-			r23 = r11;
-			label$96e09ea_12_1110:
-			if( r23 == NULL ) hl_null_access();
-			r30 = r23->length;
-			if( r5 >= r30 ) goto label$96e09ea_12_1147;
-			r30 = r23->length;
-			if( ((unsigned)r5) < ((unsigned)r30) ) goto label$96e09ea_12_1118;
-			r8 = NULL;
-			goto label$96e09ea_12_1124;
-			label$96e09ea_12_1118:
-			r7 = r23->array;
+			r22 = r10;
+			label$96e09ea_12_1014:
+			if( r22 == NULL ) hl_null_access();
+			r29 = r22->length;
+			if( r5 >= r29 ) goto label$96e09ea_12_1045;
+			r29 = r22->length;
+			if( ((unsigned)r5) < ((unsigned)r29) ) goto label$96e09ea_12_1022;
+			r11 = NULL;
+			goto label$96e09ea_12_1025;
+			label$96e09ea_12_1022:
+			r7 = r22->array;
 			r3 = ((vdynamic**)(r7 + 1))[r5];
-			r8 = (venum*)r3;
-			r14 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r8 == r14 ) goto label$96e09ea_12_1124;
-			hl_assert();
-			label$96e09ea_12_1124:
+			r11 = (venum*)r3;
+			label$96e09ea_12_1025:
 			++r5;
 			if( r17 == NULL ) hl_null_access();
-			r9 = &t$little_parser_ParserTokens;
-			r10 = 1;
-			r7 = hl_alloc_array(r9,r10);
-			r10 = 0;
-			((venum**)(r7 + 1))[r10] = r8;
-			r42 = hl_types_ArrayObj_alloc(r7);
-			r42 = little_parser_Parser_mergeElses(r42);
-			if( r42 == NULL ) hl_null_access();
-			r10 = 0;
-			r30 = r42->length;
-			if( ((unsigned)r10) < ((unsigned)r30) ) goto label$96e09ea_12_1139;
+			r8 = &t$little_parser_ParserTokens;
+			r9 = 1;
+			r7 = hl_alloc_array(r8,r9);
+			r9 = 0;
+			((venum**)(r7 + 1))[r9] = r11;
+			r39 = hl_types_ArrayObj_alloc(r7);
+			r39 = little_parser_Parser_mergeElses(r39);
+			if( r39 == NULL ) hl_null_access();
+			r9 = 0;
+			r29 = r39->length;
+			if( ((unsigned)r9) < ((unsigned)r29) ) goto label$96e09ea_12_1040;
 			r14 = NULL;
-			goto label$96e09ea_12_1145;
-			label$96e09ea_12_1139:
-			r7 = r42->array;
-			r3 = ((vdynamic**)(r7 + 1))[r10];
+			goto label$96e09ea_12_1043;
+			label$96e09ea_12_1040:
+			r7 = r39->array;
+			r3 = ((vdynamic**)(r7 + 1))[r9];
 			r14 = (venum*)r3;
-			r15 = (venum*)hl_dyn_castp(&r3,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r14 == r15 ) goto label$96e09ea_12_1145;
-			hl_assert();
-			label$96e09ea_12_1145:
-			r10 = hl_types_ArrayObj_push(r17,((vdynamic*)r14));
-			goto label$96e09ea_12_1110;
-			label$96e09ea_12_1147:
+			label$96e09ea_12_1043:
+			r9 = hl_types_ArrayObj_push(r17,((vdynamic*)r14));
+			goto label$96e09ea_12_1014;
+			label$96e09ea_12_1045:
 			if( r2 == NULL ) hl_null_access();
-			r8 = hl_alloc_enum(&t$little_parser_ParserTokens,25);
-			((little_parser_ParserTokens_Custom*)r8)->p0 = r12;
-			((little_parser_ParserTokens_Custom*)r8)->p1 = r17;
-			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r8));
+			r11 = hl_alloc_enum(&t$little_parser_ParserTokens,25);
+			((little_parser_ParserTokens_Custom*)r11)->p0 = r12;
+			((little_parser_ParserTokens_Custom*)r11)->p1 = r17;
+			r5 = hl_types_ArrayObj_push(r2,((vdynamic*)r11));
 	}
-	label$96e09ea_12_1150:
+	label$96e09ea_12_1048:
 	++r4;
-	goto label$96e09ea_12_32;
-	label$96e09ea_12_1152:
+	goto label$96e09ea_12_29;
+	label$96e09ea_12_1050:
 	little_parser_Parser_resetLines();
 	return r2;
 }

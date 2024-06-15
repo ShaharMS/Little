@@ -14,10 +14,8 @@ String little_tools_PrettyPrinter_getTree_INTERP(venum*,hl__types__ArrayBytes_In
 extern String s$;
 extern String s$68b329d;
 hl__types__ArrayObj String_split(String,String);
-extern hl_type t$String;
-extern hl_type t$_dyn;
-int String___compare(String,vdynamic*);
 extern String s$_Expression;
+int String___compare(String,vdynamic*);
 String String_substring(String,int,vdynamic*);
 String String___add__(String,String);
 extern String s$_Ast_;
@@ -47,6 +45,7 @@ extern String s$_Function_Return_;
 extern String s$_Write_;
 extern String s$_Type_Cast_;
 extern String s$_empty_expression_;
+extern hl_type t$String;
 extern String s$_Expression_;
 hl__types__ArrayObj hl_types_ArrayObj_alloc(varray*);
 int hl_types_ArrayObj_push(hl__types__ArrayObj,vdynamic*);
@@ -175,24 +174,21 @@ String little_tools_PrettyPrinter_printInterpreterAst(hl__types__ArrayObj r0,vdy
 	label$b9f8ab8_1_26:
 	if( r3 == NULL ) hl_null_access();
 	r16 = r3->length;
-	if( r2 >= r16 ) goto label$b9f8ab8_1_55;
+	if( r2 >= r16 ) goto label$b9f8ab8_1_52;
 	r16 = r3->length;
 	if( ((unsigned)r2) < ((unsigned)r16) ) goto label$b9f8ab8_1_34;
 	r13 = NULL;
-	goto label$b9f8ab8_1_40;
+	goto label$b9f8ab8_1_37;
 	label$b9f8ab8_1_34:
 	r17 = r3->array;
 	r5 = ((vdynamic**)(r17 + 1))[r2];
 	r13 = (String)r5;
-	r14 = (String)hl_dyn_castp(&r5,&t$_dyn,&t$String);
-	if( r13 == r14 || (r13 && r14 && String___compare(r13,(vdynamic*)r14) == 0) ) goto label$b9f8ab8_1_40;
-	hl_assert();
-	label$b9f8ab8_1_40:
+	label$b9f8ab8_1_37:
 	++r2;
 	r18 = (String)s$_Expression;
-	if( r13 != r18 && (!r13 || !r18 || String___compare(r13,(vdynamic*)r18) != 0) ) goto label$b9f8ab8_1_44;
+	if( r13 != r18 && (!r13 || !r18 || String___compare(r13,(vdynamic*)r18) != 0) ) goto label$b9f8ab8_1_41;
 	goto label$b9f8ab8_1_26;
-	label$b9f8ab8_1_44:
+	label$b9f8ab8_1_41:
 	if( r13 == NULL ) hl_null_access();
 	r15 = r1 ? r1->v.i : 0;
 	r16 = 1;
@@ -204,7 +200,7 @@ String little_tools_PrettyPrinter_printInterpreterAst(hl__types__ArrayObj r0,vdy
 	r14 = String___add__(r12,r18);
 	r12 = r14;
 	goto label$b9f8ab8_1_26;
-	label$b9f8ab8_1_55:
+	label$b9f8ab8_1_52:
 	r13 = (String)s$_Ast_;
 	r13 = String___add__(r13,r12);
 	return r13;
@@ -317,7 +313,7 @@ String little_tools_PrettyPrinter_getTree_INTERP(venum* r0,hl__types__ArrayBytes
 	r4 = HL__ENUM_INDEX__(r0);
 	switch(r4) {
 		default:
-			goto label$b9f8ab8_4_837;
+			goto label$b9f8ab8_4_819;
 		case 0:
 			r4 = ((little_interpreter_InterpTokens_SetLine*)r0)->p0;
 			r11 = (String)s$;
@@ -681,7 +677,7 @@ String little_tools_PrettyPrinter_getTree_INTERP(venum* r0,hl__types__ArrayBytes
 			r33 = 1;
 			r15 = r15 - r33;
 			label$b9f8ab8_4_349:
-			if( r4 >= r15 ) goto label$b9f8ab8_4_372;
+			if( r4 >= r15 ) goto label$b9f8ab8_4_369;
 			r33 = r4;
 			++r4;
 			if( r31 == NULL ) hl_null_access();
@@ -689,15 +685,12 @@ String little_tools_PrettyPrinter_getTree_INTERP(venum* r0,hl__types__ArrayBytes
 			r35 = r27->length;
 			if( ((unsigned)r33) < ((unsigned)r35) ) goto label$b9f8ab8_4_359;
 			r19 = NULL;
-			goto label$b9f8ab8_4_365;
+			goto label$b9f8ab8_4_362;
 			label$b9f8ab8_4_359:
 			r29 = r27->array;
 			r12 = ((vdynamic**)(r29 + 1))[r33];
 			r19 = (venum*)r12;
-			r20 = (venum*)hl_dyn_castp(&r12,&t$_dyn,&t$little_interpreter_InterpTokens);
-			if( r19 == r20 ) goto label$b9f8ab8_4_365;
-			hl_assert();
-			label$b9f8ab8_4_365:
+			label$b9f8ab8_4_362:
 			r14 = little_tools_PrettyPrinter_pushIndex(r1,r2);
 			r35 = 1;
 			r34 = r2 + r35;
@@ -705,7 +698,7 @@ String little_tools_PrettyPrinter_getTree_INTERP(venum* r0,hl__types__ArrayBytes
 			r11 = little_tools_PrettyPrinter_getTree_INTERP(r19,r14,r34,r7);
 			r34 = hl_types_ArrayObj_push(r31,((vdynamic*)r11));
 			goto label$b9f8ab8_4_349;
-			label$b9f8ab8_4_372:
+			label$b9f8ab8_4_369:
 			if( r28 == NULL ) hl_null_access();
 			r32 = hl_types_ArrayObj_concat(r28,r31);
 			if( r32 == NULL ) hl_null_access();
@@ -714,17 +707,14 @@ String little_tools_PrettyPrinter_getTree_INTERP(venum* r0,hl__types__ArrayBytes
 			r15 = 1;
 			r4 = r4 - r15;
 			r15 = r27->length;
-			if( ((unsigned)r4) < ((unsigned)r15) ) goto label$b9f8ab8_4_383;
+			if( ((unsigned)r4) < ((unsigned)r15) ) goto label$b9f8ab8_4_380;
 			r19 = NULL;
-			goto label$b9f8ab8_4_389;
-			label$b9f8ab8_4_383:
+			goto label$b9f8ab8_4_383;
+			label$b9f8ab8_4_380:
 			r29 = r27->array;
 			r12 = ((vdynamic**)(r29 + 1))[r4];
 			r19 = (venum*)r12;
-			r20 = (venum*)hl_dyn_castp(&r12,&t$_dyn,&t$little_interpreter_InterpTokens);
-			if( r19 == r20 ) goto label$b9f8ab8_4_389;
-			hl_assert();
-			label$b9f8ab8_4_389:
+			label$b9f8ab8_4_383:
 			if( r1 == NULL ) hl_null_access();
 			r14 = hl_types_ArrayBytes_Int_copy(r1);
 			r15 = 1;
@@ -741,7 +731,7 @@ String little_tools_PrettyPrinter_getTree_INTERP(venum* r0,hl__types__ArrayBytes
 			if( r27 == NULL ) hl_null_access();
 			r4 = r27->length;
 			r15 = 0;
-			if( r4 != r15 ) goto label$b9f8ab8_4_413;
+			if( r4 != r15 ) goto label$b9f8ab8_4_407;
 			r11 = (String)s$;
 			r13 = little_tools_PrettyPrinter_prefixFA(r1);
 			r11 = String___add__(r11,r13);
@@ -750,7 +740,7 @@ String little_tools_PrettyPrinter_getTree_INTERP(venum* r0,hl__types__ArrayBytes
 			r13 = (String)s$_empty_block_;
 			r11 = String___add__(r11,r13);
 			return r11;
-			label$b9f8ab8_4_413:
+			label$b9f8ab8_4_407:
 			r30 = &t$String;
 			r4 = 1;
 			r29 = hl_alloc_array(r30,r4);
@@ -779,32 +769,29 @@ String little_tools_PrettyPrinter_getTree_INTERP(venum* r0,hl__types__ArrayBytes
 			r15 = r27->length;
 			r33 = 1;
 			r15 = r15 - r33;
-			label$b9f8ab8_4_441:
-			if( r4 >= r15 ) goto label$b9f8ab8_4_464;
+			label$b9f8ab8_4_435:
+			if( r4 >= r15 ) goto label$b9f8ab8_4_455;
 			r33 = r4;
 			++r4;
 			if( r31 == NULL ) hl_null_access();
 			if( r27 == NULL ) hl_null_access();
 			r35 = r27->length;
-			if( ((unsigned)r33) < ((unsigned)r35) ) goto label$b9f8ab8_4_451;
+			if( ((unsigned)r33) < ((unsigned)r35) ) goto label$b9f8ab8_4_445;
 			r19 = NULL;
-			goto label$b9f8ab8_4_457;
-			label$b9f8ab8_4_451:
+			goto label$b9f8ab8_4_448;
+			label$b9f8ab8_4_445:
 			r29 = r27->array;
 			r12 = ((vdynamic**)(r29 + 1))[r33];
 			r19 = (venum*)r12;
-			r20 = (venum*)hl_dyn_castp(&r12,&t$_dyn,&t$little_interpreter_InterpTokens);
-			if( r19 == r20 ) goto label$b9f8ab8_4_457;
-			hl_assert();
-			label$b9f8ab8_4_457:
+			label$b9f8ab8_4_448:
 			r14 = little_tools_PrettyPrinter_pushIndex(r1,r2);
 			r35 = 1;
 			r34 = r2 + r35;
 			r7 = false;
 			r11 = little_tools_PrettyPrinter_getTree_INTERP(r19,r14,r34,r7);
 			r34 = hl_types_ArrayObj_push(r31,((vdynamic*)r11));
-			goto label$b9f8ab8_4_441;
-			label$b9f8ab8_4_464:
+			goto label$b9f8ab8_4_435;
+			label$b9f8ab8_4_455:
 			if( r28 == NULL ) hl_null_access();
 			r32 = hl_types_ArrayObj_concat(r28,r31);
 			if( r32 == NULL ) hl_null_access();
@@ -813,17 +800,14 @@ String little_tools_PrettyPrinter_getTree_INTERP(venum* r0,hl__types__ArrayBytes
 			r15 = 1;
 			r4 = r4 - r15;
 			r15 = r27->length;
-			if( ((unsigned)r4) < ((unsigned)r15) ) goto label$b9f8ab8_4_475;
+			if( ((unsigned)r4) < ((unsigned)r15) ) goto label$b9f8ab8_4_466;
 			r19 = NULL;
-			goto label$b9f8ab8_4_481;
-			label$b9f8ab8_4_475:
+			goto label$b9f8ab8_4_469;
+			label$b9f8ab8_4_466:
 			r29 = r27->array;
 			r12 = ((vdynamic**)(r29 + 1))[r4];
 			r19 = (venum*)r12;
-			r20 = (venum*)hl_dyn_castp(&r12,&t$_dyn,&t$little_interpreter_InterpTokens);
-			if( r19 == r20 ) goto label$b9f8ab8_4_481;
-			hl_assert();
-			label$b9f8ab8_4_481:
+			label$b9f8ab8_4_469:
 			if( r1 == NULL ) hl_null_access();
 			r14 = hl_types_ArrayBytes_Int_copy(r1);
 			r15 = 1;
@@ -844,22 +828,19 @@ String little_tools_PrettyPrinter_getTree_INTERP(venum* r0,hl__types__ArrayBytes
 			r13 = (String)s$_Part_Array_;
 			r11 = String___add__(r11,r13);
 			r4 = 0;
-			label$b9f8ab8_4_500:
+			label$b9f8ab8_4_488:
 			if( r27 == NULL ) hl_null_access();
 			r33 = r27->length;
-			if( r4 >= r33 ) goto label$b9f8ab8_4_540;
+			if( r4 >= r33 ) goto label$b9f8ab8_4_522;
 			r33 = r27->length;
-			if( ((unsigned)r4) < ((unsigned)r33) ) goto label$b9f8ab8_4_508;
+			if( ((unsigned)r4) < ((unsigned)r33) ) goto label$b9f8ab8_4_496;
 			r10 = NULL;
-			goto label$b9f8ab8_4_514;
-			label$b9f8ab8_4_508:
+			goto label$b9f8ab8_4_499;
+			label$b9f8ab8_4_496:
 			r29 = r27->array;
 			r12 = ((vdynamic**)(r29 + 1))[r4];
 			r10 = (venum*)r12;
-			r19 = (venum*)hl_dyn_castp(&r12,&t$_dyn,&t$little_interpreter_InterpTokens);
-			if( r10 == r19 ) goto label$b9f8ab8_4_514;
-			hl_assert();
-			label$b9f8ab8_4_514:
+			label$b9f8ab8_4_499:
 			++r4;
 			if( r1 == NULL ) hl_null_access();
 			r14 = hl_types_ArrayBytes_Int_copy(r1);
@@ -869,28 +850,25 @@ String little_tools_PrettyPrinter_getTree_INTERP(venum* r0,hl__types__ArrayBytes
 			r34 = 1;
 			r33 = r33 - r34;
 			r34 = r27->length;
-			if( ((unsigned)r33) < ((unsigned)r34) ) goto label$b9f8ab8_4_526;
+			if( ((unsigned)r33) < ((unsigned)r34) ) goto label$b9f8ab8_4_511;
 			r21 = NULL;
-			goto label$b9f8ab8_4_532;
-			label$b9f8ab8_4_526:
+			goto label$b9f8ab8_4_514;
+			label$b9f8ab8_4_511:
 			r29 = r27->array;
 			r12 = ((vdynamic**)(r29 + 1))[r33];
 			r21 = (venum*)r12;
-			r22 = (venum*)hl_dyn_castp(&r12,&t$_dyn,&t$little_interpreter_InterpTokens);
-			if( r21 == r22 ) goto label$b9f8ab8_4_532;
-			hl_assert();
-			label$b9f8ab8_4_532:
-			if( r10 == r21 ) goto label$b9f8ab8_4_535;
+			label$b9f8ab8_4_514:
+			if( r10 == r21 ) goto label$b9f8ab8_4_517;
 			r7 = false;
-			goto label$b9f8ab8_4_536;
-			label$b9f8ab8_4_535:
+			goto label$b9f8ab8_4_518;
+			label$b9f8ab8_4_517:
 			r7 = true;
-			label$b9f8ab8_4_536:
+			label$b9f8ab8_4_518:
 			r18 = little_tools_PrettyPrinter_getTree_INTERP(r10,r14,r15,r7);
 			r13 = String___add__(r11,r18);
 			r11 = r13;
-			goto label$b9f8ab8_4_500;
-			label$b9f8ab8_4_540:
+			goto label$b9f8ab8_4_488;
+			label$b9f8ab8_4_522:
 			return r11;
 		case 15:
 			r10 = ((little_interpreter_InterpTokens_PropertyAccess*)r0)->p0;
@@ -1068,29 +1046,29 @@ String little_tools_PrettyPrinter_getTree_INTERP(venum* r0,hl__types__ArrayBytes
 			r18 = (String)s$_Object_;
 			r13 = String___add__(r13,r18);
 			r4 = 0;
-			if( r38 ) goto label$b9f8ab8_4_708;
+			if( r38 ) goto label$b9f8ab8_4_690;
 			r39 = NULL;
-			goto label$b9f8ab8_4_712;
-			label$b9f8ab8_4_708:
+			goto label$b9f8ab8_4_694;
+			label$b9f8ab8_4_690:
 			r39 = r38->f$1;
-			if( r39 ) goto label$b9f8ab8_4_712;
+			if( r39 ) goto label$b9f8ab8_4_694;
 			r39 = hl_to_virtual(&t$vrt_e3ef9ba,(vdynamic*)r38);
 			r38->f$1 = r39;
-			label$b9f8ab8_4_712:
+			label$b9f8ab8_4_694:
 			r40 = r39;
 			if( r39 == NULL ) hl_null_access();
 			if( hl_vfields(r39)[0] ) r41 = ((vvirtual* (*)(vdynamic*))hl_vfields(r39)[0])(r39->value); else {
 				r41 = (vvirtual*)hl_dyn_call_obj(r39->value,&t$fun_eb2fdfb,117891838/*keys*/,NULL,NULL);
 			}
 			r42 = hl_to_virtual(&t$vrt_0a81a53,(vdynamic*)r41);
-			label$b9f8ab8_4_716:
+			label$b9f8ab8_4_698:
 			if( r42 == NULL ) hl_null_access();
 			if( hl_vfields(r42)[0] ) r7 = ((bool (*)(vdynamic*))hl_vfields(r42)[0])(r42->value); else {
 				vdynamic ret;
 				hl_dyn_call_obj(r42->value,&t$fun_bf7849e,407283053/*hasNext*/,NULL,&ret);
 				r7 = (bool)ret.v.i;
 			}
-			if( !r7 ) goto label$b9f8ab8_4_814;
+			if( !r7 ) goto label$b9f8ab8_4_796;
 			if( hl_vfields(r42)[1] ) r18 = ((String (*)(vdynamic*))hl_vfields(r42)[1])(r42->value); else {
 				r18 = (String)hl_dyn_call_obj(r42->value,&t$fun_820f49a,151160317/*next*/,NULL,NULL);
 			}
@@ -1114,29 +1092,29 @@ String little_tools_PrettyPrinter_getTree_INTERP(venum* r0,hl__types__ArrayBytes
 			r27 = hl_types_ArrayObj_alloc(r29);
 			if( r38 == NULL ) hl_null_access();
 			r43 = haxe_ds_StringMap_keys(r38);
-			label$b9f8ab8_4_737:
+			label$b9f8ab8_4_719:
 			if( r43 == NULL ) hl_null_access();
 			if( hl_vfields(r43)[0] ) r7 = ((bool (*)(vdynamic*))hl_vfields(r43)[0])(r43->value); else {
 				vdynamic ret;
 				hl_dyn_call_obj(r43->value,&t$fun_bf7849e,407283053/*hasNext*/,NULL,&ret);
 				r7 = (bool)ret.v.i;
 			}
-			if( !r7 ) goto label$b9f8ab8_4_745;
+			if( !r7 ) goto label$b9f8ab8_4_727;
 			if( hl_vfields(r43)[1] ) r46 = ((String (*)(vdynamic*))hl_vfields(r43)[1])(r43->value); else {
 				r46 = (String)hl_dyn_call_obj(r43->value,&t$fun_820f49a,151160317/*next*/,NULL,NULL);
 			}
 			if( r27 == NULL ) hl_null_access();
 			r33 = hl_types_ArrayObj_push(r27,((vdynamic*)r46));
-			goto label$b9f8ab8_4_737;
-			label$b9f8ab8_4_745:
+			goto label$b9f8ab8_4_719;
+			label$b9f8ab8_4_727:
 			if( r27 == NULL ) hl_null_access();
 			r35 = r27->length;
-			if( r4 == r35 ) goto label$b9f8ab8_4_750;
+			if( r4 == r35 ) goto label$b9f8ab8_4_732;
 			r7 = false;
-			goto label$b9f8ab8_4_751;
-			label$b9f8ab8_4_750:
+			goto label$b9f8ab8_4_733;
+			label$b9f8ab8_4_732:
 			r7 = true;
-			label$b9f8ab8_4_751:
+			label$b9f8ab8_4_733:
 			r47 = little_tools_PrettyPrinter_getTree_INTERP(r10,r14,r15,r7);
 			r46 = String___add__(r13,r47);
 			r13 = r46;
@@ -1150,30 +1128,30 @@ String little_tools_PrettyPrinter_getTree_INTERP(venum* r0,hl__types__ArrayBytes
 			r28 = hl_types_ArrayObj_alloc(r29);
 			if( r38 == NULL ) hl_null_access();
 			r43 = haxe_ds_StringMap_keys(r38);
-			label$b9f8ab8_4_763:
+			label$b9f8ab8_4_745:
 			if( r43 == NULL ) hl_null_access();
 			if( hl_vfields(r43)[0] ) r7 = ((bool (*)(vdynamic*))hl_vfields(r43)[0])(r43->value); else {
 				vdynamic ret;
 				hl_dyn_call_obj(r43->value,&t$fun_bf7849e,407283053/*hasNext*/,NULL,&ret);
 				r7 = (bool)ret.v.i;
 			}
-			if( !r7 ) goto label$b9f8ab8_4_771;
+			if( !r7 ) goto label$b9f8ab8_4_753;
 			if( hl_vfields(r43)[1] ) r46 = ((String (*)(vdynamic*))hl_vfields(r43)[1])(r43->value); else {
 				r46 = (String)hl_dyn_call_obj(r43->value,&t$fun_820f49a,151160317/*next*/,NULL,NULL);
 			}
 			if( r28 == NULL ) hl_null_access();
 			r33 = hl_types_ArrayObj_push(r28,((vdynamic*)r46));
-			goto label$b9f8ab8_4_763;
-			label$b9f8ab8_4_771:
+			goto label$b9f8ab8_4_745;
+			label$b9f8ab8_4_753:
 			if( r28 == NULL ) hl_null_access();
 			r34 = r28->length;
-			if( r4 != r34 ) goto label$b9f8ab8_4_777;
+			if( r4 != r34 ) goto label$b9f8ab8_4_759;
 			if( r1 == NULL ) hl_null_access();
 			r48 = hl_types_ArrayBytes_Int_copy(r1);
-			goto label$b9f8ab8_4_778;
-			label$b9f8ab8_4_777:
+			goto label$b9f8ab8_4_760;
+			label$b9f8ab8_4_759:
 			r48 = little_tools_PrettyPrinter_pushIndex(r1,r2);
-			label$b9f8ab8_4_778:
+			label$b9f8ab8_4_760:
 			r34 = 2;
 			r33 = r2 + r34;
 			r7 = false;
@@ -1188,38 +1166,38 @@ String little_tools_PrettyPrinter_getTree_INTERP(venum* r0,hl__types__ArrayBytes
 			r31 = hl_types_ArrayObj_alloc(r29);
 			if( r38 == NULL ) hl_null_access();
 			r43 = haxe_ds_StringMap_keys(r38);
-			label$b9f8ab8_4_792:
+			label$b9f8ab8_4_774:
 			if( r43 == NULL ) hl_null_access();
 			if( hl_vfields(r43)[0] ) r7 = ((bool (*)(vdynamic*))hl_vfields(r43)[0])(r43->value); else {
 				vdynamic ret;
 				hl_dyn_call_obj(r43->value,&t$fun_bf7849e,407283053/*hasNext*/,NULL,&ret);
 				r7 = (bool)ret.v.i;
 			}
-			if( !r7 ) goto label$b9f8ab8_4_800;
+			if( !r7 ) goto label$b9f8ab8_4_782;
 			if( hl_vfields(r43)[1] ) r46 = ((String (*)(vdynamic*))hl_vfields(r43)[1])(r43->value); else {
 				r46 = (String)hl_dyn_call_obj(r43->value,&t$fun_820f49a,151160317/*next*/,NULL,NULL);
 			}
 			if( r31 == NULL ) hl_null_access();
 			r33 = hl_types_ArrayObj_push(r31,((vdynamic*)r46));
-			goto label$b9f8ab8_4_792;
-			label$b9f8ab8_4_800:
+			goto label$b9f8ab8_4_774;
+			label$b9f8ab8_4_782:
 			if( r31 == NULL ) hl_null_access();
 			r34 = r31->length;
-			if( r4 != r34 ) goto label$b9f8ab8_4_806;
+			if( r4 != r34 ) goto label$b9f8ab8_4_788;
 			if( r1 == NULL ) hl_null_access();
 			r48 = hl_types_ArrayBytes_Int_copy(r1);
-			goto label$b9f8ab8_4_807;
-			label$b9f8ab8_4_806:
+			goto label$b9f8ab8_4_789;
+			label$b9f8ab8_4_788:
 			r48 = little_tools_PrettyPrinter_pushIndex(r1,r2);
-			label$b9f8ab8_4_807:
+			label$b9f8ab8_4_789:
 			r34 = 2;
 			r33 = r2 + r34;
 			r7 = true;
 			r47 = little_tools_PrettyPrinter_getTree_INTERP(r20,r48,r33,r7);
 			r46 = String___add__(r13,r47);
 			r13 = r46;
-			goto label$b9f8ab8_4_716;
-			label$b9f8ab8_4_814:
+			goto label$b9f8ab8_4_698;
+			label$b9f8ab8_4_796:
 			return r13;
 		case 27:
 			r11 = ((little_interpreter_InterpTokens_ErrorMessage*)r0)->p0;
@@ -1246,17 +1224,17 @@ String little_tools_PrettyPrinter_getTree_INTERP(venum* r0,hl__types__ArrayBytes
 			r11 = String___add__(r11,r13);
 			return r11;
 	}
-	label$b9f8ab8_4_837:
+	label$b9f8ab8_4_819:
 	r6 = NULL;
 	return r6;
 }
 
 String little_tools_PrettyPrinter_stringifyParser(hl__types__ArrayObj r0,venum* r1) {
-	String r7, r12, r13, r14, r26, r27;
+	String r7, r12, r13, r14, r25, r26;
 	little__$Little r22;
-	hl__types__ArrayObj r3, r28, r29, r30, r31;
+	hl__types__ArrayObj r3, r27, r28, r29, r30;
 	hl_type *r5;
-	venum *r2, *r11, *r19, *r20, *r23, *r24, *r25, *r32, *r33;
+	venum *r2, *r11, *r19, *r20, *r23, *r24, *r31;
 	bool r16;
 	little__tools__$PrettyPrinter r15;
 	little__KeywordConfig r21;
@@ -1277,25 +1255,22 @@ String little_tools_PrettyPrinter_stringifyParser(hl__types__ArrayObj r0,venum* 
 	label$b9f8ab8_5_10:
 	if( r0 == NULL ) hl_null_access();
 	r9 = r0->length;
-	if( r6 >= r9 ) goto label$b9f8ab8_5_595;
+	if( r6 >= r9 ) goto label$b9f8ab8_5_562;
 	r9 = r0->length;
 	if( ((unsigned)r6) < ((unsigned)r9) ) goto label$b9f8ab8_5_18;
 	r2 = NULL;
-	goto label$b9f8ab8_5_24;
+	goto label$b9f8ab8_5_21;
 	label$b9f8ab8_5_18:
 	r4 = r0->array;
 	r10 = ((vdynamic**)(r4 + 1))[r6];
 	r2 = (venum*)r10;
-	r11 = (venum*)hl_dyn_castp(&r10,&t$_dyn,&t$little_parser_ParserTokens);
-	if( r2 == r11 ) goto label$b9f8ab8_5_24;
-	hl_assert();
-	label$b9f8ab8_5_24:
+	label$b9f8ab8_5_21:
 	++r6;
 	if( r2 == NULL ) hl_null_access();
 	r8 = HL__ENUM_INDEX__(r2);
 	switch(r8) {
 		default:
-			goto label$b9f8ab8_5_591;
+			goto label$b9f8ab8_5_558;
 		case 0:
 			r8 = ((little_parser_ParserTokens_SetLine*)r2)->p0;
 			r13 = (String)s$68b329d;
@@ -1316,7 +1291,7 @@ String little_tools_PrettyPrinter_stringifyParser(hl__types__ArrayObj r0,venum* 
 			r12 = String_charAt(r7,r8);
 			r8 = 0;
 			r16 = StringTools_isSpace(r12,r8);
-			if( !r16 ) goto label$b9f8ab8_5_54;
+			if( !r16 ) goto label$b9f8ab8_5_51;
 			r8 = 0;
 			r9 = r7->length;
 			r17 = 1;
@@ -1325,11 +1300,11 @@ String little_tools_PrettyPrinter_stringifyParser(hl__types__ArrayObj r0,venum* 
 			r18->v.i = r9;
 			r12 = String_substring(r7,r8,r18);
 			r7 = r12;
-			label$b9f8ab8_5_54:
+			label$b9f8ab8_5_51:
 			r13 = (String)s$c0cb5f0;
 			r12 = String___add__(r7,r13);
 			r7 = r12;
-			goto label$b9f8ab8_5_591;
+			goto label$b9f8ab8_5_558;
 		case 3:
 			r11 = ((little_parser_ParserTokens_Variable*)r2)->p2;
 			r19 = ((little_parser_ParserTokens_Variable*)r2)->p0;
@@ -1345,7 +1320,7 @@ String little_tools_PrettyPrinter_stringifyParser(hl__types__ArrayObj r0,venum* 
 			r3 = NULL;
 			r14 = little_tools_PrettyPrinter_stringifyParser(r3,r19);
 			r13 = String___add__(r13,r14);
-			if( !r20 ) goto label$b9f8ab8_5_110;
+			if( !r20 ) goto label$b9f8ab8_5_104;
 			r5 = &t$little_parser_ParserTokens;
 			r8 = 1;
 			r4 = hl_alloc_array(r5,r8);
@@ -1356,42 +1331,39 @@ String little_tools_PrettyPrinter_stringifyParser(hl__types__ArrayObj r0,venum* 
 			if( r3 == NULL ) hl_null_access();
 			r8 = 0;
 			r9 = r3->length;
-			if( ((unsigned)r8) < ((unsigned)r9) ) goto label$b9f8ab8_5_86;
+			if( ((unsigned)r8) < ((unsigned)r9) ) goto label$b9f8ab8_5_83;
 			r24 = NULL;
-			goto label$b9f8ab8_5_92;
-			label$b9f8ab8_5_86:
+			goto label$b9f8ab8_5_86;
+			label$b9f8ab8_5_83:
 			r4 = r3->array;
 			r10 = ((vdynamic**)(r4 + 1))[r8];
 			r24 = (venum*)r10;
-			r25 = (venum*)hl_dyn_castp(&r10,&t$_dyn,&t$little_interpreter_InterpTokens);
-			if( r24 == r25 ) goto label$b9f8ab8_5_92;
-			hl_assert();
-			label$b9f8ab8_5_92:
+			label$b9f8ab8_5_86:
 			r14 = little_tools_Extensions_asJoinedStringPath(r24);
 			r22 = (little__$Little)g$_little_Little;
 			r21 = r22->keywords;
 			if( r21 == NULL ) hl_null_access();
-			r26 = r21->TYPE_UNKNOWN;
-			if( r14 == r26 || (r14 && r26 && String___compare(r14,(vdynamic*)r26) == 0) ) goto label$b9f8ab8_5_110;
+			r25 = r21->TYPE_UNKNOWN;
+			if( r14 == r25 || (r14 && r25 && String___compare(r14,(vdynamic*)r25) == 0) ) goto label$b9f8ab8_5_104;
 			r14 = (String)s$7215ee9;
 			r22 = (little__$Little)g$_little_Little;
 			r21 = r22->keywords;
 			if( r21 == NULL ) hl_null_access();
-			r26 = r21->TYPE_DECL_OR_CAST;
-			r14 = String___add__(r14,r26);
-			r26 = (String)s$7215ee9;
-			r14 = String___add__(r14,r26);
+			r25 = r21->TYPE_DECL_OR_CAST;
+			r14 = String___add__(r14,r25);
+			r25 = (String)s$7215ee9;
+			r14 = String___add__(r14,r25);
 			r3 = NULL;
-			r26 = little_tools_PrettyPrinter_stringifyParser(r3,r20);
-			r14 = String___add__(r14,r26);
-			goto label$b9f8ab8_5_111;
-			label$b9f8ab8_5_110:
+			r25 = little_tools_PrettyPrinter_stringifyParser(r3,r20);
+			r14 = String___add__(r14,r25);
+			goto label$b9f8ab8_5_105;
+			label$b9f8ab8_5_104:
 			r14 = (String)s$;
-			label$b9f8ab8_5_111:
+			label$b9f8ab8_5_105:
 			r13 = String___add__(r13,r14);
 			r12 = String___add__(r7,r13);
 			r7 = r12;
-			goto label$b9f8ab8_5_591;
+			goto label$b9f8ab8_5_558;
 		case 4:
 			r11 = ((little_parser_ParserTokens_Function*)r2)->p3;
 			r19 = ((little_parser_ParserTokens_Function*)r2)->p0;
@@ -1412,13 +1384,13 @@ String little_tools_PrettyPrinter_stringifyParser(hl__types__ArrayObj r0,venum* 
 			r13 = String___add__(r13,r14);
 			r3 = NULL;
 			r14 = little_tools_PrettyPrinter_stringifyParser(r3,r20);
-			r26 = (String)s$a8d3717;
-			r27 = (String)s$c0cb5f0;
-			r14 = little_tools_TextTools_replace(r14,r26,r27);
+			r25 = (String)s$a8d3717;
+			r26 = (String)s$c0cb5f0;
+			r14 = little_tools_TextTools_replace(r14,r25,r26);
 			r13 = String___add__(r13,r14);
 			r14 = (String)s$9371d7a;
 			r13 = String___add__(r13,r14);
-			if( !r23 ) goto label$b9f8ab8_5_178;
+			if( !r23 ) goto label$b9f8ab8_5_169;
 			r5 = &t$little_parser_ParserTokens;
 			r8 = 1;
 			r4 = hl_alloc_array(r5,r8);
@@ -1429,42 +1401,39 @@ String little_tools_PrettyPrinter_stringifyParser(hl__types__ArrayObj r0,venum* 
 			if( r3 == NULL ) hl_null_access();
 			r8 = 0;
 			r9 = r3->length;
-			if( ((unsigned)r8) < ((unsigned)r9) ) goto label$b9f8ab8_5_154;
+			if( ((unsigned)r8) < ((unsigned)r9) ) goto label$b9f8ab8_5_148;
 			r24 = NULL;
-			goto label$b9f8ab8_5_160;
-			label$b9f8ab8_5_154:
+			goto label$b9f8ab8_5_151;
+			label$b9f8ab8_5_148:
 			r4 = r3->array;
 			r10 = ((vdynamic**)(r4 + 1))[r8];
 			r24 = (venum*)r10;
-			r25 = (venum*)hl_dyn_castp(&r10,&t$_dyn,&t$little_interpreter_InterpTokens);
-			if( r24 == r25 ) goto label$b9f8ab8_5_160;
-			hl_assert();
-			label$b9f8ab8_5_160:
+			label$b9f8ab8_5_151:
 			r14 = little_tools_Extensions_asJoinedStringPath(r24);
 			r22 = (little__$Little)g$_little_Little;
 			r21 = r22->keywords;
 			if( r21 == NULL ) hl_null_access();
-			r26 = r21->TYPE_UNKNOWN;
-			if( r14 == r26 || (r14 && r26 && String___compare(r14,(vdynamic*)r26) == 0) ) goto label$b9f8ab8_5_178;
+			r25 = r21->TYPE_UNKNOWN;
+			if( r14 == r25 || (r14 && r25 && String___compare(r14,(vdynamic*)r25) == 0) ) goto label$b9f8ab8_5_169;
 			r14 = (String)s$7215ee9;
 			r22 = (little__$Little)g$_little_Little;
 			r21 = r22->keywords;
 			if( r21 == NULL ) hl_null_access();
-			r26 = r21->TYPE_DECL_OR_CAST;
-			r14 = String___add__(r14,r26);
-			r26 = (String)s$7215ee9;
-			r14 = String___add__(r14,r26);
+			r25 = r21->TYPE_DECL_OR_CAST;
+			r14 = String___add__(r14,r25);
+			r25 = (String)s$7215ee9;
+			r14 = String___add__(r14,r25);
 			r3 = NULL;
-			r26 = little_tools_PrettyPrinter_stringifyParser(r3,r23);
-			r14 = String___add__(r14,r26);
-			goto label$b9f8ab8_5_179;
-			label$b9f8ab8_5_178:
+			r25 = little_tools_PrettyPrinter_stringifyParser(r3,r23);
+			r14 = String___add__(r14,r25);
+			goto label$b9f8ab8_5_170;
+			label$b9f8ab8_5_169:
 			r14 = (String)s$;
-			label$b9f8ab8_5_179:
+			label$b9f8ab8_5_170:
 			r13 = String___add__(r13,r14);
 			r12 = String___add__(r7,r13);
 			r7 = r12;
-			goto label$b9f8ab8_5_591;
+			goto label$b9f8ab8_5_558;
 		case 5:
 			r11 = ((little_parser_ParserTokens_ConditionCall*)r2)->p0;
 			r19 = ((little_parser_ParserTokens_ConditionCall*)r2)->p1;
@@ -1485,21 +1454,21 @@ String little_tools_PrettyPrinter_stringifyParser(hl__types__ArrayObj r0,venum* 
 			r13 = String___add__(r13,r14);
 			r12 = String___add__(r7,r13);
 			r7 = r12;
-			goto label$b9f8ab8_5_591;
+			goto label$b9f8ab8_5_558;
 		case 6:
 			r11 = ((little_parser_ParserTokens_Read*)r2)->p0;
 			r3 = NULL;
 			r13 = little_tools_PrettyPrinter_stringifyParser(r3,r11);
 			r12 = String___add__(r7,r13);
 			r7 = r12;
-			goto label$b9f8ab8_5_591;
+			goto label$b9f8ab8_5_558;
 		case 7:
 			r3 = ((little_parser_ParserTokens_Write*)r2)->p0;
 			r11 = ((little_parser_ParserTokens_Write*)r2)->p1;
 			r5 = &t$String;
 			r8 = 0;
 			r4 = hl_alloc_array(r5,r8);
-			r28 = hl_types_ArrayObj_alloc(r4);
+			r27 = hl_types_ArrayObj_alloc(r4);
 			r8 = 0;
 			if( r3 == NULL ) hl_null_access();
 			r5 = &t$little_parser_ParserTokens;
@@ -1507,45 +1476,42 @@ String little_tools_PrettyPrinter_stringifyParser(hl__types__ArrayObj r0,venum* 
 			r4 = hl_alloc_array(r5,r9);
 			r9 = 0;
 			((venum**)(r4 + 1))[r9] = r11;
-			r30 = hl_types_ArrayObj_alloc(r4);
-			r29 = hl_types_ArrayObj_concat(r3,r30);
-			label$b9f8ab8_5_224:
-			if( r29 == NULL ) hl_null_access();
-			r17 = r29->length;
-			if( r8 >= r17 ) goto label$b9f8ab8_5_244;
-			r17 = r29->length;
-			if( ((unsigned)r8) < ((unsigned)r17) ) goto label$b9f8ab8_5_232;
+			r29 = hl_types_ArrayObj_alloc(r4);
+			r28 = hl_types_ArrayObj_concat(r3,r29);
+			label$b9f8ab8_5_215:
+			if( r28 == NULL ) hl_null_access();
+			r17 = r28->length;
+			if( r8 >= r17 ) goto label$b9f8ab8_5_232;
+			r17 = r28->length;
+			if( ((unsigned)r8) < ((unsigned)r17) ) goto label$b9f8ab8_5_223;
 			r19 = NULL;
-			goto label$b9f8ab8_5_238;
-			label$b9f8ab8_5_232:
-			r4 = r29->array;
+			goto label$b9f8ab8_5_226;
+			label$b9f8ab8_5_223:
+			r4 = r28->array;
 			r10 = ((vdynamic**)(r4 + 1))[r8];
 			r19 = (venum*)r10;
-			r20 = (venum*)hl_dyn_castp(&r10,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r19 == r20 ) goto label$b9f8ab8_5_238;
-			hl_assert();
-			label$b9f8ab8_5_238:
+			label$b9f8ab8_5_226:
 			++r8;
-			if( r28 == NULL ) hl_null_access();
-			r31 = NULL;
-			r12 = little_tools_PrettyPrinter_stringifyParser(r31,r19);
-			r9 = hl_types_ArrayObj_push(r28,((vdynamic*)r12));
-			goto label$b9f8ab8_5_224;
-			label$b9f8ab8_5_244:
-			if( r28 == NULL ) hl_null_access();
+			if( r27 == NULL ) hl_null_access();
+			r30 = NULL;
+			r12 = little_tools_PrettyPrinter_stringifyParser(r30,r19);
+			r9 = hl_types_ArrayObj_push(r27,((vdynamic*)r12));
+			goto label$b9f8ab8_5_215;
+			label$b9f8ab8_5_232:
+			if( r27 == NULL ) hl_null_access();
 			r13 = (String)s$fcacca1;
-			r13 = hl_types_ArrayObj_join(r28,r13);
+			r13 = hl_types_ArrayObj_join(r27,r13);
 			r14 = (String)s$cd85a39;
-			r26 = (String)s$375ec27;
-			r13 = little_tools_TextTools_replace(r13,r14,r26);
+			r25 = (String)s$375ec27;
+			r13 = little_tools_TextTools_replace(r13,r14,r25);
 			r12 = String___add__(r7,r13);
 			r7 = r12;
-			goto label$b9f8ab8_5_591;
+			goto label$b9f8ab8_5_558;
 		case 8:
 			r12 = ((little_parser_ParserTokens_Identifier*)r2)->p0;
 			r13 = String___add__(r7,r12);
 			r7 = r13;
-			goto label$b9f8ab8_5_591;
+			goto label$b9f8ab8_5_558;
 		case 9:
 			r11 = ((little_parser_ParserTokens_TypeDeclaration*)r2)->p0;
 			r19 = ((little_parser_ParserTokens_TypeDeclaration*)r2)->p1;
@@ -1567,7 +1533,7 @@ String little_tools_PrettyPrinter_stringifyParser(hl__types__ArrayObj r0,venum* 
 			r13 = String___add__(r13,r14);
 			r12 = String___add__(r7,r13);
 			r7 = r12;
-			goto label$b9f8ab8_5_591;
+			goto label$b9f8ab8_5_558;
 		case 10:
 			r11 = ((little_parser_ParserTokens_FunctionCall*)r2)->p0;
 			r19 = ((little_parser_ParserTokens_FunctionCall*)r2)->p1;
@@ -1579,18 +1545,18 @@ String little_tools_PrettyPrinter_stringifyParser(hl__types__ArrayObj r0,venum* 
 			r13 = String___add__(r13,r14);
 			r3 = NULL;
 			r14 = little_tools_PrettyPrinter_stringifyParser(r3,r19);
-			r26 = (String)s$a8d3717;
-			r27 = (String)s$c0cb5f0;
-			r14 = little_tools_TextTools_replace(r14,r26,r27);
+			r25 = (String)s$a8d3717;
+			r26 = (String)s$c0cb5f0;
+			r14 = little_tools_TextTools_replace(r14,r25,r26);
 			r13 = String___add__(r13,r14);
 			r14 = (String)s$9371d7a;
 			r13 = String___add__(r13,r14);
 			r14 = (String)s$fe3c347;
-			r26 = (String)s$9371d7a;
-			r13 = little_tools_TextTools_replaceIfLast(r13,r14,r26);
+			r25 = (String)s$9371d7a;
+			r13 = little_tools_TextTools_replaceIfLast(r13,r14,r25);
 			r12 = String___add__(r7,r13);
 			r7 = r12;
-			goto label$b9f8ab8_5_591;
+			goto label$b9f8ab8_5_558;
 		case 11:
 			r11 = ((little_parser_ParserTokens_Return*)r2)->p0;
 			r19 = ((little_parser_ParserTokens_Return*)r2)->p1;
@@ -1607,7 +1573,7 @@ String little_tools_PrettyPrinter_stringifyParser(hl__types__ArrayObj r0,venum* 
 			r13 = String___add__(r13,r14);
 			r12 = String___add__(r7,r13);
 			r7 = r12;
-			goto label$b9f8ab8_5_591;
+			goto label$b9f8ab8_5_558;
 		case 12:
 			r3 = ((little_parser_ParserTokens_Expression*)r2)->p0;
 			r11 = ((little_parser_ParserTokens_Expression*)r2)->p1;
@@ -1615,7 +1581,7 @@ String little_tools_PrettyPrinter_stringifyParser(hl__types__ArrayObj r0,venum* 
 			r13 = little_tools_PrettyPrinter_stringifyParser(r3,r19);
 			r12 = String___add__(r7,r13);
 			r7 = r12;
-			goto label$b9f8ab8_5_591;
+			goto label$b9f8ab8_5_558;
 		case 13:
 			r3 = ((little_parser_ParserTokens_Block*)r2)->p0;
 			r11 = ((little_parser_ParserTokens_Block*)r2)->p1;
@@ -1627,184 +1593,163 @@ String little_tools_PrettyPrinter_stringifyParser(hl__types__ArrayObj r0,venum* 
 			r5 = &t$String;
 			r8 = 0;
 			r4 = hl_alloc_array(r5,r8);
+			r27 = hl_types_ArrayObj_alloc(r4);
+			r8 = 0;
+			r5 = &t$little_tools_ParserTokensSimple;
+			r9 = 1;
+			r4 = hl_alloc_array(r5,r9);
+			r31 = (venum*)g$75148b5;
+			r9 = 0;
+			((venum**)(r4 + 1))[r9] = r31;
+			r28 = hl_types_ArrayObj_alloc(r4);
+			if( r28 == NULL ) hl_null_access();
+			r28 = hl_types_ArrayObj_copy(r28);
+			label$b9f8ab8_5_332:
+			if( r28 == NULL ) hl_null_access();
+			r17 = r28->length;
+			if( r8 >= r17 ) goto label$b9f8ab8_5_352;
+			r17 = r28->length;
+			if( ((unsigned)r8) < ((unsigned)r17) ) goto label$b9f8ab8_5_340;
+			r31 = NULL;
+			goto label$b9f8ab8_5_343;
+			label$b9f8ab8_5_340:
+			r4 = r28->array;
+			r10 = ((vdynamic**)(r4 + 1))[r8];
+			r31 = (venum*)r10;
+			label$b9f8ab8_5_343:
+			++r8;
+			if( r27 == NULL ) hl_null_access();
+			r12 = Type_enumConstructor(((vdynamic*)r31));
+			r13 = (String)s$b14a7b8;
+			r12 = little_tools_TextTools_remove(r12,r13);
+			if( r12 == NULL ) hl_null_access();
+			r12 = String_toLowerCase(r12);
+			r9 = hl_types_ArrayObj_push(r27,((vdynamic*)r12));
+			goto label$b9f8ab8_5_332;
+			label$b9f8ab8_5_352:
+			if( r27 == NULL ) hl_null_access();
+			if( r3 == NULL ) hl_null_access();
+			r8 = 0;
+			r9 = r3->length;
+			if( ((unsigned)r8) < ((unsigned)r9) ) goto label$b9f8ab8_5_359;
+			r19 = NULL;
+			goto label$b9f8ab8_5_362;
+			label$b9f8ab8_5_359:
+			r4 = r3->array;
+			r10 = ((vdynamic**)(r4 + 1))[r8];
+			r19 = (venum*)r10;
+			label$b9f8ab8_5_362:
+			r12 = Type_enumConstructor(((vdynamic*)r19));
+			if( r12 == NULL ) hl_null_access();
+			r12 = String_toLowerCase(r12);
+			r16 = hl_types_ArrayObj_contains(r27,((vdynamic*)r12));
+			if( !r16 ) goto label$b9f8ab8_5_369;
+			r10 = hl_types_ArrayObj_shift(r3);
+			r19 = (venum*)r10;
+			label$b9f8ab8_5_369:
+			r5 = &t$String;
+			r8 = 0;
+			r4 = hl_alloc_array(r5,r8);
 			r28 = hl_types_ArrayObj_alloc(r4);
 			r8 = 0;
 			r5 = &t$little_tools_ParserTokensSimple;
 			r9 = 1;
 			r4 = hl_alloc_array(r5,r9);
-			r32 = (venum*)g$75148b5;
+			r31 = (venum*)g$8361676;
 			r9 = 0;
-			((venum**)(r4 + 1))[r9] = r32;
+			((venum**)(r4 + 1))[r9] = r31;
 			r29 = hl_types_ArrayObj_alloc(r4);
 			if( r29 == NULL ) hl_null_access();
 			r29 = hl_types_ArrayObj_copy(r29);
-			label$b9f8ab8_5_344:
+			label$b9f8ab8_5_383:
 			if( r29 == NULL ) hl_null_access();
 			r17 = r29->length;
-			if( r8 >= r17 ) goto label$b9f8ab8_5_367;
+			if( r8 >= r17 ) goto label$b9f8ab8_5_403;
 			r17 = r29->length;
-			if( ((unsigned)r8) < ((unsigned)r17) ) goto label$b9f8ab8_5_352;
-			r32 = NULL;
-			goto label$b9f8ab8_5_358;
-			label$b9f8ab8_5_352:
+			if( ((unsigned)r8) < ((unsigned)r17) ) goto label$b9f8ab8_5_391;
+			r31 = NULL;
+			goto label$b9f8ab8_5_394;
+			label$b9f8ab8_5_391:
 			r4 = r29->array;
 			r10 = ((vdynamic**)(r4 + 1))[r8];
-			r32 = (venum*)r10;
-			r33 = (venum*)hl_dyn_castp(&r10,&t$_dyn,&t$little_tools_ParserTokensSimple);
-			if( r32 == r33 ) goto label$b9f8ab8_5_358;
-			hl_assert();
-			label$b9f8ab8_5_358:
+			r31 = (venum*)r10;
+			label$b9f8ab8_5_394:
 			++r8;
 			if( r28 == NULL ) hl_null_access();
-			r12 = Type_enumConstructor(((vdynamic*)r32));
+			r12 = Type_enumConstructor(((vdynamic*)r31));
 			r13 = (String)s$b14a7b8;
 			r12 = little_tools_TextTools_remove(r12,r13);
 			if( r12 == NULL ) hl_null_access();
 			r12 = String_toLowerCase(r12);
 			r9 = hl_types_ArrayObj_push(r28,((vdynamic*)r12));
-			goto label$b9f8ab8_5_344;
-			label$b9f8ab8_5_367:
+			goto label$b9f8ab8_5_383;
+			label$b9f8ab8_5_403:
 			if( r28 == NULL ) hl_null_access();
 			if( r3 == NULL ) hl_null_access();
 			r8 = 0;
 			r9 = r3->length;
-			if( ((unsigned)r8) < ((unsigned)r9) ) goto label$b9f8ab8_5_374;
+			if( ((unsigned)r8) < ((unsigned)r9) ) goto label$b9f8ab8_5_410;
 			r19 = NULL;
-			goto label$b9f8ab8_5_380;
-			label$b9f8ab8_5_374:
+			goto label$b9f8ab8_5_413;
+			label$b9f8ab8_5_410:
 			r4 = r3->array;
 			r10 = ((vdynamic**)(r4 + 1))[r8];
 			r19 = (venum*)r10;
-			r20 = (venum*)hl_dyn_castp(&r10,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r19 == r20 ) goto label$b9f8ab8_5_380;
-			hl_assert();
-			label$b9f8ab8_5_380:
+			label$b9f8ab8_5_413:
 			r12 = Type_enumConstructor(((vdynamic*)r19));
 			if( r12 == NULL ) hl_null_access();
 			r12 = String_toLowerCase(r12);
 			r16 = hl_types_ArrayObj_contains(r28,((vdynamic*)r12));
-			if( !r16 ) goto label$b9f8ab8_5_390;
+			if( !r16 ) goto label$b9f8ab8_5_420;
 			r10 = hl_types_ArrayObj_shift(r3);
 			r19 = (venum*)r10;
-			r20 = (venum*)hl_dyn_castp(&r10,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r19 == r20 ) goto label$b9f8ab8_5_390;
-			hl_assert();
-			label$b9f8ab8_5_390:
-			r5 = &t$String;
-			r8 = 0;
-			r4 = hl_alloc_array(r5,r8);
-			r29 = hl_types_ArrayObj_alloc(r4);
-			r8 = 0;
-			r5 = &t$little_tools_ParserTokensSimple;
-			r9 = 1;
-			r4 = hl_alloc_array(r5,r9);
-			r32 = (venum*)g$8361676;
-			r9 = 0;
-			((venum**)(r4 + 1))[r9] = r32;
-			r30 = hl_types_ArrayObj_alloc(r4);
-			if( r30 == NULL ) hl_null_access();
-			r30 = hl_types_ArrayObj_copy(r30);
-			label$b9f8ab8_5_404:
-			if( r30 == NULL ) hl_null_access();
-			r17 = r30->length;
-			if( r8 >= r17 ) goto label$b9f8ab8_5_427;
-			r17 = r30->length;
-			if( ((unsigned)r8) < ((unsigned)r17) ) goto label$b9f8ab8_5_412;
-			r32 = NULL;
-			goto label$b9f8ab8_5_418;
-			label$b9f8ab8_5_412:
-			r4 = r30->array;
-			r10 = ((vdynamic**)(r4 + 1))[r8];
-			r32 = (venum*)r10;
-			r33 = (venum*)hl_dyn_castp(&r10,&t$_dyn,&t$little_tools_ParserTokensSimple);
-			if( r32 == r33 ) goto label$b9f8ab8_5_418;
-			hl_assert();
-			label$b9f8ab8_5_418:
-			++r8;
-			if( r29 == NULL ) hl_null_access();
-			r12 = Type_enumConstructor(((vdynamic*)r32));
-			r13 = (String)s$b14a7b8;
-			r12 = little_tools_TextTools_remove(r12,r13);
-			if( r12 == NULL ) hl_null_access();
-			r12 = String_toLowerCase(r12);
-			r9 = hl_types_ArrayObj_push(r29,((vdynamic*)r12));
-			goto label$b9f8ab8_5_404;
-			label$b9f8ab8_5_427:
-			if( r29 == NULL ) hl_null_access();
-			if( r3 == NULL ) hl_null_access();
-			r8 = 0;
-			r9 = r3->length;
-			if( ((unsigned)r8) < ((unsigned)r9) ) goto label$b9f8ab8_5_434;
-			r19 = NULL;
-			goto label$b9f8ab8_5_440;
-			label$b9f8ab8_5_434:
-			r4 = r3->array;
-			r10 = ((vdynamic**)(r4 + 1))[r8];
-			r19 = (venum*)r10;
-			r20 = (venum*)hl_dyn_castp(&r10,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r19 == r20 ) goto label$b9f8ab8_5_440;
-			hl_assert();
-			label$b9f8ab8_5_440:
-			r12 = Type_enumConstructor(((vdynamic*)r19));
-			if( r12 == NULL ) hl_null_access();
-			r12 = String_toLowerCase(r12);
-			r16 = hl_types_ArrayObj_contains(r29,((vdynamic*)r12));
-			if( !r16 ) goto label$b9f8ab8_5_450;
-			r10 = hl_types_ArrayObj_shift(r3);
-			r19 = (venum*)r10;
-			r20 = (venum*)hl_dyn_castp(&r10,&t$_dyn,&t$little_parser_ParserTokens);
-			if( r19 == r20 ) goto label$b9f8ab8_5_450;
-			hl_assert();
-			label$b9f8ab8_5_450:
+			label$b9f8ab8_5_420:
 			r13 = (String)s$f95b70f;
 			r19 = NULL;
 			r14 = little_tools_PrettyPrinter_stringifyParser(r3,r19);
 			r13 = String___add__(r13,r14);
 			r14 = (String)s$8aa4ce4;
 			r13 = String___add__(r13,r14);
-			if( !r11 ) goto label$b9f8ab8_5_494;
+			if( !r11 ) goto label$b9f8ab8_5_461;
 			r5 = &t$little_parser_ParserTokens;
 			r8 = 1;
 			r4 = hl_alloc_array(r5,r8);
 			r8 = 0;
 			((venum**)(r4 + 1))[r8] = r11;
-			r30 = hl_types_ArrayObj_alloc(r4);
-			r30 = little_interpreter_Interpreter_convert(r30);
-			if( r30 == NULL ) hl_null_access();
+			r29 = hl_types_ArrayObj_alloc(r4);
+			r29 = little_interpreter_Interpreter_convert(r29);
+			if( r29 == NULL ) hl_null_access();
 			r8 = 0;
-			r9 = r30->length;
-			if( ((unsigned)r8) < ((unsigned)r9) ) goto label$b9f8ab8_5_470;
+			r9 = r29->length;
+			if( ((unsigned)r8) < ((unsigned)r9) ) goto label$b9f8ab8_5_440;
 			r24 = NULL;
-			goto label$b9f8ab8_5_476;
-			label$b9f8ab8_5_470:
-			r4 = r30->array;
+			goto label$b9f8ab8_5_443;
+			label$b9f8ab8_5_440:
+			r4 = r29->array;
 			r10 = ((vdynamic**)(r4 + 1))[r8];
 			r24 = (venum*)r10;
-			r25 = (venum*)hl_dyn_castp(&r10,&t$_dyn,&t$little_interpreter_InterpTokens);
-			if( r24 == r25 ) goto label$b9f8ab8_5_476;
-			hl_assert();
-			label$b9f8ab8_5_476:
+			label$b9f8ab8_5_443:
 			r14 = little_tools_Extensions_asJoinedStringPath(r24);
 			r22 = (little__$Little)g$_little_Little;
 			r21 = r22->keywords;
 			if( r21 == NULL ) hl_null_access();
-			r26 = r21->TYPE_UNKNOWN;
-			if( r14 == r26 || (r14 && r26 && String___compare(r14,(vdynamic*)r26) == 0) ) goto label$b9f8ab8_5_494;
+			r25 = r21->TYPE_UNKNOWN;
+			if( r14 == r25 || (r14 && r25 && String___compare(r14,(vdynamic*)r25) == 0) ) goto label$b9f8ab8_5_461;
 			r14 = (String)s$;
 			r22 = (little__$Little)g$_little_Little;
 			r21 = r22->keywords;
 			if( r21 == NULL ) hl_null_access();
-			r26 = r21->TYPE_DECL_OR_CAST;
-			r14 = String___add__(r14,r26);
-			r26 = (String)s$7215ee9;
-			r14 = String___add__(r14,r26);
-			r30 = NULL;
-			r26 = little_tools_PrettyPrinter_stringifyParser(r30,r11);
-			r14 = String___add__(r14,r26);
-			goto label$b9f8ab8_5_495;
-			label$b9f8ab8_5_494:
+			r25 = r21->TYPE_DECL_OR_CAST;
+			r14 = String___add__(r14,r25);
+			r25 = (String)s$7215ee9;
+			r14 = String___add__(r14,r25);
+			r29 = NULL;
+			r25 = little_tools_PrettyPrinter_stringifyParser(r29,r11);
+			r14 = String___add__(r14,r25);
+			goto label$b9f8ab8_5_462;
+			label$b9f8ab8_5_461:
 			r14 = (String)s$;
-			label$b9f8ab8_5_495:
+			label$b9f8ab8_5_462:
 			r13 = String___add__(r13,r14);
 			r12 = String___add__(r7,r13);
 			r13 = (String)s$9261c94;
@@ -1818,14 +1763,14 @@ String little_tools_PrettyPrinter_stringifyParser(hl__types__ArrayObj r0,venum* 
 			r12 = little_tools_TextTools_replaceLast(r12,r13,r14);
 			r15 = (little__tools__$PrettyPrinter)g$_little_tools_PrettyPrinter;
 			r15->indent = r12;
-			goto label$b9f8ab8_5_591;
+			goto label$b9f8ab8_5_558;
 		case 14:
 			r3 = ((little_parser_ParserTokens_PartArray*)r2)->p0;
 			r11 = NULL;
 			r13 = little_tools_PrettyPrinter_stringifyParser(r3,r11);
 			r12 = String___add__(r7,r13);
 			r7 = r12;
-			goto label$b9f8ab8_5_591;
+			goto label$b9f8ab8_5_558;
 		case 15:
 			r11 = ((little_parser_ParserTokens_PropertyAccess*)r2)->p0;
 			r19 = ((little_parser_ParserTokens_PropertyAccess*)r2)->p1;
@@ -1843,40 +1788,40 @@ String little_tools_PrettyPrinter_stringifyParser(hl__types__ArrayObj r0,venum* 
 			r13 = String___add__(r13,r14);
 			r12 = String___add__(r7,r13);
 			r7 = r12;
-			goto label$b9f8ab8_5_591;
+			goto label$b9f8ab8_5_558;
 		case 16:
 			r12 = ((little_parser_ParserTokens_Sign*)r2)->p0;
 			r13 = String___add__(r7,r12);
 			r7 = r13;
-			goto label$b9f8ab8_5_591;
+			goto label$b9f8ab8_5_558;
 		case 17:
 			r12 = ((little_parser_ParserTokens_Number*)r2)->p0;
 			r13 = String___add__(r7,r12);
 			r7 = r13;
-			goto label$b9f8ab8_5_591;
+			goto label$b9f8ab8_5_558;
 		case 18:
 			r12 = ((little_parser_ParserTokens_Decimal*)r2)->p0;
 			r13 = String___add__(r7,r12);
 			r7 = r13;
-			goto label$b9f8ab8_5_591;
+			goto label$b9f8ab8_5_558;
 		case 19:
 			r12 = ((little_parser_ParserTokens_Characters*)r2)->p0;
 			r14 = (String)s$b15835f;
 			r14 = String___add__(r14,r12);
-			r26 = (String)s$b15835f;
-			r14 = String___add__(r14,r26);
+			r25 = (String)s$b15835f;
+			r14 = String___add__(r14,r25);
 			r13 = String___add__(r7,r14);
 			r7 = r13;
-			goto label$b9f8ab8_5_591;
+			goto label$b9f8ab8_5_558;
 		case 20:
 			r12 = ((little_parser_ParserTokens_Documentation*)r2)->p0;
 			r14 = (String)s$d7ef707;
 			r14 = String___add__(r14,r12);
-			r26 = (String)s$d7ef707;
-			r14 = String___add__(r14,r26);
+			r25 = (String)s$d7ef707;
+			r14 = String___add__(r14,r25);
 			r13 = String___add__(r7,r14);
 			r7 = r13;
-			goto label$b9f8ab8_5_591;
+			goto label$b9f8ab8_5_558;
 		case 21:
 			r12 = ((little_parser_ParserTokens_ErrorMessage*)r2)->p0;
 			goto label$b9f8ab8_5_10;
@@ -1887,7 +1832,7 @@ String little_tools_PrettyPrinter_stringifyParser(hl__types__ArrayObj r0,venum* 
 			r13 = r21->NULL_VALUE;
 			r12 = String___add__(r7,r13);
 			r7 = r12;
-			goto label$b9f8ab8_5_591;
+			goto label$b9f8ab8_5_558;
 		case 23:
 			r22 = (little__$Little)g$_little_Little;
 			r21 = r22->keywords;
@@ -1895,7 +1840,7 @@ String little_tools_PrettyPrinter_stringifyParser(hl__types__ArrayObj r0,venum* 
 			r13 = r21->TRUE_VALUE;
 			r12 = String___add__(r7,r13);
 			r7 = r12;
-			goto label$b9f8ab8_5_591;
+			goto label$b9f8ab8_5_558;
 		case 24:
 			r22 = (little__$Little)g$_little_Little;
 			r21 = r22->keywords;
@@ -1903,7 +1848,7 @@ String little_tools_PrettyPrinter_stringifyParser(hl__types__ArrayObj r0,venum* 
 			r13 = r21->FALSE_VALUE;
 			r12 = String___add__(r7,r13);
 			r7 = r12;
-			goto label$b9f8ab8_5_591;
+			goto label$b9f8ab8_5_558;
 		case 25:
 			r12 = ((little_parser_ParserTokens_Custom*)r2)->p0;
 			r3 = ((little_parser_ParserTokens_Custom*)r2)->p1;
@@ -1914,12 +1859,12 @@ String little_tools_PrettyPrinter_stringifyParser(hl__types__ArrayObj r0,venum* 
 			r13 = String___add__(r13,r14);
 			hl_throw((vdynamic*)r13);
 	}
-	label$b9f8ab8_5_591:
+	label$b9f8ab8_5_558:
 	r13 = (String)s$7215ee9;
 	r12 = String___add__(r7,r13);
 	r7 = r12;
 	goto label$b9f8ab8_5_10;
-	label$b9f8ab8_5_595:
+	label$b9f8ab8_5_562:
 	r12 = StringTools_ltrim(r7);
 	r13 = (String)s$7215ee9;
 	r14 = (String)s$;
@@ -1928,80 +1873,74 @@ String little_tools_PrettyPrinter_stringifyParser(hl__types__ArrayObj r0,venum* 
 }
 
 String little_tools_PrettyPrinter_stringifyInterpreter(hl__types__ArrayObj r0,venum* r1) {
-	String r9, r13, r14, r15, r25, r26, r27;
+	String r8, r13, r14, r15, r25, r26, r27;
 	little__$Little r23;
 	hl__types__ArrayObj r3, r29, r30, r31, r32;
-	little__interpreter__memory__Memory r38;
-	hl_type *r10;
-	venum *r2, *r8, *r20, *r21, *r24, *r33, *r34;
+	little__interpreter__memory__Memory r37;
+	hl_type *r9;
+	venum *r2, *r12, *r20, *r21, *r24, *r33;
 	bool r17;
 	little__tools__$PrettyPrinter r16;
 	little__tools__BaseOrderedMap r28;
 	little__KeywordConfig r22;
-	double r37;
-	int *r35;
+	double r36;
+	int *r34;
 	vdynamic *r6, *r19;
-	vbyte *r36;
+	vbyte *r35;
 	varray *r7;
-	int r4, r5, r11, r12, r18;
+	int r4, r5, r10, r11, r18;
 	if( r1 ) goto label$b9f8ab8_6_2;
-	if( !r0 ) goto label$b9f8ab8_6_19;
+	if( !r0 ) goto label$b9f8ab8_6_16;
 	label$b9f8ab8_6_2:
-	if( !r0 ) goto label$b9f8ab8_6_21;
+	if( !r0 ) goto label$b9f8ab8_6_18;
 	if( r0 == NULL ) hl_null_access();
 	r4 = r0->length;
 	r5 = 1;
-	if( r4 != r5 ) goto label$b9f8ab8_6_21;
+	if( r4 != r5 ) goto label$b9f8ab8_6_18;
 	r4 = 0;
 	r5 = r0->length;
 	if( ((unsigned)r4) < ((unsigned)r5) ) goto label$b9f8ab8_6_12;
 	r2 = NULL;
-	goto label$b9f8ab8_6_18;
+	goto label$b9f8ab8_6_15;
 	label$b9f8ab8_6_12:
 	r7 = r0->array;
 	r6 = ((vdynamic**)(r7 + 1))[r4];
 	r2 = (venum*)r6;
-	r8 = (venum*)hl_dyn_castp(&r6,&t$_dyn,&t$little_interpreter_InterpTokens);
-	if( r2 == r8 ) goto label$b9f8ab8_6_18;
-	hl_assert();
+	label$b9f8ab8_6_15:
+	if( r2 ) goto label$b9f8ab8_6_18;
+	label$b9f8ab8_6_16:
+	r8 = (String)s$;
+	return r8;
 	label$b9f8ab8_6_18:
-	if( r2 ) goto label$b9f8ab8_6_21;
-	label$b9f8ab8_6_19:
-	r9 = (String)s$;
-	return r9;
-	label$b9f8ab8_6_21:
-	if( !r1 ) goto label$b9f8ab8_6_29;
-	r10 = &t$little_interpreter_InterpTokens;
+	if( !r1 ) goto label$b9f8ab8_6_26;
+	r9 = &t$little_interpreter_InterpTokens;
 	r4 = 1;
-	r7 = hl_alloc_array(r10,r4);
+	r7 = hl_alloc_array(r9,r4);
 	r4 = 0;
 	((venum**)(r7 + 1))[r4] = r1;
 	r3 = hl_types_ArrayObj_alloc(r7);
 	r0 = r3;
-	label$b9f8ab8_6_29:
-	r9 = (String)s$;
+	label$b9f8ab8_6_26:
+	r8 = (String)s$;
 	r4 = -1;
 	r5 = 0;
-	label$b9f8ab8_6_32:
+	label$b9f8ab8_6_29:
 	if( r0 == NULL ) hl_null_access();
-	r12 = r0->length;
-	if( r5 >= r12 ) goto label$b9f8ab8_6_591;
-	r12 = r0->length;
-	if( ((unsigned)r5) < ((unsigned)r12) ) goto label$b9f8ab8_6_40;
+	r11 = r0->length;
+	if( r5 >= r11 ) goto label$b9f8ab8_6_564;
+	r11 = r0->length;
+	if( ((unsigned)r5) < ((unsigned)r11) ) goto label$b9f8ab8_6_37;
 	r2 = NULL;
-	goto label$b9f8ab8_6_46;
-	label$b9f8ab8_6_40:
+	goto label$b9f8ab8_6_40;
+	label$b9f8ab8_6_37:
 	r7 = r0->array;
 	r6 = ((vdynamic**)(r7 + 1))[r5];
 	r2 = (venum*)r6;
-	r8 = (venum*)hl_dyn_castp(&r6,&t$_dyn,&t$little_interpreter_InterpTokens);
-	if( r2 == r8 ) goto label$b9f8ab8_6_46;
-	hl_assert();
-	label$b9f8ab8_6_46:
+	label$b9f8ab8_6_40:
 	++r5;
 	if( r2 == NULL ) hl_null_access();
-	r11 = HL__ENUM_INDEX__(r2);
-	switch(r11) {
+	r10 = HL__ENUM_INDEX__(r2);
+	switch(r10) {
 		default:
 		case 5:
 		case 26:
@@ -2012,41 +1951,41 @@ String little_tools_PrettyPrinter_stringifyInterpreter(hl__types__ArrayObj r0,ve
 			r13 = String___add__(r13,r14);
 			hl_throw((vdynamic*)r13);
 		case 0:
-			r11 = ((little_interpreter_InterpTokens_SetLine*)r2)->p0;
+			r10 = ((little_interpreter_InterpTokens_SetLine*)r2)->p0;
 			r14 = (String)s$68b329d;
 			r16 = (little__tools__$PrettyPrinter)g$_little_tools_PrettyPrinter;
 			r15 = r16->indent;
 			r14 = String___add__(r14,r15);
-			r13 = String___add__(r9,r14);
-			r9 = r13;
-			goto label$b9f8ab8_6_32;
+			r13 = String___add__(r8,r14);
+			r8 = r13;
+			goto label$b9f8ab8_6_29;
 		case 1:
 			r13 = ((little_interpreter_InterpTokens_SetModule*)r2)->p0;
-			goto label$b9f8ab8_6_32;
+			goto label$b9f8ab8_6_29;
 		case 2:
-			if( r9 == NULL ) hl_null_access();
-			r11 = r9->length;
-			r12 = 1;
-			r11 = r11 - r12;
-			r13 = String_charAt(r9,r11);
-			r11 = 0;
-			r17 = StringTools_isSpace(r13,r11);
-			if( !r17 ) goto label$b9f8ab8_6_81;
-			r11 = 0;
-			r12 = r9->length;
+			if( r8 == NULL ) hl_null_access();
+			r10 = r8->length;
+			r11 = 1;
+			r10 = r10 - r11;
+			r13 = String_charAt(r8,r10);
+			r10 = 0;
+			r17 = StringTools_isSpace(r13,r10);
+			if( !r17 ) goto label$b9f8ab8_6_75;
+			r10 = 0;
+			r11 = r8->length;
 			r18 = 1;
-			r12 = r12 - r18;
+			r11 = r11 - r18;
 			r19 = hl_alloc_dynamic(&t$_i32);
-			r19->v.i = r12;
-			r13 = String_substring(r9,r11,r19);
-			r9 = r13;
-			label$b9f8ab8_6_81:
+			r19->v.i = r11;
+			r13 = String_substring(r8,r10,r19);
+			r8 = r13;
+			label$b9f8ab8_6_75:
 			r14 = (String)s$c0cb5f0;
-			r13 = String___add__(r9,r14);
-			r9 = r13;
-			goto label$b9f8ab8_6_587;
+			r13 = String___add__(r8,r14);
+			r8 = r13;
+			goto label$b9f8ab8_6_560;
 		case 3:
-			r8 = ((little_interpreter_InterpTokens_VariableDeclaration*)r2)->p0;
+			r12 = ((little_interpreter_InterpTokens_VariableDeclaration*)r2)->p0;
 			r20 = ((little_interpreter_InterpTokens_VariableDeclaration*)r2)->p1;
 			r21 = ((little_interpreter_InterpTokens_VariableDeclaration*)r2)->p2;
 			r14 = (String)s$;
@@ -2058,15 +1997,15 @@ String little_tools_PrettyPrinter_stringifyInterpreter(hl__types__ArrayObj r0,ve
 			r15 = (String)s$7215ee9;
 			r14 = String___add__(r14,r15);
 			r3 = NULL;
-			r15 = little_tools_PrettyPrinter_stringifyInterpreter(r3,r8);
+			r15 = little_tools_PrettyPrinter_stringifyInterpreter(r3,r12);
 			r14 = String___add__(r14,r15);
-			if( !r20 ) goto label$b9f8ab8_6_118;
+			if( !r20 ) goto label$b9f8ab8_6_112;
 			r15 = little_tools_Extensions_asJoinedStringPath(r20);
 			r23 = (little__$Little)g$_little_Little;
 			r22 = r23->keywords;
 			if( r22 == NULL ) hl_null_access();
 			r25 = r22->TYPE_UNKNOWN;
-			if( r15 == r25 || (r15 && r25 && String___compare(r15,(vdynamic*)r25) == 0) ) goto label$b9f8ab8_6_118;
+			if( r15 == r25 || (r15 && r25 && String___compare(r15,(vdynamic*)r25) == 0) ) goto label$b9f8ab8_6_112;
 			r15 = (String)s$7215ee9;
 			r23 = (little__$Little)g$_little_Little;
 			r22 = r23->keywords;
@@ -2078,16 +2017,16 @@ String little_tools_PrettyPrinter_stringifyInterpreter(hl__types__ArrayObj r0,ve
 			r3 = NULL;
 			r25 = little_tools_PrettyPrinter_stringifyInterpreter(r3,r20);
 			r15 = String___add__(r15,r25);
-			goto label$b9f8ab8_6_119;
-			label$b9f8ab8_6_118:
+			goto label$b9f8ab8_6_113;
+			label$b9f8ab8_6_112:
 			r15 = (String)s$;
-			label$b9f8ab8_6_119:
+			label$b9f8ab8_6_113:
 			r14 = String___add__(r14,r15);
-			r13 = String___add__(r9,r14);
-			r9 = r13;
-			goto label$b9f8ab8_6_587;
+			r13 = String___add__(r8,r14);
+			r8 = r13;
+			goto label$b9f8ab8_6_560;
 		case 4:
-			r8 = ((little_interpreter_InterpTokens_FunctionDeclaration*)r2)->p0;
+			r12 = ((little_interpreter_InterpTokens_FunctionDeclaration*)r2)->p0;
 			r20 = ((little_interpreter_InterpTokens_FunctionDeclaration*)r2)->p1;
 			r21 = ((little_interpreter_InterpTokens_FunctionDeclaration*)r2)->p2;
 			r24 = ((little_interpreter_InterpTokens_FunctionDeclaration*)r2)->p3;
@@ -2100,9 +2039,9 @@ String little_tools_PrettyPrinter_stringifyInterpreter(hl__types__ArrayObj r0,ve
 			r15 = (String)s$7215ee9;
 			r14 = String___add__(r14,r15);
 			r3 = NULL;
-			r15 = little_tools_PrettyPrinter_stringifyInterpreter(r3,r8);
+			r15 = little_tools_PrettyPrinter_stringifyInterpreter(r3,r12);
 			r14 = String___add__(r14,r15);
-			if( !r20 ) goto label$b9f8ab8_6_149;
+			if( !r20 ) goto label$b9f8ab8_6_143;
 			r15 = (String)s$84c4047;
 			r3 = NULL;
 			r25 = little_tools_PrettyPrinter_stringifyInterpreter(r3,r20);
@@ -2112,18 +2051,18 @@ String little_tools_PrettyPrinter_stringifyInterpreter(hl__types__ArrayObj r0,ve
 			r15 = String___add__(r15,r25);
 			r25 = (String)s$9371d7a;
 			r15 = String___add__(r15,r25);
-			goto label$b9f8ab8_6_150;
-			label$b9f8ab8_6_149:
+			goto label$b9f8ab8_6_144;
+			label$b9f8ab8_6_143:
 			r15 = (String)s$;
-			label$b9f8ab8_6_150:
+			label$b9f8ab8_6_144:
 			r14 = String___add__(r14,r15);
-			if( !r21 ) goto label$b9f8ab8_6_170;
+			if( !r21 ) goto label$b9f8ab8_6_164;
 			r15 = little_tools_Extensions_asJoinedStringPath(r21);
 			r23 = (little__$Little)g$_little_Little;
 			r22 = r23->keywords;
 			if( r22 == NULL ) hl_null_access();
 			r25 = r22->TYPE_UNKNOWN;
-			if( r15 == r25 || (r15 && r25 && String___compare(r15,(vdynamic*)r25) == 0) ) goto label$b9f8ab8_6_170;
+			if( r15 == r25 || (r15 && r25 && String___compare(r15,(vdynamic*)r25) == 0) ) goto label$b9f8ab8_6_164;
 			r15 = (String)s$7215ee9;
 			r23 = (little__$Little)g$_little_Little;
 			r22 = r23->keywords;
@@ -2135,58 +2074,58 @@ String little_tools_PrettyPrinter_stringifyInterpreter(hl__types__ArrayObj r0,ve
 			r3 = NULL;
 			r25 = little_tools_PrettyPrinter_stringifyInterpreter(r3,r21);
 			r15 = String___add__(r15,r25);
-			goto label$b9f8ab8_6_171;
-			label$b9f8ab8_6_170:
+			goto label$b9f8ab8_6_165;
+			label$b9f8ab8_6_164:
 			r15 = (String)s$;
-			label$b9f8ab8_6_171:
+			label$b9f8ab8_6_165:
 			r14 = String___add__(r14,r15);
-			r13 = String___add__(r9,r14);
-			r9 = r13;
-			goto label$b9f8ab8_6_587;
+			r13 = String___add__(r8,r14);
+			r8 = r13;
+			goto label$b9f8ab8_6_560;
 		case 6:
-			r8 = ((little_interpreter_InterpTokens_ConditionCall*)r2)->p0;
+			r12 = ((little_interpreter_InterpTokens_ConditionCall*)r2)->p0;
 			r20 = ((little_interpreter_InterpTokens_ConditionCall*)r2)->p1;
 			r21 = ((little_interpreter_InterpTokens_ConditionCall*)r2)->p2;
 			r14 = (String)s$;
 			r3 = NULL;
-			r15 = little_tools_PrettyPrinter_stringifyInterpreter(r3,r8);
+			r15 = little_tools_PrettyPrinter_stringifyInterpreter(r3,r12);
 			r14 = String___add__(r14,r15);
 			r15 = (String)s$7215ee9;
 			r14 = String___add__(r14,r15);
-			if( !r20 ) goto label$b9f8ab8_6_192;
+			if( !r20 ) goto label$b9f8ab8_6_186;
 			r15 = (String)s$84c4047;
 			r3 = NULL;
 			r25 = little_tools_PrettyPrinter_stringifyInterpreter(r3,r20);
 			r15 = String___add__(r15,r25);
 			r25 = (String)s$9371d7a;
 			r15 = String___add__(r15,r25);
-			goto label$b9f8ab8_6_193;
-			label$b9f8ab8_6_192:
+			goto label$b9f8ab8_6_187;
+			label$b9f8ab8_6_186:
 			r15 = (String)s$;
-			label$b9f8ab8_6_193:
+			label$b9f8ab8_6_187:
 			r14 = String___add__(r14,r15);
 			r15 = (String)s$7215ee9;
 			r14 = String___add__(r14,r15);
 			r3 = NULL;
 			r15 = little_tools_PrettyPrinter_stringifyInterpreter(r3,r21);
 			r14 = String___add__(r14,r15);
-			r13 = String___add__(r9,r14);
-			r9 = r13;
-			goto label$b9f8ab8_6_587;
+			r13 = String___add__(r8,r14);
+			r8 = r13;
+			goto label$b9f8ab8_6_560;
 		case 7:
 			r28 = ((little_interpreter_InterpTokens_FunctionCode*)r2)->p0;
-			r8 = ((little_interpreter_InterpTokens_FunctionCode*)r2)->p1;
+			r12 = ((little_interpreter_InterpTokens_FunctionCode*)r2)->p1;
 			r3 = NULL;
-			r14 = little_tools_PrettyPrinter_stringifyInterpreter(r3,r8);
-			r13 = String___add__(r9,r14);
-			r9 = r13;
-			goto label$b9f8ab8_6_587;
+			r14 = little_tools_PrettyPrinter_stringifyInterpreter(r3,r12);
+			r13 = String___add__(r8,r14);
+			r8 = r13;
+			goto label$b9f8ab8_6_560;
 		case 8:
-			r8 = ((little_interpreter_InterpTokens_FunctionCall*)r2)->p0;
+			r12 = ((little_interpreter_InterpTokens_FunctionCall*)r2)->p0;
 			r20 = ((little_interpreter_InterpTokens_FunctionCall*)r2)->p1;
 			r14 = (String)s$;
 			r3 = NULL;
-			r15 = little_tools_PrettyPrinter_stringifyInterpreter(r3,r8);
+			r15 = little_tools_PrettyPrinter_stringifyInterpreter(r3,r12);
 			r14 = String___add__(r14,r15);
 			r15 = (String)s$84c4047;
 			r14 = String___add__(r14,r15);
@@ -2201,11 +2140,11 @@ String little_tools_PrettyPrinter_stringifyInterpreter(hl__types__ArrayObj r0,ve
 			r15 = (String)s$fe3c347;
 			r25 = (String)s$9371d7a;
 			r14 = little_tools_TextTools_replaceIfLast(r14,r15,r25);
-			r13 = String___add__(r9,r14);
-			r9 = r13;
-			goto label$b9f8ab8_6_587;
+			r13 = String___add__(r8,r14);
+			r8 = r13;
+			goto label$b9f8ab8_6_560;
 		case 9:
-			r8 = ((little_interpreter_InterpTokens_FunctionReturn*)r2)->p0;
+			r12 = ((little_interpreter_InterpTokens_FunctionReturn*)r2)->p0;
 			r20 = ((little_interpreter_InterpTokens_FunctionReturn*)r2)->p1;
 			r14 = (String)s$;
 			r23 = (little__$Little)g$_little_Little;
@@ -2216,65 +2155,62 @@ String little_tools_PrettyPrinter_stringifyInterpreter(hl__types__ArrayObj r0,ve
 			r15 = (String)s$7215ee9;
 			r14 = String___add__(r14,r15);
 			r3 = NULL;
-			r15 = little_tools_PrettyPrinter_stringifyInterpreter(r3,r8);
+			r15 = little_tools_PrettyPrinter_stringifyInterpreter(r3,r12);
 			r14 = String___add__(r14,r15);
-			r13 = String___add__(r9,r14);
-			r9 = r13;
-			goto label$b9f8ab8_6_587;
+			r13 = String___add__(r8,r14);
+			r8 = r13;
+			goto label$b9f8ab8_6_560;
 		case 10:
 			r3 = ((little_interpreter_InterpTokens_Write*)r2)->p0;
-			r8 = ((little_interpreter_InterpTokens_Write*)r2)->p1;
-			r10 = &t$String;
-			r11 = 0;
-			r7 = hl_alloc_array(r10,r11);
+			r12 = ((little_interpreter_InterpTokens_Write*)r2)->p1;
+			r9 = &t$String;
+			r10 = 0;
+			r7 = hl_alloc_array(r9,r10);
 			r29 = hl_types_ArrayObj_alloc(r7);
-			r11 = 0;
+			r10 = 0;
 			if( r3 == NULL ) hl_null_access();
-			r10 = &t$little_interpreter_InterpTokens;
-			r12 = 1;
-			r7 = hl_alloc_array(r10,r12);
-			r12 = 0;
-			((venum**)(r7 + 1))[r12] = r8;
+			r9 = &t$little_interpreter_InterpTokens;
+			r11 = 1;
+			r7 = hl_alloc_array(r9,r11);
+			r11 = 0;
+			((venum**)(r7 + 1))[r11] = r12;
 			r31 = hl_types_ArrayObj_alloc(r7);
 			r30 = hl_types_ArrayObj_concat(r3,r31);
-			label$b9f8ab8_6_262:
+			label$b9f8ab8_6_256:
 			if( r30 == NULL ) hl_null_access();
 			r18 = r30->length;
-			if( r11 >= r18 ) goto label$b9f8ab8_6_282;
+			if( r10 >= r18 ) goto label$b9f8ab8_6_273;
 			r18 = r30->length;
-			if( ((unsigned)r11) < ((unsigned)r18) ) goto label$b9f8ab8_6_270;
+			if( ((unsigned)r10) < ((unsigned)r18) ) goto label$b9f8ab8_6_264;
 			r20 = NULL;
-			goto label$b9f8ab8_6_276;
-			label$b9f8ab8_6_270:
+			goto label$b9f8ab8_6_267;
+			label$b9f8ab8_6_264:
 			r7 = r30->array;
-			r6 = ((vdynamic**)(r7 + 1))[r11];
+			r6 = ((vdynamic**)(r7 + 1))[r10];
 			r20 = (venum*)r6;
-			r21 = (venum*)hl_dyn_castp(&r6,&t$_dyn,&t$little_interpreter_InterpTokens);
-			if( r20 == r21 ) goto label$b9f8ab8_6_276;
-			hl_assert();
-			label$b9f8ab8_6_276:
-			++r11;
+			label$b9f8ab8_6_267:
+			++r10;
 			if( r29 == NULL ) hl_null_access();
 			r32 = NULL;
 			r13 = little_tools_PrettyPrinter_stringifyInterpreter(r32,r20);
-			r12 = hl_types_ArrayObj_push(r29,((vdynamic*)r13));
-			goto label$b9f8ab8_6_262;
-			label$b9f8ab8_6_282:
+			r11 = hl_types_ArrayObj_push(r29,((vdynamic*)r13));
+			goto label$b9f8ab8_6_256;
+			label$b9f8ab8_6_273:
 			if( r29 == NULL ) hl_null_access();
 			r14 = (String)s$fcacca1;
 			r14 = hl_types_ArrayObj_join(r29,r14);
 			r15 = (String)s$cd85a39;
 			r25 = (String)s$375ec27;
 			r14 = little_tools_TextTools_replace(r14,r15,r25);
-			r13 = String___add__(r9,r14);
-			r9 = r13;
-			goto label$b9f8ab8_6_587;
+			r13 = String___add__(r8,r14);
+			r8 = r13;
+			goto label$b9f8ab8_6_560;
 		case 11:
-			r8 = ((little_interpreter_InterpTokens_TypeCast*)r2)->p0;
+			r12 = ((little_interpreter_InterpTokens_TypeCast*)r2)->p0;
 			r20 = ((little_interpreter_InterpTokens_TypeCast*)r2)->p1;
 			r14 = (String)s$;
 			r3 = NULL;
-			r15 = little_tools_PrettyPrinter_stringifyInterpreter(r3,r8);
+			r15 = little_tools_PrettyPrinter_stringifyInterpreter(r3,r12);
 			r14 = String___add__(r14,r15);
 			r15 = (String)s$7215ee9;
 			r14 = String___add__(r14,r15);
@@ -2288,170 +2224,152 @@ String little_tools_PrettyPrinter_stringifyInterpreter(hl__types__ArrayObj r0,ve
 			r3 = NULL;
 			r15 = little_tools_PrettyPrinter_stringifyInterpreter(r3,r20);
 			r14 = String___add__(r14,r15);
-			r13 = String___add__(r9,r14);
-			r9 = r13;
-			goto label$b9f8ab8_6_587;
+			r13 = String___add__(r8,r14);
+			r8 = r13;
+			goto label$b9f8ab8_6_560;
 		case 12:
 			r3 = ((little_interpreter_InterpTokens_Expression*)r2)->p0;
-			r8 = ((little_interpreter_InterpTokens_Expression*)r2)->p1;
+			r12 = ((little_interpreter_InterpTokens_Expression*)r2)->p1;
 			r20 = NULL;
 			r14 = little_tools_PrettyPrinter_stringifyInterpreter(r3,r20);
-			r13 = String___add__(r9,r14);
-			r9 = r13;
-			goto label$b9f8ab8_6_587;
+			r13 = String___add__(r8,r14);
+			r8 = r13;
+			goto label$b9f8ab8_6_560;
 		case 13:
 			r3 = ((little_interpreter_InterpTokens_Block*)r2)->p0;
-			r8 = ((little_interpreter_InterpTokens_Block*)r2)->p1;
+			r12 = ((little_interpreter_InterpTokens_Block*)r2)->p1;
 			r16 = (little__tools__$PrettyPrinter)g$_little_tools_PrettyPrinter;
 			r13 = r16->indent;
 			r14 = (String)s$5e732a1;
 			r13 = String___add__(r13,r14);
 			r16->indent = r13;
-			r10 = &t$String;
-			r11 = 0;
-			r7 = hl_alloc_array(r10,r11);
+			r9 = &t$String;
+			r10 = 0;
+			r7 = hl_alloc_array(r9,r10);
 			r29 = hl_types_ArrayObj_alloc(r7);
-			r11 = 0;
-			r10 = &t$little_tools_InterpTokensSimple;
-			r12 = 1;
-			r7 = hl_alloc_array(r10,r12);
+			r10 = 0;
+			r9 = &t$little_tools_InterpTokensSimple;
+			r11 = 1;
+			r7 = hl_alloc_array(r9,r11);
 			r33 = (venum*)g$cb5ddb0;
-			r12 = 0;
-			((venum**)(r7 + 1))[r12] = r33;
+			r11 = 0;
+			((venum**)(r7 + 1))[r11] = r33;
 			r30 = hl_types_ArrayObj_alloc(r7);
 			if( r30 == NULL ) hl_null_access();
 			r30 = hl_types_ArrayObj_copy(r30);
-			label$b9f8ab8_6_340:
+			label$b9f8ab8_6_331:
 			if( r30 == NULL ) hl_null_access();
 			r18 = r30->length;
-			if( r11 >= r18 ) goto label$b9f8ab8_6_363;
+			if( r10 >= r18 ) goto label$b9f8ab8_6_351;
 			r18 = r30->length;
-			if( ((unsigned)r11) < ((unsigned)r18) ) goto label$b9f8ab8_6_348;
+			if( ((unsigned)r10) < ((unsigned)r18) ) goto label$b9f8ab8_6_339;
 			r33 = NULL;
-			goto label$b9f8ab8_6_354;
-			label$b9f8ab8_6_348:
+			goto label$b9f8ab8_6_342;
+			label$b9f8ab8_6_339:
 			r7 = r30->array;
-			r6 = ((vdynamic**)(r7 + 1))[r11];
+			r6 = ((vdynamic**)(r7 + 1))[r10];
 			r33 = (venum*)r6;
-			r34 = (venum*)hl_dyn_castp(&r6,&t$_dyn,&t$little_tools_InterpTokensSimple);
-			if( r33 == r34 ) goto label$b9f8ab8_6_354;
-			hl_assert();
-			label$b9f8ab8_6_354:
-			++r11;
+			label$b9f8ab8_6_342:
+			++r10;
 			if( r29 == NULL ) hl_null_access();
 			r13 = Type_enumConstructor(((vdynamic*)r33));
 			r14 = (String)s$b14a7b8;
 			r13 = little_tools_TextTools_remove(r13,r14);
 			if( r13 == NULL ) hl_null_access();
 			r13 = String_toLowerCase(r13);
-			r12 = hl_types_ArrayObj_push(r29,((vdynamic*)r13));
-			goto label$b9f8ab8_6_340;
-			label$b9f8ab8_6_363:
+			r11 = hl_types_ArrayObj_push(r29,((vdynamic*)r13));
+			goto label$b9f8ab8_6_331;
+			label$b9f8ab8_6_351:
 			if( r29 == NULL ) hl_null_access();
 			if( r3 == NULL ) hl_null_access();
-			r11 = 0;
-			r12 = r3->length;
-			if( ((unsigned)r11) < ((unsigned)r12) ) goto label$b9f8ab8_6_370;
+			r10 = 0;
+			r11 = r3->length;
+			if( ((unsigned)r10) < ((unsigned)r11) ) goto label$b9f8ab8_6_358;
 			r20 = NULL;
-			goto label$b9f8ab8_6_376;
-			label$b9f8ab8_6_370:
+			goto label$b9f8ab8_6_361;
+			label$b9f8ab8_6_358:
 			r7 = r3->array;
-			r6 = ((vdynamic**)(r7 + 1))[r11];
+			r6 = ((vdynamic**)(r7 + 1))[r10];
 			r20 = (venum*)r6;
-			r21 = (venum*)hl_dyn_castp(&r6,&t$_dyn,&t$little_interpreter_InterpTokens);
-			if( r20 == r21 ) goto label$b9f8ab8_6_376;
-			hl_assert();
-			label$b9f8ab8_6_376:
+			label$b9f8ab8_6_361:
 			r13 = Type_enumConstructor(((vdynamic*)r20));
 			if( r13 == NULL ) hl_null_access();
 			r13 = String_toLowerCase(r13);
 			r17 = hl_types_ArrayObj_contains(r29,((vdynamic*)r13));
-			if( !r17 ) goto label$b9f8ab8_6_386;
+			if( !r17 ) goto label$b9f8ab8_6_368;
 			r6 = hl_types_ArrayObj_shift(r3);
 			r20 = (venum*)r6;
-			r21 = (venum*)hl_dyn_castp(&r6,&t$_dyn,&t$little_interpreter_InterpTokens);
-			if( r20 == r21 ) goto label$b9f8ab8_6_386;
-			hl_assert();
-			label$b9f8ab8_6_386:
-			r10 = &t$String;
-			r11 = 0;
-			r7 = hl_alloc_array(r10,r11);
+			label$b9f8ab8_6_368:
+			r9 = &t$String;
+			r10 = 0;
+			r7 = hl_alloc_array(r9,r10);
 			r30 = hl_types_ArrayObj_alloc(r7);
-			r11 = 0;
-			r10 = &t$little_tools_InterpTokensSimple;
-			r12 = 1;
-			r7 = hl_alloc_array(r10,r12);
+			r10 = 0;
+			r9 = &t$little_tools_InterpTokensSimple;
+			r11 = 1;
+			r7 = hl_alloc_array(r9,r11);
 			r33 = (venum*)g$225e4f1;
-			r12 = 0;
-			((venum**)(r7 + 1))[r12] = r33;
+			r11 = 0;
+			((venum**)(r7 + 1))[r11] = r33;
 			r31 = hl_types_ArrayObj_alloc(r7);
 			if( r31 == NULL ) hl_null_access();
 			r31 = hl_types_ArrayObj_copy(r31);
-			label$b9f8ab8_6_400:
+			label$b9f8ab8_6_382:
 			if( r31 == NULL ) hl_null_access();
 			r18 = r31->length;
-			if( r11 >= r18 ) goto label$b9f8ab8_6_423;
+			if( r10 >= r18 ) goto label$b9f8ab8_6_402;
 			r18 = r31->length;
-			if( ((unsigned)r11) < ((unsigned)r18) ) goto label$b9f8ab8_6_408;
+			if( ((unsigned)r10) < ((unsigned)r18) ) goto label$b9f8ab8_6_390;
 			r33 = NULL;
-			goto label$b9f8ab8_6_414;
-			label$b9f8ab8_6_408:
+			goto label$b9f8ab8_6_393;
+			label$b9f8ab8_6_390:
 			r7 = r31->array;
-			r6 = ((vdynamic**)(r7 + 1))[r11];
+			r6 = ((vdynamic**)(r7 + 1))[r10];
 			r33 = (venum*)r6;
-			r34 = (venum*)hl_dyn_castp(&r6,&t$_dyn,&t$little_tools_InterpTokensSimple);
-			if( r33 == r34 ) goto label$b9f8ab8_6_414;
-			hl_assert();
-			label$b9f8ab8_6_414:
-			++r11;
+			label$b9f8ab8_6_393:
+			++r10;
 			if( r30 == NULL ) hl_null_access();
 			r13 = Type_enumConstructor(((vdynamic*)r33));
 			r14 = (String)s$b14a7b8;
 			r13 = little_tools_TextTools_remove(r13,r14);
 			if( r13 == NULL ) hl_null_access();
 			r13 = String_toLowerCase(r13);
-			r12 = hl_types_ArrayObj_push(r30,((vdynamic*)r13));
-			goto label$b9f8ab8_6_400;
-			label$b9f8ab8_6_423:
+			r11 = hl_types_ArrayObj_push(r30,((vdynamic*)r13));
+			goto label$b9f8ab8_6_382;
+			label$b9f8ab8_6_402:
 			if( r30 == NULL ) hl_null_access();
 			if( r3 == NULL ) hl_null_access();
-			r11 = 0;
-			r12 = r3->length;
-			if( ((unsigned)r11) < ((unsigned)r12) ) goto label$b9f8ab8_6_430;
+			r10 = 0;
+			r11 = r3->length;
+			if( ((unsigned)r10) < ((unsigned)r11) ) goto label$b9f8ab8_6_409;
 			r20 = NULL;
-			goto label$b9f8ab8_6_436;
-			label$b9f8ab8_6_430:
+			goto label$b9f8ab8_6_412;
+			label$b9f8ab8_6_409:
 			r7 = r3->array;
-			r6 = ((vdynamic**)(r7 + 1))[r11];
+			r6 = ((vdynamic**)(r7 + 1))[r10];
 			r20 = (venum*)r6;
-			r21 = (venum*)hl_dyn_castp(&r6,&t$_dyn,&t$little_interpreter_InterpTokens);
-			if( r20 == r21 ) goto label$b9f8ab8_6_436;
-			hl_assert();
-			label$b9f8ab8_6_436:
+			label$b9f8ab8_6_412:
 			r13 = Type_enumConstructor(((vdynamic*)r20));
 			if( r13 == NULL ) hl_null_access();
 			r13 = String_toLowerCase(r13);
 			r17 = hl_types_ArrayObj_contains(r30,((vdynamic*)r13));
-			if( !r17 ) goto label$b9f8ab8_6_446;
+			if( !r17 ) goto label$b9f8ab8_6_419;
 			r6 = hl_types_ArrayObj_shift(r3);
 			r20 = (venum*)r6;
-			r21 = (venum*)hl_dyn_castp(&r6,&t$_dyn,&t$little_interpreter_InterpTokens);
-			if( r20 == r21 ) goto label$b9f8ab8_6_446;
-			hl_assert();
-			label$b9f8ab8_6_446:
+			label$b9f8ab8_6_419:
 			r14 = (String)s$f95b70f;
 			r20 = NULL;
 			r15 = little_tools_PrettyPrinter_stringifyInterpreter(r3,r20);
 			r14 = String___add__(r14,r15);
 			r15 = (String)s$8aa4ce4;
 			r14 = String___add__(r14,r15);
-			if( !r8 ) goto label$b9f8ab8_6_471;
-			r15 = little_tools_Extensions_asJoinedStringPath(r8);
+			if( !r12 ) goto label$b9f8ab8_6_444;
+			r15 = little_tools_Extensions_asJoinedStringPath(r12);
 			r23 = (little__$Little)g$_little_Little;
 			r22 = r23->keywords;
 			if( r22 == NULL ) hl_null_access();
 			r25 = r22->TYPE_UNKNOWN;
-			if( r15 == r25 || (r15 && r25 && String___compare(r15,(vdynamic*)r25) == 0) ) goto label$b9f8ab8_6_471;
+			if( r15 == r25 || (r15 && r25 && String___compare(r15,(vdynamic*)r25) == 0) ) goto label$b9f8ab8_6_444;
 			r15 = (String)s$;
 			r23 = (little__$Little)g$_little_Little;
 			r22 = r23->keywords;
@@ -2461,18 +2379,18 @@ String little_tools_PrettyPrinter_stringifyInterpreter(hl__types__ArrayObj r0,ve
 			r25 = (String)s$7215ee9;
 			r15 = String___add__(r15,r25);
 			r31 = NULL;
-			r25 = little_tools_PrettyPrinter_stringifyInterpreter(r31,r8);
+			r25 = little_tools_PrettyPrinter_stringifyInterpreter(r31,r12);
 			r15 = String___add__(r15,r25);
-			goto label$b9f8ab8_6_472;
-			label$b9f8ab8_6_471:
+			goto label$b9f8ab8_6_445;
+			label$b9f8ab8_6_444:
 			r15 = (String)s$;
-			label$b9f8ab8_6_472:
+			label$b9f8ab8_6_445:
 			r14 = String___add__(r14,r15);
-			r13 = String___add__(r9,r14);
+			r13 = String___add__(r8,r14);
 			r14 = (String)s$003412c;
 			r15 = (String)s$cbb184d;
 			r13 = little_tools_TextTools_replaceLast(r13,r14,r15);
-			r9 = r13;
+			r8 = r13;
 			r16 = (little__tools__$PrettyPrinter)g$_little_tools_PrettyPrinter;
 			r13 = r16->indent;
 			r14 = (String)s$5e732a1;
@@ -2480,20 +2398,20 @@ String little_tools_PrettyPrinter_stringifyInterpreter(hl__types__ArrayObj r0,ve
 			r13 = little_tools_TextTools_replaceLast(r13,r14,r15);
 			r16 = (little__tools__$PrettyPrinter)g$_little_tools_PrettyPrinter;
 			r16->indent = r13;
-			goto label$b9f8ab8_6_587;
+			goto label$b9f8ab8_6_560;
 		case 14:
 			r3 = ((little_interpreter_InterpTokens_PartArray*)r2)->p0;
-			r8 = NULL;
-			r14 = little_tools_PrettyPrinter_stringifyInterpreter(r3,r8);
-			r13 = String___add__(r9,r14);
-			r9 = r13;
-			goto label$b9f8ab8_6_587;
+			r12 = NULL;
+			r14 = little_tools_PrettyPrinter_stringifyInterpreter(r3,r12);
+			r13 = String___add__(r8,r14);
+			r8 = r13;
+			goto label$b9f8ab8_6_560;
 		case 15:
-			r8 = ((little_interpreter_InterpTokens_PropertyAccess*)r2)->p0;
+			r12 = ((little_interpreter_InterpTokens_PropertyAccess*)r2)->p0;
 			r20 = ((little_interpreter_InterpTokens_PropertyAccess*)r2)->p1;
 			r14 = (String)s$;
 			r3 = NULL;
-			r15 = little_tools_PrettyPrinter_stringifyInterpreter(r3,r8);
+			r15 = little_tools_PrettyPrinter_stringifyInterpreter(r3,r12);
 			r14 = String___add__(r14,r15);
 			r23 = (little__$Little)g$_little_Little;
 			r22 = r23->keywords;
@@ -2503,108 +2421,108 @@ String little_tools_PrettyPrinter_stringifyInterpreter(hl__types__ArrayObj r0,ve
 			r3 = NULL;
 			r15 = little_tools_PrettyPrinter_stringifyInterpreter(r3,r20);
 			r14 = String___add__(r14,r15);
-			r13 = String___add__(r9,r14);
-			r9 = r13;
-			goto label$b9f8ab8_6_587;
+			r13 = String___add__(r8,r14);
+			r8 = r13;
+			goto label$b9f8ab8_6_560;
 		case 16:
-			r11 = ((little_interpreter_InterpTokens_Number*)r2)->p0;
-			r12 = r11;
-			r35 = &r12;
-			r36 = hl_itos(r12,r35);
-			r14 = String___alloc__(r36,r12);
-			r13 = String___add__(r9,r14);
-			r9 = r13;
-			goto label$b9f8ab8_6_587;
+			r10 = ((little_interpreter_InterpTokens_Number*)r2)->p0;
+			r11 = r10;
+			r34 = &r11;
+			r35 = hl_itos(r11,r34);
+			r14 = String___alloc__(r35,r11);
+			r13 = String___add__(r8,r14);
+			r8 = r13;
+			goto label$b9f8ab8_6_560;
 		case 17:
-			r37 = ((little_interpreter_InterpTokens_Decimal*)r2)->p0;
-			r35 = &r11;
-			r36 = hl_ftos(r37,r35);
-			r14 = String___alloc__(r36,r11);
-			r13 = String___add__(r9,r14);
-			r9 = r13;
-			goto label$b9f8ab8_6_587;
+			r36 = ((little_interpreter_InterpTokens_Decimal*)r2)->p0;
+			r34 = &r10;
+			r35 = hl_ftos(r36,r34);
+			r14 = String___alloc__(r35,r10);
+			r13 = String___add__(r8,r14);
+			r8 = r13;
+			goto label$b9f8ab8_6_560;
 		case 18:
 			r13 = ((little_interpreter_InterpTokens_Characters*)r2)->p0;
 			r15 = (String)s$b15835f;
 			r15 = String___add__(r15,r13);
 			r25 = (String)s$b15835f;
 			r15 = String___add__(r15,r25);
-			r14 = String___add__(r9,r15);
-			r9 = r14;
-			goto label$b9f8ab8_6_587;
+			r14 = String___add__(r8,r15);
+			r8 = r14;
+			goto label$b9f8ab8_6_560;
 		case 19:
 			r13 = ((little_interpreter_InterpTokens_Documentation*)r2)->p0;
 			r15 = (String)s$d7ef707;
 			r15 = String___add__(r15,r13);
 			r25 = (String)s$d7ef707;
 			r15 = String___add__(r15,r25);
-			r14 = String___add__(r9,r15);
-			r9 = r14;
-			goto label$b9f8ab8_6_587;
+			r14 = String___add__(r8,r15);
+			r8 = r14;
+			goto label$b9f8ab8_6_560;
 		case 20:
-			r11 = ((little_interpreter_InterpTokens_ClassPointer*)r2)->p0;
+			r10 = ((little_interpreter_InterpTokens_ClassPointer*)r2)->p0;
 			r23 = (little__$Little)g$_little_Little;
-			r38 = r23->memory;
-			if( !r38 ) goto label$b9f8ab8_6_550;
+			r37 = r23->memory;
+			if( !r37 ) goto label$b9f8ab8_6_523;
 			r23 = (little__$Little)g$_little_Little;
-			r38 = r23->memory;
-			if( r38 == NULL ) hl_null_access();
-			r14 = little_interpreter_memory_Memory_getTypeName(r38,r11);
+			r37 = r23->memory;
+			if( r37 == NULL ) hl_null_access();
+			r14 = little_interpreter_memory_Memory_getTypeName(r37,r10);
 			r13 = r14;
-			goto label$b9f8ab8_6_554;
-			label$b9f8ab8_6_550:
+			goto label$b9f8ab8_6_527;
+			label$b9f8ab8_6_523:
 			r14 = (String)s$46a2573;
-			r15 = little_interpreter_memory__MemoryPointer_MemoryPointer_Impl__toString(r11);
+			r15 = little_interpreter_memory__MemoryPointer_MemoryPointer_Impl__toString(r10);
 			r14 = String___add__(r14,r15);
 			hl_throw((vdynamic*)r14);
-			label$b9f8ab8_6_554:
-			r14 = String___add__(r9,r13);
-			r9 = r14;
-			goto label$b9f8ab8_6_587;
+			label$b9f8ab8_6_527:
+			r14 = String___add__(r8,r13);
+			r8 = r14;
+			goto label$b9f8ab8_6_560;
 		case 21:
 			r13 = ((little_interpreter_InterpTokens_Sign*)r2)->p0;
-			r14 = String___add__(r9,r13);
-			r9 = r14;
-			goto label$b9f8ab8_6_587;
+			r14 = String___add__(r8,r13);
+			r8 = r14;
+			goto label$b9f8ab8_6_560;
 		case 22:
 			r23 = (little__$Little)g$_little_Little;
 			r22 = r23->keywords;
 			if( r22 == NULL ) hl_null_access();
 			r14 = r22->NULL_VALUE;
-			r13 = String___add__(r9,r14);
-			r9 = r13;
-			goto label$b9f8ab8_6_587;
+			r13 = String___add__(r8,r14);
+			r8 = r13;
+			goto label$b9f8ab8_6_560;
 		case 23:
 			r23 = (little__$Little)g$_little_Little;
 			r22 = r23->keywords;
 			if( r22 == NULL ) hl_null_access();
 			r14 = r22->TRUE_VALUE;
-			r13 = String___add__(r9,r14);
-			r9 = r13;
-			goto label$b9f8ab8_6_587;
+			r13 = String___add__(r8,r14);
+			r8 = r13;
+			goto label$b9f8ab8_6_560;
 		case 24:
 			r23 = (little__$Little)g$_little_Little;
 			r22 = r23->keywords;
 			if( r22 == NULL ) hl_null_access();
 			r14 = r22->FALSE_VALUE;
-			r13 = String___add__(r9,r14);
-			r9 = r13;
-			goto label$b9f8ab8_6_587;
+			r13 = String___add__(r8,r14);
+			r8 = r13;
+			goto label$b9f8ab8_6_560;
 		case 25:
 			r13 = ((little_interpreter_InterpTokens_Identifier*)r2)->p0;
-			r14 = String___add__(r9,r13);
-			r9 = r14;
-			goto label$b9f8ab8_6_587;
+			r14 = String___add__(r8,r13);
+			r8 = r14;
+			goto label$b9f8ab8_6_560;
 		case 27:
 			r13 = ((little_interpreter_InterpTokens_ErrorMessage*)r2)->p0;
 	}
-	label$b9f8ab8_6_587:
+	label$b9f8ab8_6_560:
 	r14 = (String)s$7215ee9;
-	r13 = String___add__(r9,r14);
-	r9 = r13;
-	goto label$b9f8ab8_6_32;
-	label$b9f8ab8_6_591:
-	r13 = StringTools_ltrim(r9);
+	r13 = String___add__(r8,r14);
+	r8 = r13;
+	goto label$b9f8ab8_6_29;
+	label$b9f8ab8_6_564:
+	r13 = StringTools_ltrim(r8);
 	r14 = (String)s$7215ee9;
 	r15 = (String)s$;
 	r13 = little_tools_TextTools_replaceLast(r13,r14,r15);

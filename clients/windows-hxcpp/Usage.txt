@@ -1,4 +1,0 @@
-Welcome!
-
-To start the interpreter, just double-click the application, or type out the path 
-to the application in the command prompt

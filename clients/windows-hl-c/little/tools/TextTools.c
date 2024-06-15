@@ -17,7 +17,6 @@ void hl_types_ArrayObj_sort(hl__types__ArrayObj,vclosure*);
 bool little_tools_TextTools_contains(String,String);
 String little_tools_TextTools_replace(String,String,String);
 String StringTools_replace(String,String,String);
-int String___compare(String,vdynamic*);
 
 int little_tools_TextTools_sortByLength__$2(vclosure* r0,vdynamic* r1,vdynamic* r2) {
 	String r3, r4;
@@ -190,40 +189,37 @@ String little_tools_TextTools_replace(String r0,String r1,String r2) {
 }
 
 bool little_tools_TextTools_containsAny(String r0,hl__types__ArrayObj r1) {
-	String r5, r8;
-	bool r10;
-	vdynamic *r6, *r9;
+	String r5;
+	bool r9;
+	vdynamic *r6, *r8;
 	varray *r7;
 	int r2, r3, r4;
 	r2 = 0;
 	label$c015c8f_12_1:
 	if( r1 == NULL ) hl_null_access();
 	r4 = r1->length;
-	if( r2 >= r4 ) goto label$c015c8f_12_24;
+	if( r2 >= r4 ) goto label$c015c8f_12_21;
 	r4 = r1->length;
 	if( ((unsigned)r2) < ((unsigned)r4) ) goto label$c015c8f_12_9;
 	r5 = NULL;
-	goto label$c015c8f_12_15;
+	goto label$c015c8f_12_12;
 	label$c015c8f_12_9:
 	r7 = r1->array;
 	r6 = ((vdynamic**)(r7 + 1))[r2];
 	r5 = (String)r6;
-	r8 = (String)hl_dyn_castp(&r6,&t$_dyn,&t$String);
-	if( r5 == r8 || (r5 && r8 && String___compare(r5,(vdynamic*)r8) == 0) ) goto label$c015c8f_12_15;
-	hl_assert();
-	label$c015c8f_12_15:
+	label$c015c8f_12_12:
 	++r2;
 	if( r0 == NULL ) hl_null_access();
-	r9 = NULL;
-	r3 = String_indexOf(r0,r5,r9);
+	r8 = NULL;
+	r3 = String_indexOf(r0,r5,r8);
 	r4 = -1;
-	if( r3 == r4 ) goto label$c015c8f_12_23;
-	r10 = true;
-	return r10;
-	label$c015c8f_12_23:
+	if( r3 == r4 ) goto label$c015c8f_12_20;
+	r9 = true;
+	return r9;
+	label$c015c8f_12_20:
 	goto label$c015c8f_12_1;
-	label$c015c8f_12_24:
-	r10 = false;
-	return r10;
+	label$c015c8f_12_21:
+	r9 = false;
+	return r9;
 }
 

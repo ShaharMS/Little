@@ -5,7 +5,6 @@
 		"HAXE_OUTPUT_FILE" : "Little",
 		"HL_MINGW" : "1",
 		"dce" : "full",
-		"debug" : "1",
 		"hash" : "1.0.1",
 		"hashlink" : "0.1.0",
 		"haxe" : "4.3.4",

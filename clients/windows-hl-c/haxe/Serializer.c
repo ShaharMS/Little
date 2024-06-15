@@ -12,8 +12,6 @@ void haxe_ds_StringMap_new(haxe__ds__StringMap);
 String haxe_Serializer_toString(haxe__Serializer);
 String StringBuf_toString(StringBuf);
 vdynamic* haxe_ds_StringMap_get(haxe__ds__StringMap,String);
-extern hl_type t$nul_i32;
-extern hl_type t$_dyn;
 extern String s$R;
 void StringBuf_add(StringBuf,vdynamic*);
 extern hl_type t$_i32;
@@ -26,7 +24,6 @@ int hl_types_ArrayDyn_get_length(hl__types__ArrayDyn);
 extern String s$r;
 int hl_types_ArrayDyn_push(hl__types__ArrayDyn,vdynamic*);
 hl__types__ArrayObj Reflect_fields(vdynamic*);
-int String___compare(String,vdynamic*);
 vdynamic* Reflect_field(vdynamic*,String);
 void haxe_Serializer_serialize(haxe__Serializer,vdynamic*);
 extern String s$g;
@@ -45,6 +42,7 @@ extern String s$Cannot_serialize_;
 String Std_string(vdynamic*);
 String String___add__(String,String);
 extern String s$n;
+extern hl_type t$_dyn;
 extern String s$z;
 extern String s$i;
 extern String s$k;
@@ -102,6 +100,7 @@ vvirtual* haxe_ds_StringMap_keys(haxe__ds__StringMap);
 extern hl_type t$fun_820f49a;
 extern hl_type t$haxe_io_Bytes;
 extern String s$s;
+extern hl_type t$nul_i32;
 hl__types__ArrayObj hl_types_ArrayObj_alloc(varray*);
 void hl_types_ArrayObj___expand(hl__types__ArrayObj,int);
 vdynamic* String_charCodeAt(String,int);
@@ -165,18 +164,14 @@ void haxe_Serializer_serializeString(haxe__Serializer r0,String r1) {
 	haxe__ds__StringMap r3;
 	StringBuf r8;
 	int *r12;
-	vdynamic *r2, *r5, *r6;
+	vdynamic *r2, *r5, *r7;
 	vbyte *r11;
 	int r9, r10;
 	r3 = r0->shash;
 	if( r3 == NULL ) hl_null_access();
 	r2 = haxe_ds_StringMap_get(r3,r1);
 	r5 = (vdynamic*)r2;
-	r6 = (vdynamic*)hl_dyn_castp(&r2,&t$_dyn,&t$nul_i32);
-	if( r5 == r6 || (r5 && r6 && (r5->v.i == r6->v.i)) ) goto label$4e40e36_4_7;
-	hl_assert();
-	label$4e40e36_4_7:
-	if( !r5 ) goto label$4e40e36_4_16;
+	if( !r5 ) goto label$4e40e36_4_13;
 	r8 = r0->buf;
 	if( r8 == NULL ) hl_null_access();
 	r4 = (String)s$R;
@@ -185,16 +180,16 @@ void haxe_Serializer_serializeString(haxe__Serializer r0,String r1) {
 	if( r8 == NULL ) hl_null_access();
 	StringBuf_add(r8,((vdynamic*)r5));
 	return;
-	label$4e40e36_4_16:
+	label$4e40e36_4_13:
 	r3 = r0->shash;
 	if( r3 == NULL ) hl_null_access();
 	r9 = r0->scount;
 	r10 = r9;
 	++r9;
 	r0->scount = r9;
-	r6 = hl_alloc_dynamic(&t$_i32);
-	r6->v.i = r10;
-	haxe_ds_StringMap_set(r3,r1,((vdynamic*)r6));
+	r7 = hl_alloc_dynamic(&t$_i32);
+	r7->v.i = r10;
+	haxe_ds_StringMap_set(r3,r1,((vdynamic*)r7));
 	r8 = r0->buf;
 	if( r8 == NULL ) hl_null_access();
 	r4 = (String)s$y;
@@ -210,9 +205,9 @@ void haxe_Serializer_serializeString(haxe__Serializer r0,String r1) {
 	r8 = r0->buf;
 	if( r8 == NULL ) hl_null_access();
 	r10 = r4->length;
-	r6 = hl_alloc_dynamic(&t$_i32);
-	r6->v.i = r10;
-	StringBuf_add(r8,((vdynamic*)r6));
+	r7 = hl_alloc_dynamic(&t$_i32);
+	r7->v.i = r10;
+	StringBuf_add(r8,((vdynamic*)r7));
 	r8 = r0->buf;
 	if( r8 == NULL ) hl_null_access();
 	r13 = (String)s$853ae90;
@@ -264,9 +259,9 @@ bool haxe_Serializer_serializeRef(haxe__Serializer r0,vdynamic* r1) {
 }
 
 void haxe_Serializer_serializeFields(haxe__Serializer r0,vdynamic* r1) {
-	String r7, r9;
+	String r7;
 	hl__types__ArrayObj r4;
-	StringBuf r10;
+	StringBuf r9;
 	vdynamic *r5;
 	varray *r8;
 	int r2, r6;
@@ -275,29 +270,26 @@ void haxe_Serializer_serializeFields(haxe__Serializer r0,vdynamic* r1) {
 	label$4e40e36_6_2:
 	if( r4 == NULL ) hl_null_access();
 	r6 = r4->length;
-	if( r2 >= r6 ) goto label$4e40e36_6_21;
+	if( r2 >= r6 ) goto label$4e40e36_6_18;
 	r6 = r4->length;
 	if( ((unsigned)r2) < ((unsigned)r6) ) goto label$4e40e36_6_10;
 	r7 = NULL;
-	goto label$4e40e36_6_16;
+	goto label$4e40e36_6_13;
 	label$4e40e36_6_10:
 	r8 = r4->array;
 	r5 = ((vdynamic**)(r8 + 1))[r2];
 	r7 = (String)r5;
-	r9 = (String)hl_dyn_castp(&r5,&t$_dyn,&t$String);
-	if( r7 == r9 || (r7 && r9 && String___compare(r7,(vdynamic*)r9) == 0) ) goto label$4e40e36_6_16;
-	hl_assert();
-	label$4e40e36_6_16:
+	label$4e40e36_6_13:
 	++r2;
 	haxe_Serializer_serializeString(r0,r7);
 	r5 = Reflect_field(r1,r7);
 	haxe_Serializer_serialize(r0,r5);
 	goto label$4e40e36_6_2;
-	label$4e40e36_6_21:
-	r10 = r0->buf;
-	if( r10 == NULL ) hl_null_access();
+	label$4e40e36_6_18:
+	r9 = r0->buf;
+	if( r9 == NULL ) hl_null_access();
 	r7 = (String)s$g;
-	StringBuf_add(r10,((vdynamic*)r7));
+	StringBuf_add(r9,((vdynamic*)r7));
 	return;
 }
 
@@ -327,7 +319,7 @@ void haxe_Serializer_serialize(haxe__Serializer r0,vdynamic* r1) {
 	hl__types__$ArrayBase r20;
 	double r12, r14, r15;
 	haxe__ds___List__ListNode r37, r38;
-	vdynamic *r3, *r11, *r16, *r39, *r51;
+	vdynamic *r3, *r11, *r16, *r39;
 	varray *r48;
 	haxe__ds__$IntMap r22;
 	$Date r21;
@@ -346,7 +338,7 @@ void haxe_Serializer_serialize(haxe__Serializer r0,vdynamic* r1) {
 			if( r8 == NULL ) hl_null_access();
 			r6 = (String)s$n;
 			StringBuf_add(r8,((vdynamic*)r6));
-			goto label$4e40e36_7_666;
+			goto label$4e40e36_7_639;
 		case 1:
 			r5 = (int)hl_dyn_casti(&r1,&t$_dyn,&t$_i32);
 			r10 = 0;
@@ -366,7 +358,7 @@ void haxe_Serializer_serialize(haxe__Serializer r0,vdynamic* r1) {
 			r11 = hl_alloc_dynamic(&t$_i32);
 			r11->v.i = r5;
 			StringBuf_add(r8,((vdynamic*)r11));
-			goto label$4e40e36_7_666;
+			goto label$4e40e36_7_639;
 		case 2:
 			r12 = (double)hl_dyn_castd(&r1,&t$_dyn);
 			r13 = hl_math_isnan(r12);
@@ -401,7 +393,7 @@ void haxe_Serializer_serialize(haxe__Serializer r0,vdynamic* r1) {
 			r16->v.d = r12;
 			StringBuf_add(r8,((vdynamic*)r16));
 			label$4e40e36_7_57:
-			goto label$4e40e36_7_666;
+			goto label$4e40e36_7_639;
 		case 3:
 			r8 = r0->buf;
 			if( r8 == NULL ) hl_null_access();
@@ -413,7 +405,7 @@ void haxe_Serializer_serialize(haxe__Serializer r0,vdynamic* r1) {
 			r6 = (String)s$f;
 			label$4e40e36_7_65:
 			StringBuf_add(r8,((vdynamic*)r6));
-			goto label$4e40e36_7_666;
+			goto label$4e40e36_7_639;
 		case 4:
 			r17 = (hl__BaseType)g$_hl_Class;
 			r13 = Std_isOfType(r1,((vdynamic*)r17));
@@ -451,7 +443,7 @@ void haxe_Serializer_serialize(haxe__Serializer r0,vdynamic* r1) {
 			StringBuf_add(r8,((vdynamic*)r6));
 			haxe_Serializer_serializeFields(r0,r1);
 			label$4e40e36_7_99:
-			goto label$4e40e36_7_666;
+			goto label$4e40e36_7_639;
 		case 5:
 			r6 = (String)s$Cannot_serialize_function;
 			hl_throw((vdynamic*)r6);
@@ -530,7 +522,7 @@ void haxe_Serializer_serialize(haxe__Serializer r0,vdynamic* r1) {
 			label$4e40e36_7_165:
 			haxe_Serializer_serializeFields(r0,r1);
 			label$4e40e36_7_166:
-			goto label$4e40e36_7_601;
+			goto label$4e40e36_7_574;
 			label$4e40e36_7_167:
 			r5 = 0;
 			r8 = r0->buf;
@@ -604,7 +596,7 @@ void haxe_Serializer_serialize(haxe__Serializer r0,vdynamic* r1) {
 			if( r8 == NULL ) hl_null_access();
 			r6 = (String)s$h;
 			StringBuf_add(r8,((vdynamic*)r6));
-			goto label$4e40e36_7_601;
+			goto label$4e40e36_7_574;
 			label$4e40e36_7_230:
 			r33 = (Date)hl_dyn_castp(&r1,&t$_dyn,&t$Date);
 			r8 = r0->buf;
@@ -618,7 +610,7 @@ void haxe_Serializer_serialize(haxe__Serializer r0,vdynamic* r1) {
 			r16 = hl_alloc_dynamic(&t$_f64);
 			r16->v.d = r12;
 			StringBuf_add(r8,((vdynamic*)r16));
-			goto label$4e40e36_7_601;
+			goto label$4e40e36_7_574;
 			label$4e40e36_7_242:
 			r8 = r0->buf;
 			if( r8 == NULL ) hl_null_access();
@@ -658,7 +650,7 @@ void haxe_Serializer_serialize(haxe__Serializer r0,vdynamic* r1) {
 			if( r8 == NULL ) hl_null_access();
 			r6 = (String)s$h;
 			StringBuf_add(r8,((vdynamic*)r6));
-			goto label$4e40e36_7_601;
+			goto label$4e40e36_7_574;
 			label$4e40e36_7_271:
 			r8 = r0->buf;
 			if( r8 == NULL ) hl_null_access();
@@ -680,7 +672,7 @@ void haxe_Serializer_serialize(haxe__Serializer r0,vdynamic* r1) {
 			if( r8 == NULL ) hl_null_access();
 			r6 = (String)s$h;
 			StringBuf_add(r8,((vdynamic*)r6));
-			goto label$4e40e36_7_601;
+			goto label$4e40e36_7_574;
 			label$4e40e36_7_291:
 			r8 = r0->buf;
 			if( r8 == NULL ) hl_null_access();
@@ -710,7 +702,7 @@ void haxe_Serializer_serialize(haxe__Serializer r0,vdynamic* r1) {
 			if( r8 == NULL ) hl_null_access();
 			r6 = (String)s$h;
 			StringBuf_add(r8,((vdynamic*)r6));
-			goto label$4e40e36_7_601;
+			goto label$4e40e36_7_574;
 			label$4e40e36_7_313:
 			r8 = r0->buf;
 			if( r8 == NULL ) hl_null_access();
@@ -740,7 +732,7 @@ void haxe_Serializer_serialize(haxe__Serializer r0,vdynamic* r1) {
 			if( r8 == NULL ) hl_null_access();
 			r6 = (String)s$h;
 			StringBuf_add(r8,((vdynamic*)r6));
-			goto label$4e40e36_7_601;
+			goto label$4e40e36_7_574;
 			label$4e40e36_7_335:
 			r44 = (haxe__io__Bytes)hl_dyn_castp(&r1,&t$_dyn,&t$haxe_io_Bytes);
 			r8 = r0->buf;
@@ -819,7 +811,7 @@ void haxe_Serializer_serialize(haxe__Serializer r0,vdynamic* r1) {
 			r46 = (haxe__$Serializer)g$_haxe_Serializer;
 			r46->BASE64_CODES = r45;
 			label$4e40e36_7_406:
-			if( r5 >= r9 ) goto label$4e40e36_7_494;
+			if( r5 >= r9 ) goto label$4e40e36_7_482;
 			if( r44 == NULL ) hl_null_access();
 			r10 = r5;
 			++r5;
@@ -838,15 +830,12 @@ void haxe_Serializer_serialize(haxe__Serializer r0,vdynamic* r1) {
 			r32 = r45->length;
 			if( ((unsigned)r31) < ((unsigned)r32) ) goto label$4e40e36_7_427;
 			r11 = NULL;
-			goto label$4e40e36_7_433;
+			goto label$4e40e36_7_430;
 			label$4e40e36_7_427:
 			r48 = r45->array;
 			r3 = ((vdynamic**)(r48 + 1))[r31];
 			r11 = (vdynamic*)r3;
-			r51 = (vdynamic*)hl_dyn_castp(&r3,&t$_dyn,&t$nul_i32);
-			if( r11 == r51 || (r11 && r51 && (r11->v.i == r51->v.i)) ) goto label$4e40e36_7_433;
-			hl_assert();
-			label$4e40e36_7_433:
+			label$4e40e36_7_430:
 			r31 = r11 ? r11->v.i : 0;
 			StringBuf_addChar(r8,r31);
 			r8 = r0->buf;
@@ -859,17 +848,14 @@ void haxe_Serializer_serialize(haxe__Serializer r0,vdynamic* r1) {
 			r32 = 63;
 			r31 = r31 & r32;
 			r32 = r45->length;
-			if( ((unsigned)r31) < ((unsigned)r32) ) goto label$4e40e36_7_448;
+			if( ((unsigned)r31) < ((unsigned)r32) ) goto label$4e40e36_7_445;
 			r11 = NULL;
-			goto label$4e40e36_7_454;
-			label$4e40e36_7_448:
+			goto label$4e40e36_7_448;
+			label$4e40e36_7_445:
 			r48 = r45->array;
 			r3 = ((vdynamic**)(r48 + 1))[r31];
 			r11 = (vdynamic*)r3;
-			r51 = (vdynamic*)hl_dyn_castp(&r3,&t$_dyn,&t$nul_i32);
-			if( r11 == r51 || (r11 && r51 && (r11->v.i == r51->v.i)) ) goto label$4e40e36_7_454;
-			hl_assert();
-			label$4e40e36_7_454:
+			label$4e40e36_7_448:
 			r31 = r11 ? r11->v.i : 0;
 			StringBuf_addChar(r8,r31);
 			r8 = r0->buf;
@@ -882,17 +868,14 @@ void haxe_Serializer_serialize(haxe__Serializer r0,vdynamic* r1) {
 			r32 = 63;
 			r31 = r31 & r32;
 			r32 = r45->length;
-			if( ((unsigned)r31) < ((unsigned)r32) ) goto label$4e40e36_7_469;
+			if( ((unsigned)r31) < ((unsigned)r32) ) goto label$4e40e36_7_463;
 			r11 = NULL;
-			goto label$4e40e36_7_475;
-			label$4e40e36_7_469:
+			goto label$4e40e36_7_466;
+			label$4e40e36_7_463:
 			r48 = r45->array;
 			r3 = ((vdynamic**)(r48 + 1))[r31];
 			r11 = (vdynamic*)r3;
-			r51 = (vdynamic*)hl_dyn_castp(&r3,&t$_dyn,&t$nul_i32);
-			if( r11 == r51 || (r11 && r51 && (r11->v.i == r51->v.i)) ) goto label$4e40e36_7_475;
-			hl_assert();
-			label$4e40e36_7_475:
+			label$4e40e36_7_466:
 			r31 = r11 ? r11->v.i : 0;
 			StringBuf_addChar(r8,r31);
 			r8 = r0->buf;
@@ -900,22 +883,19 @@ void haxe_Serializer_serialize(haxe__Serializer r0,vdynamic* r1) {
 			r32 = 63;
 			r31 = r30 & r32;
 			r32 = r45->length;
-			if( ((unsigned)r31) < ((unsigned)r32) ) goto label$4e40e36_7_485;
+			if( ((unsigned)r31) < ((unsigned)r32) ) goto label$4e40e36_7_476;
 			r11 = NULL;
-			goto label$4e40e36_7_491;
-			label$4e40e36_7_485:
+			goto label$4e40e36_7_479;
+			label$4e40e36_7_476:
 			r48 = r45->array;
 			r3 = ((vdynamic**)(r48 + 1))[r31];
 			r11 = (vdynamic*)r3;
-			r51 = (vdynamic*)hl_dyn_castp(&r3,&t$_dyn,&t$nul_i32);
-			if( r11 == r51 || (r11 && r51 && (r11->v.i == r51->v.i)) ) goto label$4e40e36_7_491;
-			hl_assert();
-			label$4e40e36_7_491:
+			label$4e40e36_7_479:
 			r31 = r11 ? r11->v.i : 0;
 			StringBuf_addChar(r8,r31);
 			goto label$4e40e36_7_406;
-			label$4e40e36_7_494:
-			if( r5 != r9 ) goto label$4e40e36_7_559;
+			label$4e40e36_7_482:
+			if( r5 != r9 ) goto label$4e40e36_7_538;
 			if( r44 == NULL ) hl_null_access();
 			r10 = r5;
 			++r5;
@@ -929,17 +909,14 @@ void haxe_Serializer_serialize(haxe__Serializer r0,vdynamic* r1) {
 			r31 = 2;
 			r30 = r10 >> r31;
 			r31 = r45->length;
-			if( ((unsigned)r30) < ((unsigned)r31) ) goto label$4e40e36_7_511;
+			if( ((unsigned)r30) < ((unsigned)r31) ) goto label$4e40e36_7_499;
 			r11 = NULL;
-			goto label$4e40e36_7_517;
-			label$4e40e36_7_511:
+			goto label$4e40e36_7_502;
+			label$4e40e36_7_499:
 			r48 = r45->array;
 			r3 = ((vdynamic**)(r48 + 1))[r30];
 			r11 = (vdynamic*)r3;
-			r51 = (vdynamic*)hl_dyn_castp(&r3,&t$_dyn,&t$nul_i32);
-			if( r11 == r51 || (r11 && r51 && (r11->v.i == r51->v.i)) ) goto label$4e40e36_7_517;
-			hl_assert();
-			label$4e40e36_7_517:
+			label$4e40e36_7_502:
 			r30 = r11 ? r11->v.i : 0;
 			StringBuf_addChar(r8,r30);
 			r8 = r0->buf;
@@ -952,17 +929,14 @@ void haxe_Serializer_serialize(haxe__Serializer r0,vdynamic* r1) {
 			r31 = 63;
 			r30 = r30 & r31;
 			r31 = r45->length;
-			if( ((unsigned)r30) < ((unsigned)r31) ) goto label$4e40e36_7_532;
+			if( ((unsigned)r30) < ((unsigned)r31) ) goto label$4e40e36_7_517;
 			r11 = NULL;
-			goto label$4e40e36_7_538;
-			label$4e40e36_7_532:
+			goto label$4e40e36_7_520;
+			label$4e40e36_7_517:
 			r48 = r45->array;
 			r3 = ((vdynamic**)(r48 + 1))[r30];
 			r11 = (vdynamic*)r3;
-			r51 = (vdynamic*)hl_dyn_castp(&r3,&t$_dyn,&t$nul_i32);
-			if( r11 == r51 || (r11 && r51 && (r11->v.i == r51->v.i)) ) goto label$4e40e36_7_538;
-			hl_assert();
-			label$4e40e36_7_538:
+			label$4e40e36_7_520:
 			r30 = r11 ? r11->v.i : 0;
 			StringBuf_addChar(r8,r30);
 			r8 = r0->buf;
@@ -972,24 +946,21 @@ void haxe_Serializer_serialize(haxe__Serializer r0,vdynamic* r1) {
 			r31 = 63;
 			r30 = r30 & r31;
 			r31 = r45->length;
-			if( ((unsigned)r30) < ((unsigned)r31) ) goto label$4e40e36_7_550;
+			if( ((unsigned)r30) < ((unsigned)r31) ) goto label$4e40e36_7_532;
 			r11 = NULL;
-			goto label$4e40e36_7_556;
-			label$4e40e36_7_550:
+			goto label$4e40e36_7_535;
+			label$4e40e36_7_532:
 			r48 = r45->array;
 			r3 = ((vdynamic**)(r48 + 1))[r30];
 			r11 = (vdynamic*)r3;
-			r51 = (vdynamic*)hl_dyn_castp(&r3,&t$_dyn,&t$nul_i32);
-			if( r11 == r51 || (r11 && r51 && (r11->v.i == r51->v.i)) ) goto label$4e40e36_7_556;
-			hl_assert();
-			label$4e40e36_7_556:
+			label$4e40e36_7_535:
 			r30 = r11 ? r11->v.i : 0;
 			StringBuf_addChar(r8,r30);
-			goto label$4e40e36_7_601;
-			label$4e40e36_7_559:
+			goto label$4e40e36_7_574;
+			label$4e40e36_7_538:
 			r30 = 1;
 			r29 = r9 + r30;
-			if( r5 != r29 ) goto label$4e40e36_7_601;
+			if( r5 != r29 ) goto label$4e40e36_7_574;
 			if( r44 == NULL ) hl_null_access();
 			r10 = r5;
 			++r5;
@@ -1000,17 +971,14 @@ void haxe_Serializer_serialize(haxe__Serializer r0,vdynamic* r1) {
 			r30 = 2;
 			r29 = r10 >> r30;
 			r30 = r45->length;
-			if( ((unsigned)r29) < ((unsigned)r30) ) goto label$4e40e36_7_575;
+			if( ((unsigned)r29) < ((unsigned)r30) ) goto label$4e40e36_7_554;
 			r11 = NULL;
-			goto label$4e40e36_7_581;
-			label$4e40e36_7_575:
+			goto label$4e40e36_7_557;
+			label$4e40e36_7_554:
 			r48 = r45->array;
 			r3 = ((vdynamic**)(r48 + 1))[r29];
 			r11 = (vdynamic*)r3;
-			r51 = (vdynamic*)hl_dyn_castp(&r3,&t$_dyn,&t$nul_i32);
-			if( r11 == r51 || (r11 && r51 && (r11->v.i == r51->v.i)) ) goto label$4e40e36_7_581;
-			hl_assert();
-			label$4e40e36_7_581:
+			label$4e40e36_7_557:
 			r29 = r11 ? r11->v.i : 0;
 			StringBuf_addChar(r8,r29);
 			r8 = r0->buf;
@@ -1020,47 +988,44 @@ void haxe_Serializer_serialize(haxe__Serializer r0,vdynamic* r1) {
 			r30 = 63;
 			r29 = r29 & r30;
 			r30 = r45->length;
-			if( ((unsigned)r29) < ((unsigned)r30) ) goto label$4e40e36_7_593;
+			if( ((unsigned)r29) < ((unsigned)r30) ) goto label$4e40e36_7_569;
 			r11 = NULL;
-			goto label$4e40e36_7_599;
-			label$4e40e36_7_593:
+			goto label$4e40e36_7_572;
+			label$4e40e36_7_569:
 			r48 = r45->array;
 			r3 = ((vdynamic**)(r48 + 1))[r29];
 			r11 = (vdynamic*)r3;
-			r51 = (vdynamic*)hl_dyn_castp(&r3,&t$_dyn,&t$nul_i32);
-			if( r11 == r51 || (r11 && r51 && (r11->v.i == r51->v.i)) ) goto label$4e40e36_7_599;
-			hl_assert();
-			label$4e40e36_7_599:
+			label$4e40e36_7_572:
 			r29 = r11 ? r11->v.i : 0;
 			StringBuf_addChar(r8,r29);
-			label$4e40e36_7_601:
-			goto label$4e40e36_7_666;
+			label$4e40e36_7_574:
+			goto label$4e40e36_7_639;
 		case 7:
 			r17 = ((ValueType_TEnum*)r2)->p0;
 			r13 = r0->useCache;
-			if( !r13 ) goto label$4e40e36_7_611;
+			if( !r13 ) goto label$4e40e36_7_584;
 			r13 = haxe_Serializer_serializeRef(r0,r1);
-			if( !r13 ) goto label$4e40e36_7_608;
+			if( !r13 ) goto label$4e40e36_7_581;
 			return;
-			label$4e40e36_7_608:
+			label$4e40e36_7_581:
 			r27 = r0->cache;
 			if( r27 == NULL ) hl_null_access();
 			r3 = hl_types_ArrayDyn_pop(r27);
-			label$4e40e36_7_611:
+			label$4e40e36_7_584:
 			r8 = r0->buf;
 			if( r8 == NULL ) hl_null_access();
 			r13 = r0->useEnumIndex;
-			if( !r13 ) goto label$4e40e36_7_617;
+			if( !r13 ) goto label$4e40e36_7_590;
 			r6 = (String)s$j;
-			goto label$4e40e36_7_618;
-			label$4e40e36_7_617:
+			goto label$4e40e36_7_591;
+			label$4e40e36_7_590:
 			r6 = (String)s$w;
-			label$4e40e36_7_618:
+			label$4e40e36_7_591:
 			StringBuf_add(r8,((vdynamic*)r6));
 			r6 = Type_getEnumName(r17);
 			haxe_Serializer_serializeString(r0,r6);
 			r13 = r0->useEnumIndex;
-			if( !r13 ) goto label$4e40e36_7_633;
+			if( !r13 ) goto label$4e40e36_7_606;
 			r8 = r0->buf;
 			if( r8 == NULL ) hl_null_access();
 			r6 = (String)s$853ae90;
@@ -1071,17 +1036,17 @@ void haxe_Serializer_serialize(haxe__Serializer r0,vdynamic* r1) {
 			r11 = hl_alloc_dynamic(&t$_i32);
 			r11->v.i = r5;
 			StringBuf_add(r8,((vdynamic*)r11));
-			goto label$4e40e36_7_635;
-			label$4e40e36_7_633:
+			goto label$4e40e36_7_608;
+			label$4e40e36_7_606:
 			r6 = Type_enumConstructor(r1);
 			haxe_Serializer_serializeString(r0,r6);
-			label$4e40e36_7_635:
+			label$4e40e36_7_608:
 			r8 = r0->buf;
 			if( r8 == NULL ) hl_null_access();
 			r6 = (String)s$853ae90;
 			StringBuf_add(r8,((vdynamic*)r6));
 			r27 = Type_enumParameters(r1);
-			if( !r27 ) goto label$4e40e36_7_657;
+			if( !r27 ) goto label$4e40e36_7_630;
 			r8 = r0->buf;
 			if( r8 == NULL ) hl_null_access();
 			if( r27 == NULL ) hl_null_access();
@@ -1090,29 +1055,29 @@ void haxe_Serializer_serialize(haxe__Serializer r0,vdynamic* r1) {
 			r11->v.i = r5;
 			StringBuf_add(r8,((vdynamic*)r11));
 			r5 = 0;
-			label$4e40e36_7_648:
+			label$4e40e36_7_621:
 			if( r27 == NULL ) hl_null_access();
 			r10 = hl_types_ArrayDyn_get_length(r27);
-			if( r5 >= r10 ) goto label$4e40e36_7_656;
+			if( r5 >= r10 ) goto label$4e40e36_7_629;
 			r3 = ((vdynamic* (*)(hl__types__ArrayDyn,int))r27->$type->vobj_proto[0])(r27,r5);
 			++r5;
 			haxe_Serializer_serialize(r0,r3);
-			goto label$4e40e36_7_648;
-			label$4e40e36_7_656:
-			goto label$4e40e36_7_661;
-			label$4e40e36_7_657:
+			goto label$4e40e36_7_621;
+			label$4e40e36_7_629:
+			goto label$4e40e36_7_634;
+			label$4e40e36_7_630:
 			r8 = r0->buf;
 			if( r8 == NULL ) hl_null_access();
 			r6 = (String)s$0;
 			StringBuf_add(r8,((vdynamic*)r6));
-			label$4e40e36_7_661:
+			label$4e40e36_7_634:
 			r13 = r0->useCache;
-			if( !r13 ) goto label$4e40e36_7_666;
+			if( !r13 ) goto label$4e40e36_7_639;
 			r28 = r0->cache;
 			if( r28 == NULL ) hl_null_access();
 			r5 = hl_types_ArrayDyn_push(r28,r1);
 	}
-	label$4e40e36_7_666:
+	label$4e40e36_7_639:
 	return;
 }
 

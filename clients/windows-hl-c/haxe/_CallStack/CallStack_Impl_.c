@@ -4,8 +4,6 @@
 #include <haxe/_CallStack/CallStack_Impl_.h>
 extern hl_type t$StringBuf;
 void StringBuf_new(StringBuf);
-extern hl_type t$haxe_StackItem;
-extern hl_type t$_dyn;
 extern String s$_Called_from_;
 void StringBuf_add(StringBuf,vdynamic*);
 void haxe__CallStack_CallStack_Impl__itemToString(StringBuf,venum*);
@@ -28,9 +26,9 @@ extern String s$5058f1a;
 extern String s$local_function_;
 
 String haxe__CallStack_CallStack_Impl__toString(hl__types__ArrayObj r0) {
-	String r10;
+	String r9;
 	hl__types__ArrayObj r4;
-	venum *r6, *r9;
+	venum *r6;
 	StringBuf r1;
 	vdynamic *r7;
 	varray *r8;
@@ -42,37 +40,34 @@ String haxe__CallStack_CallStack_Impl__toString(hl__types__ArrayObj r0) {
 	label$e26c8ce_1_4:
 	if( r4 == NULL ) hl_null_access();
 	r5 = r4->length;
-	if( r3 >= r5 ) goto label$e26c8ce_1_24;
+	if( r3 >= r5 ) goto label$e26c8ce_1_21;
 	r5 = r4->length;
 	if( ((unsigned)r3) < ((unsigned)r5) ) goto label$e26c8ce_1_12;
 	r6 = NULL;
-	goto label$e26c8ce_1_18;
+	goto label$e26c8ce_1_15;
 	label$e26c8ce_1_12:
 	r8 = r4->array;
 	r7 = ((vdynamic**)(r8 + 1))[r3];
 	r6 = (venum*)r7;
-	r9 = (venum*)hl_dyn_castp(&r7,&t$_dyn,&t$haxe_StackItem);
-	if( r6 == r9 ) goto label$e26c8ce_1_18;
-	hl_assert();
-	label$e26c8ce_1_18:
+	label$e26c8ce_1_15:
 	++r3;
 	if( r1 == NULL ) hl_null_access();
-	r10 = (String)s$_Called_from_;
-	StringBuf_add(r1,((vdynamic*)r10));
+	r9 = (String)s$_Called_from_;
+	StringBuf_add(r1,((vdynamic*)r9));
 	haxe__CallStack_CallStack_Impl__itemToString(r1,r6);
 	goto label$e26c8ce_1_4;
-	label$e26c8ce_1_24:
+	label$e26c8ce_1_21:
 	if( r1 == NULL ) hl_null_access();
-	r10 = StringBuf_toString(r1);
-	return r10;
+	r9 = StringBuf_toString(r1);
+	return r9;
 }
 
 hl__types__ArrayObj haxe__CallStack_CallStack_Impl__subtract(hl__types__ArrayObj r0,hl__types__ArrayObj r1) {
 	hl__types__ArrayObj r5;
-	venum *r11, *r14, *r15;
+	venum *r11, *r14;
 	bool r9;
-	hl__types__ArrayBase r16;
-	vdynamic *r12, *r17;
+	hl__types__ArrayBase r15;
+	vdynamic *r12, *r16;
 	varray *r13;
 	int r2, r3, r4, r6, r7, r8, r10;
 	r2 = -1;
@@ -81,74 +76,68 @@ hl__types__ArrayObj haxe__CallStack_CallStack_Impl__subtract(hl__types__ArrayObj
 	++r3;
 	if( r0 == NULL ) hl_null_access();
 	r4 = r0->length;
-	if( r3 >= r4 ) goto label$e26c8ce_2_53;
+	if( r3 >= r4 ) goto label$e26c8ce_2_47;
 	r4 = 0;
 	if( r1 == NULL ) hl_null_access();
 	r6 = r1->length;
 	label$e26c8ce_2_10:
-	if( r4 >= r6 ) goto label$e26c8ce_2_49;
+	if( r4 >= r6 ) goto label$e26c8ce_2_43;
 	r7 = r4;
 	++r4;
 	if( r0 == NULL ) hl_null_access();
 	r10 = r0->length;
 	if( ((unsigned)r3) < ((unsigned)r10) ) goto label$e26c8ce_2_19;
 	r11 = NULL;
-	goto label$e26c8ce_2_25;
+	goto label$e26c8ce_2_22;
 	label$e26c8ce_2_19:
 	r13 = r0->array;
 	r12 = ((vdynamic**)(r13 + 1))[r3];
 	r11 = (venum*)r12;
-	r14 = (venum*)hl_dyn_castp(&r12,&t$_dyn,&t$haxe_StackItem);
-	if( r11 == r14 ) goto label$e26c8ce_2_25;
-	hl_assert();
-	label$e26c8ce_2_25:
+	label$e26c8ce_2_22:
 	if( r1 == NULL ) hl_null_access();
 	r10 = r1->length;
-	if( ((unsigned)r7) < ((unsigned)r10) ) goto label$e26c8ce_2_30;
+	if( ((unsigned)r7) < ((unsigned)r10) ) goto label$e26c8ce_2_27;
 	r14 = NULL;
-	goto label$e26c8ce_2_36;
-	label$e26c8ce_2_30:
+	goto label$e26c8ce_2_30;
+	label$e26c8ce_2_27:
 	r13 = r1->array;
 	r12 = ((vdynamic**)(r13 + 1))[r7];
 	r14 = (venum*)r12;
-	r15 = (venum*)hl_dyn_castp(&r12,&t$_dyn,&t$haxe_StackItem);
-	if( r14 == r15 ) goto label$e26c8ce_2_36;
-	hl_assert();
-	label$e26c8ce_2_36:
+	label$e26c8ce_2_30:
 	r9 = haxe__CallStack_CallStack_Impl__equalItems(r11,r14);
-	if( !r9 ) goto label$e26c8ce_2_46;
+	if( !r9 ) goto label$e26c8ce_2_40;
 	r10 = 0;
-	if( r2 >= r10 ) goto label$e26c8ce_2_41;
+	if( r2 >= r10 ) goto label$e26c8ce_2_35;
 	r2 = r3;
-	label$e26c8ce_2_41:
+	label$e26c8ce_2_35:
 	++r3;
 	r10 = r0->length;
-	if( r3 < r10 ) goto label$e26c8ce_2_45;
-	goto label$e26c8ce_2_49;
-	label$e26c8ce_2_45:
-	goto label$e26c8ce_2_48;
-	label$e26c8ce_2_46:
+	if( r3 < r10 ) goto label$e26c8ce_2_39;
+	goto label$e26c8ce_2_43;
+	label$e26c8ce_2_39:
+	goto label$e26c8ce_2_42;
+	label$e26c8ce_2_40:
 	r8 = -1;
 	r2 = r8;
-	label$e26c8ce_2_48:
+	label$e26c8ce_2_42:
 	goto label$e26c8ce_2_10;
-	label$e26c8ce_2_49:
+	label$e26c8ce_2_43:
 	r6 = 0;
-	if( r2 < r6 ) goto label$e26c8ce_2_52;
-	goto label$e26c8ce_2_53;
-	label$e26c8ce_2_52:
+	if( r2 < r6 ) goto label$e26c8ce_2_46;
+	goto label$e26c8ce_2_47;
+	label$e26c8ce_2_46:
 	goto label$e26c8ce_2_2;
-	label$e26c8ce_2_53:
+	label$e26c8ce_2_47:
 	r6 = 0;
-	if( r2 < r6 ) goto label$e26c8ce_2_61;
+	if( r2 < r6 ) goto label$e26c8ce_2_55;
 	if( r0 == NULL ) hl_null_access();
 	r4 = 0;
-	r17 = hl_alloc_dynamic(&t$_i32);
-	r17->v.i = r2;
-	r16 = hl_types_ArrayObj_slice(r0,r4,r17);
-	r5 = (hl__types__ArrayObj)hl_dyn_castp(&r16,&t$hl_types_ArrayBase,&t$hl_types_ArrayObj);
+	r16 = hl_alloc_dynamic(&t$_i32);
+	r16->v.i = r2;
+	r15 = hl_types_ArrayObj_slice(r0,r4,r16);
+	r5 = (hl__types__ArrayObj)hl_dyn_castp(&r15,&t$hl_types_ArrayBase,&t$hl_types_ArrayObj);
 	return r5;
-	label$e26c8ce_2_61:
+	label$e26c8ce_2_55:
 	return r0;
 }
 

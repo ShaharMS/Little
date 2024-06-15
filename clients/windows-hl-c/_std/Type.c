@@ -28,7 +28,6 @@ extern String s$Invalid_enum_index_;
 String String___alloc__(vbyte*,int);
 int hl_types_ArrayDyn_get_length(hl__types__ArrayDyn);
 extern String s$Constructor_;
-int String___compare(String,vdynamic*);
 extern String s$_takes_parameters;
 extern hl_type t$hl_types_ArrayBase;
 extern String s$_does_not_takes_;
@@ -306,18 +305,18 @@ vdynamic* Type_createEnum(hl__BaseType r0,String r1,hl__types__ArrayDyn r2) {
 }
 
 vdynamic* Type_createEnumIndex(hl__BaseType r0,int r1,hl__types__ArrayDyn r2) {
-	String r7, r8, r16;
+	String r7, r8;
 	hl__types__ArrayObj r6;
-	hl_type *r19;
-	bool r17;
-	hl__types__ArrayBase r18;
+	hl_type *r18;
+	bool r16;
+	hl__types__ArrayBase r17;
 	hl__Enum r3;
 	hl__types__ArrayDyn r12;
 	vdynamic *r11, *r15;
 	int *r9;
 	varray *r13, *r14;
 	vbyte *r10;
-	int r4, r5, r20, r21;
+	int r4, r5, r19, r20;
 	r3 = (hl__Enum)hl_dyn_castp(&r0,&t$hl_BaseType,&t$hl_Enum);
 	r5 = 0;
 	if( r1 < r5 ) goto label$9fea9d9_13_8;
@@ -344,7 +343,7 @@ vdynamic* Type_createEnumIndex(hl__BaseType r0,int r1,hl__types__ArrayDyn r2) {
 	if( r2 == NULL ) hl_null_access();
 	r4 = hl_types_ArrayDyn_get_length(r2);
 	r5 = 0;
-	if( r4 != r5 ) goto label$9fea9d9_13_55;
+	if( r4 != r5 ) goto label$9fea9d9_13_52;
 	label$9fea9d9_13_25:
 	r13 = r3->_hx___evalues__;
 	r5 = r13->size;
@@ -355,7 +354,7 @@ vdynamic* Type_createEnumIndex(hl__BaseType r0,int r1,hl__types__ArrayDyn r2) {
 	r14 = r3->_hx___evalues__;
 	r15 = ((vdynamic**)(r14 + 1))[r1];
 	label$9fea9d9_13_32:
-	if( r15 ) goto label$9fea9d9_13_54;
+	if( r15 ) goto label$9fea9d9_13_51;
 	r7 = (String)s$Constructor_;
 	r8 = r3->_hx___ename__;
 	r7 = String___add__(r7,r8);
@@ -366,64 +365,61 @@ vdynamic* Type_createEnumIndex(hl__BaseType r0,int r1,hl__types__ArrayDyn r2) {
 	r5 = r6->length;
 	if( ((unsigned)r1) < ((unsigned)r5) ) goto label$9fea9d9_13_44;
 	r8 = NULL;
-	goto label$9fea9d9_13_50;
+	goto label$9fea9d9_13_47;
 	label$9fea9d9_13_44:
 	r14 = r6->array;
 	r15 = ((vdynamic**)(r14 + 1))[r1];
 	r8 = (String)r15;
-	r16 = (String)hl_dyn_castp(&r15,&t$_dyn,&t$String);
-	if( r8 == r16 || (r8 && r16 && String___compare(r8,(vdynamic*)r16) == 0) ) goto label$9fea9d9_13_50;
-	hl_assert();
-	label$9fea9d9_13_50:
+	label$9fea9d9_13_47:
 	r7 = String___add__(r7,r8);
 	r8 = (String)s$_takes_parameters;
 	r7 = String___add__(r7,r8);
 	hl_throw((vdynamic*)r7);
-	label$9fea9d9_13_54:
+	label$9fea9d9_13_51:
 	return r15;
-	label$9fea9d9_13_55:
+	label$9fea9d9_13_52:
 	r12 = r2;
-	r18 = r2->array;
-	if( r18 == NULL ) hl_null_access();
-	r17 = ((bool (*)(hl__types__ArrayBase))r18->$type->vobj_proto[17])(r18);
-	if( r17 ) goto label$9fea9d9_13_81;
-	r18 = r2->array;
-	if( r18 == NULL ) hl_null_access();
-	r4 = r18->length;
-	r19 = &t$_dyn;
-	r14 = hl_alloc_array(r19,r4);
+	r17 = r2->array;
+	if( r17 == NULL ) hl_null_access();
+	r16 = ((bool (*)(hl__types__ArrayBase))r17->$type->vobj_proto[17])(r17);
+	if( r16 ) goto label$9fea9d9_13_78;
+	r17 = r2->array;
+	if( r17 == NULL ) hl_null_access();
+	r4 = r17->length;
+	r18 = &t$_dyn;
+	r14 = hl_alloc_array(r18,r4);
 	r13 = r14;
 	r5 = 0;
-	r18 = r2->array;
-	if( r18 == NULL ) hl_null_access();
-	r20 = r18->length;
-	label$9fea9d9_13_70:
-	if( r5 >= r20 ) goto label$9fea9d9_13_80;
-	r21 = r5;
+	r17 = r2->array;
+	if( r17 == NULL ) hl_null_access();
+	r19 = r17->length;
+	label$9fea9d9_13_67:
+	if( r5 >= r19 ) goto label$9fea9d9_13_77;
+	r20 = r5;
 	++r5;
 	if( r12 == NULL ) hl_null_access();
-	r18 = r12->array;
-	if( r18 == NULL ) hl_null_access();
-	r11 = ((vdynamic* (*)(hl__types__ArrayBase,int))r18->$type->vobj_proto[0])(r18,r21);
-	((vdynamic**)(r13 + 1))[r21] = r11;
-	goto label$9fea9d9_13_70;
-	label$9fea9d9_13_80:
-	goto label$9fea9d9_13_86;
-	label$9fea9d9_13_81:
-	r18 = r2->array;
-	r6 = (hl__types__ArrayObj)hl_dyn_castp(&r18,&t$hl_types_ArrayBase,&t$hl_types_ArrayObj);
+	r17 = r12->array;
+	if( r17 == NULL ) hl_null_access();
+	r11 = ((vdynamic* (*)(hl__types__ArrayBase,int))r17->$type->vobj_proto[0])(r17,r20);
+	((vdynamic**)(r13 + 1))[r20] = r11;
+	goto label$9fea9d9_13_67;
+	label$9fea9d9_13_77:
+	goto label$9fea9d9_13_83;
+	label$9fea9d9_13_78:
+	r17 = r2->array;
+	r6 = (hl__types__ArrayObj)hl_dyn_castp(&r17,&t$hl_types_ArrayBase,&t$hl_types_ArrayObj);
 	if( r6 == NULL ) hl_null_access();
 	r14 = r6->array;
 	r13 = r14;
-	label$9fea9d9_13_86:
+	label$9fea9d9_13_83:
 	if( r3 == NULL ) hl_null_access();
-	r19 = r3->_hx___type__;
+	r18 = r3->_hx___type__;
 	if( r12 == NULL ) hl_null_access();
-	r18 = r12->array;
-	if( r18 == NULL ) hl_null_access();
-	r5 = r18->length;
-	r11 = hl_alloc_enum_dyn(r19,r1,r13,r5);
-	if( r11 ) goto label$9fea9d9_13_122;
+	r17 = r12->array;
+	if( r17 == NULL ) hl_null_access();
+	r5 = r17->length;
+	r11 = hl_alloc_enum_dyn(r18,r1,r13,r5);
+	if( r11 ) goto label$9fea9d9_13_116;
 	r7 = (String)s$Constructor_;
 	r8 = r3->_hx___ename__;
 	r7 = String___add__(r7,r8);
@@ -432,17 +428,14 @@ vdynamic* Type_createEnumIndex(hl__BaseType r0,int r1,hl__types__ArrayDyn r2) {
 	r6 = r3->_hx___constructs__;
 	if( r6 == NULL ) hl_null_access();
 	r5 = r6->length;
-	if( ((unsigned)r1) < ((unsigned)r5) ) goto label$9fea9d9_13_105;
+	if( ((unsigned)r1) < ((unsigned)r5) ) goto label$9fea9d9_13_102;
 	r8 = NULL;
-	goto label$9fea9d9_13_111;
-	label$9fea9d9_13_105:
+	goto label$9fea9d9_13_105;
+	label$9fea9d9_13_102:
 	r14 = r6->array;
 	r15 = ((vdynamic**)(r14 + 1))[r1];
 	r8 = (String)r15;
-	r16 = (String)hl_dyn_castp(&r15,&t$_dyn,&t$String);
-	if( r8 == r16 || (r8 && r16 && String___compare(r8,(vdynamic*)r16) == 0) ) goto label$9fea9d9_13_111;
-	hl_assert();
-	label$9fea9d9_13_111:
+	label$9fea9d9_13_105:
 	r7 = String___add__(r7,r8);
 	r8 = (String)s$_does_not_takes_;
 	r7 = String___add__(r7,r8);
@@ -454,7 +447,7 @@ vdynamic* Type_createEnumIndex(hl__BaseType r0,int r1,hl__types__ArrayDyn r2) {
 	r8 = (String)s$_parameters;
 	r7 = String___add__(r7,r8);
 	hl_throw((vdynamic*)r7);
-	label$9fea9d9_13_122:
+	label$9fea9d9_13_116:
 	return r11;
 }
 
@@ -580,7 +573,7 @@ venum* Type_typeof(vdynamic* r0) {
 }
 
 String Type_enumConstructor(vdynamic* r0) {
-	String r7, r9;
+	String r7;
 	hl__BaseType r1;
 	hl__types__ArrayObj r4;
 	hl__Enum r3;
@@ -596,15 +589,12 @@ String Type_enumConstructor(vdynamic* r0) {
 	r6 = r4->length;
 	if( ((unsigned)r5) < ((unsigned)r6) ) goto label$9fea9d9_17_10;
 	r7 = NULL;
-	goto label$9fea9d9_17_16;
+	goto label$9fea9d9_17_13;
 	label$9fea9d9_17_10:
 	r8 = r4->array;
 	r2 = ((vdynamic**)(r8 + 1))[r5];
 	r7 = (String)r2;
-	r9 = (String)hl_dyn_castp(&r2,&t$_dyn,&t$String);
-	if( r7 == r9 || (r7 && r9 && String___compare(r7,(vdynamic*)r9) == 0) ) goto label$9fea9d9_17_16;
-	hl_assert();
-	label$9fea9d9_17_16:
+	label$9fea9d9_17_13:
 	return r7;
 }
 

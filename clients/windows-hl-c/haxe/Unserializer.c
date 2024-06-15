@@ -47,7 +47,6 @@ extern hl_type t$haxe_ds_ObjectMap;
 void haxe_ds_ObjectMap_new(haxe__ds__ObjectMap);
 void haxe_ds_ObjectMap_set(haxe__ds__ObjectMap,vdynamic*,vdynamic*);
 extern String s$Invalid_string_reference;
-int String___compare(String,vdynamic*);
 int hl_types_ArrayDyn_get_length(hl__types__ArrayDyn);
 extern hl_type t$haxe_ds_StringMap;
 void haxe_ds_StringMap_new(haxe__ds__StringMap);
@@ -486,7 +485,7 @@ vdynamic* haxe_Unserializer_unserialize(haxe__Unserializer r0) {
 		case 103:
 		case 104:
 		case 117:
-			goto label$2789538_7_774;
+			goto label$2789538_7_768;
 		case 65:
 			r8 = haxe_Unserializer_unserialize(r0);
 			r5 = (String)hl_dyn_castp(&r8,&t$_dyn,&t$String);
@@ -606,15 +605,12 @@ vdynamic* haxe_Unserializer_unserialize(haxe__Unserializer r0) {
 			r17 = r21->length;
 			if( ((unsigned)r2) < ((unsigned)r17) ) goto label$2789538_7_107;
 			r5 = NULL;
-			goto label$2789538_7_113;
+			goto label$2789538_7_110;
 			label$2789538_7_107:
 			r22 = r21->array;
 			r8 = ((vdynamic**)(r22 + 1))[r2];
 			r5 = (String)r8;
-			r11 = (String)hl_dyn_castp(&r8,&t$_dyn,&t$String);
-			if( r5 == r11 || (r5 && r11 && String___compare(r5,(vdynamic*)r11) == 0) ) goto label$2789538_7_113;
-			hl_assert();
-			label$2789538_7_113:
+			label$2789538_7_110:
 			return ((vdynamic*)r5);
 		case 97:
 			r5 = r0->buf;
@@ -623,9 +619,9 @@ vdynamic* haxe_Unserializer_unserialize(haxe__Unserializer r0) {
 			r23 = r0->cache;
 			if( r23 == NULL ) hl_null_access();
 			r2 = hl_types_ArrayDyn_push(r23,((vdynamic*)r14));
-			label$2789538_7_120:
+			label$2789538_7_117:
 			r19 = true;
-			if( !r19 ) goto label$2789538_7_154;
+			if( !r19 ) goto label$2789538_7_151;
 			r2 = r0->pos;
 			r11 = r0->buf;
 			if( r11 == NULL ) hl_null_access();
@@ -634,14 +630,14 @@ vdynamic* haxe_Unserializer_unserialize(haxe__Unserializer r0) {
 			r7 = r2 << r17;
 			r7 = *(unsigned short*)(r6 + r7);
 			r24 = 104;
-			if( r7 != r24 ) goto label$2789538_7_136;
+			if( r7 != r24 ) goto label$2789538_7_133;
 			r17 = r0->pos;
 			++r17;
 			r0->pos = r17;
-			goto label$2789538_7_154;
-			label$2789538_7_136:
+			goto label$2789538_7_151;
+			label$2789538_7_133:
 			r24 = 117;
-			if( r7 != r24 ) goto label$2789538_7_150;
+			if( r7 != r24 ) goto label$2789538_7_147;
 			r17 = r0->pos;
 			++r17;
 			r0->pos = r17;
@@ -653,14 +649,14 @@ vdynamic* haxe_Unserializer_unserialize(haxe__Unserializer r0) {
 			r24 = r24 - r25;
 			r8 = NULL;
 			((void (*)(hl__types__ArrayDyn,int,vdynamic*))r14->$type->vobj_proto[1])(r14,r24,r8);
-			goto label$2789538_7_153;
-			label$2789538_7_150:
+			goto label$2789538_7_150;
+			label$2789538_7_147:
 			if( r14 == NULL ) hl_null_access();
 			r8 = haxe_Unserializer_unserialize(r0);
 			r17 = hl_types_ArrayDyn_push(r14,r8);
-			label$2789538_7_153:
-			goto label$2789538_7_120;
-			label$2789538_7_154:
+			label$2789538_7_150:
+			goto label$2789538_7_117;
+			label$2789538_7_151:
 			return ((vdynamic*)r14);
 		case 98:
 			r26 = (haxe__ds__StringMap)hl_alloc_obj(&t$haxe_ds_StringMap);
@@ -669,9 +665,9 @@ vdynamic* haxe_Unserializer_unserialize(haxe__Unserializer r0) {
 			if( r14 == NULL ) hl_null_access();
 			r2 = hl_types_ArrayDyn_push(r14,((vdynamic*)r26));
 			r5 = r0->buf;
-			label$2789538_7_161:
+			label$2789538_7_158:
 			r19 = true;
-			if( !r19 ) goto label$2789538_7_180;
+			if( !r19 ) goto label$2789538_7_177;
 			r2 = r0->pos;
 			r11 = r0->buf;
 			if( r11 == NULL ) hl_null_access();
@@ -680,16 +676,16 @@ vdynamic* haxe_Unserializer_unserialize(haxe__Unserializer r0) {
 			r7 = r2 << r17;
 			r7 = *(unsigned short*)(r6 + r7);
 			r17 = 104;
-			if( r7 != r17 ) goto label$2789538_7_174;
-			goto label$2789538_7_180;
-			label$2789538_7_174:
+			if( r7 != r17 ) goto label$2789538_7_171;
+			goto label$2789538_7_177;
+			label$2789538_7_171:
 			r8 = haxe_Unserializer_unserialize(r0);
 			r11 = (String)hl_dyn_castp(&r8,&t$_dyn,&t$String);
 			if( r26 == NULL ) hl_null_access();
 			r8 = haxe_Unserializer_unserialize(r0);
 			haxe_ds_StringMap_set(r26,r11,r8);
-			goto label$2789538_7_161;
-			label$2789538_7_180:
+			goto label$2789538_7_158;
+			label$2789538_7_177:
 			r2 = r0->pos;
 			++r2;
 			r0->pos = r2;
@@ -703,11 +699,11 @@ vdynamic* haxe_Unserializer_unserialize(haxe__Unserializer r0) {
 				void *args[] = {r5};
 				r9 = (hl__Class)hl_dyn_call_obj(r10->value,&t$fun_ed91dde,-522339299/*resolveClass*/,args,NULL);
 			}
-			if( r9 ) goto label$2789538_7_193;
+			if( r9 ) goto label$2789538_7_190;
 			r11 = (String)s$Class_not_found_;
 			r11 = String___add__(r11,r5);
 			hl_throw((vdynamic*)r11);
-			label$2789538_7_193:
+			label$2789538_7_190:
 			r8 = Type_createEmptyInstance(r9);
 			r14 = r0->cache;
 			if( r14 == NULL ) hl_null_access();
@@ -737,11 +733,11 @@ vdynamic* haxe_Unserializer_unserialize(haxe__Unserializer r0) {
 				void *args[] = {r5};
 				r13 = (hl__BaseType)hl_dyn_call_obj(r10->value,&t$fun_03ea481,-28209272/*resolveEnum*/,args,NULL);
 			}
-			if( r13 ) goto label$2789538_7_217;
+			if( r13 ) goto label$2789538_7_214;
 			r11 = (String)s$Enum_not_found_;
 			r11 = String___add__(r11,r5);
 			hl_throw((vdynamic*)r11);
-			label$2789538_7_217:
+			label$2789538_7_214:
 			r2 = r0->pos;
 			++r2;
 			r0->pos = r2;
@@ -749,18 +745,15 @@ vdynamic* haxe_Unserializer_unserialize(haxe__Unserializer r0) {
 			r21 = Type_getEnumConstructs(r13);
 			if( r21 == NULL ) hl_null_access();
 			r17 = r21->length;
-			if( ((unsigned)r2) < ((unsigned)r17) ) goto label$2789538_7_227;
+			if( ((unsigned)r2) < ((unsigned)r17) ) goto label$2789538_7_224;
 			r11 = NULL;
-			goto label$2789538_7_233;
-			label$2789538_7_227:
+			goto label$2789538_7_227;
+			label$2789538_7_224:
 			r22 = r21->array;
 			r8 = ((vdynamic**)(r22 + 1))[r2];
 			r11 = (String)r8;
-			r12 = (String)hl_dyn_castp(&r8,&t$_dyn,&t$String);
-			if( r11 == r12 || (r11 && r12 && String___compare(r11,(vdynamic*)r12) == 0) ) goto label$2789538_7_233;
-			hl_assert();
-			label$2789538_7_233:
-			if( r11 ) goto label$2789538_7_244;
+			label$2789538_7_227:
+			if( r11 ) goto label$2789538_7_238;
 			r12 = (String)s$Unknown_enum_index_;
 			r12 = String___add__(r12,r5);
 			r28 = (String)s$518ed29;
@@ -771,7 +764,7 @@ vdynamic* haxe_Unserializer_unserialize(haxe__Unserializer r0) {
 			r28 = String___alloc__(r6,r7);
 			r12 = String___add__(r12,r28);
 			hl_throw((vdynamic*)r12);
-			label$2789538_7_244:
+			label$2789538_7_238:
 			r8 = haxe_Unserializer_unserializeEnum(r0,r13,r11);
 			r14 = r0->cache;
 			if( r14 == NULL ) hl_null_access();
@@ -790,9 +783,9 @@ vdynamic* haxe_Unserializer_unserialize(haxe__Unserializer r0) {
 			if( r14 == NULL ) hl_null_access();
 			r2 = hl_types_ArrayDyn_push(r14,((vdynamic*)r31));
 			r5 = r0->buf;
-			label$2789538_7_259:
+			label$2789538_7_253:
 			r19 = true;
-			if( !r19 ) goto label$2789538_7_276;
+			if( !r19 ) goto label$2789538_7_270;
 			r2 = r0->pos;
 			r11 = r0->buf;
 			if( r11 == NULL ) hl_null_access();
@@ -801,14 +794,14 @@ vdynamic* haxe_Unserializer_unserialize(haxe__Unserializer r0) {
 			r7 = r2 << r17;
 			r7 = *(unsigned short*)(r6 + r7);
 			r17 = 104;
-			if( r7 != r17 ) goto label$2789538_7_272;
-			goto label$2789538_7_276;
-			label$2789538_7_272:
+			if( r7 != r17 ) goto label$2789538_7_266;
+			goto label$2789538_7_270;
+			label$2789538_7_266:
 			if( r31 == NULL ) hl_null_access();
 			r8 = haxe_Unserializer_unserialize(r0);
 			haxe_ds_List_add(r31,r8);
-			goto label$2789538_7_259;
-			label$2789538_7_276:
+			goto label$2789538_7_253;
+			label$2789538_7_270:
 			r2 = r0->pos;
 			++r2;
 			r0->pos = r2;
@@ -852,9 +845,9 @@ vdynamic* haxe_Unserializer_unserialize(haxe__Unserializer r0) {
 			r17 = 1;
 			r7 = r7 << r17;
 			r7 = *(unsigned short*)(r6 + r7);
-			label$2789538_7_312:
+			label$2789538_7_306:
 			r24 = 58;
-			if( r7 != r24 ) goto label$2789538_7_331;
+			if( r7 != r24 ) goto label$2789538_7_325;
 			r17 = haxe_Unserializer_readDigits(r0);
 			if( r33 == NULL ) hl_null_access();
 			r8 = haxe_Unserializer_unserialize(r0);
@@ -870,26 +863,26 @@ vdynamic* haxe_Unserializer_unserialize(haxe__Unserializer r0) {
 			r25 = r25 << r35;
 			r25 = *(unsigned short*)(r16 + r25);
 			r7 = r25;
-			goto label$2789538_7_312;
-			label$2789538_7_331:
+			goto label$2789538_7_306;
+			label$2789538_7_325:
 			r24 = 104;
-			if( r7 == r24 ) goto label$2789538_7_335;
+			if( r7 == r24 ) goto label$2789538_7_329;
 			r11 = (String)s$Invalid_IntMap_format;
 			hl_throw((vdynamic*)r11);
-			label$2789538_7_335:
+			label$2789538_7_329:
 			return ((vdynamic*)r33);
 		case 114:
 			r2 = haxe_Unserializer_readDigits(r0);
 			r17 = 0;
-			if( r2 < r17 ) goto label$2789538_7_343;
+			if( r2 < r17 ) goto label$2789538_7_337;
 			r14 = r0->cache;
 			if( r14 == NULL ) hl_null_access();
 			r17 = hl_types_ArrayDyn_get_length(r14);
-			if( r2 < r17 ) goto label$2789538_7_345;
-			label$2789538_7_343:
+			if( r2 < r17 ) goto label$2789538_7_339;
+			label$2789538_7_337:
 			r5 = (String)s$Invalid_reference;
 			hl_throw((vdynamic*)r5);
-			label$2789538_7_345:
+			label$2789538_7_339:
 			r14 = r0->cache;
 			if( r14 == NULL ) hl_null_access();
 			r8 = ((vdynamic* (*)(hl__types__ArrayDyn,int))r14->$type->vobj_proto[0])(r14,r2);
@@ -908,23 +901,23 @@ vdynamic* haxe_Unserializer_unserialize(haxe__Unserializer r0) {
 			r17 = r17 << r24;
 			r17 = *(unsigned short*)(r6 + r17);
 			r24 = 58;
-			if( r17 != r24 ) goto label$2789538_7_367;
+			if( r17 != r24 ) goto label$2789538_7_361;
 			r17 = r0->length;
 			r24 = r0->pos;
 			r17 = r17 - r24;
-			if( r17 >= r2 ) goto label$2789538_7_369;
-			label$2789538_7_367:
+			if( r17 >= r2 ) goto label$2789538_7_363;
+			label$2789538_7_361:
 			r11 = (String)s$Invalid_bytes_length;
 			hl_throw((vdynamic*)r11);
-			label$2789538_7_369:
+			label$2789538_7_363:
 			r37 = (haxe__$Unserializer)g$_haxe_Unserializer;
 			r36 = r37->CODES;
-			if( r36 ) goto label$2789538_7_376;
+			if( r36 ) goto label$2789538_7_370;
 			r38 = haxe_Unserializer_initCodes();
 			r36 = r38;
 			r37 = (haxe__$Unserializer)g$_haxe_Unserializer;
 			r37->CODES = r38;
-			label$2789538_7_376:
+			label$2789538_7_370:
 			r17 = r0->pos;
 			r25 = 3;
 			r24 = r2 & r25;
@@ -933,20 +926,20 @@ vdynamic* haxe_Unserializer_unserialize(haxe__Unserializer r0) {
 			r35 = 3;
 			r25 = r25 * r35;
 			r39 = 2;
-			if( r24 < r39 ) goto label$2789538_7_388;
+			if( r24 < r39 ) goto label$2789538_7_382;
 			r39 = 1;
 			r35 = r24 - r39;
-			goto label$2789538_7_389;
-			label$2789538_7_388:
+			goto label$2789538_7_383;
+			label$2789538_7_382:
 			r35 = 0;
-			label$2789538_7_389:
+			label$2789538_7_383:
 			r25 = r25 + r35;
 			r39 = r2 - r24;
 			r35 = r17 + r39;
 			r41 = haxe_io_Bytes_alloc(r25);
 			r39 = 0;
-			label$2789538_7_394:
-			if( r17 >= r35 ) goto label$2789538_7_478;
+			label$2789538_7_388:
+			if( r17 >= r35 ) goto label$2789538_7_472;
 			r40 = r17;
 			++r17;
 			if( r5 == NULL ) hl_null_access();
@@ -956,15 +949,15 @@ vdynamic* haxe_Unserializer_unserialize(haxe__Unserializer r0) {
 			r42 = r40 << r43;
 			r42 = *(unsigned short*)(r16 + r42);
 			r43 = r36->length;
-			if( ((unsigned)r42) < ((unsigned)r43) ) goto label$2789538_7_408;
+			if( ((unsigned)r42) < ((unsigned)r43) ) goto label$2789538_7_402;
 			r42 = 0;
-			goto label$2789538_7_412;
-			label$2789538_7_408:
+			goto label$2789538_7_406;
+			label$2789538_7_402:
 			r34 = r36->bytes;
 			r43 = 2;
 			r43 = r42 << r43;
 			r42 = *(int*)(r34 + r43);
-			label$2789538_7_412:
+			label$2789538_7_406:
 			r43 = r17;
 			++r17;
 			r34 = r5->bytes;
@@ -972,15 +965,15 @@ vdynamic* haxe_Unserializer_unserialize(haxe__Unserializer r0) {
 			r45 = r43 << r46;
 			r45 = *(unsigned short*)(r34 + r45);
 			r46 = r36->length;
-			if( ((unsigned)r45) < ((unsigned)r46) ) goto label$2789538_7_422;
+			if( ((unsigned)r45) < ((unsigned)r46) ) goto label$2789538_7_416;
 			r45 = 0;
-			goto label$2789538_7_426;
-			label$2789538_7_422:
+			goto label$2789538_7_420;
+			label$2789538_7_416:
 			r44 = r36->bytes;
 			r46 = 2;
 			r46 = r45 << r46;
 			r45 = *(int*)(r44 + r46);
-			label$2789538_7_426:
+			label$2789538_7_420:
 			if( r41 == NULL ) hl_null_access();
 			r46 = r39;
 			++r39;
@@ -997,15 +990,15 @@ vdynamic* haxe_Unserializer_unserialize(haxe__Unserializer r0) {
 			r47 = r46 << r48;
 			r47 = *(unsigned short*)(r44 + r47);
 			r48 = r36->length;
-			if( ((unsigned)r47) < ((unsigned)r48) ) goto label$2789538_7_445;
+			if( ((unsigned)r47) < ((unsigned)r48) ) goto label$2789538_7_439;
 			r47 = 0;
-			goto label$2789538_7_449;
-			label$2789538_7_445:
+			goto label$2789538_7_443;
+			label$2789538_7_439:
 			r50 = r36->bytes;
 			r48 = 2;
 			r48 = r47 << r48;
 			r47 = *(int*)(r50 + r48);
-			label$2789538_7_449:
+			label$2789538_7_443:
 			r48 = r39;
 			++r39;
 			r51 = 4;
@@ -1021,25 +1014,25 @@ vdynamic* haxe_Unserializer_unserialize(haxe__Unserializer r0) {
 			r49 = r48 << r51;
 			r49 = *(unsigned short*)(r50 + r49);
 			r51 = r36->length;
-			if( ((unsigned)r49) < ((unsigned)r51) ) goto label$2789538_7_467;
+			if( ((unsigned)r49) < ((unsigned)r51) ) goto label$2789538_7_461;
 			r49 = 0;
-			goto label$2789538_7_471;
-			label$2789538_7_467:
+			goto label$2789538_7_465;
+			label$2789538_7_461:
 			r53 = r36->bytes;
 			r51 = 2;
 			r51 = r49 << r51;
 			r49 = *(int*)(r53 + r51);
-			label$2789538_7_471:
+			label$2789538_7_465:
 			r51 = r39;
 			++r39;
 			r54 = 6;
 			r52 = r47 << r54;
 			r52 = r52 | r49;
 			haxe_io_Bytes_set(r41,r51,r52);
-			goto label$2789538_7_394;
-			label$2789538_7_478:
+			goto label$2789538_7_388;
+			label$2789538_7_472:
 			r42 = 2;
-			if( r24 < r42 ) goto label$2789538_7_543;
+			if( r24 < r42 ) goto label$2789538_7_537;
 			r40 = r17;
 			++r17;
 			if( r5 == NULL ) hl_null_access();
@@ -1049,15 +1042,15 @@ vdynamic* haxe_Unserializer_unserialize(haxe__Unserializer r0) {
 			r42 = r40 << r43;
 			r42 = *(unsigned short*)(r16 + r42);
 			r43 = r36->length;
-			if( ((unsigned)r42) < ((unsigned)r43) ) goto label$2789538_7_492;
+			if( ((unsigned)r42) < ((unsigned)r43) ) goto label$2789538_7_486;
 			r42 = 0;
-			goto label$2789538_7_496;
-			label$2789538_7_492:
+			goto label$2789538_7_490;
+			label$2789538_7_486:
 			r34 = r36->bytes;
 			r43 = 2;
 			r43 = r42 << r43;
 			r42 = *(int*)(r34 + r43);
-			label$2789538_7_496:
+			label$2789538_7_490:
 			r43 = r17;
 			++r17;
 			r34 = r5->bytes;
@@ -1065,15 +1058,15 @@ vdynamic* haxe_Unserializer_unserialize(haxe__Unserializer r0) {
 			r45 = r43 << r46;
 			r45 = *(unsigned short*)(r34 + r45);
 			r46 = r36->length;
-			if( ((unsigned)r45) < ((unsigned)r46) ) goto label$2789538_7_506;
+			if( ((unsigned)r45) < ((unsigned)r46) ) goto label$2789538_7_500;
 			r45 = 0;
-			goto label$2789538_7_510;
-			label$2789538_7_506:
+			goto label$2789538_7_504;
+			label$2789538_7_500:
 			r44 = r36->bytes;
 			r46 = 2;
 			r46 = r45 << r46;
 			r45 = *(int*)(r44 + r46);
-			label$2789538_7_510:
+			label$2789538_7_504:
 			if( r41 == NULL ) hl_null_access();
 			r46 = r39;
 			++r39;
@@ -1084,7 +1077,7 @@ vdynamic* haxe_Unserializer_unserialize(haxe__Unserializer r0) {
 			r47 = r47 | r48;
 			haxe_io_Bytes_set(r41,r46,r47);
 			r47 = 3;
-			if( r24 != r47 ) goto label$2789538_7_543;
+			if( r24 != r47 ) goto label$2789538_7_537;
 			r46 = r17;
 			++r17;
 			r44 = r5->bytes;
@@ -1092,15 +1085,15 @@ vdynamic* haxe_Unserializer_unserialize(haxe__Unserializer r0) {
 			r47 = r46 << r48;
 			r47 = *(unsigned short*)(r44 + r47);
 			r48 = r36->length;
-			if( ((unsigned)r47) < ((unsigned)r48) ) goto label$2789538_7_531;
+			if( ((unsigned)r47) < ((unsigned)r48) ) goto label$2789538_7_525;
 			r47 = 0;
-			goto label$2789538_7_535;
-			label$2789538_7_531:
+			goto label$2789538_7_529;
+			label$2789538_7_525:
 			r50 = r36->bytes;
 			r48 = 2;
 			r48 = r47 << r48;
 			r47 = *(int*)(r50 + r48);
-			label$2789538_7_535:
+			label$2789538_7_529:
 			r48 = r39;
 			++r39;
 			r51 = 4;
@@ -1109,7 +1102,7 @@ vdynamic* haxe_Unserializer_unserialize(haxe__Unserializer r0) {
 			r51 = r47 >> r52;
 			r49 = r49 | r51;
 			haxe_io_Bytes_set(r41,r48,r49);
-			label$2789538_7_543:
+			label$2789538_7_537:
 			r40 = r0->pos;
 			r40 = r40 + r2;
 			r0->pos = r40;
@@ -1130,7 +1123,7 @@ vdynamic* haxe_Unserializer_unserialize(haxe__Unserializer r0) {
 			r7 = r2 << r17;
 			r7 = *(unsigned short*)(r6 + r7);
 			r17 = 48;
-			if( r7 < r17 ) goto label$2789538_7_575;
+			if( r7 < r17 ) goto label$2789538_7_569;
 			r7 = r0->pos;
 			r5 = r0->buf;
 			if( r5 == NULL ) hl_null_access();
@@ -1139,17 +1132,17 @@ vdynamic* haxe_Unserializer_unserialize(haxe__Unserializer r0) {
 			r17 = r7 << r24;
 			r17 = *(unsigned short*)(r16 + r17);
 			r24 = 57;
-			if( r17 <= r24 ) goto label$2789538_7_573;
+			if( r17 <= r24 ) goto label$2789538_7_567;
 			r55 = false;
-			goto label$2789538_7_574;
-			label$2789538_7_573:
+			goto label$2789538_7_568;
+			label$2789538_7_567:
 			r55 = true;
-			label$2789538_7_574:
-			goto label$2789538_7_576;
-			label$2789538_7_575:
+			label$2789538_7_568:
+			goto label$2789538_7_570;
+			label$2789538_7_569:
 			r55 = false;
-			label$2789538_7_576:
-			if( !r55 ) goto label$2789538_7_592;
+			label$2789538_7_570:
+			if( !r55 ) goto label$2789538_7_586;
 			r7 = r0->pos;
 			r17 = 1;
 			r7 = r7 + r17;
@@ -1160,17 +1153,17 @@ vdynamic* haxe_Unserializer_unserialize(haxe__Unserializer r0) {
 			r17 = r7 << r24;
 			r17 = *(unsigned short*)(r16 + r17);
 			r24 = 48;
-			if( r17 >= r24 ) goto label$2789538_7_590;
+			if( r17 >= r24 ) goto label$2789538_7_584;
 			r56 = false;
-			goto label$2789538_7_591;
-			label$2789538_7_590:
+			goto label$2789538_7_585;
+			label$2789538_7_584:
 			r56 = true;
-			label$2789538_7_591:
-			goto label$2789538_7_593;
-			label$2789538_7_592:
+			label$2789538_7_585:
+			goto label$2789538_7_587;
+			label$2789538_7_586:
 			r56 = false;
-			label$2789538_7_593:
-			if( !r56 ) goto label$2789538_7_609;
+			label$2789538_7_587:
+			if( !r56 ) goto label$2789538_7_603;
 			r7 = r0->pos;
 			r17 = 1;
 			r7 = r7 + r17;
@@ -1181,17 +1174,17 @@ vdynamic* haxe_Unserializer_unserialize(haxe__Unserializer r0) {
 			r17 = r7 << r24;
 			r17 = *(unsigned short*)(r16 + r17);
 			r24 = 57;
-			if( r17 <= r24 ) goto label$2789538_7_607;
+			if( r17 <= r24 ) goto label$2789538_7_601;
 			r57 = false;
-			goto label$2789538_7_608;
-			label$2789538_7_607:
+			goto label$2789538_7_602;
+			label$2789538_7_601:
 			r57 = true;
-			label$2789538_7_608:
-			goto label$2789538_7_610;
-			label$2789538_7_609:
+			label$2789538_7_602:
+			goto label$2789538_7_604;
+			label$2789538_7_603:
 			r57 = false;
-			label$2789538_7_610:
-			if( !r57 ) goto label$2789538_7_626;
+			label$2789538_7_604:
+			if( !r57 ) goto label$2789538_7_620;
 			r7 = r0->pos;
 			r17 = 2;
 			r7 = r7 + r17;
@@ -1202,17 +1195,17 @@ vdynamic* haxe_Unserializer_unserialize(haxe__Unserializer r0) {
 			r17 = r7 << r24;
 			r17 = *(unsigned short*)(r16 + r17);
 			r24 = 48;
-			if( r17 >= r24 ) goto label$2789538_7_624;
+			if( r17 >= r24 ) goto label$2789538_7_618;
 			r58 = false;
-			goto label$2789538_7_625;
-			label$2789538_7_624:
+			goto label$2789538_7_619;
+			label$2789538_7_618:
 			r58 = true;
-			label$2789538_7_625:
-			goto label$2789538_7_627;
-			label$2789538_7_626:
+			label$2789538_7_619:
+			goto label$2789538_7_621;
+			label$2789538_7_620:
 			r58 = false;
-			label$2789538_7_627:
-			if( !r58 ) goto label$2789538_7_643;
+			label$2789538_7_621:
+			if( !r58 ) goto label$2789538_7_637;
 			r7 = r0->pos;
 			r17 = 2;
 			r7 = r7 + r17;
@@ -1223,17 +1216,17 @@ vdynamic* haxe_Unserializer_unserialize(haxe__Unserializer r0) {
 			r17 = r7 << r24;
 			r17 = *(unsigned short*)(r16 + r17);
 			r24 = 57;
-			if( r17 <= r24 ) goto label$2789538_7_641;
+			if( r17 <= r24 ) goto label$2789538_7_635;
 			r59 = false;
-			goto label$2789538_7_642;
-			label$2789538_7_641:
+			goto label$2789538_7_636;
+			label$2789538_7_635:
 			r59 = true;
-			label$2789538_7_642:
-			goto label$2789538_7_644;
-			label$2789538_7_643:
+			label$2789538_7_636:
+			goto label$2789538_7_638;
+			label$2789538_7_637:
 			r59 = false;
-			label$2789538_7_644:
-			if( !r59 ) goto label$2789538_7_660;
+			label$2789538_7_638:
+			if( !r59 ) goto label$2789538_7_654;
 			r7 = r0->pos;
 			r17 = 3;
 			r7 = r7 + r17;
@@ -1244,17 +1237,17 @@ vdynamic* haxe_Unserializer_unserialize(haxe__Unserializer r0) {
 			r17 = r7 << r24;
 			r17 = *(unsigned short*)(r16 + r17);
 			r24 = 48;
-			if( r17 >= r24 ) goto label$2789538_7_658;
+			if( r17 >= r24 ) goto label$2789538_7_652;
 			r60 = false;
-			goto label$2789538_7_659;
-			label$2789538_7_658:
+			goto label$2789538_7_653;
+			label$2789538_7_652:
 			r60 = true;
-			label$2789538_7_659:
-			goto label$2789538_7_661;
-			label$2789538_7_660:
+			label$2789538_7_653:
+			goto label$2789538_7_655;
+			label$2789538_7_654:
 			r60 = false;
-			label$2789538_7_661:
-			if( !r60 ) goto label$2789538_7_677;
+			label$2789538_7_655:
+			if( !r60 ) goto label$2789538_7_671;
 			r7 = r0->pos;
 			r17 = 3;
 			r7 = r7 + r17;
@@ -1265,17 +1258,17 @@ vdynamic* haxe_Unserializer_unserialize(haxe__Unserializer r0) {
 			r17 = r7 << r24;
 			r17 = *(unsigned short*)(r16 + r17);
 			r24 = 57;
-			if( r17 <= r24 ) goto label$2789538_7_675;
+			if( r17 <= r24 ) goto label$2789538_7_669;
 			r61 = false;
-			goto label$2789538_7_676;
-			label$2789538_7_675:
+			goto label$2789538_7_670;
+			label$2789538_7_669:
 			r61 = true;
-			label$2789538_7_676:
-			goto label$2789538_7_678;
-			label$2789538_7_677:
+			label$2789538_7_670:
+			goto label$2789538_7_672;
+			label$2789538_7_671:
 			r61 = false;
-			label$2789538_7_678:
-			if( !r61 ) goto label$2789538_7_694;
+			label$2789538_7_672:
+			if( !r61 ) goto label$2789538_7_688;
 			r7 = r0->pos;
 			r17 = 4;
 			r7 = r7 + r17;
@@ -1286,17 +1279,17 @@ vdynamic* haxe_Unserializer_unserialize(haxe__Unserializer r0) {
 			r17 = r7 << r24;
 			r17 = *(unsigned short*)(r16 + r17);
 			r24 = 45;
-			if( r17 == r24 ) goto label$2789538_7_692;
+			if( r17 == r24 ) goto label$2789538_7_686;
 			r62 = false;
-			goto label$2789538_7_693;
-			label$2789538_7_692:
+			goto label$2789538_7_687;
+			label$2789538_7_686:
 			r62 = true;
-			label$2789538_7_693:
-			goto label$2789538_7_695;
-			label$2789538_7_694:
+			label$2789538_7_687:
+			goto label$2789538_7_689;
+			label$2789538_7_688:
 			r62 = false;
-			label$2789538_7_695:
-			if( !r62 ) goto label$2789538_7_708;
+			label$2789538_7_689:
+			if( !r62 ) goto label$2789538_7_702;
 			r5 = r0->buf;
 			if( r5 == NULL ) hl_null_access();
 			r7 = r0->pos;
@@ -1309,11 +1302,11 @@ vdynamic* haxe_Unserializer_unserialize(haxe__Unserializer r0) {
 			r17 = 19;
 			r7 = r7 + r17;
 			r0->pos = r7;
-			goto label$2789538_7_710;
-			label$2789538_7_708:
+			goto label$2789538_7_704;
+			label$2789538_7_702:
 			r27 = haxe_Unserializer_readFloat(r0);
 			r63 = Date_fromTime(r27);
-			label$2789538_7_710:
+			label$2789538_7_704:
 			r14 = r0->cache;
 			if( r14 == NULL ) hl_null_access();
 			r7 = hl_types_ArrayDyn_push(r14,((vdynamic*)r63));
@@ -1327,11 +1320,11 @@ vdynamic* haxe_Unserializer_unserialize(haxe__Unserializer r0) {
 				void *args[] = {r5};
 				r13 = (hl__BaseType)hl_dyn_call_obj(r10->value,&t$fun_03ea481,-28209272/*resolveEnum*/,args,NULL);
 			}
-			if( r13 ) goto label$2789538_7_723;
+			if( r13 ) goto label$2789538_7_717;
 			r11 = (String)s$Enum_not_found_;
 			r11 = String___add__(r11,r5);
 			hl_throw((vdynamic*)r11);
-			label$2789538_7_723:
+			label$2789538_7_717:
 			r8 = haxe_Unserializer_unserialize(r0);
 			r11 = (String)hl_dyn_castp(&r8,&t$_dyn,&t$String);
 			r8 = haxe_Unserializer_unserializeEnum(r0,r13,r11);
@@ -1355,15 +1348,15 @@ vdynamic* haxe_Unserializer_unserialize(haxe__Unserializer r0) {
 			r17 = r17 << r24;
 			r17 = *(unsigned short*)(r6 + r17);
 			r24 = 58;
-			if( r17 != r24 ) goto label$2789538_7_749;
+			if( r17 != r24 ) goto label$2789538_7_743;
 			r17 = r0->length;
 			r24 = r0->pos;
 			r17 = r17 - r24;
-			if( r17 >= r2 ) goto label$2789538_7_751;
-			label$2789538_7_749:
+			if( r17 >= r2 ) goto label$2789538_7_745;
+			label$2789538_7_743:
 			r5 = (String)s$Invalid_string_length;
 			hl_throw((vdynamic*)r5);
-			label$2789538_7_751:
+			label$2789538_7_745:
 			r5 = r0->buf;
 			if( r5 == NULL ) hl_null_access();
 			r17 = r0->pos;
@@ -1391,7 +1384,7 @@ vdynamic* haxe_Unserializer_unserialize(haxe__Unserializer r0) {
 			r8->v.i = r2;
 			return r8;
 	}
-	label$2789538_7_774:
+	label$2789538_7_768:
 	r1 = r0->pos;
 	--r1;
 	r0->pos = r1;

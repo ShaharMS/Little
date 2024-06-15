@@ -131,7 +131,7 @@ void little_interpreter_memory_Operators_setPriority(little__interpreter__memory
 	r12 = (hl__types__ArrayObj)hl_dyn_castp(&r9,&t$_dyn,&t$hl_types_ArrayObj);
 	if( r12 == NULL ) hl_null_access();
 	r11 = hl_types_ArrayObj_push(r12,((vdynamic*)r4));
-	goto label$2e2d2f5_2_489;
+	goto label$2e2d2f5_2_480;
 	label$2e2d2f5_2_27:
 	r8 = (String)s$last;
 	if( r3 != r8 && (!r3 || !r8 || String___compare(r3,(vdynamic*)r8) != 0) ) goto label$2e2d2f5_2_66;
@@ -182,7 +182,7 @@ void little_interpreter_memory_Operators_setPriority(little__interpreter__memory
 	r12 = (hl__types__ArrayObj)hl_dyn_castp(&r9,&t$_dyn,&t$hl_types_ArrayObj);
 	if( r12 == NULL ) hl_null_access();
 	r19 = hl_types_ArrayObj_push(r12,((vdynamic*)r4));
-	goto label$2e2d2f5_2_489;
+	goto label$2e2d2f5_2_480;
 	label$2e2d2f5_2_66:
 	r22 = (EReg)hl_alloc_obj(&t$EReg);
 	r5 = (String)s$780550e;
@@ -213,7 +213,7 @@ void little_interpreter_memory_Operators_setPriority(little__interpreter__memory
 	r12 = (hl__types__ArrayObj)hl_dyn_castp(&r9,&t$_dyn,&t$hl_types_ArrayObj);
 	if( r12 == NULL ) hl_null_access();
 	r11 = hl_types_ArrayObj_push(r12,((vdynamic*)r4));
-	goto label$2e2d2f5_2_489;
+	goto label$2e2d2f5_2_480;
 	label$2e2d2f5_2_95:
 	r8 = (String)s$before;
 	r18 = StringTools_startsWith(r3,r8);
@@ -405,11 +405,11 @@ void little_interpreter_memory_Operators_setPriority(little__interpreter__memory
 	label$2e2d2f5_2_253:
 	goto label$2e2d2f5_2_150;
 	label$2e2d2f5_2_254:
-	goto label$2e2d2f5_2_489;
+	goto label$2e2d2f5_2_480;
 	label$2e2d2f5_2_255:
 	r8 = (String)s$between;
 	r18 = StringTools_startsWith(r3,r8);
-	if( !r18 ) goto label$2e2d2f5_2_489;
+	if( !r18 ) goto label$2e2d2f5_2_480;
 	r8 = (String)s$between;
 	r5 = little_tools_TextTools_remove(r3,r8);
 	r5 = StringTools_trim(r5);
@@ -424,80 +424,71 @@ void little_interpreter_memory_Operators_setPriority(little__interpreter__memory
 	label$2e2d2f5_2_269:
 	if( r15 == NULL ) hl_null_access();
 	r20 = r15->length;
-	if( r11 >= r20 ) goto label$2e2d2f5_2_288;
+	if( r11 >= r20 ) goto label$2e2d2f5_2_285;
 	r20 = r15->length;
 	if( ((unsigned)r11) < ((unsigned)r20) ) goto label$2e2d2f5_2_277;
 	r8 = NULL;
-	goto label$2e2d2f5_2_283;
+	goto label$2e2d2f5_2_280;
 	label$2e2d2f5_2_277:
 	r13 = r15->array;
 	r9 = ((vdynamic**)(r13 + 1))[r11];
 	r8 = (String)r9;
-	r24 = (String)hl_dyn_castp(&r9,&t$_dyn,&t$String);
-	if( r8 == r24 || (r8 && r24 && String___compare(r8,(vdynamic*)r24) == 0) ) goto label$2e2d2f5_2_283;
-	hl_assert();
-	label$2e2d2f5_2_283:
+	label$2e2d2f5_2_280:
 	++r11;
 	if( r12 == NULL ) hl_null_access();
 	r24 = StringTools_trim(r8);
 	r19 = hl_types_ArrayObj_push(r12,((vdynamic*)r24));
 	goto label$2e2d2f5_2_269;
-	label$2e2d2f5_2_288:
+	label$2e2d2f5_2_285:
 	if( r12 == NULL ) hl_null_access();
 	r11 = 0;
 	r19 = r12->length;
-	if( ((unsigned)r11) < ((unsigned)r19) ) goto label$2e2d2f5_2_294;
+	if( ((unsigned)r11) < ((unsigned)r19) ) goto label$2e2d2f5_2_291;
 	r8 = NULL;
-	goto label$2e2d2f5_2_300;
-	label$2e2d2f5_2_294:
+	goto label$2e2d2f5_2_294;
+	label$2e2d2f5_2_291:
 	r13 = r12->array;
 	r9 = ((vdynamic**)(r13 + 1))[r11];
 	r8 = (String)r9;
-	r24 = (String)hl_dyn_castp(&r9,&t$_dyn,&t$String);
-	if( r8 == r24 || (r8 && r24 && String___compare(r8,(vdynamic*)r24) == 0) ) goto label$2e2d2f5_2_300;
-	hl_assert();
-	label$2e2d2f5_2_300:
+	label$2e2d2f5_2_294:
 	r16 = little_interpreter_memory_Operators_signPosToObject(r0,r8);
 	r11 = 1;
 	r19 = r12->length;
-	if( ((unsigned)r11) < ((unsigned)r19) ) goto label$2e2d2f5_2_306;
+	if( ((unsigned)r11) < ((unsigned)r19) ) goto label$2e2d2f5_2_300;
 	r8 = NULL;
-	goto label$2e2d2f5_2_312;
-	label$2e2d2f5_2_306:
+	goto label$2e2d2f5_2_303;
+	label$2e2d2f5_2_300:
 	r13 = r12->array;
 	r9 = ((vdynamic**)(r13 + 1))[r11];
 	r8 = (String)r9;
-	r24 = (String)hl_dyn_castp(&r9,&t$_dyn,&t$String);
-	if( r8 == r24 || (r8 && r24 && String___compare(r8,(vdynamic*)r24) == 0) ) goto label$2e2d2f5_2_312;
-	hl_assert();
-	label$2e2d2f5_2_312:
+	label$2e2d2f5_2_303:
 	r36 = little_interpreter_memory_Operators_signPosToObject(r0,r8);
 	r11 = -1;
 	r19 = -1;
 	r10 = r0->priority;
-	if( r10 ) goto label$2e2d2f5_2_319;
+	if( r10 ) goto label$2e2d2f5_2_310;
 	r28 = NULL;
-	goto label$2e2d2f5_2_323;
-	label$2e2d2f5_2_319:
+	goto label$2e2d2f5_2_314;
+	label$2e2d2f5_2_310:
 	r28 = r10->f$1;
-	if( r28 ) goto label$2e2d2f5_2_323;
+	if( r28 ) goto label$2e2d2f5_2_314;
 	r28 = hl_to_virtual(&t$vrt_e3ef9ba,(vdynamic*)r10);
 	r10->f$1 = r28;
-	label$2e2d2f5_2_323:
+	label$2e2d2f5_2_314:
 	r29 = r28;
 	if( r28 == NULL ) hl_null_access();
 	if( hl_vfields(r28)[0] ) r30 = ((vvirtual* (*)(vdynamic*))hl_vfields(r28)[0])(r28->value); else {
 		r30 = (vvirtual*)hl_dyn_call_obj(r28->value,&t$fun_eb2fdfb,117891838/*keys*/,NULL,NULL);
 	}
 	r17 = hl_to_virtual(&t$vrt_738d39e,(vdynamic*)r30);
-	label$2e2d2f5_2_327:
+	label$2e2d2f5_2_318:
 	if( r17 == NULL ) hl_null_access();
 	if( hl_vfields(r17)[0] ) r18 = ((bool (*)(vdynamic*))hl_vfields(r17)[0])(r17->value); else {
 		vdynamic ret;
 		hl_dyn_call_obj(r17->value,&t$fun_bf7849e,407283053/*hasNext*/,NULL,&ret);
 		r18 = (bool)ret.v.i;
 	}
-	if( !r18 ) goto label$2e2d2f5_2_407;
+	if( !r18 ) goto label$2e2d2f5_2_398;
 	if( hl_vfields(r17)[1] ) r20 = ((int (*)(vdynamic*))hl_vfields(r17)[1])(r17->value); else {
 		vdynamic ret;
 		hl_dyn_call_obj(r17->value,&t$fun_4dc72d5,151160317/*next*/,NULL,&ret);
@@ -519,95 +510,95 @@ void little_interpreter_memory_Operators_setPriority(little__interpreter__memory
 	r35 = hl_types_ArrayObj_alloc(r13);
 	r34 = 0;
 	r37 = r31;
-	label$2e2d2f5_2_344:
+	label$2e2d2f5_2_335:
 	if( r37 == NULL ) hl_null_access();
 	r39 = r37->length;
-	if( r34 >= r39 ) goto label$2e2d2f5_2_367;
+	if( r34 >= r39 ) goto label$2e2d2f5_2_358;
 	r39 = r37->length;
-	if( ((unsigned)r34) < ((unsigned)r39) ) goto label$2e2d2f5_2_352;
+	if( ((unsigned)r34) < ((unsigned)r39) ) goto label$2e2d2f5_2_343;
 	r41 = NULL;
-	goto label$2e2d2f5_2_355;
-	label$2e2d2f5_2_352:
+	goto label$2e2d2f5_2_346;
+	label$2e2d2f5_2_343:
 	r13 = r37->array;
 	r9 = ((vdynamic**)(r13 + 1))[r34];
 	r41 = hl_to_virtual(&t$vrt_5733b33,(vdynamic*)r9);
-	label$2e2d2f5_2_355:
+	label$2e2d2f5_2_346:
 	++r34;
 	if( r41 == NULL ) hl_null_access();
 	r6 = hl_vfields(r41)[0] ? (*(venum**)(hl_vfields(r41)[0])) : (venum*)hl_dyn_getp(r41->value,206802593/*side*/,&t$little_interpreter_memory_OperatorType);
 	if( r16 == NULL ) hl_null_access();
 	r27 = hl_vfields(r16)[0] ? (*(venum**)(hl_vfields(r16)[0])) : (venum*)hl_dyn_getp(r16->value,206802593/*side*/,&t$little_interpreter_memory_OperatorType);
-	if( r6 != r27 ) goto label$2e2d2f5_2_366;
+	if( r6 != r27 ) goto label$2e2d2f5_2_357;
 	r8 = hl_vfields(r41)[1] ? (*(String*)(hl_vfields(r41)[1])) : (String)hl_dyn_getp(r41->value,206803271/*sign*/,&t$String);
 	r24 = hl_vfields(r16)[1] ? (*(String*)(hl_vfields(r16)[1])) : (String)hl_dyn_getp(r16->value,206803271/*sign*/,&t$String);
-	if( r8 != r24 && (!r8 || !r24 || String___compare(r8,(vdynamic*)r24) != 0) ) goto label$2e2d2f5_2_366;
+	if( r8 != r24 && (!r8 || !r24 || String___compare(r8,(vdynamic*)r24) != 0) ) goto label$2e2d2f5_2_357;
 	if( r35 == NULL ) hl_null_access();
 	r38 = hl_types_ArrayObj_push(r35,((vdynamic*)r41));
-	label$2e2d2f5_2_366:
-	goto label$2e2d2f5_2_344;
-	label$2e2d2f5_2_367:
+	label$2e2d2f5_2_357:
+	goto label$2e2d2f5_2_335;
+	label$2e2d2f5_2_358:
 	if( r35 == NULL ) hl_null_access();
 	r34 = r35->length;
 	r38 = 0;
-	if( r38 >= r34 ) goto label$2e2d2f5_2_372;
+	if( r38 >= r34 ) goto label$2e2d2f5_2_363;
 	r11 = r33;
-	label$2e2d2f5_2_372:
+	label$2e2d2f5_2_363:
 	r14 = &t$vrt_5733b33;
 	r34 = 0;
 	r13 = hl_alloc_array(r14,r34);
 	r37 = hl_types_ArrayObj_alloc(r13);
 	r34 = 0;
 	r40 = r32;
-	label$2e2d2f5_2_378:
+	label$2e2d2f5_2_369:
 	if( r40 == NULL ) hl_null_access();
 	r39 = r40->length;
-	if( r34 >= r39 ) goto label$2e2d2f5_2_401;
+	if( r34 >= r39 ) goto label$2e2d2f5_2_392;
 	r39 = r40->length;
-	if( ((unsigned)r34) < ((unsigned)r39) ) goto label$2e2d2f5_2_386;
+	if( ((unsigned)r34) < ((unsigned)r39) ) goto label$2e2d2f5_2_377;
 	r41 = NULL;
-	goto label$2e2d2f5_2_389;
-	label$2e2d2f5_2_386:
+	goto label$2e2d2f5_2_380;
+	label$2e2d2f5_2_377:
 	r13 = r40->array;
 	r9 = ((vdynamic**)(r13 + 1))[r34];
 	r41 = hl_to_virtual(&t$vrt_5733b33,(vdynamic*)r9);
-	label$2e2d2f5_2_389:
+	label$2e2d2f5_2_380:
 	++r34;
 	if( r41 == NULL ) hl_null_access();
 	r6 = hl_vfields(r41)[0] ? (*(venum**)(hl_vfields(r41)[0])) : (venum*)hl_dyn_getp(r41->value,206802593/*side*/,&t$little_interpreter_memory_OperatorType);
 	if( r36 == NULL ) hl_null_access();
 	r27 = hl_vfields(r36)[0] ? (*(venum**)(hl_vfields(r36)[0])) : (venum*)hl_dyn_getp(r36->value,206802593/*side*/,&t$little_interpreter_memory_OperatorType);
-	if( r6 != r27 ) goto label$2e2d2f5_2_400;
+	if( r6 != r27 ) goto label$2e2d2f5_2_391;
 	r8 = hl_vfields(r41)[1] ? (*(String*)(hl_vfields(r41)[1])) : (String)hl_dyn_getp(r41->value,206803271/*sign*/,&t$String);
 	r24 = hl_vfields(r36)[1] ? (*(String*)(hl_vfields(r36)[1])) : (String)hl_dyn_getp(r36->value,206803271/*sign*/,&t$String);
-	if( r8 != r24 && (!r8 || !r24 || String___compare(r8,(vdynamic*)r24) != 0) ) goto label$2e2d2f5_2_400;
+	if( r8 != r24 && (!r8 || !r24 || String___compare(r8,(vdynamic*)r24) != 0) ) goto label$2e2d2f5_2_391;
 	if( r37 == NULL ) hl_null_access();
 	r38 = hl_types_ArrayObj_push(r37,((vdynamic*)r41));
-	label$2e2d2f5_2_400:
-	goto label$2e2d2f5_2_378;
-	label$2e2d2f5_2_401:
+	label$2e2d2f5_2_391:
+	goto label$2e2d2f5_2_369;
+	label$2e2d2f5_2_392:
 	if( r37 == NULL ) hl_null_access();
 	r34 = r37->length;
 	r38 = 0;
-	if( r38 >= r34 ) goto label$2e2d2f5_2_406;
+	if( r38 >= r34 ) goto label$2e2d2f5_2_397;
 	r19 = r33;
-	label$2e2d2f5_2_406:
-	goto label$2e2d2f5_2_327;
-	label$2e2d2f5_2_407:
+	label$2e2d2f5_2_397:
+	goto label$2e2d2f5_2_318;
+	label$2e2d2f5_2_398:
 	r21 = -1;
-	if( r11 == r21 ) goto label$2e2d2f5_2_489;
+	if( r11 == r21 ) goto label$2e2d2f5_2_480;
 	r21 = -1;
-	if( r19 == r21 ) goto label$2e2d2f5_2_489;
-	if( r11 == r19 ) goto label$2e2d2f5_2_489;
+	if( r19 == r21 ) goto label$2e2d2f5_2_480;
+	if( r11 == r19 ) goto label$2e2d2f5_2_480;
 	r20 = r11 - r19;
 	r42 = (double)r20;
 	r42 = hl_math_abs(r42);
 	r43 = 2.;
-	if( !(r43 >= r42) ) goto label$2e2d2f5_2_489;
+	if( !(r43 >= r42) ) goto label$2e2d2f5_2_480;
 	r20 = r11 - r19;
 	r42 = (double)r20;
 	r42 = hl_math_abs(r42);
 	r43 = 2.;
-	if( r42 != r43 ) goto label$2e2d2f5_2_444;
+	if( r42 != r43 ) goto label$2e2d2f5_2_435;
 	r20 = r11 + r19;
 	r21 = 2;
 	r20 = r21 == 0 ? 0 : r20 / r21;
@@ -615,7 +606,7 @@ void little_interpreter_memory_Operators_setPriority(little__interpreter__memory
 	if( r10 == NULL ) hl_null_access();
 	r9 = haxe_ds_IntMap_get(r10,r20);
 	r31 = (hl__types__ArrayObj)hl_dyn_castp(&r9,&t$_dyn,&t$hl_types_ArrayObj);
-	if( r31 ) goto label$2e2d2f5_2_437;
+	if( r31 ) goto label$2e2d2f5_2_428;
 	r14 = &t$vrt_5733b33;
 	r21 = 0;
 	r13 = hl_alloc_array(r14,r21);
@@ -623,15 +614,15 @@ void little_interpreter_memory_Operators_setPriority(little__interpreter__memory
 	r10 = r0->priority;
 	if( r10 == NULL ) hl_null_access();
 	haxe_ds_IntMap_set(r10,r20,((vdynamic*)r31));
-	label$2e2d2f5_2_437:
+	label$2e2d2f5_2_428:
 	r10 = r0->priority;
 	if( r10 == NULL ) hl_null_access();
 	r9 = haxe_ds_IntMap_get(r10,r20);
 	r31 = (hl__types__ArrayObj)hl_dyn_castp(&r9,&t$_dyn,&t$hl_types_ArrayObj);
 	if( r31 == NULL ) hl_null_access();
 	r21 = hl_types_ArrayObj_push(r31,((vdynamic*)r4));
-	goto label$2e2d2f5_2_489;
-	label$2e2d2f5_2_444:
+	goto label$2e2d2f5_2_480;
+	label$2e2d2f5_2_435:
 	r42 = (double)r11;
 	r43 = (double)r19;
 	r42 = Math_max(r42,r43);
@@ -639,29 +630,29 @@ void little_interpreter_memory_Operators_setPriority(little__interpreter__memory
 	r10 = (haxe__ds__IntMap)hl_alloc_obj(&t$haxe_ds_IntMap);
 	haxe_ds_IntMap_new(r10);
 	r44 = r0->priority;
-	if( r44 ) goto label$2e2d2f5_2_454;
+	if( r44 ) goto label$2e2d2f5_2_445;
 	r28 = NULL;
-	goto label$2e2d2f5_2_458;
-	label$2e2d2f5_2_454:
+	goto label$2e2d2f5_2_449;
+	label$2e2d2f5_2_445:
 	r28 = r44->f$1;
-	if( r28 ) goto label$2e2d2f5_2_458;
+	if( r28 ) goto label$2e2d2f5_2_449;
 	r28 = hl_to_virtual(&t$vrt_e3ef9ba,(vdynamic*)r44);
 	r44->f$1 = r28;
-	label$2e2d2f5_2_458:
+	label$2e2d2f5_2_449:
 	r29 = r28;
 	if( r28 == NULL ) hl_null_access();
 	if( hl_vfields(r28)[0] ) r30 = ((vvirtual* (*)(vdynamic*))hl_vfields(r28)[0])(r28->value); else {
 		r30 = (vvirtual*)hl_dyn_call_obj(r28->value,&t$fun_eb2fdfb,117891838/*keys*/,NULL,NULL);
 	}
 	r17 = hl_to_virtual(&t$vrt_738d39e,(vdynamic*)r30);
-	label$2e2d2f5_2_462:
+	label$2e2d2f5_2_453:
 	if( r17 == NULL ) hl_null_access();
 	if( hl_vfields(r17)[0] ) r18 = ((bool (*)(vdynamic*))hl_vfields(r17)[0])(r17->value); else {
 		vdynamic ret;
 		hl_dyn_call_obj(r17->value,&t$fun_bf7849e,407283053/*hasNext*/,NULL,&ret);
 		r18 = (bool)ret.v.i;
 	}
-	if( !r18 ) goto label$2e2d2f5_2_480;
+	if( !r18 ) goto label$2e2d2f5_2_471;
 	if( hl_vfields(r17)[1] ) r21 = ((int (*)(vdynamic*))hl_vfields(r17)[1])(r17->value); else {
 		vdynamic ret;
 		hl_dyn_call_obj(r17->value,&t$fun_4dc72d5,151160317/*next*/,NULL,&ret);
@@ -675,18 +666,18 @@ void little_interpreter_memory_Operators_setPriority(little__interpreter__memory
 		r9 = (vdynamic*)hl_dyn_call_obj(r29->value,&t$fun_555f5cd,5144726/*get*/,args,NULL);
 	}
 	r31 = (hl__types__ArrayObj)hl_dyn_castp(&r9,&t$_dyn,&t$hl_types_ArrayObj);
-	if( r21 >= r20 ) goto label$2e2d2f5_2_475;
+	if( r21 >= r20 ) goto label$2e2d2f5_2_466;
 	if( r10 == NULL ) hl_null_access();
 	haxe_ds_IntMap_set(r10,r21,((vdynamic*)r31));
-	goto label$2e2d2f5_2_479;
-	label$2e2d2f5_2_475:
+	goto label$2e2d2f5_2_470;
+	label$2e2d2f5_2_466:
 	if( r10 == NULL ) hl_null_access();
 	r39 = 1;
 	r38 = r21 + r39;
 	haxe_ds_IntMap_set(r10,r38,((vdynamic*)r31));
-	label$2e2d2f5_2_479:
-	goto label$2e2d2f5_2_462;
-	label$2e2d2f5_2_480:
+	label$2e2d2f5_2_470:
+	goto label$2e2d2f5_2_453;
+	label$2e2d2f5_2_471:
 	r14 = &t$vrt_5733b33;
 	r21 = 1;
 	r13 = hl_alloc_array(r14,r21);
@@ -696,7 +687,7 @@ void little_interpreter_memory_Operators_setPriority(little__interpreter__memory
 	if( r10 == NULL ) hl_null_access();
 	haxe_ds_IntMap_set(r10,r20,((vdynamic*)r31));
 	r0->priority = r10;
-	label$2e2d2f5_2_489:
+	label$2e2d2f5_2_480:
 	r11 = 0;
 	r46 = hl_alloc_bytes(r11);
 	r11 = 0;
@@ -705,14 +696,14 @@ void little_interpreter_memory_Operators_setPriority(little__interpreter__memory
 	r10 = r0->priority;
 	if( r10 == NULL ) hl_null_access();
 	r17 = haxe_ds_IntMap_keys(r10);
-	label$2e2d2f5_2_497:
+	label$2e2d2f5_2_488:
 	if( r17 == NULL ) hl_null_access();
 	if( hl_vfields(r17)[0] ) r18 = ((bool (*)(vdynamic*))hl_vfields(r17)[0])(r17->value); else {
 		vdynamic ret;
 		hl_dyn_call_obj(r17->value,&t$fun_bf7849e,407283053/*hasNext*/,NULL,&ret);
 		r18 = (bool)ret.v.i;
 	}
-	if( !r18 ) goto label$2e2d2f5_2_505;
+	if( !r18 ) goto label$2e2d2f5_2_496;
 	if( hl_vfields(r17)[1] ) r11 = ((int (*)(vdynamic*))hl_vfields(r17)[1])(r17->value); else {
 		vdynamic ret;
 		hl_dyn_call_obj(r17->value,&t$fun_4dc72d5,151160317/*next*/,NULL,&ret);
@@ -720,64 +711,64 @@ void little_interpreter_memory_Operators_setPriority(little__interpreter__memory
 	}
 	if( r45 == NULL ) hl_null_access();
 	r19 = hl_types_ArrayBytes_Int_push(r45,r11);
-	goto label$2e2d2f5_2_497;
-	label$2e2d2f5_2_505:
+	goto label$2e2d2f5_2_488;
+	label$2e2d2f5_2_496:
 	if( r45 == NULL ) hl_null_access();
 	r11 = r45->length;
 	r19 = 0;
-	if( r11 != r19 ) goto label$2e2d2f5_2_510;
+	if( r11 != r19 ) goto label$2e2d2f5_2_501;
 	return;
-	label$2e2d2f5_2_510:
+	label$2e2d2f5_2_501:
 	r47 = (hl__types__ArrayDyn)hl_dyn_castp(&r45,&t$hl_types_ArrayBytes_Int,&t$hl_types_ArrayDyn);
 	r48 = &cl$0;
-	if( r48 ) goto label$2e2d2f5_2_515;
+	if( r48 ) goto label$2e2d2f5_2_506;
 	r49 = NULL;
-	goto label$2e2d2f5_2_516;
-	label$2e2d2f5_2_515:
+	goto label$2e2d2f5_2_507;
+	label$2e2d2f5_2_506:
 	r49 = hl_alloc_closure_ptr(&t$fun_c7b734a,wrapt$fun_c7b734a,r48);
-	label$2e2d2f5_2_516:
+	label$2e2d2f5_2_507:
 	haxe_ds_ArraySort_sort(r47,r49);
 	r11 = 0;
 	r19 = r45->length;
-	if( ((unsigned)r11) < ((unsigned)r19) ) goto label$2e2d2f5_2_522;
+	if( ((unsigned)r11) < ((unsigned)r19) ) goto label$2e2d2f5_2_513;
 	r11 = 0;
-	goto label$2e2d2f5_2_526;
-	label$2e2d2f5_2_522:
+	goto label$2e2d2f5_2_517;
+	label$2e2d2f5_2_513:
 	r46 = r45->bytes;
 	r19 = 2;
 	r19 = r11 << r19;
 	r11 = *(int*)(r46 + r19);
-	label$2e2d2f5_2_526:
+	label$2e2d2f5_2_517:
 	r20 = 0;
-	if( r11 == r20 ) goto label$2e2d2f5_2_558;
+	if( r11 == r20 ) goto label$2e2d2f5_2_549;
 	r19 = 0;
 	r19 = r19 - r11;
 	r10 = (haxe__ds__IntMap)hl_alloc_obj(&t$haxe_ds_IntMap);
 	haxe_ds_IntMap_new(r10);
 	r44 = r0->priority;
-	if( r44 ) goto label$2e2d2f5_2_536;
+	if( r44 ) goto label$2e2d2f5_2_527;
 	r28 = NULL;
-	goto label$2e2d2f5_2_540;
-	label$2e2d2f5_2_536:
+	goto label$2e2d2f5_2_531;
+	label$2e2d2f5_2_527:
 	r28 = r44->f$1;
-	if( r28 ) goto label$2e2d2f5_2_540;
+	if( r28 ) goto label$2e2d2f5_2_531;
 	r28 = hl_to_virtual(&t$vrt_e3ef9ba,(vdynamic*)r44);
 	r44->f$1 = r28;
-	label$2e2d2f5_2_540:
+	label$2e2d2f5_2_531:
 	r29 = r28;
 	if( r28 == NULL ) hl_null_access();
 	if( hl_vfields(r28)[0] ) r30 = ((vvirtual* (*)(vdynamic*))hl_vfields(r28)[0])(r28->value); else {
 		r30 = (vvirtual*)hl_dyn_call_obj(r28->value,&t$fun_eb2fdfb,117891838/*keys*/,NULL,NULL);
 	}
 	r17 = hl_to_virtual(&t$vrt_738d39e,(vdynamic*)r30);
-	label$2e2d2f5_2_544:
+	label$2e2d2f5_2_535:
 	if( r17 == NULL ) hl_null_access();
 	if( hl_vfields(r17)[0] ) r18 = ((bool (*)(vdynamic*))hl_vfields(r17)[0])(r17->value); else {
 		vdynamic ret;
 		hl_dyn_call_obj(r17->value,&t$fun_bf7849e,407283053/*hasNext*/,NULL,&ret);
 		r18 = (bool)ret.v.i;
 	}
-	if( !r18 ) goto label$2e2d2f5_2_557;
+	if( !r18 ) goto label$2e2d2f5_2_548;
 	if( hl_vfields(r17)[1] ) r20 = ((int (*)(vdynamic*))hl_vfields(r17)[1])(r17->value); else {
 		vdynamic ret;
 		hl_dyn_call_obj(r17->value,&t$fun_4dc72d5,151160317/*next*/,NULL,&ret);
@@ -794,10 +785,10 @@ void little_interpreter_memory_Operators_setPriority(little__interpreter__memory
 	if( r10 == NULL ) hl_null_access();
 	r34 = r20 + r19;
 	haxe_ds_IntMap_set(r10,r34,((vdynamic*)r12));
-	goto label$2e2d2f5_2_544;
-	label$2e2d2f5_2_557:
+	goto label$2e2d2f5_2_535;
+	label$2e2d2f5_2_548:
 	r0->priority = r10;
-	label$2e2d2f5_2_558:
+	label$2e2d2f5_2_549:
 	return;
 }
 

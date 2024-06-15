@@ -7,9 +7,6 @@
 #include <little/parser/Parser.h>
 extern little__$Little g$_little_Little;
 vdynamic* vision_ds_Queue_enqueue(vision__ds__Queue,vdynamic*);
-extern hl_type t$String;
-extern hl_type t$_dyn;
-int String___compare(String,vdynamic*);
 extern little__tools__$PrepareRun g$_little_tools_PrepareRun;
 void little_tools_PrepareRun_addTypes(void);
 void little_tools_PrepareRun_addSigns(void);
@@ -33,15 +30,15 @@ extern hl_type t$vision_ds_Queue;
 void vision_ds_Queue_new(vision__ds__Queue);
 
 void little_Little_loadModule(String r0,String r1,bool* r2,bool* r3) {
-	String r10, r14;
-	hl__types__ArrayObj r18;
+	String r10;
+	hl__types__ArrayObj r17;
 	little__$Little r7;
-	venum *r17;
-	bool r4, r5, r8, r15;
-	little__tools__$PrepareRun r16;
+	venum *r16;
+	bool r4, r5, r8, r14;
+	little__tools__$PrepareRun r15;
 	little__interpreter__Runtime r6;
-	vclosure *r19;
-	little__parser__$Parser r20;
+	vclosure *r18;
+	little__parser__$Parser r19;
 	vdynamic *r12;
 	vision__ds__Queue r13;
 	int r9;
@@ -71,63 +68,59 @@ void little_Little_loadModule(String r0,String r1,bool* r2,bool* r3) {
 	r6 = r7->runtime;
 	if( r6 == NULL ) hl_null_access();
 	r6->module = r1;
-	if( !r5 ) goto label$c0fc762_1_32;
+	if( !r5 ) goto label$c0fc762_1_29;
 	r7 = (little__$Little)g$_little_Little;
 	r13 = r7->queue;
 	if( r13 == NULL ) hl_null_access();
 	r12 = vision_ds_Queue_enqueue(r13,((vdynamic*)r0));
 	r10 = (String)r12;
-	r14 = (String)hl_dyn_castp(&r12,&t$_dyn,&t$String);
-	if( r10 == r14 || (r10 && r14 && String___compare(r10,(vdynamic*)r14) == 0) ) goto label$c0fc762_1_31;
-	hl_assert();
-	label$c0fc762_1_31:
-	goto label$c0fc762_1_54;
-	label$c0fc762_1_32:
+	goto label$c0fc762_1_51;
+	label$c0fc762_1_29:
 	r7 = (little__$Little)g$_little_Little;
 	r8 = r7->debug;
 	r7 = (little__$Little)g$_little_Little;
 	r7->debug = r4;
-	r16 = (little__tools__$PrepareRun)g$_little_tools_PrepareRun;
-	r15 = r16->prepared;
-	if( r15 ) goto label$c0fc762_1_44;
+	r15 = (little__tools__$PrepareRun)g$_little_tools_PrepareRun;
+	r14 = r15->prepared;
+	if( r14 ) goto label$c0fc762_1_41;
 	little_tools_PrepareRun_addTypes();
 	little_tools_PrepareRun_addSigns();
 	little_tools_PrepareRun_addFunctions();
 	little_tools_PrepareRun_addConditions();
 	little_tools_PrepareRun_addProps();
-	label$c0fc762_1_44:
-	r20 = (little__parser__$Parser)g$_little_parser_Parser;
-	r19 = r20->parse;
-	if( r19 == NULL ) hl_null_access();
-	r18 = little_lexer_Lexer_lex(r0);
-	r18 = r19->hasValue ? ((hl__types__ArrayObj (*)(vdynamic*,hl__types__ArrayObj))r19->fun)((vdynamic*)r19->value,r18) : ((hl__types__ArrayObj (*)(hl__types__ArrayObj))r19->fun)(r18);
-	r18 = little_interpreter_Interpreter_convert(r18);
+	label$c0fc762_1_41:
+	r19 = (little__parser__$Parser)g$_little_parser_Parser;
+	r18 = r19->parse;
+	if( r18 == NULL ) hl_null_access();
+	r17 = little_lexer_Lexer_lex(r0);
+	r17 = r18->hasValue ? ((hl__types__ArrayObj (*)(vdynamic*,hl__types__ArrayObj))r18->fun)((vdynamic*)r18->value,r17) : ((hl__types__ArrayObj (*)(hl__types__ArrayObj))r18->fun)(r17);
+	r17 = little_interpreter_Interpreter_convert(r17);
 	r2 = NULL;
-	r17 = little_interpreter_Interpreter_run(r18,r2);
+	r16 = little_interpreter_Interpreter_run(r17,r2);
 	r7 = (little__$Little)g$_little_Little;
 	r7->debug = r8;
-	label$c0fc762_1_54:
+	label$c0fc762_1_51:
 	return;
 }
 
 void little_Little_run(String r0,vdynamic* r1) {
-	bool *r20;
-	String r9, r13;
-	hl__types__ArrayObj r17;
-	vvirtual *r14, *r15;
+	bool *r19;
+	String r9;
+	hl__types__ArrayObj r16;
+	vvirtual *r13, *r14;
 	little__$Little r5;
-	venum *r16;
+	venum *r15;
 	bool r4, r6;
 	little__tools__$PrepareRun r7;
 	little__interpreter__Runtime r8;
 	little__KeywordConfig r10;
-	vclosure *r18;
-	little__parser__$Parser r19;
+	vclosure *r17;
+	little__parser__$Parser r18;
 	vdynamic *r2;
 	vision__ds__Queue r12;
 	int r11;
 	hl_trap_ctx trap$0;
-	hl_trap(trap$0,r2,label$c0fc762_2_64);
+	hl_trap(trap$0,r2,label$c0fc762_2_61);
 	r5 = (little__$Little)g$_little_Little;
 	r4 = r5->debug;
 	if( !r1 ) goto label$c0fc762_2_7;
@@ -167,42 +160,38 @@ void little_Little_run(String r0,vdynamic* r1) {
 	if( r12 == NULL ) hl_null_access();
 	r2 = vision_ds_Queue_enqueue(r12,((vdynamic*)r0));
 	r9 = (String)r2;
-	r13 = (String)hl_dyn_castp(&r2,&t$_dyn,&t$String);
-	if( r9 == r13 || (r9 && r13 && String___compare(r9,(vdynamic*)r13) == 0) ) goto label$c0fc762_2_41;
-	hl_assert();
-	label$c0fc762_2_41:
 	r5 = (little__$Little)g$_little_Little;
 	r12 = r5->queue;
 	if( r12 == NULL ) hl_null_access();
-	r14 = vision_ds_Queue_iterator(r12);
-	r15 = hl_to_virtual(&t$vrt_0a81a53,(vdynamic*)r14);
-	label$c0fc762_2_46:
-	if( r15 == NULL ) hl_null_access();
-	if( hl_vfields(r15)[0] ) r6 = ((bool (*)(vdynamic*))hl_vfields(r15)[0])(r15->value); else {
+	r13 = vision_ds_Queue_iterator(r12);
+	r14 = hl_to_virtual(&t$vrt_0a81a53,(vdynamic*)r13);
+	label$c0fc762_2_43:
+	if( r14 == NULL ) hl_null_access();
+	if( hl_vfields(r14)[0] ) r6 = ((bool (*)(vdynamic*))hl_vfields(r14)[0])(r14->value); else {
 		vdynamic ret;
-		hl_dyn_call_obj(r15->value,&t$fun_bf7849e,407283053/*hasNext*/,NULL,&ret);
+		hl_dyn_call_obj(r14->value,&t$fun_bf7849e,407283053/*hasNext*/,NULL,&ret);
 		r6 = (bool)ret.v.i;
 	}
-	if( !r6 ) goto label$c0fc762_2_60;
-	if( hl_vfields(r15)[1] ) r9 = ((String (*)(vdynamic*))hl_vfields(r15)[1])(r15->value); else {
-		r9 = (String)hl_dyn_call_obj(r15->value,&t$fun_820f49a,151160317/*next*/,NULL,NULL);
+	if( !r6 ) goto label$c0fc762_2_57;
+	if( hl_vfields(r14)[1] ) r9 = ((String (*)(vdynamic*))hl_vfields(r14)[1])(r14->value); else {
+		r9 = (String)hl_dyn_call_obj(r14->value,&t$fun_820f49a,151160317/*next*/,NULL,NULL);
 	}
-	r19 = (little__parser__$Parser)g$_little_parser_Parser;
-	r18 = r19->parse;
-	if( r18 == NULL ) hl_null_access();
-	r17 = little_lexer_Lexer_lex(r9);
-	r17 = r18->hasValue ? ((hl__types__ArrayObj (*)(vdynamic*,hl__types__ArrayObj))r18->fun)((vdynamic*)r18->value,r17) : ((hl__types__ArrayObj (*)(hl__types__ArrayObj))r18->fun)(r17);
-	r17 = little_interpreter_Interpreter_convert(r17);
-	r20 = NULL;
-	r16 = little_interpreter_Interpreter_run(r17,r20);
-	goto label$c0fc762_2_46;
-	label$c0fc762_2_60:
-	if( !r1 ) goto label$c0fc762_2_63;
+	r18 = (little__parser__$Parser)g$_little_parser_Parser;
+	r17 = r18->parse;
+	if( r17 == NULL ) hl_null_access();
+	r16 = little_lexer_Lexer_lex(r9);
+	r16 = r17->hasValue ? ((hl__types__ArrayObj (*)(vdynamic*,hl__types__ArrayObj))r17->fun)((vdynamic*)r17->value,r16) : ((hl__types__ArrayObj (*)(hl__types__ArrayObj))r17->fun)(r16);
+	r16 = little_interpreter_Interpreter_convert(r16);
+	r19 = NULL;
+	r15 = little_interpreter_Interpreter_run(r16,r19);
+	goto label$c0fc762_2_43;
+	label$c0fc762_2_57:
+	if( !r1 ) goto label$c0fc762_2_60;
 	r5 = (little__$Little)g$_little_Little;
 	r5->debug = r4;
-	label$c0fc762_2_63:
+	label$c0fc762_2_60:
 	hl_endtrap(trap$0);
-	label$c0fc762_2_64:
+	label$c0fc762_2_61:
 	return;
 }
 

@@ -1,0 +1,10 @@
+--class-path src
+--main Main
+--library vision
+--library hash
+
+--cmd echo Compiling: JS
+--debug
+--js clients/web/interp.js
+
+--cmd echo Done.

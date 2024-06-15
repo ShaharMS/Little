@@ -64,6 +64,12 @@ class Little {
     /**
         Indicates the version of the Little compiler & Interpreter.
         First number is the major version, second is the minor version, third is the patch.
+
+        Additional letters mark the "type" of the compiler & Interpreter:
+
+        | Letter | Short For | Meaning |
+        |:---:|---|---|
+        | `f` | functional | Little, with support for functional programming patterns only. |
     **/
     public static var version:String = "1.0.0-f";
 
@@ -161,6 +167,11 @@ class Little {
         return Interpreter.convert(...Parser.parse(Lexer.lex(code)));
     }
 
+    /**
+    	Formats a string of code written in Little.
+    	@param code a string containing code written in Little.
+    	@return a string containing the formatted code
+    **/
     public static function format(code:String):String {
         return PrettyPrinter.stringifyParser(Parser.parse(Lexer.lex(code)));
     }

@@ -9,7 +9,6 @@ extern hl_type t$fun_7b48b4f;
 extern hl_type t$_f64;
 bool sys_thread_Lock_wait(sys__thread__Lock,vdynamic*);
 void hl_types_ArrayObj___expand(hl__types__ArrayObj,int);
-extern hl_type t$_dyn;
 double haxe_MainLoop_tick(void);
 bool haxe_MainLoop_hasEvents(void);
 double Math_max(double,double);
@@ -21,16 +20,16 @@ hl_mutex* sys_thread__Mutex_Mutex_Impl___new(void);
 extern sys__thread__$EventLoop g$_sys_thread_EventLoop;
 
 void sys_thread_EventLoop_loop(sys__thread__EventLoop r0) {
-	hl__types__ArrayObj r1, r6, r9, r18, r27, r28;
+	hl__types__ArrayObj r1, r6, r9, r18, r26, r27;
 	hl_type *r3;
-	bool r7, r34, r37;
-	sys__thread___EventLoop__RegularEvent r15, r16, r21;
+	bool r7, r32, r35;
+	sys__thread___EventLoop__RegularEvent r15, r16;
 	sys__thread__Lock r12;
 	hl_mutex *r11;
-	vclosure *r26, *r29, *r30;
-	double r8, r10, r13, r17, r35, r36;
-	vdynamic *r14, *r25;
-	int r4, r19, r20, r22, r23, r24, r31, r32, r33;
+	vclosure *r25, *r28;
+	double r8, r10, r13, r17, r33, r34;
+	vdynamic *r14, *r24;
+	int r4, r19, r20, r21, r22, r23, r29, r30, r31;
 	varray *r2;
 	r3 = &t$sys_thread__EventLoop_RegularEvent;
 	r4 = 0;
@@ -42,7 +41,7 @@ void sys_thread_EventLoop_loop(sys__thread__EventLoop r0) {
 	r6 = hl_types_ArrayObj_alloc(r2);
 	label$93e7ec3_1_8:
 	r7 = true;
-	if( !r7 ) goto label$93e7ec3_1_210;
+	if( !r7 ) goto label$93e7ec3_1_198;
 	r8 = hl_sys_time();
 	r9 = r1;
 	r4 = 0;
@@ -99,183 +98,171 @@ void sys_thread_EventLoop_loop(sys__thread__EventLoop r0) {
 	r19 = 0;
 	r20 = r4;
 	label$93e7ec3_1_59:
-	if( r19 >= r20 ) goto label$93e7ec3_1_98;
-	r22 = r19;
+	if( r19 >= r20 ) goto label$93e7ec3_1_92;
+	r21 = r19;
 	++r19;
 	if( r9 == NULL ) hl_null_access();
-	r24 = r9->length;
-	if( ((unsigned)r22) < ((unsigned)r24) ) goto label$93e7ec3_1_68;
+	r23 = r9->length;
+	if( ((unsigned)r21) < ((unsigned)r23) ) goto label$93e7ec3_1_68;
 	r16 = NULL;
-	goto label$93e7ec3_1_74;
+	goto label$93e7ec3_1_71;
 	label$93e7ec3_1_68:
 	r2 = r9->array;
-	r25 = ((vdynamic**)(r2 + 1))[r22];
-	r16 = (sys__thread___EventLoop__RegularEvent)r25;
-	r21 = (sys__thread___EventLoop__RegularEvent)hl_dyn_castp(&r25,&t$_dyn,&t$sys_thread__EventLoop_RegularEvent);
-	if( r16 == r21 ) goto label$93e7ec3_1_74;
-	hl_assert();
-	label$93e7ec3_1_74:
+	r24 = ((vdynamic**)(r2 + 1))[r21];
+	r16 = (sys__thread___EventLoop__RegularEvent)r24;
+	label$93e7ec3_1_71:
 	if( r16 == NULL ) hl_null_access();
 	r7 = r16->cancelled;
-	if( r7 ) goto label$93e7ec3_1_91;
-	r24 = r9->length;
-	if( ((unsigned)r22) < ((unsigned)r24) ) goto label$93e7ec3_1_81;
+	if( r7 ) goto label$93e7ec3_1_85;
+	r23 = r9->length;
+	if( ((unsigned)r21) < ((unsigned)r23) ) goto label$93e7ec3_1_78;
 	r16 = NULL;
-	goto label$93e7ec3_1_87;
+	goto label$93e7ec3_1_81;
+	label$93e7ec3_1_78:
+	r2 = r9->array;
+	r24 = ((vdynamic**)(r2 + 1))[r21];
+	r16 = (sys__thread___EventLoop__RegularEvent)r24;
 	label$93e7ec3_1_81:
-	r2 = r9->array;
-	r25 = ((vdynamic**)(r2 + 1))[r22];
-	r16 = (sys__thread___EventLoop__RegularEvent)r25;
-	r21 = (sys__thread___EventLoop__RegularEvent)hl_dyn_castp(&r25,&t$_dyn,&t$sys_thread__EventLoop_RegularEvent);
-	if( r16 == r21 ) goto label$93e7ec3_1_87;
-	hl_assert();
-	label$93e7ec3_1_87:
 	if( r16 == NULL ) hl_null_access();
-	r26 = r16->run;
-	if( r26 == NULL ) hl_null_access();
-	r26->hasValue ? ((void (*)(vdynamic*))r26->fun)((vdynamic*)r26->value) : ((void (*)(void))r26->fun)();
-	label$93e7ec3_1_91:
+	r25 = r16->run;
+	if( r25 == NULL ) hl_null_access();
+	r25->hasValue ? ((void (*)(vdynamic*))r25->fun)((vdynamic*)r25->value) : ((void (*)(void))r25->fun)();
+	label$93e7ec3_1_85:
 	r16 = NULL;
-	r24 = r9->length;
-	if( ((unsigned)r22) < ((unsigned)r24) ) goto label$93e7ec3_1_95;
-	hl_types_ArrayObj___expand(r9,r22);
-	label$93e7ec3_1_95:
+	r23 = r9->length;
+	if( ((unsigned)r21) < ((unsigned)r23) ) goto label$93e7ec3_1_89;
+	hl_types_ArrayObj___expand(r9,r21);
+	label$93e7ec3_1_89:
 	r2 = r9->array;
-	((sys__thread___EventLoop__RegularEvent*)(r2 + 1))[r22] = r16;
+	((sys__thread___EventLoop__RegularEvent*)(r2 + 1))[r21] = r16;
 	goto label$93e7ec3_1_59;
-	label$93e7ec3_1_98:
-	r22 = 0;
-	r4 = r22;
+	label$93e7ec3_1_92:
+	r21 = 0;
+	r4 = r21;
 	r18 = r6;
 	r11 = r0->mutex;
 	hl_mutex_acquire(r11);
-	r22 = 0;
-	r27 = r0->oneTimeEvents;
-	label$93e7ec3_1_105:
-	if( r27 == NULL ) hl_null_access();
-	r24 = r27->length;
-	if( r22 >= r24 ) goto label$93e7ec3_1_140;
-	r24 = r27->length;
-	if( ((unsigned)r22) < ((unsigned)r24) ) goto label$93e7ec3_1_113;
-	r26 = NULL;
-	goto label$93e7ec3_1_119;
-	label$93e7ec3_1_113:
-	r2 = r27->array;
-	r25 = ((vdynamic**)(r2 + 1))[r22];
-	r26 = (vclosure*)r25;
-	r29 = (vclosure*)hl_dyn_castp(&r25,&t$_dyn,&t$fun_7b48b4f);
-	{ int i = hl_dyn_compare((vdynamic*)r26,(vdynamic*)r29); if( i == 0 ) goto label$93e7ec3_1_119; };
-	hl_assert();
-	label$93e7ec3_1_119:
-	r23 = r22;
-	++r22;
-	if( r26 ) goto label$93e7ec3_1_123;
-	goto label$93e7ec3_1_140;
-	label$93e7ec3_1_123:
+	r21 = 0;
+	r26 = r0->oneTimeEvents;
+	label$93e7ec3_1_99:
+	if( r26 == NULL ) hl_null_access();
+	r23 = r26->length;
+	if( r21 >= r23 ) goto label$93e7ec3_1_131;
+	r23 = r26->length;
+	if( ((unsigned)r21) < ((unsigned)r23) ) goto label$93e7ec3_1_107;
+	r25 = NULL;
+	goto label$93e7ec3_1_110;
+	label$93e7ec3_1_107:
+	r2 = r26->array;
+	r24 = ((vdynamic**)(r2 + 1))[r21];
+	r25 = (vclosure*)r24;
+	label$93e7ec3_1_110:
+	r22 = r21;
+	++r21;
+	if( r25 ) goto label$93e7ec3_1_114;
+	goto label$93e7ec3_1_131;
+	label$93e7ec3_1_114:
 	if( r18 == NULL ) hl_null_access();
-	r31 = r4;
+	r29 = r4;
 	++r4;
-	r32 = r18->length;
-	if( ((unsigned)r31) < ((unsigned)r32) ) goto label$93e7ec3_1_129;
-	hl_types_ArrayObj___expand(r18,r31);
-	label$93e7ec3_1_129:
+	r30 = r18->length;
+	if( ((unsigned)r29) < ((unsigned)r30) ) goto label$93e7ec3_1_120;
+	hl_types_ArrayObj___expand(r18,r29);
+	label$93e7ec3_1_120:
 	r2 = r18->array;
-	((vclosure**)(r2 + 1))[r31] = r26;
-	r28 = r0->oneTimeEvents;
-	if( r28 == NULL ) hl_null_access();
-	r30 = NULL;
-	r32 = r28->length;
-	if( ((unsigned)r23) < ((unsigned)r32) ) goto label$93e7ec3_1_137;
-	hl_types_ArrayObj___expand(r28,r23);
-	label$93e7ec3_1_137:
-	r2 = r28->array;
-	((vclosure**)(r2 + 1))[r23] = r30;
-	goto label$93e7ec3_1_105;
-	label$93e7ec3_1_140:
+	((vclosure**)(r2 + 1))[r29] = r25;
+	r27 = r0->oneTimeEvents;
+	if( r27 == NULL ) hl_null_access();
+	r28 = NULL;
+	r30 = r27->length;
+	if( ((unsigned)r22) < ((unsigned)r30) ) goto label$93e7ec3_1_128;
+	hl_types_ArrayObj___expand(r27,r22);
+	label$93e7ec3_1_128:
+	r2 = r27->array;
+	((vclosure**)(r2 + 1))[r22] = r28;
+	goto label$93e7ec3_1_99;
+	label$93e7ec3_1_131:
+	r22 = 0;
+	r0->oneTimeEventsIdx = r22;
+	r22 = r0->promisedEventsCount;
 	r23 = 0;
-	r0->oneTimeEventsIdx = r23;
-	r23 = r0->promisedEventsCount;
-	r24 = 0;
-	if( r23 > r24 ) goto label$93e7ec3_1_147;
+	if( r22 > r23 ) goto label$93e7ec3_1_138;
 	r7 = false;
-	goto label$93e7ec3_1_148;
-	label$93e7ec3_1_147:
+	goto label$93e7ec3_1_139;
+	label$93e7ec3_1_138:
 	r7 = true;
-	label$93e7ec3_1_148:
+	label$93e7ec3_1_139:
 	r11 = r0->mutex;
 	hl_mutex_release(r11);
-	r23 = 0;
-	r24 = r4;
-	label$93e7ec3_1_152:
-	if( r23 >= r24 ) goto label$93e7ec3_1_176;
-	r31 = r23;
-	++r23;
+	r22 = 0;
+	r23 = r4;
+	label$93e7ec3_1_143:
+	if( r22 >= r23 ) goto label$93e7ec3_1_164;
+	r29 = r22;
+	++r22;
 	if( r18 == NULL ) hl_null_access();
-	r33 = r18->length;
-	if( ((unsigned)r31) < ((unsigned)r33) ) goto label$93e7ec3_1_161;
-	r26 = NULL;
-	goto label$93e7ec3_1_167;
+	r31 = r18->length;
+	if( ((unsigned)r29) < ((unsigned)r31) ) goto label$93e7ec3_1_152;
+	r25 = NULL;
+	goto label$93e7ec3_1_155;
+	label$93e7ec3_1_152:
+	r2 = r18->array;
+	r24 = ((vdynamic**)(r2 + 1))[r29];
+	r25 = (vclosure*)r24;
+	label$93e7ec3_1_155:
+	if( r25 == NULL ) hl_null_access();
+	r25->hasValue ? ((void (*)(vdynamic*))r25->fun)((vdynamic*)r25->value) : ((void (*)(void))r25->fun)();
+	r25 = NULL;
+	r31 = r18->length;
+	if( ((unsigned)r29) < ((unsigned)r31) ) goto label$93e7ec3_1_161;
+	hl_types_ArrayObj___expand(r18,r29);
 	label$93e7ec3_1_161:
 	r2 = r18->array;
-	r25 = ((vdynamic**)(r2 + 1))[r31];
-	r26 = (vclosure*)r25;
-	r29 = (vclosure*)hl_dyn_castp(&r25,&t$_dyn,&t$fun_7b48b4f);
-	{ int i = hl_dyn_compare((vdynamic*)r26,(vdynamic*)r29); if( i == 0 ) goto label$93e7ec3_1_167; };
-	hl_assert();
-	label$93e7ec3_1_167:
-	if( r26 == NULL ) hl_null_access();
-	r26->hasValue ? ((void (*)(vdynamic*))r26->fun)((vdynamic*)r26->value) : ((void (*)(void))r26->fun)();
-	r26 = NULL;
-	r33 = r18->length;
-	if( ((unsigned)r31) < ((unsigned)r33) ) goto label$93e7ec3_1_173;
-	hl_types_ArrayObj___expand(r18,r31);
-	label$93e7ec3_1_173:
-	r2 = r18->array;
-	((vclosure**)(r2 + 1))[r31] = r26;
-	goto label$93e7ec3_1_152;
-	label$93e7ec3_1_176:
-	r34 = r0->isMainThread;
-	if( !r34 ) goto label$93e7ec3_1_184;
+	((vclosure**)(r2 + 1))[r29] = r25;
+	goto label$93e7ec3_1_143;
+	label$93e7ec3_1_164:
+	r32 = r0->isMainThread;
+	if( !r32 ) goto label$93e7ec3_1_172;
 	r13 = haxe_MainLoop_tick();
-	r34 = haxe_MainLoop_hasEvents();
-	if( !r34 ) goto label$93e7ec3_1_184;
+	r32 = haxe_MainLoop_hasEvents();
+	if( !r32 ) goto label$93e7ec3_1_172;
 	++r4;
-	if( !(r13 < r10) ) goto label$93e7ec3_1_184;
+	if( !(r13 < r10) ) goto label$93e7ec3_1_172;
 	r10 = r13;
-	label$93e7ec3_1_184:
-	r32 = 0;
-	if( r32 >= r4 ) goto label$93e7ec3_1_188;
+	label$93e7ec3_1_172:
+	r30 = 0;
+	if( r30 >= r4 ) goto label$93e7ec3_1_176;
 	r13 = -2.;
 	r10 = r13;
-	label$93e7ec3_1_188:
-	r35 = -2.;
-	if( r35 == r10 ) goto label$93e7ec3_1_201;
-	r35 = -1.;
-	if( r35 == r10 ) goto label$93e7ec3_1_202;
-	r36 = hl_sys_time();
-	r35 = r10 - r36;
+	label$93e7ec3_1_176:
+	r33 = -2.;
+	if( r33 == r10 ) goto label$93e7ec3_1_189;
+	r33 = -1.;
+	if( r33 == r10 ) goto label$93e7ec3_1_190;
+	r34 = hl_sys_time();
+	r33 = r10 - r34;
 	r12 = r0->waitLock;
 	if( r12 == NULL ) hl_null_access();
-	r36 = 0.;
-	r36 = Math_max(r36,r35);
+	r34 = 0.;
+	r34 = Math_max(r34,r33);
 	r14 = hl_alloc_dynamic(&t$_f64);
-	r14->v.d = r36;
-	r37 = sys_thread_Lock_wait(r12,r14);
-	goto label$93e7ec3_1_209;
-	label$93e7ec3_1_201:
-	goto label$93e7ec3_1_209;
-	label$93e7ec3_1_202:
-	if( !r7 ) goto label$93e7ec3_1_208;
+	r14->v.d = r34;
+	r35 = sys_thread_Lock_wait(r12,r14);
+	goto label$93e7ec3_1_197;
+	label$93e7ec3_1_189:
+	goto label$93e7ec3_1_197;
+	label$93e7ec3_1_190:
+	if( !r7 ) goto label$93e7ec3_1_196;
 	r12 = r0->waitLock;
 	if( r12 == NULL ) hl_null_access();
 	r14 = NULL;
-	r37 = sys_thread_Lock_wait(r12,r14);
-	goto label$93e7ec3_1_209;
-	label$93e7ec3_1_208:
-	goto label$93e7ec3_1_210;
-	label$93e7ec3_1_209:
+	r35 = sys_thread_Lock_wait(r12,r14);
+	goto label$93e7ec3_1_197;
+	label$93e7ec3_1_196:
+	goto label$93e7ec3_1_198;
+	label$93e7ec3_1_197:
 	goto label$93e7ec3_1_8;
-	label$93e7ec3_1_210:
+	label$93e7ec3_1_198:
 	return;
 }
 

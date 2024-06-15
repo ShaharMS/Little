@@ -42,21 +42,21 @@ void *hlc_static_call( void *fun, hl_type *t, void **args, vdynamic *out ) {
 		case 43:
 			out->v.d = ((double (*)(vdynamic*))fun)((vdynamic*)args[0]);
 			return &out->v.d;
-		case 41:
-			out->v.i = ((int (*)(vdynamic*))fun)((vdynamic*)args[0]);
-			return &out->v.i;
 		case 8:
 			((void (*)(int))fun)(*(int*)args[0]);
 			return NULL;
+		case 41:
+			out->v.i = ((int (*)(vdynamic*))fun)((vdynamic*)args[0]);
+			return &out->v.i;
 		case 45:
 			return ((vdynamic* (*)(vdynamic*))fun)((vdynamic*)args[0]);
 		case 29:
 			return ((vdynamic* (*)(double))fun)(*(double*)args[0]);
-		case 13:
-			return ((vdynamic* (*)(int))fun)(*(int*)args[0]);
 		case 40:
 			((void (*)(vdynamic*))fun)((vdynamic*)args[0]);
 			return NULL;
+		case 13:
+			return ((vdynamic* (*)(int))fun)(*(int*)args[0]);
 		case 9:
 			out->v.i = ((int (*)(int))fun)(*(int*)args[0]);
 			return &out->v.i;
@@ -341,15 +341,15 @@ static double wrap_p_d(void *value,vdynamic* p0) {
 	hl_wrapper_call(value,args,&ret);
 	return ret.v.d;
 }
+static void wrap_i_v(void *value,int p0) {
+	void *args[] = {&p0};
+	hl_wrapper_call(value,args,NULL);
+}
 static int wrap_p_i(void *value,vdynamic* p0) {
 	void *args[] = {p0};
 	vdynamic ret;
 	hl_wrapper_call(value,args,&ret);
 	return ret.v.i;
-}
-static void wrap_i_v(void *value,int p0) {
-	void *args[] = {&p0};
-	hl_wrapper_call(value,args,NULL);
 }
 static vdynamic* wrap_p_p(void *value,vdynamic* p0) {
 	void *args[] = {p0};
@@ -359,13 +359,13 @@ static vdynamic* wrap_d_p(void *value,double p0) {
 	void *args[] = {&p0};
 	return hl_wrapper_call(value,args,NULL);
 }
-static vdynamic* wrap_i_p(void *value,int p0) {
-	void *args[] = {&p0};
-	return hl_wrapper_call(value,args,NULL);
-}
 static void wrap_p_v(void *value,vdynamic* p0) {
 	void *args[] = {p0};
 	hl_wrapper_call(value,args,NULL);
+}
+static vdynamic* wrap_i_p(void *value,int p0) {
+	void *args[] = {&p0};
+	return hl_wrapper_call(value,args,NULL);
 }
 static int wrap_i_i(void *value,int p0) {
 	void *args[] = {&p0};
@@ -697,12 +697,12 @@ void *hlc_get_wrapper( hl_type *t ) {
 		case 27: return wrap_d_d;
 		case 11: return wrap_i_d;
 		case 43: return wrap_p_d;
-		case 41: return wrap_p_i;
 		case 8: return wrap_i_v;
+		case 41: return wrap_p_i;
 		case 45: return wrap_p_p;
 		case 29: return wrap_d_p;
-		case 13: return wrap_i_p;
 		case 40: return wrap_p_v;
+		case 13: return wrap_i_p;
 		case 9: return wrap_i_i;
 		}
 		break;
