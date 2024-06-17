@@ -26,6 +26,18 @@ class KeywordConfig {
 	public static var recognizedOperators:Array<String> = ["!", "#", "$", "%", "&", "'", "(", ")", "*", "+", "-", ".", "/", ":", "<", "=", ">", "?", "@", "[", "\\", "]", "^", "_", "`", "{", "|", "}", "~", "^", "√"];
 
 	/**
+		For formatting purposes - some operators make more sense when they are prefixed with a white space.
+		Everything here should already exist in the `recognizedOperators` field.
+	**/
+	public static var whiteSpacePrefixedOperators:Array<String> = ["%", "&", "&&", "*", "+", "-", "/", "<", "<=", "==", ">", ">=", "||", "|"];
+
+	/**
+		For formatting purposes - some operators make more sense when they are suffixed with a white space.
+		Everything here should already exist in the `recognizedOperators` field.
+	**/
+	public static var whiteSpaceSuffixedOperators:Array<String> = ["!", "&", "&&", "||", "|", "*", "+", "-", "/", "<", "<=", "==", ">", ">="];
+
+	/**
 		Creates a new keyword config, using an existing config, made using the anonymous structure syntax.
 
 		@param config The config to use. Not all fields have to be referenced - those that aren't referenced are set 

@@ -161,12 +161,12 @@ HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_564_addConditions,"little.tools.Pr
 HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_577_addConditions,"little.tools.PrepareRun","addConditions",0x2a20655a,"little.tools.PrepareRun.addConditions","little/tools/PrepareRun.hx",577,0x70b2680d)
 HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_703_addConditions,"little.tools.PrepareRun","addConditions",0x2a20655a,"little.tools.PrepareRun.addConditions","little/tools/PrepareRun.hx",703,0x70b2680d)
 HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_685_addConditions,"little.tools.PrepareRun","addConditions",0x2a20655a,"little.tools.PrepareRun.addConditions","little/tools/PrepareRun.hx",685,0x70b2680d)
-static const ::String _hx_array_data_c62cc60f_90[] = {
+static const ::String _hx_array_data_c62cc60f_88[] = {
 	HX_("",00,00,00,00),
 };
 HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_732_addConditions,"little.tools.PrepareRun","addConditions",0x2a20655a,"little.tools.PrepareRun.addConditions","little/tools/PrepareRun.hx",732,0x70b2680d)
 HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_716_addConditions,"little.tools.PrepareRun","addConditions",0x2a20655a,"little.tools.PrepareRun.addConditions","little/tools/PrepareRun.hx",716,0x70b2680d)
-static const ::String _hx_array_data_c62cc60f_93[] = {
+static const ::String _hx_array_data_c62cc60f_91[] = {
 	HX_("",00,00,00,00),
 };
 HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_539_addConditions,"little.tools.PrepareRun","addConditions",0x2a20655a,"little.tools.PrepareRun.addConditions","little/tools/PrepareRun.hx",539,0x70b2680d)
@@ -1661,7 +1661,7 @@ HXLINE( 707)					::little::Little_obj::runtime->onWriteValue->remove(listener->_
 
             			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_685_addConditions)
 HXLINE( 686)			 ::little::interpreter::InterpTokens val = ::little::interpreter::InterpTokens_obj::NullValue_dyn();
-HXLINE( 687)			::Array< ::String > ident = ::Array_obj< ::String >::fromData( _hx_array_data_c62cc60f_90,1);
+HXLINE( 687)			::Array< ::String > ident = ::Array_obj< ::String >::fromData( _hx_array_data_c62cc60f_88,1);
 HXLINE( 688)			::Array< ::Dynamic> _this = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::BLOCK_dyn())->copy();
 HXDLIN( 688)			::Array< ::String > result = ::Array_obj< ::String >::__new(_this->length);
 HXDLIN( 688)			{
@@ -1699,35 +1699,12 @@ HXDLIN( 693)							result1->__unsafe_set(i1,inValue1);
             					}
             				}
 HXDLIN( 693)				if (result1->contains(::Type_obj::enumConstructor(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >()).toLowerCase())) {
-HXLINE( 694)					::Array< ::String > ident1 = ident;
-HXDLIN( 694)					 ::little::interpreter::InterpTokens token = params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 694)					::String _hx_tmp1;
-HXDLIN( 694)					::Array< ::Dynamic> _this2 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::IDENTIFIER_dyn())->copy();
-HXDLIN( 694)					::Array< ::String > result2 = ::Array_obj< ::String >::__new(_this2->length);
-HXDLIN( 694)					{
-HXLINE( 694)						int _g4 = 0;
-HXDLIN( 694)						int _g5 = _this2->length;
-HXDLIN( 694)						while((_g4 < _g5)){
-HXLINE( 694)							_g4 = (_g4 + 1);
-HXDLIN( 694)							int i2 = (_g4 - 1);
-HXDLIN( 694)							{
-HXLINE( 694)								::String inValue2 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this2,i2)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 694)								result2->__unsafe_set(i2,inValue2);
-            							}
-            						}
-            					}
-HXDLIN( 694)					if (result2->contains(::Type_obj::enumConstructor(token).toLowerCase())) {
-HXLINE( 694)						_hx_tmp1 = ( (::String)(::Type_obj::enumParameters(token)->__get(0)) );
-            					}
-            					else {
-HXLINE( 694)						_hx_tmp1 = ( (::String)(::Type_obj::enumParameters(::little::interpreter::Interpreter_obj::run(::Array_obj< ::Dynamic>::__new(1)->init(0,token),null()))->__get(0)) );
-            					}
-HXDLIN( 694)					ident1[0] = _hx_tmp1;
+HXLINE( 694)					ident[0] = ::little::tools::Extensions_obj::extractIdentifier(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >());
             				}
             				else {
-HXLINE( 696)					 ::little::interpreter::Runtime _hx_tmp2 = ::little::Little_obj::runtime;
-HXDLIN( 696)					::String _hx_tmp3 = ((HX_("`",60,00,00,00) + ::little::Little_obj::keywords->CONDITION__AFTER) + HX_("` condition must start with a variable to watch (expected definition, found: `",5a,6a,88,2d));
-HXDLIN( 696)					_hx_tmp2->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((_hx_tmp3 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())) + HX_("`)",c9,53,00,00))),null());
+HXLINE( 696)					 ::little::interpreter::Runtime _hx_tmp1 = ::little::Little_obj::runtime;
+HXDLIN( 696)					::String _hx_tmp2 = ((HX_("`",60,00,00,00) + ::little::Little_obj::keywords->CONDITION__AFTER) + HX_("` condition must start with a variable to watch (expected definition, found: `",5a,6a,88,2d));
+HXDLIN( 696)					_hx_tmp1->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((_hx_tmp2 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())) + HX_("`)",c9,53,00,00))),null());
 HXLINE( 697)					return val;
             				}
             			}
@@ -1759,7 +1736,7 @@ HXLINE( 735)					::little::interpreter::Interpreter_obj::run(body,null());
 
             			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_716_addConditions)
 HXLINE( 717)			 ::little::interpreter::InterpTokens val = ::little::interpreter::InterpTokens_obj::NullValue_dyn();
-HXLINE( 718)			::Array< ::String > ident = ::Array_obj< ::String >::fromData( _hx_array_data_c62cc60f_93,1);
+HXLINE( 718)			::Array< ::String > ident = ::Array_obj< ::String >::fromData( _hx_array_data_c62cc60f_91,1);
 HXLINE( 719)			::Array< ::Dynamic> _this = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::BLOCK_dyn())->copy();
 HXDLIN( 719)			::Array< ::String > result = ::Array_obj< ::String >::__new(_this->length);
 HXDLIN( 719)			{
@@ -1796,35 +1773,12 @@ HXDLIN( 723)							result1->__unsafe_set(i1,inValue1);
             					}
             				}
 HXDLIN( 723)				if (result1->contains(::Type_obj::enumConstructor(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >()).toLowerCase())) {
-HXLINE( 724)					::Array< ::String > ident1 = ident;
-HXDLIN( 724)					 ::little::interpreter::InterpTokens token = params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 724)					::String _hx_tmp1;
-HXDLIN( 724)					::Array< ::Dynamic> _this2 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::IDENTIFIER_dyn())->copy();
-HXDLIN( 724)					::Array< ::String > result2 = ::Array_obj< ::String >::__new(_this2->length);
-HXDLIN( 724)					{
-HXLINE( 724)						int _g4 = 0;
-HXDLIN( 724)						int _g5 = _this2->length;
-HXDLIN( 724)						while((_g4 < _g5)){
-HXLINE( 724)							_g4 = (_g4 + 1);
-HXDLIN( 724)							int i2 = (_g4 - 1);
-HXDLIN( 724)							{
-HXLINE( 724)								::String inValue2 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this2,i2)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 724)								result2->__unsafe_set(i2,inValue2);
-            							}
-            						}
-            					}
-HXDLIN( 724)					if (result2->contains(::Type_obj::enumConstructor(token).toLowerCase())) {
-HXLINE( 724)						_hx_tmp1 = ( (::String)(::Type_obj::enumParameters(token)->__get(0)) );
-            					}
-            					else {
-HXLINE( 724)						_hx_tmp1 = ( (::String)(::Type_obj::enumParameters(::little::interpreter::Interpreter_obj::run(::Array_obj< ::Dynamic>::__new(1)->init(0,token),null()))->__get(0)) );
-            					}
-HXDLIN( 724)					ident1[0] = _hx_tmp1;
+HXLINE( 724)					ident[0] = ::little::tools::Extensions_obj::extractIdentifier(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >());
             				}
             				else {
-HXLINE( 726)					 ::little::interpreter::Runtime _hx_tmp2 = ::little::Little_obj::runtime;
-HXDLIN( 726)					::String _hx_tmp3 = ((HX_("`",60,00,00,00) + ::little::Little_obj::keywords->CONDITION__WHENEVER) + HX_("` condition must start with a variable to watch (expected definition, found: `",5a,6a,88,2d));
-HXDLIN( 726)					_hx_tmp2->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((_hx_tmp3 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())) + HX_("`)",c9,53,00,00))),null());
+HXLINE( 726)					 ::little::interpreter::Runtime _hx_tmp1 = ::little::Little_obj::runtime;
+HXDLIN( 726)					::String _hx_tmp2 = ((HX_("`",60,00,00,00) + ::little::Little_obj::keywords->CONDITION__WHENEVER) + HX_("` condition must start with a variable to watch (expected definition, found: `",5a,6a,88,2d));
+HXDLIN( 726)					_hx_tmp1->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((_hx_tmp2 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())) + HX_("`)",c9,53,00,00))),null());
 HXLINE( 727)					return val;
             				}
             			}

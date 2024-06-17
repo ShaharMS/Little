@@ -379,7 +379,6 @@ class Parser {
 
         var post:Array<ParserTokens> = [];
 
-		var currentDoc:ParserTokens = null;
         var i = 0;
         while (i < pre.length) {
             var token = pre[i];
@@ -388,7 +387,7 @@ class Parser {
                 case SetLine(line): {setLine(line); post.push(token);}
 				case SetModule(module): {Parser.module = module; post.push(token);}
                 case SplitLine: {nextPart(); post.push(token);}
-				case Documentation(doc): currentDoc = token;
+				case Documentation(doc): post.push(token);
                 case Identifier(_ == Little.keywords.VARIABLE_DECLARATION => true): {
                     i++;
                     if (i >= pre.length) {
@@ -446,8 +445,7 @@ class Parser {
 						return null;
 					}
                     
-                    post.push(Variable(name, type, currentDoc));
-					currentDoc = null;
+                    post.push(Variable(name, type, post.length > 0 && post[post.length - 1].is(DOCUMENTATION) ? post.pop() : null));
                 }
                 case Identifier(_ == Little.keywords.FUNCTION_DECLARATION => true): {
                     i++;
@@ -519,8 +517,7 @@ class Parser {
                         Little.runtime.throwError(ErrorMessage("Missing function parameters, function is cut off by the end of the file, block or expression."), Layer.PARSER);
 						return null;
 					}
-                    post.push(Function(name, params, type, currentDoc));
-					currentDoc = null;
+                    post.push(Function(name, params, type, post.length > 0 && post[post.length - 1].is(DOCUMENTATION) ? post.pop() : null));
                 }
                 case Identifier(_ == Little.keywords.FUNCTION_RETURN => true): {
                     i++;
@@ -597,7 +594,6 @@ class Parser {
 					} else {
 						i -= 1;
 						post.push(ConditionCall(name, exp, body));
-						currentDoc = null;
 					}
                 }                
                 case Expression(parts, type): post.push(Expression(mergeComplexStructures(parts), mergeComplexStructures([type])[0]));
@@ -709,14 +705,20 @@ class Parser {
                     while (i + 1 < pre.length) {
                         var lookahead = pre[i + 1];
                         switch lookahead {
-                            case SetLine(_) | SetModule(_) | SplitLine | Sign("="): break;
+                            case SetLine(_) | SetModule(_) | SplitLine | Sign("="):{
+                                if (value.length == 0) {
+                                    Little.runtime.callStack.unshift({module: Parser.module, line: line, linePart: linePart, token: Interpreter.convert(Write([assignee], lookahead))[0]});
+                                    Little.runtime.throwError(ErrorMessage("Missing value after the last `=`"), Layer.PARSER);
+                                }
+                                break;
+                            }
                             case _: value.push(lookahead);
                         }
                         i++;
                     }
                     var token = value.length == 1 ? mergeWrites([value[0]])[0] : Expression(mergeWrites(value), null);
                     if (assignee.is(WRITE)) {
-                        var assignees = assignee.parameter(0).push(assignee.parameter(1));
+                        var assignees:Array<ParserTokens> = (assignee.parameter(0) : Array<ParserTokens>).concat([assignee.parameter(1)]);
                         post.push(Write(assignees, token));
                     } else post.push(Write([assignee], token));
 				}

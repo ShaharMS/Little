@@ -2625,7 +2625,7 @@ js_$example_JsExample.prototype = {
 			ret = "myArray" + little_Little.keywords.PROPERTY_ACCESS_SIGN + little_Little.keywords.STDLIB__ARRAY_set + "(0, \"Hey\")";
 			break;
 		case "STDLIB__FLOAT_isWhole":
-			ret = "5.6" + little_Little.keywords.PROPERTY_ACCESS_SIGN + little_Little.keywords.STDLIB__FLOAT_isWhole;
+			ret = "5.6" + little_Little.keywords.PROPERTY_ACCESS_SIGN + little_Little.keywords.STDLIB__FLOAT_isWhole + "()";
 			break;
 		case "STDLIB__MEMORY_allocate":
 			ret = "" + little_Little.keywords.VARIABLE_DECLARATION + " address = " + little_Little.keywords.TYPE_MEMORY + little_Little.keywords.PROPERTY_ACCESS_SIGN + little_Little.keywords.STDLIB__MEMORY_allocate + "(byteAmount)";
@@ -2697,7 +2697,7 @@ js_$example_JsExample.prototype = {
 			ret = "" + little_Little.keywords.VARIABLE_DECLARATION + " x " + little_Little.keywords.TYPE_DECL_OR_CAST + " " + little_Little.keywords.TYPE_BOOLEAN + " = " + little_Little.keywords.TRUE_VALUE + " " + little_Little.keywords.OR_SIGN + " " + little_Little.keywords.FALSE_VALUE + "\nif (" + little_Little.keywords.TRUE_VALUE + ") {}";
 			break;
 		case "TYPE_ARRAY":
-			ret = "" + little_Little.keywords.VARIABLE_DECLARATION + " array " + little_Little.keywords.TYPE_DECL_OR_CAST + " " + little_Little.keywords.TYPE_ARRAY + " = " + little_Little.keywords.TYPE_ARRAY + little_Little.keywords.PROPERTY_ACCESS_SIGN + little_Little.keywords.INSTANTIATE_FUNCTION_NAME + "(" + little_Little.keywords.TYPE_STRING + ", 3)\narray" + little_Little.keywords.PROPERTY_ACCESS_SIGN + little_Little.keywords.STDLIB__ARRAY_set + "(1, \"Hey!\")\n" + little_Little.keywords.PRINT_FUNCTION_NAME + "(x" + little_Little.keywords.PROPERTY_ACCESS_SIGN + little_Little.keywords.STDLIB__ARRAY_get + "(1)) \"\"\" \"Hey!\" \"\"\"\n" + little_Little.keywords.PRINT_FUNCTION_NAME + "(x" + little_Little.keywords.PROPERTY_ACCESS_SIGN + little_Little.keywords.STDLIB__ARRAY_length + ") \"\"\" 3 \"\"\"";
+			ret = "" + little_Little.keywords.VARIABLE_DECLARATION + " array " + little_Little.keywords.TYPE_DECL_OR_CAST + " " + little_Little.keywords.TYPE_ARRAY + " = " + little_Little.keywords.TYPE_ARRAY + little_Little.keywords.PROPERTY_ACCESS_SIGN + little_Little.keywords.INSTANTIATE_FUNCTION_NAME + "(" + little_Little.keywords.TYPE_STRING + ", 3)\narray" + little_Little.keywords.PROPERTY_ACCESS_SIGN + little_Little.keywords.STDLIB__ARRAY_set + "(1, \"Hey!\")\n" + little_Little.keywords.PRINT_FUNCTION_NAME + "(array" + little_Little.keywords.PROPERTY_ACCESS_SIGN + little_Little.keywords.STDLIB__ARRAY_get + "(1)) \"\"\" \"Hey!\" \"\"\"\n" + little_Little.keywords.PRINT_FUNCTION_NAME + "(array" + little_Little.keywords.PROPERTY_ACCESS_SIGN + little_Little.keywords.STDLIB__ARRAY_length + ") \"\"\" 3 \"\"\"";
 			break;
 		case "TYPE_BOOLEAN":
 			ret = "" + little_Little.keywords.VARIABLE_DECLARATION + " x " + little_Little.keywords.TYPE_DECL_OR_CAST + " " + little_Little.keywords.TYPE_BOOLEAN + " = " + little_Little.keywords.TRUE_VALUE + " || " + little_Little.keywords.FALSE_VALUE;
@@ -3103,16 +3103,16 @@ var little_KeywordConfig = function(config,nullifyDefaults) {
 			++_g;
 			var configValue = Reflect.field(config,field);
 			if(configValue.length == 0) {
-				throw new haxe_exceptions_ArgumentException("config." + field,"Keywords of length 0 are not allowed.",null,{ fileName : "src/little/KeywordConfig.hx", lineNumber : 45, className : "little.KeywordConfig", methodName : "new"});
+				throw new haxe_exceptions_ArgumentException("config." + field,"Keywords of length 0 are not allowed.",null,{ fileName : "src/little/KeywordConfig.hx", lineNumber : 57, className : "little.KeywordConfig", methodName : "new"});
 			}
 			if(little_tools_TextTools.contains(configValue," ")) {
-				throw new haxe_exceptions_ArgumentException("config." + field,"Keywords cannot contain whitespaces.",null,{ fileName : "src/little/KeywordConfig.hx", lineNumber : 47, className : "little.KeywordConfig", methodName : "new"});
+				throw new haxe_exceptions_ArgumentException("config." + field,"Keywords cannot contain whitespaces.",null,{ fileName : "src/little/KeywordConfig.hx", lineNumber : 59, className : "little.KeywordConfig", methodName : "new"});
 			}
 			if(little_tools_TextTools.containsAny(configValue,little_KeywordConfig.recognizedOperators)) {
-				throw new haxe_exceptions_ArgumentException("config." + field,"Keywords cannot contain operators/signs.",null,{ fileName : "src/little/KeywordConfig.hx", lineNumber : 49, className : "little.KeywordConfig", methodName : "new"});
+				throw new haxe_exceptions_ArgumentException("config." + field,"Keywords cannot contain operators/signs.",null,{ fileName : "src/little/KeywordConfig.hx", lineNumber : 61, className : "little.KeywordConfig", methodName : "new"});
 			}
 			if(new EReg("[0-9]","").match(configValue.charAt(0))) {
-				throw new haxe_exceptions_ArgumentException("config." + field,"Keywords cannot start with numbers.",null,{ fileName : "src/little/KeywordConfig.hx", lineNumber : 51, className : "little.KeywordConfig", methodName : "new"});
+				throw new haxe_exceptions_ArgumentException("config." + field,"Keywords cannot start with numbers.",null,{ fileName : "src/little/KeywordConfig.hx", lineNumber : 63, className : "little.KeywordConfig", methodName : "new"});
 			}
 			if(configValue == Reflect.field(little_KeywordConfig.defaultConfig,field)) {
 				this[field] = null;
@@ -6632,68 +6632,28 @@ little_tools_Plugins.prototype = {
 							var _g6 = entry.doc;
 							if(_g5 == null) {
 								var name2 = _g4;
-								var paramMap1 = paramMap[0];
-								var _this1 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-								var result1 = new Array(_this1.length);
-								var _g7 = 0;
-								var _g8 = _this1.length;
-								while(_g7 < _g8) {
-									var i1 = _g7++;
-									var x1 = _this1[i1];
-									result1[i1] = little_tools_TextTools.remove($hxEnums[x1.__enum__].__constructs__[x1._hx_index]._hx_name,"_").toLowerCase();
-								}
-								little_tools_OrderedMap.set(paramMap1,result1.indexOf($hxEnums[name2.__enum__].__constructs__[name2._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(name2)[0] : Type.enumParameters(little_interpreter_Interpreter.run([name2]))[0],little_interpreter_InterpTokens.TypeCast(little_interpreter_InterpTokens.NullValue,little_interpreter_InterpTokens.Identifier(little_Little.keywords.TYPE_DYNAMIC)));
+								little_tools_OrderedMap.set(paramMap[0],little_tools_Extensions.extractIdentifier(name2),little_interpreter_InterpTokens.TypeCast(little_interpreter_InterpTokens.NullValue,little_interpreter_InterpTokens.Identifier(little_Little.keywords.TYPE_DYNAMIC)));
 							} else {
 								var type2 = _g5;
 								var name3 = _g4;
-								var paramMap2 = paramMap[0];
-								var _this2 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-								var result2 = new Array(_this2.length);
-								var _g9 = 0;
-								var _g10 = _this2.length;
-								while(_g9 < _g10) {
-									var i2 = _g9++;
-									var x2 = _this2[i2];
-									result2[i2] = little_tools_TextTools.remove($hxEnums[x2.__enum__].__constructs__[x2._hx_index]._hx_name,"_").toLowerCase();
-								}
-								little_tools_OrderedMap.set(paramMap2,result2.indexOf($hxEnums[name3.__enum__].__constructs__[name3._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(name3)[0] : Type.enumParameters(little_interpreter_Interpreter.run([name3]))[0],little_interpreter_InterpTokens.TypeCast(little_interpreter_InterpTokens.NullValue,type2));
+								little_tools_OrderedMap.set(paramMap[0],little_tools_Extensions.extractIdentifier(name3),little_interpreter_InterpTokens.TypeCast(little_interpreter_InterpTokens.NullValue,type2));
 							}
 							break;
 						case 10:
 							var assignees = entry.assignees;
 							var value = entry.value;
-							var _g11 = assignees[0];
-							if(_g11._hx_index == 3) {
-								var _g12 = _g11.name;
-								var _g13 = _g11.type;
-								var _g14 = _g11.doc;
-								if(_g13 == null) {
-									var name4 = _g12;
-									var paramMap3 = paramMap[0];
-									var _this3 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-									var result3 = new Array(_this3.length);
-									var _g15 = 0;
-									var _g16 = _this3.length;
-									while(_g15 < _g16) {
-										var i3 = _g15++;
-										var x3 = _this3[i3];
-										result3[i3] = little_tools_TextTools.remove($hxEnums[x3.__enum__].__constructs__[x3._hx_index]._hx_name,"_").toLowerCase();
-									}
-									little_tools_OrderedMap.set(paramMap3,result3.indexOf($hxEnums[name4.__enum__].__constructs__[name4._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(name4)[0] : Type.enumParameters(little_interpreter_Interpreter.run([name4]))[0],little_interpreter_InterpTokens.TypeCast(value,little_interpreter_InterpTokens.Identifier(little_Little.keywords.TYPE_DYNAMIC)));
+							var _g7 = assignees[0];
+							if(_g7._hx_index == 3) {
+								var _g8 = _g7.name;
+								var _g9 = _g7.type;
+								var _g10 = _g7.doc;
+								if(_g9 == null) {
+									var name4 = _g8;
+									little_tools_OrderedMap.set(paramMap[0],little_tools_Extensions.extractIdentifier(name4),little_interpreter_InterpTokens.TypeCast(value,little_interpreter_InterpTokens.Identifier(little_Little.keywords.TYPE_DYNAMIC)));
 								} else {
-									var type3 = _g13;
-									var name5 = _g12;
-									var paramMap4 = paramMap[0];
-									var _this4 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-									var result4 = new Array(_this4.length);
-									var _g17 = 0;
-									var _g18 = _this4.length;
-									while(_g17 < _g18) {
-										var i4 = _g17++;
-										var x4 = _this4[i4];
-										result4[i4] = little_tools_TextTools.remove($hxEnums[x4.__enum__].__constructs__[x4._hx_index]._hx_name,"_").toLowerCase();
-									}
-									little_tools_OrderedMap.set(paramMap4,result4.indexOf($hxEnums[name5.__enum__].__constructs__[name5._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(name5)[0] : Type.enumParameters(little_interpreter_Interpreter.run([name5]))[0],little_interpreter_InterpTokens.TypeCast(value,type3));
+									var type3 = _g9;
+									var name5 = _g8;
+									little_tools_OrderedMap.set(paramMap[0],little_tools_Extensions.extractIdentifier(name5),little_interpreter_InterpTokens.TypeCast(value,type3));
 								}
 							}
 							break;
@@ -6756,92 +6716,52 @@ little_tools_Plugins.prototype = {
 							var name7 = little_tools_TextTools.replace(key1.split(" ")[2],little_Little.keywords.PROPERTY_ACCESS_SIGN,"_");
 							var type5 = [this.memory.getTypeInformation(key1.split(" ")[1])];
 							var params1 = little_interpreter_Interpreter.convert.apply(null,little_parser_Parser.parse(little_lexer_Lexer.lex(little_tools_TextTools.replaceLast(little_tools_TextTools.replaceFirst(little_tools_TextTools.replaceFirst(key1,"static function " + name7 + " ",""),"(",""),")",""))));
-							var paramMap5 = [little_tools_OrderedMap._new()];
-							var _g19 = 0;
-							while(_g19 < params1.length) {
-								var entry1 = params1[_g19];
-								++_g19;
-								var _this5 = [little_tools_InterpTokensSimple.SPLIT_LINE,little_tools_InterpTokensSimple.SET_LINE].slice();
-								var result5 = new Array(_this5.length);
-								var _g20 = 0;
-								var _g21 = _this5.length;
-								while(_g20 < _g21) {
-									var i5 = _g20++;
-									var x5 = _this5[i5];
-									result5[i5] = little_tools_TextTools.remove($hxEnums[x5.__enum__].__constructs__[x5._hx_index]._hx_name,"_").toLowerCase();
+							var paramMap1 = [little_tools_OrderedMap._new()];
+							var _g11 = 0;
+							while(_g11 < params1.length) {
+								var entry1 = params1[_g11];
+								++_g11;
+								var _this1 = [little_tools_InterpTokensSimple.SPLIT_LINE,little_tools_InterpTokensSimple.SET_LINE].slice();
+								var result1 = new Array(_this1.length);
+								var _g12 = 0;
+								var _g13 = _this1.length;
+								while(_g12 < _g13) {
+									var i1 = _g12++;
+									var x1 = _this1[i1];
+									result1[i1] = little_tools_TextTools.remove($hxEnums[x1.__enum__].__constructs__[x1._hx_index]._hx_name,"_").toLowerCase();
 								}
-								if(result5.indexOf($hxEnums[entry1.__enum__].__constructs__[entry1._hx_index]._hx_name.toLowerCase()) != -1) {
+								if(result1.indexOf($hxEnums[entry1.__enum__].__constructs__[entry1._hx_index]._hx_name.toLowerCase()) != -1) {
 									continue;
 								}
 								switch(entry1._hx_index) {
 								case 3:
-									var _g22 = entry1.name;
-									var _g23 = entry1.type;
-									var _g24 = entry1.doc;
-									if(_g23 == null) {
-										var name8 = _g22;
-										var paramMap6 = paramMap5[0];
-										var _this6 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-										var result6 = new Array(_this6.length);
-										var _g25 = 0;
-										var _g26 = _this6.length;
-										while(_g25 < _g26) {
-											var i6 = _g25++;
-											var x6 = _this6[i6];
-											result6[i6] = little_tools_TextTools.remove($hxEnums[x6.__enum__].__constructs__[x6._hx_index]._hx_name,"_").toLowerCase();
-										}
-										little_tools_OrderedMap.set(paramMap6,result6.indexOf($hxEnums[name8.__enum__].__constructs__[name8._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(name8)[0] : Type.enumParameters(little_interpreter_Interpreter.run([name8]))[0],little_interpreter_InterpTokens.TypeCast(little_interpreter_InterpTokens.NullValue,little_interpreter_InterpTokens.Identifier(little_Little.keywords.TYPE_DYNAMIC)));
+									var _g14 = entry1.name;
+									var _g15 = entry1.type;
+									var _g16 = entry1.doc;
+									if(_g15 == null) {
+										var name8 = _g14;
+										little_tools_OrderedMap.set(paramMap1[0],little_tools_Extensions.extractIdentifier(name8),little_interpreter_InterpTokens.TypeCast(little_interpreter_InterpTokens.NullValue,little_interpreter_InterpTokens.Identifier(little_Little.keywords.TYPE_DYNAMIC)));
 									} else {
-										var type6 = _g23;
-										var name9 = _g22;
-										var paramMap7 = paramMap5[0];
-										var _this7 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-										var result7 = new Array(_this7.length);
-										var _g27 = 0;
-										var _g28 = _this7.length;
-										while(_g27 < _g28) {
-											var i7 = _g27++;
-											var x7 = _this7[i7];
-											result7[i7] = little_tools_TextTools.remove($hxEnums[x7.__enum__].__constructs__[x7._hx_index]._hx_name,"_").toLowerCase();
-										}
-										little_tools_OrderedMap.set(paramMap7,result7.indexOf($hxEnums[name9.__enum__].__constructs__[name9._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(name9)[0] : Type.enumParameters(little_interpreter_Interpreter.run([name9]))[0],little_interpreter_InterpTokens.TypeCast(little_interpreter_InterpTokens.NullValue,type6));
+										var type6 = _g15;
+										var name9 = _g14;
+										little_tools_OrderedMap.set(paramMap1[0],little_tools_Extensions.extractIdentifier(name9),little_interpreter_InterpTokens.TypeCast(little_interpreter_InterpTokens.NullValue,type6));
 									}
 									break;
 								case 10:
 									var assignees1 = entry1.assignees;
 									var value1 = entry1.value;
-									var _g29 = assignees1[0];
-									if(_g29._hx_index == 3) {
-										var _g30 = _g29.name;
-										var _g31 = _g29.type;
-										var _g32 = _g29.doc;
-										if(_g31 == null) {
-											var name10 = _g30;
-											var paramMap8 = paramMap5[0];
-											var _this8 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-											var result8 = new Array(_this8.length);
-											var _g33 = 0;
-											var _g34 = _this8.length;
-											while(_g33 < _g34) {
-												var i8 = _g33++;
-												var x8 = _this8[i8];
-												result8[i8] = little_tools_TextTools.remove($hxEnums[x8.__enum__].__constructs__[x8._hx_index]._hx_name,"_").toLowerCase();
-											}
-											little_tools_OrderedMap.set(paramMap8,result8.indexOf($hxEnums[name10.__enum__].__constructs__[name10._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(name10)[0] : Type.enumParameters(little_interpreter_Interpreter.run([name10]))[0],little_interpreter_InterpTokens.TypeCast(value1,little_interpreter_InterpTokens.Identifier(little_Little.keywords.TYPE_DYNAMIC)));
+									var _g17 = assignees1[0];
+									if(_g17._hx_index == 3) {
+										var _g18 = _g17.name;
+										var _g19 = _g17.type;
+										var _g20 = _g17.doc;
+										if(_g19 == null) {
+											var name10 = _g18;
+											little_tools_OrderedMap.set(paramMap1[0],little_tools_Extensions.extractIdentifier(name10),little_interpreter_InterpTokens.TypeCast(value1,little_interpreter_InterpTokens.Identifier(little_Little.keywords.TYPE_DYNAMIC)));
 										} else {
-											var type7 = _g31;
-											var name11 = _g30;
-											var paramMap9 = paramMap5[0];
-											var _this9 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-											var result9 = new Array(_this9.length);
-											var _g35 = 0;
-											var _g36 = _this9.length;
-											while(_g35 < _g36) {
-												var i9 = _g35++;
-												var x9 = _this9[i9];
-												result9[i9] = little_tools_TextTools.remove($hxEnums[x9.__enum__].__constructs__[x9._hx_index]._hx_name,"_").toLowerCase();
-											}
-											little_tools_OrderedMap.set(paramMap9,result9.indexOf($hxEnums[name11.__enum__].__constructs__[name11._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(name11)[0] : Type.enumParameters(little_interpreter_Interpreter.run([name11]))[0],little_interpreter_InterpTokens.TypeCast(value1,type7));
+											var type7 = _g19;
+											var name11 = _g18;
+											little_tools_OrderedMap.set(paramMap1[0],little_tools_Extensions.extractIdentifier(name11),little_interpreter_InterpTokens.TypeCast(value1,type7));
 										}
 									}
 									break;
@@ -6868,7 +6788,7 @@ little_tools_Plugins.prototype = {
 										};
 									})(paramMap,field)),returnType)],returnType)), objectAddress : _gthis.memory.constants.EXTERN};
 								};
-							})(paramMap5,type5,field));
+							})(paramMap1,type5,field));
 							this4.h[name7] = v3;
 						} else {
 							throw haxe_Exception.thrown("Invalid key syntax for `" + key1 + "`. Must start with either `public`/`static` `function`/`var`, and end with a variable name. (Example: `public var myVar`). Each item must be separated by a single whitespace.");
@@ -6921,68 +6841,28 @@ little_tools_Plugins.prototype = {
 				var _g5 = entry.doc;
 				if(_g4 == null) {
 					var name = _g3;
-					var paramMap1 = paramMap;
-					var _this1 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-					var result1 = new Array(_this1.length);
-					var _g6 = 0;
-					var _g7 = _this1.length;
-					while(_g6 < _g7) {
-						var i1 = _g6++;
-						var x1 = _this1[i1];
-						result1[i1] = little_tools_TextTools.remove($hxEnums[x1.__enum__].__constructs__[x1._hx_index]._hx_name,"_").toLowerCase();
-					}
-					little_tools_OrderedMap.set(paramMap1,result1.indexOf($hxEnums[name.__enum__].__constructs__[name._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(name)[0] : Type.enumParameters(little_interpreter_Interpreter.run([name]))[0],little_interpreter_InterpTokens.TypeCast(little_interpreter_InterpTokens.NullValue,little_interpreter_InterpTokens.Identifier(little_Little.keywords.TYPE_DYNAMIC)));
+					little_tools_OrderedMap.set(paramMap,little_tools_Extensions.extractIdentifier(name),little_interpreter_InterpTokens.TypeCast(little_interpreter_InterpTokens.NullValue,little_interpreter_InterpTokens.Identifier(little_Little.keywords.TYPE_DYNAMIC)));
 				} else {
 					var type = _g4;
 					var name1 = _g3;
-					var paramMap2 = paramMap;
-					var _this2 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-					var result2 = new Array(_this2.length);
-					var _g8 = 0;
-					var _g9 = _this2.length;
-					while(_g8 < _g9) {
-						var i2 = _g8++;
-						var x2 = _this2[i2];
-						result2[i2] = little_tools_TextTools.remove($hxEnums[x2.__enum__].__constructs__[x2._hx_index]._hx_name,"_").toLowerCase();
-					}
-					little_tools_OrderedMap.set(paramMap2,result2.indexOf($hxEnums[name1.__enum__].__constructs__[name1._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(name1)[0] : Type.enumParameters(little_interpreter_Interpreter.run([name1]))[0],little_interpreter_InterpTokens.TypeCast(little_interpreter_InterpTokens.NullValue,type));
+					little_tools_OrderedMap.set(paramMap,little_tools_Extensions.extractIdentifier(name1),little_interpreter_InterpTokens.TypeCast(little_interpreter_InterpTokens.NullValue,type));
 				}
 				break;
 			case 10:
 				var assignees = entry.assignees;
 				var value = entry.value;
-				var _g10 = assignees[0];
-				if(_g10._hx_index == 3) {
-					var _g11 = _g10.name;
-					var _g12 = _g10.type;
-					var _g13 = _g10.doc;
-					if(_g12 == null) {
-						var name2 = _g11;
-						var paramMap3 = paramMap;
-						var _this3 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-						var result3 = new Array(_this3.length);
-						var _g14 = 0;
-						var _g15 = _this3.length;
-						while(_g14 < _g15) {
-							var i3 = _g14++;
-							var x3 = _this3[i3];
-							result3[i3] = little_tools_TextTools.remove($hxEnums[x3.__enum__].__constructs__[x3._hx_index]._hx_name,"_").toLowerCase();
-						}
-						little_tools_OrderedMap.set(paramMap3,result3.indexOf($hxEnums[name2.__enum__].__constructs__[name2._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(name2)[0] : Type.enumParameters(little_interpreter_Interpreter.run([name2]))[0],little_interpreter_InterpTokens.TypeCast(value,little_interpreter_InterpTokens.Identifier(little_Little.keywords.TYPE_DYNAMIC)));
+				var _g6 = assignees[0];
+				if(_g6._hx_index == 3) {
+					var _g7 = _g6.name;
+					var _g8 = _g6.type;
+					var _g9 = _g6.doc;
+					if(_g8 == null) {
+						var name2 = _g7;
+						little_tools_OrderedMap.set(paramMap,little_tools_Extensions.extractIdentifier(name2),little_interpreter_InterpTokens.TypeCast(value,little_interpreter_InterpTokens.Identifier(little_Little.keywords.TYPE_DYNAMIC)));
 					} else {
-						var type1 = _g12;
-						var name3 = _g11;
-						var paramMap4 = paramMap;
-						var _this4 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-						var result4 = new Array(_this4.length);
-						var _g16 = 0;
-						var _g17 = _this4.length;
-						while(_g16 < _g17) {
-							var i4 = _g16++;
-							var x4 = _this4[i4];
-							result4[i4] = little_tools_TextTools.remove($hxEnums[x4.__enum__].__constructs__[x4._hx_index]._hx_name,"_").toLowerCase();
-						}
-						little_tools_OrderedMap.set(paramMap4,result4.indexOf($hxEnums[name3.__enum__].__constructs__[name3._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(name3)[0] : Type.enumParameters(little_interpreter_Interpreter.run([name3]))[0],little_interpreter_InterpTokens.TypeCast(value,type1));
+						var type1 = _g8;
+						var name3 = _g7;
+						little_tools_OrderedMap.set(paramMap,little_tools_Extensions.extractIdentifier(name3),little_interpreter_InterpTokens.TypeCast(value,type1));
 					}
 				}
 				break;
@@ -7064,68 +6944,28 @@ little_tools_Plugins.prototype = {
 				var _g5 = entry.doc;
 				if(_g4 == null) {
 					var name = _g3;
-					var paramMap1 = paramMap;
-					var _this1 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-					var result1 = new Array(_this1.length);
-					var _g6 = 0;
-					var _g7 = _this1.length;
-					while(_g6 < _g7) {
-						var i1 = _g6++;
-						var x1 = _this1[i1];
-						result1[i1] = little_tools_TextTools.remove($hxEnums[x1.__enum__].__constructs__[x1._hx_index]._hx_name,"_").toLowerCase();
-					}
-					little_tools_OrderedMap.set(paramMap1,result1.indexOf($hxEnums[name.__enum__].__constructs__[name._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(name)[0] : Type.enumParameters(little_interpreter_Interpreter.run([name]))[0],little_interpreter_InterpTokens.TypeCast(little_interpreter_InterpTokens.NullValue,little_interpreter_InterpTokens.Identifier(little_Little.keywords.TYPE_DYNAMIC)));
+					little_tools_OrderedMap.set(paramMap,little_tools_Extensions.extractIdentifier(name),little_interpreter_InterpTokens.TypeCast(little_interpreter_InterpTokens.NullValue,little_interpreter_InterpTokens.Identifier(little_Little.keywords.TYPE_DYNAMIC)));
 				} else {
 					var type = _g4;
 					var name1 = _g3;
-					var paramMap2 = paramMap;
-					var _this2 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-					var result2 = new Array(_this2.length);
-					var _g8 = 0;
-					var _g9 = _this2.length;
-					while(_g8 < _g9) {
-						var i2 = _g8++;
-						var x2 = _this2[i2];
-						result2[i2] = little_tools_TextTools.remove($hxEnums[x2.__enum__].__constructs__[x2._hx_index]._hx_name,"_").toLowerCase();
-					}
-					little_tools_OrderedMap.set(paramMap2,result2.indexOf($hxEnums[name1.__enum__].__constructs__[name1._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(name1)[0] : Type.enumParameters(little_interpreter_Interpreter.run([name1]))[0],little_interpreter_InterpTokens.TypeCast(little_interpreter_InterpTokens.NullValue,type));
+					little_tools_OrderedMap.set(paramMap,little_tools_Extensions.extractIdentifier(name1),little_interpreter_InterpTokens.TypeCast(little_interpreter_InterpTokens.NullValue,type));
 				}
 				break;
 			case 10:
 				var assignees = entry.assignees;
 				var value = entry.value;
-				var _g10 = assignees[0];
-				if(_g10._hx_index == 3) {
-					var _g11 = _g10.name;
-					var _g12 = _g10.type;
-					var _g13 = _g10.doc;
-					if(_g12 == null) {
-						var name2 = _g11;
-						var paramMap3 = paramMap;
-						var _this3 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-						var result3 = new Array(_this3.length);
-						var _g14 = 0;
-						var _g15 = _this3.length;
-						while(_g14 < _g15) {
-							var i3 = _g14++;
-							var x3 = _this3[i3];
-							result3[i3] = little_tools_TextTools.remove($hxEnums[x3.__enum__].__constructs__[x3._hx_index]._hx_name,"_").toLowerCase();
-						}
-						little_tools_OrderedMap.set(paramMap3,result3.indexOf($hxEnums[name2.__enum__].__constructs__[name2._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(name2)[0] : Type.enumParameters(little_interpreter_Interpreter.run([name2]))[0],little_interpreter_InterpTokens.TypeCast(value,little_interpreter_InterpTokens.Identifier(little_Little.keywords.TYPE_DYNAMIC)));
+				var _g6 = assignees[0];
+				if(_g6._hx_index == 3) {
+					var _g7 = _g6.name;
+					var _g8 = _g6.type;
+					var _g9 = _g6.doc;
+					if(_g8 == null) {
+						var name2 = _g7;
+						little_tools_OrderedMap.set(paramMap,little_tools_Extensions.extractIdentifier(name2),little_interpreter_InterpTokens.TypeCast(value,little_interpreter_InterpTokens.Identifier(little_Little.keywords.TYPE_DYNAMIC)));
 					} else {
-						var type1 = _g12;
-						var name3 = _g11;
-						var paramMap4 = paramMap;
-						var _this4 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-						var result4 = new Array(_this4.length);
-						var _g16 = 0;
-						var _g17 = _this4.length;
-						while(_g16 < _g17) {
-							var i4 = _g16++;
-							var x4 = _this4[i4];
-							result4[i4] = little_tools_TextTools.remove($hxEnums[x4.__enum__].__constructs__[x4._hx_index]._hx_name,"_").toLowerCase();
-						}
-						little_tools_OrderedMap.set(paramMap4,result4.indexOf($hxEnums[name3.__enum__].__constructs__[name3._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(name3)[0] : Type.enumParameters(little_interpreter_Interpreter.run([name3]))[0],little_interpreter_InterpTokens.TypeCast(value,type1));
+						var type1 = _g8;
+						var name3 = _g7;
+						little_tools_OrderedMap.set(paramMap,little_tools_Extensions.extractIdentifier(name3),little_interpreter_InterpTokens.TypeCast(value,type1));
 					}
 				}
 				break;
@@ -7175,28 +7015,7 @@ little_tools_Plugins.prototype = {
 					var lType = little_tools_Extensions.type(little_interpreter_Interpreter.evaluate(lhs));
 					var rType = little_tools_Extensions.type(little_interpreter_Interpreter.evaluate(rhs));
 					if(info.lhsAllowedTypes.indexOf(lType) == -1) {
-						var callbackFunc = little_Little.runtime;
-						var callbackFunc1 = "Cannot preform " + lType + "(";
-						var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-						var result = new Array(_this.length);
-						var _g = 0;
-						var _g1 = _this.length;
-						while(_g < _g1) {
-							var i = _g++;
-							var x = _this[i];
-							result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
-						}
-						var callbackFunc2 = callbackFunc1 + (result.indexOf($hxEnums[lhs.__enum__].__constructs__[lhs._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(lhs)[0] : Type.enumParameters(little_interpreter_Interpreter.run([lhs]))[0]) + ") " + symbol + " " + rType + "(";
-						var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-						var result = new Array(_this.length);
-						var _g = 0;
-						var _g1 = _this.length;
-						while(_g < _g1) {
-							var i = _g++;
-							var x = _this[i];
-							result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
-						}
-						return callbackFunc.throwError(little_interpreter_InterpTokens.ErrorMessage(callbackFunc2 + (result.indexOf($hxEnums[rhs.__enum__].__constructs__[rhs._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(rhs)[0] : Type.enumParameters(little_interpreter_Interpreter.run([rhs]))[0]) + ") - Left operand cannot be of type " + lType + " (accepted types: " + Std.string(info.lhsAllowedTypes) + ")"));
+						return little_Little.runtime.throwError(little_interpreter_InterpTokens.ErrorMessage("Cannot preform " + lType + "(" + little_tools_Extensions.extractIdentifier(lhs) + ") " + symbol + " " + rType + "(" + little_tools_Extensions.extractIdentifier(rhs) + ") - Left operand cannot be of type " + lType + " (accepted types: " + Std.string(info.lhsAllowedTypes) + ")"));
 					}
 					return info.callback(lhs,rhs);
 				};
@@ -7205,28 +7024,7 @@ little_tools_Plugins.prototype = {
 					var lType = little_tools_Extensions.type(little_interpreter_Interpreter.evaluate(lhs));
 					var rType = little_tools_Extensions.type(little_interpreter_Interpreter.evaluate(rhs));
 					if(info.rhsAllowedTypes.indexOf(rType) == -1) {
-						var callbackFunc = little_Little.runtime;
-						var callbackFunc1 = "Cannot preform " + lType + "(";
-						var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-						var result = new Array(_this.length);
-						var _g = 0;
-						var _g1 = _this.length;
-						while(_g < _g1) {
-							var i = _g++;
-							var x = _this[i];
-							result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
-						}
-						var callbackFunc2 = callbackFunc1 + (result.indexOf($hxEnums[lhs.__enum__].__constructs__[lhs._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(lhs)[0] : Type.enumParameters(little_interpreter_Interpreter.run([lhs]))[0]) + ") " + symbol + " " + rType + "(";
-						var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-						var result = new Array(_this.length);
-						var _g = 0;
-						var _g1 = _this.length;
-						while(_g < _g1) {
-							var i = _g++;
-							var x = _this[i];
-							result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
-						}
-						return callbackFunc.throwError(little_interpreter_InterpTokens.ErrorMessage(callbackFunc2 + (result.indexOf($hxEnums[rhs.__enum__].__constructs__[rhs._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(rhs)[0] : Type.enumParameters(little_interpreter_Interpreter.run([rhs]))[0]) + ") - Right operand cannot be of type " + rType + " (accepted types: " + Std.string(info.rhsAllowedTypes) + ")"));
+						return little_Little.runtime.throwError(little_interpreter_InterpTokens.ErrorMessage("Cannot preform " + lType + "(" + little_tools_Extensions.extractIdentifier(lhs) + ") " + symbol + " " + rType + "(" + little_tools_Extensions.extractIdentifier(rhs) + ") - Right operand cannot be of type " + rType + " (accepted types: " + Std.string(info.rhsAllowedTypes) + ")"));
 					}
 					return info.callback(lhs,rhs);
 				};
@@ -7235,52 +7033,10 @@ little_tools_Plugins.prototype = {
 					var lType = little_tools_Extensions.type(little_interpreter_Interpreter.evaluate(lhs));
 					var rType = little_tools_Extensions.type(little_interpreter_Interpreter.evaluate(rhs));
 					if(info.rhsAllowedTypes.indexOf(rType) == -1) {
-						var callbackFunc = little_Little.runtime;
-						var callbackFunc1 = "Cannot preform " + lType + "(";
-						var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-						var result = new Array(_this.length);
-						var _g = 0;
-						var _g1 = _this.length;
-						while(_g < _g1) {
-							var i = _g++;
-							var x = _this[i];
-							result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
-						}
-						var callbackFunc2 = callbackFunc1 + (result.indexOf($hxEnums[lhs.__enum__].__constructs__[lhs._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(lhs)[0] : Type.enumParameters(little_interpreter_Interpreter.run([lhs]))[0]) + ") " + symbol + " " + rType + "(";
-						var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-						var result = new Array(_this.length);
-						var _g = 0;
-						var _g1 = _this.length;
-						while(_g < _g1) {
-							var i = _g++;
-							var x = _this[i];
-							result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
-						}
-						return callbackFunc.throwError(little_interpreter_InterpTokens.ErrorMessage(callbackFunc2 + (result.indexOf($hxEnums[rhs.__enum__].__constructs__[rhs._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(rhs)[0] : Type.enumParameters(little_interpreter_Interpreter.run([rhs]))[0]) + ") - Right operand cannot be of type " + rType + " (accepted types: " + Std.string(info.rhsAllowedTypes) + ")"));
+						return little_Little.runtime.throwError(little_interpreter_InterpTokens.ErrorMessage("Cannot preform " + lType + "(" + little_tools_Extensions.extractIdentifier(lhs) + ") " + symbol + " " + rType + "(" + little_tools_Extensions.extractIdentifier(rhs) + ") - Right operand cannot be of type " + rType + " (accepted types: " + Std.string(info.rhsAllowedTypes) + ")"));
 					}
 					if(info.rhsAllowedTypes.indexOf(lType) == -1) {
-						var callbackFunc = little_Little.runtime;
-						var callbackFunc1 = "Cannot preform " + lType + "(";
-						var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-						var result = new Array(_this.length);
-						var _g = 0;
-						var _g1 = _this.length;
-						while(_g < _g1) {
-							var i = _g++;
-							var x = _this[i];
-							result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
-						}
-						var callbackFunc2 = callbackFunc1 + (result.indexOf($hxEnums[lhs.__enum__].__constructs__[lhs._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(lhs)[0] : Type.enumParameters(little_interpreter_Interpreter.run([lhs]))[0]) + ") " + symbol + " " + rType + "(";
-						var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-						var result = new Array(_this.length);
-						var _g = 0;
-						var _g1 = _this.length;
-						while(_g < _g1) {
-							var i = _g++;
-							var x = _this[i];
-							result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
-						}
-						return callbackFunc.throwError(little_interpreter_InterpTokens.ErrorMessage(callbackFunc2 + (result.indexOf($hxEnums[rhs.__enum__].__constructs__[rhs._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(rhs)[0] : Type.enumParameters(little_interpreter_Interpreter.run([rhs]))[0]) + ") - Left operand cannot be of type " + lType + " (accepted types: " + Std.string(info.lhsAllowedTypes) + ")"));
+						return little_Little.runtime.throwError(little_interpreter_InterpTokens.ErrorMessage("Cannot preform " + lType + "(" + little_tools_Extensions.extractIdentifier(lhs) + ") " + symbol + " " + rType + "(" + little_tools_Extensions.extractIdentifier(rhs) + ") - Left operand cannot be of type " + lType + " (accepted types: " + Std.string(info.lhsAllowedTypes) + ")"));
 					}
 					return info.callback(lhs,rhs);
 				};
@@ -7290,27 +7046,7 @@ little_tools_Plugins.prototype = {
 					var rType = little_tools_Extensions.type(little_interpreter_Interpreter.evaluate(rhs));
 					if(info.lhsAllowedTypes.indexOf(lType) == -1 && !little_tools_Plugins.containsCombo(info.allowedTypeCombos,lType,rType)) {
 						var callbackFunc = little_Little.runtime;
-						var callbackFunc1 = "Cannot preform " + lType + "(";
-						var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-						var result = new Array(_this.length);
-						var _g = 0;
-						var _g1 = _this.length;
-						while(_g < _g1) {
-							var i = _g++;
-							var x = _this[i];
-							result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
-						}
-						var callbackFunc2 = callbackFunc1 + (result.indexOf($hxEnums[lhs.__enum__].__constructs__[lhs._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(lhs)[0] : Type.enumParameters(little_interpreter_Interpreter.run([lhs]))[0]) + ") " + symbol + " " + rType + "(";
-						var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-						var result = new Array(_this.length);
-						var _g = 0;
-						var _g1 = _this.length;
-						while(_g < _g1) {
-							var i = _g++;
-							var x = _this[i];
-							result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
-						}
-						var callbackFunc1 = callbackFunc2 + (result.indexOf($hxEnums[rhs.__enum__].__constructs__[rhs._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(rhs)[0] : Type.enumParameters(little_interpreter_Interpreter.run([rhs]))[0]) + ") - Right operand cannot be of type " + rType + " while left operand is of type " + lType + " (accepted types for left operand: " + Std.string(info.lhsAllowedTypes) + ", accepted type combinations: ";
+						var callbackFunc1 = "Cannot preform " + lType + "(" + little_tools_Extensions.extractIdentifier(lhs) + ") " + symbol + " " + rType + "(" + little_tools_Extensions.extractIdentifier(rhs) + ") - Right operand cannot be of type " + rType + " while left operand is of type " + lType + " (accepted types for left operand: " + Std.string(info.lhsAllowedTypes) + ", accepted type combinations: ";
 						var _this = info.allowedTypeCombos;
 						var result = new Array(_this.length);
 						var _g = 0;
@@ -7330,27 +7066,7 @@ little_tools_Plugins.prototype = {
 					var rType = little_tools_Extensions.type(little_interpreter_Interpreter.evaluate(rhs));
 					if(info.rhsAllowedTypes.indexOf(rType) == -1 && !little_tools_Plugins.containsCombo(info.allowedTypeCombos,lType,rType)) {
 						var callbackFunc = little_Little.runtime;
-						var callbackFunc1 = "Cannot preform " + lType + "(";
-						var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-						var result = new Array(_this.length);
-						var _g = 0;
-						var _g1 = _this.length;
-						while(_g < _g1) {
-							var i = _g++;
-							var x = _this[i];
-							result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
-						}
-						var callbackFunc2 = callbackFunc1 + (result.indexOf($hxEnums[lhs.__enum__].__constructs__[lhs._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(lhs)[0] : Type.enumParameters(little_interpreter_Interpreter.run([lhs]))[0]) + ") " + symbol + " " + rType + "(";
-						var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-						var result = new Array(_this.length);
-						var _g = 0;
-						var _g1 = _this.length;
-						while(_g < _g1) {
-							var i = _g++;
-							var x = _this[i];
-							result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
-						}
-						var callbackFunc1 = callbackFunc2 + (result.indexOf($hxEnums[rhs.__enum__].__constructs__[rhs._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(rhs)[0] : Type.enumParameters(little_interpreter_Interpreter.run([rhs]))[0]) + ") - Right operand cannot be of type " + rType + " while left operand is of type " + lType + " (accepted types for right operand: " + Std.string(info.rhsAllowedTypes) + ", accepted type combinations: ";
+						var callbackFunc1 = "Cannot preform " + lType + "(" + little_tools_Extensions.extractIdentifier(lhs) + ") " + symbol + " " + rType + "(" + little_tools_Extensions.extractIdentifier(rhs) + ") - Right operand cannot be of type " + rType + " while left operand is of type " + lType + " (accepted types for right operand: " + Std.string(info.rhsAllowedTypes) + ", accepted type combinations: ";
 						var _this = info.allowedTypeCombos;
 						var result = new Array(_this.length);
 						var _g = 0;
@@ -7370,27 +7086,7 @@ little_tools_Plugins.prototype = {
 					var rType = little_tools_Extensions.type(little_interpreter_Interpreter.evaluate(rhs));
 					if(info.rhsAllowedTypes.indexOf(rType) == -1 && !little_tools_Plugins.containsCombo(info.allowedTypeCombos,lType,rType)) {
 						var callbackFunc = little_Little.runtime;
-						var callbackFunc1 = "Cannot preform " + lType + "(";
-						var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-						var result = new Array(_this.length);
-						var _g = 0;
-						var _g1 = _this.length;
-						while(_g < _g1) {
-							var i = _g++;
-							var x = _this[i];
-							result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
-						}
-						var callbackFunc2 = callbackFunc1 + (result.indexOf($hxEnums[lhs.__enum__].__constructs__[lhs._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(lhs)[0] : Type.enumParameters(little_interpreter_Interpreter.run([lhs]))[0]) + ") " + symbol + " " + rType + "(";
-						var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-						var result = new Array(_this.length);
-						var _g = 0;
-						var _g1 = _this.length;
-						while(_g < _g1) {
-							var i = _g++;
-							var x = _this[i];
-							result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
-						}
-						var callbackFunc1 = callbackFunc2 + (result.indexOf($hxEnums[rhs.__enum__].__constructs__[rhs._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(rhs)[0] : Type.enumParameters(little_interpreter_Interpreter.run([rhs]))[0]) + ") - Right operand cannot be of type " + rType + " (accepted types: " + Std.string(info.rhsAllowedTypes) + ", accepted type combinations: ";
+						var callbackFunc1 = "Cannot preform " + lType + "(" + little_tools_Extensions.extractIdentifier(lhs) + ") " + symbol + " " + rType + "(" + little_tools_Extensions.extractIdentifier(rhs) + ") - Right operand cannot be of type " + rType + " (accepted types: " + Std.string(info.rhsAllowedTypes) + ", accepted type combinations: ";
 						var _this = info.allowedTypeCombos;
 						var result = new Array(_this.length);
 						var _g = 0;
@@ -7404,27 +7100,7 @@ little_tools_Plugins.prototype = {
 					}
 					if(info.rhsAllowedTypes.indexOf(lType) == -1 && !little_tools_Plugins.containsCombo(info.allowedTypeCombos,lType,rType)) {
 						var callbackFunc = little_Little.runtime;
-						var callbackFunc1 = "Cannot preform " + lType + "(";
-						var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-						var result = new Array(_this.length);
-						var _g = 0;
-						var _g1 = _this.length;
-						while(_g < _g1) {
-							var i = _g++;
-							var x = _this[i];
-							result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
-						}
-						var callbackFunc2 = callbackFunc1 + (result.indexOf($hxEnums[lhs.__enum__].__constructs__[lhs._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(lhs)[0] : Type.enumParameters(little_interpreter_Interpreter.run([lhs]))[0]) + ") " + symbol + " " + rType + "(";
-						var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-						var result = new Array(_this.length);
-						var _g = 0;
-						var _g1 = _this.length;
-						while(_g < _g1) {
-							var i = _g++;
-							var x = _this[i];
-							result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
-						}
-						var callbackFunc1 = callbackFunc2 + (result.indexOf($hxEnums[rhs.__enum__].__constructs__[rhs._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(rhs)[0] : Type.enumParameters(little_interpreter_Interpreter.run([rhs]))[0]) + ") - Left operand cannot be of type " + lType + " (accepted types: " + Std.string(info.lhsAllowedTypes) + ", accepted type combinations: ";
+						var callbackFunc1 = "Cannot preform " + lType + "(" + little_tools_Extensions.extractIdentifier(lhs) + ") " + symbol + " " + rType + "(" + little_tools_Extensions.extractIdentifier(rhs) + ") - Left operand cannot be of type " + lType + " (accepted types: " + Std.string(info.lhsAllowedTypes) + ", accepted type combinations: ";
 						var _this = info.allowedTypeCombos;
 						var result = new Array(_this.length);
 						var _g = 0;
@@ -7454,18 +7130,7 @@ little_tools_Plugins.prototype = {
 				callbackFunc = function(lhs) {
 					var lType = little_tools_Extensions.type(little_interpreter_Interpreter.evaluate(lhs));
 					if(info.lhsAllowedTypes.indexOf(lType) == -1) {
-						var callbackFunc = little_Little.runtime;
-						var callbackFunc1 = "Cannot perform " + lType + "(";
-						var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-						var result = new Array(_this.length);
-						var _g = 0;
-						var _g1 = _this.length;
-						while(_g < _g1) {
-							var i = _g++;
-							var x = _this[i];
-							result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
-						}
-						return callbackFunc.throwError(little_interpreter_InterpTokens.ErrorMessage(callbackFunc1 + (result.indexOf($hxEnums[lhs.__enum__].__constructs__[lhs._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(lhs)[0] : Type.enumParameters(little_interpreter_Interpreter.run([lhs]))[0]) + ")" + symbol + " - Operand cannot be of type " + lType + " (accepted types: " + Std.string(info.lhsAllowedTypes) + ")"));
+						return little_Little.runtime.throwError(little_interpreter_InterpTokens.ErrorMessage("Cannot perform " + lType + "(" + little_tools_Extensions.extractIdentifier(lhs) + ")" + symbol + " - Operand cannot be of type " + lType + " (accepted types: " + Std.string(info.lhsAllowedTypes) + ")"));
 					}
 					return info.singleSidedOperatorCallback(lhs);
 				};
@@ -7473,18 +7138,7 @@ little_tools_Plugins.prototype = {
 				callbackFunc = function(rhs) {
 					var rType = little_tools_Extensions.type(little_interpreter_Interpreter.evaluate(rhs));
 					if(info.rhsAllowedTypes.indexOf(rType) == -1) {
-						var callbackFunc = little_Little.runtime;
-						var callbackFunc1 = "Cannot perform " + symbol + rType + "(";
-						var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-						var result = new Array(_this.length);
-						var _g = 0;
-						var _g1 = _this.length;
-						while(_g < _g1) {
-							var i = _g++;
-							var x = _this[i];
-							result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
-						}
-						return callbackFunc.throwError(little_interpreter_InterpTokens.ErrorMessage(callbackFunc1 + (result.indexOf($hxEnums[rhs.__enum__].__constructs__[rhs._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(rhs)[0] : Type.enumParameters(little_interpreter_Interpreter.run([rhs]))[0]) + ") - Operand cannot be of type " + rType + " (accepted types: " + Std.string(info.rhsAllowedTypes) + ")"));
+						return little_Little.runtime.throwError(little_interpreter_InterpTokens.ErrorMessage("Cannot perform " + symbol + rType + "(" + little_tools_Extensions.extractIdentifier(rhs) + ") - Operand cannot be of type " + rType + " (accepted types: " + Std.string(info.rhsAllowedTypes) + ")"));
 					}
 					return info.singleSidedOperatorCallback(rhs);
 				};
@@ -7579,6 +7233,7 @@ var little_interpreter_Runtime = function() {
 	this.onLineChanged = [];
 	this.errorThrown = false;
 	this.exitCode = 0;
+	this.module = little_Little.keywords.MAIN_MODULE_NAME;
 	this.currentToken = null;
 	this.linePart = 0;
 	this.line = 0;
@@ -7735,6 +7390,12 @@ little_Little.run = function(code,debug) {
 			little_Little.debug = previous;
 		}
 	} catch( _g ) {
+		var e = haxe_Exception.caught(_g);
+		if(e.get_message() == "Quitting...") {
+			haxe_Log.trace(e.get_message(),{ fileName : "src/little/Little.hx", lineNumber : 146, className : "little.Little", methodName : "run"});
+		} else {
+			haxe_Log.trace(e.details(),{ fileName : "src/little/Little.hx", lineNumber : 146, className : "little.Little", methodName : "run"});
+		}
 	}
 };
 little_Little.compile = function(code) {
@@ -7987,34 +7648,7 @@ little_interpreter_Interpreter.splitLine = function() {
 };
 little_interpreter_Interpreter.declareVariable = function(name,type,doc) {
 	var path = little_tools_Extensions.asStringPath(name);
-	var tmp = little_Little.memory;
-	var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-	var result = new Array(_this.length);
-	var _g = 0;
-	var _g1 = _this.length;
-	while(_g < _g1) {
-		var i = _g++;
-		var x = _this[i];
-		result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
-	}
-	var tmp1 = result.indexOf($hxEnums[type.__enum__].__constructs__[type._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(type)[0] : Type.enumParameters(little_interpreter_Interpreter.run([type]))[0];
-	var tmp2;
-	if(doc != null) {
-		var token = little_interpreter_Interpreter.evaluate(doc);
-		var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-		var result = new Array(_this.length);
-		var _g = 0;
-		var _g1 = _this.length;
-		while(_g < _g1) {
-			var i = _g++;
-			var x = _this[i];
-			result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
-		}
-		tmp2 = result.indexOf($hxEnums[token.__enum__].__constructs__[token._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(token)[0] : Type.enumParameters(little_interpreter_Interpreter.run([token]))[0];
-	} else {
-		tmp2 = "";
-	}
-	tmp.write(path,little_interpreter_InterpTokens.NullValue,tmp1,tmp2);
+	little_Little.memory.write(path,little_interpreter_InterpTokens.NullValue,little_tools_Extensions.extractIdentifier(type),doc != null ? little_tools_Extensions.extractIdentifier(little_interpreter_Interpreter.evaluate(doc)) : "");
 	var _g = 0;
 	var _g1 = little_Little.runtime.onFieldDeclared;
 	while(_g < _g1.length) {
@@ -8050,90 +7684,35 @@ little_interpreter_Interpreter.declareFunction = function(name,params,doc) {
 			var _g5 = entry.doc;
 			if(_g4 == null) {
 				var name1 = _g3;
-				var _this1 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-				var result1 = new Array(_this1.length);
-				var _g6 = 0;
-				var _g7 = _this1.length;
-				while(_g6 < _g7) {
-					var i1 = _g6++;
-					var x1 = _this1[i1];
-					result1[i1] = little_tools_TextTools.remove($hxEnums[x1.__enum__].__constructs__[x1._hx_index]._hx_name,"_").toLowerCase();
-				}
-				little_tools_OrderedMap.set(paramMap,result1.indexOf($hxEnums[name1.__enum__].__constructs__[name1._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(name1)[0] : Type.enumParameters(little_interpreter_Interpreter.run([name1]))[0],little_interpreter_InterpTokens.TypeCast(little_interpreter_InterpTokens.NullValue,little_interpreter_InterpTokens.Identifier(little_Little.keywords.TYPE_UNKNOWN)));
+				little_tools_OrderedMap.set(paramMap,little_tools_Extensions.extractIdentifier(name1),little_interpreter_InterpTokens.TypeCast(little_interpreter_InterpTokens.NullValue,little_interpreter_InterpTokens.Identifier(little_Little.keywords.TYPE_UNKNOWN)));
 			} else {
 				var type = _g4;
 				var name2 = _g3;
-				var _this2 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-				var result2 = new Array(_this2.length);
-				var _g8 = 0;
-				var _g9 = _this2.length;
-				while(_g8 < _g9) {
-					var i2 = _g8++;
-					var x2 = _this2[i2];
-					result2[i2] = little_tools_TextTools.remove($hxEnums[x2.__enum__].__constructs__[x2._hx_index]._hx_name,"_").toLowerCase();
-				}
-				little_tools_OrderedMap.set(paramMap,result2.indexOf($hxEnums[name2.__enum__].__constructs__[name2._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(name2)[0] : Type.enumParameters(little_interpreter_Interpreter.run([name2]))[0],little_interpreter_InterpTokens.TypeCast(little_interpreter_InterpTokens.NullValue,type));
+				little_tools_OrderedMap.set(paramMap,little_tools_Extensions.extractIdentifier(name2),little_interpreter_InterpTokens.TypeCast(little_interpreter_InterpTokens.NullValue,type));
 			}
 			break;
 		case 10:
 			var assignees = entry.assignees;
 			var value = entry.value;
-			var _g10 = assignees[0];
-			if(_g10._hx_index == 3) {
-				var _g11 = _g10.name;
-				var _g12 = _g10.type;
-				var _g13 = _g10.doc;
-				if(_g12 == null) {
-					var name3 = _g11;
-					var _this3 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-					var result3 = new Array(_this3.length);
-					var _g14 = 0;
-					var _g15 = _this3.length;
-					while(_g14 < _g15) {
-						var i3 = _g14++;
-						var x3 = _this3[i3];
-						result3[i3] = little_tools_TextTools.remove($hxEnums[x3.__enum__].__constructs__[x3._hx_index]._hx_name,"_").toLowerCase();
-					}
-					little_tools_OrderedMap.set(paramMap,result3.indexOf($hxEnums[name3.__enum__].__constructs__[name3._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(name3)[0] : Type.enumParameters(little_interpreter_Interpreter.run([name3]))[0],little_interpreter_InterpTokens.TypeCast(value,little_interpreter_InterpTokens.Identifier(little_Little.keywords.TYPE_UNKNOWN)));
+			var _g6 = assignees[0];
+			if(_g6._hx_index == 3) {
+				var _g7 = _g6.name;
+				var _g8 = _g6.type;
+				var _g9 = _g6.doc;
+				if(_g8 == null) {
+					var name3 = _g7;
+					little_tools_OrderedMap.set(paramMap,little_tools_Extensions.extractIdentifier(name3),little_interpreter_InterpTokens.TypeCast(value,little_interpreter_InterpTokens.Identifier(little_Little.keywords.TYPE_UNKNOWN)));
 				} else {
-					var type1 = _g12;
-					var name4 = _g11;
-					var _this4 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-					var result4 = new Array(_this4.length);
-					var _g16 = 0;
-					var _g17 = _this4.length;
-					while(_g16 < _g17) {
-						var i4 = _g16++;
-						var x4 = _this4[i4];
-						result4[i4] = little_tools_TextTools.remove($hxEnums[x4.__enum__].__constructs__[x4._hx_index]._hx_name,"_").toLowerCase();
-					}
-					little_tools_OrderedMap.set(paramMap,result4.indexOf($hxEnums[name4.__enum__].__constructs__[name4._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(name4)[0] : Type.enumParameters(little_interpreter_Interpreter.run([name4]))[0],little_interpreter_InterpTokens.TypeCast(value,type1));
+					var type1 = _g8;
+					var name4 = _g7;
+					little_tools_OrderedMap.set(paramMap,little_tools_Extensions.extractIdentifier(name4),little_interpreter_InterpTokens.TypeCast(value,type1));
 				}
 			}
 			break;
 		default:
 		}
 	}
-	var tmp = little_Little.memory;
-	var tmp1 = little_interpreter_InterpTokens.FunctionCode(paramMap,little_interpreter_InterpTokens.Block([],little_interpreter_InterpTokens.Identifier(little_Little.keywords.TYPE_UNKNOWN)));
-	var tmp2 = little_Little.keywords.TYPE_FUNCTION;
-	var tmp3;
-	if(doc != null) {
-		var token = little_interpreter_Interpreter.evaluate(doc);
-		var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-		var result = new Array(_this.length);
-		var _g = 0;
-		var _g1 = _this.length;
-		while(_g < _g1) {
-			var i = _g++;
-			var x = _this[i];
-			result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
-		}
-		tmp3 = result.indexOf($hxEnums[token.__enum__].__constructs__[token._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(token)[0] : Type.enumParameters(little_interpreter_Interpreter.run([token]))[0];
-	} else {
-		tmp3 = "";
-	}
-	tmp.write(path,tmp1,tmp2,tmp3);
+	little_Little.memory.write(path,little_interpreter_InterpTokens.FunctionCode(paramMap,little_interpreter_InterpTokens.Block([],little_interpreter_InterpTokens.Identifier(little_Little.keywords.TYPE_UNKNOWN))),little_Little.keywords.TYPE_FUNCTION,doc != null ? little_tools_Extensions.extractIdentifier(little_interpreter_Interpreter.evaluate(doc)) : "");
 	var _g = 0;
 	var _g1 = little_Little.runtime.onFieldDeclared;
 	while(_g < _g1.length) {
@@ -8443,37 +8022,17 @@ little_interpreter_Interpreter.write = function(assignees,value) {
 		var _g3 = vars.length;
 		while(_g2 < _g3) {
 			var i = _g2++;
-			var x = vars[i];
-			var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-			var result1 = new Array(_this.length);
-			var _g4 = 0;
-			var _g5 = _this.length;
-			while(_g4 < _g5) {
-				var i1 = _g4++;
-				var x1 = _this[i1];
-				result1[i1] = little_tools_TextTools.remove($hxEnums[x1.__enum__].__constructs__[x1._hx_index]._hx_name,"_").toLowerCase();
-			}
-			result[i] = result1.indexOf($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(x)[0] : Type.enumParameters(little_interpreter_Interpreter.run([x]))[0];
+			result[i] = little_tools_Extensions.extractIdentifier(vars[i]);
 		}
 		var tmp = result;
-		var result2 = new Array(funcs.length);
-		var _g6 = 0;
-		var _g7 = funcs.length;
-		while(_g6 < _g7) {
-			var i2 = _g6++;
-			var x2 = funcs[i2];
-			var _this1 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-			var result3 = new Array(_this1.length);
-			var _g8 = 0;
-			var _g9 = _this1.length;
-			while(_g8 < _g9) {
-				var i3 = _g8++;
-				var x3 = _this1[i3];
-				result3[i3] = little_tools_TextTools.remove($hxEnums[x3.__enum__].__constructs__[x3._hx_index]._hx_name,"_").toLowerCase();
-			}
-			result2[i2] = result3.indexOf($hxEnums[x2.__enum__].__constructs__[x2._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(x2)[0] : Type.enumParameters(little_interpreter_Interpreter.run([x2]))[0];
+		var result1 = new Array(funcs.length);
+		var _g4 = 0;
+		var _g5 = funcs.length;
+		while(_g4 < _g5) {
+			var i1 = _g4++;
+			result1[i1] = little_tools_Extensions.extractIdentifier(funcs[i1]);
 		}
-		listener(tmp.concat(result2));
+		listener(tmp.concat(result1));
 	}
 	return value;
 };
@@ -8576,16 +8135,7 @@ little_interpreter_Interpreter.read = function(name) {
 };
 little_interpreter_Interpreter.typeCast = function(value,type) {
 	var preType = little_tools_Extensions.asStringPath(little_tools_Extensions.asTokenPath(little_tools_Extensions.type(little_interpreter_Interpreter.evaluate(value))));
-	var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-	var result = new Array(_this.length);
-	var _g = 0;
-	var _g1 = _this.length;
-	while(_g < _g1) {
-		var i = _g++;
-		var x = _this[i];
-		result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
-	}
-	var postType = little_tools_Extensions.asStringPath(little_tools_Extensions.asTokenPath(result.indexOf($hxEnums[type.__enum__].__constructs__[type._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(type)[0] : Type.enumParameters(little_interpreter_Interpreter.run([type]))[0]));
+	var postType = little_tools_Extensions.asStringPath(little_tools_Extensions.asTokenPath(little_tools_Extensions.extractIdentifier(type)));
 	if(preType.join(little_Little.keywords.PROPERTY_ACCESS_SIGN) == postType.join(little_Little.keywords.PROPERTY_ACCESS_SIGN) || postType.join(little_Little.keywords.PROPERTY_ACCESS_SIGN) == little_Little.keywords.TYPE_UNKNOWN) {
 		return value;
 	}
@@ -8944,17 +8494,7 @@ little_interpreter_Interpreter.evaluate = function(exp,dontThrow) {
 				var _g1 = _this.length;
 				while(_g < _g1) {
 					var i = _g++;
-					var token = _this[i];
-					var _this1 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-					var result1 = new Array(_this1.length);
-					var _g2 = 0;
-					var _g3 = _this1.length;
-					while(_g2 < _g3) {
-						var i1 = _g2++;
-						var x = _this1[i1];
-						result1[i1] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
-					}
-					result[i] = result1.indexOf($hxEnums[token.__enum__].__constructs__[token._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(token)[0] : Type.enumParameters(little_interpreter_Interpreter.run([token]))[0];
+					result[i] = little_tools_Extensions.extractIdentifier(_this[i]);
 				}
 				return ($_=tmp,$_.readFrom.apply($_,[tmp1].concat(result))).objectValue;
 			} else {
@@ -10132,17 +9672,7 @@ little_tools_Extensions.extractIdentifier = function(token) {
 	if(result.indexOf($hxEnums[token.__enum__].__constructs__[token._hx_index]._hx_name.toLowerCase()) != -1) {
 		return Type.enumParameters(token)[0];
 	} else {
-		return Type.enumParameters(little_interpreter_Interpreter.run([token]))[0];
-	}
-};
-little_tools_Extensions.asStringPath = function(token) {
-	var path = [];
-	var current = token;
-	while(current != null) switch(current._hx_index) {
-	case 15:
-		var source = current.name;
-		var property = current.property;
-		var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
+		var _this = [little_tools_InterpTokensSimple.PROPERTY_ACCESS].slice();
 		var result = new Array(_this.length);
 		var _g = 0;
 		var _g1 = _this.length;
@@ -10151,7 +9681,46 @@ little_tools_Extensions.asStringPath = function(token) {
 			var x = _this[i];
 			result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
 		}
-		path.unshift(result.indexOf($hxEnums[property.__enum__].__constructs__[property._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(property)[0] : Type.enumParameters(little_interpreter_Interpreter.run([property]))[0]);
+		if(result.indexOf($hxEnums[token.__enum__].__constructs__[token._hx_index]._hx_name.toLowerCase()) != -1) {
+			var t = little_interpreter_Interpreter.evaluate(token);
+			var _this = [little_tools_InterpTokensSimple.IDENTIFIER,little_tools_InterpTokensSimple.PROPERTY_ACCESS].slice();
+			var result = new Array(_this.length);
+			var _g = 0;
+			var _g1 = _this.length;
+			while(_g < _g1) {
+				var i = _g++;
+				var x = _this[i];
+				result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
+			}
+			if(result.indexOf($hxEnums[t.__enum__].__constructs__[t._hx_index]._hx_name.toLowerCase()) != -1) {
+				return little_tools_Extensions.extractIdentifier(t);
+			} else {
+				var _this = [little_tools_InterpTokensSimple.CLASS_POINTER].slice();
+				var result = new Array(_this.length);
+				var _g = 0;
+				var _g1 = _this.length;
+				while(_g < _g1) {
+					var i = _g++;
+					var x = _this[i];
+					result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
+				}
+				if(result.indexOf($hxEnums[t.__enum__].__constructs__[t._hx_index]._hx_name.toLowerCase()) != -1) {
+					return little_Little.memory.getTypeName(Type.enumParameters(t)[0]);
+				}
+			}
+			return Type.enumParameters(t)[0];
+		}
+	}
+	return Type.enumParameters(little_interpreter_Interpreter.evaluate(token))[0];
+};
+little_tools_Extensions.asStringPath = function(token) {
+	var path = [];
+	var current = token;
+	while(current != null) switch(current._hx_index) {
+	case 15:
+		var source = current.name;
+		var property = current.property;
+		path.unshift(little_tools_Extensions.extractIdentifier(property));
 		current = source;
 		break;
 	case 18:
@@ -10165,16 +9734,7 @@ little_tools_Extensions.asStringPath = function(token) {
 		current = null;
 		break;
 	default:
-		var _this1 = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-		var result1 = new Array(_this1.length);
-		var _g2 = 0;
-		var _g3 = _this1.length;
-		while(_g2 < _g3) {
-			var i1 = _g2++;
-			var x1 = _this1[i1];
-			result1[i1] = little_tools_TextTools.remove($hxEnums[x1.__enum__].__constructs__[x1._hx_index]._hx_name,"_").toLowerCase();
-		}
-		path.unshift(result1.indexOf($hxEnums[current.__enum__].__constructs__[current._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(current)[0] : Type.enumParameters(little_interpreter_Interpreter.run([current]))[0]);
+		path.unshift(little_tools_Extensions.extractIdentifier(current));
 		current = null;
 	}
 	return path;
@@ -10877,7 +10437,6 @@ little_parser_Parser.mergeComplexStructures = function(pre) {
 		return [null];
 	}
 	var post = [];
-	var currentDoc = null;
 	var i = 0;
 	while(i < pre.length) {
 		var token = pre[i];
@@ -11021,8 +10580,23 @@ little_parser_Parser.mergeComplexStructures = function(pre) {
 					little_Little.runtime.throwError(little_interpreter_InterpTokens.ErrorMessage("Missing variable name, variable is cut off by the end of the file, block or expression."),"Parser");
 					return null;
 				}
-				post.push(little_parser_ParserTokens.Variable(name,type,currentDoc));
-				currentDoc = null;
+				var tmp2;
+				if(post.length > 0) {
+					var token1 = post[post.length - 1];
+					var _this2 = [little_tools_ParserTokensSimple.DOCUMENTATION].slice();
+					var result2 = new Array(_this2.length);
+					var _g8 = 0;
+					var _g9 = _this2.length;
+					while(_g8 < _g9) {
+						var i3 = _g8++;
+						var x2 = _this2[i3];
+						result2[i3] = little_tools_TextTools.remove($hxEnums[x2.__enum__].__constructs__[x2._hx_index]._hx_name,"_").toLowerCase();
+					}
+					tmp2 = result2.indexOf($hxEnums[token1.__enum__].__constructs__[token1._hx_index]._hx_name.toLowerCase()) != -1;
+				} else {
+					tmp2 = false;
+				}
+				post.push(little_parser_ParserTokens.Variable(name,type,tmp2 ? post.pop() : null));
 			} else {
 				_hx_tmp1 = _g == little_Little.keywords.FUNCTION_DECLARATION;
 				if(_hx_tmp1 == true) {
@@ -11040,11 +10614,11 @@ little_parser_Parser.mergeComplexStructures = function(pre) {
 					var name1 = null;
 					var params = null;
 					var type3 = null;
-					_hx_loop5: while(i < pre.length) {
+					_hx_loop6: while(i < pre.length) {
 						var lookahead1 = pre[i];
 						switch(lookahead1._hx_index) {
 						case 9:
-							var _g8 = lookahead1.value;
+							var _g10 = lookahead1.value;
 							var typeToken1 = lookahead1.type;
 							if(name1 == null) {
 								little_Little.runtime.callStack.unshift({ module : little_parser_Parser.get_module(), line : little_parser_Parser.get_line(), linePart : little_parser_Parser.linePart, token : little_interpreter_InterpTokens.FunctionDeclaration(little_interpreter_InterpTokens.Identifier(""),null,little_interpreter_Interpreter.convert(typeToken1)[0])});
@@ -11056,7 +10630,7 @@ little_parser_Parser.mergeComplexStructures = function(pre) {
 								return null;
 							}
 							type3 = little_parser_Parser.mergeComplexStructures([typeToken1])[0];
-							break _hx_loop5;
+							break _hx_loop6;
 						case 12:
 							var body2 = lookahead1.parts;
 							var type4 = lookahead1.type;
@@ -11067,7 +10641,7 @@ little_parser_Parser.mergeComplexStructures = function(pre) {
 							} else if(type4 == null) {
 								type4 = little_parser_ParserTokens.Expression(little_parser_Parser.mergeComplexStructures(body2),little_parser_Parser.mergeComplexStructures([type4])[0]);
 							} else {
-								break _hx_loop5;
+								break _hx_loop6;
 							}
 							break;
 						case 13:
@@ -11080,13 +10654,13 @@ little_parser_Parser.mergeComplexStructures = function(pre) {
 							} else if(type5 == null) {
 								type5 = little_parser_ParserTokens.Block(little_parser_Parser.mergeComplexStructures(body3),little_parser_Parser.mergeComplexStructures([type5])[0]);
 							} else {
-								break _hx_loop5;
+								break _hx_loop6;
 							}
 							break;
 						case 16:
 							if(lookahead1.sign == "=") {
 								--i;
-								break _hx_loop5;
+								break _hx_loop6;
 							} else if(name1 == null) {
 								name1 = lookahead1;
 							} else if(params == null) {
@@ -11094,7 +10668,7 @@ little_parser_Parser.mergeComplexStructures = function(pre) {
 							} else if(type3 == null && $hxEnums[lookahead1.__enum__].__constructs__[lookahead1._hx_index]._hx_name == "TypeDeclaration") {
 								type3 = little_parser_Parser.mergeComplexStructures([Type.enumParameters(lookahead1)[1]])[0];
 							} else {
-								break _hx_loop5;
+								break _hx_loop6;
 							}
 							break;
 						default:
@@ -11105,7 +10679,7 @@ little_parser_Parser.mergeComplexStructures = function(pre) {
 							} else if(type3 == null && $hxEnums[lookahead1.__enum__].__constructs__[lookahead1._hx_index]._hx_name == "TypeDeclaration") {
 								type3 = little_parser_Parser.mergeComplexStructures([Type.enumParameters(lookahead1)[1]])[0];
 							} else {
-								break _hx_loop5;
+								break _hx_loop6;
 							}
 						}
 						++i;
@@ -11119,8 +10693,23 @@ little_parser_Parser.mergeComplexStructures = function(pre) {
 						little_Little.runtime.throwError(little_interpreter_InterpTokens.ErrorMessage("Missing function parameters, function is cut off by the end of the file, block or expression."),"Parser");
 						return null;
 					}
-					post.push(little_parser_ParserTokens.Function(name1,params,type3,currentDoc));
-					currentDoc = null;
+					var tmp3;
+					if(post.length > 0) {
+						var token2 = post[post.length - 1];
+						var _this3 = [little_tools_ParserTokensSimple.DOCUMENTATION].slice();
+						var result3 = new Array(_this3.length);
+						var _g11 = 0;
+						var _g12 = _this3.length;
+						while(_g11 < _g12) {
+							var i4 = _g11++;
+							var x3 = _this3[i4];
+							result3[i4] = little_tools_TextTools.remove($hxEnums[x3.__enum__].__constructs__[x3._hx_index]._hx_name,"_").toLowerCase();
+						}
+						tmp3 = result3.indexOf($hxEnums[token2.__enum__].__constructs__[token2._hx_index]._hx_name.toLowerCase()) != -1;
+					} else {
+						tmp3 = false;
+					}
+					post.push(little_parser_ParserTokens.Function(name1,params,type3,tmp3 ? post.pop() : null));
 				} else {
 					_hx_tmp = _g == little_Little.keywords.FUNCTION_RETURN;
 					if(_hx_tmp == true) {
@@ -11131,20 +10720,20 @@ little_parser_Parser.mergeComplexStructures = function(pre) {
 							return null;
 						}
 						var valueToReturn = [];
-						_hx_loop6: while(i < pre.length) {
+						_hx_loop8: while(i < pre.length) {
 							var lookahead2 = pre[i];
 							switch(lookahead2._hx_index) {
 							case 0:
-								var _g9 = lookahead2.line;
+								var _g13 = lookahead2.line;
 								--i;
-								break _hx_loop6;
+								break _hx_loop8;
 							case 1:
-								var _g10 = lookahead2.module;
+								var _g14 = lookahead2.module;
 								--i;
-								break _hx_loop6;
+								break _hx_loop8;
 							case 2:
 								--i;
-								break _hx_loop6;
+								break _hx_loop8;
 							case 12:
 								var body4 = lookahead2.parts;
 								var type6 = lookahead2.type;
@@ -11167,7 +10756,7 @@ little_parser_Parser.mergeComplexStructures = function(pre) {
 						var exp = null;
 						var body6 = null;
 						var fallback = i - 1;
-						_hx_loop7: while(body6 == null) {
+						_hx_loop9: while(body6 == null) {
 							if(i >= pre.length) {
 								i = fallback;
 								break;
@@ -11175,25 +10764,25 @@ little_parser_Parser.mergeComplexStructures = function(pre) {
 							var lookahead3 = pre[i];
 							switch(lookahead3._hx_index) {
 							case 0:
-								var _g11 = lookahead3.line;
+								var _g15 = lookahead3.line;
 								if(exp != null && body6 != null) {
-									break _hx_loop7;
+									break _hx_loop9;
 								}
 								i = fallback;
-								break _hx_loop7;
+								break _hx_loop9;
 							case 1:
-								var _g12 = lookahead3.module;
+								var _g16 = lookahead3.module;
 								if(exp != null && body6 != null) {
-									break _hx_loop7;
+									break _hx_loop9;
 								}
 								i = fallback;
-								break _hx_loop7;
+								break _hx_loop9;
 							case 2:
 								if(exp != null && body6 != null) {
-									break _hx_loop7;
+									break _hx_loop9;
 								}
 								i = fallback;
-								break _hx_loop7;
+								break _hx_loop9;
 							case 12:
 								var parts = lookahead3.parts;
 								var type8 = lookahead3.type;
@@ -11201,7 +10790,7 @@ little_parser_Parser.mergeComplexStructures = function(pre) {
 									exp = little_parser_ParserTokens.PartArray(little_parser_Parser.mergeComplexStructures(parts));
 								} else if(body6 == null) {
 									i = fallback;
-									break _hx_loop7;
+									break _hx_loop9;
 								}
 								break;
 							case 13:
@@ -11209,7 +10798,7 @@ little_parser_Parser.mergeComplexStructures = function(pre) {
 								var type9 = lookahead3.type;
 								if(exp == null) {
 									i = fallback;
-									break _hx_loop7;
+									break _hx_loop9;
 								} else if(body6 == null) {
 									body6 = little_parser_ParserTokens.Block(little_parser_Parser.mergeComplexStructures(b),little_parser_Parser.mergeComplexStructures([type9])[0]);
 								}
@@ -11217,7 +10806,7 @@ little_parser_Parser.mergeComplexStructures = function(pre) {
 							default:
 								if(exp == null || body6 == null) {
 									i = fallback;
-									break _hx_loop7;
+									break _hx_loop9;
 								}
 							}
 							++i;
@@ -11227,7 +10816,6 @@ little_parser_Parser.mergeComplexStructures = function(pre) {
 						} else {
 							--i;
 							post.push(little_parser_ParserTokens.ConditionCall(name2,exp,body6));
-							currentDoc = null;
 						}
 					}
 				}
@@ -11250,19 +10838,19 @@ little_parser_Parser.mergeComplexStructures = function(pre) {
 			break;
 		case 20:
 			var doc = token.doc;
-			currentDoc = token;
+			post.push(token);
 			break;
 		case 25:
 			var name4 = token.name;
 			var params1 = token.params;
-			var result2 = new Array(params1.length);
-			var _g13 = 0;
-			var _g14 = params1.length;
-			while(_g13 < _g14) {
-				var i3 = _g13++;
-				result2[i3] = little_parser_Parser.mergeComplexStructures([params1[i3]])[0];
+			var result4 = new Array(params1.length);
+			var _g17 = 0;
+			var _g18 = params1.length;
+			while(_g17 < _g18) {
+				var i5 = _g17++;
+				result4[i5] = little_parser_Parser.mergeComplexStructures([params1[i5]])[0];
 			}
-			post.push(little_parser_ParserTokens.Custom(name4,result2));
+			post.push(little_parser_ParserTokens.Custom(name4,result4));
 			break;
 		default:
 			post.push(token);
@@ -11507,14 +11095,30 @@ little_parser_Parser.mergeWrites = function(pre) {
 					switch(lookahead._hx_index) {
 					case 0:
 						var _g2 = lookahead.line;
+						if(value3.length == 0) {
+							little_Little.runtime.callStack.unshift({ module : little_parser_Parser.get_module(), line : little_parser_Parser.get_line(), linePart : little_parser_Parser.linePart, token : little_interpreter_Interpreter.convert(little_parser_ParserTokens.Write([assignee],lookahead))[0]});
+							little_Little.runtime.throwError(little_interpreter_InterpTokens.ErrorMessage("Missing value after the last `=`"),"Parser");
+						}
 						break _hx_loop3;
 					case 1:
 						var _g3 = lookahead.module;
+						if(value3.length == 0) {
+							little_Little.runtime.callStack.unshift({ module : little_parser_Parser.get_module(), line : little_parser_Parser.get_line(), linePart : little_parser_Parser.linePart, token : little_interpreter_Interpreter.convert(little_parser_ParserTokens.Write([assignee],lookahead))[0]});
+							little_Little.runtime.throwError(little_interpreter_InterpTokens.ErrorMessage("Missing value after the last `=`"),"Parser");
+						}
 						break _hx_loop3;
 					case 2:
+						if(value3.length == 0) {
+							little_Little.runtime.callStack.unshift({ module : little_parser_Parser.get_module(), line : little_parser_Parser.get_line(), linePart : little_parser_Parser.linePart, token : little_interpreter_Interpreter.convert(little_parser_ParserTokens.Write([assignee],lookahead))[0]});
+							little_Little.runtime.throwError(little_interpreter_InterpTokens.ErrorMessage("Missing value after the last `=`"),"Parser");
+						}
 						break _hx_loop3;
 					case 16:
 						if(lookahead.sign == "=") {
+							if(value3.length == 0) {
+								little_Little.runtime.callStack.unshift({ module : little_parser_Parser.get_module(), line : little_parser_Parser.get_line(), linePart : little_parser_Parser.linePart, token : little_interpreter_Interpreter.convert(little_parser_ParserTokens.Write([assignee],lookahead))[0]});
+								little_Little.runtime.throwError(little_interpreter_InterpTokens.ErrorMessage("Missing value after the last `=`"),"Parser");
+							}
 							break _hx_loop3;
 						} else {
 							value3.push(lookahead);
@@ -11536,7 +11140,7 @@ little_parser_Parser.mergeWrites = function(pre) {
 					result1[i2] = little_tools_TextTools.remove($hxEnums[x1.__enum__].__constructs__[x1._hx_index]._hx_name,"_").toLowerCase();
 				}
 				if(result1.indexOf($hxEnums[assignee.__enum__].__constructs__[assignee._hx_index]._hx_name.toLowerCase()) != -1) {
-					var assignees1 = Type.enumParameters(assignee)[0].push(Type.enumParameters(assignee)[1]);
+					var assignees1 = Type.enumParameters(assignee)[0].concat([Type.enumParameters(assignee)[1]]);
 					post.push(little_parser_ParserTokens.Write(assignees1,token1));
 				} else {
 					post.push(little_parser_ParserTokens.Write([assignee],token1));
@@ -13143,17 +12747,7 @@ little_tools_PrepareRun.addConditions = function() {
 				result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
 			}
 			if(result.indexOf($hxEnums[token.__enum__].__constructs__[token._hx_index]._hx_name.toLowerCase()) != -1) {
-				var token = params[0];
-				var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-				var result = new Array(_this.length);
-				var _g = 0;
-				var _g1 = _this.length;
-				while(_g < _g1) {
-					var i = _g++;
-					var x = _this[i];
-					result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
-				}
-				ident = result.indexOf($hxEnums[token.__enum__].__constructs__[token._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(token)[0] : Type.enumParameters(little_interpreter_Interpreter.run([token]))[0];
+				ident = little_tools_Extensions.extractIdentifier(params[0]);
 			} else {
 				little_Little.runtime.throwError(little_interpreter_InterpTokens.ErrorMessage("`" + little_Little.keywords.CONDITION__AFTER + "` condition must start with a variable to watch (expected definition, found: `" + little_tools_PrettyPrinter.stringifyInterpreter(null,params[0]) + "`)"));
 				return val;
@@ -13199,17 +12793,7 @@ little_tools_PrepareRun.addConditions = function() {
 				result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
 			}
 			if(result.indexOf($hxEnums[token.__enum__].__constructs__[token._hx_index]._hx_name.toLowerCase()) != -1) {
-				var token = params[0];
-				var _this = [little_tools_InterpTokensSimple.IDENTIFIER].slice();
-				var result = new Array(_this.length);
-				var _g = 0;
-				var _g1 = _this.length;
-				while(_g < _g1) {
-					var i = _g++;
-					var x = _this[i];
-					result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
-				}
-				ident = result.indexOf($hxEnums[token.__enum__].__constructs__[token._hx_index]._hx_name.toLowerCase()) != -1 ? Type.enumParameters(token)[0] : Type.enumParameters(little_interpreter_Interpreter.run([token]))[0];
+				ident = little_tools_Extensions.extractIdentifier(params[0]);
 			} else {
 				little_Little.runtime.throwError(little_interpreter_InterpTokens.ErrorMessage("`" + little_Little.keywords.CONDITION__WHENEVER + "` condition must start with a variable to watch (expected definition, found: `" + little_tools_PrettyPrinter.stringifyInterpreter(null,params[0]) + "`)"));
 				return val;
@@ -13706,11 +13290,18 @@ little_tools_PrettyPrinter.getTree_INTERP = function(root,prefix,level,last) {
 		return "" + little_tools_PrettyPrinter.prefixFA(prefix) + t + d + " <Haxe Extern>\n";
 	}
 };
+little_tools_PrettyPrinter.requiresWhitespaceBeforeSign = function(s) {
+	return little_KeywordConfig.whiteSpacePrefixedOperators.indexOf(s) != -1;
+};
+little_tools_PrettyPrinter.requiresWhitespaceAfterSign = function(s) {
+	return little_KeywordConfig.whiteSpaceSuffixedOperators.indexOf(s) != -1;
+};
 little_tools_PrettyPrinter.stringifyParser = function(code,token) {
 	if(token != null) {
 		code = [token];
 	}
 	var s = "";
+	haxe_Log.trace(code,{ fileName : "src/little/tools/PrettyPrinter.hx", lineNumber : 368, className : "little.tools.PrettyPrinter", methodName : "stringifyParser"});
 	var _g = 0;
 	while(_g < code.length) {
 		var token = code[_g];
@@ -13718,6 +13309,7 @@ little_tools_PrettyPrinter.stringifyParser = function(code,token) {
 		switch(token._hx_index) {
 		case 0:
 			var line = token.line;
+			s = little_tools_TextTools.replaceIfLast(s," ","");
 			s += "\n" + little_tools_PrettyPrinter.indent;
 			continue;
 		case 1:
@@ -13820,8 +13412,8 @@ little_tools_PrettyPrinter.stringifyParser = function(code,token) {
 				body1.shift();
 			}
 			s += "{" + little_tools_PrettyPrinter.stringifyParser(body1) + "} " + (type5 != null && little_tools_Extensions.asJoinedStringPath(little_interpreter_Interpreter.convert(type5)[0]) != little_Little.keywords.TYPE_UNKNOWN ? "" + little_Little.keywords.TYPE_DECL_OR_CAST + " " + little_tools_PrettyPrinter.stringifyParser(null,type5) : "");
-			s = little_tools_TextTools.replaceLast(s,"\t} ","}");
 			little_tools_PrettyPrinter.indent = little_tools_TextTools.replaceLast(little_tools_PrettyPrinter.indent,"\t","");
+			s = little_tools_TextTools.replaceLast(s,"" + little_tools_PrettyPrinter.indent + "}","}");
 			break;
 		case 14:
 			var parts1 = token.parts;
@@ -13834,8 +13426,14 @@ little_tools_PrettyPrinter.stringifyParser = function(code,token) {
 			break;
 		case 16:
 			var sign = token.sign;
+			if(!little_tools_PrettyPrinter.requiresWhitespaceBeforeSign(sign)) {
+				s = little_tools_TextTools.replaceIfLast(s," ","");
+			}
 			s += sign;
-			break;
+			if(little_tools_PrettyPrinter.requiresWhitespaceAfterSign(sign)) {
+				s += " ";
+			}
+			continue;
 		case 17:
 			var num = token.num;
 			s += num;
@@ -13869,9 +13467,11 @@ little_tools_PrettyPrinter.stringifyParser = function(code,token) {
 			var _g11 = token.params;
 			throw haxe_Exception.thrown("Custom tokens cannot be stringified, as they dont represent any output syntax (found " + Std.string(token) + ")");
 		}
-		s += " ";
+		if(token != code[code.length - 1]) {
+			s += " ";
+		}
 	}
-	return little_tools_TextTools.replaceLast(StringTools.ltrim(s)," ","");
+	return little_tools_TextTools.replaceIfLast(s,"\t","");
 };
 little_tools_PrettyPrinter.stringifyInterpreter = function(code,token) {
 	if(token == null && code == null || code != null && code.length == 1 && code[0] == null) {
@@ -14028,8 +13628,14 @@ little_tools_PrettyPrinter.stringifyInterpreter = function(code,token) {
 			break;
 		case 21:
 			var sign = token.sign;
+			if(!little_tools_PrettyPrinter.requiresWhitespaceBeforeSign(sign)) {
+				s = little_tools_TextTools.replaceIfLast(s," ","");
+			}
 			s += sign;
-			break;
+			if(little_tools_PrettyPrinter.requiresWhitespaceAfterSign(sign)) {
+				s += " ";
+			}
+			continue;
 		case 22:
 			s += little_Little.keywords.NULL_VALUE;
 			break;
@@ -40102,6 +39708,8 @@ little_tools_TextTools.fonts = new little_tools__$TextTools_MultilangFonts();
 little_tools_TextTools.loremIpsumText = "\r\n\t\tLorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque finibus condimentum magna, eget porttitor libero aliquam non. Praesent commodo, augue nec hendrerit tincidunt, urna felis lobortis mi, non cursus libero tellus quis tellus. Vivamus ornare convallis tristique. Integer nec ornare libero. Phasellus feugiat facilisis faucibus. Vivamus porta id neque id placerat. Proin convallis vel felis et pharetra. Quisque magna justo, ullamcorper quis scelerisque eu, tincidunt vitae lectus. Nunc sed turpis justo. Aliquam porttitor, purus sit amet faucibus bibendum, ligula elit molestie purus, eu volutpat turpis sapien ac tellus. Fusce mauris arcu, volutpat ut aliquam ut, ultrices id ante. Morbi quis consectetur turpis. Integer semper lacinia urna id laoreet.\r\n\r\n\t\tUt mollis eget eros eu tempor. Phasellus nulla velit, sollicitudin eget massa a, tristique rutrum turpis. Vestibulum in dolor at elit pellentesque finibus. Nulla pharetra felis a varius molestie. Nam magna lectus, eleifend ac sagittis id, ornare id nibh. Praesent congue est non iaculis consectetur. Nullam dictum augue sit amet dignissim fringilla. Aenean semper justo velit. Sed nec lectus facilisis, sodales diam eget, imperdiet nunc. Quisque elementum nulla non orci interdum pharetra id quis arcu. Phasellus eu nunc lectus. Nam tellus tortor, pellentesque eget faucibus eu, laoreet quis odio. Pellentesque posuere in enim a blandit.\r\n\r\n\t\tDuis dignissim neque et ex iaculis, ac consequat diam gravida. In mi ex, blandit eget velit non, euismod feugiat arcu. Nulla nec fermentum neque, eget elementum mauris. Vivamus urna ligula, faucibus at facilisis sed, commodo sit amet urna. Sed porttitor feugiat purus ac tincidunt. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aliquam sollicitudin lacinia turpis quis placerat. Donec eget velit nibh. Duis vehicula orci lectus, eget rutrum arcu tincidunt et. Vestibulum ut pharetra lectus. Quisque lacinia nunc rhoncus neque venenatis consequat. Nulla rutrum ultricies sapien, sed semper lectus accumsan nec. Phasellus commodo faucibus lacinia. Donec auctor condimentum ligula. Sed quis viverra mauris.\r\n\r\n\t\tQuisque maximus justo dui, eget pretium lorem accumsan ac. Praesent eleifend faucibus orci et varius. Ut et molestie turpis, eu porta neque. Quisque vehicula, libero in tincidunt facilisis, purus eros pulvinar leo, sit amet eleifend justo ligula tempor lectus. Donec ac tortor sed ipsum tincidunt pulvinar id nec eros. In luctus purus cursus est dictum, ac sollicitudin turpis maximus. Maecenas a nisl velit. Nulla gravida lectus vel ultricies gravida. Proin vel bibendum magna. Donec aliquam ultricies quam, quis tempor nunc pharetra ut.\r\n\r\n\t\tPellentesque sit amet dui est. Aliquam erat volutpat. Integer vitae ullamcorper est, ut eleifend augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Quisque congue velit felis, vitae elementum nulla faucibus id. Donec lectus nibh, commodo eget nunc id, feugiat sagittis massa. In hac habitasse platea dictumst. Pellentesque volutpat molestie ultrices.\r\n\t";
 little_KeywordConfig.defaultConfig = new little_KeywordConfig(null,null);
 little_KeywordConfig.recognizedOperators = ["!","#","$","%","&","'","(",")","*","+","-",".","/",":","<","=",">","?","@","[","\\","]","^","_","`","{","|","}","~","^","√"];
+little_KeywordConfig.whiteSpacePrefixedOperators = ["%","&","&&","*","+","-","/","<","<=","==",">",">=","||","|"];
+little_KeywordConfig.whiteSpaceSuffixedOperators = ["!","&","&&","||","|","*","+","-","/","<","<=","==",">",">="];
 little_interpreter_memory_Referrer.KEY_SIZE = 16;
 little_Little.keywords = new little_KeywordConfig(null,true);
 little_Little.runtime = new little_interpreter_Runtime();

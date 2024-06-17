@@ -95,6 +95,8 @@ void hl_init_hashes() {
 	hl_hash((vbyte*)USTR("containsCombo"));
 	hl_hash((vbyte*)USTR("defaultConfig"));
 	hl_hash((vbyte*)USTR("recognizedOperators"));
+	hl_hash((vbyte*)USTR("whiteSpacePrefixedOperators"));
+	hl_hash((vbyte*)USTR("whiteSpaceSuffixedOperators"));
 	hl_hash((vbyte*)USTR("VARIABLE_DECLARATION"));
 	hl_hash((vbyte*)USTR("FUNCTION_DECLARATION"));
 	hl_hash((vbyte*)USTR("TYPE_DECL_OR_CAST"));
@@ -462,6 +464,8 @@ void hl_init_hashes() {
 	hl_hash((vbyte*)USTR("l"));
 	hl_hash((vbyte*)USTR("getTree_INTERP"));
 	hl_hash((vbyte*)USTR("indent"));
+	hl_hash((vbyte*)USTR("requiresWhitespaceBeforeSign"));
+	hl_hash((vbyte*)USTR("requiresWhitespaceAfterSign"));
 	hl_hash((vbyte*)USTR("stringifyParser"));
 	hl_hash((vbyte*)USTR("stringifyInterpreter"));
 	hl_hash((vbyte*)USTR("main"));
@@ -537,6 +541,7 @@ void hl_init_hashes() {
 	hl_hash((vbyte*)USTR("lex"));
 	hl_hash((vbyte*)USTR("separateBooleanIdentifiers"));
 	hl_hash((vbyte*)USTR("mergeOrSplitKnownSigns"));
+	hl_hash((vbyte*)USTR("extractIdentifier"));
 	hl_hash((vbyte*)USTR("asStringPath"));
 	hl_hash((vbyte*)USTR("asJoinedStringPath"));
 	hl_hash((vbyte*)USTR("asObjectToken"));

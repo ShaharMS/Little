@@ -7,6 +7,9 @@
 #ifndef INCLUDED_Type
 #include <Type.h>
 #endif
+#ifndef INCLUDED_little_KeywordConfig
+#include <little/KeywordConfig.h>
+#endif
 #ifndef INCLUDED_little_Little
 #include <little/Little.h>
 #endif
@@ -59,6 +62,7 @@ HXLINE(  77)		this->onModuleChanged = ::Array_obj< ::Dynamic>::__new(0);
 HXLINE(  67)		this->onLineChanged = ::Array_obj< ::Dynamic>::__new(0);
 HXLINE(  55)		this->errorThrown = false;
 HXLINE(  50)		this->exitCode = 0;
+HXLINE(  37)		this->module = ::little::Little_obj::keywords->MAIN_MODULE_NAME;
 HXLINE(  32)		this->currentToken = null();
 HXLINE(  27)		this->linePart = 0;
 HXLINE(  22)		this->line = 0;

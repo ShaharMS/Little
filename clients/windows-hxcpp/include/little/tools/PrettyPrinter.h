@@ -78,6 +78,12 @@ class HXCPP_CLASS_ATTRIBUTES PrettyPrinter_obj : public ::hx::Object
 		static ::Dynamic getTree_INTERP_dyn();
 
 		static ::String indent;
+		static bool requiresWhitespaceBeforeSign(::String s);
+		static ::Dynamic requiresWhitespaceBeforeSign_dyn();
+
+		static bool requiresWhitespaceAfterSign(::String s);
+		static ::Dynamic requiresWhitespaceAfterSign_dyn();
+
 		static ::String stringifyParser(::Array< ::Dynamic> code, ::little::parser::ParserTokens token);
 		static ::Dynamic stringifyParser_dyn();
 

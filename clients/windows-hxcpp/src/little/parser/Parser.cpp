@@ -42,20 +42,20 @@ HX_LOCAL_STACK_FRAME(_hx_pos_b4f540063664edae_175_mergeExpressions,"little.parse
 HX_LOCAL_STACK_FRAME(_hx_pos_b4f540063664edae_235_mergePropertyOperations,"little.parser.Parser","mergePropertyOperations",0xbb82cac1,"little.parser.Parser.mergePropertyOperations","little/parser/Parser.hx",235,0x38f03b28)
 HX_LOCAL_STACK_FRAME(_hx_pos_b4f540063664edae_325_mergeTypeDecls,"little.parser.Parser","mergeTypeDecls",0xeb7c980f,"little.parser.Parser.mergeTypeDecls","little/parser/Parser.hx",325,0x38f03b28)
 HX_LOCAL_STACK_FRAME(_hx_pos_b4f540063664edae_375_mergeComplexStructures,"little.parser.Parser","mergeComplexStructures",0x49a7ef90,"little.parser.Parser.mergeComplexStructures","little/parser/Parser.hx",375,0x38f03b28)
-HX_LOCAL_STACK_FRAME(_hx_pos_b4f540063664edae_619_mergeCalls,"little.parser.Parser","mergeCalls",0xa9e7f275,"little.parser.Parser.mergeCalls","little/parser/Parser.hx",619,0x38f03b28)
-HX_LOCAL_STACK_FRAME(_hx_pos_b4f540063664edae_670_mergeWrites,"little.parser.Parser","mergeWrites",0xc809aa54,"little.parser.Parser.mergeWrites","little/parser/Parser.hx",670,0x38f03b28)
-HX_LOCAL_STACK_FRAME(_hx_pos_b4f540063664edae_748_mergeValuesWithTypeDecls,"little.parser.Parser","mergeValuesWithTypeDecls",0x9fb24fe7,"little.parser.Parser.mergeValuesWithTypeDecls","little/parser/Parser.hx",748,0x38f03b28)
-HX_LOCAL_STACK_FRAME(_hx_pos_b4f540063664edae_807_mergeNonBlockBodies,"little.parser.Parser","mergeNonBlockBodies",0x799ce040,"little.parser.Parser.mergeNonBlockBodies","little/parser/Parser.hx",807,0x38f03b28)
-HX_LOCAL_STACK_FRAME(_hx_pos_b4f540063664edae_860_mergeElses,"little.parser.Parser","mergeElses",0xd7ffbdfa,"little.parser.Parser.mergeElses","little/parser/Parser.hx",860,0x38f03b28)
-HX_LOCAL_STACK_FRAME(_hx_pos_b4f540063664edae_933_get_line,"little.parser.Parser","get_line",0x4425e3b5,"little.parser.Parser.get_line","little/parser/Parser.hx",933,0x38f03b28)
-HX_LOCAL_STACK_FRAME(_hx_pos_b4f540063664edae_934_set_line,"little.parser.Parser","set_line",0xf2833d29,"little.parser.Parser.set_line","little/parser/Parser.hx",934,0x38f03b28)
-HX_LOCAL_STACK_FRAME(_hx_pos_b4f540063664edae_936_get_module,"little.parser.Parser","get_module",0xd86132ad,"little.parser.Parser.get_module","little/parser/Parser.hx",936,0x38f03b28)
-HX_LOCAL_STACK_FRAME(_hx_pos_b4f540063664edae_937_set_module,"little.parser.Parser","set_module",0xdbded121,"little.parser.Parser.set_module","little/parser/Parser.hx",937,0x38f03b28)
-HX_LOCAL_STACK_FRAME(_hx_pos_b4f540063664edae_943_setLine,"little.parser.Parser","setLine",0xc202377e,"little.parser.Parser.setLine","little/parser/Parser.hx",943,0x38f03b28)
-HX_LOCAL_STACK_FRAME(_hx_pos_b4f540063664edae_950_nextPart,"little.parser.Parser","nextPart",0x72d69abe,"little.parser.Parser.nextPart","little/parser/Parser.hx",950,0x38f03b28)
-HX_LOCAL_STACK_FRAME(_hx_pos_b4f540063664edae_955_resetLines,"little.parser.Parser","resetLines",0x84a4a3e8,"little.parser.Parser.resetLines","little/parser/Parser.hx",955,0x38f03b28)
+HX_LOCAL_STACK_FRAME(_hx_pos_b4f540063664edae_615_mergeCalls,"little.parser.Parser","mergeCalls",0xa9e7f275,"little.parser.Parser.mergeCalls","little/parser/Parser.hx",615,0x38f03b28)
+HX_LOCAL_STACK_FRAME(_hx_pos_b4f540063664edae_666_mergeWrites,"little.parser.Parser","mergeWrites",0xc809aa54,"little.parser.Parser.mergeWrites","little/parser/Parser.hx",666,0x38f03b28)
+HX_LOCAL_STACK_FRAME(_hx_pos_b4f540063664edae_750_mergeValuesWithTypeDecls,"little.parser.Parser","mergeValuesWithTypeDecls",0x9fb24fe7,"little.parser.Parser.mergeValuesWithTypeDecls","little/parser/Parser.hx",750,0x38f03b28)
+HX_LOCAL_STACK_FRAME(_hx_pos_b4f540063664edae_809_mergeNonBlockBodies,"little.parser.Parser","mergeNonBlockBodies",0x799ce040,"little.parser.Parser.mergeNonBlockBodies","little/parser/Parser.hx",809,0x38f03b28)
+HX_LOCAL_STACK_FRAME(_hx_pos_b4f540063664edae_862_mergeElses,"little.parser.Parser","mergeElses",0xd7ffbdfa,"little.parser.Parser.mergeElses","little/parser/Parser.hx",862,0x38f03b28)
+HX_LOCAL_STACK_FRAME(_hx_pos_b4f540063664edae_935_get_line,"little.parser.Parser","get_line",0x4425e3b5,"little.parser.Parser.get_line","little/parser/Parser.hx",935,0x38f03b28)
+HX_LOCAL_STACK_FRAME(_hx_pos_b4f540063664edae_936_set_line,"little.parser.Parser","set_line",0xf2833d29,"little.parser.Parser.set_line","little/parser/Parser.hx",936,0x38f03b28)
+HX_LOCAL_STACK_FRAME(_hx_pos_b4f540063664edae_938_get_module,"little.parser.Parser","get_module",0xd86132ad,"little.parser.Parser.get_module","little/parser/Parser.hx",938,0x38f03b28)
+HX_LOCAL_STACK_FRAME(_hx_pos_b4f540063664edae_939_set_module,"little.parser.Parser","set_module",0xdbded121,"little.parser.Parser.set_module","little/parser/Parser.hx",939,0x38f03b28)
+HX_LOCAL_STACK_FRAME(_hx_pos_b4f540063664edae_945_setLine,"little.parser.Parser","setLine",0xc202377e,"little.parser.Parser.setLine","little/parser/Parser.hx",945,0x38f03b28)
+HX_LOCAL_STACK_FRAME(_hx_pos_b4f540063664edae_952_nextPart,"little.parser.Parser","nextPart",0x72d69abe,"little.parser.Parser.nextPart","little/parser/Parser.hx",952,0x38f03b28)
+HX_LOCAL_STACK_FRAME(_hx_pos_b4f540063664edae_957_resetLines,"little.parser.Parser","resetLines",0x84a4a3e8,"little.parser.Parser.resetLines","little/parser/Parser.hx",957,0x38f03b28)
 HX_LOCAL_STACK_FRAME(_hx_pos_b4f540063664edae_25_boot,"little.parser.Parser","boot",0x3709186a,"little.parser.Parser.boot","little/parser/Parser.hx",25,0x38f03b28)
-HX_LOCAL_STACK_FRAME(_hx_pos_b4f540063664edae_938_boot,"little.parser.Parser","boot",0x3709186a,"little.parser.Parser.boot","little/parser/Parser.hx",938,0x38f03b28)
+HX_LOCAL_STACK_FRAME(_hx_pos_b4f540063664edae_940_boot,"little.parser.Parser","boot",0x3709186a,"little.parser.Parser.boot","little/parser/Parser.hx",940,0x38f03b28)
 namespace little{
 namespace parser{
 
@@ -818,372 +818,399 @@ HXDLIN( 378)		if (_hx_tmp) {
 HXLINE( 378)			return ::Array_obj< ::Dynamic>::__new(1)->init(0,null());
             		}
 HXLINE( 380)		::Array< ::Dynamic> post = ::Array_obj< ::Dynamic>::__new(0);
-HXLINE( 382)		 ::little::parser::ParserTokens currentDoc = null();
-HXLINE( 383)		int i = 0;
-HXLINE( 384)		while((i < pre->length)){
-HXLINE( 385)			 ::little::parser::ParserTokens token = pre->__get(i).StaticCast<  ::little::parser::ParserTokens >();
-HXLINE( 387)			switch((int)(token->_hx_getIndex())){
+HXLINE( 382)		int i = 0;
+HXLINE( 383)		while((i < pre->length)){
+HXLINE( 384)			 ::little::parser::ParserTokens token = pre->__get(i).StaticCast<  ::little::parser::ParserTokens >();
+HXLINE( 386)			switch((int)(token->_hx_getIndex())){
             				case (int)0: {
-HXLINE( 388)					int line = token->_hx_getInt(0);
-HXDLIN( 388)					{
-HXLINE( 388)						::little::parser::Parser_obj::setLine(line);
-HXDLIN( 388)						post->push(token);
+HXLINE( 387)					int line = token->_hx_getInt(0);
+HXDLIN( 387)					{
+HXLINE( 387)						::little::parser::Parser_obj::setLine(line);
+HXDLIN( 387)						post->push(token);
             					}
             				}
             				break;
             				case (int)1: {
-HXLINE( 389)					::String module = token->_hx_getString(0);
-HXDLIN( 389)					{
-HXLINE( 389)						::little::parser::Parser_obj::set_module(module);
-HXDLIN( 389)						post->push(token);
+HXLINE( 388)					::String module = token->_hx_getString(0);
+HXDLIN( 388)					{
+HXLINE( 388)						::little::parser::Parser_obj::set_module(module);
+HXDLIN( 388)						post->push(token);
             					}
             				}
             				break;
             				case (int)2: {
-HXLINE( 390)					::little::parser::Parser_obj::nextPart();
-HXDLIN( 390)					post->push(token);
+HXLINE( 389)					::little::parser::Parser_obj::nextPart();
+HXDLIN( 389)					post->push(token);
             				}
             				break;
             				case (int)8: {
-HXLINE( 550)					::String _g = token->_hx_getString(0);
-HXLINE( 392)					{
-HXLINE( 525)						bool _hx_tmp1;
-HXLINE( 452)						bool _hx_tmp2;
-HXLINE( 392)						if (((_g == ::little::Little_obj::keywords->VARIABLE_DECLARATION) == true)) {
-HXLINE( 393)							i = (i + 1);
-HXLINE( 394)							if ((i >= pre->length)) {
-HXLINE( 395)								::Array< ::Dynamic> _hx_tmp3 = ::little::Little_obj::runtime->callStack;
-HXDLIN( 395)								::String _hx_tmp4 = ::little::parser::Parser_obj::get_module();
-HXDLIN( 395)								int _hx_tmp5 = ::little::parser::Parser_obj::get_line();
-HXDLIN( 395)								_hx_tmp3->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
+HXLINE( 547)					::String _g = token->_hx_getString(0);
+HXLINE( 391)					{
+HXLINE( 522)						bool _hx_tmp1;
+HXLINE( 450)						bool _hx_tmp2;
+HXLINE( 391)						if (((_g == ::little::Little_obj::keywords->VARIABLE_DECLARATION) == true)) {
+HXLINE( 392)							i = (i + 1);
+HXLINE( 393)							if ((i >= pre->length)) {
+HXLINE( 394)								::Array< ::Dynamic> _hx_tmp3 = ::little::Little_obj::runtime->callStack;
+HXDLIN( 394)								::String _hx_tmp4 = ::little::parser::Parser_obj::get_module();
+HXDLIN( 394)								int _hx_tmp5 = ::little::parser::Parser_obj::get_line();
+HXDLIN( 394)								_hx_tmp3->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
             									->setFixed(0,HX_("linePart",07,32,7b,87),::little::parser::Parser_obj::linePart)
             									->setFixed(1,HX_("module",ac,34,d3,c0),_hx_tmp4)
             									->setFixed(2,HX_("token",f9,82,2b,14),::little::interpreter::InterpTokens_obj::VariableDeclaration(::little::interpreter::InterpTokens_obj::Identifier(HX_("",00,00,00,00)),null(),null()))
             									->setFixed(3,HX_("line",f4,17,b3,47),_hx_tmp5)));
-HXLINE( 396)								::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(HX_("Missing variable name, variable is cut off by the end of the file, block or expression.",81,1e,ff,ea)),HX_("Parser",ff,10,1d,22));
-HXLINE( 397)								return null();
+HXLINE( 395)								::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(HX_("Missing variable name, variable is cut off by the end of the file, block or expression.",81,1e,ff,ea)),HX_("Parser",ff,10,1d,22));
+HXLINE( 396)								return null();
             							}
-HXLINE( 400)							 ::little::parser::ParserTokens name = null();
-HXLINE( 401)							 ::little::parser::ParserTokens type = null();
-HXLINE( 403)							while((i < pre->length)){
-HXLINE( 404)								 ::little::parser::ParserTokens lookahead = pre->__get(i).StaticCast<  ::little::parser::ParserTokens >();
-HXLINE( 405)								switch((int)(lookahead->_hx_getIndex())){
+HXLINE( 399)							 ::little::parser::ParserTokens name = null();
+HXLINE( 400)							 ::little::parser::ParserTokens type = null();
+HXLINE( 402)							while((i < pre->length)){
+HXLINE( 403)								 ::little::parser::ParserTokens lookahead = pre->__get(i).StaticCast<  ::little::parser::ParserTokens >();
+HXLINE( 404)								switch((int)(lookahead->_hx_getIndex())){
             									case (int)0: {
-HXLINE( 415)										int _g1 = lookahead->_hx_getInt(0);
-HXDLIN( 415)										i = (i - 1);
-HXDLIN( 415)										goto _hx_goto_21;
+HXLINE( 414)										int _g1 = lookahead->_hx_getInt(0);
+HXDLIN( 414)										i = (i - 1);
+HXDLIN( 414)										goto _hx_goto_21;
             									}
             									break;
             									case (int)1: {
-HXLINE( 415)										::String _g2 = lookahead->_hx_getString(0);
-HXDLIN( 415)										i = (i - 1);
-HXDLIN( 415)										goto _hx_goto_21;
+HXLINE( 414)										::String _g2 = lookahead->_hx_getString(0);
+HXDLIN( 414)										i = (i - 1);
+HXDLIN( 414)										goto _hx_goto_21;
             									}
             									break;
             									case (int)2: {
-HXLINE( 415)										i = (i - 1);
-HXDLIN( 415)										goto _hx_goto_21;
+HXLINE( 414)										i = (i - 1);
+HXDLIN( 414)										goto _hx_goto_21;
             									}
             									break;
             									case (int)9: {
-HXLINE( 406)										 ::little::parser::ParserTokens _g3 = lookahead->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 406)										 ::little::parser::ParserTokens typeToken = lookahead->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXLINE( 407)										if (::hx::IsNull( name )) {
-HXLINE( 408)											::Array< ::Dynamic> _hx_tmp6 = ::little::Little_obj::runtime->callStack;
-HXDLIN( 408)											::String _hx_tmp7 = ::little::parser::Parser_obj::get_module();
-HXDLIN( 408)											int _hx_tmp8 = ::little::parser::Parser_obj::get_line();
-HXDLIN( 408)											int _hx_tmp9 = ::little::parser::Parser_obj::linePart;
-HXDLIN( 408)											_hx_tmp6->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
+HXLINE( 405)										 ::little::parser::ParserTokens _g3 = lookahead->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 405)										 ::little::parser::ParserTokens typeToken = lookahead->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXLINE( 406)										if (::hx::IsNull( name )) {
+HXLINE( 407)											::Array< ::Dynamic> _hx_tmp6 = ::little::Little_obj::runtime->callStack;
+HXDLIN( 407)											::String _hx_tmp7 = ::little::parser::Parser_obj::get_module();
+HXDLIN( 407)											int _hx_tmp8 = ::little::parser::Parser_obj::get_line();
+HXDLIN( 407)											int _hx_tmp9 = ::little::parser::Parser_obj::linePart;
+HXDLIN( 407)											_hx_tmp6->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
             												->setFixed(0,HX_("linePart",07,32,7b,87),_hx_tmp9)
             												->setFixed(1,HX_("module",ac,34,d3,c0),_hx_tmp7)
             												->setFixed(2,HX_("token",f9,82,2b,14),::little::interpreter::InterpTokens_obj::VariableDeclaration(::little::interpreter::InterpTokens_obj::Identifier(HX_("",00,00,00,00)),::little::interpreter::Interpreter_obj::convert(::Array_obj< ::Dynamic>::__new(1)->init(0,typeToken))->__get(0).StaticCast<  ::little::interpreter::InterpTokens >(),null()))
             												->setFixed(3,HX_("line",f4,17,b3,47),_hx_tmp8)));
-HXLINE( 409)											::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(HX_("Missing variable name before type declaration.",64,1e,a6,f5)),HX_("Parser",ff,10,1d,22));
-HXLINE( 410)											return null();
+HXLINE( 408)											::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(HX_("Missing variable name before type declaration.",64,1e,a6,f5)),HX_("Parser",ff,10,1d,22));
+HXLINE( 409)											return null();
             										}
-HXLINE( 412)										type = typeToken;
-HXLINE( 413)										goto _hx_goto_21;
+HXLINE( 411)										type = typeToken;
+HXLINE( 412)										goto _hx_goto_21;
             									}
             									break;
             									case (int)12: {
-HXLINE( 424)										::Array< ::Dynamic> body = lookahead->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 424)										 ::little::parser::ParserTokens type1 = lookahead->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXLINE( 425)										if (::hx::IsNull( name )) {
-HXLINE( 425)											::Array< ::Dynamic> name1 = ::little::parser::Parser_obj::mergeComplexStructures(body);
-HXDLIN( 425)											name = ::little::parser::ParserTokens_obj::Expression(name1,::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,type1))->__get(0).StaticCast<  ::little::parser::ParserTokens >());
+HXLINE( 423)										::Array< ::Dynamic> body = lookahead->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 423)										 ::little::parser::ParserTokens type1 = lookahead->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXLINE( 424)										if (::hx::IsNull( name )) {
+HXLINE( 424)											::Array< ::Dynamic> name1 = ::little::parser::Parser_obj::mergeComplexStructures(body);
+HXDLIN( 424)											name = ::little::parser::ParserTokens_obj::Expression(name1,::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,type1))->__get(0).StaticCast<  ::little::parser::ParserTokens >());
             										}
             										else {
-HXLINE( 426)											if (::hx::IsNull( type1 )) {
-HXLINE( 426)												::Array< ::Dynamic> type2 = ::little::parser::Parser_obj::mergeComplexStructures(body);
-HXDLIN( 426)												type1 = ::little::parser::ParserTokens_obj::Expression(type2,::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,type1))->__get(0).StaticCast<  ::little::parser::ParserTokens >());
+HXLINE( 425)											if (::hx::IsNull( type1 )) {
+HXLINE( 425)												::Array< ::Dynamic> type2 = ::little::parser::Parser_obj::mergeComplexStructures(body);
+HXDLIN( 425)												type1 = ::little::parser::ParserTokens_obj::Expression(type2,::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,type1))->__get(0).StaticCast<  ::little::parser::ParserTokens >());
             											}
             											else {
-HXLINE( 428)												i = (i - 1);
-HXLINE( 429)												goto _hx_goto_21;
+HXLINE( 427)												i = (i - 1);
+HXLINE( 428)												goto _hx_goto_21;
             											}
             										}
             									}
             									break;
             									case (int)13: {
-HXLINE( 416)										::Array< ::Dynamic> body1 = lookahead->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 416)										 ::little::parser::ParserTokens type3 = lookahead->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXLINE( 417)										if (::hx::IsNull( name )) {
-HXLINE( 417)											::Array< ::Dynamic> name2 = ::little::parser::Parser_obj::mergeComplexStructures(body1);
-HXDLIN( 417)											name = ::little::parser::ParserTokens_obj::Block(name2,::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,type3))->__get(0).StaticCast<  ::little::parser::ParserTokens >());
+HXLINE( 415)										::Array< ::Dynamic> body1 = lookahead->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 415)										 ::little::parser::ParserTokens type3 = lookahead->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXLINE( 416)										if (::hx::IsNull( name )) {
+HXLINE( 416)											::Array< ::Dynamic> name2 = ::little::parser::Parser_obj::mergeComplexStructures(body1);
+HXDLIN( 416)											name = ::little::parser::ParserTokens_obj::Block(name2,::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,type3))->__get(0).StaticCast<  ::little::parser::ParserTokens >());
             										}
             										else {
-HXLINE( 418)											if (::hx::IsNull( type3 )) {
-HXLINE( 418)												::Array< ::Dynamic> type4 = ::little::parser::Parser_obj::mergeComplexStructures(body1);
-HXDLIN( 418)												type3 = ::little::parser::ParserTokens_obj::Block(type4,::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,type3))->__get(0).StaticCast<  ::little::parser::ParserTokens >());
+HXLINE( 417)											if (::hx::IsNull( type3 )) {
+HXLINE( 417)												::Array< ::Dynamic> type4 = ::little::parser::Parser_obj::mergeComplexStructures(body1);
+HXDLIN( 417)												type3 = ::little::parser::ParserTokens_obj::Block(type4,::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,type3))->__get(0).StaticCast<  ::little::parser::ParserTokens >());
             											}
             											else {
-HXLINE( 420)												i = (i - 1);
-HXLINE( 421)												goto _hx_goto_21;
+HXLINE( 419)												i = (i - 1);
+HXLINE( 420)												goto _hx_goto_21;
             											}
             										}
             									}
             									break;
             									case (int)16: {
-HXLINE( 415)										if ((lookahead->_hx_getString(0) == HX_("=",3d,00,00,00))) {
-HXLINE( 415)											i = (i - 1);
-HXDLIN( 415)											goto _hx_goto_21;
+HXLINE( 414)										if ((lookahead->_hx_getString(0) == HX_("=",3d,00,00,00))) {
+HXLINE( 414)											i = (i - 1);
+HXDLIN( 414)											goto _hx_goto_21;
             										}
             										else {
-HXLINE( 433)											if (::hx::IsNull( name )) {
-HXLINE( 433)												name = lookahead;
+HXLINE( 432)											if (::hx::IsNull( name )) {
+HXLINE( 432)												name = lookahead;
             											}
             											else {
-HXLINE( 434)												bool _hx_tmp10;
-HXDLIN( 434)												if (::hx::IsNull( type )) {
-HXLINE( 434)													::Array< ::Dynamic> _this = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::ParserTokensSimple_obj::TYPE_DECLARATION_dyn())->copy();
-HXDLIN( 434)													::Array< ::String > result = ::Array_obj< ::String >::__new(_this->length);
-HXDLIN( 434)													{
-HXLINE( 434)														int _g4 = 0;
-HXDLIN( 434)														int _g5 = _this->length;
-HXDLIN( 434)														while((_g4 < _g5)){
-HXLINE( 434)															_g4 = (_g4 + 1);
-HXDLIN( 434)															int i1 = (_g4 - 1);
-HXDLIN( 434)															{
-HXLINE( 434)																::String inValue = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this,i1)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 434)																result->__unsafe_set(i1,inValue);
+HXLINE( 433)												bool _hx_tmp10;
+HXDLIN( 433)												if (::hx::IsNull( type )) {
+HXLINE( 433)													::Array< ::Dynamic> _this = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::ParserTokensSimple_obj::TYPE_DECLARATION_dyn())->copy();
+HXDLIN( 433)													::Array< ::String > result = ::Array_obj< ::String >::__new(_this->length);
+HXDLIN( 433)													{
+HXLINE( 433)														int _g4 = 0;
+HXDLIN( 433)														int _g5 = _this->length;
+HXDLIN( 433)														while((_g4 < _g5)){
+HXLINE( 433)															_g4 = (_g4 + 1);
+HXDLIN( 433)															int i1 = (_g4 - 1);
+HXDLIN( 433)															{
+HXLINE( 433)																::String inValue = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this,i1)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 433)																result->__unsafe_set(i1,inValue);
             															}
             														}
             													}
-HXDLIN( 434)													_hx_tmp10 = result->contains(::Type_obj::enumConstructor(lookahead).toLowerCase());
+HXDLIN( 433)													_hx_tmp10 = result->contains(::Type_obj::enumConstructor(lookahead).toLowerCase());
             												}
             												else {
-HXLINE( 434)													_hx_tmp10 = false;
+HXLINE( 433)													_hx_tmp10 = false;
             												}
-HXDLIN( 434)												if (_hx_tmp10) {
-HXLINE( 434)													type = lookahead;
+HXDLIN( 433)												if (_hx_tmp10) {
+HXLINE( 433)													type = lookahead;
             												}
             												else {
-HXLINE( 436)													i = (i - 1);
-HXLINE( 437)													goto _hx_goto_21;
+HXLINE( 435)													i = (i - 1);
+HXLINE( 436)													goto _hx_goto_21;
             												}
             											}
             										}
             									}
             									break;
             									default:{
-HXLINE( 433)										if (::hx::IsNull( name )) {
-HXLINE( 433)											name = lookahead;
+HXLINE( 432)										if (::hx::IsNull( name )) {
+HXLINE( 432)											name = lookahead;
             										}
             										else {
-HXLINE( 434)											bool _hx_tmp11;
-HXDLIN( 434)											if (::hx::IsNull( type )) {
-HXLINE( 434)												::Array< ::Dynamic> _this1 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::ParserTokensSimple_obj::TYPE_DECLARATION_dyn())->copy();
-HXDLIN( 434)												::Array< ::String > result1 = ::Array_obj< ::String >::__new(_this1->length);
-HXDLIN( 434)												{
-HXLINE( 434)													int _g6 = 0;
-HXDLIN( 434)													int _g7 = _this1->length;
-HXDLIN( 434)													while((_g6 < _g7)){
-HXLINE( 434)														_g6 = (_g6 + 1);
-HXDLIN( 434)														int i2 = (_g6 - 1);
-HXDLIN( 434)														{
-HXLINE( 434)															::String inValue1 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this1,i2)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 434)															result1->__unsafe_set(i2,inValue1);
+HXLINE( 433)											bool _hx_tmp11;
+HXDLIN( 433)											if (::hx::IsNull( type )) {
+HXLINE( 433)												::Array< ::Dynamic> _this1 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::ParserTokensSimple_obj::TYPE_DECLARATION_dyn())->copy();
+HXDLIN( 433)												::Array< ::String > result1 = ::Array_obj< ::String >::__new(_this1->length);
+HXDLIN( 433)												{
+HXLINE( 433)													int _g6 = 0;
+HXDLIN( 433)													int _g7 = _this1->length;
+HXDLIN( 433)													while((_g6 < _g7)){
+HXLINE( 433)														_g6 = (_g6 + 1);
+HXDLIN( 433)														int i2 = (_g6 - 1);
+HXDLIN( 433)														{
+HXLINE( 433)															::String inValue1 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this1,i2)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 433)															result1->__unsafe_set(i2,inValue1);
             														}
             													}
             												}
-HXDLIN( 434)												_hx_tmp11 = result1->contains(::Type_obj::enumConstructor(lookahead).toLowerCase());
+HXDLIN( 433)												_hx_tmp11 = result1->contains(::Type_obj::enumConstructor(lookahead).toLowerCase());
             											}
             											else {
-HXLINE( 434)												_hx_tmp11 = false;
+HXLINE( 433)												_hx_tmp11 = false;
             											}
-HXDLIN( 434)											if (_hx_tmp11) {
-HXLINE( 434)												type = lookahead;
+HXDLIN( 433)											if (_hx_tmp11) {
+HXLINE( 433)												type = lookahead;
             											}
             											else {
-HXLINE( 436)												i = (i - 1);
-HXLINE( 437)												goto _hx_goto_21;
+HXLINE( 435)												i = (i - 1);
+HXLINE( 436)												goto _hx_goto_21;
             											}
             										}
             									}
             								}
-HXLINE( 441)								i = (i + 1);
+HXLINE( 440)								i = (i + 1);
             							}
             							_hx_goto_21:;
-HXLINE( 443)							if (::hx::IsNull( name )) {
-HXLINE( 444)								::Array< ::Dynamic> _hx_tmp12 = ::little::Little_obj::runtime->callStack;
-HXDLIN( 444)								::String _hx_tmp13 = ::little::parser::Parser_obj::get_module();
-HXDLIN( 444)								int _hx_tmp14 = ::little::parser::Parser_obj::get_line();
-HXDLIN( 444)								_hx_tmp12->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
+HXLINE( 442)							if (::hx::IsNull( name )) {
+HXLINE( 443)								::Array< ::Dynamic> _hx_tmp12 = ::little::Little_obj::runtime->callStack;
+HXDLIN( 443)								::String _hx_tmp13 = ::little::parser::Parser_obj::get_module();
+HXDLIN( 443)								int _hx_tmp14 = ::little::parser::Parser_obj::get_line();
+HXDLIN( 443)								_hx_tmp12->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
             									->setFixed(0,HX_("linePart",07,32,7b,87),::little::parser::Parser_obj::linePart)
             									->setFixed(1,HX_("module",ac,34,d3,c0),_hx_tmp13)
             									->setFixed(2,HX_("token",f9,82,2b,14),::little::interpreter::InterpTokens_obj::VariableDeclaration(::little::interpreter::InterpTokens_obj::Identifier(HX_("",00,00,00,00)),null(),null()))
             									->setFixed(3,HX_("line",f4,17,b3,47),_hx_tmp14)));
-HXLINE( 445)								::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(HX_("Missing variable name, variable is cut off by the end of the file, block or expression.",81,1e,ff,ea)),HX_("Parser",ff,10,1d,22));
-HXLINE( 446)								return null();
+HXLINE( 444)								::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(HX_("Missing variable name, variable is cut off by the end of the file, block or expression.",81,1e,ff,ea)),HX_("Parser",ff,10,1d,22));
+HXLINE( 445)								return null();
             							}
-HXLINE( 449)							post->push(::little::parser::ParserTokens_obj::Variable(name,type,currentDoc));
-HXLINE( 450)							currentDoc = null();
+HXLINE( 448)							 ::little::parser::ParserTokens _hx_tmp15;
+HXDLIN( 448)							bool _hx_tmp16;
+HXDLIN( 448)							if ((post->length > 0)) {
+HXLINE( 448)								 ::little::parser::ParserTokens token1 = post->__get((post->length - 1)).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 448)								::Array< ::Dynamic> _this2 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::ParserTokensSimple_obj::DOCUMENTATION_dyn())->copy();
+HXDLIN( 448)								::Array< ::String > result2 = ::Array_obj< ::String >::__new(_this2->length);
+HXDLIN( 448)								{
+HXLINE( 448)									int _g8 = 0;
+HXDLIN( 448)									int _g9 = _this2->length;
+HXDLIN( 448)									while((_g8 < _g9)){
+HXLINE( 448)										_g8 = (_g8 + 1);
+HXDLIN( 448)										int i3 = (_g8 - 1);
+HXDLIN( 448)										{
+HXLINE( 448)											::String inValue2 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this2,i3)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 448)											result2->__unsafe_set(i3,inValue2);
+            										}
+            									}
+            								}
+HXDLIN( 448)								_hx_tmp16 = result2->contains(::Type_obj::enumConstructor(token1).toLowerCase());
+            							}
+            							else {
+HXLINE( 448)								_hx_tmp16 = false;
+            							}
+HXDLIN( 448)							if (_hx_tmp16) {
+HXLINE( 448)								_hx_tmp15 = post->pop().StaticCast<  ::little::parser::ParserTokens >();
+            							}
+            							else {
+HXLINE( 448)								_hx_tmp15 = null();
+            							}
+HXDLIN( 448)							post->push(::little::parser::ParserTokens_obj::Variable(name,type,_hx_tmp15));
             						}
             						else {
-HXLINE( 452)							_hx_tmp2 = (_g == ::little::Little_obj::keywords->FUNCTION_DECLARATION);
-HXDLIN( 452)							if ((_hx_tmp2 == true)) {
-HXLINE( 453)								i = (i + 1);
-HXLINE( 454)								if ((i >= pre->length)) {
-HXLINE( 455)									::Array< ::Dynamic> _hx_tmp15 = ::little::Little_obj::runtime->callStack;
-HXDLIN( 455)									::String _hx_tmp16 = ::little::parser::Parser_obj::get_module();
-HXDLIN( 455)									int _hx_tmp17 = ::little::parser::Parser_obj::get_line();
-HXDLIN( 455)									_hx_tmp15->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
+HXLINE( 450)							_hx_tmp2 = (_g == ::little::Little_obj::keywords->FUNCTION_DECLARATION);
+HXDLIN( 450)							if ((_hx_tmp2 == true)) {
+HXLINE( 451)								i = (i + 1);
+HXLINE( 452)								if ((i >= pre->length)) {
+HXLINE( 453)									::Array< ::Dynamic> _hx_tmp17 = ::little::Little_obj::runtime->callStack;
+HXDLIN( 453)									::String _hx_tmp18 = ::little::parser::Parser_obj::get_module();
+HXDLIN( 453)									int _hx_tmp19 = ::little::parser::Parser_obj::get_line();
+HXDLIN( 453)									_hx_tmp17->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
             										->setFixed(0,HX_("linePart",07,32,7b,87),::little::parser::Parser_obj::linePart)
-            										->setFixed(1,HX_("module",ac,34,d3,c0),_hx_tmp16)
+            										->setFixed(1,HX_("module",ac,34,d3,c0),_hx_tmp18)
             										->setFixed(2,HX_("token",f9,82,2b,14),::little::interpreter::InterpTokens_obj::FunctionDeclaration(::little::interpreter::InterpTokens_obj::Identifier(HX_("",00,00,00,00)),null(),null(),null()))
-            										->setFixed(3,HX_("line",f4,17,b3,47),_hx_tmp17)));
-HXLINE( 456)									::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(HX_("Missing function name, function is cut off by the end of the file, block or expression.",01,f6,a5,95)),HX_("Parser",ff,10,1d,22));
-HXLINE( 457)									return null();
+            										->setFixed(3,HX_("line",f4,17,b3,47),_hx_tmp19)));
+HXLINE( 454)									::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(HX_("Missing function name, function is cut off by the end of the file, block or expression.",01,f6,a5,95)),HX_("Parser",ff,10,1d,22));
+HXLINE( 455)									return null();
             								}
-HXLINE( 459)								if (((i + 1) >= pre->length)) {
-HXLINE( 460)									::Array< ::Dynamic> _hx_tmp18 = ::little::Little_obj::runtime->callStack;
-HXDLIN( 460)									::String _hx_tmp19 = ::little::parser::Parser_obj::get_module();
-HXDLIN( 460)									int _hx_tmp20 = ::little::parser::Parser_obj::get_line();
-HXDLIN( 460)									int _hx_tmp21 = ::little::parser::Parser_obj::linePart;
-HXDLIN( 460)									_hx_tmp18->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
-            										->setFixed(0,HX_("linePart",07,32,7b,87),_hx_tmp21)
-            										->setFixed(1,HX_("module",ac,34,d3,c0),_hx_tmp19)
+HXLINE( 457)								if (((i + 1) >= pre->length)) {
+HXLINE( 458)									::Array< ::Dynamic> _hx_tmp20 = ::little::Little_obj::runtime->callStack;
+HXDLIN( 458)									::String _hx_tmp21 = ::little::parser::Parser_obj::get_module();
+HXDLIN( 458)									int _hx_tmp22 = ::little::parser::Parser_obj::get_line();
+HXDLIN( 458)									int _hx_tmp23 = ::little::parser::Parser_obj::linePart;
+HXDLIN( 458)									_hx_tmp20->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
+            										->setFixed(0,HX_("linePart",07,32,7b,87),_hx_tmp23)
+            										->setFixed(1,HX_("module",ac,34,d3,c0),_hx_tmp21)
             										->setFixed(2,HX_("token",f9,82,2b,14),::little::interpreter::InterpTokens_obj::FunctionDeclaration(::little::interpreter::Interpreter_obj::convert(::Array_obj< ::Dynamic>::__new(1)->init(0,pre->__get(i).StaticCast<  ::little::parser::ParserTokens >()))->__get(0).StaticCast<  ::little::interpreter::InterpTokens >(),null(),null(),null()))
-            										->setFixed(3,HX_("line",f4,17,b3,47),_hx_tmp20)));
-HXLINE( 461)									::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(HX_("Missing function parameter body, function is cut off by the end of the file, block or expression.",2f,91,cb,1a)),HX_("Parser",ff,10,1d,22));
-HXLINE( 462)									return null();
+            										->setFixed(3,HX_("line",f4,17,b3,47),_hx_tmp22)));
+HXLINE( 459)									::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(HX_("Missing function parameter body, function is cut off by the end of the file, block or expression.",2f,91,cb,1a)),HX_("Parser",ff,10,1d,22));
+HXLINE( 460)									return null();
             								}
-HXLINE( 465)								 ::little::parser::ParserTokens name3 = null();
-HXLINE( 466)								 ::little::parser::ParserTokens params = null();
-HXLINE( 467)								 ::little::parser::ParserTokens type5 = null();
-HXLINE( 468)								while((i < pre->length)){
-HXLINE( 469)									 ::little::parser::ParserTokens lookahead1 = pre->__get(i).StaticCast<  ::little::parser::ParserTokens >();
-HXLINE( 470)									switch((int)(lookahead1->_hx_getIndex())){
+HXLINE( 463)								 ::little::parser::ParserTokens name3 = null();
+HXLINE( 464)								 ::little::parser::ParserTokens params = null();
+HXLINE( 465)								 ::little::parser::ParserTokens type5 = null();
+HXLINE( 466)								while((i < pre->length)){
+HXLINE( 467)									 ::little::parser::ParserTokens lookahead1 = pre->__get(i).StaticCast<  ::little::parser::ParserTokens >();
+HXLINE( 468)									switch((int)(lookahead1->_hx_getIndex())){
             										case (int)9: {
-HXLINE( 471)											 ::little::parser::ParserTokens _g8 = lookahead1->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 471)											 ::little::parser::ParserTokens typeToken1 = lookahead1->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXLINE( 472)											if (::hx::IsNull( name3 )) {
-HXLINE( 473)												::Array< ::Dynamic> _hx_tmp22 = ::little::Little_obj::runtime->callStack;
-HXDLIN( 473)												::String _hx_tmp23 = ::little::parser::Parser_obj::get_module();
-HXDLIN( 473)												int _hx_tmp24 = ::little::parser::Parser_obj::get_line();
-HXDLIN( 473)												int _hx_tmp25 = ::little::parser::Parser_obj::linePart;
-HXDLIN( 473)												_hx_tmp22->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
-            													->setFixed(0,HX_("linePart",07,32,7b,87),_hx_tmp25)
-            													->setFixed(1,HX_("module",ac,34,d3,c0),_hx_tmp23)
+HXLINE( 469)											 ::little::parser::ParserTokens _g10 = lookahead1->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 469)											 ::little::parser::ParserTokens typeToken1 = lookahead1->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXLINE( 470)											if (::hx::IsNull( name3 )) {
+HXLINE( 471)												::Array< ::Dynamic> _hx_tmp24 = ::little::Little_obj::runtime->callStack;
+HXDLIN( 471)												::String _hx_tmp25 = ::little::parser::Parser_obj::get_module();
+HXDLIN( 471)												int _hx_tmp26 = ::little::parser::Parser_obj::get_line();
+HXDLIN( 471)												int _hx_tmp27 = ::little::parser::Parser_obj::linePart;
+HXDLIN( 471)												_hx_tmp24->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
+            													->setFixed(0,HX_("linePart",07,32,7b,87),_hx_tmp27)
+            													->setFixed(1,HX_("module",ac,34,d3,c0),_hx_tmp25)
             													->setFixed(2,HX_("token",f9,82,2b,14),::little::interpreter::InterpTokens_obj::FunctionDeclaration(::little::interpreter::InterpTokens_obj::Identifier(HX_("",00,00,00,00)),null(),::little::interpreter::Interpreter_obj::convert(::Array_obj< ::Dynamic>::__new(1)->init(0,typeToken1))->__get(0).StaticCast<  ::little::interpreter::InterpTokens >(),null()))
-            													->setFixed(3,HX_("line",f4,17,b3,47),_hx_tmp24)));
-HXLINE( 474)												::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(HX_("Missing function name and parameters before type declaration.",7f,98,8f,9a)),HX_("Parser",ff,10,1d,22));
-HXLINE( 475)												return null();
+            													->setFixed(3,HX_("line",f4,17,b3,47),_hx_tmp26)));
+HXLINE( 472)												::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(HX_("Missing function name and parameters before type declaration.",7f,98,8f,9a)),HX_("Parser",ff,10,1d,22));
+HXLINE( 473)												return null();
             											}
             											else {
-HXLINE( 477)												if (::hx::IsNull( params )) {
-HXLINE( 478)													::Array< ::Dynamic> _hx_tmp26 = ::little::Little_obj::runtime->callStack;
-HXDLIN( 478)													::String _hx_tmp27 = ::little::parser::Parser_obj::get_module();
-HXDLIN( 478)													int _hx_tmp28 = ::little::parser::Parser_obj::get_line();
-HXDLIN( 478)													int _hx_tmp29 = ::little::parser::Parser_obj::linePart;
-HXDLIN( 478)													 ::little::interpreter::InterpTokens _hx_tmp30 = ::little::interpreter::Interpreter_obj::convert(::Array_obj< ::Dynamic>::__new(1)->init(0,name3))->__get(0).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 478)													_hx_tmp26->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
-            														->setFixed(0,HX_("linePart",07,32,7b,87),_hx_tmp29)
-            														->setFixed(1,HX_("module",ac,34,d3,c0),_hx_tmp27)
-            														->setFixed(2,HX_("token",f9,82,2b,14),::little::interpreter::InterpTokens_obj::FunctionDeclaration(_hx_tmp30,null(),::little::interpreter::Interpreter_obj::convert(::Array_obj< ::Dynamic>::__new(1)->init(0,typeToken1))->__get(0).StaticCast<  ::little::interpreter::InterpTokens >(),null()))
-            														->setFixed(3,HX_("line",f4,17,b3,47),_hx_tmp28)));
-HXLINE( 479)													::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(HX_("Missing function parameters before type declaration.",81,b3,5a,87)),HX_("Parser",ff,10,1d,22));
-HXLINE( 480)													return null();
+HXLINE( 475)												if (::hx::IsNull( params )) {
+HXLINE( 476)													::Array< ::Dynamic> _hx_tmp28 = ::little::Little_obj::runtime->callStack;
+HXDLIN( 476)													::String _hx_tmp29 = ::little::parser::Parser_obj::get_module();
+HXDLIN( 476)													int _hx_tmp30 = ::little::parser::Parser_obj::get_line();
+HXDLIN( 476)													int _hx_tmp31 = ::little::parser::Parser_obj::linePart;
+HXDLIN( 476)													 ::little::interpreter::InterpTokens _hx_tmp32 = ::little::interpreter::Interpreter_obj::convert(::Array_obj< ::Dynamic>::__new(1)->init(0,name3))->__get(0).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 476)													_hx_tmp28->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
+            														->setFixed(0,HX_("linePart",07,32,7b,87),_hx_tmp31)
+            														->setFixed(1,HX_("module",ac,34,d3,c0),_hx_tmp29)
+            														->setFixed(2,HX_("token",f9,82,2b,14),::little::interpreter::InterpTokens_obj::FunctionDeclaration(_hx_tmp32,null(),::little::interpreter::Interpreter_obj::convert(::Array_obj< ::Dynamic>::__new(1)->init(0,typeToken1))->__get(0).StaticCast<  ::little::interpreter::InterpTokens >(),null()))
+            														->setFixed(3,HX_("line",f4,17,b3,47),_hx_tmp30)));
+HXLINE( 477)													::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(HX_("Missing function parameters before type declaration.",81,b3,5a,87)),HX_("Parser",ff,10,1d,22));
+HXLINE( 478)													return null();
             												}
             											}
-HXLINE( 482)											type5 = ::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,typeToken1))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXLINE( 483)											goto _hx_goto_24;
+HXLINE( 480)											type5 = ::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,typeToken1))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXLINE( 481)											goto _hx_goto_25;
             										}
             										break;
             										case (int)12: {
-HXLINE( 494)											::Array< ::Dynamic> body2 = lookahead1->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 494)											 ::little::parser::ParserTokens type6 = lookahead1->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXLINE( 495)											if (::hx::IsNull( name3 )) {
-HXLINE( 495)												::Array< ::Dynamic> name4 = ::little::parser::Parser_obj::mergeComplexStructures(body2);
-HXDLIN( 495)												name3 = ::little::parser::ParserTokens_obj::Expression(name4,::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,type6))->__get(0).StaticCast<  ::little::parser::ParserTokens >());
+HXLINE( 492)											::Array< ::Dynamic> body2 = lookahead1->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 492)											 ::little::parser::ParserTokens type6 = lookahead1->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXLINE( 493)											if (::hx::IsNull( name3 )) {
+HXLINE( 493)												::Array< ::Dynamic> name4 = ::little::parser::Parser_obj::mergeComplexStructures(body2);
+HXDLIN( 493)												name3 = ::little::parser::ParserTokens_obj::Expression(name4,::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,type6))->__get(0).StaticCast<  ::little::parser::ParserTokens >());
             											}
             											else {
-HXLINE( 496)												if (::hx::IsNull( params )) {
-HXLINE( 496)													::Array< ::Dynamic> params1 = ::little::parser::Parser_obj::mergeComplexStructures(body2);
-HXDLIN( 496)													params = ::little::parser::ParserTokens_obj::Expression(params1,::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,type6))->__get(0).StaticCast<  ::little::parser::ParserTokens >());
+HXLINE( 494)												if (::hx::IsNull( params )) {
+HXLINE( 494)													::Array< ::Dynamic> params1 = ::little::parser::Parser_obj::mergeComplexStructures(body2);
+HXDLIN( 494)													params = ::little::parser::ParserTokens_obj::Expression(params1,::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,type6))->__get(0).StaticCast<  ::little::parser::ParserTokens >());
             												}
             												else {
-HXLINE( 497)													if (::hx::IsNull( type6 )) {
-HXLINE( 497)														::Array< ::Dynamic> type7 = ::little::parser::Parser_obj::mergeComplexStructures(body2);
-HXDLIN( 497)														type6 = ::little::parser::ParserTokens_obj::Expression(type7,::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,type6))->__get(0).StaticCast<  ::little::parser::ParserTokens >());
+HXLINE( 495)													if (::hx::IsNull( type6 )) {
+HXLINE( 495)														::Array< ::Dynamic> type7 = ::little::parser::Parser_obj::mergeComplexStructures(body2);
+HXDLIN( 495)														type6 = ::little::parser::ParserTokens_obj::Expression(type7,::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,type6))->__get(0).StaticCast<  ::little::parser::ParserTokens >());
             													}
             													else {
-HXLINE( 499)														goto _hx_goto_24;
+HXLINE( 497)														goto _hx_goto_25;
             													}
             												}
             											}
             										}
             										break;
             										case (int)13: {
-HXLINE( 486)											::Array< ::Dynamic> body3 = lookahead1->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 486)											 ::little::parser::ParserTokens type8 = lookahead1->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXLINE( 487)											if (::hx::IsNull( name3 )) {
-HXLINE( 487)												::Array< ::Dynamic> name5 = ::little::parser::Parser_obj::mergeComplexStructures(body3);
-HXDLIN( 487)												name3 = ::little::parser::ParserTokens_obj::Block(name5,::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,type8))->__get(0).StaticCast<  ::little::parser::ParserTokens >());
+HXLINE( 484)											::Array< ::Dynamic> body3 = lookahead1->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 484)											 ::little::parser::ParserTokens type8 = lookahead1->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXLINE( 485)											if (::hx::IsNull( name3 )) {
+HXLINE( 485)												::Array< ::Dynamic> name5 = ::little::parser::Parser_obj::mergeComplexStructures(body3);
+HXDLIN( 485)												name3 = ::little::parser::ParserTokens_obj::Block(name5,::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,type8))->__get(0).StaticCast<  ::little::parser::ParserTokens >());
             											}
             											else {
-HXLINE( 488)												if (::hx::IsNull( params )) {
-HXLINE( 488)													::Array< ::Dynamic> params2 = ::little::parser::Parser_obj::mergeComplexStructures(body3);
-HXDLIN( 488)													params = ::little::parser::ParserTokens_obj::Block(params2,::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,type8))->__get(0).StaticCast<  ::little::parser::ParserTokens >());
+HXLINE( 486)												if (::hx::IsNull( params )) {
+HXLINE( 486)													::Array< ::Dynamic> params2 = ::little::parser::Parser_obj::mergeComplexStructures(body3);
+HXDLIN( 486)													params = ::little::parser::ParserTokens_obj::Block(params2,::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,type8))->__get(0).StaticCast<  ::little::parser::ParserTokens >());
             												}
             												else {
-HXLINE( 489)													if (::hx::IsNull( type8 )) {
-HXLINE( 489)														::Array< ::Dynamic> type9 = ::little::parser::Parser_obj::mergeComplexStructures(body3);
-HXDLIN( 489)														type8 = ::little::parser::ParserTokens_obj::Block(type9,::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,type8))->__get(0).StaticCast<  ::little::parser::ParserTokens >());
+HXLINE( 487)													if (::hx::IsNull( type8 )) {
+HXLINE( 487)														::Array< ::Dynamic> type9 = ::little::parser::Parser_obj::mergeComplexStructures(body3);
+HXDLIN( 487)														type8 = ::little::parser::ParserTokens_obj::Block(type9,::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,type8))->__get(0).StaticCast<  ::little::parser::ParserTokens >());
             													}
             													else {
-HXLINE( 491)														goto _hx_goto_24;
+HXLINE( 489)														goto _hx_goto_25;
             													}
             												}
             											}
             										}
             										break;
             										case (int)16: {
-HXLINE( 485)											if ((lookahead1->_hx_getString(0) == HX_("=",3d,00,00,00))) {
-HXLINE( 485)												i = (i - 1);
-HXDLIN( 485)												goto _hx_goto_24;
+HXLINE( 483)											if ((lookahead1->_hx_getString(0) == HX_("=",3d,00,00,00))) {
+HXLINE( 483)												i = (i - 1);
+HXDLIN( 483)												goto _hx_goto_25;
             											}
             											else {
-HXLINE( 503)												if (::hx::IsNull( name3 )) {
-HXLINE( 503)													name3 = lookahead1;
+HXLINE( 501)												if (::hx::IsNull( name3 )) {
+HXLINE( 501)													name3 = lookahead1;
             												}
             												else {
-HXLINE( 504)													if (::hx::IsNull( params )) {
-HXLINE( 504)														params = lookahead1;
+HXLINE( 502)													if (::hx::IsNull( params )) {
+HXLINE( 502)														params = lookahead1;
             													}
             													else {
-HXLINE( 505)														bool _hx_tmp31;
-HXDLIN( 505)														if (::hx::IsNull( type5 )) {
-HXLINE( 505)															_hx_tmp31 = (::Type_obj::enumConstructor(lookahead1) == HX_("TypeDeclaration",40,b8,7f,a5));
+HXLINE( 503)														bool _hx_tmp33;
+HXDLIN( 503)														if (::hx::IsNull( type5 )) {
+HXLINE( 503)															_hx_tmp33 = (::Type_obj::enumConstructor(lookahead1) == HX_("TypeDeclaration",40,b8,7f,a5));
             														}
             														else {
-HXLINE( 505)															_hx_tmp31 = false;
+HXLINE( 503)															_hx_tmp33 = false;
             														}
-HXDLIN( 505)														if (_hx_tmp31) {
-HXLINE( 505)															type5 = ::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,::Type_obj::enumParameters(lookahead1)->__get(1)))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 503)														if (_hx_tmp33) {
+HXLINE( 503)															type5 = ::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,::Type_obj::enumParameters(lookahead1)->__get(1)))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
             														}
             														else {
-HXLINE( 507)															goto _hx_goto_24;
+HXLINE( 505)															goto _hx_goto_25;
             														}
             													}
             												}
@@ -1191,244 +1218,271 @@ HXLINE( 507)															goto _hx_goto_24;
             										}
             										break;
             										default:{
-HXLINE( 503)											if (::hx::IsNull( name3 )) {
-HXLINE( 503)												name3 = lookahead1;
+HXLINE( 501)											if (::hx::IsNull( name3 )) {
+HXLINE( 501)												name3 = lookahead1;
             											}
             											else {
-HXLINE( 504)												if (::hx::IsNull( params )) {
-HXLINE( 504)													params = lookahead1;
+HXLINE( 502)												if (::hx::IsNull( params )) {
+HXLINE( 502)													params = lookahead1;
             												}
             												else {
-HXLINE( 505)													bool _hx_tmp32;
-HXDLIN( 505)													if (::hx::IsNull( type5 )) {
-HXLINE( 505)														_hx_tmp32 = (::Type_obj::enumConstructor(lookahead1) == HX_("TypeDeclaration",40,b8,7f,a5));
+HXLINE( 503)													bool _hx_tmp34;
+HXDLIN( 503)													if (::hx::IsNull( type5 )) {
+HXLINE( 503)														_hx_tmp34 = (::Type_obj::enumConstructor(lookahead1) == HX_("TypeDeclaration",40,b8,7f,a5));
             													}
             													else {
-HXLINE( 505)														_hx_tmp32 = false;
+HXLINE( 503)														_hx_tmp34 = false;
             													}
-HXDLIN( 505)													if (_hx_tmp32) {
-HXLINE( 505)														type5 = ::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,::Type_obj::enumParameters(lookahead1)->__get(1)))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 503)													if (_hx_tmp34) {
+HXLINE( 503)														type5 = ::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,::Type_obj::enumParameters(lookahead1)->__get(1)))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
             													}
             													else {
-HXLINE( 507)														goto _hx_goto_24;
+HXLINE( 505)														goto _hx_goto_25;
             													}
             												}
             											}
             										}
             									}
-HXLINE( 511)									i = (i + 1);
+HXLINE( 509)									i = (i + 1);
             								}
-            								_hx_goto_24:;
-HXLINE( 513)								if (::hx::IsNull( name3 )) {
-HXLINE( 514)									::Array< ::Dynamic> _hx_tmp33 = ::little::Little_obj::runtime->callStack;
-HXDLIN( 514)									::String _hx_tmp34 = ::little::parser::Parser_obj::get_module();
-HXDLIN( 514)									int _hx_tmp35 = ::little::parser::Parser_obj::get_line();
-HXDLIN( 514)									_hx_tmp33->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
+            								_hx_goto_25:;
+HXLINE( 511)								if (::hx::IsNull( name3 )) {
+HXLINE( 512)									::Array< ::Dynamic> _hx_tmp35 = ::little::Little_obj::runtime->callStack;
+HXDLIN( 512)									::String _hx_tmp36 = ::little::parser::Parser_obj::get_module();
+HXDLIN( 512)									int _hx_tmp37 = ::little::parser::Parser_obj::get_line();
+HXDLIN( 512)									_hx_tmp35->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
             										->setFixed(0,HX_("linePart",07,32,7b,87),::little::parser::Parser_obj::linePart)
-            										->setFixed(1,HX_("module",ac,34,d3,c0),_hx_tmp34)
+            										->setFixed(1,HX_("module",ac,34,d3,c0),_hx_tmp36)
             										->setFixed(2,HX_("token",f9,82,2b,14),::little::interpreter::InterpTokens_obj::FunctionDeclaration(::little::interpreter::InterpTokens_obj::Identifier(HX_("",00,00,00,00)),null(),null(),null()))
-            										->setFixed(3,HX_("line",f4,17,b3,47),_hx_tmp35)));
-HXLINE( 515)									::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(HX_("Missing function name and parameters, function is cut off by the end of the file, block or expression.",e2,79,3a,ec)),HX_("Parser",ff,10,1d,22));
-HXLINE( 516)									return null();
+            										->setFixed(3,HX_("line",f4,17,b3,47),_hx_tmp37)));
+HXLINE( 513)									::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(HX_("Missing function name and parameters, function is cut off by the end of the file, block or expression.",e2,79,3a,ec)),HX_("Parser",ff,10,1d,22));
+HXLINE( 514)									return null();
             								}
             								else {
-HXLINE( 517)									if (::hx::IsNull( params )) {
-HXLINE( 518)										::Array< ::Dynamic> _hx_tmp36 = ::little::Little_obj::runtime->callStack;
-HXDLIN( 518)										::String _hx_tmp37 = ::little::parser::Parser_obj::get_module();
-HXDLIN( 518)										int _hx_tmp38 = ::little::parser::Parser_obj::get_line();
-HXDLIN( 518)										int _hx_tmp39 = ::little::parser::Parser_obj::linePart;
-HXDLIN( 518)										_hx_tmp36->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
-            											->setFixed(0,HX_("linePart",07,32,7b,87),_hx_tmp39)
-            											->setFixed(1,HX_("module",ac,34,d3,c0),_hx_tmp37)
+HXLINE( 515)									if (::hx::IsNull( params )) {
+HXLINE( 516)										::Array< ::Dynamic> _hx_tmp38 = ::little::Little_obj::runtime->callStack;
+HXDLIN( 516)										::String _hx_tmp39 = ::little::parser::Parser_obj::get_module();
+HXDLIN( 516)										int _hx_tmp40 = ::little::parser::Parser_obj::get_line();
+HXDLIN( 516)										int _hx_tmp41 = ::little::parser::Parser_obj::linePart;
+HXDLIN( 516)										_hx_tmp38->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
+            											->setFixed(0,HX_("linePart",07,32,7b,87),_hx_tmp41)
+            											->setFixed(1,HX_("module",ac,34,d3,c0),_hx_tmp39)
             											->setFixed(2,HX_("token",f9,82,2b,14),::little::interpreter::InterpTokens_obj::FunctionDeclaration(::little::interpreter::Interpreter_obj::convert(::Array_obj< ::Dynamic>::__new(1)->init(0,name3))->__get(0).StaticCast<  ::little::interpreter::InterpTokens >(),null(),null(),null()))
-            											->setFixed(3,HX_("line",f4,17,b3,47),_hx_tmp38)));
-HXLINE( 519)										::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(HX_("Missing function parameters, function is cut off by the end of the file, block or expression.",a0,a6,fc,8b)),HX_("Parser",ff,10,1d,22));
-HXLINE( 520)										return null();
+            											->setFixed(3,HX_("line",f4,17,b3,47),_hx_tmp40)));
+HXLINE( 517)										::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(HX_("Missing function parameters, function is cut off by the end of the file, block or expression.",a0,a6,fc,8b)),HX_("Parser",ff,10,1d,22));
+HXLINE( 518)										return null();
             									}
             								}
-HXLINE( 522)								post->push(::little::parser::ParserTokens_obj::Function(name3,params,type5,currentDoc));
-HXLINE( 523)								currentDoc = null();
+HXLINE( 520)								 ::little::parser::ParserTokens _hx_tmp42;
+HXDLIN( 520)								bool _hx_tmp43;
+HXDLIN( 520)								if ((post->length > 0)) {
+HXLINE( 520)									 ::little::parser::ParserTokens token2 = post->__get((post->length - 1)).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 520)									::Array< ::Dynamic> _this3 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::ParserTokensSimple_obj::DOCUMENTATION_dyn())->copy();
+HXDLIN( 520)									::Array< ::String > result3 = ::Array_obj< ::String >::__new(_this3->length);
+HXDLIN( 520)									{
+HXLINE( 520)										int _g11 = 0;
+HXDLIN( 520)										int _g12 = _this3->length;
+HXDLIN( 520)										while((_g11 < _g12)){
+HXLINE( 520)											_g11 = (_g11 + 1);
+HXDLIN( 520)											int i4 = (_g11 - 1);
+HXDLIN( 520)											{
+HXLINE( 520)												::String inValue3 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this3,i4)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 520)												result3->__unsafe_set(i4,inValue3);
+            											}
+            										}
+            									}
+HXDLIN( 520)									_hx_tmp43 = result3->contains(::Type_obj::enumConstructor(token2).toLowerCase());
+            								}
+            								else {
+HXLINE( 520)									_hx_tmp43 = false;
+            								}
+HXDLIN( 520)								if (_hx_tmp43) {
+HXLINE( 520)									_hx_tmp42 = post->pop().StaticCast<  ::little::parser::ParserTokens >();
+            								}
+            								else {
+HXLINE( 520)									_hx_tmp42 = null();
+            								}
+HXDLIN( 520)								post->push(::little::parser::ParserTokens_obj::Function(name3,params,type5,_hx_tmp42));
             							}
             							else {
-HXLINE( 525)								_hx_tmp1 = (_g == ::little::Little_obj::keywords->FUNCTION_RETURN);
-HXDLIN( 525)								if ((_hx_tmp1 == true)) {
-HXLINE( 526)									i = (i + 1);
-HXLINE( 527)									if ((i >= pre->length)) {
-HXLINE( 528)										::Array< ::Dynamic> _hx_tmp40 = ::little::Little_obj::runtime->callStack;
-HXDLIN( 528)										::String _hx_tmp41 = ::little::parser::Parser_obj::get_module();
-HXDLIN( 528)										int _hx_tmp42 = ::little::parser::Parser_obj::get_line();
-HXDLIN( 528)										_hx_tmp40->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
+HXLINE( 522)								_hx_tmp1 = (_g == ::little::Little_obj::keywords->FUNCTION_RETURN);
+HXDLIN( 522)								if ((_hx_tmp1 == true)) {
+HXLINE( 523)									i = (i + 1);
+HXLINE( 524)									if ((i >= pre->length)) {
+HXLINE( 525)										::Array< ::Dynamic> _hx_tmp44 = ::little::Little_obj::runtime->callStack;
+HXDLIN( 525)										::String _hx_tmp45 = ::little::parser::Parser_obj::get_module();
+HXDLIN( 525)										int _hx_tmp46 = ::little::parser::Parser_obj::get_line();
+HXDLIN( 525)										_hx_tmp44->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
             											->setFixed(0,HX_("linePart",07,32,7b,87),::little::parser::Parser_obj::linePart)
-            											->setFixed(1,HX_("module",ac,34,d3,c0),_hx_tmp41)
+            											->setFixed(1,HX_("module",ac,34,d3,c0),_hx_tmp45)
             											->setFixed(2,HX_("token",f9,82,2b,14),::little::interpreter::InterpTokens_obj::FunctionReturn(::little::interpreter::InterpTokens_obj::Identifier(HX_("",00,00,00,00)),null()))
-            											->setFixed(3,HX_("line",f4,17,b3,47),_hx_tmp42)));
-HXLINE( 529)										::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(HX_("Missing return value, value is cut off by the end of the file, block or expression.",fe,14,08,44)),HX_("Parser",ff,10,1d,22));
-HXLINE( 530)										return null();
+            											->setFixed(3,HX_("line",f4,17,b3,47),_hx_tmp46)));
+HXLINE( 526)										::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(HX_("Missing return value, value is cut off by the end of the file, block or expression.",fe,14,08,44)),HX_("Parser",ff,10,1d,22));
+HXLINE( 527)										return null();
             									}
-HXLINE( 533)									::Array< ::Dynamic> valueToReturn = ::Array_obj< ::Dynamic>::__new(0);
-HXLINE( 534)									while((i < pre->length)){
-HXLINE( 535)										 ::little::parser::ParserTokens lookahead2 = pre->__get(i).StaticCast<  ::little::parser::ParserTokens >();
-HXLINE( 536)										switch((int)(lookahead2->_hx_getIndex())){
+HXLINE( 530)									::Array< ::Dynamic> valueToReturn = ::Array_obj< ::Dynamic>::__new(0);
+HXLINE( 531)									while((i < pre->length)){
+HXLINE( 532)										 ::little::parser::ParserTokens lookahead2 = pre->__get(i).StaticCast<  ::little::parser::ParserTokens >();
+HXLINE( 533)										switch((int)(lookahead2->_hx_getIndex())){
             											case (int)0: {
-HXLINE( 537)												int _g9 = lookahead2->_hx_getInt(0);
-HXDLIN( 537)												i = (i - 1);
-HXDLIN( 537)												goto _hx_goto_25;
+HXLINE( 534)												int _g13 = lookahead2->_hx_getInt(0);
+HXDLIN( 534)												i = (i - 1);
+HXDLIN( 534)												goto _hx_goto_27;
             											}
             											break;
             											case (int)1: {
-HXLINE( 537)												::String _g10 = lookahead2->_hx_getString(0);
-HXDLIN( 537)												i = (i - 1);
-HXDLIN( 537)												goto _hx_goto_25;
+HXLINE( 534)												::String _g14 = lookahead2->_hx_getString(0);
+HXDLIN( 534)												i = (i - 1);
+HXDLIN( 534)												goto _hx_goto_27;
             											}
             											break;
             											case (int)2: {
-HXLINE( 537)												i = (i - 1);
-HXDLIN( 537)												goto _hx_goto_25;
+HXLINE( 534)												i = (i - 1);
+HXDLIN( 534)												goto _hx_goto_27;
             											}
             											break;
             											case (int)12: {
-HXLINE( 541)												::Array< ::Dynamic> body4 = lookahead2->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 541)												 ::little::parser::ParserTokens type10 = lookahead2->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXLINE( 542)												::Array< ::Dynamic> _hx_tmp43 = ::little::parser::Parser_obj::mergeComplexStructures(body4);
-HXDLIN( 542)												valueToReturn->push(::little::parser::ParserTokens_obj::Expression(_hx_tmp43,::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,type10))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 538)												::Array< ::Dynamic> body4 = lookahead2->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 538)												 ::little::parser::ParserTokens type10 = lookahead2->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXLINE( 539)												::Array< ::Dynamic> _hx_tmp47 = ::little::parser::Parser_obj::mergeComplexStructures(body4);
+HXDLIN( 539)												valueToReturn->push(::little::parser::ParserTokens_obj::Expression(_hx_tmp47,::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,type10))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             											}
             											break;
             											case (int)13: {
-HXLINE( 538)												::Array< ::Dynamic> body5 = lookahead2->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 538)												 ::little::parser::ParserTokens type11 = lookahead2->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXLINE( 539)												::Array< ::Dynamic> _hx_tmp44 = ::little::parser::Parser_obj::mergeComplexStructures(body5);
-HXDLIN( 539)												valueToReturn->push(::little::parser::ParserTokens_obj::Block(_hx_tmp44,::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,type11))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 535)												::Array< ::Dynamic> body5 = lookahead2->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 535)												 ::little::parser::ParserTokens type11 = lookahead2->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXLINE( 536)												::Array< ::Dynamic> _hx_tmp48 = ::little::parser::Parser_obj::mergeComplexStructures(body5);
+HXDLIN( 536)												valueToReturn->push(::little::parser::ParserTokens_obj::Block(_hx_tmp48,::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,type11))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             											}
             											break;
             											default:{
-HXLINE( 544)												valueToReturn->push(lookahead2);
+HXLINE( 541)												valueToReturn->push(lookahead2);
             											}
             										}
-HXLINE( 546)										i = (i + 1);
+HXLINE( 543)										i = (i + 1);
             									}
-            									_hx_goto_25:;
-HXLINE( 548)									 ::little::parser::ParserTokens _hx_tmp45;
-HXDLIN( 548)									if ((valueToReturn->length == 1)) {
-HXLINE( 548)										_hx_tmp45 = valueToReturn->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+            									_hx_goto_27:;
+HXLINE( 545)									 ::little::parser::ParserTokens _hx_tmp49;
+HXDLIN( 545)									if ((valueToReturn->length == 1)) {
+HXLINE( 545)										_hx_tmp49 = valueToReturn->__get(0).StaticCast<  ::little::parser::ParserTokens >();
             									}
             									else {
-HXLINE( 548)										_hx_tmp45 = ::little::parser::ParserTokens_obj::Expression(valueToReturn->copy(),null());
+HXLINE( 545)										_hx_tmp49 = ::little::parser::ParserTokens_obj::Expression(valueToReturn->copy(),null());
             									}
-HXDLIN( 548)									post->push(::little::parser::ParserTokens_obj::Return(_hx_tmp45,null()));
+HXDLIN( 545)									post->push(::little::parser::ParserTokens_obj::Return(_hx_tmp49,null()));
             								}
             								else {
-HXLINE( 551)									i = (i + 1);
-HXLINE( 553)									 ::little::parser::ParserTokens name6 = ::little::parser::ParserTokens_obj::Identifier(::Type_obj::enumParameters(token)->__get(0));
-HXLINE( 554)									 ::little::parser::ParserTokens exp = null();
-HXLINE( 555)									 ::little::parser::ParserTokens body6 = null();
-HXLINE( 557)									int fallback = (i - 1);
-HXLINE( 559)									while(::hx::IsNull( body6 )){
-HXLINE( 561)										if ((i >= pre->length)) {
-HXLINE( 562)											i = fallback;
-HXLINE( 563)											goto _hx_goto_26;
+HXLINE( 548)									i = (i + 1);
+HXLINE( 550)									 ::little::parser::ParserTokens name6 = ::little::parser::ParserTokens_obj::Identifier(::Type_obj::enumParameters(token)->__get(0));
+HXLINE( 551)									 ::little::parser::ParserTokens exp = null();
+HXLINE( 552)									 ::little::parser::ParserTokens body6 = null();
+HXLINE( 554)									int fallback = (i - 1);
+HXLINE( 556)									while(::hx::IsNull( body6 )){
+HXLINE( 558)										if ((i >= pre->length)) {
+HXLINE( 559)											i = fallback;
+HXLINE( 560)											goto _hx_goto_28;
             										}
-HXLINE( 565)										 ::little::parser::ParserTokens lookahead3 = pre->__get(i).StaticCast<  ::little::parser::ParserTokens >();
-HXLINE( 566)										switch((int)(lookahead3->_hx_getIndex())){
+HXLINE( 562)										 ::little::parser::ParserTokens lookahead3 = pre->__get(i).StaticCast<  ::little::parser::ParserTokens >();
+HXLINE( 563)										switch((int)(lookahead3->_hx_getIndex())){
             											case (int)0: {
-HXLINE( 567)												int _g11 = lookahead3->_hx_getInt(0);
-HXLINE( 568)												bool _hx_tmp46;
-HXDLIN( 568)												if (::hx::IsNotNull( exp )) {
-HXLINE( 568)													_hx_tmp46 = ::hx::IsNotNull( body6 );
+HXLINE( 564)												int _g15 = lookahead3->_hx_getInt(0);
+HXLINE( 565)												bool _hx_tmp50;
+HXDLIN( 565)												if (::hx::IsNotNull( exp )) {
+HXLINE( 565)													_hx_tmp50 = ::hx::IsNotNull( body6 );
             												}
             												else {
-HXLINE( 568)													_hx_tmp46 = false;
+HXLINE( 565)													_hx_tmp50 = false;
             												}
-HXDLIN( 568)												if (_hx_tmp46) {
-HXLINE( 568)													goto _hx_goto_26;
+HXDLIN( 565)												if (_hx_tmp50) {
+HXLINE( 565)													goto _hx_goto_28;
             												}
-HXLINE( 569)												i = fallback;
-HXLINE( 570)												goto _hx_goto_26;
+HXLINE( 566)												i = fallback;
+HXLINE( 567)												goto _hx_goto_28;
             											}
             											break;
             											case (int)1: {
-HXLINE( 567)												::String _g12 = lookahead3->_hx_getString(0);
-HXLINE( 568)												bool _hx_tmp47;
-HXDLIN( 568)												if (::hx::IsNotNull( exp )) {
-HXLINE( 568)													_hx_tmp47 = ::hx::IsNotNull( body6 );
+HXLINE( 564)												::String _g16 = lookahead3->_hx_getString(0);
+HXLINE( 565)												bool _hx_tmp51;
+HXDLIN( 565)												if (::hx::IsNotNull( exp )) {
+HXLINE( 565)													_hx_tmp51 = ::hx::IsNotNull( body6 );
             												}
             												else {
-HXLINE( 568)													_hx_tmp47 = false;
+HXLINE( 565)													_hx_tmp51 = false;
             												}
-HXDLIN( 568)												if (_hx_tmp47) {
-HXLINE( 568)													goto _hx_goto_26;
+HXDLIN( 565)												if (_hx_tmp51) {
+HXLINE( 565)													goto _hx_goto_28;
             												}
-HXLINE( 569)												i = fallback;
-HXLINE( 570)												goto _hx_goto_26;
+HXLINE( 566)												i = fallback;
+HXLINE( 567)												goto _hx_goto_28;
             											}
             											break;
             											case (int)2: {
-HXLINE( 568)												bool _hx_tmp48;
-HXDLIN( 568)												if (::hx::IsNotNull( exp )) {
-HXLINE( 568)													_hx_tmp48 = ::hx::IsNotNull( body6 );
+HXLINE( 565)												bool _hx_tmp52;
+HXDLIN( 565)												if (::hx::IsNotNull( exp )) {
+HXLINE( 565)													_hx_tmp52 = ::hx::IsNotNull( body6 );
             												}
             												else {
-HXLINE( 568)													_hx_tmp48 = false;
+HXLINE( 565)													_hx_tmp52 = false;
             												}
-HXDLIN( 568)												if (_hx_tmp48) {
-HXLINE( 568)													goto _hx_goto_26;
+HXDLIN( 565)												if (_hx_tmp52) {
+HXLINE( 565)													goto _hx_goto_28;
             												}
-HXLINE( 569)												i = fallback;
-HXLINE( 570)												goto _hx_goto_26;
+HXLINE( 566)												i = fallback;
+HXLINE( 567)												goto _hx_goto_28;
             											}
             											break;
             											case (int)12: {
-HXLINE( 579)												::Array< ::Dynamic> parts = lookahead3->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 579)												 ::little::parser::ParserTokens type12 = lookahead3->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXLINE( 580)												if (::hx::IsNull( exp )) {
-HXLINE( 580)													exp = ::little::parser::ParserTokens_obj::PartArray(::little::parser::Parser_obj::mergeComplexStructures(parts));
+HXLINE( 576)												::Array< ::Dynamic> parts = lookahead3->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 576)												 ::little::parser::ParserTokens type12 = lookahead3->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXLINE( 577)												if (::hx::IsNull( exp )) {
+HXLINE( 577)													exp = ::little::parser::ParserTokens_obj::PartArray(::little::parser::Parser_obj::mergeComplexStructures(parts));
             												}
             												else {
-HXLINE( 581)													if (::hx::IsNull( body6 )) {
-HXLINE( 582)														i = fallback;
-HXLINE( 583)														goto _hx_goto_26;
+HXLINE( 578)													if (::hx::IsNull( body6 )) {
+HXLINE( 579)														i = fallback;
+HXLINE( 580)														goto _hx_goto_28;
             													}
             												}
             											}
             											break;
             											case (int)13: {
-HXLINE( 572)												::Array< ::Dynamic> b = lookahead3->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 572)												 ::little::parser::ParserTokens type13 = lookahead3->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXLINE( 573)												if (::hx::IsNull( exp )) {
-HXLINE( 574)													i = fallback;
-HXLINE( 575)													goto _hx_goto_26;
+HXLINE( 569)												::Array< ::Dynamic> b = lookahead3->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 569)												 ::little::parser::ParserTokens type13 = lookahead3->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXLINE( 570)												if (::hx::IsNull( exp )) {
+HXLINE( 571)													i = fallback;
+HXLINE( 572)													goto _hx_goto_28;
             												}
             												else {
-HXLINE( 577)													if (::hx::IsNull( body6 )) {
-HXLINE( 577)														::Array< ::Dynamic> body7 = ::little::parser::Parser_obj::mergeComplexStructures(b);
-HXDLIN( 577)														body6 = ::little::parser::ParserTokens_obj::Block(body7,::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,type13))->__get(0).StaticCast<  ::little::parser::ParserTokens >());
+HXLINE( 574)													if (::hx::IsNull( body6 )) {
+HXLINE( 574)														::Array< ::Dynamic> body7 = ::little::parser::Parser_obj::mergeComplexStructures(b);
+HXDLIN( 574)														body6 = ::little::parser::ParserTokens_obj::Block(body7,::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,type13))->__get(0).StaticCast<  ::little::parser::ParserTokens >());
             													}
             												}
             											}
             											break;
             											default:{
-HXLINE( 587)												bool _hx_tmp49;
-HXDLIN( 587)												if (::hx::IsNotNull( exp )) {
-HXLINE( 587)													_hx_tmp49 = ::hx::IsNull( body6 );
+HXLINE( 584)												bool _hx_tmp53;
+HXDLIN( 584)												if (::hx::IsNotNull( exp )) {
+HXLINE( 584)													_hx_tmp53 = ::hx::IsNull( body6 );
             												}
             												else {
-HXLINE( 587)													_hx_tmp49 = true;
+HXLINE( 584)													_hx_tmp53 = true;
             												}
-HXDLIN( 587)												if (_hx_tmp49) {
-HXLINE( 588)													i = fallback;
-HXLINE( 589)													goto _hx_goto_26;
+HXDLIN( 584)												if (_hx_tmp53) {
+HXLINE( 585)													i = fallback;
+HXLINE( 586)													goto _hx_goto_28;
             												}
             											}
             										}
-HXLINE( 593)										i = (i + 1);
+HXLINE( 590)										i = (i + 1);
             									}
-            									_hx_goto_26:;
-HXLINE( 595)									if ((i == fallback)) {
-HXLINE( 596)										post->push(token);
+            									_hx_goto_28:;
+HXLINE( 592)									if ((i == fallback)) {
+HXLINE( 593)										post->push(token);
             									}
             									else {
-HXLINE( 598)										i = (i - 1);
-HXLINE( 599)										post->push(::little::parser::ParserTokens_obj::ConditionCall(name6,exp,body6));
-HXLINE( 600)										currentDoc = null();
+HXLINE( 595)										i = (i - 1);
+HXLINE( 596)										post->push(::little::parser::ParserTokens_obj::ConditionCall(name6,exp,body6));
             									}
             								}
             							}
@@ -1437,174 +1491,174 @@ HXLINE( 600)										currentDoc = null();
             				}
             				break;
             				case (int)12: {
-HXLINE( 603)					::Array< ::Dynamic> parts1 = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 603)					 ::little::parser::ParserTokens type14 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 603)					::Array< ::Dynamic> _hx_tmp50 = ::little::parser::Parser_obj::mergeComplexStructures(parts1);
-HXDLIN( 603)					post->push(::little::parser::ParserTokens_obj::Expression(_hx_tmp50,::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,type14))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 599)					::Array< ::Dynamic> parts1 = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 599)					 ::little::parser::ParserTokens type14 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 599)					::Array< ::Dynamic> _hx_tmp54 = ::little::parser::Parser_obj::mergeComplexStructures(parts1);
+HXDLIN( 599)					post->push(::little::parser::ParserTokens_obj::Expression(_hx_tmp54,::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,type14))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)13: {
-HXLINE( 604)					::Array< ::Dynamic> body8 = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 604)					 ::little::parser::ParserTokens type15 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 604)					::Array< ::Dynamic> _hx_tmp51 = ::little::parser::Parser_obj::mergeComplexStructures(body8);
-HXDLIN( 604)					post->push(::little::parser::ParserTokens_obj::Block(_hx_tmp51,::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,type15))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 600)					::Array< ::Dynamic> body8 = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 600)					 ::little::parser::ParserTokens type15 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 600)					::Array< ::Dynamic> _hx_tmp55 = ::little::parser::Parser_obj::mergeComplexStructures(body8);
+HXDLIN( 600)					post->push(::little::parser::ParserTokens_obj::Block(_hx_tmp55,::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,type15))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)15: {
-HXLINE( 605)					 ::little::parser::ParserTokens name7 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 605)					 ::little::parser::ParserTokens property = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 605)					 ::little::parser::ParserTokens _hx_tmp52 = ::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,name7))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 605)					post->push(::little::parser::ParserTokens_obj::PropertyAccess(_hx_tmp52,::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,property))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 601)					 ::little::parser::ParserTokens name7 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 601)					 ::little::parser::ParserTokens property = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 601)					 ::little::parser::ParserTokens _hx_tmp56 = ::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,name7))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 601)					post->push(::little::parser::ParserTokens_obj::PropertyAccess(_hx_tmp56,::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,property))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)20: {
-HXLINE( 391)					::String doc = token->_hx_getString(0);
-HXDLIN( 391)					currentDoc = token;
+HXLINE( 390)					::String doc = token->_hx_getString(0);
+HXDLIN( 390)					post->push(token);
             				}
             				break;
             				case (int)25: {
-HXLINE( 606)					::String name8 = token->_hx_getString(0);
-HXDLIN( 606)					::Array< ::Dynamic> params3 = token->_hx_getObject(1).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 606)					::Array< ::Dynamic> result2 = ::Array_obj< ::Dynamic>::__new(params3->length);
-HXDLIN( 606)					{
-HXLINE( 606)						int _g13 = 0;
-HXDLIN( 606)						int _g14 = params3->length;
-HXDLIN( 606)						while((_g13 < _g14)){
-HXLINE( 606)							_g13 = (_g13 + 1);
-HXDLIN( 606)							int i3 = (_g13 - 1);
-HXDLIN( 606)							{
-HXLINE( 606)								 ::little::parser::ParserTokens inValue2 = ::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,_hx_array_unsafe_get(params3,i3)))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 606)								result2->__unsafe_set(i3,inValue2);
+HXLINE( 602)					::String name8 = token->_hx_getString(0);
+HXDLIN( 602)					::Array< ::Dynamic> params3 = token->_hx_getObject(1).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 602)					::Array< ::Dynamic> result4 = ::Array_obj< ::Dynamic>::__new(params3->length);
+HXDLIN( 602)					{
+HXLINE( 602)						int _g17 = 0;
+HXDLIN( 602)						int _g18 = params3->length;
+HXDLIN( 602)						while((_g17 < _g18)){
+HXLINE( 602)							_g17 = (_g17 + 1);
+HXDLIN( 602)							int i5 = (_g17 - 1);
+HXDLIN( 602)							{
+HXLINE( 602)								 ::little::parser::ParserTokens inValue4 = ::little::parser::Parser_obj::mergeComplexStructures(::Array_obj< ::Dynamic>::__new(1)->init(0,_hx_array_unsafe_get(params3,i5)))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 602)								result4->__unsafe_set(i5,inValue4);
             							}
             						}
             					}
-HXDLIN( 606)					post->push(::little::parser::ParserTokens_obj::Custom(name8,result2));
+HXDLIN( 602)					post->push(::little::parser::ParserTokens_obj::Custom(name8,result4));
             				}
             				break;
             				default:{
-HXLINE( 607)					post->push(token);
+HXLINE( 603)					post->push(token);
             				}
             			}
-HXLINE( 609)			i = (i + 1);
+HXLINE( 605)			i = (i + 1);
             		}
-HXLINE( 612)		::little::parser::Parser_obj::resetLines();
-HXLINE( 613)		return post;
+HXLINE( 608)		::little::parser::Parser_obj::resetLines();
+HXLINE( 609)		return post;
             	}
 
 
 STATIC_HX_DEFINE_DYNAMIC_FUNC1(Parser_obj,mergeComplexStructures,return )
 
 ::Array< ::Dynamic> Parser_obj::mergeCalls(::Array< ::Dynamic> pre){
-            	HX_STACKFRAME(&_hx_pos_b4f540063664edae_619_mergeCalls)
-HXLINE( 621)		if (::hx::IsNull( pre )) {
-HXLINE( 621)			return null();
+            	HX_STACKFRAME(&_hx_pos_b4f540063664edae_615_mergeCalls)
+HXLINE( 617)		if (::hx::IsNull( pre )) {
+HXLINE( 617)			return null();
             		}
-HXLINE( 622)		bool _hx_tmp;
-HXDLIN( 622)		if ((pre->length == 1)) {
-HXLINE( 622)			_hx_tmp = ::hx::IsNull( pre->__get(0).StaticCast<  ::little::parser::ParserTokens >() );
+HXLINE( 618)		bool _hx_tmp;
+HXDLIN( 618)		if ((pre->length == 1)) {
+HXLINE( 618)			_hx_tmp = ::hx::IsNull( pre->__get(0).StaticCast<  ::little::parser::ParserTokens >() );
             		}
             		else {
-HXLINE( 622)			_hx_tmp = false;
+HXLINE( 618)			_hx_tmp = false;
             		}
-HXDLIN( 622)		if (_hx_tmp) {
-HXLINE( 622)			return ::Array_obj< ::Dynamic>::__new(1)->init(0,null());
+HXDLIN( 618)		if (_hx_tmp) {
+HXLINE( 618)			return ::Array_obj< ::Dynamic>::__new(1)->init(0,null());
             		}
-HXLINE( 624)		::Array< ::Dynamic> post = ::Array_obj< ::Dynamic>::__new(0);
-HXLINE( 626)		int i = 0;
-HXLINE( 627)		while((i < pre->length)){
-HXLINE( 629)			 ::little::parser::ParserTokens token = pre->__get(i).StaticCast<  ::little::parser::ParserTokens >();
-HXLINE( 630)			switch((int)(token->_hx_getIndex())){
+HXLINE( 620)		::Array< ::Dynamic> post = ::Array_obj< ::Dynamic>::__new(0);
+HXLINE( 622)		int i = 0;
+HXLINE( 623)		while((i < pre->length)){
+HXLINE( 625)			 ::little::parser::ParserTokens token = pre->__get(i).StaticCast<  ::little::parser::ParserTokens >();
+HXLINE( 626)			switch((int)(token->_hx_getIndex())){
             				case (int)0: {
-HXLINE( 631)					int line = token->_hx_getInt(0);
-HXDLIN( 631)					{
-HXLINE( 631)						::little::parser::Parser_obj::setLine(line);
-HXDLIN( 631)						post->push(token);
+HXLINE( 627)					int line = token->_hx_getInt(0);
+HXDLIN( 627)					{
+HXLINE( 627)						::little::parser::Parser_obj::setLine(line);
+HXDLIN( 627)						post->push(token);
             					}
             				}
             				break;
             				case (int)1: {
-HXLINE( 632)					::String module = token->_hx_getString(0);
-HXDLIN( 632)					{
-HXLINE( 632)						::little::parser::Parser_obj::set_module(module);
-HXDLIN( 632)						post->push(token);
+HXLINE( 628)					::String module = token->_hx_getString(0);
+HXDLIN( 628)					{
+HXLINE( 628)						::little::parser::Parser_obj::set_module(module);
+HXDLIN( 628)						post->push(token);
             					}
             				}
             				break;
             				case (int)2: {
-HXLINE( 633)					::little::parser::Parser_obj::nextPart();
-HXDLIN( 633)					post->push(token);
+HXLINE( 629)					::little::parser::Parser_obj::nextPart();
+HXDLIN( 629)					post->push(token);
             				}
             				break;
             				case (int)3: {
-HXLINE( 651)					 ::little::parser::ParserTokens name = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 651)					 ::little::parser::ParserTokens type = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 651)					 ::little::parser::ParserTokens doc = token->_hx_getObject(2).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 651)					 ::little::parser::ParserTokens _hx_tmp1 = ::little::parser::Parser_obj::mergeCalls(::Array_obj< ::Dynamic>::__new(1)->init(0,name))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 651)					 ::little::parser::ParserTokens _hx_tmp2 = ::little::parser::Parser_obj::mergeCalls(::Array_obj< ::Dynamic>::__new(1)->init(0,type))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 651)					post->push(::little::parser::ParserTokens_obj::Variable(_hx_tmp1,_hx_tmp2,::little::parser::Parser_obj::mergeCalls(::Array_obj< ::Dynamic>::__new(1)->init(0,doc))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 647)					 ::little::parser::ParserTokens name = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 647)					 ::little::parser::ParserTokens type = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 647)					 ::little::parser::ParserTokens doc = token->_hx_getObject(2).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 647)					 ::little::parser::ParserTokens _hx_tmp1 = ::little::parser::Parser_obj::mergeCalls(::Array_obj< ::Dynamic>::__new(1)->init(0,name))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 647)					 ::little::parser::ParserTokens _hx_tmp2 = ::little::parser::Parser_obj::mergeCalls(::Array_obj< ::Dynamic>::__new(1)->init(0,type))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 647)					post->push(::little::parser::ParserTokens_obj::Variable(_hx_tmp1,_hx_tmp2,::little::parser::Parser_obj::mergeCalls(::Array_obj< ::Dynamic>::__new(1)->init(0,doc))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)4: {
-HXLINE( 652)					 ::little::parser::ParserTokens name1 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 652)					 ::little::parser::ParserTokens params = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 652)					 ::little::parser::ParserTokens type1 = token->_hx_getObject(2).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 652)					 ::little::parser::ParserTokens doc1 = token->_hx_getObject(3).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 652)					 ::little::parser::ParserTokens _hx_tmp3 = ::little::parser::Parser_obj::mergeCalls(::Array_obj< ::Dynamic>::__new(1)->init(0,name1))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 652)					 ::little::parser::ParserTokens _hx_tmp4 = ::little::parser::Parser_obj::mergeCalls(::Array_obj< ::Dynamic>::__new(1)->init(0,params))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 652)					 ::little::parser::ParserTokens _hx_tmp5 = ::little::parser::Parser_obj::mergeCalls(::Array_obj< ::Dynamic>::__new(1)->init(0,type1))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 652)					post->push(::little::parser::ParserTokens_obj::Function(_hx_tmp3,_hx_tmp4,_hx_tmp5,::little::parser::Parser_obj::mergeCalls(::Array_obj< ::Dynamic>::__new(1)->init(0,doc1))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 648)					 ::little::parser::ParserTokens name1 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 648)					 ::little::parser::ParserTokens params = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 648)					 ::little::parser::ParserTokens type1 = token->_hx_getObject(2).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 648)					 ::little::parser::ParserTokens doc1 = token->_hx_getObject(3).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 648)					 ::little::parser::ParserTokens _hx_tmp3 = ::little::parser::Parser_obj::mergeCalls(::Array_obj< ::Dynamic>::__new(1)->init(0,name1))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 648)					 ::little::parser::ParserTokens _hx_tmp4 = ::little::parser::Parser_obj::mergeCalls(::Array_obj< ::Dynamic>::__new(1)->init(0,params))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 648)					 ::little::parser::ParserTokens _hx_tmp5 = ::little::parser::Parser_obj::mergeCalls(::Array_obj< ::Dynamic>::__new(1)->init(0,type1))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 648)					post->push(::little::parser::ParserTokens_obj::Function(_hx_tmp3,_hx_tmp4,_hx_tmp5,::little::parser::Parser_obj::mergeCalls(::Array_obj< ::Dynamic>::__new(1)->init(0,doc1))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)5: {
-HXLINE( 653)					 ::little::parser::ParserTokens name2 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 653)					 ::little::parser::ParserTokens exp = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 653)					 ::little::parser::ParserTokens body = token->_hx_getObject(2).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 653)					 ::little::parser::ParserTokens _hx_tmp6 = ::little::parser::Parser_obj::mergeCalls(::Array_obj< ::Dynamic>::__new(1)->init(0,name2))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 653)					 ::little::parser::ParserTokens _hx_tmp7 = ::little::parser::Parser_obj::mergeCalls(::Array_obj< ::Dynamic>::__new(1)->init(0,exp))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 653)					post->push(::little::parser::ParserTokens_obj::ConditionCall(_hx_tmp6,_hx_tmp7,::little::parser::Parser_obj::mergeCalls(::Array_obj< ::Dynamic>::__new(1)->init(0,body))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 649)					 ::little::parser::ParserTokens name2 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 649)					 ::little::parser::ParserTokens exp = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 649)					 ::little::parser::ParserTokens body = token->_hx_getObject(2).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 649)					 ::little::parser::ParserTokens _hx_tmp6 = ::little::parser::Parser_obj::mergeCalls(::Array_obj< ::Dynamic>::__new(1)->init(0,name2))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 649)					 ::little::parser::ParserTokens _hx_tmp7 = ::little::parser::Parser_obj::mergeCalls(::Array_obj< ::Dynamic>::__new(1)->init(0,exp))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 649)					post->push(::little::parser::ParserTokens_obj::ConditionCall(_hx_tmp6,_hx_tmp7,::little::parser::Parser_obj::mergeCalls(::Array_obj< ::Dynamic>::__new(1)->init(0,body))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)11: {
-HXLINE( 654)					 ::little::parser::ParserTokens value = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 654)					 ::little::parser::ParserTokens type2 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 654)					 ::little::parser::ParserTokens _hx_tmp8 = ::little::parser::Parser_obj::mergeCalls(::Array_obj< ::Dynamic>::__new(1)->init(0,value))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 654)					post->push(::little::parser::ParserTokens_obj::Return(_hx_tmp8,::little::parser::Parser_obj::mergeCalls(::Array_obj< ::Dynamic>::__new(1)->init(0,type2))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 650)					 ::little::parser::ParserTokens value = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 650)					 ::little::parser::ParserTokens type2 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 650)					 ::little::parser::ParserTokens _hx_tmp8 = ::little::parser::Parser_obj::mergeCalls(::Array_obj< ::Dynamic>::__new(1)->init(0,value))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 650)					post->push(::little::parser::ParserTokens_obj::Return(_hx_tmp8,::little::parser::Parser_obj::mergeCalls(::Array_obj< ::Dynamic>::__new(1)->init(0,type2))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)12: {
-HXLINE( 634)					::Array< ::Dynamic> parts = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 634)					 ::little::parser::ParserTokens type3 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 634)					{
-HXLINE( 635)						parts = ::little::parser::Parser_obj::mergeCalls(parts);
-HXLINE( 636)						if ((i == 0)) {
-HXLINE( 637)							post->push(::little::parser::ParserTokens_obj::Expression(parts,type3));
+HXLINE( 630)					::Array< ::Dynamic> parts = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 630)					 ::little::parser::ParserTokens type3 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 630)					{
+HXLINE( 631)						parts = ::little::parser::Parser_obj::mergeCalls(parts);
+HXLINE( 632)						if ((i == 0)) {
+HXLINE( 633)							post->push(::little::parser::ParserTokens_obj::Expression(parts,type3));
             						}
             						else {
-HXLINE( 639)							 ::little::parser::ParserTokens lookbehind = pre->__get((i - 1)).StaticCast<  ::little::parser::ParserTokens >();
-HXLINE( 640)							switch((int)(lookbehind->_hx_getIndex())){
+HXLINE( 635)							 ::little::parser::ParserTokens lookbehind = pre->__get((i - 1)).StaticCast<  ::little::parser::ParserTokens >();
+HXLINE( 636)							switch((int)(lookbehind->_hx_getIndex())){
             								case (int)0: {
-HXLINE( 641)									int _g = lookbehind->_hx_getInt(0);
-HXDLIN( 641)									post->push(::little::parser::ParserTokens_obj::Expression(parts,type3));
+HXLINE( 637)									int _g = lookbehind->_hx_getInt(0);
+HXDLIN( 637)									post->push(::little::parser::ParserTokens_obj::Expression(parts,type3));
             								}
             								break;
             								case (int)1: {
-HXLINE( 641)									::String _g1 = lookbehind->_hx_getString(0);
-HXDLIN( 641)									post->push(::little::parser::ParserTokens_obj::Expression(parts,type3));
+HXLINE( 637)									::String _g1 = lookbehind->_hx_getString(0);
+HXDLIN( 637)									post->push(::little::parser::ParserTokens_obj::Expression(parts,type3));
             								}
             								break;
             								case (int)2: {
-HXLINE( 641)									post->push(::little::parser::ParserTokens_obj::Expression(parts,type3));
+HXLINE( 637)									post->push(::little::parser::ParserTokens_obj::Expression(parts,type3));
             								}
             								break;
             								case (int)16: {
-HXLINE( 641)									::String _g2 = lookbehind->_hx_getString(0);
-HXDLIN( 641)									post->push(::little::parser::ParserTokens_obj::Expression(parts,type3));
+HXLINE( 637)									::String _g2 = lookbehind->_hx_getString(0);
+HXDLIN( 637)									post->push(::little::parser::ParserTokens_obj::Expression(parts,type3));
             								}
             								break;
             								default:{
-HXLINE( 643)									 ::little::parser::ParserTokens previous = post->pop().StaticCast<  ::little::parser::ParserTokens >();
-HXLINE( 644)									token = ::little::parser::ParserTokens_obj::PartArray(parts);
-HXLINE( 645)									post->push(::little::parser::ParserTokens_obj::FunctionCall(previous,token));
+HXLINE( 639)									 ::little::parser::ParserTokens previous = post->pop().StaticCast<  ::little::parser::ParserTokens >();
+HXLINE( 640)									token = ::little::parser::ParserTokens_obj::PartArray(parts);
+HXLINE( 641)									post->push(::little::parser::ParserTokens_obj::FunctionCall(previous,token));
             								}
             							}
             						}
@@ -1612,1138 +1666,1186 @@ HXLINE( 645)									post->push(::little::parser::ParserTokens_obj::FunctionCall
             				}
             				break;
             				case (int)13: {
-HXLINE( 650)					::Array< ::Dynamic> body1 = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 650)					 ::little::parser::ParserTokens type4 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 650)					::Array< ::Dynamic> _hx_tmp9 = ::little::parser::Parser_obj::mergeCalls(body1);
-HXDLIN( 650)					post->push(::little::parser::ParserTokens_obj::Block(_hx_tmp9,::little::parser::Parser_obj::mergeCalls(::Array_obj< ::Dynamic>::__new(1)->init(0,type4))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 646)					::Array< ::Dynamic> body1 = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 646)					 ::little::parser::ParserTokens type4 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 646)					::Array< ::Dynamic> _hx_tmp9 = ::little::parser::Parser_obj::mergeCalls(body1);
+HXDLIN( 646)					post->push(::little::parser::ParserTokens_obj::Block(_hx_tmp9,::little::parser::Parser_obj::mergeCalls(::Array_obj< ::Dynamic>::__new(1)->init(0,type4))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)14: {
-HXLINE( 656)					::Array< ::Dynamic> parts1 = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 656)					post->push(::little::parser::ParserTokens_obj::PartArray(::little::parser::Parser_obj::mergeCalls(parts1)));
+HXLINE( 652)					::Array< ::Dynamic> parts1 = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 652)					post->push(::little::parser::ParserTokens_obj::PartArray(::little::parser::Parser_obj::mergeCalls(parts1)));
             				}
             				break;
             				case (int)15: {
-HXLINE( 655)					 ::little::parser::ParserTokens name3 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 655)					 ::little::parser::ParserTokens property = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 655)					 ::little::parser::ParserTokens _hx_tmp10 = ::little::parser::Parser_obj::mergeCalls(::Array_obj< ::Dynamic>::__new(1)->init(0,name3))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 655)					post->push(::little::parser::ParserTokens_obj::PropertyAccess(_hx_tmp10,::little::parser::Parser_obj::mergeCalls(::Array_obj< ::Dynamic>::__new(1)->init(0,property))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 651)					 ::little::parser::ParserTokens name3 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 651)					 ::little::parser::ParserTokens property = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 651)					 ::little::parser::ParserTokens _hx_tmp10 = ::little::parser::Parser_obj::mergeCalls(::Array_obj< ::Dynamic>::__new(1)->init(0,name3))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 651)					post->push(::little::parser::ParserTokens_obj::PropertyAccess(_hx_tmp10,::little::parser::Parser_obj::mergeCalls(::Array_obj< ::Dynamic>::__new(1)->init(0,property))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)25: {
-HXLINE( 657)					::String name4 = token->_hx_getString(0);
-HXDLIN( 657)					::Array< ::Dynamic> params1 = token->_hx_getObject(1).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 657)					::Array< ::Dynamic> result = ::Array_obj< ::Dynamic>::__new(params1->length);
-HXDLIN( 657)					{
-HXLINE( 657)						int _g3 = 0;
-HXDLIN( 657)						int _g4 = params1->length;
-HXDLIN( 657)						while((_g3 < _g4)){
-HXLINE( 657)							_g3 = (_g3 + 1);
-HXDLIN( 657)							int i1 = (_g3 - 1);
-HXDLIN( 657)							{
-HXLINE( 657)								 ::little::parser::ParserTokens inValue = ::little::parser::Parser_obj::mergeCalls(::Array_obj< ::Dynamic>::__new(1)->init(0,_hx_array_unsafe_get(params1,i1)))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 657)								result->__unsafe_set(i1,inValue);
+HXLINE( 653)					::String name4 = token->_hx_getString(0);
+HXDLIN( 653)					::Array< ::Dynamic> params1 = token->_hx_getObject(1).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 653)					::Array< ::Dynamic> result = ::Array_obj< ::Dynamic>::__new(params1->length);
+HXDLIN( 653)					{
+HXLINE( 653)						int _g3 = 0;
+HXDLIN( 653)						int _g4 = params1->length;
+HXDLIN( 653)						while((_g3 < _g4)){
+HXLINE( 653)							_g3 = (_g3 + 1);
+HXDLIN( 653)							int i1 = (_g3 - 1);
+HXDLIN( 653)							{
+HXLINE( 653)								 ::little::parser::ParserTokens inValue = ::little::parser::Parser_obj::mergeCalls(::Array_obj< ::Dynamic>::__new(1)->init(0,_hx_array_unsafe_get(params1,i1)))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 653)								result->__unsafe_set(i1,inValue);
             							}
             						}
             					}
-HXDLIN( 657)					post->push(::little::parser::ParserTokens_obj::Custom(name4,result));
+HXDLIN( 653)					post->push(::little::parser::ParserTokens_obj::Custom(name4,result));
             				}
             				break;
             				default:{
-HXLINE( 658)					post->push(token);
+HXLINE( 654)					post->push(token);
             				}
             			}
-HXLINE( 660)			i = (i + 1);
+HXLINE( 656)			i = (i + 1);
             		}
-HXLINE( 663)		::little::parser::Parser_obj::resetLines();
-HXLINE( 664)		return post;
+HXLINE( 659)		::little::parser::Parser_obj::resetLines();
+HXLINE( 660)		return post;
             	}
 
 
 STATIC_HX_DEFINE_DYNAMIC_FUNC1(Parser_obj,mergeCalls,return )
 
 ::Array< ::Dynamic> Parser_obj::mergeWrites(::Array< ::Dynamic> pre){
-            	HX_STACKFRAME(&_hx_pos_b4f540063664edae_670_mergeWrites)
-HXLINE( 671)		if (::hx::IsNull( pre )) {
-HXLINE( 671)			return null();
+            	HX_STACKFRAME(&_hx_pos_b4f540063664edae_666_mergeWrites)
+HXLINE( 667)		if (::hx::IsNull( pre )) {
+HXLINE( 667)			return null();
             		}
-HXLINE( 672)		bool _hx_tmp;
-HXDLIN( 672)		if ((pre->length == 1)) {
-HXLINE( 672)			_hx_tmp = ::hx::IsNull( pre->__get(0).StaticCast<  ::little::parser::ParserTokens >() );
+HXLINE( 668)		bool _hx_tmp;
+HXDLIN( 668)		if ((pre->length == 1)) {
+HXLINE( 668)			_hx_tmp = ::hx::IsNull( pre->__get(0).StaticCast<  ::little::parser::ParserTokens >() );
             		}
             		else {
-HXLINE( 672)			_hx_tmp = false;
+HXLINE( 668)			_hx_tmp = false;
             		}
-HXDLIN( 672)		if (_hx_tmp) {
-HXLINE( 672)			return ::Array_obj< ::Dynamic>::__new(1)->init(0,null());
+HXDLIN( 668)		if (_hx_tmp) {
+HXLINE( 668)			return ::Array_obj< ::Dynamic>::__new(1)->init(0,null());
             		}
-HXLINE( 674)		::Array< ::Dynamic> post = ::Array_obj< ::Dynamic>::__new(0);
-HXLINE( 676)		int i = 0;
-HXLINE( 677)		while((i < pre->length)){
-HXLINE( 678)			 ::little::parser::ParserTokens token = pre->__get(i).StaticCast<  ::little::parser::ParserTokens >();
-HXLINE( 679)			switch((int)(token->_hx_getIndex())){
+HXLINE( 670)		::Array< ::Dynamic> post = ::Array_obj< ::Dynamic>::__new(0);
+HXLINE( 672)		int i = 0;
+HXLINE( 673)		while((i < pre->length)){
+HXLINE( 674)			 ::little::parser::ParserTokens token = pre->__get(i).StaticCast<  ::little::parser::ParserTokens >();
+HXLINE( 675)			switch((int)(token->_hx_getIndex())){
             				case (int)0: {
-HXLINE( 680)					int line = token->_hx_getInt(0);
-HXDLIN( 680)					{
-HXLINE( 681)						::little::parser::Parser_obj::setLine(line);
-HXLINE( 682)						post->push(token);
+HXLINE( 676)					int line = token->_hx_getInt(0);
+HXDLIN( 676)					{
+HXLINE( 677)						::little::parser::Parser_obj::setLine(line);
+HXLINE( 678)						post->push(token);
             					}
             				}
             				break;
             				case (int)1: {
-HXLINE( 684)					::String module = token->_hx_getString(0);
-HXDLIN( 684)					{
-HXLINE( 685)						::little::parser::Parser_obj::set_module(module);
-HXLINE( 686)						post->push(token);
+HXLINE( 680)					::String module = token->_hx_getString(0);
+HXDLIN( 680)					{
+HXLINE( 681)						::little::parser::Parser_obj::set_module(module);
+HXLINE( 682)						post->push(token);
             					}
             				}
             				break;
             				case (int)2: {
-HXLINE( 689)					::little::parser::Parser_obj::nextPart();
-HXLINE( 690)					post->push(token);
+HXLINE( 685)					::little::parser::Parser_obj::nextPart();
+HXLINE( 686)					post->push(token);
             				}
             				break;
             				case (int)3: {
-HXLINE( 723)					 ::little::parser::ParserTokens name = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 723)					 ::little::parser::ParserTokens type = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 723)					 ::little::parser::ParserTokens doc = token->_hx_getObject(2).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 723)					 ::little::parser::ParserTokens _hx_tmp1 = ::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,name))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 723)					 ::little::parser::ParserTokens _hx_tmp2 = ::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,type))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 723)					post->push(::little::parser::ParserTokens_obj::Variable(_hx_tmp1,_hx_tmp2,::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,doc))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 725)					 ::little::parser::ParserTokens name = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 725)					 ::little::parser::ParserTokens type = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 725)					 ::little::parser::ParserTokens doc = token->_hx_getObject(2).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 725)					 ::little::parser::ParserTokens _hx_tmp1 = ::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,name))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 725)					 ::little::parser::ParserTokens _hx_tmp2 = ::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,type))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 725)					post->push(::little::parser::ParserTokens_obj::Variable(_hx_tmp1,_hx_tmp2,::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,doc))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)4: {
-HXLINE( 724)					 ::little::parser::ParserTokens name1 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 724)					 ::little::parser::ParserTokens params = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 724)					 ::little::parser::ParserTokens type1 = token->_hx_getObject(2).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 724)					 ::little::parser::ParserTokens doc1 = token->_hx_getObject(3).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 724)					 ::little::parser::ParserTokens _hx_tmp3 = ::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,name1))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 724)					 ::little::parser::ParserTokens _hx_tmp4 = ::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,params))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 724)					 ::little::parser::ParserTokens _hx_tmp5 = ::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,type1))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 724)					post->push(::little::parser::ParserTokens_obj::Function(_hx_tmp3,_hx_tmp4,_hx_tmp5,::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,doc1))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 726)					 ::little::parser::ParserTokens name1 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 726)					 ::little::parser::ParserTokens params = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 726)					 ::little::parser::ParserTokens type1 = token->_hx_getObject(2).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 726)					 ::little::parser::ParserTokens doc1 = token->_hx_getObject(3).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 726)					 ::little::parser::ParserTokens _hx_tmp3 = ::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,name1))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 726)					 ::little::parser::ParserTokens _hx_tmp4 = ::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,params))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 726)					 ::little::parser::ParserTokens _hx_tmp5 = ::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,type1))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 726)					post->push(::little::parser::ParserTokens_obj::Function(_hx_tmp3,_hx_tmp4,_hx_tmp5,::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,doc1))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)5: {
-HXLINE( 725)					 ::little::parser::ParserTokens name2 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 725)					 ::little::parser::ParserTokens exp = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 725)					 ::little::parser::ParserTokens body = token->_hx_getObject(2).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 725)					 ::little::parser::ParserTokens _hx_tmp6 = ::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,name2))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 725)					 ::little::parser::ParserTokens _hx_tmp7 = ::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,exp))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 725)					post->push(::little::parser::ParserTokens_obj::ConditionCall(_hx_tmp6,_hx_tmp7,::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,body))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 727)					 ::little::parser::ParserTokens name2 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 727)					 ::little::parser::ParserTokens exp = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 727)					 ::little::parser::ParserTokens body = token->_hx_getObject(2).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 727)					 ::little::parser::ParserTokens _hx_tmp6 = ::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,name2))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 727)					 ::little::parser::ParserTokens _hx_tmp7 = ::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,exp))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 727)					post->push(::little::parser::ParserTokens_obj::ConditionCall(_hx_tmp6,_hx_tmp7,::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,body))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)6: {
-HXLINE( 726)					 ::little::parser::ParserTokens name3 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 726)					post->push(::little::parser::ParserTokens_obj::Read(::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,name3))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 728)					 ::little::parser::ParserTokens name3 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 728)					post->push(::little::parser::ParserTokens_obj::Read(::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,name3))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)7: {
-HXLINE( 734)					::Array< ::Dynamic> assignees = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 734)					 ::little::parser::ParserTokens value = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 734)					::Array< ::Dynamic> _hx_tmp8 = ::little::parser::Parser_obj::mergeWrites(assignees);
-HXDLIN( 734)					post->push(::little::parser::ParserTokens_obj::Write(_hx_tmp8,::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,value))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 736)					::Array< ::Dynamic> assignees = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 736)					 ::little::parser::ParserTokens value = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 736)					::Array< ::Dynamic> _hx_tmp8 = ::little::parser::Parser_obj::mergeWrites(assignees);
+HXDLIN( 736)					post->push(::little::parser::ParserTokens_obj::Write(_hx_tmp8,::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,value))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)9: {
-HXLINE( 727)					 ::little::parser::ParserTokens value1 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 727)					 ::little::parser::ParserTokens type2 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 727)					 ::little::parser::ParserTokens _hx_tmp9 = ::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,value1))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 727)					post->push(::little::parser::ParserTokens_obj::TypeDeclaration(_hx_tmp9,::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,type2))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 729)					 ::little::parser::ParserTokens value1 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 729)					 ::little::parser::ParserTokens type2 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 729)					 ::little::parser::ParserTokens _hx_tmp9 = ::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,value1))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 729)					post->push(::little::parser::ParserTokens_obj::TypeDeclaration(_hx_tmp9,::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,type2))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)10: {
-HXLINE( 728)					 ::little::parser::ParserTokens name4 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 728)					 ::little::parser::ParserTokens params1 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 728)					 ::little::parser::ParserTokens _hx_tmp10 = ::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,name4))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 728)					post->push(::little::parser::ParserTokens_obj::FunctionCall(_hx_tmp10,::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,params1))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 730)					 ::little::parser::ParserTokens name4 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 730)					 ::little::parser::ParserTokens params1 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 730)					 ::little::parser::ParserTokens _hx_tmp10 = ::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,name4))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 730)					post->push(::little::parser::ParserTokens_obj::FunctionCall(_hx_tmp10,::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,params1))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)11: {
-HXLINE( 729)					 ::little::parser::ParserTokens value2 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 729)					 ::little::parser::ParserTokens type3 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 729)					 ::little::parser::ParserTokens _hx_tmp11 = ::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,value2))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 729)					post->push(::little::parser::ParserTokens_obj::Return(_hx_tmp11,::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,type3))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 731)					 ::little::parser::ParserTokens value2 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 731)					 ::little::parser::ParserTokens type3 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 731)					 ::little::parser::ParserTokens _hx_tmp11 = ::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,value2))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 731)					post->push(::little::parser::ParserTokens_obj::Return(_hx_tmp11,::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,type3))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)12: {
-HXLINE( 730)					::Array< ::Dynamic> parts = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 730)					 ::little::parser::ParserTokens type4 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 730)					::Array< ::Dynamic> _hx_tmp12 = ::little::parser::Parser_obj::mergeWrites(parts);
-HXDLIN( 730)					post->push(::little::parser::ParserTokens_obj::Expression(_hx_tmp12,::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,type4))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 732)					::Array< ::Dynamic> parts = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 732)					 ::little::parser::ParserTokens type4 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 732)					::Array< ::Dynamic> _hx_tmp12 = ::little::parser::Parser_obj::mergeWrites(parts);
+HXDLIN( 732)					post->push(::little::parser::ParserTokens_obj::Expression(_hx_tmp12,::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,type4))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)13: {
-HXLINE( 731)					::Array< ::Dynamic> body1 = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 731)					 ::little::parser::ParserTokens type5 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 731)					::Array< ::Dynamic> _hx_tmp13 = ::little::parser::Parser_obj::mergeWrites(body1);
-HXDLIN( 731)					post->push(::little::parser::ParserTokens_obj::Block(_hx_tmp13,::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,type5))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 733)					::Array< ::Dynamic> body1 = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 733)					 ::little::parser::ParserTokens type5 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 733)					::Array< ::Dynamic> _hx_tmp13 = ::little::parser::Parser_obj::mergeWrites(body1);
+HXDLIN( 733)					post->push(::little::parser::ParserTokens_obj::Block(_hx_tmp13,::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,type5))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)14: {
-HXLINE( 732)					::Array< ::Dynamic> parts1 = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 732)					post->push(::little::parser::ParserTokens_obj::PartArray(::little::parser::Parser_obj::mergeWrites(parts1)));
+HXLINE( 734)					::Array< ::Dynamic> parts1 = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 734)					post->push(::little::parser::ParserTokens_obj::PartArray(::little::parser::Parser_obj::mergeWrites(parts1)));
             				}
             				break;
             				case (int)15: {
-HXLINE( 733)					 ::little::parser::ParserTokens name5 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 733)					 ::little::parser::ParserTokens property = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 733)					 ::little::parser::ParserTokens _hx_tmp14 = ::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,name5))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 733)					post->push(::little::parser::ParserTokens_obj::PropertyAccess(_hx_tmp14,::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,property))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 735)					 ::little::parser::ParserTokens name5 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 735)					 ::little::parser::ParserTokens property = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 735)					 ::little::parser::ParserTokens _hx_tmp14 = ::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,name5))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 735)					post->push(::little::parser::ParserTokens_obj::PropertyAccess(_hx_tmp14,::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,property))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)16: {
-HXLINE( 692)					if ((token->_hx_getString(0) == HX_("=",3d,00,00,00))) {
-HXLINE( 693)						if ((post->length == 0)) {
-HXLINE( 694)							::Array< ::Dynamic> _hx_tmp15 = ::little::Little_obj::runtime->callStack;
-HXDLIN( 694)							::String _hx_tmp16 = ::little::parser::Parser_obj::get_module();
-HXDLIN( 694)							int _hx_tmp17 = ::little::parser::Parser_obj::get_line();
-HXDLIN( 694)							_hx_tmp15->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
+HXLINE( 688)					if ((token->_hx_getString(0) == HX_("=",3d,00,00,00))) {
+HXLINE( 689)						if ((post->length == 0)) {
+HXLINE( 690)							::Array< ::Dynamic> _hx_tmp15 = ::little::Little_obj::runtime->callStack;
+HXDLIN( 690)							::String _hx_tmp16 = ::little::parser::Parser_obj::get_module();
+HXDLIN( 690)							int _hx_tmp17 = ::little::parser::Parser_obj::get_line();
+HXDLIN( 690)							_hx_tmp15->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
             								->setFixed(0,HX_("linePart",07,32,7b,87),::little::parser::Parser_obj::linePart)
             								->setFixed(1,HX_("module",ac,34,d3,c0),_hx_tmp16)
             								->setFixed(2,HX_("token",f9,82,2b,14),::little::interpreter::InterpTokens_obj::Write(null(),null()))
             								->setFixed(3,HX_("line",f4,17,b3,47),_hx_tmp17)));
-HXLINE( 695)							::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(HX_("Missing assignee before `=`",19,58,a3,a9)),HX_("Parser",ff,10,1d,22));
-HXLINE( 696)							return null();
+HXLINE( 691)							::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(HX_("Missing assignee before `=`",19,58,a3,a9)),HX_("Parser",ff,10,1d,22));
+HXLINE( 692)							return null();
             						}
-HXLINE( 698)						 ::little::parser::ParserTokens assignee = post->pop().StaticCast<  ::little::parser::ParserTokens >();
-HXLINE( 699)						::Array< ::Dynamic> _this = ::Array_obj< ::Dynamic>::__new(3)->init(0,::little::tools::ParserTokensSimple_obj::SET_MODULE_dyn())->init(1,::little::tools::ParserTokensSimple_obj::SPLIT_LINE_dyn())->init(2,::little::tools::ParserTokensSimple_obj::SET_LINE_dyn())->copy();
-HXDLIN( 699)						::Array< ::String > result = ::Array_obj< ::String >::__new(_this->length);
-HXDLIN( 699)						{
-HXLINE( 699)							int _g = 0;
-HXDLIN( 699)							int _g1 = _this->length;
-HXDLIN( 699)							while((_g < _g1)){
-HXLINE( 699)								_g = (_g + 1);
-HXDLIN( 699)								int i1 = (_g - 1);
-HXDLIN( 699)								{
-HXLINE( 699)									::String inValue = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this,i1)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 699)									result->__unsafe_set(i1,inValue);
+HXLINE( 694)						 ::little::parser::ParserTokens assignee = post->pop().StaticCast<  ::little::parser::ParserTokens >();
+HXLINE( 695)						::Array< ::Dynamic> _this = ::Array_obj< ::Dynamic>::__new(3)->init(0,::little::tools::ParserTokensSimple_obj::SET_MODULE_dyn())->init(1,::little::tools::ParserTokensSimple_obj::SPLIT_LINE_dyn())->init(2,::little::tools::ParserTokensSimple_obj::SET_LINE_dyn())->copy();
+HXDLIN( 695)						::Array< ::String > result = ::Array_obj< ::String >::__new(_this->length);
+HXDLIN( 695)						{
+HXLINE( 695)							int _g = 0;
+HXDLIN( 695)							int _g1 = _this->length;
+HXDLIN( 695)							while((_g < _g1)){
+HXLINE( 695)								_g = (_g + 1);
+HXDLIN( 695)								int i1 = (_g - 1);
+HXDLIN( 695)								{
+HXLINE( 695)									::String inValue = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this,i1)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 695)									result->__unsafe_set(i1,inValue);
             								}
             							}
             						}
-HXDLIN( 699)						if (result->contains(::Type_obj::enumConstructor(assignee).toLowerCase())) {
-HXLINE( 700)							::Array< ::Dynamic> _hx_tmp18 = ::little::Little_obj::runtime->callStack;
-HXDLIN( 700)							::String _hx_tmp19 = ::little::parser::Parser_obj::get_module();
-HXDLIN( 700)							int _hx_tmp20 = ::little::parser::Parser_obj::get_line();
-HXDLIN( 700)							int _hx_tmp21 = ::little::parser::Parser_obj::linePart;
-HXDLIN( 700)							_hx_tmp18->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
+HXDLIN( 695)						if (result->contains(::Type_obj::enumConstructor(assignee).toLowerCase())) {
+HXLINE( 696)							::Array< ::Dynamic> _hx_tmp18 = ::little::Little_obj::runtime->callStack;
+HXDLIN( 696)							::String _hx_tmp19 = ::little::parser::Parser_obj::get_module();
+HXDLIN( 696)							int _hx_tmp20 = ::little::parser::Parser_obj::get_line();
+HXDLIN( 696)							int _hx_tmp21 = ::little::parser::Parser_obj::linePart;
+HXDLIN( 696)							_hx_tmp18->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
             								->setFixed(0,HX_("linePart",07,32,7b,87),_hx_tmp21)
             								->setFixed(1,HX_("module",ac,34,d3,c0),_hx_tmp19)
             								->setFixed(2,HX_("token",f9,82,2b,14),::little::interpreter::InterpTokens_obj::Write(::little::interpreter::Interpreter_obj::convert(::Array_obj< ::Dynamic>::__new(1)->init(0,assignee)),null()))
             								->setFixed(3,HX_("line",f4,17,b3,47),_hx_tmp20)));
-HXLINE( 701)							::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(HX_("Missing assignee before `=`, assigning operation is cut off by a line split, a new file or a line.",eb,6d,ce,d6)),HX_("Parser",ff,10,1d,22));
+HXLINE( 697)							::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(HX_("Missing assignee before `=`, assigning operation is cut off by a line split, a new file or a line.",eb,6d,ce,d6)),HX_("Parser",ff,10,1d,22));
             						}
-HXLINE( 703)						if (((i + 1) >= pre->length)) {
-HXLINE( 704)							::Array< ::Dynamic> _hx_tmp22 = ::little::Little_obj::runtime->callStack;
-HXDLIN( 704)							::String _hx_tmp23 = ::little::parser::Parser_obj::get_module();
-HXDLIN( 704)							int _hx_tmp24 = ::little::parser::Parser_obj::get_line();
-HXDLIN( 704)							int _hx_tmp25 = ::little::parser::Parser_obj::linePart;
-HXDLIN( 704)							_hx_tmp22->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
+HXLINE( 699)						if (((i + 1) >= pre->length)) {
+HXLINE( 700)							::Array< ::Dynamic> _hx_tmp22 = ::little::Little_obj::runtime->callStack;
+HXDLIN( 700)							::String _hx_tmp23 = ::little::parser::Parser_obj::get_module();
+HXDLIN( 700)							int _hx_tmp24 = ::little::parser::Parser_obj::get_line();
+HXDLIN( 700)							int _hx_tmp25 = ::little::parser::Parser_obj::linePart;
+HXDLIN( 700)							_hx_tmp22->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
             								->setFixed(0,HX_("linePart",07,32,7b,87),_hx_tmp25)
             								->setFixed(1,HX_("module",ac,34,d3,c0),_hx_tmp23)
             								->setFixed(2,HX_("token",f9,82,2b,14),::little::interpreter::InterpTokens_obj::Write(::little::interpreter::Interpreter_obj::convert(::Array_obj< ::Dynamic>::__new(1)->init(0,assignee)),null()))
             								->setFixed(3,HX_("line",f4,17,b3,47),_hx_tmp24)));
-HXLINE( 705)							::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(HX_("Missing value after the last `=`",95,a8,26,8f)),HX_("Parser",ff,10,1d,22));
-HXLINE( 706)							return null();
+HXLINE( 701)							::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(HX_("Missing value after the last `=`",95,a8,26,8f)),HX_("Parser",ff,10,1d,22));
+HXLINE( 702)							return null();
             						}
-HXLINE( 708)						::Array< ::Dynamic> value3 = ::Array_obj< ::Dynamic>::__new(0);
-HXLINE( 709)						while(((i + 1) < pre->length)){
-HXLINE( 710)							 ::little::parser::ParserTokens lookahead = pre->__get((i + 1)).StaticCast<  ::little::parser::ParserTokens >();
-HXLINE( 711)							switch((int)(lookahead->_hx_getIndex())){
+HXLINE( 704)						::Array< ::Dynamic> value3 = ::Array_obj< ::Dynamic>::__new(0);
+HXLINE( 705)						while(((i + 1) < pre->length)){
+HXLINE( 706)							 ::little::parser::ParserTokens lookahead = pre->__get((i + 1)).StaticCast<  ::little::parser::ParserTokens >();
+HXLINE( 707)							switch((int)(lookahead->_hx_getIndex())){
             								case (int)0: {
-HXLINE( 712)									int _g2 = lookahead->_hx_getInt(0);
-HXDLIN( 712)									goto _hx_goto_34;
+HXLINE( 708)									int _g2 = lookahead->_hx_getInt(0);
+HXLINE( 709)									if ((value3->length == 0)) {
+HXLINE( 710)										::Array< ::Dynamic> _hx_tmp26 = ::little::Little_obj::runtime->callStack;
+HXDLIN( 710)										::String _hx_tmp27 = ::little::parser::Parser_obj::get_module();
+HXDLIN( 710)										int _hx_tmp28 = ::little::parser::Parser_obj::get_line();
+HXDLIN( 710)										int _hx_tmp29 = ::little::parser::Parser_obj::linePart;
+HXDLIN( 710)										_hx_tmp26->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
+            											->setFixed(0,HX_("linePart",07,32,7b,87),_hx_tmp29)
+            											->setFixed(1,HX_("module",ac,34,d3,c0),_hx_tmp27)
+            											->setFixed(2,HX_("token",f9,82,2b,14),::little::interpreter::Interpreter_obj::convert(::Array_obj< ::Dynamic>::__new(1)->init(0,::little::parser::ParserTokens_obj::Write(::Array_obj< ::Dynamic>::__new(1)->init(0,assignee),lookahead)))->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())
+            											->setFixed(3,HX_("line",f4,17,b3,47),_hx_tmp28)));
+HXLINE( 711)										::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(HX_("Missing value after the last `=`",95,a8,26,8f)),HX_("Parser",ff,10,1d,22));
+            									}
+HXLINE( 713)									goto _hx_goto_36;
             								}
             								break;
             								case (int)1: {
-HXLINE( 712)									::String _g3 = lookahead->_hx_getString(0);
-HXDLIN( 712)									goto _hx_goto_34;
+HXLINE( 708)									::String _g3 = lookahead->_hx_getString(0);
+HXLINE( 709)									if ((value3->length == 0)) {
+HXLINE( 710)										::Array< ::Dynamic> _hx_tmp30 = ::little::Little_obj::runtime->callStack;
+HXDLIN( 710)										::String _hx_tmp31 = ::little::parser::Parser_obj::get_module();
+HXDLIN( 710)										int _hx_tmp32 = ::little::parser::Parser_obj::get_line();
+HXDLIN( 710)										int _hx_tmp33 = ::little::parser::Parser_obj::linePart;
+HXDLIN( 710)										_hx_tmp30->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
+            											->setFixed(0,HX_("linePart",07,32,7b,87),_hx_tmp33)
+            											->setFixed(1,HX_("module",ac,34,d3,c0),_hx_tmp31)
+            											->setFixed(2,HX_("token",f9,82,2b,14),::little::interpreter::Interpreter_obj::convert(::Array_obj< ::Dynamic>::__new(1)->init(0,::little::parser::ParserTokens_obj::Write(::Array_obj< ::Dynamic>::__new(1)->init(0,assignee),lookahead)))->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())
+            											->setFixed(3,HX_("line",f4,17,b3,47),_hx_tmp32)));
+HXLINE( 711)										::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(HX_("Missing value after the last `=`",95,a8,26,8f)),HX_("Parser",ff,10,1d,22));
+            									}
+HXLINE( 713)									goto _hx_goto_36;
             								}
             								break;
             								case (int)2: {
-HXLINE( 712)									goto _hx_goto_34;
+HXLINE( 709)									if ((value3->length == 0)) {
+HXLINE( 710)										::Array< ::Dynamic> _hx_tmp34 = ::little::Little_obj::runtime->callStack;
+HXDLIN( 710)										::String _hx_tmp35 = ::little::parser::Parser_obj::get_module();
+HXDLIN( 710)										int _hx_tmp36 = ::little::parser::Parser_obj::get_line();
+HXDLIN( 710)										int _hx_tmp37 = ::little::parser::Parser_obj::linePart;
+HXDLIN( 710)										_hx_tmp34->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
+            											->setFixed(0,HX_("linePart",07,32,7b,87),_hx_tmp37)
+            											->setFixed(1,HX_("module",ac,34,d3,c0),_hx_tmp35)
+            											->setFixed(2,HX_("token",f9,82,2b,14),::little::interpreter::Interpreter_obj::convert(::Array_obj< ::Dynamic>::__new(1)->init(0,::little::parser::ParserTokens_obj::Write(::Array_obj< ::Dynamic>::__new(1)->init(0,assignee),lookahead)))->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())
+            											->setFixed(3,HX_("line",f4,17,b3,47),_hx_tmp36)));
+HXLINE( 711)										::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(HX_("Missing value after the last `=`",95,a8,26,8f)),HX_("Parser",ff,10,1d,22));
+            									}
+HXLINE( 713)									goto _hx_goto_36;
             								}
             								break;
             								case (int)16: {
-HXLINE( 712)									if ((lookahead->_hx_getString(0) == HX_("=",3d,00,00,00))) {
-HXLINE( 712)										goto _hx_goto_34;
+HXLINE( 708)									if ((lookahead->_hx_getString(0) == HX_("=",3d,00,00,00))) {
+HXLINE( 709)										if ((value3->length == 0)) {
+HXLINE( 710)											::Array< ::Dynamic> _hx_tmp38 = ::little::Little_obj::runtime->callStack;
+HXDLIN( 710)											::String _hx_tmp39 = ::little::parser::Parser_obj::get_module();
+HXDLIN( 710)											int _hx_tmp40 = ::little::parser::Parser_obj::get_line();
+HXDLIN( 710)											int _hx_tmp41 = ::little::parser::Parser_obj::linePart;
+HXDLIN( 710)											_hx_tmp38->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
+            												->setFixed(0,HX_("linePart",07,32,7b,87),_hx_tmp41)
+            												->setFixed(1,HX_("module",ac,34,d3,c0),_hx_tmp39)
+            												->setFixed(2,HX_("token",f9,82,2b,14),::little::interpreter::Interpreter_obj::convert(::Array_obj< ::Dynamic>::__new(1)->init(0,::little::parser::ParserTokens_obj::Write(::Array_obj< ::Dynamic>::__new(1)->init(0,assignee),lookahead)))->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())
+            												->setFixed(3,HX_("line",f4,17,b3,47),_hx_tmp40)));
+HXLINE( 711)											::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(HX_("Missing value after the last `=`",95,a8,26,8f)),HX_("Parser",ff,10,1d,22));
+            										}
+HXLINE( 713)										goto _hx_goto_36;
             									}
             									else {
-HXLINE( 713)										value3->push(lookahead);
+HXLINE( 715)										value3->push(lookahead);
             									}
             								}
             								break;
             								default:{
-HXLINE( 713)									value3->push(lookahead);
+HXLINE( 715)									value3->push(lookahead);
             								}
             							}
-HXLINE( 715)							i = (i + 1);
+HXLINE( 717)							i = (i + 1);
             						}
-            						_hx_goto_34:;
-HXLINE( 717)						 ::little::parser::ParserTokens token1;
-HXDLIN( 717)						if ((value3->length == 1)) {
-HXLINE( 717)							token1 = ::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,value3->__get(0).StaticCast<  ::little::parser::ParserTokens >()))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+            						_hx_goto_36:;
+HXLINE( 719)						 ::little::parser::ParserTokens token1;
+HXDLIN( 719)						if ((value3->length == 1)) {
+HXLINE( 719)							token1 = ::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,value3->__get(0).StaticCast<  ::little::parser::ParserTokens >()))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
             						}
             						else {
-HXLINE( 717)							token1 = ::little::parser::ParserTokens_obj::Expression(::little::parser::Parser_obj::mergeWrites(value3),null());
+HXLINE( 719)							token1 = ::little::parser::ParserTokens_obj::Expression(::little::parser::Parser_obj::mergeWrites(value3),null());
             						}
-HXLINE( 718)						::Array< ::Dynamic> _this1 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::ParserTokensSimple_obj::WRITE_dyn())->copy();
-HXDLIN( 718)						::Array< ::String > result1 = ::Array_obj< ::String >::__new(_this1->length);
-HXDLIN( 718)						{
-HXLINE( 718)							int _g4 = 0;
-HXDLIN( 718)							int _g5 = _this1->length;
-HXDLIN( 718)							while((_g4 < _g5)){
-HXLINE( 718)								_g4 = (_g4 + 1);
-HXDLIN( 718)								int i2 = (_g4 - 1);
-HXDLIN( 718)								{
-HXLINE( 718)									::String inValue1 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this1,i2)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 718)									result1->__unsafe_set(i2,inValue1);
+HXLINE( 720)						::Array< ::Dynamic> _this1 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::ParserTokensSimple_obj::WRITE_dyn())->copy();
+HXDLIN( 720)						::Array< ::String > result1 = ::Array_obj< ::String >::__new(_this1->length);
+HXDLIN( 720)						{
+HXLINE( 720)							int _g4 = 0;
+HXDLIN( 720)							int _g5 = _this1->length;
+HXDLIN( 720)							while((_g4 < _g5)){
+HXLINE( 720)								_g4 = (_g4 + 1);
+HXDLIN( 720)								int i2 = (_g4 - 1);
+HXDLIN( 720)								{
+HXLINE( 720)									::String inValue1 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this1,i2)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 720)									result1->__unsafe_set(i2,inValue1);
             								}
             							}
             						}
-HXDLIN( 718)						if (result1->contains(::Type_obj::enumConstructor(assignee).toLowerCase())) {
-HXLINE( 719)							 ::Dynamic assignees1 =  ::Dynamic(::Type_obj::enumParameters(assignee)->__get(0)->__Field(HX_("push",da,11,61,4a),::hx::paccDynamic));
-HXDLIN( 719)							::Array< ::Dynamic> assignees2 = ( (::Array< ::Dynamic>)(assignees1(::Type_obj::enumParameters(assignee)->__get(1))) );
-HXLINE( 720)							post->push(::little::parser::ParserTokens_obj::Write(assignees2,token1));
+HXDLIN( 720)						if (result1->contains(::Type_obj::enumConstructor(assignee).toLowerCase())) {
+HXLINE( 721)							::Array< ::Dynamic> assignees1 = ( (::Array< ::Dynamic>)(::Type_obj::enumParameters(assignee)->__get(0)) );
+HXDLIN( 721)							::Array< ::Dynamic> assignees2 = assignees1->concat(::Array_obj< ::Dynamic>::__new(1)->init(0,::Type_obj::enumParameters(assignee)->__get(1)));
+HXLINE( 722)							post->push(::little::parser::ParserTokens_obj::Write(assignees2,token1));
             						}
             						else {
-HXLINE( 721)							post->push(::little::parser::ParserTokens_obj::Write(::Array_obj< ::Dynamic>::__new(1)->init(0,assignee),token1));
+HXLINE( 723)							post->push(::little::parser::ParserTokens_obj::Write(::Array_obj< ::Dynamic>::__new(1)->init(0,assignee),token1));
             						}
             					}
             					else {
-HXLINE( 736)						post->push(token);
+HXLINE( 738)						post->push(token);
             					}
             				}
             				break;
             				case (int)25: {
-HXLINE( 735)					::String name6 = token->_hx_getString(0);
-HXDLIN( 735)					::Array< ::Dynamic> params2 = token->_hx_getObject(1).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 735)					::Array< ::Dynamic> result2 = ::Array_obj< ::Dynamic>::__new(params2->length);
-HXDLIN( 735)					{
-HXLINE( 735)						int _g6 = 0;
-HXDLIN( 735)						int _g7 = params2->length;
-HXDLIN( 735)						while((_g6 < _g7)){
-HXLINE( 735)							_g6 = (_g6 + 1);
-HXDLIN( 735)							int i3 = (_g6 - 1);
-HXDLIN( 735)							{
-HXLINE( 735)								 ::little::parser::ParserTokens inValue2 = ::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,_hx_array_unsafe_get(params2,i3)))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 735)								result2->__unsafe_set(i3,inValue2);
+HXLINE( 737)					::String name6 = token->_hx_getString(0);
+HXDLIN( 737)					::Array< ::Dynamic> params2 = token->_hx_getObject(1).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 737)					::Array< ::Dynamic> result2 = ::Array_obj< ::Dynamic>::__new(params2->length);
+HXDLIN( 737)					{
+HXLINE( 737)						int _g6 = 0;
+HXDLIN( 737)						int _g7 = params2->length;
+HXDLIN( 737)						while((_g6 < _g7)){
+HXLINE( 737)							_g6 = (_g6 + 1);
+HXDLIN( 737)							int i3 = (_g6 - 1);
+HXDLIN( 737)							{
+HXLINE( 737)								 ::little::parser::ParserTokens inValue2 = ::little::parser::Parser_obj::mergeWrites(::Array_obj< ::Dynamic>::__new(1)->init(0,_hx_array_unsafe_get(params2,i3)))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 737)								result2->__unsafe_set(i3,inValue2);
             							}
             						}
             					}
-HXDLIN( 735)					post->push(::little::parser::ParserTokens_obj::Custom(name6,result2));
+HXDLIN( 737)					post->push(::little::parser::ParserTokens_obj::Custom(name6,result2));
             				}
             				break;
             				default:{
-HXLINE( 736)					post->push(token);
+HXLINE( 738)					post->push(token);
             				}
             			}
-HXLINE( 739)			i = (i + 1);
+HXLINE( 741)			i = (i + 1);
             		}
-HXLINE( 742)		return post;
+HXLINE( 744)		return post;
             	}
 
 
 STATIC_HX_DEFINE_DYNAMIC_FUNC1(Parser_obj,mergeWrites,return )
 
 ::Array< ::Dynamic> Parser_obj::mergeValuesWithTypeDecls(::Array< ::Dynamic> pre){
-            	HX_STACKFRAME(&_hx_pos_b4f540063664edae_748_mergeValuesWithTypeDecls)
-HXLINE( 750)		if (::hx::IsNull( pre )) {
-HXLINE( 750)			return null();
+            	HX_STACKFRAME(&_hx_pos_b4f540063664edae_750_mergeValuesWithTypeDecls)
+HXLINE( 752)		if (::hx::IsNull( pre )) {
+HXLINE( 752)			return null();
             		}
-HXLINE( 751)		bool _hx_tmp;
-HXDLIN( 751)		if ((pre->length == 1)) {
-HXLINE( 751)			_hx_tmp = ::hx::IsNull( pre->__get(0).StaticCast<  ::little::parser::ParserTokens >() );
+HXLINE( 753)		bool _hx_tmp;
+HXDLIN( 753)		if ((pre->length == 1)) {
+HXLINE( 753)			_hx_tmp = ::hx::IsNull( pre->__get(0).StaticCast<  ::little::parser::ParserTokens >() );
             		}
             		else {
-HXLINE( 751)			_hx_tmp = false;
+HXLINE( 753)			_hx_tmp = false;
             		}
-HXDLIN( 751)		if (_hx_tmp) {
-HXLINE( 751)			return ::Array_obj< ::Dynamic>::__new(1)->init(0,null());
+HXDLIN( 753)		if (_hx_tmp) {
+HXLINE( 753)			return ::Array_obj< ::Dynamic>::__new(1)->init(0,null());
             		}
-HXLINE( 753)		::Array< ::Dynamic> post = ::Array_obj< ::Dynamic>::__new(0);
-HXLINE( 755)		int i = (pre->length - 1);
-HXLINE( 756)		while((i >= 0)){
-HXLINE( 757)			 ::little::parser::ParserTokens token = pre->__get(i).StaticCast<  ::little::parser::ParserTokens >();
-HXLINE( 758)			switch((int)(token->_hx_getIndex())){
+HXLINE( 755)		::Array< ::Dynamic> post = ::Array_obj< ::Dynamic>::__new(0);
+HXLINE( 757)		int i = (pre->length - 1);
+HXLINE( 758)		while((i >= 0)){
+HXLINE( 759)			 ::little::parser::ParserTokens token = pre->__get(i).StaticCast<  ::little::parser::ParserTokens >();
+HXLINE( 760)			switch((int)(token->_hx_getIndex())){
             				case (int)0: {
-HXLINE( 759)					int line = token->_hx_getInt(0);
-HXDLIN( 759)					{
-HXLINE( 759)						::little::parser::Parser_obj::setLine(line);
-HXDLIN( 759)						post->unshift(token);
+HXLINE( 761)					int line = token->_hx_getInt(0);
+HXDLIN( 761)					{
+HXLINE( 761)						::little::parser::Parser_obj::setLine(line);
+HXDLIN( 761)						post->unshift(token);
             					}
             				}
             				break;
             				case (int)1: {
-HXLINE( 760)					::String module = token->_hx_getString(0);
-HXDLIN( 760)					{
-HXLINE( 760)						::little::parser::Parser_obj::set_module(module);
-HXDLIN( 760)						post->unshift(token);
+HXLINE( 762)					::String module = token->_hx_getString(0);
+HXDLIN( 762)					{
+HXLINE( 762)						::little::parser::Parser_obj::set_module(module);
+HXDLIN( 762)						post->unshift(token);
             					}
             				}
             				break;
             				case (int)2: {
-HXLINE( 761)					::little::parser::Parser_obj::nextPart();
-HXDLIN( 761)					post->unshift(token);
+HXLINE( 763)					::little::parser::Parser_obj::nextPart();
+HXDLIN( 763)					post->unshift(token);
             				}
             				break;
             				case (int)3: {
-HXLINE( 782)					 ::little::parser::ParserTokens name = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 782)					 ::little::parser::ParserTokens type = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 782)					 ::little::parser::ParserTokens doc = token->_hx_getObject(2).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 782)					 ::little::parser::ParserTokens _hx_tmp1 = ::little::parser::Parser_obj::mergeValuesWithTypeDecls(::Array_obj< ::Dynamic>::__new(1)->init(0,name))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 782)					 ::little::parser::ParserTokens _hx_tmp2 = ::little::parser::Parser_obj::mergeValuesWithTypeDecls(::Array_obj< ::Dynamic>::__new(1)->init(0,type))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 782)					post->unshift(::little::parser::ParserTokens_obj::Variable(_hx_tmp1,_hx_tmp2,::little::parser::Parser_obj::mergeValuesWithTypeDecls(::Array_obj< ::Dynamic>::__new(1)->init(0,doc))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 784)					 ::little::parser::ParserTokens name = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 784)					 ::little::parser::ParserTokens type = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 784)					 ::little::parser::ParserTokens doc = token->_hx_getObject(2).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 784)					 ::little::parser::ParserTokens _hx_tmp1 = ::little::parser::Parser_obj::mergeValuesWithTypeDecls(::Array_obj< ::Dynamic>::__new(1)->init(0,name))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 784)					 ::little::parser::ParserTokens _hx_tmp2 = ::little::parser::Parser_obj::mergeValuesWithTypeDecls(::Array_obj< ::Dynamic>::__new(1)->init(0,type))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 784)					post->unshift(::little::parser::ParserTokens_obj::Variable(_hx_tmp1,_hx_tmp2,::little::parser::Parser_obj::mergeValuesWithTypeDecls(::Array_obj< ::Dynamic>::__new(1)->init(0,doc))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)4: {
-HXLINE( 783)					 ::little::parser::ParserTokens name1 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 783)					 ::little::parser::ParserTokens params = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 783)					 ::little::parser::ParserTokens type1 = token->_hx_getObject(2).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 783)					 ::little::parser::ParserTokens doc1 = token->_hx_getObject(3).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 783)					 ::little::parser::ParserTokens _hx_tmp3 = ::little::parser::Parser_obj::mergeValuesWithTypeDecls(::Array_obj< ::Dynamic>::__new(1)->init(0,name1))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 783)					 ::little::parser::ParserTokens _hx_tmp4 = ::little::parser::Parser_obj::mergeValuesWithTypeDecls(::Array_obj< ::Dynamic>::__new(1)->init(0,params))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 783)					 ::little::parser::ParserTokens _hx_tmp5 = ::little::parser::Parser_obj::mergeValuesWithTypeDecls(::Array_obj< ::Dynamic>::__new(1)->init(0,type1))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 783)					post->unshift(::little::parser::ParserTokens_obj::Function(_hx_tmp3,_hx_tmp4,_hx_tmp5,::little::parser::Parser_obj::mergeValuesWithTypeDecls(::Array_obj< ::Dynamic>::__new(1)->init(0,doc1))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 785)					 ::little::parser::ParserTokens name1 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 785)					 ::little::parser::ParserTokens params = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 785)					 ::little::parser::ParserTokens type1 = token->_hx_getObject(2).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 785)					 ::little::parser::ParserTokens doc1 = token->_hx_getObject(3).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 785)					 ::little::parser::ParserTokens _hx_tmp3 = ::little::parser::Parser_obj::mergeValuesWithTypeDecls(::Array_obj< ::Dynamic>::__new(1)->init(0,name1))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 785)					 ::little::parser::ParserTokens _hx_tmp4 = ::little::parser::Parser_obj::mergeValuesWithTypeDecls(::Array_obj< ::Dynamic>::__new(1)->init(0,params))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 785)					 ::little::parser::ParserTokens _hx_tmp5 = ::little::parser::Parser_obj::mergeValuesWithTypeDecls(::Array_obj< ::Dynamic>::__new(1)->init(0,type1))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 785)					post->unshift(::little::parser::ParserTokens_obj::Function(_hx_tmp3,_hx_tmp4,_hx_tmp5,::little::parser::Parser_obj::mergeValuesWithTypeDecls(::Array_obj< ::Dynamic>::__new(1)->init(0,doc1))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)5: {
-HXLINE( 784)					 ::little::parser::ParserTokens name2 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 784)					 ::little::parser::ParserTokens exp = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 784)					 ::little::parser::ParserTokens body = token->_hx_getObject(2).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 784)					 ::little::parser::ParserTokens _hx_tmp6 = ::little::parser::Parser_obj::mergeValuesWithTypeDecls(::Array_obj< ::Dynamic>::__new(1)->init(0,name2))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 784)					 ::little::parser::ParserTokens _hx_tmp7 = ::little::parser::Parser_obj::mergeValuesWithTypeDecls(::Array_obj< ::Dynamic>::__new(1)->init(0,exp))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 784)					post->unshift(::little::parser::ParserTokens_obj::ConditionCall(_hx_tmp6,_hx_tmp7,::little::parser::Parser_obj::mergeValuesWithTypeDecls(::Array_obj< ::Dynamic>::__new(1)->init(0,body))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 786)					 ::little::parser::ParserTokens name2 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 786)					 ::little::parser::ParserTokens exp = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 786)					 ::little::parser::ParserTokens body = token->_hx_getObject(2).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 786)					 ::little::parser::ParserTokens _hx_tmp6 = ::little::parser::Parser_obj::mergeValuesWithTypeDecls(::Array_obj< ::Dynamic>::__new(1)->init(0,name2))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 786)					 ::little::parser::ParserTokens _hx_tmp7 = ::little::parser::Parser_obj::mergeValuesWithTypeDecls(::Array_obj< ::Dynamic>::__new(1)->init(0,exp))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 786)					post->unshift(::little::parser::ParserTokens_obj::ConditionCall(_hx_tmp6,_hx_tmp7,::little::parser::Parser_obj::mergeValuesWithTypeDecls(::Array_obj< ::Dynamic>::__new(1)->init(0,body))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)7: {
-HXLINE( 788)					::Array< ::Dynamic> assignees = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 788)					 ::little::parser::ParserTokens value = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 788)					::Array< ::Dynamic> _hx_tmp8 = ::little::parser::Parser_obj::mergeValuesWithTypeDecls(assignees);
-HXDLIN( 788)					post->unshift(::little::parser::ParserTokens_obj::Write(_hx_tmp8,::little::parser::Parser_obj::mergeValuesWithTypeDecls(::Array_obj< ::Dynamic>::__new(1)->init(0,value))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 790)					::Array< ::Dynamic> assignees = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 790)					 ::little::parser::ParserTokens value = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 790)					::Array< ::Dynamic> _hx_tmp8 = ::little::parser::Parser_obj::mergeValuesWithTypeDecls(assignees);
+HXDLIN( 790)					post->unshift(::little::parser::ParserTokens_obj::Write(_hx_tmp8,::little::parser::Parser_obj::mergeValuesWithTypeDecls(::Array_obj< ::Dynamic>::__new(1)->init(0,value))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)9: {
-HXLINE( 762)					if (::hx::IsNull( token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >() )) {
-HXLINE( 762)						 ::little::parser::ParserTokens type2 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 762)						{
-HXLINE( 763)							i = (i - 1);
-HXDLIN( 763)							if (((i + 1) <= 0)) {
-HXLINE( 764)								::Array< ::Dynamic> _hx_tmp9 = ::little::Little_obj::runtime->callStack;
-HXDLIN( 764)								::String _hx_tmp10 = ::little::parser::Parser_obj::get_module();
-HXDLIN( 764)								int _hx_tmp11 = ::little::parser::Parser_obj::get_line();
-HXDLIN( 764)								int _hx_tmp12 = ::little::parser::Parser_obj::linePart;
-HXDLIN( 764)								_hx_tmp9->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
+HXLINE( 764)					if (::hx::IsNull( token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >() )) {
+HXLINE( 764)						 ::little::parser::ParserTokens type2 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 764)						{
+HXLINE( 765)							i = (i - 1);
+HXDLIN( 765)							if (((i + 1) <= 0)) {
+HXLINE( 766)								::Array< ::Dynamic> _hx_tmp9 = ::little::Little_obj::runtime->callStack;
+HXDLIN( 766)								::String _hx_tmp10 = ::little::parser::Parser_obj::get_module();
+HXDLIN( 766)								int _hx_tmp11 = ::little::parser::Parser_obj::get_line();
+HXDLIN( 766)								int _hx_tmp12 = ::little::parser::Parser_obj::linePart;
+HXDLIN( 766)								_hx_tmp9->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
             									->setFixed(0,HX_("linePart",07,32,7b,87),_hx_tmp12)
             									->setFixed(1,HX_("module",ac,34,d3,c0),_hx_tmp10)
             									->setFixed(2,HX_("token",f9,82,2b,14),::little::interpreter::InterpTokens_obj::TypeCast(null(),::little::interpreter::Interpreter_obj::convert(::Array_obj< ::Dynamic>::__new(1)->init(0,type2))->__get(0).StaticCast<  ::little::interpreter::InterpTokens >()))
             									->setFixed(3,HX_("line",f4,17,b3,47),_hx_tmp11)));
-HXLINE( 765)								::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(HX_("Value's type declaration cut off by the start of file, block or expression.",87,ac,a0,5f)),HX_("Parser",ff,10,1d,22));
-HXLINE( 766)								return null();
+HXLINE( 767)								::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(HX_("Value's type declaration cut off by the start of file, block or expression.",87,ac,a0,5f)),HX_("Parser",ff,10,1d,22));
+HXLINE( 768)								return null();
             							}
-HXLINE( 768)							 ::little::parser::ParserTokens lookbehind = pre->__get(i).StaticCast<  ::little::parser::ParserTokens >();
-HXLINE( 769)							switch((int)(lookbehind->_hx_getIndex())){
+HXLINE( 770)							 ::little::parser::ParserTokens lookbehind = pre->__get(i).StaticCast<  ::little::parser::ParserTokens >();
+HXLINE( 771)							switch((int)(lookbehind->_hx_getIndex())){
             								case (int)0: {
-HXLINE( 770)									int _g = lookbehind->_hx_getInt(0);
-HXLINE( 771)									::Array< ::Dynamic> _hx_tmp13 = ::little::Little_obj::runtime->callStack;
-HXDLIN( 771)									::String _hx_tmp14 = ::little::parser::Parser_obj::get_module();
-HXDLIN( 771)									int _hx_tmp15 = ::little::parser::Parser_obj::get_line();
-HXDLIN( 771)									int _hx_tmp16 = ::little::parser::Parser_obj::linePart;
-HXDLIN( 771)									 ::little::interpreter::InterpTokens _hx_tmp17 = ::little::interpreter::Interpreter_obj::convert(::Array_obj< ::Dynamic>::__new(1)->init(0,lookbehind))->__get(0).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 771)									_hx_tmp13->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
+HXLINE( 772)									int _g = lookbehind->_hx_getInt(0);
+HXLINE( 773)									::Array< ::Dynamic> _hx_tmp13 = ::little::Little_obj::runtime->callStack;
+HXDLIN( 773)									::String _hx_tmp14 = ::little::parser::Parser_obj::get_module();
+HXDLIN( 773)									int _hx_tmp15 = ::little::parser::Parser_obj::get_line();
+HXDLIN( 773)									int _hx_tmp16 = ::little::parser::Parser_obj::linePart;
+HXDLIN( 773)									 ::little::interpreter::InterpTokens _hx_tmp17 = ::little::interpreter::Interpreter_obj::convert(::Array_obj< ::Dynamic>::__new(1)->init(0,lookbehind))->__get(0).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 773)									_hx_tmp13->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
             										->setFixed(0,HX_("linePart",07,32,7b,87),_hx_tmp16)
             										->setFixed(1,HX_("module",ac,34,d3,c0),_hx_tmp14)
             										->setFixed(2,HX_("token",f9,82,2b,14),::little::interpreter::InterpTokens_obj::TypeCast(_hx_tmp17,::little::interpreter::Interpreter_obj::convert(::Array_obj< ::Dynamic>::__new(1)->init(0,type2))->__get(0).StaticCast<  ::little::interpreter::InterpTokens >()))
             										->setFixed(3,HX_("line",f4,17,b3,47),_hx_tmp15)));
-HXLINE( 772)									::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(HX_("Value's type declaration access cut off by the start of a line, or by a line split (; or ,).",76,0d,74,e7)),HX_("Parser",ff,10,1d,22));
-HXLINE( 773)									return null();
+HXLINE( 774)									::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(HX_("Value's type declaration access cut off by the start of a line, or by a line split (; or ,).",76,0d,74,e7)),HX_("Parser",ff,10,1d,22));
+HXLINE( 775)									return null();
             								}
             								break;
             								case (int)1: {
-HXLINE( 770)									::String _g1 = lookbehind->_hx_getString(0);
-HXLINE( 771)									::Array< ::Dynamic> _hx_tmp18 = ::little::Little_obj::runtime->callStack;
-HXDLIN( 771)									::String _hx_tmp19 = ::little::parser::Parser_obj::get_module();
-HXDLIN( 771)									int _hx_tmp20 = ::little::parser::Parser_obj::get_line();
-HXDLIN( 771)									int _hx_tmp21 = ::little::parser::Parser_obj::linePart;
-HXDLIN( 771)									 ::little::interpreter::InterpTokens _hx_tmp22 = ::little::interpreter::Interpreter_obj::convert(::Array_obj< ::Dynamic>::__new(1)->init(0,lookbehind))->__get(0).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 771)									_hx_tmp18->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
+HXLINE( 772)									::String _g1 = lookbehind->_hx_getString(0);
+HXLINE( 773)									::Array< ::Dynamic> _hx_tmp18 = ::little::Little_obj::runtime->callStack;
+HXDLIN( 773)									::String _hx_tmp19 = ::little::parser::Parser_obj::get_module();
+HXDLIN( 773)									int _hx_tmp20 = ::little::parser::Parser_obj::get_line();
+HXDLIN( 773)									int _hx_tmp21 = ::little::parser::Parser_obj::linePart;
+HXDLIN( 773)									 ::little::interpreter::InterpTokens _hx_tmp22 = ::little::interpreter::Interpreter_obj::convert(::Array_obj< ::Dynamic>::__new(1)->init(0,lookbehind))->__get(0).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 773)									_hx_tmp18->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
             										->setFixed(0,HX_("linePart",07,32,7b,87),_hx_tmp21)
             										->setFixed(1,HX_("module",ac,34,d3,c0),_hx_tmp19)
             										->setFixed(2,HX_("token",f9,82,2b,14),::little::interpreter::InterpTokens_obj::TypeCast(_hx_tmp22,::little::interpreter::Interpreter_obj::convert(::Array_obj< ::Dynamic>::__new(1)->init(0,type2))->__get(0).StaticCast<  ::little::interpreter::InterpTokens >()))
             										->setFixed(3,HX_("line",f4,17,b3,47),_hx_tmp20)));
-HXLINE( 772)									::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(HX_("Value's type declaration access cut off by the start of a line, or by a line split (; or ,).",76,0d,74,e7)),HX_("Parser",ff,10,1d,22));
-HXLINE( 773)									return null();
+HXLINE( 774)									::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(HX_("Value's type declaration access cut off by the start of a line, or by a line split (; or ,).",76,0d,74,e7)),HX_("Parser",ff,10,1d,22));
+HXLINE( 775)									return null();
             								}
             								break;
             								case (int)2: {
-HXLINE( 771)									::Array< ::Dynamic> _hx_tmp23 = ::little::Little_obj::runtime->callStack;
-HXDLIN( 771)									::String _hx_tmp24 = ::little::parser::Parser_obj::get_module();
-HXDLIN( 771)									int _hx_tmp25 = ::little::parser::Parser_obj::get_line();
-HXDLIN( 771)									int _hx_tmp26 = ::little::parser::Parser_obj::linePart;
-HXDLIN( 771)									 ::little::interpreter::InterpTokens _hx_tmp27 = ::little::interpreter::Interpreter_obj::convert(::Array_obj< ::Dynamic>::__new(1)->init(0,lookbehind))->__get(0).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 771)									_hx_tmp23->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
+HXLINE( 773)									::Array< ::Dynamic> _hx_tmp23 = ::little::Little_obj::runtime->callStack;
+HXDLIN( 773)									::String _hx_tmp24 = ::little::parser::Parser_obj::get_module();
+HXDLIN( 773)									int _hx_tmp25 = ::little::parser::Parser_obj::get_line();
+HXDLIN( 773)									int _hx_tmp26 = ::little::parser::Parser_obj::linePart;
+HXDLIN( 773)									 ::little::interpreter::InterpTokens _hx_tmp27 = ::little::interpreter::Interpreter_obj::convert(::Array_obj< ::Dynamic>::__new(1)->init(0,lookbehind))->__get(0).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 773)									_hx_tmp23->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
             										->setFixed(0,HX_("linePart",07,32,7b,87),_hx_tmp26)
             										->setFixed(1,HX_("module",ac,34,d3,c0),_hx_tmp24)
             										->setFixed(2,HX_("token",f9,82,2b,14),::little::interpreter::InterpTokens_obj::TypeCast(_hx_tmp27,::little::interpreter::Interpreter_obj::convert(::Array_obj< ::Dynamic>::__new(1)->init(0,type2))->__get(0).StaticCast<  ::little::interpreter::InterpTokens >()))
             										->setFixed(3,HX_("line",f4,17,b3,47),_hx_tmp25)));
-HXLINE( 772)									::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(HX_("Value's type declaration access cut off by the start of a line, or by a line split (; or ,).",76,0d,74,e7)),HX_("Parser",ff,10,1d,22));
-HXLINE( 773)									return null();
+HXLINE( 774)									::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(HX_("Value's type declaration access cut off by the start of a line, or by a line split (; or ,).",76,0d,74,e7)),HX_("Parser",ff,10,1d,22));
+HXLINE( 775)									return null();
             								}
             								break;
             								default:{
-HXLINE( 776)									post->unshift(::little::parser::ParserTokens_obj::TypeDeclaration(lookbehind,type2));
+HXLINE( 778)									post->unshift(::little::parser::ParserTokens_obj::TypeDeclaration(lookbehind,type2));
             								}
             							}
             						}
             					}
             					else {
-HXLINE( 791)						post->unshift(token);
+HXLINE( 793)						post->unshift(token);
             					}
             				}
             				break;
             				case (int)10: {
-HXLINE( 787)					 ::little::parser::ParserTokens name3 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 787)					 ::little::parser::ParserTokens params1 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 787)					 ::little::parser::ParserTokens _hx_tmp28 = ::little::parser::Parser_obj::mergeValuesWithTypeDecls(::Array_obj< ::Dynamic>::__new(1)->init(0,name3))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 787)					post->unshift(::little::parser::ParserTokens_obj::FunctionCall(_hx_tmp28,::little::parser::Parser_obj::mergeValuesWithTypeDecls(::Array_obj< ::Dynamic>::__new(1)->init(0,params1))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 789)					 ::little::parser::ParserTokens name3 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 789)					 ::little::parser::ParserTokens params1 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 789)					 ::little::parser::ParserTokens _hx_tmp28 = ::little::parser::Parser_obj::mergeValuesWithTypeDecls(::Array_obj< ::Dynamic>::__new(1)->init(0,name3))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 789)					post->unshift(::little::parser::ParserTokens_obj::FunctionCall(_hx_tmp28,::little::parser::Parser_obj::mergeValuesWithTypeDecls(::Array_obj< ::Dynamic>::__new(1)->init(0,params1))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)11: {
-HXLINE( 785)					 ::little::parser::ParserTokens value1 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 785)					 ::little::parser::ParserTokens type3 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 785)					 ::little::parser::ParserTokens _hx_tmp29 = ::little::parser::Parser_obj::mergeValuesWithTypeDecls(::Array_obj< ::Dynamic>::__new(1)->init(0,value1))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 785)					post->unshift(::little::parser::ParserTokens_obj::Return(_hx_tmp29,::little::parser::Parser_obj::mergeValuesWithTypeDecls(::Array_obj< ::Dynamic>::__new(1)->init(0,type3))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 787)					 ::little::parser::ParserTokens value1 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 787)					 ::little::parser::ParserTokens type3 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 787)					 ::little::parser::ParserTokens _hx_tmp29 = ::little::parser::Parser_obj::mergeValuesWithTypeDecls(::Array_obj< ::Dynamic>::__new(1)->init(0,value1))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 787)					post->unshift(::little::parser::ParserTokens_obj::Return(_hx_tmp29,::little::parser::Parser_obj::mergeValuesWithTypeDecls(::Array_obj< ::Dynamic>::__new(1)->init(0,type3))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)12: {
-HXLINE( 781)					::Array< ::Dynamic> parts = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 781)					 ::little::parser::ParserTokens type4 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 781)					::Array< ::Dynamic> _hx_tmp30 = ::little::parser::Parser_obj::mergeValuesWithTypeDecls(parts);
-HXDLIN( 781)					post->unshift(::little::parser::ParserTokens_obj::Expression(_hx_tmp30,::little::parser::Parser_obj::mergeValuesWithTypeDecls(::Array_obj< ::Dynamic>::__new(1)->init(0,type4))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 783)					::Array< ::Dynamic> parts = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 783)					 ::little::parser::ParserTokens type4 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 783)					::Array< ::Dynamic> _hx_tmp30 = ::little::parser::Parser_obj::mergeValuesWithTypeDecls(parts);
+HXDLIN( 783)					post->unshift(::little::parser::ParserTokens_obj::Expression(_hx_tmp30,::little::parser::Parser_obj::mergeValuesWithTypeDecls(::Array_obj< ::Dynamic>::__new(1)->init(0,type4))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)13: {
-HXLINE( 780)					::Array< ::Dynamic> body1 = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 780)					 ::little::parser::ParserTokens type5 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 780)					::Array< ::Dynamic> _hx_tmp31 = ::little::parser::Parser_obj::mergeValuesWithTypeDecls(body1);
-HXDLIN( 780)					post->unshift(::little::parser::ParserTokens_obj::Block(_hx_tmp31,::little::parser::Parser_obj::mergeValuesWithTypeDecls(::Array_obj< ::Dynamic>::__new(1)->init(0,type5))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 782)					::Array< ::Dynamic> body1 = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 782)					 ::little::parser::ParserTokens type5 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 782)					::Array< ::Dynamic> _hx_tmp31 = ::little::parser::Parser_obj::mergeValuesWithTypeDecls(body1);
+HXDLIN( 782)					post->unshift(::little::parser::ParserTokens_obj::Block(_hx_tmp31,::little::parser::Parser_obj::mergeValuesWithTypeDecls(::Array_obj< ::Dynamic>::__new(1)->init(0,type5))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)14: {
-HXLINE( 786)					::Array< ::Dynamic> parts1 = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 786)					post->unshift(::little::parser::ParserTokens_obj::PartArray(::little::parser::Parser_obj::mergeValuesWithTypeDecls(parts1)));
+HXLINE( 788)					::Array< ::Dynamic> parts1 = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 788)					post->unshift(::little::parser::ParserTokens_obj::PartArray(::little::parser::Parser_obj::mergeValuesWithTypeDecls(parts1)));
             				}
             				break;
             				case (int)15: {
-HXLINE( 789)					 ::little::parser::ParserTokens name4 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 789)					 ::little::parser::ParserTokens property = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 789)					 ::little::parser::ParserTokens _hx_tmp32 = ::little::parser::Parser_obj::mergeValuesWithTypeDecls(::Array_obj< ::Dynamic>::__new(1)->init(0,name4))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 789)					post->unshift(::little::parser::ParserTokens_obj::PropertyAccess(_hx_tmp32,::little::parser::Parser_obj::mergeValuesWithTypeDecls(::Array_obj< ::Dynamic>::__new(1)->init(0,property))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 791)					 ::little::parser::ParserTokens name4 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 791)					 ::little::parser::ParserTokens property = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 791)					 ::little::parser::ParserTokens _hx_tmp32 = ::little::parser::Parser_obj::mergeValuesWithTypeDecls(::Array_obj< ::Dynamic>::__new(1)->init(0,name4))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 791)					post->unshift(::little::parser::ParserTokens_obj::PropertyAccess(_hx_tmp32,::little::parser::Parser_obj::mergeValuesWithTypeDecls(::Array_obj< ::Dynamic>::__new(1)->init(0,property))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)25: {
-HXLINE( 790)					::String name5 = token->_hx_getString(0);
-HXDLIN( 790)					::Array< ::Dynamic> params2 = token->_hx_getObject(1).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 790)					::Array< ::Dynamic> result = ::Array_obj< ::Dynamic>::__new(params2->length);
-HXDLIN( 790)					{
-HXLINE( 790)						int _g2 = 0;
-HXDLIN( 790)						int _g3 = params2->length;
-HXDLIN( 790)						while((_g2 < _g3)){
-HXLINE( 790)							_g2 = (_g2 + 1);
-HXDLIN( 790)							int i1 = (_g2 - 1);
-HXDLIN( 790)							{
-HXLINE( 790)								 ::little::parser::ParserTokens inValue = ::little::parser::Parser_obj::mergeValuesWithTypeDecls(::Array_obj< ::Dynamic>::__new(1)->init(0,_hx_array_unsafe_get(params2,i1)))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 790)								result->__unsafe_set(i1,inValue);
+HXLINE( 792)					::String name5 = token->_hx_getString(0);
+HXDLIN( 792)					::Array< ::Dynamic> params2 = token->_hx_getObject(1).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 792)					::Array< ::Dynamic> result = ::Array_obj< ::Dynamic>::__new(params2->length);
+HXDLIN( 792)					{
+HXLINE( 792)						int _g2 = 0;
+HXDLIN( 792)						int _g3 = params2->length;
+HXDLIN( 792)						while((_g2 < _g3)){
+HXLINE( 792)							_g2 = (_g2 + 1);
+HXDLIN( 792)							int i1 = (_g2 - 1);
+HXDLIN( 792)							{
+HXLINE( 792)								 ::little::parser::ParserTokens inValue = ::little::parser::Parser_obj::mergeValuesWithTypeDecls(::Array_obj< ::Dynamic>::__new(1)->init(0,_hx_array_unsafe_get(params2,i1)))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 792)								result->__unsafe_set(i1,inValue);
             							}
             						}
             					}
-HXDLIN( 790)					post->unshift(::little::parser::ParserTokens_obj::Custom(name5,result));
+HXDLIN( 792)					post->unshift(::little::parser::ParserTokens_obj::Custom(name5,result));
             				}
             				break;
             				default:{
-HXLINE( 791)					post->unshift(token);
+HXLINE( 793)					post->unshift(token);
             				}
             			}
-HXLINE( 793)			i = (i - 1);
+HXLINE( 795)			i = (i - 1);
             		}
-HXLINE( 796)		::little::parser::Parser_obj::resetLines();
-HXLINE( 797)		return post;
+HXLINE( 798)		::little::parser::Parser_obj::resetLines();
+HXLINE( 799)		return post;
             	}
 
 
 STATIC_HX_DEFINE_DYNAMIC_FUNC1(Parser_obj,mergeValuesWithTypeDecls,return )
 
 ::Array< ::Dynamic> Parser_obj::mergeNonBlockBodies(::Array< ::Dynamic> pre){
-            	HX_STACKFRAME(&_hx_pos_b4f540063664edae_807_mergeNonBlockBodies)
-HXLINE( 809)		if (::hx::IsNull( pre )) {
-HXLINE( 809)			return null();
+            	HX_STACKFRAME(&_hx_pos_b4f540063664edae_809_mergeNonBlockBodies)
+HXLINE( 811)		if (::hx::IsNull( pre )) {
+HXLINE( 811)			return null();
             		}
-HXLINE( 810)		bool _hx_tmp;
-HXDLIN( 810)		if ((pre->length == 1)) {
-HXLINE( 810)			_hx_tmp = ::hx::IsNull( pre->__get(0).StaticCast<  ::little::parser::ParserTokens >() );
+HXLINE( 812)		bool _hx_tmp;
+HXDLIN( 812)		if ((pre->length == 1)) {
+HXLINE( 812)			_hx_tmp = ::hx::IsNull( pre->__get(0).StaticCast<  ::little::parser::ParserTokens >() );
             		}
             		else {
-HXLINE( 810)			_hx_tmp = false;
+HXLINE( 812)			_hx_tmp = false;
             		}
-HXDLIN( 810)		if (_hx_tmp) {
-HXLINE( 810)			return ::Array_obj< ::Dynamic>::__new(1)->init(0,null());
+HXDLIN( 812)		if (_hx_tmp) {
+HXLINE( 812)			return ::Array_obj< ::Dynamic>::__new(1)->init(0,null());
             		}
-HXLINE( 812)		::Array< ::Dynamic> post = ::Array_obj< ::Dynamic>::__new(0);
-HXLINE( 814)		int i = 0;
-HXLINE( 815)		while((i < pre->length)){
-HXLINE( 816)			 ::little::parser::ParserTokens token = pre->__get(i).StaticCast<  ::little::parser::ParserTokens >();
-HXLINE( 817)			switch((int)(token->_hx_getIndex())){
+HXLINE( 814)		::Array< ::Dynamic> post = ::Array_obj< ::Dynamic>::__new(0);
+HXLINE( 816)		int i = 0;
+HXLINE( 817)		while((i < pre->length)){
+HXLINE( 818)			 ::little::parser::ParserTokens token = pre->__get(i).StaticCast<  ::little::parser::ParserTokens >();
+HXLINE( 819)			switch((int)(token->_hx_getIndex())){
             				case (int)0: {
-HXLINE( 818)					int line = token->_hx_getInt(0);
-HXDLIN( 818)					{
-HXLINE( 818)						::little::parser::Parser_obj::setLine(line);
-HXDLIN( 818)						post->push(token);
+HXLINE( 820)					int line = token->_hx_getInt(0);
+HXDLIN( 820)					{
+HXLINE( 820)						::little::parser::Parser_obj::setLine(line);
+HXDLIN( 820)						post->push(token);
             					}
             				}
             				break;
             				case (int)1: {
-HXLINE( 819)					::String module = token->_hx_getString(0);
-HXDLIN( 819)					{
-HXLINE( 819)						::little::parser::Parser_obj::set_module(module);
-HXDLIN( 819)						post->push(token);
+HXLINE( 821)					::String module = token->_hx_getString(0);
+HXDLIN( 821)					{
+HXLINE( 821)						::little::parser::Parser_obj::set_module(module);
+HXDLIN( 821)						post->push(token);
             					}
             				}
             				break;
             				case (int)2: {
-HXLINE( 820)					::little::parser::Parser_obj::nextPart();
-HXDLIN( 820)					post->push(token);
+HXLINE( 822)					::little::parser::Parser_obj::nextPart();
+HXDLIN( 822)					post->push(token);
             				}
             				break;
             				case (int)3: {
-HXLINE( 840)					 ::little::parser::ParserTokens name = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 840)					 ::little::parser::ParserTokens type = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 840)					 ::little::parser::ParserTokens doc = token->_hx_getObject(2).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 840)					 ::little::parser::ParserTokens _hx_tmp1 = ::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,name))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 840)					 ::little::parser::ParserTokens _hx_tmp2 = ::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,type))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 840)					post->push(::little::parser::ParserTokens_obj::Variable(_hx_tmp1,_hx_tmp2,::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,doc))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 842)					 ::little::parser::ParserTokens name = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 842)					 ::little::parser::ParserTokens type = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 842)					 ::little::parser::ParserTokens doc = token->_hx_getObject(2).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 842)					 ::little::parser::ParserTokens _hx_tmp1 = ::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,name))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 842)					 ::little::parser::ParserTokens _hx_tmp2 = ::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,type))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 842)					post->push(::little::parser::ParserTokens_obj::Variable(_hx_tmp1,_hx_tmp2,::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,doc))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)4: {
-HXLINE( 841)					 ::little::parser::ParserTokens name1 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 841)					 ::little::parser::ParserTokens params = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 841)					 ::little::parser::ParserTokens type1 = token->_hx_getObject(2).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 841)					 ::little::parser::ParserTokens doc1 = token->_hx_getObject(3).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 841)					 ::little::parser::ParserTokens _hx_tmp3 = ::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,name1))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 841)					 ::little::parser::ParserTokens _hx_tmp4 = ::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,params))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 841)					 ::little::parser::ParserTokens _hx_tmp5 = ::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,type1))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 841)					post->push(::little::parser::ParserTokens_obj::Function(_hx_tmp3,_hx_tmp4,_hx_tmp5,::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,doc1))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 843)					 ::little::parser::ParserTokens name1 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 843)					 ::little::parser::ParserTokens params = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 843)					 ::little::parser::ParserTokens type1 = token->_hx_getObject(2).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 843)					 ::little::parser::ParserTokens doc1 = token->_hx_getObject(3).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 843)					 ::little::parser::ParserTokens _hx_tmp3 = ::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,name1))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 843)					 ::little::parser::ParserTokens _hx_tmp4 = ::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,params))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 843)					 ::little::parser::ParserTokens _hx_tmp5 = ::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,type1))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 843)					post->push(::little::parser::ParserTokens_obj::Function(_hx_tmp3,_hx_tmp4,_hx_tmp5,::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,doc1))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)5: {
-HXLINE( 842)					 ::little::parser::ParserTokens name2 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 842)					 ::little::parser::ParserTokens exp = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 842)					 ::little::parser::ParserTokens body = token->_hx_getObject(2).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 842)					 ::little::parser::ParserTokens _hx_tmp6 = ::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,name2))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 842)					 ::little::parser::ParserTokens _hx_tmp7 = ::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,exp))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 842)					post->push(::little::parser::ParserTokens_obj::ConditionCall(_hx_tmp6,_hx_tmp7,::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,body))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 844)					 ::little::parser::ParserTokens name2 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 844)					 ::little::parser::ParserTokens exp = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 844)					 ::little::parser::ParserTokens body = token->_hx_getObject(2).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 844)					 ::little::parser::ParserTokens _hx_tmp6 = ::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,name2))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 844)					 ::little::parser::ParserTokens _hx_tmp7 = ::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,exp))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 844)					post->push(::little::parser::ParserTokens_obj::ConditionCall(_hx_tmp6,_hx_tmp7,::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,body))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)7: {
-HXLINE( 845)					::Array< ::Dynamic> assignees = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 845)					 ::little::parser::ParserTokens value = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 845)					::Array< ::Dynamic> _hx_tmp8 = ::little::parser::Parser_obj::mergeNonBlockBodies(assignees);
-HXDLIN( 845)					post->push(::little::parser::ParserTokens_obj::Write(_hx_tmp8,::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,value))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 847)					::Array< ::Dynamic> assignees = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 847)					 ::little::parser::ParserTokens value = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 847)					::Array< ::Dynamic> _hx_tmp8 = ::little::parser::Parser_obj::mergeNonBlockBodies(assignees);
+HXDLIN( 847)					post->push(::little::parser::ParserTokens_obj::Write(_hx_tmp8,::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,value))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)10: {
-HXLINE( 821)					 ::little::parser::ParserTokens name3 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 821)					 ::little::parser::ParserTokens params1 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 821)					{
-HXLINE( 822)						if (((i + 1) >= pre->length)) {
-HXLINE( 823)							 ::little::parser::ParserTokens _hx_tmp9 = ::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,name3))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 823)							post->push(::little::parser::ParserTokens_obj::FunctionCall(_hx_tmp9,::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,params1))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
-HXLINE( 824)							i = (i + 1);
-HXLINE( 825)							continue;
+HXLINE( 823)					 ::little::parser::ParserTokens name3 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 823)					 ::little::parser::ParserTokens params1 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 823)					{
+HXLINE( 824)						if (((i + 1) >= pre->length)) {
+HXLINE( 825)							 ::little::parser::ParserTokens _hx_tmp9 = ::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,name3))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 825)							post->push(::little::parser::ParserTokens_obj::FunctionCall(_hx_tmp9,::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,params1))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 826)							i = (i + 1);
+HXLINE( 827)							continue;
             						}
-HXLINE( 827)						 ::little::parser::ParserTokens lookahead = pre->__get((i + 1)).StaticCast<  ::little::parser::ParserTokens >();
-HXLINE( 828)						switch((int)(lookahead->_hx_getIndex())){
+HXLINE( 829)						 ::little::parser::ParserTokens lookahead = pre->__get((i + 1)).StaticCast<  ::little::parser::ParserTokens >();
+HXLINE( 830)						switch((int)(lookahead->_hx_getIndex())){
             							case (int)0: {
-HXLINE( 829)								int _g = lookahead->_hx_getInt(0);
-HXLINE( 830)								 ::little::parser::ParserTokens _hx_tmp10 = ::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,name3))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 830)								post->push(::little::parser::ParserTokens_obj::FunctionCall(_hx_tmp10,::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,params1))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 831)								int _g = lookahead->_hx_getInt(0);
+HXLINE( 832)								 ::little::parser::ParserTokens _hx_tmp10 = ::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,name3))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 832)								post->push(::little::parser::ParserTokens_obj::FunctionCall(_hx_tmp10,::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,params1))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             							}
             							break;
             							case (int)1: {
-HXLINE( 829)								::String _g1 = lookahead->_hx_getString(0);
-HXLINE( 830)								 ::little::parser::ParserTokens _hx_tmp11 = ::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,name3))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 830)								post->push(::little::parser::ParserTokens_obj::FunctionCall(_hx_tmp11,::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,params1))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 831)								::String _g1 = lookahead->_hx_getString(0);
+HXLINE( 832)								 ::little::parser::ParserTokens _hx_tmp11 = ::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,name3))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 832)								post->push(::little::parser::ParserTokens_obj::FunctionCall(_hx_tmp11,::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,params1))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             							}
             							break;
             							case (int)2: {
-HXLINE( 830)								 ::little::parser::ParserTokens _hx_tmp12 = ::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,name3))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 830)								post->push(::little::parser::ParserTokens_obj::FunctionCall(_hx_tmp12,::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,params1))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 832)								 ::little::parser::ParserTokens _hx_tmp12 = ::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,name3))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 832)								post->push(::little::parser::ParserTokens_obj::FunctionCall(_hx_tmp12,::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,params1))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             							}
             							break;
             							case (int)16: {
-HXLINE( 829)								::String _g2 = lookahead->_hx_getString(0);
-HXLINE( 830)								 ::little::parser::ParserTokens _hx_tmp13 = ::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,name3))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 830)								post->push(::little::parser::ParserTokens_obj::FunctionCall(_hx_tmp13,::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,params1))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 831)								::String _g2 = lookahead->_hx_getString(0);
+HXLINE( 832)								 ::little::parser::ParserTokens _hx_tmp13 = ::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,name3))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 832)								post->push(::little::parser::ParserTokens_obj::FunctionCall(_hx_tmp13,::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,params1))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             							}
             							break;
             							default:{
-HXLINE( 833)								 ::little::parser::ParserTokens _hx_tmp14 = ::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,name3))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 833)								 ::little::parser::ParserTokens _hx_tmp15 = ::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,params1))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 833)								post->push(::little::parser::ParserTokens_obj::ConditionCall(_hx_tmp14,_hx_tmp15,::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,lookahead))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
-HXLINE( 834)								i = (i + 1);
+HXLINE( 835)								 ::little::parser::ParserTokens _hx_tmp14 = ::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,name3))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 835)								 ::little::parser::ParserTokens _hx_tmp15 = ::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,params1))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 835)								post->push(::little::parser::ParserTokens_obj::ConditionCall(_hx_tmp14,_hx_tmp15,::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,lookahead))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 836)								i = (i + 1);
             							}
             						}
             					}
             				}
             				break;
             				case (int)11: {
-HXLINE( 843)					 ::little::parser::ParserTokens value1 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 843)					 ::little::parser::ParserTokens type2 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 843)					 ::little::parser::ParserTokens _hx_tmp16 = ::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,value1))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 843)					post->push(::little::parser::ParserTokens_obj::Return(_hx_tmp16,::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,type2))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 845)					 ::little::parser::ParserTokens value1 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 845)					 ::little::parser::ParserTokens type2 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 845)					 ::little::parser::ParserTokens _hx_tmp16 = ::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,value1))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 845)					post->push(::little::parser::ParserTokens_obj::Return(_hx_tmp16,::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,type2))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)12: {
-HXLINE( 839)					::Array< ::Dynamic> parts = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 839)					 ::little::parser::ParserTokens type3 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 839)					::Array< ::Dynamic> _hx_tmp17 = ::little::parser::Parser_obj::mergeNonBlockBodies(parts);
-HXDLIN( 839)					post->push(::little::parser::ParserTokens_obj::Expression(_hx_tmp17,::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,type3))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 841)					::Array< ::Dynamic> parts = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 841)					 ::little::parser::ParserTokens type3 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 841)					::Array< ::Dynamic> _hx_tmp17 = ::little::parser::Parser_obj::mergeNonBlockBodies(parts);
+HXDLIN( 841)					post->push(::little::parser::ParserTokens_obj::Expression(_hx_tmp17,::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,type3))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)13: {
-HXLINE( 838)					::Array< ::Dynamic> body1 = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 838)					 ::little::parser::ParserTokens type4 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 838)					::Array< ::Dynamic> _hx_tmp18 = ::little::parser::Parser_obj::mergeNonBlockBodies(body1);
-HXDLIN( 838)					post->push(::little::parser::ParserTokens_obj::Block(_hx_tmp18,::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,type4))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 840)					::Array< ::Dynamic> body1 = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 840)					 ::little::parser::ParserTokens type4 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 840)					::Array< ::Dynamic> _hx_tmp18 = ::little::parser::Parser_obj::mergeNonBlockBodies(body1);
+HXDLIN( 840)					post->push(::little::parser::ParserTokens_obj::Block(_hx_tmp18,::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,type4))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)14: {
-HXLINE( 844)					::Array< ::Dynamic> parts1 = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 844)					post->push(::little::parser::ParserTokens_obj::PartArray(::little::parser::Parser_obj::mergeNonBlockBodies(parts1)));
+HXLINE( 846)					::Array< ::Dynamic> parts1 = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 846)					post->push(::little::parser::ParserTokens_obj::PartArray(::little::parser::Parser_obj::mergeNonBlockBodies(parts1)));
             				}
             				break;
             				case (int)15: {
-HXLINE( 846)					 ::little::parser::ParserTokens name4 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 846)					 ::little::parser::ParserTokens property = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 846)					 ::little::parser::ParserTokens _hx_tmp19 = ::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,name4))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 846)					post->push(::little::parser::ParserTokens_obj::PropertyAccess(_hx_tmp19,::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,property))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 848)					 ::little::parser::ParserTokens name4 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 848)					 ::little::parser::ParserTokens property = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 848)					 ::little::parser::ParserTokens _hx_tmp19 = ::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,name4))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 848)					post->push(::little::parser::ParserTokens_obj::PropertyAccess(_hx_tmp19,::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,property))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)25: {
-HXLINE( 847)					::String name5 = token->_hx_getString(0);
-HXDLIN( 847)					::Array< ::Dynamic> params2 = token->_hx_getObject(1).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 847)					::Array< ::Dynamic> result = ::Array_obj< ::Dynamic>::__new(params2->length);
-HXDLIN( 847)					{
-HXLINE( 847)						int _g3 = 0;
-HXDLIN( 847)						int _g4 = params2->length;
-HXDLIN( 847)						while((_g3 < _g4)){
-HXLINE( 847)							_g3 = (_g3 + 1);
-HXDLIN( 847)							int i1 = (_g3 - 1);
-HXDLIN( 847)							{
-HXLINE( 847)								 ::little::parser::ParserTokens inValue = ::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,_hx_array_unsafe_get(params2,i1)))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 847)								result->__unsafe_set(i1,inValue);
+HXLINE( 849)					::String name5 = token->_hx_getString(0);
+HXDLIN( 849)					::Array< ::Dynamic> params2 = token->_hx_getObject(1).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 849)					::Array< ::Dynamic> result = ::Array_obj< ::Dynamic>::__new(params2->length);
+HXDLIN( 849)					{
+HXLINE( 849)						int _g3 = 0;
+HXDLIN( 849)						int _g4 = params2->length;
+HXDLIN( 849)						while((_g3 < _g4)){
+HXLINE( 849)							_g3 = (_g3 + 1);
+HXDLIN( 849)							int i1 = (_g3 - 1);
+HXDLIN( 849)							{
+HXLINE( 849)								 ::little::parser::ParserTokens inValue = ::little::parser::Parser_obj::mergeNonBlockBodies(::Array_obj< ::Dynamic>::__new(1)->init(0,_hx_array_unsafe_get(params2,i1)))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 849)								result->__unsafe_set(i1,inValue);
             							}
             						}
             					}
-HXDLIN( 847)					post->push(::little::parser::ParserTokens_obj::Custom(name5,result));
+HXDLIN( 849)					post->push(::little::parser::ParserTokens_obj::Custom(name5,result));
             				}
             				break;
             				default:{
-HXLINE( 848)					post->push(token);
+HXLINE( 850)					post->push(token);
             				}
             			}
-HXLINE( 850)			i = (i + 1);
+HXLINE( 852)			i = (i + 1);
             		}
-HXLINE( 853)		::little::parser::Parser_obj::resetLines();
-HXLINE( 854)		return post;
+HXLINE( 855)		::little::parser::Parser_obj::resetLines();
+HXLINE( 856)		return post;
             	}
 
 
 STATIC_HX_DEFINE_DYNAMIC_FUNC1(Parser_obj,mergeNonBlockBodies,return )
 
 ::Array< ::Dynamic> Parser_obj::mergeElses(::Array< ::Dynamic> pre){
-            	HX_STACKFRAME(&_hx_pos_b4f540063664edae_860_mergeElses)
-HXLINE( 862)		if (::hx::IsNull( pre )) {
-HXLINE( 862)			return null();
+            	HX_STACKFRAME(&_hx_pos_b4f540063664edae_862_mergeElses)
+HXLINE( 864)		if (::hx::IsNull( pre )) {
+HXLINE( 864)			return null();
             		}
-HXLINE( 863)		bool _hx_tmp;
-HXDLIN( 863)		if ((pre->length == 1)) {
-HXLINE( 863)			_hx_tmp = ::hx::IsNull( pre->__get(0).StaticCast<  ::little::parser::ParserTokens >() );
+HXLINE( 865)		bool _hx_tmp;
+HXDLIN( 865)		if ((pre->length == 1)) {
+HXLINE( 865)			_hx_tmp = ::hx::IsNull( pre->__get(0).StaticCast<  ::little::parser::ParserTokens >() );
             		}
             		else {
-HXLINE( 863)			_hx_tmp = false;
+HXLINE( 865)			_hx_tmp = false;
             		}
-HXDLIN( 863)		if (_hx_tmp) {
-HXLINE( 863)			return ::Array_obj< ::Dynamic>::__new(1)->init(0,null());
+HXDLIN( 865)		if (_hx_tmp) {
+HXLINE( 865)			return ::Array_obj< ::Dynamic>::__new(1)->init(0,null());
             		}
-HXLINE( 865)		::Array< ::Dynamic> post = ::Array_obj< ::Dynamic>::__new(0);
-HXLINE( 867)		int i = 0;
-HXLINE( 868)		while((i < pre->length)){
-HXLINE( 869)			 ::little::parser::ParserTokens token = pre->__get(i).StaticCast<  ::little::parser::ParserTokens >();
-HXLINE( 870)			switch((int)(token->_hx_getIndex())){
+HXLINE( 867)		::Array< ::Dynamic> post = ::Array_obj< ::Dynamic>::__new(0);
+HXLINE( 869)		int i = 0;
+HXLINE( 870)		while((i < pre->length)){
+HXLINE( 871)			 ::little::parser::ParserTokens token = pre->__get(i).StaticCast<  ::little::parser::ParserTokens >();
+HXLINE( 872)			switch((int)(token->_hx_getIndex())){
             				case (int)0: {
-HXLINE( 871)					int line = token->_hx_getInt(0);
-HXDLIN( 871)					{
-HXLINE( 871)						::little::parser::Parser_obj::setLine(line);
-HXDLIN( 871)						post->push(token);
+HXLINE( 873)					int line = token->_hx_getInt(0);
+HXDLIN( 873)					{
+HXLINE( 873)						::little::parser::Parser_obj::setLine(line);
+HXDLIN( 873)						post->push(token);
             					}
             				}
             				break;
             				case (int)1: {
-HXLINE( 872)					::String module = token->_hx_getString(0);
-HXDLIN( 872)					{
-HXLINE( 872)						::little::parser::Parser_obj::set_module(module);
-HXDLIN( 872)						post->push(token);
+HXLINE( 874)					::String module = token->_hx_getString(0);
+HXDLIN( 874)					{
+HXLINE( 874)						::little::parser::Parser_obj::set_module(module);
+HXDLIN( 874)						post->push(token);
             					}
             				}
             				break;
             				case (int)2: {
-HXLINE( 873)					::little::parser::Parser_obj::nextPart();
-HXDLIN( 873)					post->push(token);
+HXLINE( 875)					::little::parser::Parser_obj::nextPart();
+HXDLIN( 875)					post->push(token);
             				}
             				break;
             				case (int)3: {
-HXLINE( 906)					 ::little::parser::ParserTokens name = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 906)					 ::little::parser::ParserTokens type = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 906)					 ::little::parser::ParserTokens doc = token->_hx_getObject(2).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 906)					 ::little::parser::ParserTokens _hx_tmp1 = ::little::parser::Parser_obj::mergeElses(::Array_obj< ::Dynamic>::__new(1)->init(0,name))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 906)					 ::little::parser::ParserTokens _hx_tmp2 = ::little::parser::Parser_obj::mergeElses(::Array_obj< ::Dynamic>::__new(1)->init(0,type))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 906)					post->push(::little::parser::ParserTokens_obj::Variable(_hx_tmp1,_hx_tmp2,::little::parser::Parser_obj::mergeElses(::Array_obj< ::Dynamic>::__new(1)->init(0,doc))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 908)					 ::little::parser::ParserTokens name = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 908)					 ::little::parser::ParserTokens type = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 908)					 ::little::parser::ParserTokens doc = token->_hx_getObject(2).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 908)					 ::little::parser::ParserTokens _hx_tmp1 = ::little::parser::Parser_obj::mergeElses(::Array_obj< ::Dynamic>::__new(1)->init(0,name))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 908)					 ::little::parser::ParserTokens _hx_tmp2 = ::little::parser::Parser_obj::mergeElses(::Array_obj< ::Dynamic>::__new(1)->init(0,type))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 908)					post->push(::little::parser::ParserTokens_obj::Variable(_hx_tmp1,_hx_tmp2,::little::parser::Parser_obj::mergeElses(::Array_obj< ::Dynamic>::__new(1)->init(0,doc))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)4: {
-HXLINE( 907)					 ::little::parser::ParserTokens name1 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 907)					 ::little::parser::ParserTokens params = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 907)					 ::little::parser::ParserTokens type1 = token->_hx_getObject(2).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 907)					 ::little::parser::ParserTokens doc1 = token->_hx_getObject(3).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 907)					 ::little::parser::ParserTokens _hx_tmp3 = ::little::parser::Parser_obj::mergeElses(::Array_obj< ::Dynamic>::__new(1)->init(0,name1))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 907)					 ::little::parser::ParserTokens _hx_tmp4 = ::little::parser::Parser_obj::mergeElses(::Array_obj< ::Dynamic>::__new(1)->init(0,params))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 907)					 ::little::parser::ParserTokens _hx_tmp5 = ::little::parser::Parser_obj::mergeElses(::Array_obj< ::Dynamic>::__new(1)->init(0,type1))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 907)					post->push(::little::parser::ParserTokens_obj::Function(_hx_tmp3,_hx_tmp4,_hx_tmp5,::little::parser::Parser_obj::mergeElses(::Array_obj< ::Dynamic>::__new(1)->init(0,doc1))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 909)					 ::little::parser::ParserTokens name1 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 909)					 ::little::parser::ParserTokens params = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 909)					 ::little::parser::ParserTokens type1 = token->_hx_getObject(2).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 909)					 ::little::parser::ParserTokens doc1 = token->_hx_getObject(3).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 909)					 ::little::parser::ParserTokens _hx_tmp3 = ::little::parser::Parser_obj::mergeElses(::Array_obj< ::Dynamic>::__new(1)->init(0,name1))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 909)					 ::little::parser::ParserTokens _hx_tmp4 = ::little::parser::Parser_obj::mergeElses(::Array_obj< ::Dynamic>::__new(1)->init(0,params))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 909)					 ::little::parser::ParserTokens _hx_tmp5 = ::little::parser::Parser_obj::mergeElses(::Array_obj< ::Dynamic>::__new(1)->init(0,type1))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 909)					post->push(::little::parser::ParserTokens_obj::Function(_hx_tmp3,_hx_tmp4,_hx_tmp5,::little::parser::Parser_obj::mergeElses(::Array_obj< ::Dynamic>::__new(1)->init(0,doc1))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)5: {
-HXLINE( 908)					 ::little::parser::ParserTokens name2 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 908)					 ::little::parser::ParserTokens exp = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 908)					 ::little::parser::ParserTokens body = token->_hx_getObject(2).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 908)					 ::little::parser::ParserTokens _hx_tmp6 = ::little::parser::Parser_obj::mergeElses(::Array_obj< ::Dynamic>::__new(1)->init(0,name2))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 908)					 ::little::parser::ParserTokens _hx_tmp7 = ::little::parser::Parser_obj::mergeElses(::Array_obj< ::Dynamic>::__new(1)->init(0,exp))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 908)					post->push(::little::parser::ParserTokens_obj::ConditionCall(_hx_tmp6,_hx_tmp7,::little::parser::Parser_obj::mergeElses(::Array_obj< ::Dynamic>::__new(1)->init(0,body))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 910)					 ::little::parser::ParserTokens name2 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 910)					 ::little::parser::ParserTokens exp = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 910)					 ::little::parser::ParserTokens body = token->_hx_getObject(2).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 910)					 ::little::parser::ParserTokens _hx_tmp6 = ::little::parser::Parser_obj::mergeElses(::Array_obj< ::Dynamic>::__new(1)->init(0,name2))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 910)					 ::little::parser::ParserTokens _hx_tmp7 = ::little::parser::Parser_obj::mergeElses(::Array_obj< ::Dynamic>::__new(1)->init(0,exp))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 910)					post->push(::little::parser::ParserTokens_obj::ConditionCall(_hx_tmp6,_hx_tmp7,::little::parser::Parser_obj::mergeElses(::Array_obj< ::Dynamic>::__new(1)->init(0,body))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)7: {
-HXLINE( 912)					::Array< ::Dynamic> assignees = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 912)					 ::little::parser::ParserTokens value = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 912)					::Array< ::Dynamic> _hx_tmp8 = ::little::parser::Parser_obj::mergeElses(assignees);
-HXDLIN( 912)					post->push(::little::parser::ParserTokens_obj::Write(_hx_tmp8,::little::parser::Parser_obj::mergeElses(::Array_obj< ::Dynamic>::__new(1)->init(0,value))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 914)					::Array< ::Dynamic> assignees = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 914)					 ::little::parser::ParserTokens value = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 914)					::Array< ::Dynamic> _hx_tmp8 = ::little::parser::Parser_obj::mergeElses(assignees);
+HXDLIN( 914)					post->push(::little::parser::ParserTokens_obj::Write(_hx_tmp8,::little::parser::Parser_obj::mergeElses(::Array_obj< ::Dynamic>::__new(1)->init(0,value))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)8: {
-HXLINE( 874)					if (((token->_hx_getString(0) == ::little::Little_obj::keywords->CONDITION__ELSE) == true)) {
-HXLINE( 875)						bool _hx_tmp9;
-HXDLIN( 875)						if ((post->length != 0)) {
-HXLINE( 875)							 ::little::parser::ParserTokens token1 = post->__get((post->length - 1)).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 875)							::Array< ::Dynamic> _this = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::ParserTokensSimple_obj::CONDITION_CALL_dyn())->copy();
-HXDLIN( 875)							::Array< ::String > result = ::Array_obj< ::String >::__new(_this->length);
-HXDLIN( 875)							{
-HXLINE( 875)								int _g = 0;
-HXDLIN( 875)								int _g1 = _this->length;
-HXDLIN( 875)								while((_g < _g1)){
-HXLINE( 875)									_g = (_g + 1);
-HXDLIN( 875)									int i1 = (_g - 1);
-HXDLIN( 875)									{
-HXLINE( 875)										::String inValue = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this,i1)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 875)										result->__unsafe_set(i1,inValue);
+HXLINE( 876)					if (((token->_hx_getString(0) == ::little::Little_obj::keywords->CONDITION__ELSE) == true)) {
+HXLINE( 877)						bool _hx_tmp9;
+HXDLIN( 877)						if ((post->length != 0)) {
+HXLINE( 877)							 ::little::parser::ParserTokens token1 = post->__get((post->length - 1)).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 877)							::Array< ::Dynamic> _this = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::ParserTokensSimple_obj::CONDITION_CALL_dyn())->copy();
+HXDLIN( 877)							::Array< ::String > result = ::Array_obj< ::String >::__new(_this->length);
+HXDLIN( 877)							{
+HXLINE( 877)								int _g = 0;
+HXDLIN( 877)								int _g1 = _this->length;
+HXDLIN( 877)								while((_g < _g1)){
+HXLINE( 877)									_g = (_g + 1);
+HXDLIN( 877)									int i1 = (_g - 1);
+HXDLIN( 877)									{
+HXLINE( 877)										::String inValue = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this,i1)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 877)										result->__unsafe_set(i1,inValue);
             									}
             								}
             							}
-HXDLIN( 875)							_hx_tmp9 = !(result->contains(::Type_obj::enumConstructor(token1).toLowerCase()));
+HXDLIN( 877)							_hx_tmp9 = !(result->contains(::Type_obj::enumConstructor(token1).toLowerCase()));
             						}
             						else {
-HXLINE( 875)							_hx_tmp9 = true;
+HXLINE( 877)							_hx_tmp9 = true;
             						}
-HXDLIN( 875)						if (_hx_tmp9) {
-HXLINE( 876)							post->push(token);
-HXLINE( 877)							i = (i + 1);
-HXLINE( 878)							continue;
+HXDLIN( 877)						if (_hx_tmp9) {
+HXLINE( 878)							post->push(token);
+HXLINE( 879)							i = (i + 1);
+HXLINE( 880)							continue;
             						}
-HXLINE( 880)						if (((i + 1) >= pre->length)) {
-HXLINE( 881)							::Array< ::Dynamic> _hx_tmp10 = ::little::Little_obj::runtime->callStack;
-HXDLIN( 881)							::String _hx_tmp11 = ::little::parser::Parser_obj::get_module();
-HXDLIN( 881)							int _hx_tmp12 = ::little::parser::Parser_obj::get_line();
-HXDLIN( 881)							_hx_tmp10->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
+HXLINE( 882)						if (((i + 1) >= pre->length)) {
+HXLINE( 883)							::Array< ::Dynamic> _hx_tmp10 = ::little::Little_obj::runtime->callStack;
+HXDLIN( 883)							::String _hx_tmp11 = ::little::parser::Parser_obj::get_module();
+HXDLIN( 883)							int _hx_tmp12 = ::little::parser::Parser_obj::get_line();
+HXDLIN( 883)							_hx_tmp10->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
             								->setFixed(0,HX_("linePart",07,32,7b,87),::little::parser::Parser_obj::linePart)
             								->setFixed(1,HX_("module",ac,34,d3,c0),_hx_tmp11)
             								->setFixed(2,HX_("token",f9,82,2b,14),::little::interpreter::InterpTokens_obj::ConditionCall(::little::interpreter::InterpTokens_obj::Identifier(::little::Little_obj::keywords->CONDITION__ELSE),null(),::little::interpreter::InterpTokens_obj::Identifier(HX_("",00,00,00,00))))
             								->setFixed(3,HX_("line",f4,17,b3,47),_hx_tmp12)));
-HXLINE( 882)							::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((HX_("`",60,00,00,00) + ::little::Little_obj::keywords->CONDITION__ELSE) + HX_("` condition has no body, body may be cut off by the end of file, block or expression.",65,cb,d6,67))),HX_("Parser",ff,10,1d,22));
-HXLINE( 883)							return null();
+HXLINE( 884)							::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((HX_("`",60,00,00,00) + ::little::Little_obj::keywords->CONDITION__ELSE) + HX_("` condition has no body, body may be cut off by the end of file, block or expression.",65,cb,d6,67))),HX_("Parser",ff,10,1d,22));
+HXLINE( 885)							return null();
             						}
-HXLINE( 885)						 ::little::parser::ParserTokens exp1 = ::Type_obj::enumParameters(post->__get((post->length - 1)).StaticCast<  ::little::parser::ParserTokens >())->__get(1);
-HXLINE( 886)						exp1 = ::little::parser::ParserTokens_obj::Expression(::Array_obj< ::Dynamic>::__new(3)->init(0,exp1)->init(1,::little::parser::ParserTokens_obj::Sign(HX_("!=",fc,1c,00,00)))->init(2,::little::parser::ParserTokens_obj::TrueValue_dyn()),null());
-HXLINE( 887)						i = (i + 1);
-HXLINE( 888)						 ::little::parser::ParserTokens body1 = pre->__get(i).StaticCast<  ::little::parser::ParserTokens >();
-HXLINE( 889)						switch((int)(body1->_hx_getIndex())){
+HXLINE( 887)						 ::little::parser::ParserTokens exp1 = ::Type_obj::enumParameters(post->__get((post->length - 1)).StaticCast<  ::little::parser::ParserTokens >())->__get(1);
+HXLINE( 888)						exp1 = ::little::parser::ParserTokens_obj::Expression(::Array_obj< ::Dynamic>::__new(3)->init(0,exp1)->init(1,::little::parser::ParserTokens_obj::Sign(HX_("!=",fc,1c,00,00)))->init(2,::little::parser::ParserTokens_obj::TrueValue_dyn()),null());
+HXLINE( 889)						i = (i + 1);
+HXLINE( 890)						 ::little::parser::ParserTokens body1 = pre->__get(i).StaticCast<  ::little::parser::ParserTokens >();
+HXLINE( 891)						switch((int)(body1->_hx_getIndex())){
             							case (int)0: {
-HXLINE( 895)								int _g2 = body1->_hx_getInt(0);
-HXLINE( 896)								::Array< ::Dynamic> _hx_tmp13 = ::little::Little_obj::runtime->callStack;
-HXDLIN( 896)								::String _hx_tmp14 = ::little::parser::Parser_obj::get_module();
-HXDLIN( 896)								int _hx_tmp15 = ::little::parser::Parser_obj::get_line();
-HXDLIN( 896)								int _hx_tmp16 = ::little::parser::Parser_obj::linePart;
-HXDLIN( 896)								 ::little::interpreter::InterpTokens _hx_tmp17 = ::little::interpreter::InterpTokens_obj::Identifier(::little::Little_obj::keywords->CONDITION__ELSE);
-HXDLIN( 896)								_hx_tmp13->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
+HXLINE( 897)								int _g2 = body1->_hx_getInt(0);
+HXLINE( 898)								::Array< ::Dynamic> _hx_tmp13 = ::little::Little_obj::runtime->callStack;
+HXDLIN( 898)								::String _hx_tmp14 = ::little::parser::Parser_obj::get_module();
+HXDLIN( 898)								int _hx_tmp15 = ::little::parser::Parser_obj::get_line();
+HXDLIN( 898)								int _hx_tmp16 = ::little::parser::Parser_obj::linePart;
+HXDLIN( 898)								 ::little::interpreter::InterpTokens _hx_tmp17 = ::little::interpreter::InterpTokens_obj::Identifier(::little::Little_obj::keywords->CONDITION__ELSE);
+HXDLIN( 898)								_hx_tmp13->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
             									->setFixed(0,HX_("linePart",07,32,7b,87),_hx_tmp16)
             									->setFixed(1,HX_("module",ac,34,d3,c0),_hx_tmp14)
             									->setFixed(2,HX_("token",f9,82,2b,14),::little::interpreter::InterpTokens_obj::ConditionCall(_hx_tmp17,null(),::little::interpreter::Interpreter_obj::convert(::Array_obj< ::Dynamic>::__new(1)->init(0,body1))->__get(0).StaticCast<  ::little::interpreter::InterpTokens >()))
             									->setFixed(3,HX_("line",f4,17,b3,47),_hx_tmp15)));
-HXLINE( 897)								::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((HX_("`",60,00,00,00) + ::little::Little_obj::keywords->CONDITION__ELSE) + HX_("` condition has no body, body cut off by a new line, or does not exist",93,f3,7d,d7))),HX_("Parser",ff,10,1d,22));
-HXLINE( 898)								return null();
+HXLINE( 899)								::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((HX_("`",60,00,00,00) + ::little::Little_obj::keywords->CONDITION__ELSE) + HX_("` condition has no body, body cut off by a new line, or does not exist",93,f3,7d,d7))),HX_("Parser",ff,10,1d,22));
+HXLINE( 900)								return null();
             							}
             							break;
             							case (int)1: {
-HXLINE( 895)								::String _g3 = body1->_hx_getString(0);
-HXLINE( 896)								::Array< ::Dynamic> _hx_tmp18 = ::little::Little_obj::runtime->callStack;
-HXDLIN( 896)								::String _hx_tmp19 = ::little::parser::Parser_obj::get_module();
-HXDLIN( 896)								int _hx_tmp20 = ::little::parser::Parser_obj::get_line();
-HXDLIN( 896)								int _hx_tmp21 = ::little::parser::Parser_obj::linePart;
-HXDLIN( 896)								 ::little::interpreter::InterpTokens _hx_tmp22 = ::little::interpreter::InterpTokens_obj::Identifier(::little::Little_obj::keywords->CONDITION__ELSE);
-HXDLIN( 896)								_hx_tmp18->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
+HXLINE( 897)								::String _g3 = body1->_hx_getString(0);
+HXLINE( 898)								::Array< ::Dynamic> _hx_tmp18 = ::little::Little_obj::runtime->callStack;
+HXDLIN( 898)								::String _hx_tmp19 = ::little::parser::Parser_obj::get_module();
+HXDLIN( 898)								int _hx_tmp20 = ::little::parser::Parser_obj::get_line();
+HXDLIN( 898)								int _hx_tmp21 = ::little::parser::Parser_obj::linePart;
+HXDLIN( 898)								 ::little::interpreter::InterpTokens _hx_tmp22 = ::little::interpreter::InterpTokens_obj::Identifier(::little::Little_obj::keywords->CONDITION__ELSE);
+HXDLIN( 898)								_hx_tmp18->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
             									->setFixed(0,HX_("linePart",07,32,7b,87),_hx_tmp21)
             									->setFixed(1,HX_("module",ac,34,d3,c0),_hx_tmp19)
             									->setFixed(2,HX_("token",f9,82,2b,14),::little::interpreter::InterpTokens_obj::ConditionCall(_hx_tmp22,null(),::little::interpreter::Interpreter_obj::convert(::Array_obj< ::Dynamic>::__new(1)->init(0,body1))->__get(0).StaticCast<  ::little::interpreter::InterpTokens >()))
             									->setFixed(3,HX_("line",f4,17,b3,47),_hx_tmp20)));
-HXLINE( 897)								::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((HX_("`",60,00,00,00) + ::little::Little_obj::keywords->CONDITION__ELSE) + HX_("` condition has no body, body cut off by a new line, or does not exist",93,f3,7d,d7))),HX_("Parser",ff,10,1d,22));
-HXLINE( 898)								return null();
+HXLINE( 899)								::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((HX_("`",60,00,00,00) + ::little::Little_obj::keywords->CONDITION__ELSE) + HX_("` condition has no body, body cut off by a new line, or does not exist",93,f3,7d,d7))),HX_("Parser",ff,10,1d,22));
+HXLINE( 900)								return null();
             							}
             							break;
             							case (int)2: {
-HXLINE( 891)								::Array< ::Dynamic> _hx_tmp23 = ::little::Little_obj::runtime->callStack;
-HXDLIN( 891)								::String _hx_tmp24 = ::little::parser::Parser_obj::get_module();
-HXDLIN( 891)								int _hx_tmp25 = ::little::parser::Parser_obj::get_line();
-HXDLIN( 891)								int _hx_tmp26 = ::little::parser::Parser_obj::linePart;
-HXDLIN( 891)								 ::little::interpreter::InterpTokens _hx_tmp27 = ::little::interpreter::InterpTokens_obj::Identifier(::little::Little_obj::keywords->CONDITION__ELSE);
-HXDLIN( 891)								_hx_tmp23->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
+HXLINE( 893)								::Array< ::Dynamic> _hx_tmp23 = ::little::Little_obj::runtime->callStack;
+HXDLIN( 893)								::String _hx_tmp24 = ::little::parser::Parser_obj::get_module();
+HXDLIN( 893)								int _hx_tmp25 = ::little::parser::Parser_obj::get_line();
+HXDLIN( 893)								int _hx_tmp26 = ::little::parser::Parser_obj::linePart;
+HXDLIN( 893)								 ::little::interpreter::InterpTokens _hx_tmp27 = ::little::interpreter::InterpTokens_obj::Identifier(::little::Little_obj::keywords->CONDITION__ELSE);
+HXDLIN( 893)								_hx_tmp23->unshift( ::Dynamic(::hx::Anon_obj::Create(4)
             									->setFixed(0,HX_("linePart",07,32,7b,87),_hx_tmp26)
             									->setFixed(1,HX_("module",ac,34,d3,c0),_hx_tmp24)
             									->setFixed(2,HX_("token",f9,82,2b,14),::little::interpreter::InterpTokens_obj::ConditionCall(_hx_tmp27,null(),::little::interpreter::Interpreter_obj::convert(::Array_obj< ::Dynamic>::__new(1)->init(0,body1))->__get(0).StaticCast<  ::little::interpreter::InterpTokens >()))
             									->setFixed(3,HX_("line",f4,17,b3,47),_hx_tmp25)));
-HXLINE( 892)								::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((HX_("`",60,00,00,00) + ::little::Little_obj::keywords->CONDITION__ELSE) + HX_("` condition has no body, body cut off by a line split, or does not exist",99,32,ec,c1))),HX_("Parser",ff,10,1d,22));
-HXLINE( 893)								return null();
+HXLINE( 894)								::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((HX_("`",60,00,00,00) + ::little::Little_obj::keywords->CONDITION__ELSE) + HX_("` condition has no body, body cut off by a line split, or does not exist",99,32,ec,c1))),HX_("Parser",ff,10,1d,22));
+HXLINE( 895)								return null();
             							}
             							break;
             							case (int)5: {
-HXLINE( 900)								 ::little::parser::ParserTokens _g4 = body1->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 900)								if ((_g4->_hx_getIndex() == 8)) {
-HXLINE( 900)									if ((_g4->_hx_getString(0) == HX_("if",dd,5b,00,00))) {
-HXLINE( 900)										 ::little::parser::ParserTokens exp2 = body1->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 900)										 ::little::parser::ParserTokens body2 = body1->_hx_getObject(2).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 900)										 ::little::parser::ParserTokens _hx_tmp28 = ::little::parser::ParserTokens_obj::Identifier(HX_("if",dd,5b,00,00));
-HXDLIN( 900)										 ::little::parser::ParserTokens _hx_tmp29 = ::little::parser::ParserTokens_obj::Expression(::Array_obj< ::Dynamic>::__new(3)->init(0,exp1)->init(1,::little::parser::ParserTokens_obj::Sign(HX_("&&",40,21,00,00)))->init(2,exp2),null());
-HXDLIN( 900)										 ::little::parser::ParserTokens _hx_tmp30;
-HXDLIN( 900)										::Array< ::Dynamic> _this1 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::ParserTokensSimple_obj::BLOCK_dyn())->copy();
-HXDLIN( 900)										::Array< ::String > result1 = ::Array_obj< ::String >::__new(_this1->length);
-HXDLIN( 900)										{
-HXLINE( 900)											int _g5 = 0;
-HXDLIN( 900)											int _g6 = _this1->length;
-HXDLIN( 900)											while((_g5 < _g6)){
-HXLINE( 900)												_g5 = (_g5 + 1);
-HXDLIN( 900)												int i2 = (_g5 - 1);
-HXDLIN( 900)												{
-HXLINE( 900)													::String inValue1 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this1,i2)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 900)													result1->__unsafe_set(i2,inValue1);
+HXLINE( 902)								 ::little::parser::ParserTokens _g4 = body1->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 902)								if ((_g4->_hx_getIndex() == 8)) {
+HXLINE( 902)									if ((_g4->_hx_getString(0) == HX_("if",dd,5b,00,00))) {
+HXLINE( 902)										 ::little::parser::ParserTokens exp2 = body1->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 902)										 ::little::parser::ParserTokens body2 = body1->_hx_getObject(2).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 902)										 ::little::parser::ParserTokens _hx_tmp28 = ::little::parser::ParserTokens_obj::Identifier(HX_("if",dd,5b,00,00));
+HXDLIN( 902)										 ::little::parser::ParserTokens _hx_tmp29 = ::little::parser::ParserTokens_obj::Expression(::Array_obj< ::Dynamic>::__new(3)->init(0,exp1)->init(1,::little::parser::ParserTokens_obj::Sign(HX_("&&",40,21,00,00)))->init(2,exp2),null());
+HXDLIN( 902)										 ::little::parser::ParserTokens _hx_tmp30;
+HXDLIN( 902)										::Array< ::Dynamic> _this1 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::ParserTokensSimple_obj::BLOCK_dyn())->copy();
+HXDLIN( 902)										::Array< ::String > result1 = ::Array_obj< ::String >::__new(_this1->length);
+HXDLIN( 902)										{
+HXLINE( 902)											int _g5 = 0;
+HXDLIN( 902)											int _g6 = _this1->length;
+HXDLIN( 902)											while((_g5 < _g6)){
+HXLINE( 902)												_g5 = (_g5 + 1);
+HXDLIN( 902)												int i2 = (_g5 - 1);
+HXDLIN( 902)												{
+HXLINE( 902)													::String inValue1 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this1,i2)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 902)													result1->__unsafe_set(i2,inValue1);
             												}
             											}
             										}
-HXDLIN( 900)										if (!(result1->contains(::Type_obj::enumConstructor(body2).toLowerCase()))) {
-HXLINE( 900)											_hx_tmp30 = ::little::parser::ParserTokens_obj::Block(::Array_obj< ::Dynamic>::__new(1)->init(0,body2),null());
+HXDLIN( 902)										if (!(result1->contains(::Type_obj::enumConstructor(body2).toLowerCase()))) {
+HXLINE( 902)											_hx_tmp30 = ::little::parser::ParserTokens_obj::Block(::Array_obj< ::Dynamic>::__new(1)->init(0,body2),null());
             										}
             										else {
-HXLINE( 900)											_hx_tmp30 = body2;
+HXLINE( 902)											_hx_tmp30 = body2;
             										}
-HXDLIN( 900)										post->push(::little::parser::ParserTokens_obj::ConditionCall(_hx_tmp28,_hx_tmp29,_hx_tmp30));
+HXDLIN( 902)										post->push(::little::parser::ParserTokens_obj::ConditionCall(_hx_tmp28,_hx_tmp29,_hx_tmp30));
             									}
             									else {
-HXLINE( 901)										 ::little::parser::ParserTokens _hx_tmp31 = ::little::parser::ParserTokens_obj::Identifier(HX_("if",dd,5b,00,00));
-HXDLIN( 901)										 ::little::parser::ParserTokens _hx_tmp32;
-HXDLIN( 901)										::Array< ::Dynamic> _this2 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::ParserTokensSimple_obj::BLOCK_dyn())->copy();
-HXDLIN( 901)										::Array< ::String > result2 = ::Array_obj< ::String >::__new(_this2->length);
-HXDLIN( 901)										{
-HXLINE( 901)											int _g7 = 0;
-HXDLIN( 901)											int _g8 = _this2->length;
-HXDLIN( 901)											while((_g7 < _g8)){
-HXLINE( 901)												_g7 = (_g7 + 1);
-HXDLIN( 901)												int i3 = (_g7 - 1);
-HXDLIN( 901)												{
-HXLINE( 901)													::String inValue2 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this2,i3)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 901)													result2->__unsafe_set(i3,inValue2);
+HXLINE( 903)										 ::little::parser::ParserTokens _hx_tmp31 = ::little::parser::ParserTokens_obj::Identifier(HX_("if",dd,5b,00,00));
+HXDLIN( 903)										 ::little::parser::ParserTokens _hx_tmp32;
+HXDLIN( 903)										::Array< ::Dynamic> _this2 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::ParserTokensSimple_obj::BLOCK_dyn())->copy();
+HXDLIN( 903)										::Array< ::String > result2 = ::Array_obj< ::String >::__new(_this2->length);
+HXDLIN( 903)										{
+HXLINE( 903)											int _g7 = 0;
+HXDLIN( 903)											int _g8 = _this2->length;
+HXDLIN( 903)											while((_g7 < _g8)){
+HXLINE( 903)												_g7 = (_g7 + 1);
+HXDLIN( 903)												int i3 = (_g7 - 1);
+HXDLIN( 903)												{
+HXLINE( 903)													::String inValue2 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this2,i3)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 903)													result2->__unsafe_set(i3,inValue2);
             												}
             											}
             										}
-HXDLIN( 901)										if (!(result2->contains(::Type_obj::enumConstructor(body1).toLowerCase()))) {
-HXLINE( 901)											_hx_tmp32 = ::little::parser::ParserTokens_obj::Block(::Array_obj< ::Dynamic>::__new(1)->init(0,body1),null());
+HXDLIN( 903)										if (!(result2->contains(::Type_obj::enumConstructor(body1).toLowerCase()))) {
+HXLINE( 903)											_hx_tmp32 = ::little::parser::ParserTokens_obj::Block(::Array_obj< ::Dynamic>::__new(1)->init(0,body1),null());
             										}
             										else {
-HXLINE( 901)											_hx_tmp32 = body1;
+HXLINE( 903)											_hx_tmp32 = body1;
             										}
-HXDLIN( 901)										post->push(::little::parser::ParserTokens_obj::ConditionCall(_hx_tmp31,exp1,_hx_tmp32));
+HXDLIN( 903)										post->push(::little::parser::ParserTokens_obj::ConditionCall(_hx_tmp31,exp1,_hx_tmp32));
             									}
             								}
             								else {
-HXLINE( 901)									 ::little::parser::ParserTokens _hx_tmp33 = ::little::parser::ParserTokens_obj::Identifier(HX_("if",dd,5b,00,00));
-HXDLIN( 901)									 ::little::parser::ParserTokens _hx_tmp34;
-HXDLIN( 901)									::Array< ::Dynamic> _this3 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::ParserTokensSimple_obj::BLOCK_dyn())->copy();
-HXDLIN( 901)									::Array< ::String > result3 = ::Array_obj< ::String >::__new(_this3->length);
-HXDLIN( 901)									{
-HXLINE( 901)										int _g9 = 0;
-HXDLIN( 901)										int _g10 = _this3->length;
-HXDLIN( 901)										while((_g9 < _g10)){
-HXLINE( 901)											_g9 = (_g9 + 1);
-HXDLIN( 901)											int i4 = (_g9 - 1);
-HXDLIN( 901)											{
-HXLINE( 901)												::String inValue3 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this3,i4)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 901)												result3->__unsafe_set(i4,inValue3);
+HXLINE( 903)									 ::little::parser::ParserTokens _hx_tmp33 = ::little::parser::ParserTokens_obj::Identifier(HX_("if",dd,5b,00,00));
+HXDLIN( 903)									 ::little::parser::ParserTokens _hx_tmp34;
+HXDLIN( 903)									::Array< ::Dynamic> _this3 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::ParserTokensSimple_obj::BLOCK_dyn())->copy();
+HXDLIN( 903)									::Array< ::String > result3 = ::Array_obj< ::String >::__new(_this3->length);
+HXDLIN( 903)									{
+HXLINE( 903)										int _g9 = 0;
+HXDLIN( 903)										int _g10 = _this3->length;
+HXDLIN( 903)										while((_g9 < _g10)){
+HXLINE( 903)											_g9 = (_g9 + 1);
+HXDLIN( 903)											int i4 = (_g9 - 1);
+HXDLIN( 903)											{
+HXLINE( 903)												::String inValue3 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this3,i4)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 903)												result3->__unsafe_set(i4,inValue3);
             											}
             										}
             									}
-HXDLIN( 901)									if (!(result3->contains(::Type_obj::enumConstructor(body1).toLowerCase()))) {
-HXLINE( 901)										_hx_tmp34 = ::little::parser::ParserTokens_obj::Block(::Array_obj< ::Dynamic>::__new(1)->init(0,body1),null());
+HXDLIN( 903)									if (!(result3->contains(::Type_obj::enumConstructor(body1).toLowerCase()))) {
+HXLINE( 903)										_hx_tmp34 = ::little::parser::ParserTokens_obj::Block(::Array_obj< ::Dynamic>::__new(1)->init(0,body1),null());
             									}
             									else {
-HXLINE( 901)										_hx_tmp34 = body1;
+HXLINE( 903)										_hx_tmp34 = body1;
             									}
-HXDLIN( 901)									post->push(::little::parser::ParserTokens_obj::ConditionCall(_hx_tmp33,exp1,_hx_tmp34));
+HXDLIN( 903)									post->push(::little::parser::ParserTokens_obj::ConditionCall(_hx_tmp33,exp1,_hx_tmp34));
             								}
             							}
             							break;
             							default:{
-HXLINE( 901)								 ::little::parser::ParserTokens _hx_tmp35 = ::little::parser::ParserTokens_obj::Identifier(HX_("if",dd,5b,00,00));
-HXDLIN( 901)								 ::little::parser::ParserTokens _hx_tmp36;
-HXDLIN( 901)								::Array< ::Dynamic> _this4 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::ParserTokensSimple_obj::BLOCK_dyn())->copy();
-HXDLIN( 901)								::Array< ::String > result4 = ::Array_obj< ::String >::__new(_this4->length);
-HXDLIN( 901)								{
-HXLINE( 901)									int _g11 = 0;
-HXDLIN( 901)									int _g12 = _this4->length;
-HXDLIN( 901)									while((_g11 < _g12)){
-HXLINE( 901)										_g11 = (_g11 + 1);
-HXDLIN( 901)										int i5 = (_g11 - 1);
-HXDLIN( 901)										{
-HXLINE( 901)											::String inValue4 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this4,i5)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 901)											result4->__unsafe_set(i5,inValue4);
+HXLINE( 903)								 ::little::parser::ParserTokens _hx_tmp35 = ::little::parser::ParserTokens_obj::Identifier(HX_("if",dd,5b,00,00));
+HXDLIN( 903)								 ::little::parser::ParserTokens _hx_tmp36;
+HXDLIN( 903)								::Array< ::Dynamic> _this4 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::ParserTokensSimple_obj::BLOCK_dyn())->copy();
+HXDLIN( 903)								::Array< ::String > result4 = ::Array_obj< ::String >::__new(_this4->length);
+HXDLIN( 903)								{
+HXLINE( 903)									int _g11 = 0;
+HXDLIN( 903)									int _g12 = _this4->length;
+HXDLIN( 903)									while((_g11 < _g12)){
+HXLINE( 903)										_g11 = (_g11 + 1);
+HXDLIN( 903)										int i5 = (_g11 - 1);
+HXDLIN( 903)										{
+HXLINE( 903)											::String inValue4 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this4,i5)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 903)											result4->__unsafe_set(i5,inValue4);
             										}
             									}
             								}
-HXDLIN( 901)								if (!(result4->contains(::Type_obj::enumConstructor(body1).toLowerCase()))) {
-HXLINE( 901)									_hx_tmp36 = ::little::parser::ParserTokens_obj::Block(::Array_obj< ::Dynamic>::__new(1)->init(0,body1),null());
+HXDLIN( 903)								if (!(result4->contains(::Type_obj::enumConstructor(body1).toLowerCase()))) {
+HXLINE( 903)									_hx_tmp36 = ::little::parser::ParserTokens_obj::Block(::Array_obj< ::Dynamic>::__new(1)->init(0,body1),null());
             								}
             								else {
-HXLINE( 901)									_hx_tmp36 = body1;
+HXLINE( 903)									_hx_tmp36 = body1;
             								}
-HXDLIN( 901)								post->push(::little::parser::ParserTokens_obj::ConditionCall(_hx_tmp35,exp1,_hx_tmp36));
+HXDLIN( 903)								post->push(::little::parser::ParserTokens_obj::ConditionCall(_hx_tmp35,exp1,_hx_tmp36));
             							}
             						}
             					}
             					else {
-HXLINE( 915)						post->push(token);
+HXLINE( 917)						post->push(token);
             					}
             				}
             				break;
             				case (int)10: {
-HXLINE( 911)					 ::little::parser::ParserTokens name3 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 911)					 ::little::parser::ParserTokens params1 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 911)					 ::little::parser::ParserTokens _hx_tmp37 = ::little::parser::Parser_obj::mergeElses(::Array_obj< ::Dynamic>::__new(1)->init(0,name3))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 911)					post->push(::little::parser::ParserTokens_obj::FunctionCall(_hx_tmp37,::little::parser::Parser_obj::mergeElses(::Array_obj< ::Dynamic>::__new(1)->init(0,params1))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 913)					 ::little::parser::ParserTokens name3 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 913)					 ::little::parser::ParserTokens params1 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 913)					 ::little::parser::ParserTokens _hx_tmp37 = ::little::parser::Parser_obj::mergeElses(::Array_obj< ::Dynamic>::__new(1)->init(0,name3))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 913)					post->push(::little::parser::ParserTokens_obj::FunctionCall(_hx_tmp37,::little::parser::Parser_obj::mergeElses(::Array_obj< ::Dynamic>::__new(1)->init(0,params1))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)11: {
-HXLINE( 909)					 ::little::parser::ParserTokens value1 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 909)					 ::little::parser::ParserTokens type2 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 909)					 ::little::parser::ParserTokens _hx_tmp38 = ::little::parser::Parser_obj::mergeElses(::Array_obj< ::Dynamic>::__new(1)->init(0,value1))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 909)					post->push(::little::parser::ParserTokens_obj::Return(_hx_tmp38,::little::parser::Parser_obj::mergeElses(::Array_obj< ::Dynamic>::__new(1)->init(0,type2))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 911)					 ::little::parser::ParserTokens value1 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 911)					 ::little::parser::ParserTokens type2 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 911)					 ::little::parser::ParserTokens _hx_tmp38 = ::little::parser::Parser_obj::mergeElses(::Array_obj< ::Dynamic>::__new(1)->init(0,value1))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 911)					post->push(::little::parser::ParserTokens_obj::Return(_hx_tmp38,::little::parser::Parser_obj::mergeElses(::Array_obj< ::Dynamic>::__new(1)->init(0,type2))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)12: {
-HXLINE( 905)					::Array< ::Dynamic> parts = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 905)					 ::little::parser::ParserTokens type3 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 905)					::Array< ::Dynamic> _hx_tmp39 = ::little::parser::Parser_obj::mergeElses(parts);
-HXDLIN( 905)					post->push(::little::parser::ParserTokens_obj::Expression(_hx_tmp39,::little::parser::Parser_obj::mergeElses(::Array_obj< ::Dynamic>::__new(1)->init(0,type3))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 907)					::Array< ::Dynamic> parts = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 907)					 ::little::parser::ParserTokens type3 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 907)					::Array< ::Dynamic> _hx_tmp39 = ::little::parser::Parser_obj::mergeElses(parts);
+HXDLIN( 907)					post->push(::little::parser::ParserTokens_obj::Expression(_hx_tmp39,::little::parser::Parser_obj::mergeElses(::Array_obj< ::Dynamic>::__new(1)->init(0,type3))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)13: {
-HXLINE( 904)					::Array< ::Dynamic> body3 = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 904)					 ::little::parser::ParserTokens type4 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 904)					::Array< ::Dynamic> _hx_tmp40 = ::little::parser::Parser_obj::mergeElses(body3);
-HXDLIN( 904)					post->push(::little::parser::ParserTokens_obj::Block(_hx_tmp40,::little::parser::Parser_obj::mergeElses(::Array_obj< ::Dynamic>::__new(1)->init(0,type4))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 906)					::Array< ::Dynamic> body3 = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 906)					 ::little::parser::ParserTokens type4 = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 906)					::Array< ::Dynamic> _hx_tmp40 = ::little::parser::Parser_obj::mergeElses(body3);
+HXDLIN( 906)					post->push(::little::parser::ParserTokens_obj::Block(_hx_tmp40,::little::parser::Parser_obj::mergeElses(::Array_obj< ::Dynamic>::__new(1)->init(0,type4))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)14: {
-HXLINE( 910)					::Array< ::Dynamic> parts1 = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 910)					post->push(::little::parser::ParserTokens_obj::PartArray(::little::parser::Parser_obj::mergeElses(parts1)));
+HXLINE( 912)					::Array< ::Dynamic> parts1 = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 912)					post->push(::little::parser::ParserTokens_obj::PartArray(::little::parser::Parser_obj::mergeElses(parts1)));
             				}
             				break;
             				case (int)15: {
-HXLINE( 913)					 ::little::parser::ParserTokens name4 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 913)					 ::little::parser::ParserTokens property = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 913)					 ::little::parser::ParserTokens _hx_tmp41 = ::little::parser::Parser_obj::mergeElses(::Array_obj< ::Dynamic>::__new(1)->init(0,name4))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 913)					post->push(::little::parser::ParserTokens_obj::PropertyAccess(_hx_tmp41,::little::parser::Parser_obj::mergeElses(::Array_obj< ::Dynamic>::__new(1)->init(0,property))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
+HXLINE( 915)					 ::little::parser::ParserTokens name4 = token->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 915)					 ::little::parser::ParserTokens property = token->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 915)					 ::little::parser::ParserTokens _hx_tmp41 = ::little::parser::Parser_obj::mergeElses(::Array_obj< ::Dynamic>::__new(1)->init(0,name4))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 915)					post->push(::little::parser::ParserTokens_obj::PropertyAccess(_hx_tmp41,::little::parser::Parser_obj::mergeElses(::Array_obj< ::Dynamic>::__new(1)->init(0,property))->__get(0).StaticCast<  ::little::parser::ParserTokens >()));
             				}
             				break;
             				case (int)25: {
-HXLINE( 914)					::String name5 = token->_hx_getString(0);
-HXDLIN( 914)					::Array< ::Dynamic> params2 = token->_hx_getObject(1).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 914)					::Array< ::Dynamic> result5 = ::Array_obj< ::Dynamic>::__new(params2->length);
-HXDLIN( 914)					{
-HXLINE( 914)						int _g13 = 0;
-HXDLIN( 914)						int _g14 = params2->length;
-HXDLIN( 914)						while((_g13 < _g14)){
-HXLINE( 914)							_g13 = (_g13 + 1);
-HXDLIN( 914)							int i6 = (_g13 - 1);
-HXDLIN( 914)							{
-HXLINE( 914)								 ::little::parser::ParserTokens inValue5 = ::little::parser::Parser_obj::mergeElses(::Array_obj< ::Dynamic>::__new(1)->init(0,_hx_array_unsafe_get(params2,i6)))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 914)								result5->__unsafe_set(i6,inValue5);
+HXLINE( 916)					::String name5 = token->_hx_getString(0);
+HXDLIN( 916)					::Array< ::Dynamic> params2 = token->_hx_getObject(1).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 916)					::Array< ::Dynamic> result5 = ::Array_obj< ::Dynamic>::__new(params2->length);
+HXDLIN( 916)					{
+HXLINE( 916)						int _g13 = 0;
+HXDLIN( 916)						int _g14 = params2->length;
+HXDLIN( 916)						while((_g13 < _g14)){
+HXLINE( 916)							_g13 = (_g13 + 1);
+HXDLIN( 916)							int i6 = (_g13 - 1);
+HXDLIN( 916)							{
+HXLINE( 916)								 ::little::parser::ParserTokens inValue5 = ::little::parser::Parser_obj::mergeElses(::Array_obj< ::Dynamic>::__new(1)->init(0,_hx_array_unsafe_get(params2,i6)))->__get(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 916)								result5->__unsafe_set(i6,inValue5);
             							}
             						}
             					}
-HXDLIN( 914)					post->push(::little::parser::ParserTokens_obj::Custom(name5,result5));
+HXDLIN( 916)					post->push(::little::parser::ParserTokens_obj::Custom(name5,result5));
             				}
             				break;
             				default:{
-HXLINE( 915)					post->push(token);
+HXLINE( 917)					post->push(token);
             				}
             			}
-HXLINE( 917)			i = (i + 1);
+HXLINE( 919)			i = (i + 1);
             		}
-HXLINE( 920)		::little::parser::Parser_obj::resetLines();
-HXLINE( 921)		return post;
+HXLINE( 922)		::little::parser::Parser_obj::resetLines();
+HXLINE( 923)		return post;
             	}
 
 
 STATIC_HX_DEFINE_DYNAMIC_FUNC1(Parser_obj,mergeElses,return )
 
 int Parser_obj::get_line(){
-            	HX_STACKFRAME(&_hx_pos_b4f540063664edae_933_get_line)
-HXDLIN( 933)		return ::little::Little_obj::runtime->line;
+            	HX_STACKFRAME(&_hx_pos_b4f540063664edae_935_get_line)
+HXDLIN( 935)		return ::little::Little_obj::runtime->line;
             	}
 
 
 STATIC_HX_DEFINE_DYNAMIC_FUNC0(Parser_obj,get_line,return )
 
 int Parser_obj::set_line(int l){
-            	HX_STACKFRAME(&_hx_pos_b4f540063664edae_934_set_line)
-HXDLIN( 934)		return (::little::Little_obj::runtime->line = l);
+            	HX_STACKFRAME(&_hx_pos_b4f540063664edae_936_set_line)
+HXDLIN( 936)		return (::little::Little_obj::runtime->line = l);
             	}
 
 
 STATIC_HX_DEFINE_DYNAMIC_FUNC1(Parser_obj,set_line,return )
 
 ::String Parser_obj::get_module(){
-            	HX_STACKFRAME(&_hx_pos_b4f540063664edae_936_get_module)
-HXDLIN( 936)		return ::little::Little_obj::runtime->module;
+            	HX_STACKFRAME(&_hx_pos_b4f540063664edae_938_get_module)
+HXDLIN( 938)		return ::little::Little_obj::runtime->module;
             	}
 
 
 STATIC_HX_DEFINE_DYNAMIC_FUNC0(Parser_obj,get_module,return )
 
 ::String Parser_obj::set_module(::String l){
-            	HX_STACKFRAME(&_hx_pos_b4f540063664edae_937_set_module)
-HXDLIN( 937)		return (::little::Little_obj::runtime->module = l);
+            	HX_STACKFRAME(&_hx_pos_b4f540063664edae_939_set_module)
+HXDLIN( 939)		return (::little::Little_obj::runtime->module = l);
             	}
 
 
@@ -2752,26 +2854,26 @@ STATIC_HX_DEFINE_DYNAMIC_FUNC1(Parser_obj,set_module,return )
 int Parser_obj::linePart;
 
 void Parser_obj::setLine(int l){
-            	HX_STACKFRAME(&_hx_pos_b4f540063664edae_943_setLine)
-HXLINE( 944)		::little::parser::Parser_obj::set_line(l);
-HXLINE( 945)		::little::parser::Parser_obj::linePart = 0;
+            	HX_STACKFRAME(&_hx_pos_b4f540063664edae_945_setLine)
+HXLINE( 946)		::little::parser::Parser_obj::set_line(l);
+HXLINE( 947)		::little::parser::Parser_obj::linePart = 0;
             	}
 
 
 STATIC_HX_DEFINE_DYNAMIC_FUNC1(Parser_obj,setLine,(void))
 
 void Parser_obj::nextPart(){
-            	HX_STACKFRAME(&_hx_pos_b4f540063664edae_950_nextPart)
-HXDLIN( 950)		::little::parser::Parser_obj::linePart++;
+            	HX_STACKFRAME(&_hx_pos_b4f540063664edae_952_nextPart)
+HXDLIN( 952)		::little::parser::Parser_obj::linePart++;
             	}
 
 
 STATIC_HX_DEFINE_DYNAMIC_FUNC0(Parser_obj,nextPart,(void))
 
 void Parser_obj::resetLines(){
-            	HX_STACKFRAME(&_hx_pos_b4f540063664edae_955_resetLines)
-HXLINE( 956)		::little::parser::Parser_obj::set_line(0);
-HXLINE( 957)		::little::parser::Parser_obj::linePart = 0;
+            	HX_STACKFRAME(&_hx_pos_b4f540063664edae_957_resetLines)
+HXLINE( 958)		::little::parser::Parser_obj::set_line(0);
+HXLINE( 959)		::little::parser::Parser_obj::linePart = 0;
             	}
 
 
@@ -2946,8 +3048,8 @@ HXDLIN(  25)		additionalParsingLevels = ::Array_obj< ::Dynamic>::__new(1)->init(
 	parse = new __default_parse;
 
 {
-            	HX_STACKFRAME(&_hx_pos_b4f540063664edae_938_boot)
-HXDLIN( 938)		linePart = 0;
+            	HX_STACKFRAME(&_hx_pos_b4f540063664edae_940_boot)
+HXDLIN( 940)		linePart = 0;
             	}
 }
 

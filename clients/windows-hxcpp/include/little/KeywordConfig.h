@@ -48,6 +48,8 @@ class HXCPP_CLASS_ATTRIBUTES KeywordConfig_obj : public ::hx::Object
 		static void __boot();
 		static  ::little::KeywordConfig defaultConfig;
 		static ::Array< ::String > recognizedOperators;
+		static ::Array< ::String > whiteSpacePrefixedOperators;
+		static ::Array< ::String > whiteSpaceSuffixedOperators;
 		void change( ::little::KeywordConfig config);
 		::Dynamic change_dyn();
 

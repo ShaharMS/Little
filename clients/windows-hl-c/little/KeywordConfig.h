@@ -18,6 +18,8 @@ struct _little__$KeywordConfig {
 	vdynamic* _hx___constructor__;
 	little__KeywordConfig defaultConfig;
 	hl__types__ArrayObj recognizedOperators;
+	hl__types__ArrayObj whiteSpacePrefixedOperators;
+	hl__types__ArrayObj whiteSpaceSuffixedOperators;
 };
 struct _little__KeywordConfig {
 	hl_type *$type;

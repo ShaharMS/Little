@@ -20,7 +20,12 @@
 --cmd echo Little Boot File Renamed - Little.hl -> hlboot.dat...
 
 --cmd copy /y "Logo.png" "clients\linux-hl-bytecode\Logo.png"
---cmd echo -e "[Desktop Entry]\nType=Application\nName=Little\nExec=./Little\nIcon=./Logo.png\nTerminal=true" > clients/linux-hl-bytecode/Little.desktop
+--cmd echo [Desktop Entry] > clients/linux-hl-bytecode/Little.desktop
+--cmd echo Type=Application >> clients/linux-hl-bytecode/Little.desktop
+--cmd echo Name=Little >> clients/linux-hl-bytecode/Little.desktop
+--cmd echo Exec=./Little >> clients/linux-hl-bytecode/Little.desktop
+--cmd echo Icon=./Logo.png >> clients/linux-hl-bytecode/Little.desktop
+--cmd echo Terminal=true >> clients/linux-hl-bytecode/Little.desktop
 --cmd echo Desktop Entry Created...
 
 --cmd echo Done.

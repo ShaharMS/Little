@@ -18,7 +18,10 @@
 --cmd echo Transferred Hashlink libraries...
 
 --cmd del "clients\windows-hl-bytecode\hlboot.dat"
---cmd rename "clients\windows-hl-bytecode\Little.hl" "hlboot.dat"
+--cmd cd clients\windows-hl-bytecode
+--cmd rename Little.hl hlboot.dat
+--cmd cd ..
+--cmd cd ..
 --cmd echo Little Boot File Renamed - Little.hl -> hlboot.dat...
 
 --cmd rcedit-x64.exe clients/windows-hl-bytecode/Little.exe --set-icon Logo.ico

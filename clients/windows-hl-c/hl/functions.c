@@ -719,6 +719,7 @@ vvirtual* little_tools_Plugins_registerType__$1(venum*,venum*,int);
 vvirtual* little_tools_Plugins_registerType__$2(venum*,venum*,int);
 vvirtual* little_tools_Plugins_registerType__$3(venum*,venum*,int);
 void little_tools__OrderedMap_OrderedMap_Impl__set(little__tools__BaseOrderedMap,vdynamic*,vdynamic*);
+String little_tools_Extensions_extractIdentifier(venum*);
 vvirtual* little_tools_Plugins_registerType__$4(venum*,venum*,int);
 venum* little_tools_Plugins_registerType__$5(venum*);
 hl__types__ArrayDyn little_tools_Extensions_toArray(vvirtual*);
@@ -857,6 +858,8 @@ void little_tools_PrepareRun_addConditions__$7(venum*,hl__types__ArrayObj);
 String little_tools_PrettyPrinter_prefixFA(hl__types__ArrayBytes_Int);
 hl__types__ArrayBytes_Int little_tools_PrettyPrinter_pushIndex(hl__types__ArrayBytes_Int,int);
 String little_tools_PrettyPrinter_getTree_INTERP(venum*,hl__types__ArrayBytes_Int,int,bool);
+bool little_tools_PrettyPrinter_requiresWhitespaceBeforeSign(String);
+bool little_tools_PrettyPrinter_requiresWhitespaceAfterSign(String);
 #include <vision/ds/Line2D.h>
 #include <vision/ds/Point2D.h>
 void vision_ds_Line2D_new(vision__ds__Line2D,vision__ds__Point2D,vision__ds__Point2D);
@@ -1477,6 +1480,7 @@ extern hl_type t$fun_8c70bfd;
 extern hl_type t$fun_420a484;
 extern hl_type t$fun_d79b851;
 extern hl_type t$fun_be6b540;
+extern hl_type t$fun_dc82ddd;
 extern hl_type t$fun_cbe9114;
 extern hl_type t$fun_af26e3f;
 extern hl_type t$fun_df7a904;
@@ -2243,6 +2247,7 @@ void *hl_functions_ptrs[] = {String_toUpperCase,\
 	little_tools_Plugins_registerType__$2,\
 	little_tools_Plugins_registerType__$3,\
 	little_tools__OrderedMap_OrderedMap_Impl__set,\
+	little_tools_Extensions_extractIdentifier,\
 	little_tools_Plugins_registerType__$4,\
 	little_tools_Plugins_registerType__$5,\
 	little_tools_Extensions_toArray,\
@@ -2380,6 +2385,8 @@ void *hl_functions_ptrs[] = {String_toUpperCase,\
 	little_tools_PrettyPrinter_prefixFA,\
 	little_tools_PrettyPrinter_pushIndex,\
 	little_tools_PrettyPrinter_getTree_INTERP,\
+	little_tools_PrettyPrinter_requiresWhitespaceBeforeSign,\
+	little_tools_PrettyPrinter_requiresWhitespaceAfterSign,\
 	hl_ftos,\
 	hl_file_read_char,\
 	hl_lock_wait,\
@@ -3144,6 +3151,7 @@ hl_type *hl_functions_types[] = {&t$fun_0cf7b0f,\
 	&t$fun_a9a0082,\
 	&t$fun_92b09d7,\
 	&t$fun_a1ef64c,\
+	&t$fun_bea1378,\
 	&t$fun_0247260,\
 	&t$fun_3a57350,\
 	&t$fun_74f4c23,\
@@ -3281,6 +3289,8 @@ hl_type *hl_functions_types[] = {&t$fun_0cf7b0f,\
 	&t$fun_ee67120,\
 	&t$fun_d79b851,\
 	&t$fun_be6b540,\
+	&t$fun_dc82ddd,\
+	&t$fun_dc82ddd,\
 	&t$fun_cbe9114,\
 	&t$fun_af26e3f,\
 	&t$fun_df7a904,\

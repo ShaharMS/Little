@@ -339,6 +339,24 @@ class PrettyPrinter {
 	static var indent = "";
 
 	/**
+		Checks if an op requires whitespace before or after it
+		@param s The op
+		@return `true` if the op requires whitespace before it
+	**/
+	static function requiresWhitespaceBeforeSign(s:String):Bool {
+		return KeywordConfig.whiteSpacePrefixedOperators.contains(s);
+	}
+
+	/**
+		Checks if an op requires whitespace after it
+		@param s The op
+		@return `true` if the op requires whitespace after it
+	**/
+	static function requiresWhitespaceAfterSign(s:String):Bool {
+		return KeywordConfig.whiteSpaceSuffixedOperators.contains(s);
+	}
+
+	/**
 	    Converts an array of `ParserToken`s into their code form, with standard
 		indenting & formatting
 	    @param code An array of `ParserToken`s
@@ -347,10 +365,13 @@ class PrettyPrinter {
 	public static function stringifyParser(?code:Array<ParserTokens>, ?token:ParserTokens) {
 		if (token != null) code = [token];
 		var s = "";
-
+		trace(code);
 		for (token in code) {
 			switch token {
-				case SetLine(line):s += '\n$indent'; continue;
+				case SetLine(line):{
+					s = s.replaceIfLast(" ", "");
+					s += '\n$indent'; continue;
+				}
 				case SetModule(_): continue; // Do Nothing, this is not syntax dependent.
 				case SplitLine: {
 					if (s.charAt(s.length - 1).isSpace(0)) s = s.substring(0, s.length - 1);
@@ -371,12 +392,17 @@ class PrettyPrinter {
 					if (body[0].is(SET_MODULE)) body.shift();
 					if (body[0].is(SET_LINE)) body.shift();
 					s += '{${stringifyParser(body)}} ${if (type != null && Interpreter.convert(type)[0].asJoinedStringPath() != Little.keywords.TYPE_UNKNOWN) '${Little.keywords.TYPE_DECL_OR_CAST} ${stringifyParser(type)}' else ''}';
-					s = s.replaceLast('\t} ', "}");
 					indent = indent.replaceLast("\t", "");
+					s = s.replaceLast('$indent}', "}");
 				}
 				case PartArray(parts): s += stringifyParser(parts);
 				case PropertyAccess(name, property): s += '${stringifyParser(name)}${Little.keywords.PROPERTY_ACCESS_SIGN}${stringifyParser(property)}';
-				case Sign(sign): s += sign;
+				case Sign(sign): {
+					if (!requiresWhitespaceBeforeSign(sign)) s = s.replaceIfLast(" ", "");
+					s += sign;
+					if (requiresWhitespaceAfterSign(sign)) s += " ";
+					continue;
+				}
 				case Number(num): s += num;
 				case Decimal(num): s += num;
 				case Characters(string): s += '"' + string + '"';
@@ -387,10 +413,10 @@ class PrettyPrinter {
 				case FalseValue: s += Little.keywords.FALSE_VALUE;
 				case Custom(_, _): throw 'Custom tokens cannot be stringified, as they dont represent any output syntax (found $token)';
 			}
-			s += " ";
+			if (token != code[code.length - 1]) s += " ";
 		}
 
-		return s.ltrim().replaceLast(" ", "");
+		return s.replaceIfLast("\t", "");
 
 	}
 
@@ -434,7 +460,12 @@ class PrettyPrinter {
 					indent = indent.replaceLast("\t", "");
 				case PartArray(parts): s += stringifyInterpreter(parts);
 				case PropertyAccess(name, property): s += '${stringifyInterpreter(name)}${Little.keywords.PROPERTY_ACCESS_SIGN}${stringifyInterpreter(property)}';
-				case Sign(sign): s += sign;
+				case Sign(sign): {
+					if (!requiresWhitespaceBeforeSign(sign)) s = s.replaceIfLast(" ", "");
+					s += sign;
+					if (requiresWhitespaceAfterSign(sign)) s += " ";
+					continue;
+				}
 				case Number(num): s += num;
 				case Decimal(num): s += num;
 				case Characters(string): s += '"' + string + '"';

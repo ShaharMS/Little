@@ -27,135 +27,143 @@
 #endif
 
 HX_DEFINE_STACK_FRAME(_hx_pos_affab903f7db177c_13_new,"little.KeywordConfig","new",0x439f0f65,"little.KeywordConfig.new","little/KeywordConfig.hx",13,0x656875ac)
-HX_LOCAL_STACK_FRAME(_hx_pos_affab903f7db177c_66_change,"little.KeywordConfig","change",0xfcc6c38b,"little.KeywordConfig.change","little/KeywordConfig.hx",66,0x656875ac)
+HX_LOCAL_STACK_FRAME(_hx_pos_affab903f7db177c_78_change,"little.KeywordConfig","change",0xfcc6c38b,"little.KeywordConfig.change","little/KeywordConfig.hx",78,0x656875ac)
 HX_LOCAL_STACK_FRAME(_hx_pos_affab903f7db177c_17_boot,"little.KeywordConfig","boot",0xdfa7698d,"little.KeywordConfig.boot","little/KeywordConfig.hx",17,0x656875ac)
 HX_LOCAL_STACK_FRAME(_hx_pos_affab903f7db177c_26_boot,"little.KeywordConfig","boot",0xdfa7698d,"little.KeywordConfig.boot","little/KeywordConfig.hx",26,0x656875ac)
 static const ::String _hx_array_data_90e878f3_6[] = {
 	HX_("!",21,00,00,00),HX_("#",23,00,00,00),HX_("$",24,00,00,00),HX_("%",25,00,00,00),HX_("&",26,00,00,00),HX_("'",27,00,00,00),HX_("(",28,00,00,00),HX_(")",29,00,00,00),HX_("*",2a,00,00,00),HX_("+",2b,00,00,00),HX_("-",2d,00,00,00),HX_(".",2e,00,00,00),HX_("/",2f,00,00,00),HX_(":",3a,00,00,00),HX_("<",3c,00,00,00),HX_("=",3d,00,00,00),HX_(">",3e,00,00,00),HX_("?",3f,00,00,00),HX_("@",40,00,00,00),HX_("[",5b,00,00,00),HX_("\\",5c,00,00,00),HX_("]",5d,00,00,00),HX_("^",5e,00,00,00),HX_("_",5f,00,00,00),HX_("`",60,00,00,00),HX_("{",7b,00,00,00),HX_("|",7c,00,00,00),HX_("}",7d,00,00,00),HX_("~",7e,00,00,00),HX_("^",5e,00,00,00),HX_W(u"\u221a",f474,00ab),
+};
+HX_LOCAL_STACK_FRAME(_hx_pos_affab903f7db177c_32_boot,"little.KeywordConfig","boot",0xdfa7698d,"little.KeywordConfig.boot","little/KeywordConfig.hx",32,0x656875ac)
+static const ::String _hx_array_data_90e878f3_8[] = {
+	HX_("%",25,00,00,00),HX_("&",26,00,00,00),HX_("&&",40,21,00,00),HX_("*",2a,00,00,00),HX_("+",2b,00,00,00),HX_("-",2d,00,00,00),HX_("/",2f,00,00,00),HX_("<",3c,00,00,00),HX_("<=",81,34,00,00),HX_("==",60,35,00,00),HX_(">",3e,00,00,00),HX_(">=",3f,36,00,00),HX_("||",80,6c,00,00),HX_("|",7c,00,00,00),
+};
+HX_LOCAL_STACK_FRAME(_hx_pos_affab903f7db177c_38_boot,"little.KeywordConfig","boot",0xdfa7698d,"little.KeywordConfig.boot","little/KeywordConfig.hx",38,0x656875ac)
+static const ::String _hx_array_data_90e878f3_10[] = {
+	HX_("!",21,00,00,00),HX_("&",26,00,00,00),HX_("&&",40,21,00,00),HX_("||",80,6c,00,00),HX_("|",7c,00,00,00),HX_("*",2a,00,00,00),HX_("+",2b,00,00,00),HX_("-",2d,00,00,00),HX_("/",2f,00,00,00),HX_("<",3c,00,00,00),HX_("<=",81,34,00,00),HX_("==",60,35,00,00),HX_(">",3e,00,00,00),HX_(">=",3f,36,00,00),
 };
 namespace little{
 
 void KeywordConfig_obj::__construct( ::little::KeywordConfig config,::hx::Null< bool >  __o_nullifyDefaults){
             		bool nullifyDefaults = __o_nullifyDefaults.Default(true);
             	HX_GC_STACKFRAME(&_hx_pos_affab903f7db177c_13_new)
-HXLINE( 212)		this->INSTANTIATE_FUNCTION_NAME = HX_("create",fc,66,0f,7c);
-HXLINE( 211)		this->TYPE_CAST_FUNCTION_PREFIX = HX_("to",7b,65,00,00);
-HXLINE( 209)		this->FOR_LOOP_JUMP = HX_("jump",ee,c4,69,46);
-HXLINE( 208)		this->FOR_LOOP_TO = HX_("to",7b,65,00,00);
-HXLINE( 207)		this->FOR_LOOP_FROM = HX_("from",6a,a5,c2,43);
-HXLINE( 205)		this->STDLIB__MEMORY_maxSize = HX_("maxSize",85,f9,83,cc);
-HXLINE( 204)		this->STDLIB__MEMORY_size = HX_("size",c1,a0,53,4c);
-HXLINE( 203)		this->STDLIB__MEMORY_write = HX_("write",df,6c,59,d0);
-HXLINE( 202)		this->STDLIB__MEMORY_read = HX_("read",56,4b,a7,4b);
-HXLINE( 201)		this->STDLIB__MEMORY_free = HX_("free",ac,9c,c2,43);
-HXLINE( 200)		this->STDLIB__MEMORY_allocate = HX_("allocate",bd,d2,ea,90);
-HXLINE( 197)		this->STDLIB__ARRAY_set = HX_("set",a2,9b,57,00);
-HXLINE( 196)		this->STDLIB__ARRAY_get = HX_("get",96,80,4e,00);
-HXLINE( 195)		this->STDLIB__ARRAY_elementType = HX_("elementType",96,db,7a,f0);
-HXLINE( 194)		this->STDLIB__ARRAY_length = HX_("length",e6,94,07,9f);
-HXLINE( 191)		this->STDLIB__STRING_fromCharCode = HX_("fromCharCode",ad,3a,3b,3c);
-HXLINE( 190)		this->STDLIB__STRING_endsWith = HX_("endsWith",5e,7a,b6,db);
-HXLINE( 189)		this->STDLIB__STRING_startsWith = HX_("startsWith",77,c0,cf,f9);
-HXLINE( 188)		this->STDLIB__STRING_lastIndexOf = HX_("lastIndexOf",13,fd,6a,95);
-HXLINE( 187)		this->STDLIB__STRING_indexOf = HX_("indexOf",c9,48,bf,e0);
-HXLINE( 186)		this->STDLIB__STRING_contains = HX_("contains",1f,5a,7b,2c);
-HXLINE( 185)		this->STDLIB__STRING_remove = HX_("remove",44,9c,88,04);
-HXLINE( 184)		this->STDLIB__STRING_replace = HX_("replace",34,48,28,ab);
-HXLINE( 183)		this->STDLIB__STRING_split = HX_("split",da,ea,6e,81);
-HXLINE( 182)		this->STDLIB__STRING_charAt = HX_("charAt",69,79,75,b7);
-HXLINE( 181)		this->STDLIB__STRING_substring = HX_("substring",51,f2,e7,e2);
-HXLINE( 180)		this->STDLIB__STRING_trim = HX_("trim",e2,9c,03,4d);
-HXLINE( 179)		this->STDLIB__STRING_toUpperCase = HX_("toUpperCase",37,30,fd,38);
-HXLINE( 178)		this->STDLIB__STRING_toLowerCase = HX_("toLowerCase",56,4c,64,b8);
-HXLINE( 177)		this->STDLIB__STRING_length = HX_("length",e6,94,07,9f);
-HXLINE( 174)		this->STDLIB__FLOAT_isWhole = HX_("isWhole",ed,74,47,66);
-HXLINE( 169)		this->POSITIVE_SIGN = HX_("+",2b,00,00,00);
-HXLINE( 168)		this->NEGATE_SIGN = HX_("-",2d,00,00,00);
-HXLINE( 167)		this->SQRT_SIGN = HX_W(u"\u221a",f474,00ab);
-HXLINE( 166)		this->FACTORIAL_SIGN = HX_("!",21,00,00,00);
-HXLINE( 165)		this->POW_SIGN = HX_("^",5e,00,00,00);
-HXLINE( 164)		this->MOD_SIGN = HX_("%",25,00,00,00);
-HXLINE( 163)		this->DIVIDE_SIGN = HX_("/",2f,00,00,00);
-HXLINE( 162)		this->MULTIPLY_SIGN = HX_("*",2a,00,00,00);
-HXLINE( 161)		this->SUBTRACT_SIGN = HX_("-",2d,00,00,00);
-HXLINE( 160)		this->ADD_SIGN = HX_("+",2b,00,00,00);
-HXLINE( 159)		this->NOT_SIGN = HX_("!",21,00,00,00);
-HXLINE( 158)		this->AND_SIGN = HX_("&&",40,21,00,00);
-HXLINE( 157)		this->OR_SIGN = HX_("||",80,6c,00,00);
-HXLINE( 156)		this->XOR_SIGN = HX_("^^",40,52,00,00);
-HXLINE( 155)		this->SMALLER_EQUALS_SIGN = HX_("<=",81,34,00,00);
-HXLINE( 154)		this->LARGER_EQUALS_SIGN = HX_(">=",3f,36,00,00);
-HXLINE( 153)		this->SMALLER_SIGN = HX_("<",3c,00,00,00);
-HXLINE( 152)		this->LARGER_SIGN = HX_(">",3e,00,00,00);
-HXLINE( 151)		this->NOT_EQUALS_SIGN = HX_("!=",fc,1c,00,00);
-HXLINE( 150)		this->EQUALS_SIGN = HX_("==",60,35,00,00);
-HXLINE( 148)		this->PROPERTY_ACCESS_SIGN = HX_(".",2e,00,00,00);
-HXLINE( 143)		this->RECOGNIZED_SIGNS = ::Array_obj< ::String >::__new(0);
-HXLINE( 141)		this->TYPE_UNKNOWN = HX_("Unknown",6a,4b,cc,ae);
-HXLINE( 137)		this->CONDITION__AFTER = HX_("after",1c,66,a2,1d);
-HXLINE( 136)		this->CONDITION__WHENEVER = HX_("whenever",d8,fa,66,76);
-HXLINE( 135)		this->CONDITION__ELSE = HX_("else",b9,e4,14,43);
-HXLINE( 134)		this->CONDITION__IF = HX_("if",dd,5b,00,00);
-HXLINE( 133)		this->CONDITION__WHILE_LOOP = HX_("while",b1,43,bd,c9);
-HXLINE( 132)		this->CONDITION__FOR_LOOP = HX_("for",09,c7,4d,00);
-HXLINE( 130)		this->CONDITION_BODY_PARAMETER_NAME = HX_("code",2d,b1,c4,41);
-HXLINE( 129)		this->CONDITION_PATTERN_PARAMETER_NAME = HX_("pattern",50,06,77,11);
-HXLINE( 127)		this->RUN_CODE_FUNCTION_NAME = HX_("run",4b,e7,56,00);
-HXLINE( 126)		this->READ_FUNCTION_NAME = HX_("read",56,4b,a7,4b);
-HXLINE( 125)		this->RAISE_ERROR_FUNCTION_NAME = HX_("error",c8,cb,29,73);
-HXLINE( 124)		this->PRINT_FUNCTION_NAME = HX_("print",2d,58,8b,c8);
-HXLINE( 122)		this->OBJECT_ADDRESS_PROPERTY_NAME = HX_("address",b4,71,0b,9d);
-HXLINE( 121)		this->OBJECT_TYPE_PROPERTY_NAME = HX_("type",ba,f2,08,4d);
-HXLINE( 119)		this->MAIN_MODULE_NAME = HX_("Main",59,64,2f,33);
-HXLINE( 117)		this->TYPE_SIGN = HX_("Sign",5d,bc,2c,37);
-HXLINE( 111)		this->TYPE_MODULE = HX_("Type",da,1e,e2,37);
-HXLINE( 105)		this->TYPE_CONDITION = HX_("Condition",7b,c9,06,9e);
-HXLINE(  99)		this->TYPE_FUNCTION = HX_("Action",d6,af,da,4a);
-HXLINE(  91)		this->TYPE_ARRAY = HX_("Array",79,dd,bc,b8);
-HXLINE(  90)		this->TYPE_MEMORY = HX_("Memory",21,3f,54,39);
-HXLINE(  89)		this->TYPE_OBJECT = HX_("Object",df,f2,d3,49);
-HXLINE(  88)		this->TYPE_STRING = HX_("Characters",ca,5c,7f,4c);
-HXLINE(  87)		this->TYPE_BOOLEAN = HX_("Boolean",88,12,50,4b);
-HXLINE(  86)		this->TYPE_FLOAT = HX_("Decimal",71,dc,24,b4);
-HXLINE(  85)		this->TYPE_INT = HX_("Number",e9,fa,0e,d6);
-HXLINE(  84)		this->TYPE_DYNAMIC = HX_("Anything",a2,31,c0,d4);
-HXLINE(  83)		this->FALSE_VALUE = HX_("false",a3,35,4f,fb);
-HXLINE(  82)		this->TRUE_VALUE = HX_("true",4e,a7,03,4d);
-HXLINE(  81)		this->NULL_VALUE = HX_("nothing",0d,9c,5f,4f);
-HXLINE(  80)		this->FUNCTION_RETURN = HX_("return",b0,a4,2d,09);
-HXLINE(  79)		this->TYPE_DECL_OR_CAST = HX_("as",f2,54,00,00);
-HXLINE(  78)		this->FUNCTION_DECLARATION = HX_("action",b6,3b,46,16);
-HXLINE(  77)		this->VARIABLE_DECLARATION = HX_("define",3b,7c,e4,66);
-HXLINE(  36)		if (::hx::IsNull( config )) {
-HXLINE(  37)			return;
+HXLINE( 224)		this->INSTANTIATE_FUNCTION_NAME = HX_("create",fc,66,0f,7c);
+HXLINE( 223)		this->TYPE_CAST_FUNCTION_PREFIX = HX_("to",7b,65,00,00);
+HXLINE( 221)		this->FOR_LOOP_JUMP = HX_("jump",ee,c4,69,46);
+HXLINE( 220)		this->FOR_LOOP_TO = HX_("to",7b,65,00,00);
+HXLINE( 219)		this->FOR_LOOP_FROM = HX_("from",6a,a5,c2,43);
+HXLINE( 217)		this->STDLIB__MEMORY_maxSize = HX_("maxSize",85,f9,83,cc);
+HXLINE( 216)		this->STDLIB__MEMORY_size = HX_("size",c1,a0,53,4c);
+HXLINE( 215)		this->STDLIB__MEMORY_write = HX_("write",df,6c,59,d0);
+HXLINE( 214)		this->STDLIB__MEMORY_read = HX_("read",56,4b,a7,4b);
+HXLINE( 213)		this->STDLIB__MEMORY_free = HX_("free",ac,9c,c2,43);
+HXLINE( 212)		this->STDLIB__MEMORY_allocate = HX_("allocate",bd,d2,ea,90);
+HXLINE( 209)		this->STDLIB__ARRAY_set = HX_("set",a2,9b,57,00);
+HXLINE( 208)		this->STDLIB__ARRAY_get = HX_("get",96,80,4e,00);
+HXLINE( 207)		this->STDLIB__ARRAY_elementType = HX_("elementType",96,db,7a,f0);
+HXLINE( 206)		this->STDLIB__ARRAY_length = HX_("length",e6,94,07,9f);
+HXLINE( 203)		this->STDLIB__STRING_fromCharCode = HX_("fromCharCode",ad,3a,3b,3c);
+HXLINE( 202)		this->STDLIB__STRING_endsWith = HX_("endsWith",5e,7a,b6,db);
+HXLINE( 201)		this->STDLIB__STRING_startsWith = HX_("startsWith",77,c0,cf,f9);
+HXLINE( 200)		this->STDLIB__STRING_lastIndexOf = HX_("lastIndexOf",13,fd,6a,95);
+HXLINE( 199)		this->STDLIB__STRING_indexOf = HX_("indexOf",c9,48,bf,e0);
+HXLINE( 198)		this->STDLIB__STRING_contains = HX_("contains",1f,5a,7b,2c);
+HXLINE( 197)		this->STDLIB__STRING_remove = HX_("remove",44,9c,88,04);
+HXLINE( 196)		this->STDLIB__STRING_replace = HX_("replace",34,48,28,ab);
+HXLINE( 195)		this->STDLIB__STRING_split = HX_("split",da,ea,6e,81);
+HXLINE( 194)		this->STDLIB__STRING_charAt = HX_("charAt",69,79,75,b7);
+HXLINE( 193)		this->STDLIB__STRING_substring = HX_("substring",51,f2,e7,e2);
+HXLINE( 192)		this->STDLIB__STRING_trim = HX_("trim",e2,9c,03,4d);
+HXLINE( 191)		this->STDLIB__STRING_toUpperCase = HX_("toUpperCase",37,30,fd,38);
+HXLINE( 190)		this->STDLIB__STRING_toLowerCase = HX_("toLowerCase",56,4c,64,b8);
+HXLINE( 189)		this->STDLIB__STRING_length = HX_("length",e6,94,07,9f);
+HXLINE( 186)		this->STDLIB__FLOAT_isWhole = HX_("isWhole",ed,74,47,66);
+HXLINE( 181)		this->POSITIVE_SIGN = HX_("+",2b,00,00,00);
+HXLINE( 180)		this->NEGATE_SIGN = HX_("-",2d,00,00,00);
+HXLINE( 179)		this->SQRT_SIGN = HX_W(u"\u221a",f474,00ab);
+HXLINE( 178)		this->FACTORIAL_SIGN = HX_("!",21,00,00,00);
+HXLINE( 177)		this->POW_SIGN = HX_("^",5e,00,00,00);
+HXLINE( 176)		this->MOD_SIGN = HX_("%",25,00,00,00);
+HXLINE( 175)		this->DIVIDE_SIGN = HX_("/",2f,00,00,00);
+HXLINE( 174)		this->MULTIPLY_SIGN = HX_("*",2a,00,00,00);
+HXLINE( 173)		this->SUBTRACT_SIGN = HX_("-",2d,00,00,00);
+HXLINE( 172)		this->ADD_SIGN = HX_("+",2b,00,00,00);
+HXLINE( 171)		this->NOT_SIGN = HX_("!",21,00,00,00);
+HXLINE( 170)		this->AND_SIGN = HX_("&&",40,21,00,00);
+HXLINE( 169)		this->OR_SIGN = HX_("||",80,6c,00,00);
+HXLINE( 168)		this->XOR_SIGN = HX_("^^",40,52,00,00);
+HXLINE( 167)		this->SMALLER_EQUALS_SIGN = HX_("<=",81,34,00,00);
+HXLINE( 166)		this->LARGER_EQUALS_SIGN = HX_(">=",3f,36,00,00);
+HXLINE( 165)		this->SMALLER_SIGN = HX_("<",3c,00,00,00);
+HXLINE( 164)		this->LARGER_SIGN = HX_(">",3e,00,00,00);
+HXLINE( 163)		this->NOT_EQUALS_SIGN = HX_("!=",fc,1c,00,00);
+HXLINE( 162)		this->EQUALS_SIGN = HX_("==",60,35,00,00);
+HXLINE( 160)		this->PROPERTY_ACCESS_SIGN = HX_(".",2e,00,00,00);
+HXLINE( 155)		this->RECOGNIZED_SIGNS = ::Array_obj< ::String >::__new(0);
+HXLINE( 153)		this->TYPE_UNKNOWN = HX_("Unknown",6a,4b,cc,ae);
+HXLINE( 149)		this->CONDITION__AFTER = HX_("after",1c,66,a2,1d);
+HXLINE( 148)		this->CONDITION__WHENEVER = HX_("whenever",d8,fa,66,76);
+HXLINE( 147)		this->CONDITION__ELSE = HX_("else",b9,e4,14,43);
+HXLINE( 146)		this->CONDITION__IF = HX_("if",dd,5b,00,00);
+HXLINE( 145)		this->CONDITION__WHILE_LOOP = HX_("while",b1,43,bd,c9);
+HXLINE( 144)		this->CONDITION__FOR_LOOP = HX_("for",09,c7,4d,00);
+HXLINE( 142)		this->CONDITION_BODY_PARAMETER_NAME = HX_("code",2d,b1,c4,41);
+HXLINE( 141)		this->CONDITION_PATTERN_PARAMETER_NAME = HX_("pattern",50,06,77,11);
+HXLINE( 139)		this->RUN_CODE_FUNCTION_NAME = HX_("run",4b,e7,56,00);
+HXLINE( 138)		this->READ_FUNCTION_NAME = HX_("read",56,4b,a7,4b);
+HXLINE( 137)		this->RAISE_ERROR_FUNCTION_NAME = HX_("error",c8,cb,29,73);
+HXLINE( 136)		this->PRINT_FUNCTION_NAME = HX_("print",2d,58,8b,c8);
+HXLINE( 134)		this->OBJECT_ADDRESS_PROPERTY_NAME = HX_("address",b4,71,0b,9d);
+HXLINE( 133)		this->OBJECT_TYPE_PROPERTY_NAME = HX_("type",ba,f2,08,4d);
+HXLINE( 131)		this->MAIN_MODULE_NAME = HX_("Main",59,64,2f,33);
+HXLINE( 129)		this->TYPE_SIGN = HX_("Sign",5d,bc,2c,37);
+HXLINE( 123)		this->TYPE_MODULE = HX_("Type",da,1e,e2,37);
+HXLINE( 117)		this->TYPE_CONDITION = HX_("Condition",7b,c9,06,9e);
+HXLINE( 111)		this->TYPE_FUNCTION = HX_("Action",d6,af,da,4a);
+HXLINE( 103)		this->TYPE_ARRAY = HX_("Array",79,dd,bc,b8);
+HXLINE( 102)		this->TYPE_MEMORY = HX_("Memory",21,3f,54,39);
+HXLINE( 101)		this->TYPE_OBJECT = HX_("Object",df,f2,d3,49);
+HXLINE( 100)		this->TYPE_STRING = HX_("Characters",ca,5c,7f,4c);
+HXLINE(  99)		this->TYPE_BOOLEAN = HX_("Boolean",88,12,50,4b);
+HXLINE(  98)		this->TYPE_FLOAT = HX_("Decimal",71,dc,24,b4);
+HXLINE(  97)		this->TYPE_INT = HX_("Number",e9,fa,0e,d6);
+HXLINE(  96)		this->TYPE_DYNAMIC = HX_("Anything",a2,31,c0,d4);
+HXLINE(  95)		this->FALSE_VALUE = HX_("false",a3,35,4f,fb);
+HXLINE(  94)		this->TRUE_VALUE = HX_("true",4e,a7,03,4d);
+HXLINE(  93)		this->NULL_VALUE = HX_("nothing",0d,9c,5f,4f);
+HXLINE(  92)		this->FUNCTION_RETURN = HX_("return",b0,a4,2d,09);
+HXLINE(  91)		this->TYPE_DECL_OR_CAST = HX_("as",f2,54,00,00);
+HXLINE(  90)		this->FUNCTION_DECLARATION = HX_("action",b6,3b,46,16);
+HXLINE(  89)		this->VARIABLE_DECLARATION = HX_("define",3b,7c,e4,66);
+HXLINE(  48)		if (::hx::IsNull( config )) {
+HXLINE(  49)			return;
             		}
-HXLINE(  38)		if (nullifyDefaults) {
-HXLINE(  39)			::Array< ::String > fields = ::Type_obj::getInstanceFields(::hx::ClassOf< ::little::KeywordConfig >());
-HXLINE(  40)			fields->remove(HX_("defaultConfig",63,2a,4b,c2));
-HXLINE(  41)			{
-HXLINE(  41)				int _g = 0;
-HXDLIN(  41)				while((_g < fields->length)){
-HXLINE(  41)					::String field = fields->__get(_g);
-HXDLIN(  41)					_g = (_g + 1);
-HXLINE(  42)					::String configValue = ( (::String)(::Reflect_obj::field(config,field)) );
-HXLINE(  44)					if ((configValue.length == 0)) {
-HXLINE(  45)						HX_STACK_DO_THROW( ::haxe::exceptions::ArgumentException_obj::__alloc( HX_CTX ,(HX_("config.",2c,93,39,10) + field),HX_("Keywords of length 0 are not allowed.",f6,3a,0b,e6),null(),::hx::SourceInfo(HX_("src/little/KeywordConfig.hx",41,ce,9f,cc),45,HX_("little.KeywordConfig",f3,78,e8,90),HX_("new",60,d0,53,00))));
+HXLINE(  50)		if (nullifyDefaults) {
+HXLINE(  51)			::Array< ::String > fields = ::Type_obj::getInstanceFields(::hx::ClassOf< ::little::KeywordConfig >());
+HXLINE(  52)			fields->remove(HX_("defaultConfig",63,2a,4b,c2));
+HXLINE(  53)			{
+HXLINE(  53)				int _g = 0;
+HXDLIN(  53)				while((_g < fields->length)){
+HXLINE(  53)					::String field = fields->__get(_g);
+HXDLIN(  53)					_g = (_g + 1);
+HXLINE(  54)					::String configValue = ( (::String)(::Reflect_obj::field(config,field)) );
+HXLINE(  56)					if ((configValue.length == 0)) {
+HXLINE(  57)						HX_STACK_DO_THROW( ::haxe::exceptions::ArgumentException_obj::__alloc( HX_CTX ,(HX_("config.",2c,93,39,10) + field),HX_("Keywords of length 0 are not allowed.",f6,3a,0b,e6),null(),::hx::SourceInfo(HX_("src/little/KeywordConfig.hx",41,ce,9f,cc),57,HX_("little.KeywordConfig",f3,78,e8,90),HX_("new",60,d0,53,00))));
             					}
-HXLINE(  46)					if (::little::tools::TextTools_obj::contains(configValue,HX_(" ",20,00,00,00))) {
-HXLINE(  47)						HX_STACK_DO_THROW( ::haxe::exceptions::ArgumentException_obj::__alloc( HX_CTX ,(HX_("config.",2c,93,39,10) + field),HX_("Keywords cannot contain whitespaces.",8b,a7,23,64),null(),::hx::SourceInfo(HX_("src/little/KeywordConfig.hx",41,ce,9f,cc),47,HX_("little.KeywordConfig",f3,78,e8,90),HX_("new",60,d0,53,00))));
+HXLINE(  58)					if (::little::tools::TextTools_obj::contains(configValue,HX_(" ",20,00,00,00))) {
+HXLINE(  59)						HX_STACK_DO_THROW( ::haxe::exceptions::ArgumentException_obj::__alloc( HX_CTX ,(HX_("config.",2c,93,39,10) + field),HX_("Keywords cannot contain whitespaces.",8b,a7,23,64),null(),::hx::SourceInfo(HX_("src/little/KeywordConfig.hx",41,ce,9f,cc),59,HX_("little.KeywordConfig",f3,78,e8,90),HX_("new",60,d0,53,00))));
             					}
-HXLINE(  48)					if (::little::tools::TextTools_obj::containsAny(configValue,::little::KeywordConfig_obj::recognizedOperators)) {
-HXLINE(  49)						HX_STACK_DO_THROW( ::haxe::exceptions::ArgumentException_obj::__alloc( HX_CTX ,(HX_("config.",2c,93,39,10) + field),HX_("Keywords cannot contain operators/signs.",cb,90,a6,43),null(),::hx::SourceInfo(HX_("src/little/KeywordConfig.hx",41,ce,9f,cc),49,HX_("little.KeywordConfig",f3,78,e8,90),HX_("new",60,d0,53,00))));
+HXLINE(  60)					if (::little::tools::TextTools_obj::containsAny(configValue,::little::KeywordConfig_obj::recognizedOperators)) {
+HXLINE(  61)						HX_STACK_DO_THROW( ::haxe::exceptions::ArgumentException_obj::__alloc( HX_CTX ,(HX_("config.",2c,93,39,10) + field),HX_("Keywords cannot contain operators/signs.",cb,90,a6,43),null(),::hx::SourceInfo(HX_("src/little/KeywordConfig.hx",41,ce,9f,cc),61,HX_("little.KeywordConfig",f3,78,e8,90),HX_("new",60,d0,53,00))));
             					}
-HXLINE(  50)					 ::EReg _hx_tmp =  ::EReg_obj::__alloc( HX_CTX ,HX_("[0-9]",1c,5f,53,85),HX_("",00,00,00,00));
-HXDLIN(  50)					if (_hx_tmp->match(configValue.charAt(0))) {
-HXLINE(  51)						HX_STACK_DO_THROW( ::haxe::exceptions::ArgumentException_obj::__alloc( HX_CTX ,(HX_("config.",2c,93,39,10) + field),HX_("Keywords cannot start with numbers.",b9,71,2d,e4),null(),::hx::SourceInfo(HX_("src/little/KeywordConfig.hx",41,ce,9f,cc),51,HX_("little.KeywordConfig",f3,78,e8,90),HX_("new",60,d0,53,00))));
+HXLINE(  62)					 ::EReg _hx_tmp =  ::EReg_obj::__alloc( HX_CTX ,HX_("[0-9]",1c,5f,53,85),HX_("",00,00,00,00));
+HXDLIN(  62)					if (_hx_tmp->match(configValue.charAt(0))) {
+HXLINE(  63)						HX_STACK_DO_THROW( ::haxe::exceptions::ArgumentException_obj::__alloc( HX_CTX ,(HX_("config.",2c,93,39,10) + field),HX_("Keywords cannot start with numbers.",b9,71,2d,e4),null(),::hx::SourceInfo(HX_("src/little/KeywordConfig.hx",41,ce,9f,cc),63,HX_("little.KeywordConfig",f3,78,e8,90),HX_("new",60,d0,53,00))));
             					}
-HXLINE(  53)					if (::hx::IsEq( configValue,::Reflect_obj::field(::little::KeywordConfig_obj::defaultConfig,field) )) {
-HXLINE(  54)						::Reflect_obj::setField(::hx::ObjectPtr<OBJ_>(this),field,null());
+HXLINE(  65)					if (::hx::IsEq( configValue,::Reflect_obj::field(::little::KeywordConfig_obj::defaultConfig,field) )) {
+HXLINE(  66)						::Reflect_obj::setField(::hx::ObjectPtr<OBJ_>(this),field,null());
             					}
             					else {
-HXLINE(  56)						::Reflect_obj::setField(::hx::ObjectPtr<OBJ_>(this),field,configValue);
+HXLINE(  68)						::Reflect_obj::setField(::hx::ObjectPtr<OBJ_>(this),field,configValue);
             					}
             				}
             			}
@@ -178,19 +186,19 @@ bool KeywordConfig_obj::_hx_isInstanceOf(int inClassId) {
 }
 
 void KeywordConfig_obj::change( ::little::KeywordConfig config){
-            	HX_STACKFRAME(&_hx_pos_affab903f7db177c_66_change)
-HXLINE(  67)		::Array< ::String > fields = ::Type_obj::getInstanceFields(::hx::ClassOf< ::little::KeywordConfig >());
-HXLINE(  68)		fields->remove(HX_("defaultConfig",63,2a,4b,c2));
-HXLINE(  69)		{
-HXLINE(  69)			int _g = 0;
-HXDLIN(  69)			while((_g < fields->length)){
-HXLINE(  69)				::String field = fields->__get(_g);
-HXDLIN(  69)				_g = (_g + 1);
-HXLINE(  70)				::String configValue = ( (::String)(::Reflect_obj::field(config,field)) );
-HXLINE(  71)				if (::hx::IsNull( configValue )) {
-HXLINE(  72)					continue;
+            	HX_STACKFRAME(&_hx_pos_affab903f7db177c_78_change)
+HXLINE(  79)		::Array< ::String > fields = ::Type_obj::getInstanceFields(::hx::ClassOf< ::little::KeywordConfig >());
+HXLINE(  80)		fields->remove(HX_("defaultConfig",63,2a,4b,c2));
+HXLINE(  81)		{
+HXLINE(  81)			int _g = 0;
+HXDLIN(  81)			while((_g < fields->length)){
+HXLINE(  81)				::String field = fields->__get(_g);
+HXDLIN(  81)				_g = (_g + 1);
+HXLINE(  82)				::String configValue = ( (::String)(::Reflect_obj::field(config,field)) );
+HXLINE(  83)				if (::hx::IsNull( configValue )) {
+HXLINE(  84)					continue;
             				}
-HXLINE(  73)				::Reflect_obj::setField(::hx::ObjectPtr<OBJ_>(this),field,configValue);
+HXLINE(  85)				::Reflect_obj::setField(::hx::ObjectPtr<OBJ_>(this),field,configValue);
             			}
             		}
             	}
@@ -201,6 +209,10 @@ HX_DEFINE_DYNAMIC_FUNC1(KeywordConfig_obj,change,(void))
  ::little::KeywordConfig KeywordConfig_obj::defaultConfig;
 
 ::Array< ::String > KeywordConfig_obj::recognizedOperators;
+
+::Array< ::String > KeywordConfig_obj::whiteSpacePrefixedOperators;
+
+::Array< ::String > KeywordConfig_obj::whiteSpaceSuffixedOperators;
 
 
 ::hx::ObjectPtr< KeywordConfig_obj > KeywordConfig_obj::__new( ::little::KeywordConfig config,::hx::Null< bool >  __o_nullifyDefaults) {
@@ -559,6 +571,10 @@ bool KeywordConfig_obj::__GetStatic(const ::String &inName, Dynamic &outValue, :
 		break;
 	case 19:
 		if (HX_FIELD_EQ(inName,"recognizedOperators") ) { outValue = ( recognizedOperators ); return true; }
+		break;
+	case 27:
+		if (HX_FIELD_EQ(inName,"whiteSpacePrefixedOperators") ) { outValue = ( whiteSpacePrefixedOperators ); return true; }
+		if (HX_FIELD_EQ(inName,"whiteSpaceSuffixedOperators") ) { outValue = ( whiteSpaceSuffixedOperators ); return true; }
 	}
 	return false;
 }
@@ -713,6 +729,10 @@ bool KeywordConfig_obj::__SetStatic(const ::String &inName,Dynamic &ioValue,::hx
 		break;
 	case 19:
 		if (HX_FIELD_EQ(inName,"recognizedOperators") ) { recognizedOperators=ioValue.Cast< ::Array< ::String > >(); return true; }
+		break;
+	case 27:
+		if (HX_FIELD_EQ(inName,"whiteSpacePrefixedOperators") ) { whiteSpacePrefixedOperators=ioValue.Cast< ::Array< ::String > >(); return true; }
+		if (HX_FIELD_EQ(inName,"whiteSpaceSuffixedOperators") ) { whiteSpaceSuffixedOperators=ioValue.Cast< ::Array< ::String > >(); return true; }
 	}
 	return false;
 }
@@ -905,6 +925,8 @@ static ::hx::StorageInfo KeywordConfig_obj_sMemberStorageInfo[] = {
 static ::hx::StaticInfo KeywordConfig_obj_sStaticStorageInfo[] = {
 	{::hx::fsObject /*  ::little::KeywordConfig */ ,(void *) &KeywordConfig_obj::defaultConfig,HX_("defaultConfig",63,2a,4b,c2)},
 	{::hx::fsObject /* ::Array< ::String > */ ,(void *) &KeywordConfig_obj::recognizedOperators,HX_("recognizedOperators",d9,36,40,43)},
+	{::hx::fsObject /* ::Array< ::String > */ ,(void *) &KeywordConfig_obj::whiteSpacePrefixedOperators,HX_("whiteSpacePrefixedOperators",81,dd,9f,8d)},
+	{::hx::fsObject /* ::Array< ::String > */ ,(void *) &KeywordConfig_obj::whiteSpaceSuffixedOperators,HX_("whiteSpaceSuffixedOperators",a2,6e,07,01)},
 	{ ::hx::fsUnknown, 0, null()}
 };
 #endif
@@ -1004,12 +1026,16 @@ static ::String KeywordConfig_obj_sMemberFields[] = {
 static void KeywordConfig_obj_sMarkStatics(HX_MARK_PARAMS) {
 	HX_MARK_MEMBER_NAME(KeywordConfig_obj::defaultConfig,"defaultConfig");
 	HX_MARK_MEMBER_NAME(KeywordConfig_obj::recognizedOperators,"recognizedOperators");
+	HX_MARK_MEMBER_NAME(KeywordConfig_obj::whiteSpacePrefixedOperators,"whiteSpacePrefixedOperators");
+	HX_MARK_MEMBER_NAME(KeywordConfig_obj::whiteSpaceSuffixedOperators,"whiteSpaceSuffixedOperators");
 };
 
 #ifdef HXCPP_VISIT_ALLOCS
 static void KeywordConfig_obj_sVisitStatics(HX_VISIT_PARAMS) {
 	HX_VISIT_MEMBER_NAME(KeywordConfig_obj::defaultConfig,"defaultConfig");
 	HX_VISIT_MEMBER_NAME(KeywordConfig_obj::recognizedOperators,"recognizedOperators");
+	HX_VISIT_MEMBER_NAME(KeywordConfig_obj::whiteSpacePrefixedOperators,"whiteSpacePrefixedOperators");
+	HX_VISIT_MEMBER_NAME(KeywordConfig_obj::whiteSpaceSuffixedOperators,"whiteSpaceSuffixedOperators");
 };
 
 #endif
@@ -1019,6 +1045,8 @@ static void KeywordConfig_obj_sVisitStatics(HX_VISIT_PARAMS) {
 static ::String KeywordConfig_obj_sStaticFields[] = {
 	HX_("defaultConfig",63,2a,4b,c2),
 	HX_("recognizedOperators",d9,36,40,43),
+	HX_("whiteSpacePrefixedOperators",81,dd,9f,8d),
+	HX_("whiteSpaceSuffixedOperators",a2,6e,07,01),
 	::String(null())
 };
 
@@ -1058,6 +1086,14 @@ HXDLIN(  17)		defaultConfig =  ::little::KeywordConfig_obj::__alloc( HX_CTX ,nul
 {
             	HX_STACKFRAME(&_hx_pos_affab903f7db177c_26_boot)
 HXDLIN(  26)		recognizedOperators = ::Array_obj< ::String >::fromData( _hx_array_data_90e878f3_6,31);
+            	}
+{
+            	HX_STACKFRAME(&_hx_pos_affab903f7db177c_32_boot)
+HXDLIN(  32)		whiteSpacePrefixedOperators = ::Array_obj< ::String >::fromData( _hx_array_data_90e878f3_8,14);
+            	}
+{
+            	HX_STACKFRAME(&_hx_pos_affab903f7db177c_38_boot)
+HXDLIN(  38)		whiteSpaceSuffixedOperators = ::Array_obj< ::String >::fromData( _hx_array_data_90e878f3_10,14);
             	}
 }
 

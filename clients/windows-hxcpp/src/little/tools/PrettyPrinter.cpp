@@ -13,6 +13,9 @@
 #ifndef INCLUDED_haxe_IMap
 #include <haxe/IMap.h>
 #endif
+#ifndef INCLUDED_haxe_Log
+#include <haxe/Log.h>
+#endif
 #ifndef INCLUDED_haxe_ds_ArraySort
 #include <haxe/ds/ArraySort.h>
 #endif
@@ -74,10 +77,12 @@ HX_LOCAL_STACK_FRAME(_hx_pos_8097a7bac51ae56b_62_prefixFA,"little.tools.PrettyPr
 HX_LOCAL_STACK_FRAME(_hx_pos_8097a7bac51ae56b_77_pushIndex,"little.tools.PrettyPrinter","pushIndex",0x69d3d2c3,"little.tools.PrettyPrinter.pushIndex","little/tools/PrettyPrinter.hx",77,0xf849d687)
 HX_LOCAL_STACK_FRAME(_hx_pos_8097a7bac51ae56b_94_getTree_PARSER,"little.tools.PrettyPrinter","getTree_PARSER",0x4543b81f,"little.tools.PrettyPrinter.getTree_PARSER","little/tools/PrettyPrinter.hx",94,0xf849d687)
 HX_LOCAL_STACK_FRAME(_hx_pos_8097a7bac51ae56b_216_getTree_INTERP,"little.tools.PrettyPrinter","getTree_INTERP",0xf6419514,"little.tools.PrettyPrinter.getTree_INTERP","little/tools/PrettyPrinter.hx",216,0xf849d687)
-HX_LOCAL_STACK_FRAME(_hx_pos_8097a7bac51ae56b_347_stringifyParser,"little.tools.PrettyPrinter","stringifyParser",0x4c538335,"little.tools.PrettyPrinter.stringifyParser","little/tools/PrettyPrinter.hx",347,0xf849d687)
-HX_LOCAL_STACK_FRAME(_hx_pos_8097a7bac51ae56b_403_stringifyInterpreter,"little.tools.PrettyPrinter","stringifyInterpreter",0x1178d3a4,"little.tools.PrettyPrinter.stringifyInterpreter","little/tools/PrettyPrinter.hx",403,0xf849d687)
-HX_LOCAL_STACK_FRAME(_hx_pos_8097a7bac51ae56b_462_prettyPrintOperatorPriority,"little.tools.PrettyPrinter","prettyPrintOperatorPriority",0x5d14298a,"little.tools.PrettyPrinter.prettyPrintOperatorPriority","little/tools/PrettyPrinter.hx",462,0xf849d687)
-HX_LOCAL_STACK_FRAME(_hx_pos_8097a7bac51ae56b_460_prettyPrintOperatorPriority,"little.tools.PrettyPrinter","prettyPrintOperatorPriority",0x5d14298a,"little.tools.PrettyPrinter.prettyPrintOperatorPriority","little/tools/PrettyPrinter.hx",460,0xf849d687)
+HX_LOCAL_STACK_FRAME(_hx_pos_8097a7bac51ae56b_347_requiresWhitespaceBeforeSign,"little.tools.PrettyPrinter","requiresWhitespaceBeforeSign",0x341293bc,"little.tools.PrettyPrinter.requiresWhitespaceBeforeSign","little/tools/PrettyPrinter.hx",347,0xf849d687)
+HX_LOCAL_STACK_FRAME(_hx_pos_8097a7bac51ae56b_356_requiresWhitespaceAfterSign,"little.tools.PrettyPrinter","requiresWhitespaceAfterSign",0xc84a9519,"little.tools.PrettyPrinter.requiresWhitespaceAfterSign","little/tools/PrettyPrinter.hx",356,0xf849d687)
+HX_LOCAL_STACK_FRAME(_hx_pos_8097a7bac51ae56b_365_stringifyParser,"little.tools.PrettyPrinter","stringifyParser",0x4c538335,"little.tools.PrettyPrinter.stringifyParser","little/tools/PrettyPrinter.hx",365,0xf849d687)
+HX_LOCAL_STACK_FRAME(_hx_pos_8097a7bac51ae56b_429_stringifyInterpreter,"little.tools.PrettyPrinter","stringifyInterpreter",0x1178d3a4,"little.tools.PrettyPrinter.stringifyInterpreter","little/tools/PrettyPrinter.hx",429,0xf849d687)
+HX_LOCAL_STACK_FRAME(_hx_pos_8097a7bac51ae56b_493_prettyPrintOperatorPriority,"little.tools.PrettyPrinter","prettyPrintOperatorPriority",0x5d14298a,"little.tools.PrettyPrinter.prettyPrintOperatorPriority","little/tools/PrettyPrinter.hx",493,0xf849d687)
+HX_LOCAL_STACK_FRAME(_hx_pos_8097a7bac51ae56b_491_prettyPrintOperatorPriority,"little.tools.PrettyPrinter","prettyPrintOperatorPriority",0x5d14298a,"little.tools.PrettyPrinter.prettyPrintOperatorPriority","little/tools/PrettyPrinter.hx",491,0xf849d687)
 HX_LOCAL_STACK_FRAME(_hx_pos_8097a7bac51ae56b_83_boot,"little.tools.PrettyPrinter","boot",0xed3fbc27,"little.tools.PrettyPrinter.boot","little/tools/PrettyPrinter.hx",83,0xf849d687)
 HX_LOCAL_STACK_FRAME(_hx_pos_8097a7bac51ae56b_84_boot,"little.tools.PrettyPrinter","boot",0xed3fbc27,"little.tools.PrettyPrinter.boot","little/tools/PrettyPrinter.hx",84,0xf849d687)
 HX_LOCAL_STACK_FRAME(_hx_pos_8097a7bac51ae56b_339_boot,"little.tools.PrettyPrinter","boot",0xed3fbc27,"little.tools.PrettyPrinter.boot","little/tools/PrettyPrinter.hx",339,0xf849d687)
@@ -819,624 +824,658 @@ STATIC_HX_DEFINE_DYNAMIC_FUNC4(PrettyPrinter_obj,getTree_INTERP,return )
 
 ::String PrettyPrinter_obj::indent;
 
+bool PrettyPrinter_obj::requiresWhitespaceBeforeSign(::String s){
+            	HX_STACKFRAME(&_hx_pos_8097a7bac51ae56b_347_requiresWhitespaceBeforeSign)
+HXDLIN( 347)		return ::little::KeywordConfig_obj::whiteSpacePrefixedOperators->contains(s);
+            	}
+
+
+STATIC_HX_DEFINE_DYNAMIC_FUNC1(PrettyPrinter_obj,requiresWhitespaceBeforeSign,return )
+
+bool PrettyPrinter_obj::requiresWhitespaceAfterSign(::String s){
+            	HX_STACKFRAME(&_hx_pos_8097a7bac51ae56b_356_requiresWhitespaceAfterSign)
+HXDLIN( 356)		return ::little::KeywordConfig_obj::whiteSpaceSuffixedOperators->contains(s);
+            	}
+
+
+STATIC_HX_DEFINE_DYNAMIC_FUNC1(PrettyPrinter_obj,requiresWhitespaceAfterSign,return )
+
 ::String PrettyPrinter_obj::stringifyParser(::Array< ::Dynamic> code, ::little::parser::ParserTokens token){
-            	HX_STACKFRAME(&_hx_pos_8097a7bac51ae56b_347_stringifyParser)
-HXLINE( 348)		if (::hx::IsNotNull( token )) {
-HXLINE( 348)			code = ::Array_obj< ::Dynamic>::__new(1)->init(0,token);
+            	HX_STACKFRAME(&_hx_pos_8097a7bac51ae56b_365_stringifyParser)
+HXLINE( 366)		if (::hx::IsNotNull( token )) {
+HXLINE( 366)			code = ::Array_obj< ::Dynamic>::__new(1)->init(0,token);
             		}
-HXLINE( 349)		::String s = HX_("",00,00,00,00);
-HXLINE( 351)		{
-HXLINE( 351)			int _g = 0;
-HXDLIN( 351)			while((_g < code->length)){
-HXLINE( 351)				 ::little::parser::ParserTokens token1 = code->__get(_g).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 351)				_g = (_g + 1);
-HXLINE( 352)				switch((int)(token1->_hx_getIndex())){
+HXLINE( 367)		::String s = HX_("",00,00,00,00);
+HXLINE( 368)		::haxe::Log_obj::trace(code,::hx::SourceInfo(HX_("src/little/tools/PrettyPrinter.hx",dc,4c,91,b7),368,HX_("little.tools.PrettyPrinter",99,2c,a5,fa),HX_("stringifyParser",0a,71,36,01)));
+HXLINE( 369)		{
+HXLINE( 369)			int _g = 0;
+HXDLIN( 369)			while((_g < code->length)){
+HXLINE( 369)				 ::little::parser::ParserTokens token1 = code->__get(_g).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 369)				_g = (_g + 1);
+HXLINE( 370)				switch((int)(token1->_hx_getIndex())){
             					case (int)0: {
-HXLINE( 353)						int line = token1->_hx_getInt(0);
-HXDLIN( 353)						s = (s + (HX_("\n",0a,00,00,00) + ::little::tools::PrettyPrinter_obj::indent));
-HXDLIN( 353)						continue;
+HXLINE( 371)						int line = token1->_hx_getInt(0);
+HXLINE( 372)						s = ::little::tools::TextTools_obj::replaceIfLast(s,HX_(" ",20,00,00,00),HX_("",00,00,00,00));
+HXLINE( 373)						s = (s + (HX_("\n",0a,00,00,00) + ::little::tools::PrettyPrinter_obj::indent));
+HXDLIN( 373)						continue;
             					}
             					break;
             					case (int)1: {
-HXLINE( 354)						::String _g1 = token1->_hx_getString(0);
-HXDLIN( 354)						continue;
+HXLINE( 375)						::String _g1 = token1->_hx_getString(0);
+HXDLIN( 375)						continue;
             					}
             					break;
             					case (int)2: {
-HXLINE( 356)						if (::StringTools_obj::isSpace(s.charAt((s.length - 1)),0)) {
-HXLINE( 356)							s = s.substring(0,(s.length - 1));
+HXLINE( 377)						if (::StringTools_obj::isSpace(s.charAt((s.length - 1)),0)) {
+HXLINE( 377)							s = s.substring(0,(s.length - 1));
             						}
-HXLINE( 357)						s = (s + HX_(",",2c,00,00,00));
+HXLINE( 378)						s = (s + HX_(",",2c,00,00,00));
             					}
             					break;
             					case (int)3: {
-HXLINE( 359)						 ::little::parser::ParserTokens _g2 = token1->_hx_getObject(2).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 359)						{
-HXLINE( 359)							 ::little::parser::ParserTokens name = token1->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 359)							 ::little::parser::ParserTokens type = token1->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 359)							::String s1 = ((HX_("",00,00,00,00) + ::little::Little_obj::keywords->VARIABLE_DECLARATION) + HX_(" ",20,00,00,00));
-HXDLIN( 359)							::String s2 = (s1 + ::little::tools::PrettyPrinter_obj::stringifyParser(null(),name));
-HXDLIN( 359)							::String s3;
-HXDLIN( 359)							bool s4;
-HXDLIN( 359)							if (::hx::IsNotNull( type )) {
-HXLINE( 359)								::String s5 = ::little::tools::Extensions_obj::asJoinedStringPath(::little::interpreter::Interpreter_obj::convert(::Array_obj< ::Dynamic>::__new(1)->init(0,type))->__get(0).StaticCast<  ::little::interpreter::InterpTokens >());
-HXDLIN( 359)								s4 = (s5 != ::little::Little_obj::keywords->TYPE_UNKNOWN);
+HXLINE( 380)						 ::little::parser::ParserTokens _g2 = token1->_hx_getObject(2).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 380)						{
+HXLINE( 380)							 ::little::parser::ParserTokens name = token1->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 380)							 ::little::parser::ParserTokens type = token1->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 380)							::String s1 = ((HX_("",00,00,00,00) + ::little::Little_obj::keywords->VARIABLE_DECLARATION) + HX_(" ",20,00,00,00));
+HXDLIN( 380)							::String s2 = (s1 + ::little::tools::PrettyPrinter_obj::stringifyParser(null(),name));
+HXDLIN( 380)							::String s3;
+HXDLIN( 380)							bool s4;
+HXDLIN( 380)							if (::hx::IsNotNull( type )) {
+HXLINE( 380)								::String s5 = ::little::tools::Extensions_obj::asJoinedStringPath(::little::interpreter::Interpreter_obj::convert(::Array_obj< ::Dynamic>::__new(1)->init(0,type))->__get(0).StaticCast<  ::little::interpreter::InterpTokens >());
+HXDLIN( 380)								s4 = (s5 != ::little::Little_obj::keywords->TYPE_UNKNOWN);
             							}
             							else {
-HXLINE( 359)								s4 = false;
+HXLINE( 380)								s4 = false;
             							}
-HXDLIN( 359)							if (s4) {
-HXLINE( 359)								::String s6 = ((HX_(" ",20,00,00,00) + ::little::Little_obj::keywords->TYPE_DECL_OR_CAST) + HX_(" ",20,00,00,00));
-HXDLIN( 359)								s3 = (s6 + ::little::tools::PrettyPrinter_obj::stringifyParser(null(),type));
+HXDLIN( 380)							if (s4) {
+HXLINE( 380)								::String s6 = ((HX_(" ",20,00,00,00) + ::little::Little_obj::keywords->TYPE_DECL_OR_CAST) + HX_(" ",20,00,00,00));
+HXDLIN( 380)								s3 = (s6 + ::little::tools::PrettyPrinter_obj::stringifyParser(null(),type));
             							}
             							else {
-HXLINE( 359)								s3 = HX_("",00,00,00,00);
+HXLINE( 380)								s3 = HX_("",00,00,00,00);
             							}
-HXDLIN( 359)							s = (s + (s2 + s3));
+HXDLIN( 380)							s = (s + (s2 + s3));
             						}
             					}
             					break;
             					case (int)4: {
-HXLINE( 360)						 ::little::parser::ParserTokens _g3 = token1->_hx_getObject(3).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 360)						{
-HXLINE( 360)							 ::little::parser::ParserTokens name1 = token1->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 360)							 ::little::parser::ParserTokens params = token1->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 360)							 ::little::parser::ParserTokens type1 = token1->_hx_getObject(2).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 360)							::String s7 = ((HX_("",00,00,00,00) + ::little::Little_obj::keywords->FUNCTION_DECLARATION) + HX_(" ",20,00,00,00));
-HXDLIN( 360)							::String s8 = ((s7 + ::little::tools::PrettyPrinter_obj::stringifyParser(null(),name1)) + HX_("(",28,00,00,00));
-HXDLIN( 360)							::String s9 = ((s8 + ::little::tools::TextTools_obj::replace(::little::tools::PrettyPrinter_obj::stringifyParser(null(),params),HX_(" ,",0c,1c,00,00),HX_(",",2c,00,00,00))) + HX_(")",29,00,00,00));
-HXDLIN( 360)							::String s10;
-HXDLIN( 360)							bool s11;
-HXDLIN( 360)							if (::hx::IsNotNull( type1 )) {
-HXLINE( 360)								::String s12 = ::little::tools::Extensions_obj::asJoinedStringPath(::little::interpreter::Interpreter_obj::convert(::Array_obj< ::Dynamic>::__new(1)->init(0,type1))->__get(0).StaticCast<  ::little::interpreter::InterpTokens >());
-HXDLIN( 360)								s11 = (s12 != ::little::Little_obj::keywords->TYPE_UNKNOWN);
+HXLINE( 381)						 ::little::parser::ParserTokens _g3 = token1->_hx_getObject(3).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 381)						{
+HXLINE( 381)							 ::little::parser::ParserTokens name1 = token1->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 381)							 ::little::parser::ParserTokens params = token1->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 381)							 ::little::parser::ParserTokens type1 = token1->_hx_getObject(2).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 381)							::String s7 = ((HX_("",00,00,00,00) + ::little::Little_obj::keywords->FUNCTION_DECLARATION) + HX_(" ",20,00,00,00));
+HXDLIN( 381)							::String s8 = ((s7 + ::little::tools::PrettyPrinter_obj::stringifyParser(null(),name1)) + HX_("(",28,00,00,00));
+HXDLIN( 381)							::String s9 = ((s8 + ::little::tools::TextTools_obj::replace(::little::tools::PrettyPrinter_obj::stringifyParser(null(),params),HX_(" ,",0c,1c,00,00),HX_(",",2c,00,00,00))) + HX_(")",29,00,00,00));
+HXDLIN( 381)							::String s10;
+HXDLIN( 381)							bool s11;
+HXDLIN( 381)							if (::hx::IsNotNull( type1 )) {
+HXLINE( 381)								::String s12 = ::little::tools::Extensions_obj::asJoinedStringPath(::little::interpreter::Interpreter_obj::convert(::Array_obj< ::Dynamic>::__new(1)->init(0,type1))->__get(0).StaticCast<  ::little::interpreter::InterpTokens >());
+HXDLIN( 381)								s11 = (s12 != ::little::Little_obj::keywords->TYPE_UNKNOWN);
             							}
             							else {
-HXLINE( 360)								s11 = false;
+HXLINE( 381)								s11 = false;
             							}
-HXDLIN( 360)							if (s11) {
-HXLINE( 360)								::String s13 = ((HX_(" ",20,00,00,00) + ::little::Little_obj::keywords->TYPE_DECL_OR_CAST) + HX_(" ",20,00,00,00));
-HXDLIN( 360)								s10 = (s13 + ::little::tools::PrettyPrinter_obj::stringifyParser(null(),type1));
+HXDLIN( 381)							if (s11) {
+HXLINE( 381)								::String s13 = ((HX_(" ",20,00,00,00) + ::little::Little_obj::keywords->TYPE_DECL_OR_CAST) + HX_(" ",20,00,00,00));
+HXDLIN( 381)								s10 = (s13 + ::little::tools::PrettyPrinter_obj::stringifyParser(null(),type1));
             							}
             							else {
-HXLINE( 360)								s10 = HX_("",00,00,00,00);
+HXLINE( 381)								s10 = HX_("",00,00,00,00);
             							}
-HXDLIN( 360)							s = (s + (s9 + s10));
+HXDLIN( 381)							s = (s + (s9 + s10));
             						}
             					}
             					break;
             					case (int)5: {
-HXLINE( 361)						 ::little::parser::ParserTokens name2 = token1->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 361)						 ::little::parser::ParserTokens exp = token1->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 361)						 ::little::parser::ParserTokens body = token1->_hx_getObject(2).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 361)						::String s14 = ((HX_("",00,00,00,00) + ::little::tools::PrettyPrinter_obj::stringifyParser(null(),name2)) + HX_(" (",08,1c,00,00));
-HXDLIN( 361)						::String s15 = ((s14 + ::little::tools::PrettyPrinter_obj::stringifyParser(null(),exp)) + HX_(") ",d7,23,00,00));
-HXDLIN( 361)						s = (s + (s15 + ::little::tools::PrettyPrinter_obj::stringifyParser(null(),body)));
+HXLINE( 382)						 ::little::parser::ParserTokens name2 = token1->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 382)						 ::little::parser::ParserTokens exp = token1->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 382)						 ::little::parser::ParserTokens body = token1->_hx_getObject(2).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 382)						::String s14 = ((HX_("",00,00,00,00) + ::little::tools::PrettyPrinter_obj::stringifyParser(null(),name2)) + HX_(" (",08,1c,00,00));
+HXDLIN( 382)						::String s15 = ((s14 + ::little::tools::PrettyPrinter_obj::stringifyParser(null(),exp)) + HX_(") ",d7,23,00,00));
+HXDLIN( 382)						s = (s + (s15 + ::little::tools::PrettyPrinter_obj::stringifyParser(null(),body)));
             					}
             					break;
             					case (int)6: {
-HXLINE( 362)						 ::little::parser::ParserTokens name3 = token1->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 362)						s = (s + ::little::tools::PrettyPrinter_obj::stringifyParser(null(),name3));
+HXLINE( 383)						 ::little::parser::ParserTokens name3 = token1->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 383)						s = (s + ::little::tools::PrettyPrinter_obj::stringifyParser(null(),name3));
             					}
             					break;
             					case (int)7: {
-HXLINE( 363)						::Array< ::Dynamic> assignees = token1->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 363)						 ::little::parser::ParserTokens value = token1->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 363)						::Array< ::Dynamic> _this = assignees->concat(::Array_obj< ::Dynamic>::__new(1)->init(0,value));
-HXDLIN( 363)						::Array< ::String > result = ::Array_obj< ::String >::__new(_this->length);
-HXDLIN( 363)						{
-HXLINE( 363)							int _g4 = 0;
-HXDLIN( 363)							int _g5 = _this->length;
-HXDLIN( 363)							while((_g4 < _g5)){
-HXLINE( 363)								_g4 = (_g4 + 1);
-HXDLIN( 363)								int i = (_g4 - 1);
-HXDLIN( 363)								{
-HXLINE( 363)									::String inValue = ::little::tools::PrettyPrinter_obj::stringifyParser(null(),_hx_array_unsafe_get(_this,i));
-HXDLIN( 363)									result->__unsafe_set(i,inValue);
+HXLINE( 384)						::Array< ::Dynamic> assignees = token1->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 384)						 ::little::parser::ParserTokens value = token1->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 384)						::Array< ::Dynamic> _this = assignees->concat(::Array_obj< ::Dynamic>::__new(1)->init(0,value));
+HXDLIN( 384)						::Array< ::String > result = ::Array_obj< ::String >::__new(_this->length);
+HXDLIN( 384)						{
+HXLINE( 384)							int _g4 = 0;
+HXDLIN( 384)							int _g5 = _this->length;
+HXDLIN( 384)							while((_g4 < _g5)){
+HXLINE( 384)								_g4 = (_g4 + 1);
+HXDLIN( 384)								int i = (_g4 - 1);
+HXDLIN( 384)								{
+HXLINE( 384)									::String inValue = ::little::tools::PrettyPrinter_obj::stringifyParser(null(),_hx_array_unsafe_get(_this,i));
+HXDLIN( 384)									result->__unsafe_set(i,inValue);
             								}
             							}
             						}
-HXDLIN( 363)						s = (s + ::little::tools::TextTools_obj::replace(result->join(HX_(" = ",63,7d,18,00)),HX_("  =",3d,64,18,00),HX_(" =",1d,1c,00,00)));
+HXDLIN( 384)						s = (s + ::little::tools::TextTools_obj::replace(result->join(HX_(" = ",63,7d,18,00)),HX_("  =",3d,64,18,00),HX_(" =",1d,1c,00,00)));
             					}
             					break;
             					case (int)8: {
-HXLINE( 364)						::String word = token1->_hx_getString(0);
-HXDLIN( 364)						s = (s + word);
+HXLINE( 385)						::String word = token1->_hx_getString(0);
+HXDLIN( 385)						s = (s + word);
             					}
             					break;
             					case (int)9: {
-HXLINE( 365)						 ::little::parser::ParserTokens value1 = token1->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 365)						 ::little::parser::ParserTokens type2 = token1->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 365)						::String s16 = ((HX_("",00,00,00,00) + ::little::tools::PrettyPrinter_obj::stringifyParser(null(),value1)) + HX_(" ",20,00,00,00));
-HXDLIN( 365)						::String s17 = ((s16 + ::little::Little_obj::keywords->TYPE_DECL_OR_CAST) + HX_(" ",20,00,00,00));
-HXDLIN( 365)						s = (s + (s17 + ::little::tools::PrettyPrinter_obj::stringifyParser(null(),type2)));
+HXLINE( 386)						 ::little::parser::ParserTokens value1 = token1->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 386)						 ::little::parser::ParserTokens type2 = token1->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 386)						::String s16 = ((HX_("",00,00,00,00) + ::little::tools::PrettyPrinter_obj::stringifyParser(null(),value1)) + HX_(" ",20,00,00,00));
+HXDLIN( 386)						::String s17 = ((s16 + ::little::Little_obj::keywords->TYPE_DECL_OR_CAST) + HX_(" ",20,00,00,00));
+HXDLIN( 386)						s = (s + (s17 + ::little::tools::PrettyPrinter_obj::stringifyParser(null(),type2)));
             					}
             					break;
             					case (int)10: {
-HXLINE( 366)						 ::little::parser::ParserTokens name4 = token1->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 366)						 ::little::parser::ParserTokens params1 = token1->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 366)						::String s18 = ((HX_("",00,00,00,00) + ::little::tools::PrettyPrinter_obj::stringifyParser(null(),name4)) + HX_("(",28,00,00,00));
-HXDLIN( 366)						s = (s + ::little::tools::TextTools_obj::replaceIfLast(((s18 + ::little::tools::TextTools_obj::replace(::little::tools::PrettyPrinter_obj::stringifyParser(null(),params1),HX_(" ,",0c,1c,00,00),HX_(",",2c,00,00,00))) + HX_(")",29,00,00,00)),HX_(" )",09,1c,00,00),HX_(")",29,00,00,00)));
+HXLINE( 387)						 ::little::parser::ParserTokens name4 = token1->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 387)						 ::little::parser::ParserTokens params1 = token1->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 387)						::String s18 = ((HX_("",00,00,00,00) + ::little::tools::PrettyPrinter_obj::stringifyParser(null(),name4)) + HX_("(",28,00,00,00));
+HXDLIN( 387)						s = (s + ::little::tools::TextTools_obj::replaceIfLast(((s18 + ::little::tools::TextTools_obj::replace(::little::tools::PrettyPrinter_obj::stringifyParser(null(),params1),HX_(" ,",0c,1c,00,00),HX_(",",2c,00,00,00))) + HX_(")",29,00,00,00)),HX_(" )",09,1c,00,00),HX_(")",29,00,00,00)));
             					}
             					break;
             					case (int)11: {
-HXLINE( 367)						 ::little::parser::ParserTokens value2 = token1->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 367)						 ::little::parser::ParserTokens type3 = token1->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 367)						::String s19 = ((HX_("",00,00,00,00) + ::little::Little_obj::keywords->FUNCTION_RETURN) + HX_(" ",20,00,00,00));
-HXDLIN( 367)						s = (s + (s19 + ::little::tools::PrettyPrinter_obj::stringifyParser(null(),value2)));
+HXLINE( 388)						 ::little::parser::ParserTokens value2 = token1->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 388)						 ::little::parser::ParserTokens type3 = token1->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 388)						::String s19 = ((HX_("",00,00,00,00) + ::little::Little_obj::keywords->FUNCTION_RETURN) + HX_(" ",20,00,00,00));
+HXDLIN( 388)						s = (s + (s19 + ::little::tools::PrettyPrinter_obj::stringifyParser(null(),value2)));
             					}
             					break;
             					case (int)12: {
-HXLINE( 368)						::Array< ::Dynamic> parts = token1->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 368)						 ::little::parser::ParserTokens type4 = token1->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 368)						s = (s + ::little::tools::PrettyPrinter_obj::stringifyParser(parts,null()));
+HXLINE( 389)						::Array< ::Dynamic> parts = token1->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 389)						 ::little::parser::ParserTokens type4 = token1->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 389)						s = (s + ::little::tools::PrettyPrinter_obj::stringifyParser(parts,null()));
             					}
             					break;
             					case (int)13: {
-HXLINE( 369)						::Array< ::Dynamic> body1 = token1->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 369)						 ::little::parser::ParserTokens type5 = token1->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 369)						{
-HXLINE( 370)							 ::Dynamic _hx_tmp = ::hx::ClassOf< ::little::tools::PrettyPrinter >();
-HXDLIN( 370)							::little::tools::PrettyPrinter_obj::indent = (::little::tools::PrettyPrinter_obj::indent + HX_("\t",09,00,00,00));
-HXLINE( 371)							::Array< ::Dynamic> _this1 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::ParserTokensSimple_obj::SET_MODULE_dyn())->copy();
-HXDLIN( 371)							::Array< ::String > result1 = ::Array_obj< ::String >::__new(_this1->length);
-HXDLIN( 371)							{
-HXLINE( 371)								int _g6 = 0;
-HXDLIN( 371)								int _g7 = _this1->length;
-HXDLIN( 371)								while((_g6 < _g7)){
-HXLINE( 371)									_g6 = (_g6 + 1);
-HXDLIN( 371)									int i1 = (_g6 - 1);
-HXDLIN( 371)									{
-HXLINE( 371)										::String inValue1 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this1,i1)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 371)										result1->__unsafe_set(i1,inValue1);
+HXLINE( 390)						::Array< ::Dynamic> body1 = token1->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 390)						 ::little::parser::ParserTokens type5 = token1->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 390)						{
+HXLINE( 391)							 ::Dynamic _hx_tmp = ::hx::ClassOf< ::little::tools::PrettyPrinter >();
+HXDLIN( 391)							::little::tools::PrettyPrinter_obj::indent = (::little::tools::PrettyPrinter_obj::indent + HX_("\t",09,00,00,00));
+HXLINE( 392)							::Array< ::Dynamic> _this1 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::ParserTokensSimple_obj::SET_MODULE_dyn())->copy();
+HXDLIN( 392)							::Array< ::String > result1 = ::Array_obj< ::String >::__new(_this1->length);
+HXDLIN( 392)							{
+HXLINE( 392)								int _g6 = 0;
+HXDLIN( 392)								int _g7 = _this1->length;
+HXDLIN( 392)								while((_g6 < _g7)){
+HXLINE( 392)									_g6 = (_g6 + 1);
+HXDLIN( 392)									int i1 = (_g6 - 1);
+HXDLIN( 392)									{
+HXLINE( 392)										::String inValue1 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this1,i1)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 392)										result1->__unsafe_set(i1,inValue1);
             									}
             								}
             							}
-HXDLIN( 371)							if (result1->contains(::Type_obj::enumConstructor(body1->__get(0).StaticCast<  ::little::parser::ParserTokens >()).toLowerCase())) {
-HXLINE( 371)								body1->shift().StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 392)							if (result1->contains(::Type_obj::enumConstructor(body1->__get(0).StaticCast<  ::little::parser::ParserTokens >()).toLowerCase())) {
+HXLINE( 392)								body1->shift().StaticCast<  ::little::parser::ParserTokens >();
             							}
-HXLINE( 372)							::Array< ::Dynamic> _this2 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::ParserTokensSimple_obj::SET_LINE_dyn())->copy();
-HXDLIN( 372)							::Array< ::String > result2 = ::Array_obj< ::String >::__new(_this2->length);
-HXDLIN( 372)							{
-HXLINE( 372)								int _g8 = 0;
-HXDLIN( 372)								int _g9 = _this2->length;
-HXDLIN( 372)								while((_g8 < _g9)){
-HXLINE( 372)									_g8 = (_g8 + 1);
-HXDLIN( 372)									int i2 = (_g8 - 1);
-HXDLIN( 372)									{
-HXLINE( 372)										::String inValue2 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this2,i2)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 372)										result2->__unsafe_set(i2,inValue2);
+HXLINE( 393)							::Array< ::Dynamic> _this2 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::ParserTokensSimple_obj::SET_LINE_dyn())->copy();
+HXDLIN( 393)							::Array< ::String > result2 = ::Array_obj< ::String >::__new(_this2->length);
+HXDLIN( 393)							{
+HXLINE( 393)								int _g8 = 0;
+HXDLIN( 393)								int _g9 = _this2->length;
+HXDLIN( 393)								while((_g8 < _g9)){
+HXLINE( 393)									_g8 = (_g8 + 1);
+HXDLIN( 393)									int i2 = (_g8 - 1);
+HXDLIN( 393)									{
+HXLINE( 393)										::String inValue2 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this2,i2)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 393)										result2->__unsafe_set(i2,inValue2);
             									}
             								}
             							}
-HXDLIN( 372)							if (result2->contains(::Type_obj::enumConstructor(body1->__get(0).StaticCast<  ::little::parser::ParserTokens >()).toLowerCase())) {
-HXLINE( 372)								body1->shift().StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 393)							if (result2->contains(::Type_obj::enumConstructor(body1->__get(0).StaticCast<  ::little::parser::ParserTokens >()).toLowerCase())) {
+HXLINE( 393)								body1->shift().StaticCast<  ::little::parser::ParserTokens >();
             							}
-HXLINE( 373)							::String s20 = ((HX_("{",7b,00,00,00) + ::little::tools::PrettyPrinter_obj::stringifyParser(body1,null())) + HX_("} ",03,6d,00,00));
-HXDLIN( 373)							::String s21;
-HXDLIN( 373)							bool s22;
-HXDLIN( 373)							if (::hx::IsNotNull( type5 )) {
-HXLINE( 373)								::String s23 = ::little::tools::Extensions_obj::asJoinedStringPath(::little::interpreter::Interpreter_obj::convert(::Array_obj< ::Dynamic>::__new(1)->init(0,type5))->__get(0).StaticCast<  ::little::interpreter::InterpTokens >());
-HXDLIN( 373)								s22 = (s23 != ::little::Little_obj::keywords->TYPE_UNKNOWN);
-            							}
-            							else {
-HXLINE( 373)								s22 = false;
-            							}
-HXDLIN( 373)							if (s22) {
-HXLINE( 373)								::String s24 = ((HX_("",00,00,00,00) + ::little::Little_obj::keywords->TYPE_DECL_OR_CAST) + HX_(" ",20,00,00,00));
-HXDLIN( 373)								s21 = (s24 + ::little::tools::PrettyPrinter_obj::stringifyParser(null(),type5));
+HXLINE( 394)							::String s20 = ((HX_("{",7b,00,00,00) + ::little::tools::PrettyPrinter_obj::stringifyParser(body1,null())) + HX_("} ",03,6d,00,00));
+HXDLIN( 394)							::String s21;
+HXDLIN( 394)							bool s22;
+HXDLIN( 394)							if (::hx::IsNotNull( type5 )) {
+HXLINE( 394)								::String s23 = ::little::tools::Extensions_obj::asJoinedStringPath(::little::interpreter::Interpreter_obj::convert(::Array_obj< ::Dynamic>::__new(1)->init(0,type5))->__get(0).StaticCast<  ::little::interpreter::InterpTokens >());
+HXDLIN( 394)								s22 = (s23 != ::little::Little_obj::keywords->TYPE_UNKNOWN);
             							}
             							else {
-HXLINE( 373)								s21 = HX_("",00,00,00,00);
+HXLINE( 394)								s22 = false;
             							}
-HXDLIN( 373)							s = (s + (s20 + s21));
-HXLINE( 374)							s = ::little::tools::TextTools_obj::replaceLast(s,HX_("\t} ",4c,41,07,00),HX_("}",7d,00,00,00));
-HXLINE( 375)							::little::tools::PrettyPrinter_obj::indent = ::little::tools::TextTools_obj::replaceLast(::little::tools::PrettyPrinter_obj::indent,HX_("\t",09,00,00,00),HX_("",00,00,00,00));
+HXDLIN( 394)							if (s22) {
+HXLINE( 394)								::String s24 = ((HX_("",00,00,00,00) + ::little::Little_obj::keywords->TYPE_DECL_OR_CAST) + HX_(" ",20,00,00,00));
+HXDLIN( 394)								s21 = (s24 + ::little::tools::PrettyPrinter_obj::stringifyParser(null(),type5));
+            							}
+            							else {
+HXLINE( 394)								s21 = HX_("",00,00,00,00);
+            							}
+HXDLIN( 394)							s = (s + (s20 + s21));
+HXLINE( 395)							::little::tools::PrettyPrinter_obj::indent = ::little::tools::TextTools_obj::replaceLast(::little::tools::PrettyPrinter_obj::indent,HX_("\t",09,00,00,00),HX_("",00,00,00,00));
+HXLINE( 396)							s = ::little::tools::TextTools_obj::replaceLast(s,((HX_("",00,00,00,00) + ::little::tools::PrettyPrinter_obj::indent) + HX_("}",7d,00,00,00)),HX_("}",7d,00,00,00));
             						}
             					}
             					break;
             					case (int)14: {
-HXLINE( 377)						::Array< ::Dynamic> parts1 = token1->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 377)						s = (s + ::little::tools::PrettyPrinter_obj::stringifyParser(parts1,null()));
+HXLINE( 398)						::Array< ::Dynamic> parts1 = token1->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 398)						s = (s + ::little::tools::PrettyPrinter_obj::stringifyParser(parts1,null()));
             					}
             					break;
             					case (int)15: {
-HXLINE( 378)						 ::little::parser::ParserTokens name5 = token1->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 378)						 ::little::parser::ParserTokens property = token1->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
-HXDLIN( 378)						::String s25 = (HX_("",00,00,00,00) + ::little::tools::PrettyPrinter_obj::stringifyParser(null(),name5));
-HXDLIN( 378)						::String s26 = (s25 + ::little::Little_obj::keywords->PROPERTY_ACCESS_SIGN);
-HXDLIN( 378)						s = (s + (s26 + ::little::tools::PrettyPrinter_obj::stringifyParser(null(),property)));
+HXLINE( 399)						 ::little::parser::ParserTokens name5 = token1->_hx_getObject(0).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 399)						 ::little::parser::ParserTokens property = token1->_hx_getObject(1).StaticCast<  ::little::parser::ParserTokens >();
+HXDLIN( 399)						::String s25 = (HX_("",00,00,00,00) + ::little::tools::PrettyPrinter_obj::stringifyParser(null(),name5));
+HXDLIN( 399)						::String s26 = (s25 + ::little::Little_obj::keywords->PROPERTY_ACCESS_SIGN);
+HXDLIN( 399)						s = (s + (s26 + ::little::tools::PrettyPrinter_obj::stringifyParser(null(),property)));
             					}
             					break;
             					case (int)16: {
-HXLINE( 379)						::String sign = token1->_hx_getString(0);
-HXDLIN( 379)						s = (s + sign);
+HXLINE( 400)						::String sign = token1->_hx_getString(0);
+HXLINE( 401)						if (!(::little::tools::PrettyPrinter_obj::requiresWhitespaceBeforeSign(sign))) {
+HXLINE( 401)							s = ::little::tools::TextTools_obj::replaceIfLast(s,HX_(" ",20,00,00,00),HX_("",00,00,00,00));
+            						}
+HXLINE( 402)						s = (s + sign);
+HXLINE( 403)						if (::little::tools::PrettyPrinter_obj::requiresWhitespaceAfterSign(sign)) {
+HXLINE( 403)							s = (s + HX_(" ",20,00,00,00));
+            						}
+HXLINE( 404)						continue;
             					}
             					break;
             					case (int)17: {
-HXLINE( 380)						::String num = token1->_hx_getString(0);
-HXDLIN( 380)						s = (s + num);
+HXLINE( 406)						::String num = token1->_hx_getString(0);
+HXDLIN( 406)						s = (s + num);
             					}
             					break;
             					case (int)18: {
-HXLINE( 381)						::String num1 = token1->_hx_getString(0);
-HXDLIN( 381)						s = (s + num1);
+HXLINE( 407)						::String num1 = token1->_hx_getString(0);
+HXDLIN( 407)						s = (s + num1);
             					}
             					break;
             					case (int)19: {
-HXLINE( 382)						::String string = token1->_hx_getString(0);
-HXDLIN( 382)						s = (s + ((HX_("\"",22,00,00,00) + string) + HX_("\"",22,00,00,00)));
+HXLINE( 408)						::String string = token1->_hx_getString(0);
+HXDLIN( 408)						s = (s + ((HX_("\"",22,00,00,00) + string) + HX_("\"",22,00,00,00)));
             					}
             					break;
             					case (int)20: {
-HXLINE( 383)						::String doc = token1->_hx_getString(0);
-HXDLIN( 383)						s = (s + ((HX_("\"\"\"",62,ea,19,00) + doc) + HX_("\"\"\"",62,ea,19,00)));
+HXLINE( 409)						::String doc = token1->_hx_getString(0);
+HXDLIN( 409)						s = (s + ((HX_("\"\"\"",62,ea,19,00) + doc) + HX_("\"\"\"",62,ea,19,00)));
             					}
             					break;
             					case (int)21: {
-HXLINE( 384)						::String msg = token1->_hx_getString(0);
-HXDLIN( 384)						continue;
+HXLINE( 410)						::String msg = token1->_hx_getString(0);
+HXDLIN( 410)						continue;
             					}
             					break;
             					case (int)22: {
-HXLINE( 385)						s = (s + ::little::Little_obj::keywords->NULL_VALUE);
+HXLINE( 411)						s = (s + ::little::Little_obj::keywords->NULL_VALUE);
             					}
             					break;
             					case (int)23: {
-HXLINE( 386)						s = (s + ::little::Little_obj::keywords->TRUE_VALUE);
+HXLINE( 412)						s = (s + ::little::Little_obj::keywords->TRUE_VALUE);
             					}
             					break;
             					case (int)24: {
-HXLINE( 387)						s = (s + ::little::Little_obj::keywords->FALSE_VALUE);
+HXLINE( 413)						s = (s + ::little::Little_obj::keywords->FALSE_VALUE);
             					}
             					break;
             					case (int)25: {
-HXLINE( 388)						::String _g10 = token1->_hx_getString(0);
-HXDLIN( 388)						::Array< ::Dynamic> _g11 = token1->_hx_getObject(1).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 388)						HX_STACK_DO_THROW(((HX_("Custom tokens cannot be stringified, as they dont represent any output syntax (found ",2e,d7,47,db) + ::Std_obj::string(token1)) + HX_(")",29,00,00,00)));
+HXLINE( 414)						::String _g10 = token1->_hx_getString(0);
+HXDLIN( 414)						::Array< ::Dynamic> _g11 = token1->_hx_getObject(1).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 414)						HX_STACK_DO_THROW(((HX_("Custom tokens cannot be stringified, as they dont represent any output syntax (found ",2e,d7,47,db) + ::Std_obj::string(token1)) + HX_(")",29,00,00,00)));
             					}
             					break;
             				}
-HXLINE( 390)				s = (s + HX_(" ",20,00,00,00));
+HXLINE( 416)				if (::hx::IsPointerNotEq( token1,code->__get((code->length - 1)).StaticCast<  ::little::parser::ParserTokens >() )) {
+HXLINE( 416)					s = (s + HX_(" ",20,00,00,00));
+            				}
             			}
             		}
-HXLINE( 393)		return ::little::tools::TextTools_obj::replaceLast(::StringTools_obj::ltrim(s),HX_(" ",20,00,00,00),HX_("",00,00,00,00));
+HXLINE( 419)		return ::little::tools::TextTools_obj::replaceIfLast(s,HX_("\t",09,00,00,00),HX_("",00,00,00,00));
             	}
 
 
 STATIC_HX_DEFINE_DYNAMIC_FUNC2(PrettyPrinter_obj,stringifyParser,return )
 
 ::String PrettyPrinter_obj::stringifyInterpreter(::Array< ::Dynamic> code, ::little::interpreter::InterpTokens token){
-            	HX_STACKFRAME(&_hx_pos_8097a7bac51ae56b_403_stringifyInterpreter)
-HXLINE( 404)		bool _hx_tmp;
-HXDLIN( 404)		bool _hx_tmp1;
-HXDLIN( 404)		if (::hx::IsNull( token )) {
-HXLINE( 404)			_hx_tmp1 = ::hx::IsNull( code );
+            	HX_STACKFRAME(&_hx_pos_8097a7bac51ae56b_429_stringifyInterpreter)
+HXLINE( 430)		bool _hx_tmp;
+HXDLIN( 430)		bool _hx_tmp1;
+HXDLIN( 430)		if (::hx::IsNull( token )) {
+HXLINE( 430)			_hx_tmp1 = ::hx::IsNull( code );
             		}
             		else {
-HXLINE( 404)			_hx_tmp1 = false;
+HXLINE( 430)			_hx_tmp1 = false;
             		}
-HXDLIN( 404)		if (!(_hx_tmp1)) {
-HXLINE( 404)			bool _hx_tmp2;
-HXDLIN( 404)			if (::hx::IsNotNull( code )) {
-HXLINE( 404)				_hx_tmp2 = (code->length == 1);
+HXDLIN( 430)		if (!(_hx_tmp1)) {
+HXLINE( 430)			bool _hx_tmp2;
+HXDLIN( 430)			if (::hx::IsNotNull( code )) {
+HXLINE( 430)				_hx_tmp2 = (code->length == 1);
             			}
             			else {
-HXLINE( 404)				_hx_tmp2 = false;
+HXLINE( 430)				_hx_tmp2 = false;
             			}
-HXDLIN( 404)			if (_hx_tmp2) {
-HXLINE( 404)				_hx_tmp = ::hx::IsNull( code->__get(0).StaticCast<  ::little::interpreter::InterpTokens >() );
+HXDLIN( 430)			if (_hx_tmp2) {
+HXLINE( 430)				_hx_tmp = ::hx::IsNull( code->__get(0).StaticCast<  ::little::interpreter::InterpTokens >() );
             			}
             			else {
-HXLINE( 404)				_hx_tmp = false;
+HXLINE( 430)				_hx_tmp = false;
             			}
             		}
             		else {
-HXLINE( 404)			_hx_tmp = true;
+HXLINE( 430)			_hx_tmp = true;
             		}
-HXDLIN( 404)		if (_hx_tmp) {
-HXLINE( 404)			return HX_("",00,00,00,00);
+HXDLIN( 430)		if (_hx_tmp) {
+HXLINE( 430)			return HX_("",00,00,00,00);
             		}
-HXLINE( 405)		if (::hx::IsNotNull( token )) {
-HXLINE( 405)			code = ::Array_obj< ::Dynamic>::__new(1)->init(0,token);
+HXLINE( 431)		if (::hx::IsNotNull( token )) {
+HXLINE( 431)			code = ::Array_obj< ::Dynamic>::__new(1)->init(0,token);
             		}
-HXLINE( 406)		::String s = HX_("",00,00,00,00);
-HXLINE( 407)		int currentLine = -1;
-HXLINE( 408)		{
-HXLINE( 408)			int _g = 0;
-HXDLIN( 408)			while((_g < code->length)){
-HXLINE( 408)				 ::little::interpreter::InterpTokens token1 = code->__get(_g).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 408)				_g = (_g + 1);
-HXLINE( 409)				switch((int)(token1->_hx_getIndex())){
+HXLINE( 432)		::String s = HX_("",00,00,00,00);
+HXLINE( 433)		int currentLine = -1;
+HXLINE( 434)		{
+HXLINE( 434)			int _g = 0;
+HXDLIN( 434)			while((_g < code->length)){
+HXLINE( 434)				 ::little::interpreter::InterpTokens token1 = code->__get(_g).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 434)				_g = (_g + 1);
+HXLINE( 435)				switch((int)(token1->_hx_getIndex())){
             					case (int)0: {
-HXLINE( 410)						int line = token1->_hx_getInt(0);
-HXLINE( 411)						s = (s + (HX_("\n",0a,00,00,00) + ::little::tools::PrettyPrinter_obj::indent));
-HXLINE( 412)						continue;
+HXLINE( 436)						int line = token1->_hx_getInt(0);
+HXLINE( 437)						s = (s + (HX_("\n",0a,00,00,00) + ::little::tools::PrettyPrinter_obj::indent));
+HXLINE( 438)						continue;
             					}
             					break;
             					case (int)1: {
-HXLINE( 414)						::String module = token1->_hx_getString(0);
-HXDLIN( 414)						continue;
+HXLINE( 440)						::String module = token1->_hx_getString(0);
+HXDLIN( 440)						continue;
             					}
             					break;
             					case (int)2: {
-HXLINE( 416)						if (::StringTools_obj::isSpace(s.charAt((s.length - 1)),0)) {
-HXLINE( 416)							s = s.substring(0,(s.length - 1));
+HXLINE( 442)						if (::StringTools_obj::isSpace(s.charAt((s.length - 1)),0)) {
+HXLINE( 442)							s = s.substring(0,(s.length - 1));
             						}
-HXLINE( 417)						s = (s + HX_(",",2c,00,00,00));
+HXLINE( 443)						s = (s + HX_(",",2c,00,00,00));
             					}
             					break;
             					case (int)3: {
-HXLINE( 419)						 ::little::interpreter::InterpTokens name = token1->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 419)						 ::little::interpreter::InterpTokens type = token1->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 419)						 ::little::interpreter::InterpTokens doc = token1->_hx_getObject(2).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 419)						::String s1 = ((HX_("",00,00,00,00) + ::little::Little_obj::keywords->VARIABLE_DECLARATION) + HX_(" ",20,00,00,00));
-HXDLIN( 419)						::String s2 = (s1 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),name));
-HXDLIN( 419)						::String s3;
-HXDLIN( 419)						bool s4;
-HXDLIN( 419)						if (::hx::IsNotNull( type )) {
-HXLINE( 419)							::String s5 = ::little::tools::Extensions_obj::asJoinedStringPath(type);
-HXDLIN( 419)							s4 = (s5 != ::little::Little_obj::keywords->TYPE_UNKNOWN);
+HXLINE( 445)						 ::little::interpreter::InterpTokens name = token1->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 445)						 ::little::interpreter::InterpTokens type = token1->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 445)						 ::little::interpreter::InterpTokens doc = token1->_hx_getObject(2).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 445)						::String s1 = ((HX_("",00,00,00,00) + ::little::Little_obj::keywords->VARIABLE_DECLARATION) + HX_(" ",20,00,00,00));
+HXDLIN( 445)						::String s2 = (s1 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),name));
+HXDLIN( 445)						::String s3;
+HXDLIN( 445)						bool s4;
+HXDLIN( 445)						if (::hx::IsNotNull( type )) {
+HXLINE( 445)							::String s5 = ::little::tools::Extensions_obj::asJoinedStringPath(type);
+HXDLIN( 445)							s4 = (s5 != ::little::Little_obj::keywords->TYPE_UNKNOWN);
             						}
             						else {
-HXLINE( 419)							s4 = false;
+HXLINE( 445)							s4 = false;
             						}
-HXDLIN( 419)						if (s4) {
-HXLINE( 419)							::String s6 = ((HX_(" ",20,00,00,00) + ::little::Little_obj::keywords->TYPE_DECL_OR_CAST) + HX_(" ",20,00,00,00));
-HXDLIN( 419)							s3 = (s6 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),type));
+HXDLIN( 445)						if (s4) {
+HXLINE( 445)							::String s6 = ((HX_(" ",20,00,00,00) + ::little::Little_obj::keywords->TYPE_DECL_OR_CAST) + HX_(" ",20,00,00,00));
+HXDLIN( 445)							s3 = (s6 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),type));
             						}
             						else {
-HXLINE( 419)							s3 = HX_("",00,00,00,00);
+HXLINE( 445)							s3 = HX_("",00,00,00,00);
             						}
-HXDLIN( 419)						s = (s + (s2 + s3));
+HXDLIN( 445)						s = (s + (s2 + s3));
             					}
             					break;
             					case (int)4: {
-HXLINE( 420)						 ::little::interpreter::InterpTokens name1 = token1->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 420)						 ::little::interpreter::InterpTokens params = token1->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 420)						 ::little::interpreter::InterpTokens type1 = token1->_hx_getObject(2).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 420)						 ::little::interpreter::InterpTokens doc1 = token1->_hx_getObject(3).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 420)						::String s7 = ((HX_("",00,00,00,00) + ::little::Little_obj::keywords->FUNCTION_DECLARATION) + HX_(" ",20,00,00,00));
-HXDLIN( 420)						::String s8 = (s7 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),name1));
-HXDLIN( 420)						::String s9;
-HXDLIN( 420)						if (::hx::IsNotNull( params )) {
-HXLINE( 420)							s9 = ((HX_("(",28,00,00,00) + ::little::tools::TextTools_obj::replace(::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),params),HX_(" ,",0c,1c,00,00),HX_(",",2c,00,00,00))) + HX_(")",29,00,00,00));
+HXLINE( 446)						 ::little::interpreter::InterpTokens name1 = token1->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 446)						 ::little::interpreter::InterpTokens params = token1->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 446)						 ::little::interpreter::InterpTokens type1 = token1->_hx_getObject(2).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 446)						 ::little::interpreter::InterpTokens doc1 = token1->_hx_getObject(3).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 446)						::String s7 = ((HX_("",00,00,00,00) + ::little::Little_obj::keywords->FUNCTION_DECLARATION) + HX_(" ",20,00,00,00));
+HXDLIN( 446)						::String s8 = (s7 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),name1));
+HXDLIN( 446)						::String s9;
+HXDLIN( 446)						if (::hx::IsNotNull( params )) {
+HXLINE( 446)							s9 = ((HX_("(",28,00,00,00) + ::little::tools::TextTools_obj::replace(::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),params),HX_(" ,",0c,1c,00,00),HX_(",",2c,00,00,00))) + HX_(")",29,00,00,00));
             						}
             						else {
-HXLINE( 420)							s9 = HX_("",00,00,00,00);
+HXLINE( 446)							s9 = HX_("",00,00,00,00);
             						}
-HXDLIN( 420)						::String s10;
-HXDLIN( 420)						bool s11;
-HXDLIN( 420)						if (::hx::IsNotNull( type1 )) {
-HXLINE( 420)							::String s12 = ::little::tools::Extensions_obj::asJoinedStringPath(type1);
-HXDLIN( 420)							s11 = (s12 != ::little::Little_obj::keywords->TYPE_UNKNOWN);
-            						}
-            						else {
-HXLINE( 420)							s11 = false;
-            						}
-HXDLIN( 420)						if (s11) {
-HXLINE( 420)							::String s13 = ((HX_(" ",20,00,00,00) + ::little::Little_obj::keywords->TYPE_DECL_OR_CAST) + HX_(" ",20,00,00,00));
-HXDLIN( 420)							s10 = (s13 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),type1));
+HXDLIN( 446)						::String s10;
+HXDLIN( 446)						bool s11;
+HXDLIN( 446)						if (::hx::IsNotNull( type1 )) {
+HXLINE( 446)							::String s12 = ::little::tools::Extensions_obj::asJoinedStringPath(type1);
+HXDLIN( 446)							s11 = (s12 != ::little::Little_obj::keywords->TYPE_UNKNOWN);
             						}
             						else {
-HXLINE( 420)							s10 = HX_("",00,00,00,00);
+HXLINE( 446)							s11 = false;
             						}
-HXDLIN( 420)						s = (s + ((s8 + s9) + s10));
+HXDLIN( 446)						if (s11) {
+HXLINE( 446)							::String s13 = ((HX_(" ",20,00,00,00) + ::little::Little_obj::keywords->TYPE_DECL_OR_CAST) + HX_(" ",20,00,00,00));
+HXDLIN( 446)							s10 = (s13 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),type1));
+            						}
+            						else {
+HXLINE( 446)							s10 = HX_("",00,00,00,00);
+            						}
+HXDLIN( 446)						s = (s + ((s8 + s9) + s10));
             					}
             					break;
             					case (int)6: {
-HXLINE( 425)						 ::little::interpreter::InterpTokens name2 = token1->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 425)						 ::little::interpreter::InterpTokens exp = token1->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 425)						 ::little::interpreter::InterpTokens body = token1->_hx_getObject(2).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 425)						::String s14 = ((HX_("",00,00,00,00) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),name2)) + HX_(" ",20,00,00,00));
-HXDLIN( 425)						::String s15;
-HXDLIN( 425)						if (::hx::IsNotNull( exp )) {
-HXLINE( 425)							s15 = ((HX_("(",28,00,00,00) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),exp)) + HX_(")",29,00,00,00));
+HXLINE( 451)						 ::little::interpreter::InterpTokens name2 = token1->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 451)						 ::little::interpreter::InterpTokens exp = token1->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 451)						 ::little::interpreter::InterpTokens body = token1->_hx_getObject(2).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 451)						::String s14 = ((HX_("",00,00,00,00) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),name2)) + HX_(" ",20,00,00,00));
+HXDLIN( 451)						::String s15;
+HXDLIN( 451)						if (::hx::IsNotNull( exp )) {
+HXLINE( 451)							s15 = ((HX_("(",28,00,00,00) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),exp)) + HX_(")",29,00,00,00));
             						}
             						else {
-HXLINE( 425)							s15 = HX_("",00,00,00,00);
+HXLINE( 451)							s15 = HX_("",00,00,00,00);
             						}
-HXDLIN( 425)						s = (s + (((s14 + s15) + HX_(" ",20,00,00,00)) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),body)));
+HXDLIN( 451)						s = (s + (((s14 + s15) + HX_(" ",20,00,00,00)) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),body)));
             					}
             					break;
             					case (int)7: {
-HXLINE( 447)						 ::little::tools::BaseOrderedMap _g1 = token1->_hx_getObject(0).StaticCast<  ::little::tools::BaseOrderedMap >();
-HXDLIN( 447)						{
-HXLINE( 447)							 ::little::interpreter::InterpTokens body1 = token1->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 447)							s = (s + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),body1));
+HXLINE( 478)						 ::little::tools::BaseOrderedMap _g1 = token1->_hx_getObject(0).StaticCast<  ::little::tools::BaseOrderedMap >();
+HXDLIN( 478)						{
+HXLINE( 478)							 ::little::interpreter::InterpTokens body1 = token1->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 478)							s = (s + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),body1));
             						}
             					}
             					break;
             					case (int)8: {
-HXLINE( 424)						 ::little::interpreter::InterpTokens name3 = token1->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 424)						 ::little::interpreter::InterpTokens params1 = token1->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 424)						::String s16 = ((HX_("",00,00,00,00) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),name3)) + HX_("(",28,00,00,00));
-HXDLIN( 424)						s = (s + ::little::tools::TextTools_obj::replaceIfLast(((s16 + ::little::tools::TextTools_obj::replace(::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),params1),HX_(" ,",0c,1c,00,00),HX_(",",2c,00,00,00))) + HX_(")",29,00,00,00)),HX_(" )",09,1c,00,00),HX_(")",29,00,00,00)));
+HXLINE( 450)						 ::little::interpreter::InterpTokens name3 = token1->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 450)						 ::little::interpreter::InterpTokens params1 = token1->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 450)						::String s16 = ((HX_("",00,00,00,00) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),name3)) + HX_("(",28,00,00,00));
+HXDLIN( 450)						s = (s + ::little::tools::TextTools_obj::replaceIfLast(((s16 + ::little::tools::TextTools_obj::replace(::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),params1),HX_(" ,",0c,1c,00,00),HX_(",",2c,00,00,00))) + HX_(")",29,00,00,00)),HX_(" )",09,1c,00,00),HX_(")",29,00,00,00)));
             					}
             					break;
             					case (int)9: {
-HXLINE( 426)						 ::little::interpreter::InterpTokens value = token1->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 426)						 ::little::interpreter::InterpTokens type2 = token1->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 426)						::String s17 = ((HX_("",00,00,00,00) + ::little::Little_obj::keywords->FUNCTION_RETURN) + HX_(" ",20,00,00,00));
-HXDLIN( 426)						s = (s + (s17 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),value)));
+HXLINE( 452)						 ::little::interpreter::InterpTokens value = token1->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 452)						 ::little::interpreter::InterpTokens type2 = token1->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 452)						::String s17 = ((HX_("",00,00,00,00) + ::little::Little_obj::keywords->FUNCTION_RETURN) + HX_(" ",20,00,00,00));
+HXDLIN( 452)						s = (s + (s17 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),value)));
             					}
             					break;
             					case (int)10: {
-HXLINE( 421)						::Array< ::Dynamic> assignees = token1->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 421)						 ::little::interpreter::InterpTokens value1 = token1->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 421)						::Array< ::Dynamic> _this = assignees->concat(::Array_obj< ::Dynamic>::__new(1)->init(0,value1));
-HXDLIN( 421)						::Array< ::String > result = ::Array_obj< ::String >::__new(_this->length);
-HXDLIN( 421)						{
-HXLINE( 421)							int _g2 = 0;
-HXDLIN( 421)							int _g3 = _this->length;
-HXDLIN( 421)							while((_g2 < _g3)){
-HXLINE( 421)								_g2 = (_g2 + 1);
-HXDLIN( 421)								int i = (_g2 - 1);
-HXDLIN( 421)								{
-HXLINE( 421)									::String inValue = ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),_hx_array_unsafe_get(_this,i));
-HXDLIN( 421)									result->__unsafe_set(i,inValue);
+HXLINE( 447)						::Array< ::Dynamic> assignees = token1->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 447)						 ::little::interpreter::InterpTokens value1 = token1->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 447)						::Array< ::Dynamic> _this = assignees->concat(::Array_obj< ::Dynamic>::__new(1)->init(0,value1));
+HXDLIN( 447)						::Array< ::String > result = ::Array_obj< ::String >::__new(_this->length);
+HXDLIN( 447)						{
+HXLINE( 447)							int _g2 = 0;
+HXDLIN( 447)							int _g3 = _this->length;
+HXDLIN( 447)							while((_g2 < _g3)){
+HXLINE( 447)								_g2 = (_g2 + 1);
+HXDLIN( 447)								int i = (_g2 - 1);
+HXDLIN( 447)								{
+HXLINE( 447)									::String inValue = ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),_hx_array_unsafe_get(_this,i));
+HXDLIN( 447)									result->__unsafe_set(i,inValue);
             								}
             							}
             						}
-HXDLIN( 421)						s = (s + ::little::tools::TextTools_obj::replace(result->join(HX_(" = ",63,7d,18,00)),HX_("  =",3d,64,18,00),HX_(" =",1d,1c,00,00)));
+HXDLIN( 447)						s = (s + ::little::tools::TextTools_obj::replace(result->join(HX_(" = ",63,7d,18,00)),HX_("  =",3d,64,18,00),HX_(" =",1d,1c,00,00)));
             					}
             					break;
             					case (int)11: {
-HXLINE( 423)						 ::little::interpreter::InterpTokens value2 = token1->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 423)						 ::little::interpreter::InterpTokens type3 = token1->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 423)						::String s18 = ((HX_("",00,00,00,00) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),value2)) + HX_(" ",20,00,00,00));
-HXDLIN( 423)						::String s19 = ((s18 + ::little::Little_obj::keywords->TYPE_DECL_OR_CAST) + HX_(" ",20,00,00,00));
-HXDLIN( 423)						s = (s + (s19 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),type3)));
+HXLINE( 449)						 ::little::interpreter::InterpTokens value2 = token1->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 449)						 ::little::interpreter::InterpTokens type3 = token1->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 449)						::String s18 = ((HX_("",00,00,00,00) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),value2)) + HX_(" ",20,00,00,00));
+HXDLIN( 449)						::String s19 = ((s18 + ::little::Little_obj::keywords->TYPE_DECL_OR_CAST) + HX_(" ",20,00,00,00));
+HXDLIN( 449)						s = (s + (s19 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),type3)));
             					}
             					break;
             					case (int)12: {
-HXLINE( 427)						::Array< ::Dynamic> parts = token1->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 427)						 ::little::interpreter::InterpTokens type4 = token1->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 427)						s = (s + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(parts,null()));
+HXLINE( 453)						::Array< ::Dynamic> parts = token1->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 453)						 ::little::interpreter::InterpTokens type4 = token1->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 453)						s = (s + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(parts,null()));
             					}
             					break;
             					case (int)13: {
-HXLINE( 428)						::Array< ::Dynamic> body2 = token1->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 428)						 ::little::interpreter::InterpTokens type5 = token1->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 428)						{
-HXLINE( 429)							 ::Dynamic _hx_tmp3 = ::hx::ClassOf< ::little::tools::PrettyPrinter >();
-HXDLIN( 429)							::little::tools::PrettyPrinter_obj::indent = (::little::tools::PrettyPrinter_obj::indent + HX_("\t",09,00,00,00));
-HXLINE( 430)							::Array< ::Dynamic> _this1 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::SET_MODULE_dyn())->copy();
-HXDLIN( 430)							::Array< ::String > result1 = ::Array_obj< ::String >::__new(_this1->length);
-HXDLIN( 430)							{
-HXLINE( 430)								int _g4 = 0;
-HXDLIN( 430)								int _g5 = _this1->length;
-HXDLIN( 430)								while((_g4 < _g5)){
-HXLINE( 430)									_g4 = (_g4 + 1);
-HXDLIN( 430)									int i1 = (_g4 - 1);
-HXDLIN( 430)									{
-HXLINE( 430)										::String inValue1 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this1,i1)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 430)										result1->__unsafe_set(i1,inValue1);
+HXLINE( 454)						::Array< ::Dynamic> body2 = token1->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 454)						 ::little::interpreter::InterpTokens type5 = token1->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 454)						{
+HXLINE( 455)							 ::Dynamic _hx_tmp3 = ::hx::ClassOf< ::little::tools::PrettyPrinter >();
+HXDLIN( 455)							::little::tools::PrettyPrinter_obj::indent = (::little::tools::PrettyPrinter_obj::indent + HX_("\t",09,00,00,00));
+HXLINE( 456)							::Array< ::Dynamic> _this1 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::SET_MODULE_dyn())->copy();
+HXDLIN( 456)							::Array< ::String > result1 = ::Array_obj< ::String >::__new(_this1->length);
+HXDLIN( 456)							{
+HXLINE( 456)								int _g4 = 0;
+HXDLIN( 456)								int _g5 = _this1->length;
+HXDLIN( 456)								while((_g4 < _g5)){
+HXLINE( 456)									_g4 = (_g4 + 1);
+HXDLIN( 456)									int i1 = (_g4 - 1);
+HXDLIN( 456)									{
+HXLINE( 456)										::String inValue1 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this1,i1)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 456)										result1->__unsafe_set(i1,inValue1);
             									}
             								}
             							}
-HXDLIN( 430)							if (result1->contains(::Type_obj::enumConstructor(body2->__get(0).StaticCast<  ::little::interpreter::InterpTokens >()).toLowerCase())) {
-HXLINE( 430)								body2->shift().StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 456)							if (result1->contains(::Type_obj::enumConstructor(body2->__get(0).StaticCast<  ::little::interpreter::InterpTokens >()).toLowerCase())) {
+HXLINE( 456)								body2->shift().StaticCast<  ::little::interpreter::InterpTokens >();
             							}
-HXLINE( 431)							::Array< ::Dynamic> _this2 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::SET_LINE_dyn())->copy();
-HXDLIN( 431)							::Array< ::String > result2 = ::Array_obj< ::String >::__new(_this2->length);
-HXDLIN( 431)							{
-HXLINE( 431)								int _g6 = 0;
-HXDLIN( 431)								int _g7 = _this2->length;
-HXDLIN( 431)								while((_g6 < _g7)){
-HXLINE( 431)									_g6 = (_g6 + 1);
-HXDLIN( 431)									int i2 = (_g6 - 1);
-HXDLIN( 431)									{
-HXLINE( 431)										::String inValue2 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this2,i2)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 431)										result2->__unsafe_set(i2,inValue2);
+HXLINE( 457)							::Array< ::Dynamic> _this2 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::SET_LINE_dyn())->copy();
+HXDLIN( 457)							::Array< ::String > result2 = ::Array_obj< ::String >::__new(_this2->length);
+HXDLIN( 457)							{
+HXLINE( 457)								int _g6 = 0;
+HXDLIN( 457)								int _g7 = _this2->length;
+HXDLIN( 457)								while((_g6 < _g7)){
+HXLINE( 457)									_g6 = (_g6 + 1);
+HXDLIN( 457)									int i2 = (_g6 - 1);
+HXDLIN( 457)									{
+HXLINE( 457)										::String inValue2 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this2,i2)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 457)										result2->__unsafe_set(i2,inValue2);
             									}
             								}
             							}
-HXDLIN( 431)							if (result2->contains(::Type_obj::enumConstructor(body2->__get(0).StaticCast<  ::little::interpreter::InterpTokens >()).toLowerCase())) {
-HXLINE( 431)								body2->shift().StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 457)							if (result2->contains(::Type_obj::enumConstructor(body2->__get(0).StaticCast<  ::little::interpreter::InterpTokens >()).toLowerCase())) {
+HXLINE( 457)								body2->shift().StaticCast<  ::little::interpreter::InterpTokens >();
             							}
-HXLINE( 432)							::String s20 = ((HX_("{",7b,00,00,00) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(body2,null())) + HX_("} ",03,6d,00,00));
-HXDLIN( 432)							::String s21;
-HXDLIN( 432)							bool s22;
-HXDLIN( 432)							if (::hx::IsNotNull( type5 )) {
-HXLINE( 432)								::String s23 = ::little::tools::Extensions_obj::asJoinedStringPath(type5);
-HXDLIN( 432)								s22 = (s23 != ::little::Little_obj::keywords->TYPE_UNKNOWN);
-            							}
-            							else {
-HXLINE( 432)								s22 = false;
-            							}
-HXDLIN( 432)							if (s22) {
-HXLINE( 432)								::String s24 = ((HX_("",00,00,00,00) + ::little::Little_obj::keywords->TYPE_DECL_OR_CAST) + HX_(" ",20,00,00,00));
-HXDLIN( 432)								s21 = (s24 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),type5));
+HXLINE( 458)							::String s20 = ((HX_("{",7b,00,00,00) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(body2,null())) + HX_("} ",03,6d,00,00));
+HXDLIN( 458)							::String s21;
+HXDLIN( 458)							bool s22;
+HXDLIN( 458)							if (::hx::IsNotNull( type5 )) {
+HXLINE( 458)								::String s23 = ::little::tools::Extensions_obj::asJoinedStringPath(type5);
+HXDLIN( 458)								s22 = (s23 != ::little::Little_obj::keywords->TYPE_UNKNOWN);
             							}
             							else {
-HXLINE( 432)								s21 = HX_("",00,00,00,00);
+HXLINE( 458)								s22 = false;
             							}
-HXDLIN( 432)							s = (s + (s20 + s21));
-HXLINE( 433)							s = ::little::tools::TextTools_obj::replaceLast(s,HX_("\t}",54,08,00,00),HX_("}",7d,00,00,00));
-HXLINE( 434)							::little::tools::PrettyPrinter_obj::indent = ::little::tools::TextTools_obj::replaceLast(::little::tools::PrettyPrinter_obj::indent,HX_("\t",09,00,00,00),HX_("",00,00,00,00));
+HXDLIN( 458)							if (s22) {
+HXLINE( 458)								::String s24 = ((HX_("",00,00,00,00) + ::little::Little_obj::keywords->TYPE_DECL_OR_CAST) + HX_(" ",20,00,00,00));
+HXDLIN( 458)								s21 = (s24 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),type5));
+            							}
+            							else {
+HXLINE( 458)								s21 = HX_("",00,00,00,00);
+            							}
+HXDLIN( 458)							s = (s + (s20 + s21));
+HXLINE( 459)							s = ::little::tools::TextTools_obj::replaceLast(s,HX_("\t}",54,08,00,00),HX_("}",7d,00,00,00));
+HXLINE( 460)							::little::tools::PrettyPrinter_obj::indent = ::little::tools::TextTools_obj::replaceLast(::little::tools::PrettyPrinter_obj::indent,HX_("\t",09,00,00,00),HX_("",00,00,00,00));
             						}
             					}
             					break;
             					case (int)14: {
-HXLINE( 435)						::Array< ::Dynamic> parts1 = token1->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 435)						s = (s + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(parts1,null()));
+HXLINE( 461)						::Array< ::Dynamic> parts1 = token1->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 461)						s = (s + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(parts1,null()));
             					}
             					break;
             					case (int)15: {
-HXLINE( 436)						 ::little::interpreter::InterpTokens name4 = token1->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 436)						 ::little::interpreter::InterpTokens property = token1->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 436)						::String s25 = (HX_("",00,00,00,00) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),name4));
-HXDLIN( 436)						::String s26 = (s25 + ::little::Little_obj::keywords->PROPERTY_ACCESS_SIGN);
-HXDLIN( 436)						s = (s + (s26 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),property)));
+HXLINE( 462)						 ::little::interpreter::InterpTokens name4 = token1->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 462)						 ::little::interpreter::InterpTokens property = token1->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 462)						::String s25 = (HX_("",00,00,00,00) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),name4));
+HXDLIN( 462)						::String s26 = (s25 + ::little::Little_obj::keywords->PROPERTY_ACCESS_SIGN);
+HXDLIN( 462)						s = (s + (s26 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),property)));
             					}
             					break;
             					case (int)16: {
-HXLINE( 438)						int num = token1->_hx_getInt(0);
-HXDLIN( 438)						s = (s + num);
+HXLINE( 469)						int num = token1->_hx_getInt(0);
+HXDLIN( 469)						s = (s + num);
             					}
             					break;
             					case (int)17: {
-HXLINE( 439)						Float num1 = token1->_hx_getFloat(0);
-HXDLIN( 439)						s = (s + num1);
+HXLINE( 470)						Float num1 = token1->_hx_getFloat(0);
+HXDLIN( 470)						s = (s + num1);
             					}
             					break;
             					case (int)18: {
-HXLINE( 440)						::String string = token1->_hx_getString(0);
-HXDLIN( 440)						s = (s + ((HX_("\"",22,00,00,00) + string) + HX_("\"",22,00,00,00)));
+HXLINE( 471)						::String string = token1->_hx_getString(0);
+HXDLIN( 471)						s = (s + ((HX_("\"",22,00,00,00) + string) + HX_("\"",22,00,00,00)));
             					}
             					break;
             					case (int)19: {
-HXLINE( 441)						::String doc2 = token1->_hx_getString(0);
-HXDLIN( 441)						s = (s + ((HX_("\"\"\"",62,ea,19,00) + doc2) + HX_("\"\"\"",62,ea,19,00)));
+HXLINE( 472)						::String doc2 = token1->_hx_getString(0);
+HXDLIN( 472)						s = (s + ((HX_("\"\"\"",62,ea,19,00) + doc2) + HX_("\"\"\"",62,ea,19,00)));
             					}
             					break;
             					case (int)20: {
-HXLINE( 446)						int pointer = token1->_hx_getInt(0);
-HXDLIN( 446)						::String s27;
-HXDLIN( 446)						if (::hx::IsNotNull( ::little::Little_obj::memory )) {
-HXLINE( 446)							s27 = ::little::Little_obj::memory->getTypeName(pointer);
+HXLINE( 477)						int pointer = token1->_hx_getInt(0);
+HXDLIN( 477)						::String s27;
+HXDLIN( 477)						if (::hx::IsNotNull( ::little::Little_obj::memory )) {
+HXLINE( 477)							s27 = ::little::Little_obj::memory->getTypeName(pointer);
             						}
             						else {
-HXLINE( 446)							HX_STACK_DO_THROW((HX_("No memory for ClassPointer token ",6b,1c,b9,f1) + ::little::interpreter::memory::_MemoryPointer::MemoryPointer_Impl__obj::toString(pointer)));
+HXLINE( 477)							HX_STACK_DO_THROW((HX_("No memory for ClassPointer token ",6b,1c,b9,f1) + ::little::interpreter::memory::_MemoryPointer::MemoryPointer_Impl__obj::toString(pointer)));
             						}
-HXDLIN( 446)						s = (s + s27);
+HXDLIN( 477)						s = (s + s27);
             					}
             					break;
             					case (int)21: {
-HXLINE( 437)						::String sign = token1->_hx_getString(0);
-HXDLIN( 437)						s = (s + sign);
+HXLINE( 463)						::String sign = token1->_hx_getString(0);
+HXLINE( 464)						if (!(::little::tools::PrettyPrinter_obj::requiresWhitespaceBeforeSign(sign))) {
+HXLINE( 464)							s = ::little::tools::TextTools_obj::replaceIfLast(s,HX_(" ",20,00,00,00),HX_("",00,00,00,00));
+            						}
+HXLINE( 465)						s = (s + sign);
+HXLINE( 466)						if (::little::tools::PrettyPrinter_obj::requiresWhitespaceAfterSign(sign)) {
+HXLINE( 466)							s = (s + HX_(" ",20,00,00,00));
+            						}
+HXLINE( 467)						continue;
             					}
             					break;
             					case (int)22: {
-HXLINE( 443)						s = (s + ::little::Little_obj::keywords->NULL_VALUE);
+HXLINE( 474)						s = (s + ::little::Little_obj::keywords->NULL_VALUE);
             					}
             					break;
             					case (int)23: {
-HXLINE( 444)						s = (s + ::little::Little_obj::keywords->TRUE_VALUE);
+HXLINE( 475)						s = (s + ::little::Little_obj::keywords->TRUE_VALUE);
             					}
             					break;
             					case (int)24: {
-HXLINE( 445)						s = (s + ::little::Little_obj::keywords->FALSE_VALUE);
+HXLINE( 476)						s = (s + ::little::Little_obj::keywords->FALSE_VALUE);
             					}
             					break;
             					case (int)25: {
-HXLINE( 422)						::String word = token1->_hx_getString(0);
-HXDLIN( 422)						s = (s + word);
+HXLINE( 448)						::String word = token1->_hx_getString(0);
+HXDLIN( 448)						s = (s + word);
             					}
             					break;
             					case (int)27: {
-HXLINE( 442)						::String msg = token1->_hx_getString(0);
+HXLINE( 473)						::String msg = token1->_hx_getString(0);
             					}
             					break;
             					default:{
-HXLINE( 448)						HX_STACK_DO_THROW(((HX_("Stringifying token ",f0,5b,37,55) + ::Std_obj::string(token1)) + HX_(" does not make sense, as it is represented by other tokens on parse time, and thus cannot appear in a non-manipulated InterpTokens AST",ab,18,64,50)));
+HXLINE( 479)						HX_STACK_DO_THROW(((HX_("Stringifying token ",f0,5b,37,55) + ::Std_obj::string(token1)) + HX_(" does not make sense, as it is represented by other tokens on parse time, and thus cannot appear in a non-manipulated InterpTokens AST",ab,18,64,50)));
             					}
             				}
-HXLINE( 450)				s = (s + HX_(" ",20,00,00,00));
+HXLINE( 481)				s = (s + HX_(" ",20,00,00,00));
             			}
             		}
-HXLINE( 453)		return ::little::tools::TextTools_obj::replaceLast(::StringTools_obj::ltrim(s),HX_(" ",20,00,00,00),HX_("",00,00,00,00));
+HXLINE( 484)		return ::little::tools::TextTools_obj::replaceLast(::StringTools_obj::ltrim(s),HX_(" ",20,00,00,00),HX_("",00,00,00,00));
             	}
 
 
@@ -1445,55 +1484,55 @@ STATIC_HX_DEFINE_DYNAMIC_FUNC2(PrettyPrinter_obj,stringifyInterpreter,return )
 ::String PrettyPrinter_obj::prettyPrintOperatorPriority( ::haxe::ds::IntMap priority){
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_0) HXARGC(2)
             		int _hx_run(int x,int y){
-            			HX_STACKFRAME(&_hx_pos_8097a7bac51ae56b_462_prettyPrintOperatorPriority)
-HXLINE( 462)			return (x - y);
+            			HX_STACKFRAME(&_hx_pos_8097a7bac51ae56b_493_prettyPrintOperatorPriority)
+HXLINE( 493)			return (x - y);
             		}
             		HX_END_LOCAL_FUNC2(return)
 
-            	HX_STACKFRAME(&_hx_pos_8097a7bac51ae56b_460_prettyPrintOperatorPriority)
-HXLINE( 461)		::Array< int > _g = ::Array_obj< int >::__new(0);
-HXDLIN( 461)		{
-HXLINE( 461)			 ::Dynamic x = priority->keys();
-HXDLIN( 461)			while(( (bool)(x->__Field(HX_("hasNext",6d,a5,46,18),::hx::paccDynamic)()) )){
-HXLINE( 461)				int x1 = ( (int)(x->__Field(HX_("next",f3,84,02,49),::hx::paccDynamic)()) );
-HXDLIN( 461)				_g->push(x1);
+            	HX_STACKFRAME(&_hx_pos_8097a7bac51ae56b_491_prettyPrintOperatorPriority)
+HXLINE( 492)		::Array< int > _g = ::Array_obj< int >::__new(0);
+HXDLIN( 492)		{
+HXLINE( 492)			 ::Dynamic x = priority->keys();
+HXDLIN( 492)			while(( (bool)(x->__Field(HX_("hasNext",6d,a5,46,18),::hx::paccDynamic)()) )){
+HXLINE( 492)				int x1 = ( (int)(x->__Field(HX_("next",f3,84,02,49),::hx::paccDynamic)()) );
+HXDLIN( 492)				_g->push(x1);
             			}
             		}
-HXDLIN( 461)		::Array< int > sortedKeys = _g;
-HXLINE( 462)		::haxe::ds::ArraySort_obj::sort(sortedKeys, ::Dynamic(new _hx_Closure_0()));
-HXLINE( 464)		::String string = HX_("",00,00,00,00);
-HXLINE( 466)		{
-HXLINE( 466)			int _g1 = 0;
-HXDLIN( 466)			while((_g1 < sortedKeys->length)){
-HXLINE( 466)				int key = sortedKeys->__get(_g1);
-HXDLIN( 466)				_g1 = (_g1 + 1);
-HXLINE( 467)				string = (string + ((HX_("",00,00,00,00) + key) + HX_(": (",c2,1e,2c,00)));
-HXLINE( 468)				{
-HXLINE( 468)					int _g2 = 0;
-HXDLIN( 468)					::Array< ::Dynamic> _g3 = ( (::Array< ::Dynamic>)(priority->get(key)) );
-HXDLIN( 468)					while((_g2 < _g3->length)){
-HXLINE( 468)						 ::Dynamic obj = _g3->__get(_g2);
-HXDLIN( 468)						_g2 = (_g2 + 1);
-HXLINE( 469)						if (::hx::IsPointerEq( obj->__Field(HX_("side",97,8d,53,4c),::hx::paccDynamic),::little::interpreter::memory::OperatorType_obj::LHS_RHS_dyn() )) {
-HXLINE( 469)							string = ( (::String)((string + ((HX_("_",5f,00,00,00) + obj->__Field(HX_("sign",3d,90,53,4c),::hx::paccDynamic)) + HX_("_",5f,00,00,00)))) );
+HXDLIN( 492)		::Array< int > sortedKeys = _g;
+HXLINE( 493)		::haxe::ds::ArraySort_obj::sort(sortedKeys, ::Dynamic(new _hx_Closure_0()));
+HXLINE( 495)		::String string = HX_("",00,00,00,00);
+HXLINE( 497)		{
+HXLINE( 497)			int _g1 = 0;
+HXDLIN( 497)			while((_g1 < sortedKeys->length)){
+HXLINE( 497)				int key = sortedKeys->__get(_g1);
+HXDLIN( 497)				_g1 = (_g1 + 1);
+HXLINE( 498)				string = (string + ((HX_("",00,00,00,00) + key) + HX_(": (",c2,1e,2c,00)));
+HXLINE( 499)				{
+HXLINE( 499)					int _g2 = 0;
+HXDLIN( 499)					::Array< ::Dynamic> _g3 = ( (::Array< ::Dynamic>)(priority->get(key)) );
+HXDLIN( 499)					while((_g2 < _g3->length)){
+HXLINE( 499)						 ::Dynamic obj = _g3->__get(_g2);
+HXDLIN( 499)						_g2 = (_g2 + 1);
+HXLINE( 500)						if (::hx::IsPointerEq( obj->__Field(HX_("side",97,8d,53,4c),::hx::paccDynamic),::little::interpreter::memory::OperatorType_obj::LHS_RHS_dyn() )) {
+HXLINE( 500)							string = ( (::String)((string + ((HX_("_",5f,00,00,00) + obj->__Field(HX_("sign",3d,90,53,4c),::hx::paccDynamic)) + HX_("_",5f,00,00,00)))) );
             						}
             						else {
-HXLINE( 470)							if (::hx::IsPointerEq( obj->__Field(HX_("side",97,8d,53,4c),::hx::paccDynamic),::little::interpreter::memory::OperatorType_obj::LHS_ONLY_dyn() )) {
-HXLINE( 470)								string = ( (::String)((string + (HX_("_",5f,00,00,00) + obj->__Field(HX_("sign",3d,90,53,4c),::hx::paccDynamic)))) );
+HXLINE( 501)							if (::hx::IsPointerEq( obj->__Field(HX_("side",97,8d,53,4c),::hx::paccDynamic),::little::interpreter::memory::OperatorType_obj::LHS_ONLY_dyn() )) {
+HXLINE( 501)								string = ( (::String)((string + (HX_("_",5f,00,00,00) + obj->__Field(HX_("sign",3d,90,53,4c),::hx::paccDynamic)))) );
             							}
             							else {
-HXLINE( 471)								if (::hx::IsPointerEq( obj->__Field(HX_("side",97,8d,53,4c),::hx::paccDynamic),::little::interpreter::memory::OperatorType_obj::RHS_ONLY_dyn() )) {
-HXLINE( 471)									string = ( (::String)((string + ((HX_("",00,00,00,00) + obj->__Field(HX_("sign",3d,90,53,4c),::hx::paccDynamic)) + HX_("_",5f,00,00,00)))) );
+HXLINE( 502)								if (::hx::IsPointerEq( obj->__Field(HX_("side",97,8d,53,4c),::hx::paccDynamic),::little::interpreter::memory::OperatorType_obj::RHS_ONLY_dyn() )) {
+HXLINE( 502)									string = ( (::String)((string + ((HX_("",00,00,00,00) + obj->__Field(HX_("sign",3d,90,53,4c),::hx::paccDynamic)) + HX_("_",5f,00,00,00)))) );
             								}
             							}
             						}
-HXLINE( 473)						string = (string + HX_(", ",74,26,00,00));
+HXLINE( 504)						string = (string + HX_(", ",74,26,00,00));
             					}
             				}
-HXLINE( 475)				string = (::little::tools::TextTools_obj::replaceLast(string,HX_(", ",74,26,00,00),HX_(")",29,00,00,00)) + HX_("\n",0a,00,00,00));
+HXLINE( 506)				string = (::little::tools::TextTools_obj::replaceLast(string,HX_(", ",74,26,00,00),HX_(")",29,00,00,00)) + HX_("\n",0a,00,00,00));
             			}
             		}
-HXLINE( 478)		return string;
+HXLINE( 509)		return string;
             	}
 
 
@@ -1535,7 +1574,11 @@ bool PrettyPrinter_obj::__GetStatic(const ::String &inName, Dynamic &outValue, :
 		if (HX_FIELD_EQ(inName,"stringifyInterpreter") ) { outValue = stringifyInterpreter_dyn(); return true; }
 		break;
 	case 27:
+		if (HX_FIELD_EQ(inName,"requiresWhitespaceAfterSign") ) { outValue = requiresWhitespaceAfterSign_dyn(); return true; }
 		if (HX_FIELD_EQ(inName,"prettyPrintOperatorPriority") ) { outValue = prettyPrintOperatorPriority_dyn(); return true; }
+		break;
+	case 28:
+		if (HX_FIELD_EQ(inName,"requiresWhitespaceBeforeSign") ) { outValue = requiresWhitespaceBeforeSign_dyn(); return true; }
 	}
 	return false;
 }
@@ -1590,6 +1633,8 @@ static ::String PrettyPrinter_obj_sStaticFields[] = {
 	HX_("getTree_PARSER",ea,1b,38,66),
 	HX_("getTree_INTERP",df,f8,35,17),
 	HX_("indent",6c,0c,f3,93),
+	HX_("requiresWhitespaceBeforeSign",c7,e4,55,0a),
+	HX_("requiresWhitespaceAfterSign",6e,6e,85,85),
 	HX_("stringifyParser",0a,71,36,01),
 	HX_("stringifyInterpreter",af,a1,de,27),
 	HX_("prettyPrintOperatorPriority",df,02,4f,1a),

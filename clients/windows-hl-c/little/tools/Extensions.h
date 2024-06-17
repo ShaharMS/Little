@@ -19,6 +19,7 @@ struct _little__tools__$Extensions {
 	varray* _hx___implementedBy__;
 	String _hx___name__;
 	vdynamic* _hx___constructor__;
+	vclosure* extractIdentifier;
 	vclosure* asStringPath;
 	vclosure* asJoinedStringPath;
 	vclosure* type;

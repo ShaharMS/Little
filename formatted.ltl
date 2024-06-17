@@ -18,7 +18,7 @@ while (true ! = false) print({define z = 3, z} )
 
 whenever (x > 5) {print(x)
 }  
-after ({read("x")} = = "6".toNumber()) print("Hey!") 
+after ({read("x")} == "6".toNumber()) print("Hey!") 
 
 print(5 + 3 - 2 * 5 ^ 2 + 3 * 4 / 4 + 4 ! + 8 + - 2)
 

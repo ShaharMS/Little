@@ -34,7 +34,7 @@ class Runtime {
     /**
     	The module in which tokens are currently interpreted.
     **/
-    public var module(default, null):String;
+    public var module(default, null):String = Little.keywords.MAIN_MODULE_NAME;
 
     /**
         The token that has just been interpreted

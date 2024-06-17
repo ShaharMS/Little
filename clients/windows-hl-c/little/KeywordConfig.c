@@ -352,7 +352,7 @@ void little_KeywordConfig_new(little__KeywordConfig r0,little__KeywordConfig r1,
 	r22 = hl_alloc_virtual(&t$vrt_329ffa8);
 	r23 = (String)s$src_little_KeywordConfig_hx;
 	if( hl_vfields(r22)[1] ) *(String*)(hl_vfields(r22)[1]) = (String)r23; else hl_dyn_setp(r22->value,37969014/*fileName*/,&t$String,r23);
-	r15 = 45;
+	r15 = 57;
 	if( hl_vfields(r22)[2] ) *(int*)(hl_vfields(r22)[2]) = (int)r15; else hl_dyn_seti(r22->value,371360620/*lineNumber*/,&t$_i32,r15);
 	r23 = (String)s$little_KeywordConfig;
 	if( hl_vfields(r22)[0] ) *(String*)(hl_vfields(r22)[0]) = (String)r23; else hl_dyn_setp(r22->value,-63073762/*className*/,&t$String,r23);
@@ -373,7 +373,7 @@ void little_KeywordConfig_new(little__KeywordConfig r0,little__KeywordConfig r1,
 	r22 = hl_alloc_virtual(&t$vrt_329ffa8);
 	r23 = (String)s$src_little_KeywordConfig_hx;
 	if( hl_vfields(r22)[1] ) *(String*)(hl_vfields(r22)[1]) = (String)r23; else hl_dyn_setp(r22->value,37969014/*fileName*/,&t$String,r23);
-	r15 = 47;
+	r15 = 59;
 	if( hl_vfields(r22)[2] ) *(int*)(hl_vfields(r22)[2]) = (int)r15; else hl_dyn_seti(r22->value,371360620/*lineNumber*/,&t$_i32,r15);
 	r23 = (String)s$little_KeywordConfig;
 	if( hl_vfields(r22)[0] ) *(String*)(hl_vfields(r22)[0]) = (String)r23; else hl_dyn_setp(r22->value,-63073762/*className*/,&t$String,r23);
@@ -395,7 +395,7 @@ void little_KeywordConfig_new(little__KeywordConfig r0,little__KeywordConfig r1,
 	r22 = hl_alloc_virtual(&t$vrt_329ffa8);
 	r23 = (String)s$src_little_KeywordConfig_hx;
 	if( hl_vfields(r22)[1] ) *(String*)(hl_vfields(r22)[1]) = (String)r23; else hl_dyn_setp(r22->value,37969014/*fileName*/,&t$String,r23);
-	r15 = 49;
+	r15 = 61;
 	if( hl_vfields(r22)[2] ) *(int*)(hl_vfields(r22)[2]) = (int)r15; else hl_dyn_seti(r22->value,371360620/*lineNumber*/,&t$_i32,r15);
 	r23 = (String)s$little_KeywordConfig;
 	if( hl_vfields(r22)[0] ) *(String*)(hl_vfields(r22)[0]) = (String)r23; else hl_dyn_setp(r22->value,-63073762/*className*/,&t$String,r23);
@@ -421,7 +421,7 @@ void little_KeywordConfig_new(little__KeywordConfig r0,little__KeywordConfig r1,
 	r22 = hl_alloc_virtual(&t$vrt_329ffa8);
 	r23 = (String)s$src_little_KeywordConfig_hx;
 	if( hl_vfields(r22)[1] ) *(String*)(hl_vfields(r22)[1]) = (String)r23; else hl_dyn_setp(r22->value,37969014/*fileName*/,&t$String,r23);
-	r15 = 51;
+	r15 = 63;
 	if( hl_vfields(r22)[2] ) *(int*)(hl_vfields(r22)[2]) = (int)r15; else hl_dyn_seti(r22->value,371360620/*lineNumber*/,&t$_i32,r15);
 	r23 = (String)s$little_KeywordConfig;
 	if( hl_vfields(r22)[0] ) *(String*)(hl_vfields(r22)[0]) = (String)r23; else hl_dyn_setp(r22->value,-63073762/*className*/,&t$String,r23);

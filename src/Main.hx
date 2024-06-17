@@ -55,6 +55,10 @@ class Main {
 		UnitTests.run();
 		#elseif formatting
 		File.saveContent("formatted.txt", Little.format(Resource.getString("sample")));
+		// trace(Little.format("\n").countOccurrencesOf("\n"));
+		// trace("{\nwewe\n}");
+		// trace(Little.format("{\nwewe\n}"));
+		// trace(PrettyPrinter.printParserAst(Parser.parse(Lexer.lex("{\nwewe\n}"))));
 		#elseif sys
 		try {
 			var preDefInput:String = null;

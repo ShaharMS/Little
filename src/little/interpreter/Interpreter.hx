@@ -16,6 +16,11 @@ using little.tools.TextTools;
 using little.tools.Extensions;
 @:access(little.interpreter.Runtime)
 class Interpreter {
+	/**
+        Converts an array of `ParserTokens` into an array of `InterpTokens`.
+		@param pre An array of `ParserTokens`
+		@return Array<InterpTokens>
+	**/
 	public static function convert(pre:Rest<little.parser.Tokens.ParserTokens>):Array<InterpTokens> {
 		if (pre.length == 1 && pre[0] == null) return [null];
 		var post:Array<InterpTokens> = [];

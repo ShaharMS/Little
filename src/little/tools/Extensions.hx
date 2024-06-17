@@ -84,8 +84,16 @@ class Extensions {
 	    Grabs the string from `Identifier` or `Characters` tokens.  
 		If `token` is not an `Identifier` or `Characters` token, it will use the result of `Interpreter.run([token])`.
 	**/
-	public static inline function extractIdentifier(token:InterpTokens):String {
-		return is(token, IDENTIFIER) ? parameter(token, 0) : parameter(Interpreter.run([token]), 0);
+	public static function extractIdentifier(token:InterpTokens):String {
+		if (is(token, IDENTIFIER)) return parameter(token, 0)
+		else if (is(token, PROPERTY_ACCESS)) {
+			var t = Interpreter.evaluate(token);
+			if (is(t, IDENTIFIER, PROPERTY_ACCESS)) return extractIdentifier(t);
+			else if (is(t, CLASS_POINTER)) return Little.memory.getTypeName(parameter(t, 0));
+			return parameter(t, 0);
+		}
+
+		return parameter(Interpreter.evaluate(token), 0);
 	}
 
 	/**

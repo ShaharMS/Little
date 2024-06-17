@@ -26,6 +26,8 @@ struct _little__tools__$PrettyPrinter {
 	int l;
 	vclosure* getTree_INTERP;
 	String indent;
+	vclosure* requiresWhitespaceBeforeSign;
+	vclosure* requiresWhitespaceAfterSign;
 	vclosure* stringifyParser;
 	vclosure* stringifyInterpreter;
 };

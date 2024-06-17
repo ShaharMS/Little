@@ -35,6 +35,7 @@ String hl_types_ArrayObj_join(hl__types__ArrayObj,String);
 void hl_types_ArrayObj_unshift(hl__types__ArrayObj,vdynamic*);
 int little_tools__Layer_Layer_Impl__getIndexOf(String);
 extern String s$Module_;
+#include <little/KeywordConfig.h>
 extern hl_type t$little_interpreter_StdOut;
 void little_interpreter_StdOut_new(little__interpreter__StdOut);
 extern hl_type t$fun_681d69b;
@@ -267,10 +268,13 @@ void little_interpreter_Runtime___print(little__interpreter__Runtime r0,String r
 }
 
 void little_interpreter_Runtime_new(little__interpreter__Runtime r0) {
+	String r8;
+	little__$Little r10;
 	hl__types__ArrayObj r1;
-	venum *r8;
+	venum *r11;
 	hl_type *r3;
 	bool r7;
+	little__KeywordConfig r9;
 	little__interpreter__StdOut r5;
 	int r4;
 	varray *r2;
@@ -336,8 +340,13 @@ void little_interpreter_Runtime_new(little__interpreter__Runtime r0) {
 	r0->errorThrown = r7;
 	r4 = 0;
 	r0->exitCode = r4;
-	r8 = NULL;
-	r0->currentToken = r8;
+	r10 = (little__$Little)g$_little_Little;
+	r9 = r10->keywords;
+	if( r9 == NULL ) hl_null_access();
+	r8 = r9->MAIN_MODULE_NAME;
+	r0->module = r8;
+	r11 = NULL;
+	r0->currentToken = r11;
 	r4 = 0;
 	r0->linePart = r4;
 	r4 = 0;
