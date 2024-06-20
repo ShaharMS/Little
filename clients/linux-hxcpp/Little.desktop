@@ -1,0 +1,6 @@
+[Desktop Entry] 
+Type=Application 
+Name=Little 
+Exec=./Little 
+Icon=./Logo.png 
+Terminal=true 

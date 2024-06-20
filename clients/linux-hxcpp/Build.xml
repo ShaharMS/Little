@@ -1,0 +1,992 @@
+<xml>
+<set name="HXCPP_API_LEVEL" value="430" />
+<files id="haxe">
+<compilerflag value="-Iinclude"/>
+  <file name="src/vision/tools/MathTools.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/StringTools.h"/>
+   <depend name="include/vision/ds/Line2D.h"/>
+   <depend name="include/vision/ds/Point2D.h"/>
+   <depend name="include/vision/ds/Ray2D.h"/>
+   <depend name="include/vision/ds/Rectangle.h"/>
+   <depend name="include/vision/tools/MathTools.h"/>
+  </file>
+  <file name="src/vision/tools/_ImageTools/NeighborsIterator.cpp" >
+   <depend name="include/haxe/Exception.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/vision/ds/Point2D.h"/>
+   <depend name="include/vision/ds/_Image/Image_Impl_.h"/>
+   <depend name="include/vision/exceptions/OutOfBounds.h"/>
+   <depend name="include/vision/exceptions/VisionException.h"/>
+   <depend name="include/vision/tools/_ImageTools/NeighborsIterator.h"/>
+  </file>
+  <file name="src/vision/tools/ImageTools.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/Exception.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/vision/ds/Array2D.h"/>
+   <depend name="include/vision/ds/Point2D.h"/>
+   <depend name="include/vision/ds/_Image/Image_Impl_.h"/>
+   <depend name="include/vision/exceptions/LibraryRequired.h"/>
+   <depend name="include/vision/exceptions/OutOfBounds.h"/>
+   <depend name="include/vision/exceptions/VisionException.h"/>
+   <depend name="include/vision/tools/ImageTools.h"/>
+  </file>
+  <file name="src/vision/helpers/VisionThread.cpp" >
+   <depend name="include/haxe/Exception.h"/>
+   <depend name="include/sys/thread/_Thread/HaxeThread.h"/>
+   <depend name="include/vision/exceptions/MultithreadFailure.h"/>
+   <depend name="include/vision/exceptions/VisionException.h"/>
+   <depend name="include/vision/helpers/VisionThread.h"/>
+  </file>
+  <file name="src/vision/helpers/TextDrawer.cpp" >
+   <depend name="include/haxe/Exception.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/vision/exceptions/LibraryRequired.h"/>
+   <depend name="include/vision/exceptions/VisionException.h"/>
+   <depend name="include/vision/helpers/TextDrawer.h"/>
+  </file>
+  <file name="src/vision/exceptions/Unimplemented.cpp" >
+   <depend name="include/haxe/Exception.h"/>
+   <depend name="include/vision/exceptions/Unimplemented.h"/>
+   <depend name="include/vision/exceptions/VisionException.h"/>
+  </file>
+  <file name="src/vision/exceptions/OutOfBounds.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/Exception.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/vision/ds/Point2D.h"/>
+   <depend name="include/vision/ds/_Image/Image_Impl_.h"/>
+   <depend name="include/vision/exceptions/OutOfBounds.h"/>
+   <depend name="include/vision/exceptions/VisionException.h"/>
+  </file>
+  <file name="src/vision/exceptions/MultithreadFailure.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/Exception.h"/>
+   <depend name="include/vision/exceptions/MultithreadFailure.h"/>
+   <depend name="include/vision/exceptions/VisionException.h"/>
+  </file>
+  <file name="src/vision/exceptions/MatrixOperationError.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/Exception.h"/>
+   <depend name="include/vision/ds/Array2D.h"/>
+   <depend name="include/vision/exceptions/MatrixOperationError.h"/>
+   <depend name="include/vision/exceptions/VisionException.h"/>
+  </file>
+  <file name="src/vision/exceptions/LibraryRequired.cpp" >
+   <depend name="include/haxe/Exception.h"/>
+   <depend name="include/vision/exceptions/LibraryRequired.h"/>
+   <depend name="include/vision/exceptions/VisionException.h"/>
+  </file>
+  <file name="src/vision/exceptions/ImageSavingFailed.cpp" >
+   <depend name="include/haxe/Exception.h"/>
+   <depend name="include/vision/exceptions/ImageSavingFailed.h"/>
+   <depend name="include/vision/exceptions/VisionException.h"/>
+  </file>
+  <file name="src/vision/exceptions/ImageLoadingFailed.cpp" >
+   <depend name="include/haxe/Exception.h"/>
+   <depend name="include/vision/exceptions/ImageLoadingFailed.h"/>
+   <depend name="include/vision/exceptions/VisionException.h"/>
+  </file>
+  <file name="src/vision/exceptions/VisionException.cpp" >
+   <depend name="include/haxe/Exception.h"/>
+   <depend name="include/vision/exceptions/VisionException.h"/>
+  </file>
+  <file name="src/vision/ds/specifics/PointTransformationPair.cpp" >
+   <depend name="include/vision/ds/Point2D.h"/>
+   <depend name="include/vision/ds/specifics/PointTransformationPair.h"/>
+  </file>
+  <file name="src/vision/ds/_TransformationMatrix2D/TransformationMatrix2D_Impl_.cpp" >
+   <depend name="include/vision/ds/Array2D.h"/>
+   <depend name="include/vision/ds/_TransformationMatrix2D/TransformationMatrix2D_Impl_.h"/>
+  </file>
+  <file name="src/vision/ds/Rectangle.cpp" >
+   <depend name="include/vision/ds/Rectangle.h"/>
+  </file>
+  <file name="src/vision/ds/Ray2D.cpp" >
+   <depend name="include/vision/ds/Point2D.h"/>
+   <depend name="include/vision/ds/Ray2D.h"/>
+  </file>
+  <file name="src/vision/ds/QueueCell_String.cpp" >
+   <depend name="include/vision/ds/QueueCell_String.h"/>
+  </file>
+  <file name="src/vision/ds/Queue.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/vision/ds/Queue.h"/>
+   <depend name="include/vision/ds/QueueCell.h"/>
+  </file>
+  <file name="src/vision/ds/QueueCell.cpp" >
+   <depend name="include/vision/ds/QueueCell.h"/>
+  </file>
+  <file name="src/vision/ds/Point3D.cpp" >
+   <depend name="include/vision/ds/Point3D.h"/>
+  </file>
+  <file name="src/vision/ds/Point2D.cpp" >
+   <depend name="include/vision/ds/Point2D.h"/>
+  </file>
+  <file name="src/vision/ds/_PixelFormat/PixelFormat_Impl_.cpp" >
+   <depend name="include/haxe/Exception.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/vision/ds/_PixelFormat/PixelFormat_Impl_.h"/>
+   <depend name="include/vision/exceptions/VisionException.h"/>
+  </file>
+  <file name="src/vision/ds/Pixel.cpp" >
+   <depend name="include/vision/ds/Pixel.h"/>
+  </file>
+  <file name="src/vision/ds/_Matrix2D/Matrix2D_Impl_.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/Exception.h"/>
+   <depend name="include/vision/algorithms/GaussJordan.h"/>
+   <depend name="include/vision/algorithms/PerspectiveWarp.h"/>
+   <depend name="include/vision/ds/Array2D.h"/>
+   <depend name="include/vision/ds/Point2D.h"/>
+   <depend name="include/vision/ds/_Matrix2D/Matrix2D_Impl_.h"/>
+   <depend name="include/vision/ds/_TransformationMatrix2D/TransformationMatrix2D_Impl_.h"/>
+   <depend name="include/vision/ds/specifics/PointTransformationPair.h"/>
+   <depend name="include/vision/exceptions/MatrixOperationError.h"/>
+   <depend name="include/vision/exceptions/VisionException.h"/>
+  </file>
+  <file name="src/vision/ds/Line2D.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/vision/ds/Line2D.h"/>
+   <depend name="include/vision/ds/Point2D.h"/>
+   <depend name="include/vision/ds/Ray2D.h"/>
+  </file>
+  <file name="src/vision/ds/_IntPoint2D/IntPoint2D_Impl_.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/vision/ds/Point2D.h"/>
+   <depend name="include/vision/ds/_IntPoint2D/IntPoint2D_Impl_.h"/>
+  </file>
+  <file name="src/vision/ds/ImageView.cpp" >
+   <depend name="include/vision/ds/ImageView.h"/>
+  </file>
+  <file name="src/vision/ds/_Image/PixelIterator.cpp" >
+   <depend name="include/haxe/Exception.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/vision/ds/Pixel.h"/>
+   <depend name="include/vision/ds/Point2D.h"/>
+   <depend name="include/vision/ds/_Image/Image_Impl_.h"/>
+   <depend name="include/vision/ds/_Image/PixelIterator.h"/>
+   <depend name="include/vision/exceptions/OutOfBounds.h"/>
+   <depend name="include/vision/exceptions/VisionException.h"/>
+  </file>
+  <file name="src/vision/ds/_Image/Image_Impl_.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/Exception.h"/>
+   <depend name="include/haxe/Log.h"/>
+   <depend name="include/haxe/ds/List.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/vision/algorithms/BilinearInterpolation.h"/>
+   <depend name="include/vision/ds/ImageView.h"/>
+   <depend name="include/vision/ds/Line2D.h"/>
+   <depend name="include/vision/ds/Point2D.h"/>
+   <depend name="include/vision/ds/Ray2D.h"/>
+   <depend name="include/vision/ds/Rectangle.h"/>
+   <depend name="include/vision/ds/_Color/Color_Impl_.h"/>
+   <depend name="include/vision/ds/_Image/Image_Impl_.h"/>
+   <depend name="include/vision/ds/_Image/PixelIterator.h"/>
+   <depend name="include/vision/exceptions/OutOfBounds.h"/>
+   <depend name="include/vision/exceptions/Unimplemented.h"/>
+   <depend name="include/vision/exceptions/VisionException.h"/>
+   <depend name="include/vision/tools/ImageTools.h"/>
+   <depend name="include/vision/tools/MathTools.h"/>
+  </file>
+  <file name="src/vision/ds/_Color/Color_Impl_.cpp" >
+   <depend name="include/EReg.h"/>
+   <depend name="include/Std.h"/>
+   <depend name="include/StringTools.h"/>
+   <depend name="include/vision/ds/_Color/Color_Impl_.h"/>
+   <depend name="include/vision/tools/MathTools.h"/>
+  </file>
+  <file name="src/vision/ds/_ByteArray/ByteArray_Impl_.cpp" >
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/vision/ds/_ByteArray/ByteArray_Impl_.h"/>
+  </file>
+  <file name="src/vision/ds/Array2D.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/iterators/ArrayIterator.h"/>
+   <depend name="include/vision/ds/Array2D.h"/>
+  </file>
+  <file name="src/vision/algorithms/Radix.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/vision/algorithms/Radix.h"/>
+  </file>
+  <file name="src/vision/algorithms/PerspectiveWarp.cpp" >
+   <depend name="include/vision/algorithms/Cramer.h"/>
+   <depend name="include/vision/algorithms/PerspectiveWarp.h"/>
+   <depend name="include/vision/ds/Array2D.h"/>
+   <depend name="include/vision/ds/Point2D.h"/>
+   <depend name="include/vision/ds/_Matrix2D/Matrix2D_Impl_.h"/>
+  </file>
+  <file name="src/vision/algorithms/GaussJordan.cpp" >
+   <depend name="include/vision/algorithms/GaussJordan.h"/>
+   <depend name="include/vision/ds/Array2D.h"/>
+   <depend name="include/vision/ds/_Matrix2D/Matrix2D_Impl_.h"/>
+  </file>
+  <file name="src/vision/algorithms/Cramer.cpp" >
+   <depend name="include/vision/algorithms/Cramer.h"/>
+   <depend name="include/vision/ds/Array2D.h"/>
+   <depend name="include/vision/ds/_Matrix2D/Matrix2D_Impl_.h"/>
+  </file>
+  <file name="src/vision/algorithms/BilinearInterpolation.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/Exception.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/vision/algorithms/BilinearInterpolation.h"/>
+   <depend name="include/vision/ds/ImageView.h"/>
+   <depend name="include/vision/ds/Point2D.h"/>
+   <depend name="include/vision/ds/_Color/Color_Impl_.h"/>
+   <depend name="include/vision/ds/_Image/Image_Impl_.h"/>
+   <depend name="include/vision/exceptions/OutOfBounds.h"/>
+   <depend name="include/vision/exceptions/VisionException.h"/>
+   <depend name="include/vision/tools/MathTools.h"/>
+  </file>
+  <file name="src/sys/thread/_Thread/Thread_Impl_.cpp" >
+   <depend name="include/sys/thread/EventLoop.h"/>
+   <depend name="include/sys/thread/_Thread/HaxeThread.h"/>
+   <depend name="include/sys/thread/_Thread/Thread_Impl_.h"/>
+  </file>
+  <file name="src/sys/thread/Lock.cpp" >
+   <depend name="include/sys/thread/Lock.h"/>
+  </file>
+  <file name="src/sys/thread/_EventLoop/RegularEvent.cpp" >
+   <depend name="include/sys/thread/_EventLoop/RegularEvent.h"/>
+  </file>
+  <file name="src/sys/io/FileInput.cpp" >
+   <depend name="include/haxe/io/Eof.h"/>
+   <depend name="include/haxe/io/Error.h"/>
+   <depend name="include/haxe/io/Input.h"/>
+   <depend name="include/sys/io/FileInput.h"/>
+  </file>
+  <file name="src/little/tools/TextDirection.cpp" >
+   <depend name="include/little/tools/TextDirection.h"/>
+  </file>
+  <file name="src/little/tools/PrettyPrinter.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/StringTools.h"/>
+   <depend name="include/Type.h"/>
+   <depend name="include/haxe/IMap.h"/>
+   <depend name="include/haxe/Log.h"/>
+   <depend name="include/haxe/ds/ArraySort.h"/>
+   <depend name="include/haxe/ds/IntMap.h"/>
+   <depend name="include/haxe/ds/ObjectMap.h"/>
+   <depend name="include/haxe/ds/StringMap.h"/>
+   <depend name="include/little/KeywordConfig.h"/>
+   <depend name="include/little/Little.h"/>
+   <depend name="include/little/interpreter/InterpTokens.h"/>
+   <depend name="include/little/interpreter/Interpreter.h"/>
+   <depend name="include/little/interpreter/memory/Memory.h"/>
+   <depend name="include/little/interpreter/memory/OperatorType.h"/>
+   <depend name="include/little/interpreter/memory/_MemoryPointer/MemoryPointer_Impl_.h"/>
+   <depend name="include/little/parser/ParserTokens.h"/>
+   <depend name="include/little/tools/BaseOrderedMap.h"/>
+   <depend name="include/little/tools/Extensions.h"/>
+   <depend name="include/little/tools/InterpTokensSimple.h"/>
+   <depend name="include/little/tools/ParserTokensSimple.h"/>
+   <depend name="include/little/tools/PrettyPrinter.h"/>
+   <depend name="include/little/tools/TextTools.h"/>
+  </file>
+  <file name="src/little/tools/PrepareRun.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/Type.h"/>
+   <depend name="include/haxe/IMap.h"/>
+   <depend name="include/haxe/ds/StringMap.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/little/KeywordConfig.h"/>
+   <depend name="include/little/Little.h"/>
+   <depend name="include/little/interpreter/InterpTokens.h"/>
+   <depend name="include/little/interpreter/Interpreter.h"/>
+   <depend name="include/little/interpreter/Runtime.h"/>
+   <depend name="include/little/interpreter/memory/ConstantPool.h"/>
+   <depend name="include/little/interpreter/memory/Memory.h"/>
+   <depend name="include/little/interpreter/memory/OperatorType.h"/>
+   <depend name="include/little/interpreter/memory/Storage.h"/>
+   <depend name="include/little/interpreter/memory/_MemoryPointer/MemoryPointer_Impl_.h"/>
+   <depend name="include/little/lexer/Lexer.h"/>
+   <depend name="include/little/lexer/LexerTokens.h"/>
+   <depend name="include/little/parser/Parser.h"/>
+   <depend name="include/little/parser/ParserTokens.h"/>
+   <depend name="include/little/tools/Conversion.h"/>
+   <depend name="include/little/tools/Extensions.h"/>
+   <depend name="include/little/tools/InterpTokensSimple.h"/>
+   <depend name="include/little/tools/Plugins.h"/>
+   <depend name="include/little/tools/PrepareRun.h"/>
+   <depend name="include/little/tools/PrettyPrinter.h"/>
+   <depend name="include/little/tools/TextTools.h"/>
+   <depend name="include/vision/tools/MathTools.h"/>
+  </file>
+  <file name="src/little/tools/OrderedMapKeyValueIterator.cpp" >
+   <depend name="include/little/tools/OrderedMapKeyValueIterator.h"/>
+  </file>
+  <file name="src/little/tools/BaseOrderedMap.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/iterators/ArrayIterator.h"/>
+   <depend name="include/little/tools/BaseOrderedMap.h"/>
+   <depend name="include/little/tools/OrderedMapKeyValueIterator.h"/>
+  </file>
+  <file name="src/little/tools/_OrderedMap/OrderedMap_Impl_.cpp" >
+   <depend name="include/little/tools/BaseOrderedMap.h"/>
+   <depend name="include/little/tools/_OrderedMap/OrderedMap_Impl_.h"/>
+  </file>
+  <file name="src/little/tools/_Layer/Layer_Impl_.cpp" >
+   <depend name="include/little/tools/_Layer/Layer_Impl_.h"/>
+  </file>
+  <file name="src/little/tools/InterpTokensSimple.cpp" >
+   <depend name="include/little/tools/InterpTokensSimple.h"/>
+  </file>
+  <file name="src/little/tools/Conversion.cpp" >
+   <depend name="include/Reflect.h"/>
+   <depend name="include/Std.h"/>
+   <depend name="include/Type.h"/>
+   <depend name="include/ValueType.h"/>
+   <depend name="include/haxe/IMap.h"/>
+   <depend name="include/haxe/Log.h"/>
+   <depend name="include/haxe/ds/StringMap.h"/>
+   <depend name="include/little/KeywordConfig.h"/>
+   <depend name="include/little/Little.h"/>
+   <depend name="include/little/interpreter/InterpTokens.h"/>
+   <depend name="include/little/interpreter/Interpreter.h"/>
+   <depend name="include/little/interpreter/memory/Memory.h"/>
+   <depend name="include/little/tools/BaseOrderedMap.h"/>
+   <depend name="include/little/tools/Conversion.h"/>
+  </file>
+  <file name="src/little/parser/Parser.cpp" >
+   <depend name="include/Type.h"/>
+   <depend name="include/little/KeywordConfig.h"/>
+   <depend name="include/little/Little.h"/>
+   <depend name="include/little/interpreter/InterpTokens.h"/>
+   <depend name="include/little/interpreter/Interpreter.h"/>
+   <depend name="include/little/interpreter/Runtime.h"/>
+   <depend name="include/little/lexer/LexerTokens.h"/>
+   <depend name="include/little/parser/Parser.h"/>
+   <depend name="include/little/parser/ParserTokens.h"/>
+   <depend name="include/little/tools/ParserTokensSimple.h"/>
+   <depend name="include/little/tools/TextTools.h"/>
+  </file>
+  <file name="src/little/tools/Extensions.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/Type.h"/>
+   <depend name="include/haxe/IMap.h"/>
+   <depend name="include/haxe/ds/ObjectMap.h"/>
+   <depend name="include/haxe/ds/StringMap.h"/>
+   <depend name="include/little/KeywordConfig.h"/>
+   <depend name="include/little/Little.h"/>
+   <depend name="include/little/interpreter/InterpTokens.h"/>
+   <depend name="include/little/interpreter/Interpreter.h"/>
+   <depend name="include/little/interpreter/memory/ConstantPool.h"/>
+   <depend name="include/little/interpreter/memory/Memory.h"/>
+   <depend name="include/little/interpreter/memory/Storage.h"/>
+   <depend name="include/little/lexer/Lexer.h"/>
+   <depend name="include/little/lexer/LexerTokens.h"/>
+   <depend name="include/little/parser/Parser.h"/>
+   <depend name="include/little/parser/ParserTokens.h"/>
+   <depend name="include/little/tools/BaseOrderedMap.h"/>
+   <depend name="include/little/tools/Extensions.h"/>
+   <depend name="include/little/tools/InterpTokensSimple.h"/>
+   <depend name="include/little/tools/TextTools.h"/>
+  </file>
+  <file name="src/little/tools/ParserTokensSimple.cpp" >
+   <depend name="include/little/tools/ParserTokensSimple.h"/>
+  </file>
+  <file name="src/little/parser/ParserTokens.cpp" >
+   <depend name="include/little/parser/ParserTokens.h"/>
+  </file>
+  <file name="src/little/lexer/LexerTokens.cpp" >
+   <depend name="include/little/lexer/LexerTokens.h"/>
+  </file>
+  <file name="src/little/lexer/Lexer.cpp" >
+   <depend name="include/EReg.h"/>
+   <depend name="include/StringTools.h"/>
+   <depend name="include/Type.h"/>
+   <depend name="include/little/KeywordConfig.h"/>
+   <depend name="include/little/Little.h"/>
+   <depend name="include/little/lexer/Lexer.h"/>
+   <depend name="include/little/lexer/LexerTokens.h"/>
+   <depend name="include/little/tools/TextTools.h"/>
+  </file>
+  <file name="src/little/interpreter/memory/OperatorType.cpp" >
+   <depend name="include/little/interpreter/memory/OperatorType.h"/>
+  </file>
+  <file name="src/little/interpreter/memory/_MemoryPointer/MemoryPointer_Fields_.cpp" >
+   <depend name="include/little/interpreter/memory/_MemoryPointer/MemoryPointer_Fields_.h"/>
+  </file>
+  <file name="src/little/interpreter/memory/_MemoryPointer/MemoryPointer_Impl_.cpp" >
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/little/interpreter/memory/_MemoryPointer/MemoryPointer_Impl_.h"/>
+  </file>
+  <file name="src/little/interpreter/memory/HashTables.cpp" >
+   <depend name="include/haxe/hash/Murmur1.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/haxe/io/Encoding.h"/>
+   <depend name="include/little/interpreter/memory/HashTables.h"/>
+   <depend name="include/little/interpreter/memory/Storage.h"/>
+   <depend name="include/little/interpreter/memory/_MemoryPointer/MemoryPointer_Impl_.h"/>
+  </file>
+  <file name="src/little/interpreter/memory/ExtTree.cpp" >
+   <depend name="include/haxe/IMap.h"/>
+   <depend name="include/haxe/ds/StringMap.h"/>
+   <depend name="include/little/Little.h"/>
+   <depend name="include/little/interpreter/InterpTokens.h"/>
+   <depend name="include/little/interpreter/memory/ConstantPool.h"/>
+   <depend name="include/little/interpreter/memory/ExtTree.h"/>
+   <depend name="include/little/interpreter/memory/Memory.h"/>
+   <depend name="include/little/interpreter/memory/_MemoryPointer/MemoryPointer_Impl_.h"/>
+  </file>
+  <file name="src/little/interpreter/InterpTokens.cpp" >
+   <depend name="include/haxe/IMap.h"/>
+   <depend name="include/haxe/ds/ObjectMap.h"/>
+   <depend name="include/haxe/ds/StringMap.h"/>
+   <depend name="include/little/interpreter/InterpTokens.h"/>
+   <depend name="include/little/tools/BaseOrderedMap.h"/>
+  </file>
+  <file name="src/little/interpreter/StdOut.cpp" >
+   <depend name="include/little/interpreter/InterpTokens.h"/>
+   <depend name="include/little/interpreter/StdOut.h"/>
+  </file>
+  <file name="src/little/interpreter/FieldDeclarationType.cpp" >
+   <depend name="include/little/interpreter/FieldDeclarationType.h"/>
+  </file>
+  <file name="src/little/interpreter/Interpreter.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/Type.h"/>
+   <depend name="include/haxe/IMap.h"/>
+   <depend name="include/haxe/ds/ObjectMap.h"/>
+   <depend name="include/haxe/ds/StringMap.h"/>
+   <depend name="include/little/KeywordConfig.h"/>
+   <depend name="include/little/Little.h"/>
+   <depend name="include/little/interpreter/FieldDeclarationType.h"/>
+   <depend name="include/little/interpreter/InterpTokens.h"/>
+   <depend name="include/little/interpreter/Interpreter.h"/>
+   <depend name="include/little/interpreter/Runtime.h"/>
+   <depend name="include/little/interpreter/memory/Memory.h"/>
+   <depend name="include/little/interpreter/memory/OperatorType.h"/>
+   <depend name="include/little/interpreter/memory/Operators.h"/>
+   <depend name="include/little/interpreter/memory/Referrer.h"/>
+   <depend name="include/little/parser/ParserTokens.h"/>
+   <depend name="include/little/tools/BaseOrderedMap.h"/>
+   <depend name="include/little/tools/Extensions.h"/>
+   <depend name="include/little/tools/InterpTokensSimple.h"/>
+   <depend name="include/little/tools/OrderedMapKeyValueIterator.h"/>
+   <depend name="include/little/tools/PrettyPrinter.h"/>
+   <depend name="include/little/tools/TextTools.h"/>
+   <depend name="include/little/tools/_OrderedMap/OrderedMap_Impl_.h"/>
+  </file>
+  <file name="src/little/interpreter/ByteCode.cpp" >
+   <depend name="include/haxe/Serializer.h"/>
+   <depend name="include/haxe/Unserializer.h"/>
+   <depend name="include/little/interpreter/ByteCode.h"/>
+   <depend name="include/little/interpreter/InterpTokens.h"/>
+  </file>
+  <file name="src/little/Little.cpp" >
+   <depend name="include/little/KeywordConfig.h"/>
+   <depend name="include/little/Little.h"/>
+   <depend name="include/little/interpreter/InterpTokens.h"/>
+   <depend name="include/little/interpreter/Interpreter.h"/>
+   <depend name="include/little/interpreter/Runtime.h"/>
+   <depend name="include/little/interpreter/memory/Memory.h"/>
+   <depend name="include/little/lexer/Lexer.h"/>
+   <depend name="include/little/lexer/LexerTokens.h"/>
+   <depend name="include/little/parser/Parser.h"/>
+   <depend name="include/little/parser/ParserTokens.h"/>
+   <depend name="include/little/tools/Plugins.h"/>
+   <depend name="include/little/tools/PrepareRun.h"/>
+   <depend name="include/little/tools/PrettyPrinter.h"/>
+   <depend name="include/vision/ds/Queue_String.h"/>
+  </file>
+  <file name="src/little/interpreter/Runtime.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/Type.h"/>
+   <depend name="include/little/KeywordConfig.h"/>
+   <depend name="include/little/Little.h"/>
+   <depend name="include/little/interpreter/FieldDeclarationType.h"/>
+   <depend name="include/little/interpreter/InterpTokens.h"/>
+   <depend name="include/little/interpreter/Runtime.h"/>
+   <depend name="include/little/interpreter/StdOut.h"/>
+   <depend name="include/little/tools/PrettyPrinter.h"/>
+   <depend name="include/little/tools/TextTools.h"/>
+   <depend name="include/little/tools/_Layer/Layer_Impl_.h"/>
+  </file>
+  <file name="src/vision/ds/Queue_String.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/vision/ds/QueueCell_String.h"/>
+   <depend name="include/vision/ds/Queue_String.h"/>
+  </file>
+  <file name="src/little/tools/Plugins.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/Type.h"/>
+   <depend name="include/haxe/Exception.h"/>
+   <depend name="include/haxe/IMap.h"/>
+   <depend name="include/haxe/ds/ObjectMap.h"/>
+   <depend name="include/haxe/ds/StringMap.h"/>
+   <depend name="include/haxe/exceptions/ArgumentException.h"/>
+   <depend name="include/haxe/exceptions/PosException.h"/>
+   <depend name="include/haxe/iterators/ArrayIterator.h"/>
+   <depend name="include/little/KeywordConfig.h"/>
+   <depend name="include/little/Little.h"/>
+   <depend name="include/little/interpreter/InterpTokens.h"/>
+   <depend name="include/little/interpreter/Interpreter.h"/>
+   <depend name="include/little/interpreter/Runtime.h"/>
+   <depend name="include/little/interpreter/memory/ConstantPool.h"/>
+   <depend name="include/little/interpreter/memory/ExtTree.h"/>
+   <depend name="include/little/interpreter/memory/ExternalInterfacing.h"/>
+   <depend name="include/little/interpreter/memory/Memory.h"/>
+   <depend name="include/little/interpreter/memory/OperatorType.h"/>
+   <depend name="include/little/interpreter/memory/Operators.h"/>
+   <depend name="include/little/interpreter/memory/Storage.h"/>
+   <depend name="include/little/lexer/Lexer.h"/>
+   <depend name="include/little/lexer/LexerTokens.h"/>
+   <depend name="include/little/parser/Parser.h"/>
+   <depend name="include/little/parser/ParserTokens.h"/>
+   <depend name="include/little/tools/BaseOrderedMap.h"/>
+   <depend name="include/little/tools/Extensions.h"/>
+   <depend name="include/little/tools/InterpTokensSimple.h"/>
+   <depend name="include/little/tools/Plugins.h"/>
+   <depend name="include/little/tools/TextTools.h"/>
+   <depend name="include/little/tools/_OrderedMap/OrderedMap_Impl_.h"/>
+  </file>
+  <file name="src/little/interpreter/memory/Operators.cpp" >
+   <depend name="include/EReg.h"/>
+   <depend name="include/Std.h"/>
+   <depend name="include/StringTools.h"/>
+   <depend name="include/haxe/IMap.h"/>
+   <depend name="include/haxe/ds/ArraySort.h"/>
+   <depend name="include/haxe/ds/IntMap.h"/>
+   <depend name="include/haxe/ds/StringMap.h"/>
+   <depend name="include/little/KeywordConfig.h"/>
+   <depend name="include/little/Little.h"/>
+   <depend name="include/little/interpreter/InterpTokens.h"/>
+   <depend name="include/little/interpreter/memory/OperatorType.h"/>
+   <depend name="include/little/interpreter/memory/Operators.h"/>
+   <depend name="include/little/tools/TextTools.h"/>
+  </file>
+  <file name="src/little/interpreter/memory/ExternalInterfacing.cpp" >
+   <depend name="include/haxe/IMap.h"/>
+   <depend name="include/haxe/ds/IntMap.h"/>
+   <depend name="include/haxe/ds/StringMap.h"/>
+   <depend name="include/little/interpreter/InterpTokens.h"/>
+   <depend name="include/little/interpreter/memory/ExtTree.h"/>
+   <depend name="include/little/interpreter/memory/ExternalInterfacing.h"/>
+   <depend name="include/little/interpreter/memory/Memory.h"/>
+   <depend name="include/little/interpreter/memory/_MemoryPointer/MemoryPointer_Impl_.h"/>
+  </file>
+  <file name="src/little/interpreter/memory/ConstantPool.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/Type.h"/>
+   <depend name="include/haxe/Exception.h"/>
+   <depend name="include/haxe/exceptions/ArgumentException.h"/>
+   <depend name="include/haxe/exceptions/PosException.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/little/KeywordConfig.h"/>
+   <depend name="include/little/Little.h"/>
+   <depend name="include/little/interpreter/InterpTokens.h"/>
+   <depend name="include/little/interpreter/memory/ConstantPool.h"/>
+   <depend name="include/little/interpreter/memory/Memory.h"/>
+   <depend name="include/little/interpreter/memory/Storage.h"/>
+   <depend name="include/little/interpreter/memory/_MemoryPointer/MemoryPointer_Impl_.h"/>
+   <depend name="include/little/tools/BaseOrderedMap.h"/>
+   <depend name="include/little/tools/InterpTokensSimple.h"/>
+  </file>
+  <file name="src/little/interpreter/memory/Referrer.cpp" >
+   <depend name="include/haxe/IMap.h"/>
+   <depend name="include/haxe/Serializer.h"/>
+   <depend name="include/haxe/ds/StringMap.h"/>
+   <depend name="include/haxe/hash/Murmur1.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/haxe/io/Encoding.h"/>
+   <depend name="include/haxe/iterators/MapKeyValueIterator.h"/>
+   <depend name="include/little/Little.h"/>
+   <depend name="include/little/interpreter/InterpTokens.h"/>
+   <depend name="include/little/interpreter/Runtime.h"/>
+   <depend name="include/little/interpreter/memory/Memory.h"/>
+   <depend name="include/little/interpreter/memory/Referrer.h"/>
+   <depend name="include/little/interpreter/memory/Storage.h"/>
+   <depend name="include/little/interpreter/memory/_MemoryPointer/MemoryPointer_Impl_.h"/>
+  </file>
+  <file name="src/little/interpreter/memory/Storage.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/Type.h"/>
+   <depend name="include/haxe/Exception.h"/>
+   <depend name="include/haxe/IMap.h"/>
+   <depend name="include/haxe/Log.h"/>
+   <depend name="include/haxe/ds/ObjectMap.h"/>
+   <depend name="include/haxe/ds/StringMap.h"/>
+   <depend name="include/haxe/exceptions/ArgumentException.h"/>
+   <depend name="include/haxe/exceptions/PosException.h"/>
+   <depend name="include/haxe/hash/Murmur1.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/haxe/io/Encoding.h"/>
+   <depend name="include/haxe/io/Error.h"/>
+   <depend name="include/little/KeywordConfig.h"/>
+   <depend name="include/little/Little.h"/>
+   <depend name="include/little/interpreter/ByteCode.h"/>
+   <depend name="include/little/interpreter/InterpTokens.h"/>
+   <depend name="include/little/interpreter/Runtime.h"/>
+   <depend name="include/little/interpreter/memory/ConstantPool.h"/>
+   <depend name="include/little/interpreter/memory/HashTables.h"/>
+   <depend name="include/little/interpreter/memory/Memory.h"/>
+   <depend name="include/little/interpreter/memory/Storage.h"/>
+   <depend name="include/little/interpreter/memory/_MemoryPointer/MemoryPointer_Impl_.h"/>
+   <depend name="include/little/tools/BaseOrderedMap.h"/>
+   <depend name="include/little/tools/Extensions.h"/>
+   <depend name="include/little/tools/InterpTokensSimple.h"/>
+   <depend name="include/little/tools/TextTools.h"/>
+   <depend name="include/little/tools/_OrderedMap/OrderedMap_Impl_.h"/>
+   <depend name="include/vision/ds/_ByteArray/ByteArray_Impl_.h"/>
+  </file>
+  <file name="src/little/interpreter/memory/Memory.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/Type.h"/>
+   <depend name="include/haxe/IMap.h"/>
+   <depend name="include/haxe/ds/IntMap.h"/>
+   <depend name="include/haxe/ds/StringMap.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/haxe/iterators/ArrayIterator.h"/>
+   <depend name="include/little/KeywordConfig.h"/>
+   <depend name="include/little/Little.h"/>
+   <depend name="include/little/interpreter/InterpTokens.h"/>
+   <depend name="include/little/interpreter/Interpreter.h"/>
+   <depend name="include/little/interpreter/Runtime.h"/>
+   <depend name="include/little/interpreter/memory/ConstantPool.h"/>
+   <depend name="include/little/interpreter/memory/ExtTree.h"/>
+   <depend name="include/little/interpreter/memory/ExternalInterfacing.h"/>
+   <depend name="include/little/interpreter/memory/HashTables.h"/>
+   <depend name="include/little/interpreter/memory/Memory.h"/>
+   <depend name="include/little/interpreter/memory/Operators.h"/>
+   <depend name="include/little/interpreter/memory/Referrer.h"/>
+   <depend name="include/little/interpreter/memory/Storage.h"/>
+   <depend name="include/little/interpreter/memory/_MemoryPointer/MemoryPointer_Impl_.h"/>
+   <depend name="include/little/tools/BaseOrderedMap.h"/>
+   <depend name="include/little/tools/Extensions.h"/>
+   <depend name="include/little/tools/InterpTokensSimple.h"/>
+   <depend name="include/little/tools/PrettyPrinter.h"/>
+   <depend name="include/little/tools/TextTools.h"/>
+  </file>
+  <file name="src/little/KeywordConfig.cpp" >
+   <depend name="include/EReg.h"/>
+   <depend name="include/Reflect.h"/>
+   <depend name="include/Type.h"/>
+   <depend name="include/haxe/Exception.h"/>
+   <depend name="include/haxe/exceptions/ArgumentException.h"/>
+   <depend name="include/haxe/exceptions/PosException.h"/>
+   <depend name="include/little/KeywordConfig.h"/>
+   <depend name="include/little/tools/TextTools.h"/>
+  </file>
+  <file name="src/little/tools/TextTools.cpp" >
+   <depend name="include/EReg.h"/>
+   <depend name="include/Std.h"/>
+   <depend name="include/StringTools.h"/>
+   <depend name="include/little/tools/TextTools.h"/>
+   <depend name="include/little/tools/_TextTools/MultilangFonts.h"/>
+  </file>
+  <file name="src/little/tools/_TextTools/MultilangFonts.cpp" >
+   <depend name="include/little/tools/_TextTools/MultilangFonts.h"/>
+  </file>
+  <file name="src/haxe/iterators/MapKeyValueIterator.cpp" >
+   <depend name="include/haxe/IMap.h"/>
+   <depend name="include/haxe/iterators/MapKeyValueIterator.h"/>
+  </file>
+  <file name="src/haxe/iterators/ArrayIterator.cpp" >
+   <depend name="include/haxe/iterators/ArrayIterator.h"/>
+  </file>
+  <file name="src/haxe/io/Input.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/Exception.h"/>
+   <depend name="include/haxe/ValueException.h"/>
+   <depend name="include/haxe/exceptions/NotImplementedException.h"/>
+   <depend name="include/haxe/exceptions/PosException.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/haxe/io/BytesBuffer.h"/>
+   <depend name="include/haxe/io/Eof.h"/>
+   <depend name="include/haxe/io/Input.h"/>
+  </file>
+  <file name="src/haxe/io/Error.cpp" >
+   <depend name="include/haxe/io/Error.h"/>
+  </file>
+  <file name="src/haxe/io/Eof.cpp" >
+   <depend name="include/haxe/io/Eof.h"/>
+  </file>
+  <file name="src/haxe/io/Encoding.cpp" >
+   <depend name="include/haxe/io/Encoding.h"/>
+  </file>
+  <file name="src/haxe/io/BytesBuffer.cpp" >
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/haxe/io/BytesBuffer.h"/>
+  </file>
+  <file name="src/haxe/hash/Murmur1.cpp" >
+   <depend name="include/haxe/hash/Murmur1.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+  </file>
+  <file name="src/haxe/exceptions/NotImplementedException.cpp" >
+   <depend name="include/haxe/Exception.h"/>
+   <depend name="include/haxe/exceptions/NotImplementedException.h"/>
+   <depend name="include/haxe/exceptions/PosException.h"/>
+  </file>
+  <file name="src/haxe/exceptions/ArgumentException.cpp" >
+   <depend name="include/haxe/Exception.h"/>
+   <depend name="include/haxe/exceptions/ArgumentException.h"/>
+   <depend name="include/haxe/exceptions/PosException.h"/>
+  </file>
+  <file name="src/haxe/exceptions/PosException.cpp" >
+   <depend name="include/haxe/Exception.h"/>
+   <depend name="include/haxe/exceptions/PosException.h"/>
+  </file>
+  <file name="src/haxe/ds/StringMap.cpp" >
+   <depend name="include/haxe/IMap.h"/>
+   <depend name="include/haxe/ds/StringMap.h"/>
+   <depend name="include/haxe/iterators/ArrayIterator.h"/>
+  </file>
+  <file name="src/haxe/ds/ObjectMap.cpp" >
+   <depend name="include/haxe/IMap.h"/>
+   <depend name="include/haxe/ds/ObjectMap.h"/>
+   <depend name="include/haxe/iterators/ArrayIterator.h"/>
+  </file>
+  <file name="src/haxe/ds/_List/ListNode.cpp" >
+   <depend name="include/haxe/ds/_List/ListNode.h"/>
+  </file>
+  <file name="src/haxe/ds/List.cpp" >
+   <depend name="include/haxe/ds/List.h"/>
+   <depend name="include/haxe/ds/_List/ListNode.h"/>
+  </file>
+  <file name="src/haxe/ds/IntMap.cpp" >
+   <depend name="include/haxe/IMap.h"/>
+   <depend name="include/haxe/ds/IntMap.h"/>
+   <depend name="include/haxe/iterators/ArrayIterator.h"/>
+  </file>
+  <file name="src/haxe/ds/ArraySort.cpp" >
+   <depend name="include/haxe/ds/ArraySort.h"/>
+  </file>
+  <file name="src/haxe/io/Bytes.cpp" >
+   <depend name="include/haxe/io/Bytes.h"/>
+   <depend name="include/haxe/io/Encoding.h"/>
+   <depend name="include/haxe/io/Error.h"/>
+  </file>
+  <file name="src/haxe/ValueException.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/Exception.h"/>
+   <depend name="include/haxe/ValueException.h"/>
+  </file>
+  <file name="src/haxe/Unserializer.cpp" >
+   <depend name="include/Date.h"/>
+   <depend name="include/Reflect.h"/>
+   <depend name="include/Std.h"/>
+   <depend name="include/StringTools.h"/>
+   <depend name="include/Type.h"/>
+   <depend name="include/haxe/IMap.h"/>
+   <depend name="include/haxe/Unserializer.h"/>
+   <depend name="include/haxe/_Unserializer/DefaultResolver.h"/>
+   <depend name="include/haxe/ds/IntMap.h"/>
+   <depend name="include/haxe/ds/List.h"/>
+   <depend name="include/haxe/ds/ObjectMap.h"/>
+   <depend name="include/haxe/ds/StringMap.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+  </file>
+  <file name="src/haxe/_Unserializer/DefaultResolver.cpp" >
+   <depend name="include/Type.h"/>
+   <depend name="include/haxe/_Unserializer/DefaultResolver.h"/>
+  </file>
+  <file name="src/haxe/Serializer.cpp" >
+   <depend name="include/Date.h"/>
+   <depend name="include/Reflect.h"/>
+   <depend name="include/Std.h"/>
+   <depend name="include/StringBuf.h"/>
+   <depend name="include/StringTools.h"/>
+   <depend name="include/Type.h"/>
+   <depend name="include/ValueType.h"/>
+   <depend name="include/haxe/IMap.h"/>
+   <depend name="include/haxe/Serializer.h"/>
+   <depend name="include/haxe/ds/IntMap.h"/>
+   <depend name="include/haxe/ds/List.h"/>
+   <depend name="include/haxe/ds/ObjectMap.h"/>
+   <depend name="include/haxe/ds/StringMap.h"/>
+   <depend name="include/haxe/ds/_List/ListNode.h"/>
+   <depend name="include/haxe/io/Bytes.h"/>
+  </file>
+  <file name="src/haxe/Resource.cpp" >
+   <depend name="include/haxe/Resource.h"/>
+  </file>
+  <file name="src/haxe/NativeStackTrace.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/NativeStackTrace.h"/>
+   <depend name="include/haxe/StackItem.h"/>
+  </file>
+  <file name="src/haxe/MainLoop.cpp" >
+   <depend name="include/haxe/MainEvent.h"/>
+   <depend name="include/haxe/MainLoop.h"/>
+  </file>
+  <file name="src/haxe/MainEvent.cpp" >
+   <depend name="include/haxe/MainEvent.h"/>
+  </file>
+  <file name="src/haxe/Log.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/Log.h"/>
+  </file>
+  <file name="src/haxe/Exception.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/haxe/Exception.h"/>
+   <depend name="include/haxe/NativeStackTrace.h"/>
+   <depend name="include/haxe/StackItem.h"/>
+   <depend name="include/haxe/ValueException.h"/>
+   <depend name="include/haxe/_CallStack/CallStack_Impl_.h"/>
+  </file>
+  <file name="src/haxe/EntryPoint.cpp" >
+   <depend name="include/haxe/EntryPoint.h"/>
+  </file>
+  <file name="src/sys/thread/_Thread/HaxeThread.cpp" >
+   <depend name="include/haxe/Exception.h"/>
+   <depend name="include/sys/thread/EventLoop.h"/>
+   <depend name="include/sys/thread/Mutex.h"/>
+   <depend name="include/sys/thread/_Thread/HaxeThread.h"/>
+  </file>
+  <file name="src/sys/thread/EventLoop.cpp" >
+   <depend name="include/Sys.h"/>
+   <depend name="include/haxe/MainLoop.h"/>
+   <depend name="include/sys/thread/EventLoop.h"/>
+   <depend name="include/sys/thread/Lock.h"/>
+   <depend name="include/sys/thread/Mutex.h"/>
+   <depend name="include/sys/thread/_EventLoop/RegularEvent.h"/>
+  </file>
+  <file name="src/sys/thread/Mutex.cpp" >
+   <depend name="include/sys/thread/Mutex.h"/>
+  </file>
+  <file name="src/haxe/_CallStack/CallStack_Impl_.cpp" >
+   <depend name="include/Std.h"/>
+   <depend name="include/StringBuf.h"/>
+   <depend name="include/haxe/StackItem.h"/>
+   <depend name="include/haxe/_CallStack/CallStack_Impl_.h"/>
+  </file>
+  <file name="src/haxe/StackItem.cpp" >
+   <depend name="include/haxe/StackItem.h"/>
+  </file>
+  <file name="src/haxe/IMap.cpp" >
+   <depend name="include/haxe/IMap.h"/>
+  </file>
+  <file name="src/Type.cpp" >
+   <depend name="include/Reflect.h"/>
+   <depend name="include/Type.h"/>
+   <depend name="include/ValueType.h"/>
+  </file>
+  <file name="src/ValueType.cpp" >
+   <depend name="include/ValueType.h"/>
+  </file>
+  <file name="src/Sys.cpp" >
+   <depend name="include/StringTools.h"/>
+   <depend name="include/Sys.h"/>
+   <depend name="include/haxe/SysTools.h"/>
+   <depend name="include/haxe/io/Input.h"/>
+   <depend name="include/sys/io/FileInput.h"/>
+  </file>
+  <file name="src/StringTools.cpp" >
+   <depend name="include/StringTools.h"/>
+  </file>
+  <file name="src/haxe/SysTools.cpp" >
+   <depend name="include/EReg.h"/>
+   <depend name="include/Std.h"/>
+   <depend name="include/StringBuf.h"/>
+   <depend name="include/StringTools.h"/>
+   <depend name="include/haxe/SysTools.h"/>
+  </file>
+  <file name="src/StringBuf.cpp" >
+   <depend name="include/StringBuf.h"/>
+  </file>
+  <file name="src/Std.cpp" >
+   <depend name="include/Std.h"/>
+  </file>
+  <file name="src/Reflect.cpp" >
+   <depend name="include/Reflect.h"/>
+  </file>
+  <file name="src/Main.cpp" >
+   <depend name="include/Main.h"/>
+   <depend name="include/Sys.h"/>
+   <depend name="include/haxe/Resource.h"/>
+   <depend name="include/haxe/io/Input.h"/>
+   <depend name="include/little/Little.h"/>
+   <depend name="include/little/interpreter/InterpTokens.h"/>
+   <depend name="include/little/interpreter/Interpreter.h"/>
+   <depend name="include/little/interpreter/Runtime.h"/>
+   <depend name="include/little/interpreter/StdOut.h"/>
+   <depend name="include/little/lexer/Lexer.h"/>
+   <depend name="include/little/lexer/LexerTokens.h"/>
+   <depend name="include/little/parser/Parser.h"/>
+   <depend name="include/little/parser/ParserTokens.h"/>
+   <depend name="include/little/tools/PrettyPrinter.h"/>
+   <depend name="include/little/tools/TextTools.h"/>
+  </file>
+  <file name="src/EReg.cpp" >
+   <depend name="include/EReg.h"/>
+   <depend name="include/Std.h"/>
+   <depend name="include/StringBuf.h"/>
+   <depend name="include/haxe/Exception.h"/>
+   <depend name="include/haxe/ValueException.h"/>
+  </file>
+  <file name="src/Date.cpp" >
+   <depend name="include/Date.h"/>
+   <depend name="include/Std.h"/>
+  </file>
+  <file name="src/__boot__.cpp" >
+   <depend name="include/little/tools/TextDirection.h"/>
+   <depend name="include/little/tools/InterpTokensSimple.h"/>
+   <depend name="include/little/tools/ParserTokensSimple.h"/>
+   <depend name="include/little/parser/ParserTokens.h"/>
+   <depend name="include/little/lexer/LexerTokens.h"/>
+   <depend name="include/little/interpreter/memory/OperatorType.h"/>
+   <depend name="include/little/interpreter/InterpTokens.h"/>
+   <depend name="include/little/interpreter/FieldDeclarationType.h"/>
+   <depend name="include/haxe/io/Error.h"/>
+   <depend name="include/haxe/io/Encoding.h"/>
+   <depend name="include/haxe/StackItem.h"/>
+   <depend name="include/ValueType.h"/>
+   <depend name="include/vision/tools/ImageTools.h"/>
+   <depend name="include/vision/helpers/VisionThread.h"/>
+   <depend name="include/vision/ds/_PixelFormat/PixelFormat_Impl_.h"/>
+   <depend name="include/vision/ds/_Image/Image_Impl_.h"/>
+   <depend name="include/vision/ds/_Color/Color_Impl_.h"/>
+   <depend name="include/little/tools/PrettyPrinter.h"/>
+   <depend name="include/little/tools/PrepareRun.h"/>
+   <depend name="include/little/tools/_Layer/Layer_Impl_.h"/>
+   <depend name="include/little/parser/Parser.h"/>
+   <depend name="include/little/interpreter/memory/_MemoryPointer/MemoryPointer_Fields_.h"/>
+   <depend name="include/little/interpreter/memory/_MemoryPointer/MemoryPointer_Impl_.h"/>
+   <depend name="include/little/interpreter/memory/HashTables.h"/>
+   <depend name="include/little/Little.h"/>
+   <depend name="include/little/interpreter/memory/Referrer.h"/>
+   <depend name="include/little/KeywordConfig.h"/>
+   <depend name="include/little/tools/TextTools.h"/>
+   <depend name="include/haxe/hash/Murmur1.h"/>
+   <depend name="include/haxe/Unserializer.h"/>
+   <depend name="include/haxe/Serializer.h"/>
+   <depend name="include/haxe/Log.h"/>
+   <depend name="include/sys/thread/_Thread/HaxeThread.h"/>
+   <depend name="include/haxe/SysTools.h"/>
+  </file>
+  <file name="src/__files__.cpp" if='HXCPP_DEBUGGER'>
+  </file>
+   <file name="${HXCPP}/src/hx/NoFiles.cpp" unless="HXCPP_DEBUGGER" />
+  <file name="src/__resources__.cpp" >
+  </file>
+</files>
+<files id="__lib__">
+<compilerflag value="-Iinclude"/>
+  <file name="src/__lib__.cpp" >
+   <depend name="include/Main.h"/>
+   <depend name="include/sys/thread/_Thread/Thread_Impl_.h"/>
+  </file>
+</files>
+<files id="__main__">
+<compilerflag value="-Iinclude"/>
+  <file name="src/__main__.cpp" >
+   <depend name="include/Main.h"/>
+   <depend name="include/sys/thread/_Thread/Thread_Impl_.h"/>
+  </file>
+</files>
+<files id="__resources__">
+<file name="src/resources/__res_0.cpp" tags="optim-none" />
+</files>
+<files id="__externs__">
+</files>
+<set name="HAXE_OUTPUT" value="Main" />
+<include name="${HXCPP}/build-tool/BuildCommon.xml"/>
+<include name="${HXCPP}/src/hx/libs/regexp/Build.xml"/>
+<include name="${HXCPP}/src/hx/libs/std/Build.xml"/>
+<include name="${HXCPP}/src/hx/libs/std/Build.xml"/>
+<error value="Hxcpp is out of date - please update" unlessApi="430" />
+</xml>
