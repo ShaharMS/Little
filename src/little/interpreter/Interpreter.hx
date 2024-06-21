@@ -372,11 +372,12 @@ class Interpreter {
     public static function typeCast(value:InterpTokens, type:InterpTokens):InterpTokens {
 		var preType = evaluate(value).type().asTokenPath().asStringPath();
 		var postType = type.extractIdentifier().asTokenPath().asStringPath();
+        trace(preType, postType, value);
 		if (preType.join(Little.keywords.PROPERTY_ACCESS_SIGN) == postType.join(Little.keywords.PROPERTY_ACCESS_SIGN) || postType.join(Little.keywords.PROPERTY_ACCESS_SIGN) == Little.keywords.TYPE_UNKNOWN) return value;
 
-		preType.push(Little.keywords.TYPE_CAST_FUNCTION_PREFIX + postType.join("_"));
-		value = call(preType.join(Little.keywords.PROPERTY_ACCESS_SIGN).asTokenPath(), PartArray([value]));
-
+        var val = evaluate(value);
+        var func = Identifier(Little.keywords.TYPE_CAST_FUNCTION_PREFIX + postType.join("_"));
+		value = call(PropertyAccess(val, func), PartArray([]));
         for (listener in Little.runtime.onTypeCast) {
             listener(value, type.asJoinedStringPath());
         }

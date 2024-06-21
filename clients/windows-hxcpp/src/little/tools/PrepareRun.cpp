@@ -87,89 +87,90 @@
 #include <vision/tools/MathTools.h>
 #endif
 
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_47_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",47,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_60_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",60,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_63_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",63,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_66_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",66,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_72_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",72,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_75_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",75,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_78_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",78,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_81_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",81,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_87_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",87,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_89_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",89,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_96_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",96,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_104_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",104,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_106_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",106,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_48_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",48,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_58_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",58,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_65_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",65,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_68_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",68,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_71_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",71,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_77_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",77,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_80_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",80,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_83_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",83,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_86_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",86,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_92_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",92,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_94_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",94,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_101_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",101,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_109_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",109,0x70b2680d)
 HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_111_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",111,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_113_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",113,0x70b2680d)
 HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_116_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",116,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_120_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",120,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_123_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",123,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_118_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",118,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_121_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",121,0x70b2680d)
 HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_125_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",125,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_129_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",129,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_131_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",131,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_128_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",128,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_130_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",130,0x70b2680d)
 HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_134_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",134,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_137_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",137,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_140_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",140,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_143_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",143,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_146_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",146,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_136_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",136,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_139_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",139,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_142_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",142,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_145_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",145,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_148_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",148,0x70b2680d)
 HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_151_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",151,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_157_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",157,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_156_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",156,0x70b2680d)
 HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_162_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",162,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_169_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",169,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_176_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",176,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_183_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",183,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_191_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",191,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_204_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",204,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_207_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",207,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_211_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",211,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_214_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",214,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_228_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",228,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_231_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",231,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_167_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",167,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_174_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",174,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_181_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",181,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_188_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",188,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_196_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",196,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_209_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",209,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_212_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",212,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_216_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",216,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_219_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",219,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_233_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",233,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_236_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",236,0x70b2680d)
 HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_36_addTypes,"little.tools.PrepareRun","addTypes",0x6cf0f4d7,"little.tools.PrepareRun.addTypes","little/tools/PrepareRun.hx",36,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_241_addFunctions,"little.tools.PrepareRun","addFunctions",0x80e515b9,"little.tools.PrepareRun.addFunctions","little/tools/PrepareRun.hx",241,0x70b2680d)
 HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_246_addFunctions,"little.tools.PrepareRun","addFunctions",0x80e515b9,"little.tools.PrepareRun.addFunctions","little/tools/PrepareRun.hx",246,0x70b2680d)
 HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_251_addFunctions,"little.tools.PrepareRun","addFunctions",0x80e515b9,"little.tools.PrepareRun.addFunctions","little/tools/PrepareRun.hx",251,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_253_addFunctions,"little.tools.PrepareRun","addFunctions",0x80e515b9,"little.tools.PrepareRun.addFunctions","little/tools/PrepareRun.hx",253,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_240_addFunctions,"little.tools.PrepareRun","addFunctions",0x80e515b9,"little.tools.PrepareRun.addFunctions","little/tools/PrepareRun.hx",240,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_263_addProps,"little.tools.PrepareRun","addProps",0x1ab56bce,"little.tools.PrepareRun.addProps","little/tools/PrepareRun.hx",263,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_269_addProps,"little.tools.PrepareRun","addProps",0x1ab56bce,"little.tools.PrepareRun.addProps","little/tools/PrepareRun.hx",269,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_261_addProps,"little.tools.PrepareRun","addProps",0x1ab56bce,"little.tools.PrepareRun.addProps","little/tools/PrepareRun.hx",261,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_287_addSigns,"little.tools.PrepareRun","addSigns",0xcef029f4,"little.tools.PrepareRun.addSigns","little/tools/PrepareRun.hx",287,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_299_addSigns,"little.tools.PrepareRun","addSigns",0xcef029f4,"little.tools.PrepareRun.addSigns","little/tools/PrepareRun.hx",299,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_311_addSigns,"little.tools.PrepareRun","addSigns",0xcef029f4,"little.tools.PrepareRun.addSigns","little/tools/PrepareRun.hx",311,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_322_addSigns,"little.tools.PrepareRun","addSigns",0xcef029f4,"little.tools.PrepareRun.addSigns","little/tools/PrepareRun.hx",322,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_337_addSigns,"little.tools.PrepareRun","addSigns",0xcef029f4,"little.tools.PrepareRun.addSigns","little/tools/PrepareRun.hx",337,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_354_addSigns,"little.tools.PrepareRun","addSigns",0xcef029f4,"little.tools.PrepareRun.addSigns","little/tools/PrepareRun.hx",354,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_373_addSigns,"little.tools.PrepareRun","addSigns",0xcef029f4,"little.tools.PrepareRun.addSigns","little/tools/PrepareRun.hx",373,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_392_addSigns,"little.tools.PrepareRun","addSigns",0xcef029f4,"little.tools.PrepareRun.addSigns","little/tools/PrepareRun.hx",392,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_410_addSigns,"little.tools.PrepareRun","addSigns",0xcef029f4,"little.tools.PrepareRun.addSigns","little/tools/PrepareRun.hx",410,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_423_addSigns,"little.tools.PrepareRun","addSigns",0xcef029f4,"little.tools.PrepareRun.addSigns","little/tools/PrepareRun.hx",423,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_437_addSigns,"little.tools.PrepareRun","addSigns",0xcef029f4,"little.tools.PrepareRun.addSigns","little/tools/PrepareRun.hx",437,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_454_addSigns,"little.tools.PrepareRun","addSigns",0xcef029f4,"little.tools.PrepareRun.addSigns","little/tools/PrepareRun.hx",454,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_460_addSigns,"little.tools.PrepareRun","addSigns",0xcef029f4,"little.tools.PrepareRun.addSigns","little/tools/PrepareRun.hx",460,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_464_addSigns,"little.tools.PrepareRun","addSigns",0xcef029f4,"little.tools.PrepareRun.addSigns","little/tools/PrepareRun.hx",464,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_256_addFunctions,"little.tools.PrepareRun","addFunctions",0x80e515b9,"little.tools.PrepareRun.addFunctions","little/tools/PrepareRun.hx",256,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_258_addFunctions,"little.tools.PrepareRun","addFunctions",0x80e515b9,"little.tools.PrepareRun.addFunctions","little/tools/PrepareRun.hx",258,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_245_addFunctions,"little.tools.PrepareRun","addFunctions",0x80e515b9,"little.tools.PrepareRun.addFunctions","little/tools/PrepareRun.hx",245,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_268_addProps,"little.tools.PrepareRun","addProps",0x1ab56bce,"little.tools.PrepareRun.addProps","little/tools/PrepareRun.hx",268,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_274_addProps,"little.tools.PrepareRun","addProps",0x1ab56bce,"little.tools.PrepareRun.addProps","little/tools/PrepareRun.hx",274,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_266_addProps,"little.tools.PrepareRun","addProps",0x1ab56bce,"little.tools.PrepareRun.addProps","little/tools/PrepareRun.hx",266,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_292_addSigns,"little.tools.PrepareRun","addSigns",0xcef029f4,"little.tools.PrepareRun.addSigns","little/tools/PrepareRun.hx",292,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_304_addSigns,"little.tools.PrepareRun","addSigns",0xcef029f4,"little.tools.PrepareRun.addSigns","little/tools/PrepareRun.hx",304,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_316_addSigns,"little.tools.PrepareRun","addSigns",0xcef029f4,"little.tools.PrepareRun.addSigns","little/tools/PrepareRun.hx",316,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_327_addSigns,"little.tools.PrepareRun","addSigns",0xcef029f4,"little.tools.PrepareRun.addSigns","little/tools/PrepareRun.hx",327,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_342_addSigns,"little.tools.PrepareRun","addSigns",0xcef029f4,"little.tools.PrepareRun.addSigns","little/tools/PrepareRun.hx",342,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_359_addSigns,"little.tools.PrepareRun","addSigns",0xcef029f4,"little.tools.PrepareRun.addSigns","little/tools/PrepareRun.hx",359,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_378_addSigns,"little.tools.PrepareRun","addSigns",0xcef029f4,"little.tools.PrepareRun.addSigns","little/tools/PrepareRun.hx",378,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_397_addSigns,"little.tools.PrepareRun","addSigns",0xcef029f4,"little.tools.PrepareRun.addSigns","little/tools/PrepareRun.hx",397,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_415_addSigns,"little.tools.PrepareRun","addSigns",0xcef029f4,"little.tools.PrepareRun.addSigns","little/tools/PrepareRun.hx",415,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_428_addSigns,"little.tools.PrepareRun","addSigns",0xcef029f4,"little.tools.PrepareRun.addSigns","little/tools/PrepareRun.hx",428,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_442_addSigns,"little.tools.PrepareRun","addSigns",0xcef029f4,"little.tools.PrepareRun.addSigns","little/tools/PrepareRun.hx",442,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_459_addSigns,"little.tools.PrepareRun","addSigns",0xcef029f4,"little.tools.PrepareRun.addSigns","little/tools/PrepareRun.hx",459,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_465_addSigns,"little.tools.PrepareRun","addSigns",0xcef029f4,"little.tools.PrepareRun.addSigns","little/tools/PrepareRun.hx",465,0x70b2680d)
 HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_469_addSigns,"little.tools.PrepareRun","addSigns",0xcef029f4,"little.tools.PrepareRun.addSigns","little/tools/PrepareRun.hx",469,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_476_addSigns,"little.tools.PrepareRun","addSigns",0xcef029f4,"little.tools.PrepareRun.addSigns","little/tools/PrepareRun.hx",476,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_484_addSigns,"little.tools.PrepareRun","addSigns",0xcef029f4,"little.tools.PrepareRun.addSigns","little/tools/PrepareRun.hx",484,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_498_addSigns,"little.tools.PrepareRun","addSigns",0xcef029f4,"little.tools.PrepareRun.addSigns","little/tools/PrepareRun.hx",498,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_512_addSigns,"little.tools.PrepareRun","addSigns",0xcef029f4,"little.tools.PrepareRun.addSigns","little/tools/PrepareRun.hx",512,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_526_addSigns,"little.tools.PrepareRun","addSigns",0xcef029f4,"little.tools.PrepareRun.addSigns","little/tools/PrepareRun.hx",526,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_277_addSigns,"little.tools.PrepareRun","addSigns",0xcef029f4,"little.tools.PrepareRun.addSigns","little/tools/PrepareRun.hx",277,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_540_addConditions,"little.tools.PrepareRun","addConditions",0x2a20655a,"little.tools.PrepareRun.addConditions","little/tools/PrepareRun.hx",540,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_564_addConditions,"little.tools.PrepareRun","addConditions",0x2a20655a,"little.tools.PrepareRun.addConditions","little/tools/PrepareRun.hx",564,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_577_addConditions,"little.tools.PrepareRun","addConditions",0x2a20655a,"little.tools.PrepareRun.addConditions","little/tools/PrepareRun.hx",577,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_703_addConditions,"little.tools.PrepareRun","addConditions",0x2a20655a,"little.tools.PrepareRun.addConditions","little/tools/PrepareRun.hx",703,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_685_addConditions,"little.tools.PrepareRun","addConditions",0x2a20655a,"little.tools.PrepareRun.addConditions","little/tools/PrepareRun.hx",685,0x70b2680d)
-static const ::String _hx_array_data_c62cc60f_88[] = {
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_474_addSigns,"little.tools.PrepareRun","addSigns",0xcef029f4,"little.tools.PrepareRun.addSigns","little/tools/PrepareRun.hx",474,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_481_addSigns,"little.tools.PrepareRun","addSigns",0xcef029f4,"little.tools.PrepareRun.addSigns","little/tools/PrepareRun.hx",481,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_489_addSigns,"little.tools.PrepareRun","addSigns",0xcef029f4,"little.tools.PrepareRun.addSigns","little/tools/PrepareRun.hx",489,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_503_addSigns,"little.tools.PrepareRun","addSigns",0xcef029f4,"little.tools.PrepareRun.addSigns","little/tools/PrepareRun.hx",503,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_517_addSigns,"little.tools.PrepareRun","addSigns",0xcef029f4,"little.tools.PrepareRun.addSigns","little/tools/PrepareRun.hx",517,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_531_addSigns,"little.tools.PrepareRun","addSigns",0xcef029f4,"little.tools.PrepareRun.addSigns","little/tools/PrepareRun.hx",531,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_282_addSigns,"little.tools.PrepareRun","addSigns",0xcef029f4,"little.tools.PrepareRun.addSigns","little/tools/PrepareRun.hx",282,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_545_addConditions,"little.tools.PrepareRun","addConditions",0x2a20655a,"little.tools.PrepareRun.addConditions","little/tools/PrepareRun.hx",545,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_569_addConditions,"little.tools.PrepareRun","addConditions",0x2a20655a,"little.tools.PrepareRun.addConditions","little/tools/PrepareRun.hx",569,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_582_addConditions,"little.tools.PrepareRun","addConditions",0x2a20655a,"little.tools.PrepareRun.addConditions","little/tools/PrepareRun.hx",582,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_708_addConditions,"little.tools.PrepareRun","addConditions",0x2a20655a,"little.tools.PrepareRun.addConditions","little/tools/PrepareRun.hx",708,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_690_addConditions,"little.tools.PrepareRun","addConditions",0x2a20655a,"little.tools.PrepareRun.addConditions","little/tools/PrepareRun.hx",690,0x70b2680d)
+static const ::String _hx_array_data_c62cc60f_90[] = {
 	HX_("",00,00,00,00),
 };
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_732_addConditions,"little.tools.PrepareRun","addConditions",0x2a20655a,"little.tools.PrepareRun.addConditions","little/tools/PrepareRun.hx",732,0x70b2680d)
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_716_addConditions,"little.tools.PrepareRun","addConditions",0x2a20655a,"little.tools.PrepareRun.addConditions","little/tools/PrepareRun.hx",716,0x70b2680d)
-static const ::String _hx_array_data_c62cc60f_91[] = {
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_737_addConditions,"little.tools.PrepareRun","addConditions",0x2a20655a,"little.tools.PrepareRun.addConditions","little/tools/PrepareRun.hx",737,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_721_addConditions,"little.tools.PrepareRun","addConditions",0x2a20655a,"little.tools.PrepareRun.addConditions","little/tools/PrepareRun.hx",721,0x70b2680d)
+static const ::String _hx_array_data_c62cc60f_93[] = {
 	HX_("",00,00,00,00),
 };
-HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_539_addConditions,"little.tools.PrepareRun","addConditions",0x2a20655a,"little.tools.PrepareRun.addConditions","little/tools/PrepareRun.hx",539,0x70b2680d)
+HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_544_addConditions,"little.tools.PrepareRun","addConditions",0x2a20655a,"little.tools.PrepareRun.addConditions","little/tools/PrepareRun.hx",544,0x70b2680d)
 HX_LOCAL_STACK_FRAME(_hx_pos_0b0d584b35e606f8_31_boot,"little.tools.PrepareRun","boot",0xc0aa16f1,"little.tools.PrepareRun.boot","little/tools/PrepareRun.hx",31,0x70b2680d)
 namespace little{
 namespace tools{
@@ -196,383 +197,410 @@ bool PrepareRun_obj::prepared;
 void PrepareRun_obj::addTypes(){
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_0) HXARGC(3)
             		 ::little::interpreter::InterpTokens _hx_run(int address, ::little::interpreter::InterpTokens _,::Array< ::Dynamic> _1){
-            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_47_addTypes)
-HXLINE(  47)			return ::little::tools::Conversion_obj::toLittleValue(::little::Little_obj::memory->getTypeName(address));
+            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_48_addTypes)
+HXLINE(  48)			return ::little::tools::Conversion_obj::toLittleValue(::little::Little_obj::memory->getTypeName(address));
             		}
             		HX_END_LOCAL_FUNC3(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_1) HXARGC(3)
             		 ::little::interpreter::InterpTokens _hx_run(int _, ::little::interpreter::InterpTokens value,::Array< ::Dynamic> _1){
-            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_60_addTypes)
-HXLINE(  60)			return ::little::tools::Conversion_obj::toLittleValue(::Std_obj::string(::Type_obj::enumParameters(value)->__get(0)));
+            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_58_addTypes)
+HXLINE(  59)			::Array< ::Dynamic> _this = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::TRUE_VALUE_dyn())->copy();
+HXDLIN(  59)			::Array< ::String > result = ::Array_obj< ::String >::__new(_this->length);
+HXDLIN(  59)			{
+HXLINE(  59)				int _g = 0;
+HXDLIN(  59)				int _g1 = _this->length;
+HXDLIN(  59)				while((_g < _g1)){
+HXLINE(  59)					_g = (_g + 1);
+HXDLIN(  59)					int i = (_g - 1);
+HXDLIN(  59)					{
+HXLINE(  59)						::String inValue = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this,i)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN(  59)						result->__unsafe_set(i,inValue);
+            					}
+            				}
+            			}
+HXDLIN(  59)			if (result->contains(::Type_obj::enumConstructor(value).toLowerCase())) {
+HXLINE(  59)				return ::little::tools::Conversion_obj::toLittleValue(HX_("true",4e,a7,03,4d));
+            			}
+            			else {
+HXLINE(  59)				return ::little::tools::Conversion_obj::toLittleValue(HX_("false",a3,35,4f,fb));
+            			}
+HXDLIN(  59)			return null();
             		}
             		HX_END_LOCAL_FUNC3(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_2) HXARGC(3)
             		 ::little::interpreter::InterpTokens _hx_run(int _, ::little::interpreter::InterpTokens value,::Array< ::Dynamic> _1){
-            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_63_addTypes)
-HXLINE(  63)			return ::little::interpreter::InterpTokens_obj::Decimal(::Type_obj::enumParameters(value)->__get(0));
+            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_65_addTypes)
+HXLINE(  65)			return ::little::tools::Conversion_obj::toLittleValue(::Std_obj::string(::Type_obj::enumParameters(value)->__get(0)));
             		}
             		HX_END_LOCAL_FUNC3(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_3) HXARGC(3)
             		 ::little::interpreter::InterpTokens _hx_run(int _, ::little::interpreter::InterpTokens value,::Array< ::Dynamic> _1){
-            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_66_addTypes)
-HXLINE(  66)			return ::little::tools::Conversion_obj::toLittleValue(::hx::IsNotEq( ::Type_obj::enumParameters(value)->__get(0),0 ));
+            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_68_addTypes)
+HXLINE(  68)			return ::little::interpreter::InterpTokens_obj::Decimal(::Type_obj::enumParameters(value)->__get(0));
             		}
             		HX_END_LOCAL_FUNC3(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_4) HXARGC(3)
             		 ::little::interpreter::InterpTokens _hx_run(int _, ::little::interpreter::InterpTokens value,::Array< ::Dynamic> _1){
-            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_72_addTypes)
-HXLINE(  72)			return ::little::tools::Conversion_obj::toLittleValue(::Std_obj::string(::Type_obj::enumParameters(value)->__get(0)));
+            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_71_addTypes)
+HXLINE(  71)			return ::little::tools::Conversion_obj::toLittleValue(::hx::IsNotEq( ::Type_obj::enumParameters(value)->__get(0),0 ));
             		}
             		HX_END_LOCAL_FUNC3(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_5) HXARGC(3)
             		 ::little::interpreter::InterpTokens _hx_run(int _, ::little::interpreter::InterpTokens value,::Array< ::Dynamic> _1){
-            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_75_addTypes)
-HXLINE(  75)			return ::little::tools::Conversion_obj::toLittleValue(::Math_obj::floor(( (Float)(::Type_obj::enumParameters(value)->__get(0)) )));
+            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_77_addTypes)
+HXLINE(  77)			return ::little::tools::Conversion_obj::toLittleValue(::Std_obj::string(::Type_obj::enumParameters(value)->__get(0)));
             		}
             		HX_END_LOCAL_FUNC3(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_6) HXARGC(3)
             		 ::little::interpreter::InterpTokens _hx_run(int _, ::little::interpreter::InterpTokens value,::Array< ::Dynamic> _1){
-            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_78_addTypes)
-HXLINE(  78)			return ::little::tools::Conversion_obj::toLittleValue(::hx::IsNotEq( ::Type_obj::enumParameters(value)->__get(0),0 ));
+            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_80_addTypes)
+HXLINE(  80)			return ::little::tools::Conversion_obj::toLittleValue(::Math_obj::floor(( (Float)(::Type_obj::enumParameters(value)->__get(0)) )));
             		}
             		HX_END_LOCAL_FUNC3(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_7) HXARGC(3)
             		 ::little::interpreter::InterpTokens _hx_run(int _, ::little::interpreter::InterpTokens value,::Array< ::Dynamic> _1){
-            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_81_addTypes)
-HXLINE(  81)			return ::little::tools::Conversion_obj::toLittleValue((::hx::Mod(( (Float)(::Type_obj::enumParameters(value)->__get(0)) ),1) == 0));
+            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_83_addTypes)
+HXLINE(  83)			return ::little::tools::Conversion_obj::toLittleValue(::hx::IsNotEq( ::Type_obj::enumParameters(value)->__get(0),0 ));
             		}
             		HX_END_LOCAL_FUNC3(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_8) HXARGC(3)
             		 ::little::interpreter::InterpTokens _hx_run(int _, ::little::interpreter::InterpTokens value,::Array< ::Dynamic> _1){
-            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_87_addTypes)
-HXLINE(  87)			return ::little::tools::Conversion_obj::toLittleValue(::Std_obj::string(::Type_obj::enumParameters(value)->__get(0)));
+            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_86_addTypes)
+HXLINE(  86)			return ::little::tools::Conversion_obj::toLittleValue((::hx::Mod(( (Float)(::Type_obj::enumParameters(value)->__get(0)) ),1) == 0));
             		}
             		HX_END_LOCAL_FUNC3(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_9) HXARGC(3)
             		 ::little::interpreter::InterpTokens _hx_run(int _, ::little::interpreter::InterpTokens value,::Array< ::Dynamic> _1){
-            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_89_addTypes)
-HXLINE(  90)			 ::Dynamic number = ::Std_obj::parseInt(( (::String)(::Type_obj::enumParameters(value)->__get(0)) ));
-HXLINE(  91)			if (::hx::IsNull( number )) {
-HXLINE(  92)				 ::little::interpreter::Runtime _hx_tmp = ::little::Little_obj::runtime;
-HXDLIN(  92)				::String _hx_tmp1 = ((HX_("",00,00,00,00) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(" instance `\"",4d,5b,df,60));
-HXDLIN(  92)				::String _hx_tmp2 = ((_hx_tmp1 + ::Std_obj::string(::Type_obj::enumParameters(value)->__get(0))) + HX_("\"` cannot be converted to ",b5,de,da,6e));
-HXDLIN(  92)				_hx_tmp->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((_hx_tmp2 + ::little::Little_obj::keywords->TYPE_INT) + HX_(", since it is not a number\t",d9,15,26,98))),HX_("Interpreter",9a,09,07,b9));
-            			}
-HXLINE(  94)			return ::little::tools::Conversion_obj::toLittleValue(number);
+            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_92_addTypes)
+HXLINE(  92)			return ::little::tools::Conversion_obj::toLittleValue(::Std_obj::string(::Type_obj::enumParameters(value)->__get(0)));
             		}
             		HX_END_LOCAL_FUNC3(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_10) HXARGC(3)
             		 ::little::interpreter::InterpTokens _hx_run(int _, ::little::interpreter::InterpTokens value,::Array< ::Dynamic> _1){
-            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_96_addTypes)
-HXLINE(  97)			Float number = ::Std_obj::parseFloat(( (::String)(::Type_obj::enumParameters(value)->__get(0)) ));
-HXLINE(  98)			if ((number == ::Math_obj::NaN)) {
-HXLINE(  99)				 ::little::interpreter::Runtime _hx_tmp = ::little::Little_obj::runtime;
-HXDLIN(  99)				::String _hx_tmp1 = ((HX_("",00,00,00,00) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(" instance `\"",4d,5b,df,60));
-HXDLIN(  99)				::String _hx_tmp2 = ((_hx_tmp1 + ::Std_obj::string(::Type_obj::enumParameters(value)->__get(0))) + HX_("\"` cannot be converted to ",b5,de,da,6e));
-HXDLIN(  99)				_hx_tmp->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((_hx_tmp2 + ::little::Little_obj::keywords->TYPE_FLOAT) + HX_(", since it is not a number\t",d9,15,26,98))),HX_("Interpreter",9a,09,07,b9));
+            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_94_addTypes)
+HXLINE(  95)			 ::Dynamic number = ::Std_obj::parseInt(( (::String)(::Type_obj::enumParameters(value)->__get(0)) ));
+HXLINE(  96)			if (::hx::IsNull( number )) {
+HXLINE(  97)				 ::little::interpreter::Runtime _hx_tmp = ::little::Little_obj::runtime;
+HXDLIN(  97)				::String _hx_tmp1 = ((HX_("",00,00,00,00) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(" instance `\"",4d,5b,df,60));
+HXDLIN(  97)				::String _hx_tmp2 = ((_hx_tmp1 + ::Std_obj::string(::Type_obj::enumParameters(value)->__get(0))) + HX_("\"` cannot be converted to ",b5,de,da,6e));
+HXDLIN(  97)				_hx_tmp->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((_hx_tmp2 + ::little::Little_obj::keywords->TYPE_INT) + HX_(", since it is not a number\t",d9,15,26,98))),HX_("Interpreter",9a,09,07,b9));
             			}
-HXLINE( 101)			return ::little::tools::Conversion_obj::toLittleValue(number);
+HXLINE(  99)			return ::little::tools::Conversion_obj::toLittleValue(number);
             		}
             		HX_END_LOCAL_FUNC3(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_11) HXARGC(3)
             		 ::little::interpreter::InterpTokens _hx_run(int _, ::little::interpreter::InterpTokens value,::Array< ::Dynamic> _1){
-            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_104_addTypes)
-HXLINE( 104)			return ::little::tools::Conversion_obj::toLittleValue(::little::interpreter::InterpTokens_obj::Sign(::Type_obj::enumParameters(value)->__get(0)));
+            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_101_addTypes)
+HXLINE( 102)			Float number = ::Std_obj::parseFloat(( (::String)(::Type_obj::enumParameters(value)->__get(0)) ));
+HXLINE( 103)			if ((number == ::Math_obj::NaN)) {
+HXLINE( 104)				 ::little::interpreter::Runtime _hx_tmp = ::little::Little_obj::runtime;
+HXDLIN( 104)				::String _hx_tmp1 = ((HX_("",00,00,00,00) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(" instance `\"",4d,5b,df,60));
+HXDLIN( 104)				::String _hx_tmp2 = ((_hx_tmp1 + ::Std_obj::string(::Type_obj::enumParameters(value)->__get(0))) + HX_("\"` cannot be converted to ",b5,de,da,6e));
+HXDLIN( 104)				_hx_tmp->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((_hx_tmp2 + ::little::Little_obj::keywords->TYPE_FLOAT) + HX_(", since it is not a number\t",d9,15,26,98))),HX_("Interpreter",9a,09,07,b9));
+            			}
+HXLINE( 106)			return ::little::tools::Conversion_obj::toLittleValue(number);
             		}
             		HX_END_LOCAL_FUNC3(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_12) HXARGC(3)
             		 ::little::interpreter::InterpTokens _hx_run(int _, ::little::interpreter::InterpTokens value,::Array< ::Dynamic> _1){
-            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_106_addTypes)
-HXLINE( 107)			bool _hx_tmp;
-HXDLIN( 107)			if (::hx::IsNotEq( ::Type_obj::enumParameters(value)->__get(0),HX_("true",4e,a7,03,4d) )) {
-HXLINE( 107)				Float _hx_tmp1 = ::Std_obj::parseFloat(( (::String)(::Type_obj::enumParameters(value)->__get(0)) ));
-HXDLIN( 107)				if ((_hx_tmp1 != ::Math_obj::NaN)) {
-HXLINE( 107)					_hx_tmp = (::Std_obj::parseFloat(( (::String)(::Type_obj::enumParameters(value)->__get(0)) )) != 0);
+            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_109_addTypes)
+HXLINE( 109)			return ::little::tools::Conversion_obj::toLittleValue(::little::interpreter::InterpTokens_obj::Sign(::Type_obj::enumParameters(value)->__get(0)));
+            		}
+            		HX_END_LOCAL_FUNC3(return)
+
+            		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_13) HXARGC(3)
+            		 ::little::interpreter::InterpTokens _hx_run(int _, ::little::interpreter::InterpTokens value,::Array< ::Dynamic> _1){
+            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_111_addTypes)
+HXLINE( 112)			bool _hx_tmp;
+HXDLIN( 112)			if (::hx::IsNotEq( ::Type_obj::enumParameters(value)->__get(0),HX_("true",4e,a7,03,4d) )) {
+HXLINE( 112)				Float _hx_tmp1 = ::Std_obj::parseFloat(( (::String)(::Type_obj::enumParameters(value)->__get(0)) ));
+HXDLIN( 112)				if ((_hx_tmp1 != ::Math_obj::NaN)) {
+HXLINE( 112)					_hx_tmp = (::Std_obj::parseFloat(( (::String)(::Type_obj::enumParameters(value)->__get(0)) )) != 0);
             				}
             				else {
-HXLINE( 107)					_hx_tmp = false;
+HXLINE( 112)					_hx_tmp = false;
             				}
             			}
             			else {
-HXLINE( 107)				_hx_tmp = true;
+HXLINE( 112)				_hx_tmp = true;
             			}
-HXDLIN( 107)			return ::little::tools::Conversion_obj::toLittleValue(_hx_tmp);
+HXDLIN( 112)			return ::little::tools::Conversion_obj::toLittleValue(_hx_tmp);
             		}
             		HX_END_LOCAL_FUNC3(return)
 
-            		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_13) HXARGC(2)
+            		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_14) HXARGC(2)
             		 ::little::interpreter::InterpTokens _hx_run(int _, ::little::interpreter::InterpTokens value){
-            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_111_addTypes)
-HXLINE( 111)			return ::little::tools::Conversion_obj::toLittleValue( ::Dynamic(::Type_obj::enumParameters(value)->__get(0)->__Field(HX_("length",e6,94,07,9f),::hx::paccDynamic)));
+            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_116_addTypes)
+HXLINE( 116)			return ::little::tools::Conversion_obj::toLittleValue( ::Dynamic(::Type_obj::enumParameters(value)->__get(0)->__Field(HX_("length",e6,94,07,9f),::hx::paccDynamic)));
             		}
             		HX_END_LOCAL_FUNC2(return)
 
-            		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_14) HXARGC(3)
-            		 ::little::interpreter::InterpTokens _hx_run(int _, ::little::interpreter::InterpTokens value,::Array< ::Dynamic> params){
-            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_113_addTypes)
-HXLINE( 114)			 ::Dynamic _hx_tmp =  ::Dynamic(::Type_obj::enumParameters(value)->__get(0)->__Field(HX_("charAt",69,79,75,b7),::hx::paccDynamic));
-HXDLIN( 114)			return ::little::tools::Conversion_obj::toLittleValue(_hx_tmp(::little::tools::Conversion_obj::toHaxeValue(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())));
-            		}
-            		HX_END_LOCAL_FUNC3(return)
-
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_15) HXARGC(3)
             		 ::little::interpreter::InterpTokens _hx_run(int _, ::little::interpreter::InterpTokens value,::Array< ::Dynamic> params){
-            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_116_addTypes)
-HXLINE( 117)			 ::Dynamic _hx_tmp =  ::Dynamic(::Type_obj::enumParameters(value)->__get(0)->__Field(HX_("substring",51,f2,e7,e2),::hx::paccDynamic));
-HXDLIN( 117)			 ::Dynamic _hx_tmp1 = ::little::tools::Conversion_obj::toHaxeValue(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >());
-HXDLIN( 117)			return ::little::interpreter::InterpTokens_obj::Characters(_hx_tmp(_hx_tmp1,::little::tools::Conversion_obj::toHaxeValue(params->__get(1).StaticCast<  ::little::interpreter::InterpTokens >())));
+            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_118_addTypes)
+HXLINE( 119)			 ::Dynamic _hx_tmp =  ::Dynamic(::Type_obj::enumParameters(value)->__get(0)->__Field(HX_("charAt",69,79,75,b7),::hx::paccDynamic));
+HXDLIN( 119)			return ::little::tools::Conversion_obj::toLittleValue(_hx_tmp(::little::tools::Conversion_obj::toHaxeValue(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())));
             		}
             		HX_END_LOCAL_FUNC3(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_16) HXARGC(3)
-            		 ::little::interpreter::InterpTokens _hx_run(int _, ::little::interpreter::InterpTokens value,::Array< ::Dynamic> _1){
-            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_120_addTypes)
-HXLINE( 120)			return ::little::interpreter::InterpTokens_obj::Characters(::Type_obj::enumParameters(value)->__get(0)->__Field(HX_("toLowerCase",56,4c,64,b8),::hx::paccDynamic)());
+            		 ::little::interpreter::InterpTokens _hx_run(int _, ::little::interpreter::InterpTokens value,::Array< ::Dynamic> params){
+            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_121_addTypes)
+HXLINE( 122)			 ::Dynamic _hx_tmp =  ::Dynamic(::Type_obj::enumParameters(value)->__get(0)->__Field(HX_("substring",51,f2,e7,e2),::hx::paccDynamic));
+HXDLIN( 122)			 ::Dynamic _hx_tmp1 = ::little::tools::Conversion_obj::toHaxeValue(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >());
+HXDLIN( 122)			return ::little::interpreter::InterpTokens_obj::Characters(_hx_tmp(_hx_tmp1,::little::tools::Conversion_obj::toHaxeValue(params->__get(1).StaticCast<  ::little::interpreter::InterpTokens >())));
             		}
             		HX_END_LOCAL_FUNC3(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_17) HXARGC(3)
             		 ::little::interpreter::InterpTokens _hx_run(int _, ::little::interpreter::InterpTokens value,::Array< ::Dynamic> _1){
-            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_123_addTypes)
-HXLINE( 123)			return ::little::interpreter::InterpTokens_obj::Characters(::Type_obj::enumParameters(value)->__get(0)->__Field(HX_("toUpperCase",37,30,fd,38),::hx::paccDynamic)());
+            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_125_addTypes)
+HXLINE( 125)			return ::little::interpreter::InterpTokens_obj::Characters(::Type_obj::enumParameters(value)->__get(0)->__Field(HX_("toLowerCase",56,4c,64,b8),::hx::paccDynamic)());
             		}
             		HX_END_LOCAL_FUNC3(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_18) HXARGC(3)
-            		 ::little::interpreter::InterpTokens _hx_run(int _, ::little::interpreter::InterpTokens value,::Array< ::Dynamic> params){
-            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_125_addTypes)
-HXLINE( 126)			 ::Dynamic _hx_tmp =  ::Dynamic(::Type_obj::enumParameters(value)->__get(0)->__Field(HX_("replace",34,48,28,ab),::hx::paccDynamic));
-HXDLIN( 126)			 ::Dynamic _hx_tmp1 = ::little::tools::Conversion_obj::toHaxeValue(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >());
-HXDLIN( 126)			return ::little::interpreter::InterpTokens_obj::Characters(_hx_tmp(_hx_tmp1,::little::tools::Conversion_obj::toHaxeValue(params->__get(1).StaticCast<  ::little::interpreter::InterpTokens >())));
+            		 ::little::interpreter::InterpTokens _hx_run(int _, ::little::interpreter::InterpTokens value,::Array< ::Dynamic> _1){
+            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_128_addTypes)
+HXLINE( 128)			return ::little::interpreter::InterpTokens_obj::Characters(::Type_obj::enumParameters(value)->__get(0)->__Field(HX_("toUpperCase",37,30,fd,38),::hx::paccDynamic)());
             		}
             		HX_END_LOCAL_FUNC3(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_19) HXARGC(3)
-            		 ::little::interpreter::InterpTokens _hx_run(int _, ::little::interpreter::InterpTokens value,::Array< ::Dynamic> _1){
-            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_129_addTypes)
-HXLINE( 129)			return ::little::interpreter::InterpTokens_obj::Characters(::Type_obj::enumParameters(value)->__get(0)->__Field(HX_("trim",e2,9c,03,4d),::hx::paccDynamic)());
+            		 ::little::interpreter::InterpTokens _hx_run(int _, ::little::interpreter::InterpTokens value,::Array< ::Dynamic> params){
+            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_130_addTypes)
+HXLINE( 131)			 ::Dynamic _hx_tmp =  ::Dynamic(::Type_obj::enumParameters(value)->__get(0)->__Field(HX_("replace",34,48,28,ab),::hx::paccDynamic));
+HXDLIN( 131)			 ::Dynamic _hx_tmp1 = ::little::tools::Conversion_obj::toHaxeValue(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >());
+HXDLIN( 131)			return ::little::interpreter::InterpTokens_obj::Characters(_hx_tmp(_hx_tmp1,::little::tools::Conversion_obj::toHaxeValue(params->__get(1).StaticCast<  ::little::interpreter::InterpTokens >())));
             		}
             		HX_END_LOCAL_FUNC3(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_20) HXARGC(3)
-            		 ::little::interpreter::InterpTokens _hx_run(int _, ::little::interpreter::InterpTokens value,::Array< ::Dynamic> params){
-            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_131_addTypes)
-HXLINE( 132)			 ::Dynamic _hx_tmp =  ::Dynamic(::Type_obj::enumParameters(value)->__get(0)->__Field(HX_("replace",34,48,28,ab),::hx::paccDynamic));
-HXDLIN( 132)			return ::little::interpreter::InterpTokens_obj::Characters(_hx_tmp(::little::tools::Conversion_obj::toHaxeValue(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >()),HX_("",00,00,00,00)));
+            		 ::little::interpreter::InterpTokens _hx_run(int _, ::little::interpreter::InterpTokens value,::Array< ::Dynamic> _1){
+            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_134_addTypes)
+HXLINE( 134)			return ::little::interpreter::InterpTokens_obj::Characters(::Type_obj::enumParameters(value)->__get(0)->__Field(HX_("trim",e2,9c,03,4d),::hx::paccDynamic)());
             		}
             		HX_END_LOCAL_FUNC3(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_21) HXARGC(3)
             		 ::little::interpreter::InterpTokens _hx_run(int _, ::little::interpreter::InterpTokens value,::Array< ::Dynamic> params){
-            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_134_addTypes)
-HXLINE( 135)			 ::Dynamic _hx_tmp =  ::Dynamic(::Type_obj::enumParameters(value)->__get(0)->__Field(HX_("contains",1f,5a,7b,2c),::hx::paccDynamic));
-HXDLIN( 135)			return ::little::tools::Conversion_obj::toLittleValue(_hx_tmp(::little::tools::Conversion_obj::toHaxeValue(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())));
+            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_136_addTypes)
+HXLINE( 137)			 ::Dynamic _hx_tmp =  ::Dynamic(::Type_obj::enumParameters(value)->__get(0)->__Field(HX_("replace",34,48,28,ab),::hx::paccDynamic));
+HXDLIN( 137)			return ::little::interpreter::InterpTokens_obj::Characters(_hx_tmp(::little::tools::Conversion_obj::toHaxeValue(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >()),HX_("",00,00,00,00)));
             		}
             		HX_END_LOCAL_FUNC3(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_22) HXARGC(3)
             		 ::little::interpreter::InterpTokens _hx_run(int _, ::little::interpreter::InterpTokens value,::Array< ::Dynamic> params){
-            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_137_addTypes)
-HXLINE( 138)			 ::Dynamic _hx_tmp =  ::Dynamic(::Type_obj::enumParameters(value)->__get(0)->__Field(HX_("indexOf",c9,48,bf,e0),::hx::paccDynamic));
-HXDLIN( 138)			return ::little::tools::Conversion_obj::toLittleValue(_hx_tmp(::little::tools::Conversion_obj::toHaxeValue(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())));
+            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_139_addTypes)
+HXLINE( 140)			 ::Dynamic _hx_tmp =  ::Dynamic(::Type_obj::enumParameters(value)->__get(0)->__Field(HX_("contains",1f,5a,7b,2c),::hx::paccDynamic));
+HXDLIN( 140)			return ::little::tools::Conversion_obj::toLittleValue(_hx_tmp(::little::tools::Conversion_obj::toHaxeValue(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())));
             		}
             		HX_END_LOCAL_FUNC3(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_23) HXARGC(3)
             		 ::little::interpreter::InterpTokens _hx_run(int _, ::little::interpreter::InterpTokens value,::Array< ::Dynamic> params){
-            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_140_addTypes)
-HXLINE( 141)			 ::Dynamic _hx_tmp =  ::Dynamic(::Type_obj::enumParameters(value)->__get(0)->__Field(HX_("lastIndexOf",13,fd,6a,95),::hx::paccDynamic));
-HXDLIN( 141)			return ::little::tools::Conversion_obj::toLittleValue(_hx_tmp(::little::tools::Conversion_obj::toHaxeValue(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())));
+            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_142_addTypes)
+HXLINE( 143)			 ::Dynamic _hx_tmp =  ::Dynamic(::Type_obj::enumParameters(value)->__get(0)->__Field(HX_("indexOf",c9,48,bf,e0),::hx::paccDynamic));
+HXDLIN( 143)			return ::little::tools::Conversion_obj::toLittleValue(_hx_tmp(::little::tools::Conversion_obj::toHaxeValue(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())));
             		}
             		HX_END_LOCAL_FUNC3(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_24) HXARGC(3)
             		 ::little::interpreter::InterpTokens _hx_run(int _, ::little::interpreter::InterpTokens value,::Array< ::Dynamic> params){
-            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_143_addTypes)
-HXLINE( 144)			 ::Dynamic _hx_tmp =  ::Dynamic(::Type_obj::enumParameters(value)->__get(0)->__Field(HX_("indexOf",c9,48,bf,e0),::hx::paccDynamic));
-HXDLIN( 144)			return ::little::tools::Conversion_obj::toLittleValue(_hx_tmp(::hx::IsEq( ::little::tools::Conversion_obj::toHaxeValue(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >()),0 )));
+            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_145_addTypes)
+HXLINE( 146)			 ::Dynamic _hx_tmp =  ::Dynamic(::Type_obj::enumParameters(value)->__get(0)->__Field(HX_("lastIndexOf",13,fd,6a,95),::hx::paccDynamic));
+HXDLIN( 146)			return ::little::tools::Conversion_obj::toLittleValue(_hx_tmp(::little::tools::Conversion_obj::toHaxeValue(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())));
             		}
             		HX_END_LOCAL_FUNC3(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_25) HXARGC(3)
             		 ::little::interpreter::InterpTokens _hx_run(int _, ::little::interpreter::InterpTokens value,::Array< ::Dynamic> params){
-            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_146_addTypes)
-HXLINE( 147)			 ::Dynamic _hx_tmp =  ::Dynamic(::Type_obj::enumParameters(value)->__get(0)->__Field(HX_("indexOf",c9,48,bf,e0),::hx::paccDynamic));
-HXDLIN( 147)			 ::Dynamic _hx_tmp1 = _hx_tmp(::little::tools::Conversion_obj::toHaxeValue(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >()));
-HXDLIN( 147)			 ::Dynamic _hx_tmp2 =  ::Dynamic(::Type_obj::enumParameters(value)->__get(0)->__Field(HX_("length",e6,94,07,9f),::hx::paccDynamic));
-HXDLIN( 147)			return ::little::tools::Conversion_obj::toLittleValue(::hx::IsEq( _hx_tmp1,(( (Float)(_hx_tmp2) ) - ( (Float)(::little::tools::Conversion_obj::toHaxeValue(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())->__Field(HX_("length",e6,94,07,9f),::hx::paccDynamic)) )) ));
+            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_148_addTypes)
+HXLINE( 149)			 ::Dynamic _hx_tmp =  ::Dynamic(::Type_obj::enumParameters(value)->__get(0)->__Field(HX_("indexOf",c9,48,bf,e0),::hx::paccDynamic));
+HXDLIN( 149)			return ::little::tools::Conversion_obj::toLittleValue(_hx_tmp(::hx::IsEq( ::little::tools::Conversion_obj::toHaxeValue(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >()),0 )));
             		}
             		HX_END_LOCAL_FUNC3(return)
 
-            		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_26) HXARGC(1)
-            		 ::little::interpreter::InterpTokens _hx_run(::Array< ::Dynamic> params){
+            		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_26) HXARGC(3)
+            		 ::little::interpreter::InterpTokens _hx_run(int _, ::little::interpreter::InterpTokens value,::Array< ::Dynamic> params){
             			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_151_addTypes)
-HXLINE( 151)			return ::little::tools::Conversion_obj::toLittleValue(::String::fromCharCode(( (int)(::little::tools::Conversion_obj::toHaxeValue(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())) )));
+HXLINE( 152)			 ::Dynamic _hx_tmp =  ::Dynamic(::Type_obj::enumParameters(value)->__get(0)->__Field(HX_("indexOf",c9,48,bf,e0),::hx::paccDynamic));
+HXDLIN( 152)			 ::Dynamic _hx_tmp1 = _hx_tmp(::little::tools::Conversion_obj::toHaxeValue(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >()));
+HXDLIN( 152)			 ::Dynamic _hx_tmp2 =  ::Dynamic(::Type_obj::enumParameters(value)->__get(0)->__Field(HX_("length",e6,94,07,9f),::hx::paccDynamic));
+HXDLIN( 152)			return ::little::tools::Conversion_obj::toLittleValue(::hx::IsEq( _hx_tmp1,(( (Float)(_hx_tmp2) ) - ( (Float)(::little::tools::Conversion_obj::toHaxeValue(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())->__Field(HX_("length",e6,94,07,9f),::hx::paccDynamic)) )) ));
             		}
-            		HX_END_LOCAL_FUNC1(return)
+            		HX_END_LOCAL_FUNC3(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_27) HXARGC(1)
             		 ::little::interpreter::InterpTokens _hx_run(::Array< ::Dynamic> params){
-            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_157_addTypes)
-HXLINE( 157)			return ::little::tools::Extensions_obj::asEmptyObject(::cpp::VirtualArray_obj::__new(0),::little::Little_obj::keywords->TYPE_OBJECT);
+            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_156_addTypes)
+HXLINE( 156)			return ::little::tools::Conversion_obj::toLittleValue(::String::fromCharCode(( (int)(::little::tools::Conversion_obj::toHaxeValue(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())) )));
             		}
             		HX_END_LOCAL_FUNC1(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_28) HXARGC(1)
             		 ::little::interpreter::InterpTokens _hx_run(::Array< ::Dynamic> params){
             			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_162_addTypes)
-HXLINE( 163)			::String arrayType = ( (::String)(::little::tools::Conversion_obj::toHaxeValue(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())) );
-HXLINE( 164)			int size = ( (int)(::little::Little_obj::memory->getTypeInformation(arrayType)->__Field(HX_("defaultInstanceSize",57,9d,96,48),::hx::paccDynamic)) );
-HXLINE( 165)			int length = ( (int)(::little::tools::Conversion_obj::toHaxeValue(params->__get(1).StaticCast<  ::little::interpreter::InterpTokens >())) );
-HXLINE( 166)			int byteArray = ::little::Little_obj::memory->storage->storeArray(length,size,null());
-HXLINE( 167)			 ::haxe::ds::StringMap _g =  ::haxe::ds::StringMap_obj::__alloc( HX_CTX );
-HXDLIN( 167)			_g->set(HX_("__p",50,69,48,00),::little::interpreter::InterpTokens_obj::Number(::little::interpreter::memory::_MemoryPointer::MemoryPointer_Impl__obj::toInt(byteArray)));
-HXDLIN( 167)			_g->set(HX_("__t",54,69,48,00),params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >());
-HXDLIN( 167)			return ::little::tools::Extensions_obj::asObjectToken(_g,::little::Little_obj::keywords->TYPE_ARRAY);
+HXLINE( 162)			return ::little::tools::Extensions_obj::asEmptyObject(::cpp::VirtualArray_obj::__new(0),::little::Little_obj::keywords->TYPE_OBJECT);
             		}
             		HX_END_LOCAL_FUNC1(return)
 
-            		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_29) HXARGC(2)
+            		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_29) HXARGC(1)
+            		 ::little::interpreter::InterpTokens _hx_run(::Array< ::Dynamic> params){
+            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_167_addTypes)
+HXLINE( 168)			::String arrayType = ( (::String)(::little::tools::Conversion_obj::toHaxeValue(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())) );
+HXLINE( 169)			int size = ( (int)(::little::Little_obj::memory->getTypeInformation(arrayType)->__Field(HX_("defaultInstanceSize",57,9d,96,48),::hx::paccDynamic)) );
+HXLINE( 170)			int length = ( (int)(::little::tools::Conversion_obj::toHaxeValue(params->__get(1).StaticCast<  ::little::interpreter::InterpTokens >())) );
+HXLINE( 171)			int byteArray = ::little::Little_obj::memory->storage->storeArray(length,size,null());
+HXLINE( 172)			 ::haxe::ds::StringMap _g =  ::haxe::ds::StringMap_obj::__alloc( HX_CTX );
+HXDLIN( 172)			_g->set(HX_("__p",50,69,48,00),::little::interpreter::InterpTokens_obj::Number(::little::interpreter::memory::_MemoryPointer::MemoryPointer_Impl__obj::toInt(byteArray)));
+HXDLIN( 172)			_g->set(HX_("__t",54,69,48,00),params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >());
+HXDLIN( 172)			return ::little::tools::Extensions_obj::asObjectToken(_g,::little::Little_obj::keywords->TYPE_ARRAY);
+            		}
+            		HX_END_LOCAL_FUNC1(return)
+
+            		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_30) HXARGC(2)
             		 ::Dynamic _hx_run(int address, ::little::interpreter::InterpTokens value){
-            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_169_addTypes)
-HXLINE( 170)			int pointer = ( (int)(::little::tools::Conversion_obj::toHaxeValue(::Type_obj::enumParameters(value)->__get(0)->__Field(HX_("get",96,80,4e,00),::hx::paccDynamic)(HX_("__p",50,69,48,00))->__Field(HX_("value",71,7f,b8,31),::hx::paccDynamic))) );
-HXLINE( 172)			 ::little::interpreter::memory::Storage _hx_tmp = ::little::Little_obj::memory->storage;
-HXDLIN( 172)			 ::little::interpreter::InterpTokens _hx_tmp1 = ::little::interpreter::InterpTokens_obj::Number(_hx_tmp->readInt32(::little::interpreter::memory::_MemoryPointer::MemoryPointer_Impl__obj::fromInt(pointer)));
-HXLINE( 171)			return  ::Dynamic(::hx::Anon_obj::Create(2)
+            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_174_addTypes)
+HXLINE( 175)			int pointer = ( (int)(::little::tools::Conversion_obj::toHaxeValue(::Type_obj::enumParameters(value)->__get(0)->__Field(HX_("get",96,80,4e,00),::hx::paccDynamic)(HX_("__p",50,69,48,00))->__Field(HX_("value",71,7f,b8,31),::hx::paccDynamic))) );
+HXLINE( 177)			 ::little::interpreter::memory::Storage _hx_tmp = ::little::Little_obj::memory->storage;
+HXDLIN( 177)			 ::little::interpreter::InterpTokens _hx_tmp1 = ::little::interpreter::InterpTokens_obj::Number(_hx_tmp->readInt32(::little::interpreter::memory::_MemoryPointer::MemoryPointer_Impl__obj::fromInt(pointer)));
+HXLINE( 176)			return  ::Dynamic(::hx::Anon_obj::Create(2)
             				->setFixed(0,HX_("address",b4,71,0b,9d),::little::interpreter::memory::_MemoryPointer::MemoryPointer_Impl__obj::fromInt(pointer))
             				->setFixed(1,HX_("value",71,7f,b8,31),_hx_tmp1));
             		}
             		HX_END_LOCAL_FUNC2(return)
 
-            		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_30) HXARGC(2)
+            		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_31) HXARGC(2)
             		 ::Dynamic _hx_run(int address, ::little::interpreter::InterpTokens value){
-            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_176_addTypes)
-HXLINE( 177)			 ::little::interpreter::InterpTokens typeToken = ::Type_obj::enumParameters(value)->__get(0)->__Field(HX_("get",96,80,4e,00),::hx::paccDynamic)(HX_("__t",54,69,48,00))->__Field(HX_("value",71,7f,b8,31),::hx::paccDynamic);
-HXLINE( 178)			return  ::Dynamic(::hx::Anon_obj::Create(2)
+            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_181_addTypes)
+HXLINE( 182)			 ::little::interpreter::InterpTokens typeToken = ::Type_obj::enumParameters(value)->__get(0)->__Field(HX_("get",96,80,4e,00),::hx::paccDynamic)(HX_("__t",54,69,48,00))->__Field(HX_("value",71,7f,b8,31),::hx::paccDynamic);
+HXLINE( 183)			return  ::Dynamic(::hx::Anon_obj::Create(2)
             				->setFixed(0,HX_("address",b4,71,0b,9d),::Type_obj::enumParameters(typeToken)->__get(0))
             				->setFixed(1,HX_("value",71,7f,b8,31),typeToken));
             		}
             		HX_END_LOCAL_FUNC2(return)
 
-            		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_31) HXARGC(3)
-            		 ::little::interpreter::InterpTokens _hx_run(int address, ::little::interpreter::InterpTokens value,::Array< ::Dynamic> params){
-            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_183_addTypes)
-HXLINE( 184)			int pointer = ( (int)(::little::tools::Conversion_obj::toHaxeValue(::Type_obj::enumParameters(value)->__get(0)->__Field(HX_("get",96,80,4e,00),::hx::paccDynamic)(HX_("__p",50,69,48,00))->__Field(HX_("value",71,7f,b8,31),::hx::paccDynamic))) );
-HXLINE( 185)			::String elementType = ( (::String)(::little::tools::Conversion_obj::toHaxeValue(::Type_obj::enumParameters(value)->__get(0)->__Field(HX_("get",96,80,4e,00),::hx::paccDynamic)(HX_("__t",54,69,48,00))->__Field(HX_("value",71,7f,b8,31),::hx::paccDynamic))) );
-HXLINE( 186)			int index = ( (int)(::little::tools::Conversion_obj::toHaxeValue(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())) );
-HXLINE( 187)			 ::little::interpreter::memory::Storage elementSize = ::little::Little_obj::memory->storage;
-HXDLIN( 187)			int elementSize1 = elementSize->readInt32(::little::interpreter::memory::_MemoryPointer::MemoryPointer_Impl__obj::fromInt((pointer + 4)));
-HXLINE( 188)			int specificElement = (((pointer + 4) + 4) + (index * elementSize1));
-HXLINE( 189)			return ::little::tools::Extensions_obj::extractValue(::little::interpreter::memory::_MemoryPointer::MemoryPointer_Impl__obj::fromInt(specificElement),elementType);
-            		}
-            		HX_END_LOCAL_FUNC3(return)
-
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_32) HXARGC(3)
             		 ::little::interpreter::InterpTokens _hx_run(int address, ::little::interpreter::InterpTokens value,::Array< ::Dynamic> params){
-            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_191_addTypes)
-HXLINE( 192)			int pointer = ( (int)(::little::tools::Conversion_obj::toHaxeValue(::Type_obj::enumParameters(value)->__get(0)->__Field(HX_("get",96,80,4e,00),::hx::paccDynamic)(HX_("__p",50,69,48,00))->__Field(HX_("value",71,7f,b8,31),::hx::paccDynamic))) );
-HXLINE( 193)			int index = ( (int)(::little::tools::Conversion_obj::toHaxeValue(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())) );
-HXLINE( 194)			 ::little::interpreter::memory::Storage elementSize = ::little::Little_obj::memory->storage;
-HXDLIN( 194)			int elementSize1 = elementSize->readInt32(::little::interpreter::memory::_MemoryPointer::MemoryPointer_Impl__obj::fromInt((pointer + 4)));
-HXLINE( 195)			int specificElement = (((pointer + 4) + 4) + (index * elementSize1));
-HXLINE( 197)			int _hx_tmp = ::little::interpreter::memory::_MemoryPointer::MemoryPointer_Impl__obj::fromInt(specificElement);
-HXDLIN( 197)			::little::tools::Extensions_obj::writeInPlace(_hx_tmp,params->__get(1).StaticCast<  ::little::interpreter::InterpTokens >());
-HXLINE( 199)			return ::little::interpreter::InterpTokens_obj::NullValue_dyn();
+            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_188_addTypes)
+HXLINE( 189)			int pointer = ( (int)(::little::tools::Conversion_obj::toHaxeValue(::Type_obj::enumParameters(value)->__get(0)->__Field(HX_("get",96,80,4e,00),::hx::paccDynamic)(HX_("__p",50,69,48,00))->__Field(HX_("value",71,7f,b8,31),::hx::paccDynamic))) );
+HXLINE( 190)			::String elementType = ( (::String)(::little::tools::Conversion_obj::toHaxeValue(::Type_obj::enumParameters(value)->__get(0)->__Field(HX_("get",96,80,4e,00),::hx::paccDynamic)(HX_("__t",54,69,48,00))->__Field(HX_("value",71,7f,b8,31),::hx::paccDynamic))) );
+HXLINE( 191)			int index = ( (int)(::little::tools::Conversion_obj::toHaxeValue(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())) );
+HXLINE( 192)			 ::little::interpreter::memory::Storage elementSize = ::little::Little_obj::memory->storage;
+HXDLIN( 192)			int elementSize1 = elementSize->readInt32(::little::interpreter::memory::_MemoryPointer::MemoryPointer_Impl__obj::fromInt((pointer + 4)));
+HXLINE( 193)			int specificElement = (((pointer + 4) + 4) + (index * elementSize1));
+HXLINE( 194)			return ::little::tools::Extensions_obj::extractValue(::little::interpreter::memory::_MemoryPointer::MemoryPointer_Impl__obj::fromInt(specificElement),elementType);
             		}
             		HX_END_LOCAL_FUNC3(return)
 
-            		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_33) HXARGC(1)
-            		 ::little::interpreter::InterpTokens _hx_run(::Array< ::Dynamic> params){
-            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_204_addTypes)
-HXLINE( 205)			 ::little::interpreter::memory::Memory _hx_tmp = ::little::Little_obj::memory;
-HXDLIN( 205)			return ::little::tools::Conversion_obj::toLittleValue(_hx_tmp->allocate(( (int)(::little::tools::Conversion_obj::toHaxeValue(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())) )));
+            		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_33) HXARGC(3)
+            		 ::little::interpreter::InterpTokens _hx_run(int address, ::little::interpreter::InterpTokens value,::Array< ::Dynamic> params){
+            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_196_addTypes)
+HXLINE( 197)			int pointer = ( (int)(::little::tools::Conversion_obj::toHaxeValue(::Type_obj::enumParameters(value)->__get(0)->__Field(HX_("get",96,80,4e,00),::hx::paccDynamic)(HX_("__p",50,69,48,00))->__Field(HX_("value",71,7f,b8,31),::hx::paccDynamic))) );
+HXLINE( 198)			int index = ( (int)(::little::tools::Conversion_obj::toHaxeValue(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())) );
+HXLINE( 199)			 ::little::interpreter::memory::Storage elementSize = ::little::Little_obj::memory->storage;
+HXDLIN( 199)			int elementSize1 = elementSize->readInt32(::little::interpreter::memory::_MemoryPointer::MemoryPointer_Impl__obj::fromInt((pointer + 4)));
+HXLINE( 200)			int specificElement = (((pointer + 4) + 4) + (index * elementSize1));
+HXLINE( 202)			int _hx_tmp = ::little::interpreter::memory::_MemoryPointer::MemoryPointer_Impl__obj::fromInt(specificElement);
+HXDLIN( 202)			::little::tools::Extensions_obj::writeInPlace(_hx_tmp,params->__get(1).StaticCast<  ::little::interpreter::InterpTokens >());
+HXLINE( 204)			return ::little::interpreter::InterpTokens_obj::NullValue_dyn();
             		}
-            		HX_END_LOCAL_FUNC1(return)
+            		HX_END_LOCAL_FUNC3(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_34) HXARGC(1)
             		 ::little::interpreter::InterpTokens _hx_run(::Array< ::Dynamic> params){
-            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_207_addTypes)
-HXLINE( 208)			 ::little::interpreter::memory::Memory _hx_tmp = ::little::Little_obj::memory;
-HXDLIN( 208)			 ::Dynamic _hx_tmp1 = ::little::tools::Conversion_obj::toHaxeValue(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >());
-HXDLIN( 208)			_hx_tmp->free(( (int)(_hx_tmp1) ),( (int)(::little::tools::Conversion_obj::toHaxeValue(params->__get(1).StaticCast<  ::little::interpreter::InterpTokens >())) ));
-HXLINE( 209)			return ::little::interpreter::InterpTokens_obj::NullValue_dyn();
+            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_209_addTypes)
+HXLINE( 210)			 ::little::interpreter::memory::Memory _hx_tmp = ::little::Little_obj::memory;
+HXDLIN( 210)			return ::little::tools::Conversion_obj::toLittleValue(_hx_tmp->allocate(( (int)(::little::tools::Conversion_obj::toHaxeValue(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())) )));
             		}
             		HX_END_LOCAL_FUNC1(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_35) HXARGC(1)
             		 ::little::interpreter::InterpTokens _hx_run(::Array< ::Dynamic> params){
-            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_211_addTypes)
-HXLINE( 212)			int _hx_tmp = ::little::interpreter::memory::_MemoryPointer::MemoryPointer_Impl__obj::fromInt(( (int)(::Type_obj::enumParameters(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())->__get(0)) ));
-HXDLIN( 212)			return ::little::tools::Extensions_obj::extractValue(_hx_tmp,( (::String)(::little::tools::Conversion_obj::toHaxeValue(params->__get(1).StaticCast<  ::little::interpreter::InterpTokens >())) ));
+            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_212_addTypes)
+HXLINE( 213)			 ::little::interpreter::memory::Memory _hx_tmp = ::little::Little_obj::memory;
+HXDLIN( 213)			 ::Dynamic _hx_tmp1 = ::little::tools::Conversion_obj::toHaxeValue(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >());
+HXDLIN( 213)			_hx_tmp->free(( (int)(_hx_tmp1) ),( (int)(::little::tools::Conversion_obj::toHaxeValue(params->__get(1).StaticCast<  ::little::interpreter::InterpTokens >())) ));
+HXLINE( 214)			return ::little::interpreter::InterpTokens_obj::NullValue_dyn();
             		}
             		HX_END_LOCAL_FUNC1(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_36) HXARGC(1)
             		 ::little::interpreter::InterpTokens _hx_run(::Array< ::Dynamic> params){
-            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_214_addTypes)
-HXLINE( 215)			 ::Dynamic arrayRef = ::little::tools::Conversion_obj::toHaxeValue(params->__get(1).StaticCast<  ::little::interpreter::InterpTokens >())->__Field(HX_("parameter",a9,35,b0,48),::hx::paccDynamic)(0);
-HXLINE( 216)			int arrayPointer = ::little::interpreter::memory::_MemoryPointer::MemoryPointer_Impl__obj::fromInt(( (int)( ::Dynamic(arrayRef->__Field(HX_("get",96,80,4e,00),::hx::paccDynamic)(HX_("__p",50,69,48,00))->__Field(HX_("value",71,7f,b8,31),::hx::paccDynamic))->__Field(HX_("parameter",a9,35,b0,48),::hx::paccDynamic)(0)) ));
-HXLINE( 217)			int arrayType = ( (int)( ::Dynamic(arrayRef->__Field(HX_("get",96,80,4e,00),::hx::paccDynamic)(HX_("__t",54,69,48,00))->__Field(HX_("value",71,7f,b8,31),::hx::paccDynamic))->__Field(HX_("parameter",a9,35,b0,48),::hx::paccDynamic)(0)) );
-HXLINE( 218)			bool _hx_tmp;
-HXDLIN( 218)			bool _hx_tmp1;
-HXDLIN( 218)			if ((::little::interpreter::memory::_MemoryPointer::MemoryPointer_Impl__obj::fromInt(arrayType) == ::little::Little_obj::memory->constants->INT)) {
-HXLINE( 218)				_hx_tmp1 = (::little::interpreter::memory::_MemoryPointer::MemoryPointer_Impl__obj::fromInt(arrayType) != ::little::Little_obj::memory->constants->FLOAT);
-            			}
-            			else {
-HXLINE( 218)				_hx_tmp1 = true;
-            			}
-HXDLIN( 218)			if (!(_hx_tmp1)) {
-HXLINE( 218)				_hx_tmp = (::little::interpreter::memory::_MemoryPointer::MemoryPointer_Impl__obj::fromInt(arrayType) != ::little::Little_obj::memory->constants->BOOL);
-            			}
-            			else {
-HXLINE( 218)				_hx_tmp = true;
-            			}
-HXDLIN( 218)			if (_hx_tmp) {
-HXLINE( 219)				::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((((((((HX_("",00,00,00,00) + ::little::Little_obj::keywords->STDLIB__MEMORY_write) + HX_(" only supports  ",98,6c,a4,15)) + ::little::Little_obj::keywords->TYPE_INT) + HX_(", ",74,26,00,00)) + ::little::Little_obj::keywords->TYPE_FLOAT) + HX_(" or ",7d,71,7b,15)) + ::little::Little_obj::keywords->TYPE_BOOLEAN) + HX_(" arrays, as they're the only ones able to meaningfully represent bytes.",33,d3,f0,13))),null());
-            			}
-HXLINE( 221)			::Array< ::Dynamic> array = ::little::Little_obj::memory->storage->readArray(arrayPointer);
-HXLINE( 222)			int length = array->length;
-HXDLIN( 222)			 ::haxe::io::Bytes this1 = ::haxe::io::Bytes_obj::alloc(length);
-HXDLIN( 222)			this1->fill(0,length,0);
-HXDLIN( 222)			 ::haxe::io::Bytes byteArray = this1;
-HXLINE( 223)			{
-HXLINE( 223)				int _g = 0;
-HXDLIN( 223)				int _g1 = array->length;
-HXDLIN( 223)				while((_g < _g1)){
-HXLINE( 223)					_g = (_g + 1);
-HXDLIN( 223)					int i = (_g - 1);
-HXDLIN( 223)					byteArray->b[i] = array->__get(i).StaticCast<  ::haxe::io::Bytes >()->b->__get(i);
-            				}
-            			}
-HXLINE( 224)			 ::little::interpreter::memory::Storage _hx_tmp2 = ::little::Little_obj::memory->storage;
-HXDLIN( 224)			_hx_tmp2->setBytes(( (int)(::little::tools::Conversion_obj::toHaxeValue(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())) ),byteArray);
-HXLINE( 225)			return ::little::interpreter::InterpTokens_obj::NullValue_dyn();
+            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_216_addTypes)
+HXLINE( 217)			int _hx_tmp = ::little::interpreter::memory::_MemoryPointer::MemoryPointer_Impl__obj::fromInt(( (int)(::Type_obj::enumParameters(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())->__get(0)) ));
+HXDLIN( 217)			return ::little::tools::Extensions_obj::extractValue(_hx_tmp,( (::String)(::little::tools::Conversion_obj::toHaxeValue(params->__get(1).StaticCast<  ::little::interpreter::InterpTokens >())) ));
             		}
             		HX_END_LOCAL_FUNC1(return)
 
-            		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_37) HXARGC(0)
-            		 ::little::interpreter::InterpTokens _hx_run(){
-            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_228_addTypes)
-HXLINE( 228)			return ::little::tools::Conversion_obj::toLittleValue(::little::Little_obj::memory->get_currentMemorySize());
+            		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_37) HXARGC(1)
+            		 ::little::interpreter::InterpTokens _hx_run(::Array< ::Dynamic> params){
+            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_219_addTypes)
+HXLINE( 220)			 ::Dynamic arrayRef = ::little::tools::Conversion_obj::toHaxeValue(params->__get(1).StaticCast<  ::little::interpreter::InterpTokens >())->__Field(HX_("parameter",a9,35,b0,48),::hx::paccDynamic)(0);
+HXLINE( 221)			int arrayPointer = ::little::interpreter::memory::_MemoryPointer::MemoryPointer_Impl__obj::fromInt(( (int)( ::Dynamic(arrayRef->__Field(HX_("get",96,80,4e,00),::hx::paccDynamic)(HX_("__p",50,69,48,00))->__Field(HX_("value",71,7f,b8,31),::hx::paccDynamic))->__Field(HX_("parameter",a9,35,b0,48),::hx::paccDynamic)(0)) ));
+HXLINE( 222)			int arrayType = ( (int)( ::Dynamic(arrayRef->__Field(HX_("get",96,80,4e,00),::hx::paccDynamic)(HX_("__t",54,69,48,00))->__Field(HX_("value",71,7f,b8,31),::hx::paccDynamic))->__Field(HX_("parameter",a9,35,b0,48),::hx::paccDynamic)(0)) );
+HXLINE( 223)			bool _hx_tmp;
+HXDLIN( 223)			bool _hx_tmp1;
+HXDLIN( 223)			if ((::little::interpreter::memory::_MemoryPointer::MemoryPointer_Impl__obj::fromInt(arrayType) == ::little::Little_obj::memory->constants->INT)) {
+HXLINE( 223)				_hx_tmp1 = (::little::interpreter::memory::_MemoryPointer::MemoryPointer_Impl__obj::fromInt(arrayType) != ::little::Little_obj::memory->constants->FLOAT);
+            			}
+            			else {
+HXLINE( 223)				_hx_tmp1 = true;
+            			}
+HXDLIN( 223)			if (!(_hx_tmp1)) {
+HXLINE( 223)				_hx_tmp = (::little::interpreter::memory::_MemoryPointer::MemoryPointer_Impl__obj::fromInt(arrayType) != ::little::Little_obj::memory->constants->BOOL);
+            			}
+            			else {
+HXLINE( 223)				_hx_tmp = true;
+            			}
+HXDLIN( 223)			if (_hx_tmp) {
+HXLINE( 224)				::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((((((((HX_("",00,00,00,00) + ::little::Little_obj::keywords->STDLIB__MEMORY_write) + HX_(" only supports  ",98,6c,a4,15)) + ::little::Little_obj::keywords->TYPE_INT) + HX_(", ",74,26,00,00)) + ::little::Little_obj::keywords->TYPE_FLOAT) + HX_(" or ",7d,71,7b,15)) + ::little::Little_obj::keywords->TYPE_BOOLEAN) + HX_(" arrays, as they're the only ones able to meaningfully represent bytes.",33,d3,f0,13))),null());
+            			}
+HXLINE( 226)			::Array< ::Dynamic> array = ::little::Little_obj::memory->storage->readArray(arrayPointer);
+HXLINE( 227)			int length = array->length;
+HXDLIN( 227)			 ::haxe::io::Bytes this1 = ::haxe::io::Bytes_obj::alloc(length);
+HXDLIN( 227)			this1->fill(0,length,0);
+HXDLIN( 227)			 ::haxe::io::Bytes byteArray = this1;
+HXLINE( 228)			{
+HXLINE( 228)				int _g = 0;
+HXDLIN( 228)				int _g1 = array->length;
+HXDLIN( 228)				while((_g < _g1)){
+HXLINE( 228)					_g = (_g + 1);
+HXDLIN( 228)					int i = (_g - 1);
+HXDLIN( 228)					byteArray->b[i] = array->__get(i).StaticCast<  ::haxe::io::Bytes >()->b->__get(i);
+            				}
+            			}
+HXLINE( 229)			 ::little::interpreter::memory::Storage _hx_tmp2 = ::little::Little_obj::memory->storage;
+HXDLIN( 229)			_hx_tmp2->setBytes(( (int)(::little::tools::Conversion_obj::toHaxeValue(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())) ),byteArray);
+HXLINE( 230)			return ::little::interpreter::InterpTokens_obj::NullValue_dyn();
             		}
-            		HX_END_LOCAL_FUNC0(return)
+            		HX_END_LOCAL_FUNC1(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_38) HXARGC(0)
             		 ::little::interpreter::InterpTokens _hx_run(){
-            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_231_addTypes)
-HXLINE( 231)			return ::little::tools::Conversion_obj::toLittleValue(::little::Little_obj::memory->maxMemorySize);
+            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_233_addTypes)
+HXLINE( 233)			return ::little::tools::Conversion_obj::toLittleValue(::little::Little_obj::memory->get_currentMemorySize());
+            		}
+            		HX_END_LOCAL_FUNC0(return)
+
+            		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_39) HXARGC(0)
+            		 ::little::interpreter::InterpTokens _hx_run(){
+            			HX_GC_STACKFRAME(&_hx_pos_0b0d584b35e606f8_236_addTypes)
+HXLINE( 236)			return ::little::tools::Conversion_obj::toLittleValue(::little::Little_obj::memory->maxMemorySize);
             		}
             		HX_END_LOCAL_FUNC0(return)
 
@@ -595,73 +623,81 @@ HXDLIN(  42)		_hx_tmp8->registerType(_hx_tmp9, ::haxe::ds::StringMap_obj::__allo
 HXLINE(  43)		 ::little::tools::Plugins _hx_tmp10 = ::little::Little_obj::plugin;
 HXDLIN(  43)		::String _hx_tmp11 = ::little::Little_obj::keywords->TYPE_SIGN;
 HXDLIN(  43)		_hx_tmp10->registerType(_hx_tmp11, ::haxe::ds::StringMap_obj::__alloc( HX_CTX ));
-HXLINE(  45)		 ::little::tools::Plugins _hx_tmp12 = ::little::Little_obj::plugin;
-HXDLIN(  45)		::String _hx_tmp13 = ::little::Little_obj::keywords->TYPE_MODULE;
-HXDLIN(  45)		 ::haxe::ds::StringMap _g =  ::haxe::ds::StringMap_obj::__alloc( HX_CTX );
-HXDLIN(  45)		_g->set((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->TYPE_CAST_FUNCTION_PREFIX) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(" ()",21,6b,18,00)), ::Dynamic(new _hx_Closure_0()));
-HXDLIN(  45)		_hx_tmp12->registerType(_hx_tmp13,_g);
-HXLINE(  58)		 ::little::tools::Plugins _hx_tmp14 = ::little::Little_obj::plugin;
-HXDLIN(  58)		::String _hx_tmp15 = ::little::Little_obj::keywords->TYPE_INT;
-HXDLIN(  58)		 ::haxe::ds::StringMap _g1 =  ::haxe::ds::StringMap_obj::__alloc( HX_CTX );
-HXDLIN(  58)		_g1->set((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->TYPE_CAST_FUNCTION_PREFIX) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(" ()",21,6b,18,00)), ::Dynamic(new _hx_Closure_1()));
-HXDLIN(  58)		_g1->set((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_FLOAT) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->TYPE_CAST_FUNCTION_PREFIX) + ::little::Little_obj::keywords->TYPE_FLOAT) + HX_(" ()",21,6b,18,00)), ::Dynamic(new _hx_Closure_2()));
-HXDLIN(  58)		_g1->set((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_BOOLEAN) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->TYPE_CAST_FUNCTION_PREFIX) + ::little::Little_obj::keywords->TYPE_BOOLEAN) + HX_(" ()",21,6b,18,00)), ::Dynamic(new _hx_Closure_3()));
-HXDLIN(  58)		_hx_tmp14->registerType(_hx_tmp15,_g1);
-HXLINE(  70)		 ::little::tools::Plugins _hx_tmp16 = ::little::Little_obj::plugin;
-HXDLIN(  70)		::String _hx_tmp17 = ::little::Little_obj::keywords->TYPE_FLOAT;
-HXDLIN(  70)		 ::haxe::ds::StringMap _g2 =  ::haxe::ds::StringMap_obj::__alloc( HX_CTX );
-HXDLIN(  70)		_g2->set((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->TYPE_CAST_FUNCTION_PREFIX) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(" ()",21,6b,18,00)), ::Dynamic(new _hx_Closure_4()));
-HXDLIN(  70)		_g2->set((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_INT) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->TYPE_CAST_FUNCTION_PREFIX) + ::little::Little_obj::keywords->TYPE_INT) + HX_(" ()",21,6b,18,00)), ::Dynamic(new _hx_Closure_5()));
-HXDLIN(  70)		_g2->set((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_BOOLEAN) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->TYPE_CAST_FUNCTION_PREFIX) + ::little::Little_obj::keywords->TYPE_BOOLEAN) + HX_(" ()",21,6b,18,00)), ::Dynamic(new _hx_Closure_6()));
-HXDLIN(  70)		_g2->set(((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_BOOLEAN) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__FLOAT_isWhole) + HX_(" ()",21,6b,18,00)), ::Dynamic(new _hx_Closure_7()));
-HXDLIN(  70)		_hx_tmp16->registerType(_hx_tmp17,_g2);
-HXLINE(  85)		 ::little::tools::Plugins _hx_tmp18 = ::little::Little_obj::plugin;
-HXDLIN(  85)		::String _hx_tmp19 = ::little::Little_obj::keywords->TYPE_STRING;
-HXDLIN(  85)		 ::haxe::ds::StringMap _g3 =  ::haxe::ds::StringMap_obj::__alloc( HX_CTX );
-HXDLIN(  85)		_g3->set((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->TYPE_CAST_FUNCTION_PREFIX) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(" ()",21,6b,18,00)), ::Dynamic(new _hx_Closure_8()));
-HXDLIN(  85)		_g3->set((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_INT) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->TYPE_CAST_FUNCTION_PREFIX) + ::little::Little_obj::keywords->TYPE_INT) + HX_(" ()",21,6b,18,00)), ::Dynamic(new _hx_Closure_9()));
-HXDLIN(  85)		_g3->set((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_FLOAT) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->TYPE_CAST_FUNCTION_PREFIX) + ::little::Little_obj::keywords->TYPE_FLOAT) + HX_(" ()",21,6b,18,00)), ::Dynamic(new _hx_Closure_10()));
-HXDLIN(  85)		_g3->set((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_SIGN) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->TYPE_CAST_FUNCTION_PREFIX) + ::little::Little_obj::keywords->TYPE_SIGN) + HX_(" ()",21,6b,18,00)), ::Dynamic(new _hx_Closure_11()));
-HXDLIN(  85)		_g3->set((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_BOOLEAN) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->TYPE_CAST_FUNCTION_PREFIX) + ::little::Little_obj::keywords->TYPE_BOOLEAN) + HX_(" ()",21,6b,18,00)), ::Dynamic(new _hx_Closure_12()));
-HXDLIN(  85)		_g3->set((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_INT) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__STRING_length), ::Dynamic(new _hx_Closure_13()));
-HXDLIN(  85)		_g3->set(((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__STRING_charAt) + HX_(" (define index as ",c3,3a,a5,8d)) + ::little::Little_obj::keywords->TYPE_INT) + HX_(")",29,00,00,00)), ::Dynamic(new _hx_Closure_14()));
-HXDLIN(  85)		_g3->set(((((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__STRING_substring) + HX_(" (define start as ",13,fc,8a,8a)) + ::little::Little_obj::keywords->TYPE_INT) + HX_(", define end as ",b8,5c,29,86)) + ::little::Little_obj::keywords->TYPE_INT) + HX_(" = -1)",c2,12,26,00)), ::Dynamic(new _hx_Closure_15()));
-HXDLIN(  85)		_g3->set(((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__STRING_toLowerCase) + HX_(" ()",21,6b,18,00)), ::Dynamic(new _hx_Closure_16()));
-HXDLIN(  85)		_g3->set(((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__STRING_toUpperCase) + HX_(" ()",21,6b,18,00)), ::Dynamic(new _hx_Closure_17()));
-HXDLIN(  85)		_g3->set(((((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__STRING_replace) + HX_(" (define search as ",f3,d0,b0,d0)) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(", define replace as ",11,35,1b,2f)) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(")",29,00,00,00)), ::Dynamic(new _hx_Closure_18()));
-HXDLIN(  85)		_g3->set(((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__STRING_trim) + HX_(" ()",21,6b,18,00)), ::Dynamic(new _hx_Closure_19()));
-HXDLIN(  85)		_g3->set(((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__STRING_remove) + HX_(" (define search as ",f3,d0,b0,d0)) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(")",29,00,00,00)), ::Dynamic(new _hx_Closure_20()));
-HXDLIN(  85)		_g3->set(((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_BOOLEAN) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__STRING_contains) + HX_(" (define search as ",f3,d0,b0,d0)) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(")",29,00,00,00)), ::Dynamic(new _hx_Closure_21()));
-HXDLIN(  85)		_g3->set(((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_INT) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__STRING_indexOf) + HX_(" (define search as ",f3,d0,b0,d0)) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(")",29,00,00,00)), ::Dynamic(new _hx_Closure_22()));
-HXDLIN(  85)		_g3->set(((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_INT) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__STRING_lastIndexOf) + HX_(" (define search as ",f3,d0,b0,d0)) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(")",29,00,00,00)), ::Dynamic(new _hx_Closure_23()));
-HXDLIN(  85)		_g3->set(((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_BOOLEAN) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__STRING_startsWith) + HX_(" (define prefix as ",1d,68,69,d4)) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(")",29,00,00,00)), ::Dynamic(new _hx_Closure_24()));
-HXDLIN(  85)		_g3->set(((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_BOOLEAN) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__STRING_endsWith) + HX_(" (define postfix as ",66,45,0c,75)) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(")",29,00,00,00)), ::Dynamic(new _hx_Closure_25()));
-HXDLIN(  85)		_g3->set(((((((HX_("static ",b2,3b,65,36) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__STRING_fromCharCode) + HX_(" (define code as ",f8,8f,ed,3a)) + ::little::Little_obj::keywords->TYPE_INT) + HX_(")",29,00,00,00)), ::Dynamic(new _hx_Closure_26()));
-HXDLIN(  85)		_hx_tmp18->registerType(_hx_tmp19,_g3);
-HXLINE( 155)		 ::little::tools::Plugins _hx_tmp20 = ::little::Little_obj::plugin;
-HXDLIN( 155)		::String _hx_tmp21 = ::little::Little_obj::keywords->TYPE_OBJECT;
-HXDLIN( 155)		 ::haxe::ds::StringMap _g4 =  ::haxe::ds::StringMap_obj::__alloc( HX_CTX );
-HXDLIN( 155)		_g4->set(((((HX_("static ",b2,3b,65,36) + ::little::Little_obj::keywords->TYPE_OBJECT) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->INSTANTIATE_FUNCTION_NAME) + HX_(" ()",21,6b,18,00)), ::Dynamic(new _hx_Closure_27()));
-HXDLIN( 155)		_hx_tmp20->registerType(_hx_tmp21,_g4);
-HXLINE( 161)		 ::little::tools::Plugins _hx_tmp22 = ::little::Little_obj::plugin;
-HXDLIN( 161)		::String _hx_tmp23 = ::little::Little_obj::keywords->TYPE_ARRAY;
-HXDLIN( 161)		 ::haxe::ds::StringMap _g5 =  ::haxe::ds::StringMap_obj::__alloc( HX_CTX );
-HXDLIN( 161)		_g5->set(((((((((HX_("static ",b2,3b,65,36) + ::little::Little_obj::keywords->TYPE_ARRAY) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->INSTANTIATE_FUNCTION_NAME) + HX_(" (define type as ",05,1c,66,73)) + ::little::Little_obj::keywords->TYPE_MODULE) + HX_(", define length as ",85,d9,59,22)) + ::little::Little_obj::keywords->TYPE_INT) + HX_(")",29,00,00,00)), ::Dynamic(new _hx_Closure_28()));
-HXDLIN( 161)		_g5->set((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_INT) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__ARRAY_length), ::Dynamic(new _hx_Closure_29()));
-HXDLIN( 161)		_g5->set((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_MODULE) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__ARRAY_elementType), ::Dynamic(new _hx_Closure_30()));
-HXDLIN( 161)		_g5->set(((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_DYNAMIC) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__ARRAY_get) + HX_(" (define index as ",c3,3a,a5,8d)) + ::little::Little_obj::keywords->TYPE_INT) + HX_(")",29,00,00,00)), ::Dynamic(new _hx_Closure_31()));
-HXDLIN( 161)		_g5->set(((((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_DYNAMIC) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__ARRAY_set) + HX_(" (define index as ",c3,3a,a5,8d)) + ::little::Little_obj::keywords->TYPE_INT) + HX_(", define value as ",0e,dd,2c,e3)) + ::little::Little_obj::keywords->TYPE_DYNAMIC) + HX_(")",29,00,00,00)), ::Dynamic(new _hx_Closure_32()));
-HXDLIN( 161)		_hx_tmp22->registerType(_hx_tmp23,_g5);
-HXLINE( 203)		 ::little::tools::Plugins _hx_tmp24 = ::little::Little_obj::plugin;
-HXDLIN( 203)		::String _hx_tmp25 = ::little::Little_obj::keywords->TYPE_MEMORY;
-HXDLIN( 203)		 ::haxe::ds::StringMap _g6 =  ::haxe::ds::StringMap_obj::__alloc( HX_CTX );
-HXDLIN( 203)		_g6->set(((((((HX_("static ",b2,3b,65,36) + ::little::Little_obj::keywords->TYPE_INT) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__MEMORY_allocate) + HX_(" (define amount as ",63,3b,3e,cf)) + ::little::Little_obj::keywords->TYPE_INT) + HX_(")",29,00,00,00)), ::Dynamic(new _hx_Closure_33()));
-HXDLIN( 203)		_g6->set(((((((((HX_("static ",b2,3b,65,36) + ::little::Little_obj::keywords->TYPE_DYNAMIC) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__MEMORY_free) + HX_(" (define address as ",25,09,42,cb)) + ::little::Little_obj::keywords->TYPE_INT) + HX_(", define amount as ",77,b7,bb,78)) + ::little::Little_obj::keywords->TYPE_INT) + HX_(")",29,00,00,00)), ::Dynamic(new _hx_Closure_34()));
-HXDLIN( 203)		_g6->set(((((((((HX_("static ",b2,3b,65,36) + ::little::Little_obj::keywords->TYPE_DYNAMIC) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__MEMORY_read) + HX_(" (define address as ",25,09,42,cb)) + ::little::Little_obj::keywords->TYPE_INT) + HX_(", define type as ",19,ab,52,5d)) + ::little::Little_obj::keywords->TYPE_MODULE) + HX_(")",29,00,00,00)), ::Dynamic(new _hx_Closure_35()));
-HXDLIN( 203)		_g6->set(((((((((HX_("static ",b2,3b,65,36) + ::little::Little_obj::keywords->TYPE_DYNAMIC) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__MEMORY_write) + HX_(" (define address as ",25,09,42,cb)) + ::little::Little_obj::keywords->TYPE_INT) + HX_(", define bytes as ",08,6b,9d,bb)) + ::little::Little_obj::keywords->TYPE_ARRAY) + HX_(")",29,00,00,00)), ::Dynamic(new _hx_Closure_36()));
-HXDLIN( 203)		_g6->set((((HX_("static ",b2,3b,65,36) + ::little::Little_obj::keywords->TYPE_INT) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__MEMORY_size), ::Dynamic(new _hx_Closure_37()));
-HXDLIN( 203)		_g6->set((((HX_("static ",b2,3b,65,36) + ::little::Little_obj::keywords->TYPE_INT) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__MEMORY_maxSize), ::Dynamic(new _hx_Closure_38()));
-HXDLIN( 203)		_hx_tmp24->registerType(_hx_tmp25,_g6);
+HXLINE(  44)		 ::little::tools::Plugins _hx_tmp12 = ::little::Little_obj::plugin;
+HXDLIN(  44)		::String _hx_tmp13 = ::little::Little_obj::keywords->TYPE_BOOLEAN;
+HXDLIN(  44)		_hx_tmp12->registerType(_hx_tmp13, ::haxe::ds::StringMap_obj::__alloc( HX_CTX ));
+HXLINE(  46)		 ::little::tools::Plugins _hx_tmp14 = ::little::Little_obj::plugin;
+HXDLIN(  46)		::String _hx_tmp15 = ::little::Little_obj::keywords->TYPE_MODULE;
+HXDLIN(  46)		 ::haxe::ds::StringMap _g =  ::haxe::ds::StringMap_obj::__alloc( HX_CTX );
+HXDLIN(  46)		_g->set((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->TYPE_CAST_FUNCTION_PREFIX) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(" ()",21,6b,18,00)), ::Dynamic(new _hx_Closure_0()));
+HXDLIN(  46)		_hx_tmp14->registerType(_hx_tmp15,_g);
+HXLINE(  57)		 ::little::tools::Plugins _hx_tmp16 = ::little::Little_obj::plugin;
+HXDLIN(  57)		::String _hx_tmp17 = ::little::Little_obj::keywords->TYPE_BOOLEAN;
+HXDLIN(  57)		 ::haxe::ds::StringMap _g1 =  ::haxe::ds::StringMap_obj::__alloc( HX_CTX );
+HXDLIN(  57)		_g1->set((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->TYPE_CAST_FUNCTION_PREFIX) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(" ()",21,6b,18,00)), ::Dynamic(new _hx_Closure_1()));
+HXDLIN(  57)		_hx_tmp16->registerType(_hx_tmp17,_g1);
+HXLINE(  63)		 ::little::tools::Plugins _hx_tmp18 = ::little::Little_obj::plugin;
+HXDLIN(  63)		::String _hx_tmp19 = ::little::Little_obj::keywords->TYPE_INT;
+HXDLIN(  63)		 ::haxe::ds::StringMap _g2 =  ::haxe::ds::StringMap_obj::__alloc( HX_CTX );
+HXDLIN(  63)		_g2->set((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->TYPE_CAST_FUNCTION_PREFIX) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(" ()",21,6b,18,00)), ::Dynamic(new _hx_Closure_2()));
+HXDLIN(  63)		_g2->set((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_FLOAT) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->TYPE_CAST_FUNCTION_PREFIX) + ::little::Little_obj::keywords->TYPE_FLOAT) + HX_(" ()",21,6b,18,00)), ::Dynamic(new _hx_Closure_3()));
+HXDLIN(  63)		_g2->set((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_BOOLEAN) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->TYPE_CAST_FUNCTION_PREFIX) + ::little::Little_obj::keywords->TYPE_BOOLEAN) + HX_(" ()",21,6b,18,00)), ::Dynamic(new _hx_Closure_4()));
+HXDLIN(  63)		_hx_tmp18->registerType(_hx_tmp19,_g2);
+HXLINE(  75)		 ::little::tools::Plugins _hx_tmp20 = ::little::Little_obj::plugin;
+HXDLIN(  75)		::String _hx_tmp21 = ::little::Little_obj::keywords->TYPE_FLOAT;
+HXDLIN(  75)		 ::haxe::ds::StringMap _g3 =  ::haxe::ds::StringMap_obj::__alloc( HX_CTX );
+HXDLIN(  75)		_g3->set((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->TYPE_CAST_FUNCTION_PREFIX) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(" ()",21,6b,18,00)), ::Dynamic(new _hx_Closure_5()));
+HXDLIN(  75)		_g3->set((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_INT) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->TYPE_CAST_FUNCTION_PREFIX) + ::little::Little_obj::keywords->TYPE_INT) + HX_(" ()",21,6b,18,00)), ::Dynamic(new _hx_Closure_6()));
+HXDLIN(  75)		_g3->set((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_BOOLEAN) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->TYPE_CAST_FUNCTION_PREFIX) + ::little::Little_obj::keywords->TYPE_BOOLEAN) + HX_(" ()",21,6b,18,00)), ::Dynamic(new _hx_Closure_7()));
+HXDLIN(  75)		_g3->set(((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_BOOLEAN) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__FLOAT_isWhole) + HX_(" ()",21,6b,18,00)), ::Dynamic(new _hx_Closure_8()));
+HXDLIN(  75)		_hx_tmp20->registerType(_hx_tmp21,_g3);
+HXLINE(  90)		 ::little::tools::Plugins _hx_tmp22 = ::little::Little_obj::plugin;
+HXDLIN(  90)		::String _hx_tmp23 = ::little::Little_obj::keywords->TYPE_STRING;
+HXDLIN(  90)		 ::haxe::ds::StringMap _g4 =  ::haxe::ds::StringMap_obj::__alloc( HX_CTX );
+HXDLIN(  90)		_g4->set((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->TYPE_CAST_FUNCTION_PREFIX) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(" ()",21,6b,18,00)), ::Dynamic(new _hx_Closure_9()));
+HXDLIN(  90)		_g4->set((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_INT) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->TYPE_CAST_FUNCTION_PREFIX) + ::little::Little_obj::keywords->TYPE_INT) + HX_(" ()",21,6b,18,00)), ::Dynamic(new _hx_Closure_10()));
+HXDLIN(  90)		_g4->set((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_FLOAT) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->TYPE_CAST_FUNCTION_PREFIX) + ::little::Little_obj::keywords->TYPE_FLOAT) + HX_(" ()",21,6b,18,00)), ::Dynamic(new _hx_Closure_11()));
+HXDLIN(  90)		_g4->set((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_SIGN) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->TYPE_CAST_FUNCTION_PREFIX) + ::little::Little_obj::keywords->TYPE_SIGN) + HX_(" ()",21,6b,18,00)), ::Dynamic(new _hx_Closure_12()));
+HXDLIN(  90)		_g4->set((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_BOOLEAN) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->TYPE_CAST_FUNCTION_PREFIX) + ::little::Little_obj::keywords->TYPE_BOOLEAN) + HX_(" ()",21,6b,18,00)), ::Dynamic(new _hx_Closure_13()));
+HXDLIN(  90)		_g4->set((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_INT) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__STRING_length), ::Dynamic(new _hx_Closure_14()));
+HXDLIN(  90)		_g4->set(((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__STRING_charAt) + HX_(" (define index as ",c3,3a,a5,8d)) + ::little::Little_obj::keywords->TYPE_INT) + HX_(")",29,00,00,00)), ::Dynamic(new _hx_Closure_15()));
+HXDLIN(  90)		_g4->set(((((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__STRING_substring) + HX_(" (define start as ",13,fc,8a,8a)) + ::little::Little_obj::keywords->TYPE_INT) + HX_(", define end as ",b8,5c,29,86)) + ::little::Little_obj::keywords->TYPE_INT) + HX_(" = -1)",c2,12,26,00)), ::Dynamic(new _hx_Closure_16()));
+HXDLIN(  90)		_g4->set(((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__STRING_toLowerCase) + HX_(" ()",21,6b,18,00)), ::Dynamic(new _hx_Closure_17()));
+HXDLIN(  90)		_g4->set(((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__STRING_toUpperCase) + HX_(" ()",21,6b,18,00)), ::Dynamic(new _hx_Closure_18()));
+HXDLIN(  90)		_g4->set(((((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__STRING_replace) + HX_(" (define search as ",f3,d0,b0,d0)) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(", define replace as ",11,35,1b,2f)) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(")",29,00,00,00)), ::Dynamic(new _hx_Closure_19()));
+HXDLIN(  90)		_g4->set(((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__STRING_trim) + HX_(" ()",21,6b,18,00)), ::Dynamic(new _hx_Closure_20()));
+HXDLIN(  90)		_g4->set(((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__STRING_remove) + HX_(" (define search as ",f3,d0,b0,d0)) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(")",29,00,00,00)), ::Dynamic(new _hx_Closure_21()));
+HXDLIN(  90)		_g4->set(((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_BOOLEAN) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__STRING_contains) + HX_(" (define search as ",f3,d0,b0,d0)) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(")",29,00,00,00)), ::Dynamic(new _hx_Closure_22()));
+HXDLIN(  90)		_g4->set(((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_INT) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__STRING_indexOf) + HX_(" (define search as ",f3,d0,b0,d0)) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(")",29,00,00,00)), ::Dynamic(new _hx_Closure_23()));
+HXDLIN(  90)		_g4->set(((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_INT) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__STRING_lastIndexOf) + HX_(" (define search as ",f3,d0,b0,d0)) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(")",29,00,00,00)), ::Dynamic(new _hx_Closure_24()));
+HXDLIN(  90)		_g4->set(((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_BOOLEAN) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__STRING_startsWith) + HX_(" (define prefix as ",1d,68,69,d4)) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(")",29,00,00,00)), ::Dynamic(new _hx_Closure_25()));
+HXDLIN(  90)		_g4->set(((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_BOOLEAN) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__STRING_endsWith) + HX_(" (define postfix as ",66,45,0c,75)) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(")",29,00,00,00)), ::Dynamic(new _hx_Closure_26()));
+HXDLIN(  90)		_g4->set(((((((HX_("static ",b2,3b,65,36) + ::little::Little_obj::keywords->TYPE_STRING) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__STRING_fromCharCode) + HX_(" (define code as ",f8,8f,ed,3a)) + ::little::Little_obj::keywords->TYPE_INT) + HX_(")",29,00,00,00)), ::Dynamic(new _hx_Closure_27()));
+HXDLIN(  90)		_hx_tmp22->registerType(_hx_tmp23,_g4);
+HXLINE( 160)		 ::little::tools::Plugins _hx_tmp24 = ::little::Little_obj::plugin;
+HXDLIN( 160)		::String _hx_tmp25 = ::little::Little_obj::keywords->TYPE_OBJECT;
+HXDLIN( 160)		 ::haxe::ds::StringMap _g5 =  ::haxe::ds::StringMap_obj::__alloc( HX_CTX );
+HXDLIN( 160)		_g5->set(((((HX_("static ",b2,3b,65,36) + ::little::Little_obj::keywords->TYPE_OBJECT) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->INSTANTIATE_FUNCTION_NAME) + HX_(" ()",21,6b,18,00)), ::Dynamic(new _hx_Closure_28()));
+HXDLIN( 160)		_hx_tmp24->registerType(_hx_tmp25,_g5);
+HXLINE( 166)		 ::little::tools::Plugins _hx_tmp26 = ::little::Little_obj::plugin;
+HXDLIN( 166)		::String _hx_tmp27 = ::little::Little_obj::keywords->TYPE_ARRAY;
+HXDLIN( 166)		 ::haxe::ds::StringMap _g6 =  ::haxe::ds::StringMap_obj::__alloc( HX_CTX );
+HXDLIN( 166)		_g6->set(((((((((HX_("static ",b2,3b,65,36) + ::little::Little_obj::keywords->TYPE_ARRAY) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->INSTANTIATE_FUNCTION_NAME) + HX_(" (define type as ",05,1c,66,73)) + ::little::Little_obj::keywords->TYPE_MODULE) + HX_(", define length as ",85,d9,59,22)) + ::little::Little_obj::keywords->TYPE_INT) + HX_(")",29,00,00,00)), ::Dynamic(new _hx_Closure_29()));
+HXDLIN( 166)		_g6->set((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_INT) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__ARRAY_length), ::Dynamic(new _hx_Closure_30()));
+HXDLIN( 166)		_g6->set((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_MODULE) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__ARRAY_elementType), ::Dynamic(new _hx_Closure_31()));
+HXDLIN( 166)		_g6->set(((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_DYNAMIC) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__ARRAY_get) + HX_(" (define index as ",c3,3a,a5,8d)) + ::little::Little_obj::keywords->TYPE_INT) + HX_(")",29,00,00,00)), ::Dynamic(new _hx_Closure_32()));
+HXDLIN( 166)		_g6->set(((((((((HX_("public ",57,13,1d,ae) + ::little::Little_obj::keywords->TYPE_DYNAMIC) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__ARRAY_set) + HX_(" (define index as ",c3,3a,a5,8d)) + ::little::Little_obj::keywords->TYPE_INT) + HX_(", define value as ",0e,dd,2c,e3)) + ::little::Little_obj::keywords->TYPE_DYNAMIC) + HX_(")",29,00,00,00)), ::Dynamic(new _hx_Closure_33()));
+HXDLIN( 166)		_hx_tmp26->registerType(_hx_tmp27,_g6);
+HXLINE( 208)		 ::little::tools::Plugins _hx_tmp28 = ::little::Little_obj::plugin;
+HXDLIN( 208)		::String _hx_tmp29 = ::little::Little_obj::keywords->TYPE_MEMORY;
+HXDLIN( 208)		 ::haxe::ds::StringMap _g7 =  ::haxe::ds::StringMap_obj::__alloc( HX_CTX );
+HXDLIN( 208)		_g7->set(((((((HX_("static ",b2,3b,65,36) + ::little::Little_obj::keywords->TYPE_INT) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__MEMORY_allocate) + HX_(" (define amount as ",63,3b,3e,cf)) + ::little::Little_obj::keywords->TYPE_INT) + HX_(")",29,00,00,00)), ::Dynamic(new _hx_Closure_34()));
+HXDLIN( 208)		_g7->set(((((((((HX_("static ",b2,3b,65,36) + ::little::Little_obj::keywords->TYPE_DYNAMIC) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__MEMORY_free) + HX_(" (define address as ",25,09,42,cb)) + ::little::Little_obj::keywords->TYPE_INT) + HX_(", define amount as ",77,b7,bb,78)) + ::little::Little_obj::keywords->TYPE_INT) + HX_(")",29,00,00,00)), ::Dynamic(new _hx_Closure_35()));
+HXDLIN( 208)		_g7->set(((((((((HX_("static ",b2,3b,65,36) + ::little::Little_obj::keywords->TYPE_DYNAMIC) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__MEMORY_read) + HX_(" (define address as ",25,09,42,cb)) + ::little::Little_obj::keywords->TYPE_INT) + HX_(", define type as ",19,ab,52,5d)) + ::little::Little_obj::keywords->TYPE_MODULE) + HX_(")",29,00,00,00)), ::Dynamic(new _hx_Closure_36()));
+HXDLIN( 208)		_g7->set(((((((((HX_("static ",b2,3b,65,36) + ::little::Little_obj::keywords->TYPE_DYNAMIC) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__MEMORY_write) + HX_(" (define address as ",25,09,42,cb)) + ::little::Little_obj::keywords->TYPE_INT) + HX_(", define bytes as ",08,6b,9d,bb)) + ::little::Little_obj::keywords->TYPE_ARRAY) + HX_(")",29,00,00,00)), ::Dynamic(new _hx_Closure_37()));
+HXDLIN( 208)		_g7->set((((HX_("static ",b2,3b,65,36) + ::little::Little_obj::keywords->TYPE_INT) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__MEMORY_size), ::Dynamic(new _hx_Closure_38()));
+HXDLIN( 208)		_g7->set((((HX_("static ",b2,3b,65,36) + ::little::Little_obj::keywords->TYPE_INT) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->STDLIB__MEMORY_maxSize), ::Dynamic(new _hx_Closure_39()));
+HXDLIN( 208)		_hx_tmp28->registerType(_hx_tmp29,_g7);
             	}
 
 
@@ -670,83 +706,83 @@ STATIC_HX_DEFINE_DYNAMIC_FUNC0(PrepareRun_obj,addTypes,(void))
 void PrepareRun_obj::addFunctions(){
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_0) HXARGC(1)
             		 ::little::interpreter::InterpTokens _hx_run(::Array< ::Dynamic> params){
-            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_241_addFunctions)
-HXLINE( 242)			 ::little::interpreter::InterpTokens eval = params->__get(0)->__Field(HX_("objectValue",32,9c,e7,a0),::hx::paccDynamic);
-HXLINE( 243)			 ::little::interpreter::Runtime _hx_tmp = ::little::Little_obj::runtime;
-HXDLIN( 243)			::String _hx_tmp1;
-HXDLIN( 243)			::Array< ::Dynamic> _this = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::OBJECT_dyn())->copy();
-HXDLIN( 243)			::Array< ::String > result = ::Array_obj< ::String >::__new(_this->length);
-HXDLIN( 243)			{
-HXLINE( 243)				int _g = 0;
-HXDLIN( 243)				int _g1 = _this->length;
-HXDLIN( 243)				while((_g < _g1)){
-HXLINE( 243)					_g = (_g + 1);
-HXDLIN( 243)					int i = (_g - 1);
-HXDLIN( 243)					{
-HXLINE( 243)						::String inValue = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this,i)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 243)						result->__unsafe_set(i,inValue);
+            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_246_addFunctions)
+HXLINE( 247)			 ::little::interpreter::InterpTokens eval = params->__get(0)->__Field(HX_("objectValue",32,9c,e7,a0),::hx::paccDynamic);
+HXLINE( 248)			 ::little::interpreter::Runtime _hx_tmp = ::little::Little_obj::runtime;
+HXDLIN( 248)			::String _hx_tmp1;
+HXDLIN( 248)			::Array< ::Dynamic> _this = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::OBJECT_dyn())->copy();
+HXDLIN( 248)			::Array< ::String > result = ::Array_obj< ::String >::__new(_this->length);
+HXDLIN( 248)			{
+HXLINE( 248)				int _g = 0;
+HXDLIN( 248)				int _g1 = _this->length;
+HXDLIN( 248)				while((_g < _g1)){
+HXLINE( 248)					_g = (_g + 1);
+HXDLIN( 248)					int i = (_g - 1);
+HXDLIN( 248)					{
+HXLINE( 248)						::String inValue = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this,i)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 248)						result->__unsafe_set(i,inValue);
             					}
             				}
             			}
-HXDLIN( 243)			if (result->contains(::Type_obj::enumConstructor(eval).toLowerCase())) {
-HXLINE( 243)				::Array< ::String > _this1 = ::little::tools::PrettyPrinter_obj::printInterpreterAst(::Array_obj< ::Dynamic>::__new(1)->init(0,eval),null()).split(HX_("\n",0a,00,00,00))->slice(1,null());
-HXDLIN( 243)				::Array< ::String > result1 = ::Array_obj< ::String >::__new(_this1->length);
-HXDLIN( 243)				{
-HXLINE( 243)					int _g2 = 0;
-HXDLIN( 243)					int _g3 = _this1->length;
-HXDLIN( 243)					while((_g2 < _g3)){
-HXLINE( 243)						_g2 = (_g2 + 1);
-HXDLIN( 243)						int i1 = (_g2 - 1);
-HXDLIN( 243)						{
-HXLINE( 243)							::String inValue1 = ( (::String)(_hx_array_unsafe_get(_this1,i1)) ).substring(6,null());
-HXDLIN( 243)							result1->__unsafe_set(i1,inValue1);
+HXDLIN( 248)			if (result->contains(::Type_obj::enumConstructor(eval).toLowerCase())) {
+HXLINE( 248)				::Array< ::String > _this1 = ::little::tools::PrettyPrinter_obj::printInterpreterAst(::Array_obj< ::Dynamic>::__new(1)->init(0,eval),null()).split(HX_("\n",0a,00,00,00))->slice(1,null());
+HXDLIN( 248)				::Array< ::String > result1 = ::Array_obj< ::String >::__new(_this1->length);
+HXDLIN( 248)				{
+HXLINE( 248)					int _g2 = 0;
+HXDLIN( 248)					int _g3 = _this1->length;
+HXDLIN( 248)					while((_g2 < _g3)){
+HXLINE( 248)						_g2 = (_g2 + 1);
+HXDLIN( 248)						int i1 = (_g2 - 1);
+HXDLIN( 248)						{
+HXLINE( 248)							::String inValue1 = ( (::String)(_hx_array_unsafe_get(_this1,i1)) ).substring(6,null());
+HXDLIN( 248)							result1->__unsafe_set(i1,inValue1);
             						}
             					}
             				}
-HXDLIN( 243)				_hx_tmp1 = result1->join(HX_("\n",0a,00,00,00));
+HXDLIN( 248)				_hx_tmp1 = result1->join(HX_("\n",0a,00,00,00));
             			}
             			else {
-HXLINE( 243)				_hx_tmp1 = ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),eval);
+HXLINE( 248)				_hx_tmp1 = ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),eval);
             			}
-HXDLIN( 243)			_hx_tmp->_hx___print(_hx_tmp1,eval);
-HXLINE( 244)			return ::little::interpreter::InterpTokens_obj::NullValue_dyn();
+HXDLIN( 248)			_hx_tmp->_hx___print(_hx_tmp1,eval);
+HXLINE( 249)			return ::little::interpreter::InterpTokens_obj::NullValue_dyn();
             		}
             		HX_END_LOCAL_FUNC1(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_1) HXARGC(1)
             		 ::little::interpreter::InterpTokens _hx_run(::Array< ::Dynamic> params){
-            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_246_addFunctions)
-HXLINE( 247)			::little::Little_obj::runtime->throwError(params->__get(0)->__Field(HX_("objectValue",32,9c,e7,a0),::hx::paccDynamic),null());
-HXLINE( 248)			return ::little::interpreter::InterpTokens_obj::NullValue_dyn();
+            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_251_addFunctions)
+HXLINE( 252)			::little::Little_obj::runtime->throwError(params->__get(0)->__Field(HX_("objectValue",32,9c,e7,a0),::hx::paccDynamic),null());
+HXLINE( 253)			return ::little::interpreter::InterpTokens_obj::NullValue_dyn();
             		}
             		HX_END_LOCAL_FUNC1(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_2) HXARGC(1)
             		 ::little::interpreter::InterpTokens _hx_run(::Array< ::Dynamic> params){
-            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_251_addFunctions)
-HXLINE( 251)			return ::little::tools::Extensions_obj::asTokenPath(( (::String)(::little::tools::Conversion_obj::toHaxeValue(params->__get(0)->__Field(HX_("objectValue",32,9c,e7,a0),::hx::paccDynamic))) ));
+            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_256_addFunctions)
+HXLINE( 256)			return ::little::tools::Extensions_obj::asTokenPath(( (::String)(::little::tools::Conversion_obj::toHaxeValue(params->__get(0)->__Field(HX_("objectValue",32,9c,e7,a0),::hx::paccDynamic))) ));
             		}
             		HX_END_LOCAL_FUNC1(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_3) HXARGC(1)
             		 ::little::interpreter::InterpTokens _hx_run(::Array< ::Dynamic> params){
-            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_253_addFunctions)
-HXLINE( 254)			 ::Dynamic array = ::little::parser::Parser_obj::parse;
-HXDLIN( 254)			return ::little::interpreter::Interpreter_obj::run(::little::interpreter::Interpreter_obj::convert(( (::Array< ::Dynamic>)(array(::little::lexer::Lexer_obj::lex(( (::String)(::little::tools::Conversion_obj::toHaxeValue(params->__get(0)->__Field(HX_("objectValue",32,9c,e7,a0),::hx::paccDynamic))) )))) )),null());
+            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_258_addFunctions)
+HXLINE( 259)			 ::Dynamic array = ::little::parser::Parser_obj::parse;
+HXDLIN( 259)			return ::little::interpreter::Interpreter_obj::run(::little::interpreter::Interpreter_obj::convert(( (::Array< ::Dynamic>)(array(::little::lexer::Lexer_obj::lex(( (::String)(::little::tools::Conversion_obj::toHaxeValue(params->__get(0)->__Field(HX_("objectValue",32,9c,e7,a0),::hx::paccDynamic))) )))) )),null());
             		}
             		HX_END_LOCAL_FUNC1(return)
 
-            	HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_240_addFunctions)
-HXLINE( 241)		::little::Little_obj::plugin->registerFunction(::little::Little_obj::keywords->PRINT_FUNCTION_NAME,null(),::Array_obj< ::Dynamic>::__new(1)->init(0,::little::interpreter::InterpTokens_obj::VariableDeclaration(::little::interpreter::InterpTokens_obj::Identifier(HX_("item",13,c5,bf,45)),null(),null())), ::Dynamic(new _hx_Closure_0()),::little::Little_obj::keywords->TYPE_DYNAMIC);
-HXLINE( 246)		::little::Little_obj::plugin->registerFunction(::little::Little_obj::keywords->RAISE_ERROR_FUNCTION_NAME,null(),::Array_obj< ::Dynamic>::__new(1)->init(0,::little::interpreter::InterpTokens_obj::VariableDeclaration(::little::interpreter::InterpTokens_obj::Identifier(HX_("message",c7,35,11,9a)),null(),null())), ::Dynamic(new _hx_Closure_1()),::little::Little_obj::keywords->TYPE_DYNAMIC);
-HXLINE( 250)		 ::little::tools::Plugins _hx_tmp = ::little::Little_obj::plugin;
-HXDLIN( 250)		::String _hx_tmp1 = ::little::Little_obj::keywords->READ_FUNCTION_NAME;
-HXDLIN( 250)		 ::little::interpreter::InterpTokens _hx_tmp2 = ::little::interpreter::InterpTokens_obj::VariableDeclaration(::little::interpreter::InterpTokens_obj::Identifier(HX_("identifier",69,c8,2c,ce)),::little::tools::Extensions_obj::asTokenPath(::little::Little_obj::keywords->TYPE_STRING),null());
-HXDLIN( 250)		_hx_tmp->registerFunction(_hx_tmp1,null(),::Array_obj< ::Dynamic>::__new(1)->init(0,_hx_tmp2), ::Dynamic(new _hx_Closure_2()),::little::Little_obj::keywords->TYPE_DYNAMIC);
-HXLINE( 253)		 ::little::tools::Plugins _hx_tmp3 = ::little::Little_obj::plugin;
-HXDLIN( 253)		::String _hx_tmp4 = ::little::Little_obj::keywords->RUN_CODE_FUNCTION_NAME;
-HXDLIN( 253)		 ::little::interpreter::InterpTokens _hx_tmp5 = ::little::interpreter::InterpTokens_obj::VariableDeclaration(::little::interpreter::InterpTokens_obj::Identifier(HX_("code",2d,b1,c4,41)),::little::tools::Extensions_obj::asTokenPath(::little::Little_obj::keywords->TYPE_STRING),null());
-HXDLIN( 253)		_hx_tmp3->registerFunction(_hx_tmp4,null(),::Array_obj< ::Dynamic>::__new(1)->init(0,_hx_tmp5), ::Dynamic(new _hx_Closure_3()),::little::Little_obj::keywords->TYPE_DYNAMIC);
+            	HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_245_addFunctions)
+HXLINE( 246)		::little::Little_obj::plugin->registerFunction(::little::Little_obj::keywords->PRINT_FUNCTION_NAME,null(),::Array_obj< ::Dynamic>::__new(1)->init(0,::little::interpreter::InterpTokens_obj::VariableDeclaration(::little::interpreter::InterpTokens_obj::Identifier(HX_("item",13,c5,bf,45)),null(),null())), ::Dynamic(new _hx_Closure_0()),::little::Little_obj::keywords->TYPE_DYNAMIC);
+HXLINE( 251)		::little::Little_obj::plugin->registerFunction(::little::Little_obj::keywords->RAISE_ERROR_FUNCTION_NAME,null(),::Array_obj< ::Dynamic>::__new(1)->init(0,::little::interpreter::InterpTokens_obj::VariableDeclaration(::little::interpreter::InterpTokens_obj::Identifier(HX_("message",c7,35,11,9a)),null(),null())), ::Dynamic(new _hx_Closure_1()),::little::Little_obj::keywords->TYPE_DYNAMIC);
+HXLINE( 255)		 ::little::tools::Plugins _hx_tmp = ::little::Little_obj::plugin;
+HXDLIN( 255)		::String _hx_tmp1 = ::little::Little_obj::keywords->READ_FUNCTION_NAME;
+HXDLIN( 255)		 ::little::interpreter::InterpTokens _hx_tmp2 = ::little::interpreter::InterpTokens_obj::VariableDeclaration(::little::interpreter::InterpTokens_obj::Identifier(HX_("identifier",69,c8,2c,ce)),::little::tools::Extensions_obj::asTokenPath(::little::Little_obj::keywords->TYPE_STRING),null());
+HXDLIN( 255)		_hx_tmp->registerFunction(_hx_tmp1,null(),::Array_obj< ::Dynamic>::__new(1)->init(0,_hx_tmp2), ::Dynamic(new _hx_Closure_2()),::little::Little_obj::keywords->TYPE_DYNAMIC);
+HXLINE( 258)		 ::little::tools::Plugins _hx_tmp3 = ::little::Little_obj::plugin;
+HXDLIN( 258)		::String _hx_tmp4 = ::little::Little_obj::keywords->RUN_CODE_FUNCTION_NAME;
+HXDLIN( 258)		 ::little::interpreter::InterpTokens _hx_tmp5 = ::little::interpreter::InterpTokens_obj::VariableDeclaration(::little::interpreter::InterpTokens_obj::Identifier(HX_("code",2d,b1,c4,41)),::little::tools::Extensions_obj::asTokenPath(::little::Little_obj::keywords->TYPE_STRING),null());
+HXDLIN( 258)		_hx_tmp3->registerFunction(_hx_tmp4,null(),::Array_obj< ::Dynamic>::__new(1)->init(0,_hx_tmp5), ::Dynamic(new _hx_Closure_3()),::little::Little_obj::keywords->TYPE_DYNAMIC);
             	}
 
 
@@ -755,22 +791,22 @@ STATIC_HX_DEFINE_DYNAMIC_FUNC0(PrepareRun_obj,addFunctions,(void))
 void PrepareRun_obj::addProps(){
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_0) HXARGC(2)
             		 ::little::interpreter::InterpTokens _hx_run( ::little::interpreter::InterpTokens value,int address){
-            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_263_addProps)
-HXLINE( 264)			 ::little::interpreter::memory::Memory _hx_tmp = ::little::Little_obj::memory;
-HXDLIN( 264)			return ::little::interpreter::InterpTokens_obj::ClassPointer( ::Dynamic(_hx_tmp->getTypeInformation(::little::tools::Extensions_obj::type(value))->__Field(HX_("pointer",bd,c0,21,51),::hx::paccDynamic)));
+            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_268_addProps)
+HXLINE( 269)			 ::little::interpreter::memory::Memory _hx_tmp = ::little::Little_obj::memory;
+HXDLIN( 269)			return ::little::interpreter::InterpTokens_obj::ClassPointer( ::Dynamic(_hx_tmp->getTypeInformation(::little::tools::Extensions_obj::type(value))->__Field(HX_("pointer",bd,c0,21,51),::hx::paccDynamic)));
             		}
             		HX_END_LOCAL_FUNC2(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_1) HXARGC(2)
             		 ::little::interpreter::InterpTokens _hx_run( ::little::interpreter::InterpTokens value,int address){
-            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_269_addProps)
-HXLINE( 269)			return ::little::interpreter::InterpTokens_obj::Number(address);
+            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_274_addProps)
+HXLINE( 274)			return ::little::interpreter::InterpTokens_obj::Number(address);
             		}
             		HX_END_LOCAL_FUNC2(return)
 
-            	HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_261_addProps)
-HXLINE( 262)		::little::Little_obj::plugin->registerInstanceVariable(::little::Little_obj::keywords->OBJECT_TYPE_PROPERTY_NAME,::little::Little_obj::keywords->TYPE_STRING,::little::Little_obj::keywords->TYPE_DYNAMIC,(HX_("The name of this value's type, as a ",dd,62,5c,8d) + ::little::Little_obj::keywords->TYPE_STRING),null(), ::Dynamic(new _hx_Closure_0()));
-HXLINE( 267)		::little::Little_obj::plugin->registerInstanceVariable(::little::Little_obj::keywords->OBJECT_ADDRESS_PROPERTY_NAME,::little::Little_obj::keywords->TYPE_INT,::little::Little_obj::keywords->TYPE_DYNAMIC,HX_("The address of this value",1d,86,a6,f0),null(), ::Dynamic(new _hx_Closure_1()));
+            	HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_266_addProps)
+HXLINE( 267)		::little::Little_obj::plugin->registerInstanceVariable(::little::Little_obj::keywords->OBJECT_TYPE_PROPERTY_NAME,::little::Little_obj::keywords->TYPE_STRING,::little::Little_obj::keywords->TYPE_DYNAMIC,(HX_("The name of this value's type, as a ",dd,62,5c,8d) + ::little::Little_obj::keywords->TYPE_STRING),null(), ::Dynamic(new _hx_Closure_0()));
+HXLINE( 272)		::little::Little_obj::plugin->registerInstanceVariable(::little::Little_obj::keywords->OBJECT_ADDRESS_PROPERTY_NAME,::little::Little_obj::keywords->TYPE_INT,::little::Little_obj::keywords->TYPE_DYNAMIC,HX_("The address of this value",1d,86,a6,f0),null(), ::Dynamic(new _hx_Closure_1()));
             	}
 
 
@@ -779,297 +815,283 @@ STATIC_HX_DEFINE_DYNAMIC_FUNC0(PrepareRun_obj,addProps,(void))
 void PrepareRun_obj::addSigns(){
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_0) HXARGC(1)
             		 ::little::interpreter::InterpTokens _hx_run( ::little::interpreter::InterpTokens rhs){
-            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_287_addSigns)
-HXLINE( 288)			int r = ( (int)(::little::tools::Conversion_obj::toHaxeValue(rhs)) );
-HXLINE( 289)			::String _hx_tmp = ::little::tools::Extensions_obj::type(rhs);
-HXDLIN( 289)			if ((_hx_tmp == ::little::Little_obj::keywords->TYPE_INT)) {
-HXLINE( 290)				return ::little::interpreter::InterpTokens_obj::Number(r);
+            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_292_addSigns)
+HXLINE( 293)			int r = ( (int)(::little::tools::Conversion_obj::toHaxeValue(rhs)) );
+HXLINE( 294)			::String _hx_tmp = ::little::tools::Extensions_obj::type(rhs);
+HXDLIN( 294)			if ((_hx_tmp == ::little::Little_obj::keywords->TYPE_INT)) {
+HXLINE( 295)				return ::little::interpreter::InterpTokens_obj::Number(r);
             			}
-HXLINE( 291)			return ::little::interpreter::InterpTokens_obj::Decimal(r);
+HXLINE( 296)			return ::little::interpreter::InterpTokens_obj::Decimal(r);
             		}
             		HX_END_LOCAL_FUNC1(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_1) HXARGC(1)
             		 ::little::interpreter::InterpTokens _hx_run( ::little::interpreter::InterpTokens rhs){
-            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_299_addSigns)
-HXLINE( 300)			int r = ( (int)(::little::tools::Conversion_obj::toHaxeValue(rhs)) );
-HXLINE( 301)			::String _hx_tmp = ::little::tools::Extensions_obj::type(rhs);
-HXDLIN( 301)			if ((_hx_tmp == ::little::Little_obj::keywords->TYPE_INT)) {
-HXLINE( 302)				return ::little::interpreter::InterpTokens_obj::Number(-(r));
+            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_304_addSigns)
+HXLINE( 305)			int r = ( (int)(::little::tools::Conversion_obj::toHaxeValue(rhs)) );
+HXLINE( 306)			::String _hx_tmp = ::little::tools::Extensions_obj::type(rhs);
+HXDLIN( 306)			if ((_hx_tmp == ::little::Little_obj::keywords->TYPE_INT)) {
+HXLINE( 307)				return ::little::interpreter::InterpTokens_obj::Number(-(r));
             			}
-HXLINE( 303)			return ::little::interpreter::InterpTokens_obj::Decimal(-(r));
+HXLINE( 308)			return ::little::interpreter::InterpTokens_obj::Decimal(-(r));
             		}
             		HX_END_LOCAL_FUNC1(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_2) HXARGC(1)
             		 ::little::interpreter::InterpTokens _hx_run( ::little::interpreter::InterpTokens rhs){
-            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_311_addSigns)
-HXLINE( 312)			Float r = ( (Float)(::little::tools::Conversion_obj::toHaxeValue(rhs)) );
-HXLINE( 314)			return ::little::interpreter::InterpTokens_obj::Decimal(::Math_obj::sqrt(r));
+            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_316_addSigns)
+HXLINE( 317)			Float r = ( (Float)(::little::tools::Conversion_obj::toHaxeValue(rhs)) );
+HXLINE( 319)			return ::little::interpreter::InterpTokens_obj::Decimal(::Math_obj::sqrt(r));
             		}
             		HX_END_LOCAL_FUNC1(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_3) HXARGC(1)
             		 ::little::interpreter::InterpTokens _hx_run( ::little::interpreter::InterpTokens rhs){
-            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_322_addSigns)
-HXLINE( 323)			bool r = ( (bool)(::little::tools::Conversion_obj::toHaxeValue(rhs)) );
-HXLINE( 325)			if (r) {
-HXLINE( 325)				return ::little::interpreter::InterpTokens_obj::FalseValue_dyn();
+            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_327_addSigns)
+HXLINE( 328)			bool r = ( (bool)(::little::tools::Conversion_obj::toHaxeValue(rhs)) );
+HXLINE( 330)			if (r) {
+HXLINE( 330)				return ::little::interpreter::InterpTokens_obj::FalseValue_dyn();
             			}
             			else {
-HXLINE( 325)				return ::little::interpreter::InterpTokens_obj::TrueValue_dyn();
+HXLINE( 330)				return ::little::interpreter::InterpTokens_obj::TrueValue_dyn();
             			}
-HXDLIN( 325)			return null();
+HXDLIN( 330)			return null();
             		}
             		HX_END_LOCAL_FUNC1(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_4) HXARGC(1)
             		 ::little::interpreter::InterpTokens _hx_run( ::little::interpreter::InterpTokens lhs){
-            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_337_addSigns)
-HXLINE( 338)			int l = ( (int)(::little::tools::Conversion_obj::toHaxeValue(lhs)) );
-HXLINE( 339)			Float shifted = (::Math_obj::pow(( (Float)(10) ),( (Float)(10) )) * ( (Float)(l) ));
-HXLINE( 340)			bool _hx_tmp;
-HXDLIN( 340)			if ((shifted != ::Math_obj::floor(shifted))) {
-HXLINE( 340)				::String _hx_tmp1 = ::little::tools::Extensions_obj::type(lhs);
-HXDLIN( 340)				_hx_tmp = (_hx_tmp1 == ::little::Little_obj::keywords->TYPE_INT);
+            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_342_addSigns)
+HXLINE( 343)			int l = ( (int)(::little::tools::Conversion_obj::toHaxeValue(lhs)) );
+HXLINE( 344)			Float shifted = (::Math_obj::pow(( (Float)(10) ),( (Float)(10) )) * ( (Float)(l) ));
+HXLINE( 345)			bool _hx_tmp;
+HXDLIN( 345)			if ((shifted != ::Math_obj::floor(shifted))) {
+HXLINE( 345)				::String _hx_tmp1 = ::little::tools::Extensions_obj::type(lhs);
+HXDLIN( 345)				_hx_tmp = (_hx_tmp1 == ::little::Little_obj::keywords->TYPE_INT);
             			}
             			else {
-HXLINE( 340)				_hx_tmp = false;
+HXLINE( 345)				_hx_tmp = false;
             			}
-HXDLIN( 340)			if (_hx_tmp) {
-HXLINE( 340)				return ::little::interpreter::InterpTokens_obj::Number(::Math_obj::round(::vision::tools::MathTools_obj::factorial(( (Float)(l) ))));
+HXDLIN( 345)			if (_hx_tmp) {
+HXLINE( 345)				return ::little::interpreter::InterpTokens_obj::Number(::Math_obj::round(::vision::tools::MathTools_obj::factorial(( (Float)(l) ))));
             			}
-HXLINE( 341)			return ::little::interpreter::InterpTokens_obj::Decimal(::vision::tools::MathTools_obj::factorial(( (Float)(l) )));
+HXLINE( 346)			return ::little::interpreter::InterpTokens_obj::Decimal(::vision::tools::MathTools_obj::factorial(( (Float)(l) )));
             		}
             		HX_END_LOCAL_FUNC1(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_5) HXARGC(2)
             		 ::little::interpreter::InterpTokens _hx_run( ::little::interpreter::InterpTokens lhs, ::little::interpreter::InterpTokens rhs){
-            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_354_addSigns)
-HXLINE( 355)			lhs = ::little::interpreter::Interpreter_obj::evaluate(lhs,null());
-HXDLIN( 355)			rhs = ::little::interpreter::Interpreter_obj::evaluate(rhs,null());
-HXLINE( 356)			 ::Dynamic l = ::little::tools::Conversion_obj::toHaxeValue(lhs);
-HXDLIN( 356)			 ::Dynamic r = ::little::tools::Conversion_obj::toHaxeValue(rhs);
-HXLINE( 358)			bool _hx_tmp;
-HXDLIN( 358)			::String _hx_tmp1 = ::little::tools::Extensions_obj::type(lhs);
-HXDLIN( 358)			if ((_hx_tmp1 != ::little::Little_obj::keywords->TYPE_STRING)) {
-HXLINE( 358)				::String _hx_tmp2 = ::little::tools::Extensions_obj::type(rhs);
-HXDLIN( 358)				_hx_tmp = (_hx_tmp2 == ::little::Little_obj::keywords->TYPE_STRING);
+            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_359_addSigns)
+HXLINE( 360)			lhs = ::little::interpreter::Interpreter_obj::evaluate(lhs,null());
+HXDLIN( 360)			rhs = ::little::interpreter::Interpreter_obj::evaluate(rhs,null());
+HXLINE( 361)			 ::Dynamic l = ::little::tools::Conversion_obj::toHaxeValue(lhs);
+HXDLIN( 361)			 ::Dynamic r = ::little::tools::Conversion_obj::toHaxeValue(rhs);
+HXLINE( 363)			bool _hx_tmp;
+HXDLIN( 363)			::String _hx_tmp1 = ::little::tools::Extensions_obj::type(lhs);
+HXDLIN( 363)			if ((_hx_tmp1 != ::little::Little_obj::keywords->TYPE_STRING)) {
+HXLINE( 363)				::String _hx_tmp2 = ::little::tools::Extensions_obj::type(rhs);
+HXDLIN( 363)				_hx_tmp = (_hx_tmp2 == ::little::Little_obj::keywords->TYPE_STRING);
             			}
             			else {
-HXLINE( 358)				_hx_tmp = true;
+HXLINE( 363)				_hx_tmp = true;
             			}
-HXDLIN( 358)			if (_hx_tmp) {
-HXLINE( 359)				if (::hx::IsNull( l )) {
-HXLINE( 359)					l = ::little::Little_obj::keywords->NULL_VALUE;
+HXDLIN( 363)			if (_hx_tmp) {
+HXLINE( 364)				if (::hx::IsNull( l )) {
+HXLINE( 364)					l = ::little::Little_obj::keywords->NULL_VALUE;
             				}
-HXDLIN( 359)				if (::hx::IsNull( r )) {
-HXLINE( 359)					r = ::little::Little_obj::keywords->NULL_VALUE;
+HXDLIN( 364)				if (::hx::IsNull( r )) {
+HXLINE( 364)					r = ::little::Little_obj::keywords->NULL_VALUE;
             				}
-HXLINE( 360)				::String _hx_tmp3 = (HX_("",00,00,00,00) + ::Std_obj::string(l));
-HXDLIN( 360)				return ::little::interpreter::InterpTokens_obj::Characters((_hx_tmp3 + ::Std_obj::string(r)));
+HXLINE( 365)				::String _hx_tmp3 = (HX_("",00,00,00,00) + ::Std_obj::string(l));
+HXDLIN( 365)				return ::little::interpreter::InterpTokens_obj::Characters((_hx_tmp3 + ::Std_obj::string(r)));
             			}
-HXLINE( 362)			bool _hx_tmp4;
-HXDLIN( 362)			::String _hx_tmp5 = ::little::tools::Extensions_obj::type(lhs);
-HXDLIN( 362)			if ((_hx_tmp5 == ::little::Little_obj::keywords->TYPE_INT)) {
-HXLINE( 362)				::String _hx_tmp6 = ::little::tools::Extensions_obj::type(rhs);
-HXDLIN( 362)				_hx_tmp4 = (_hx_tmp6 == ::little::Little_obj::keywords->TYPE_INT);
+HXLINE( 367)			bool _hx_tmp4;
+HXDLIN( 367)			::String _hx_tmp5 = ::little::tools::Extensions_obj::type(lhs);
+HXDLIN( 367)			if ((_hx_tmp5 == ::little::Little_obj::keywords->TYPE_INT)) {
+HXLINE( 367)				::String _hx_tmp6 = ::little::tools::Extensions_obj::type(rhs);
+HXDLIN( 367)				_hx_tmp4 = (_hx_tmp6 == ::little::Little_obj::keywords->TYPE_INT);
             			}
             			else {
-HXLINE( 362)				_hx_tmp4 = false;
+HXLINE( 367)				_hx_tmp4 = false;
             			}
-HXDLIN( 362)			if (_hx_tmp4) {
-HXLINE( 363)				return ::little::interpreter::InterpTokens_obj::Number((l + r));
+HXDLIN( 367)			if (_hx_tmp4) {
+HXLINE( 368)				return ::little::interpreter::InterpTokens_obj::Number((l + r));
             			}
-HXLINE( 364)			return ::little::interpreter::InterpTokens_obj::Decimal((l + r));
+HXLINE( 369)			return ::little::interpreter::InterpTokens_obj::Decimal((l + r));
             		}
             		HX_END_LOCAL_FUNC2(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_6) HXARGC(2)
             		 ::little::interpreter::InterpTokens _hx_run( ::little::interpreter::InterpTokens lhs, ::little::interpreter::InterpTokens rhs){
-            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_373_addSigns)
-HXLINE( 374)			lhs = ::little::interpreter::Interpreter_obj::evaluate(lhs,null());
-HXDLIN( 374)			rhs = ::little::interpreter::Interpreter_obj::evaluate(rhs,null());
-HXLINE( 375)			 ::Dynamic l = ::little::tools::Conversion_obj::toHaxeValue(lhs);
-HXDLIN( 375)			 ::Dynamic r = ::little::tools::Conversion_obj::toHaxeValue(rhs);
-HXLINE( 377)			::String _hx_tmp = ::little::tools::Extensions_obj::type(lhs);
-HXDLIN( 377)			if ((_hx_tmp == ::little::Little_obj::keywords->TYPE_STRING)) {
-HXLINE( 378)				if (::hx::IsNull( l )) {
-HXLINE( 378)					l = ::little::Little_obj::keywords->NULL_VALUE;
+            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_378_addSigns)
+HXLINE( 379)			lhs = ::little::interpreter::Interpreter_obj::evaluate(lhs,null());
+HXDLIN( 379)			rhs = ::little::interpreter::Interpreter_obj::evaluate(rhs,null());
+HXLINE( 380)			 ::Dynamic l = ::little::tools::Conversion_obj::toHaxeValue(lhs);
+HXDLIN( 380)			 ::Dynamic r = ::little::tools::Conversion_obj::toHaxeValue(rhs);
+HXLINE( 382)			::String _hx_tmp = ::little::tools::Extensions_obj::type(lhs);
+HXDLIN( 382)			if ((_hx_tmp == ::little::Little_obj::keywords->TYPE_STRING)) {
+HXLINE( 383)				if (::hx::IsNull( l )) {
+HXLINE( 383)					l = ::little::Little_obj::keywords->NULL_VALUE;
             				}
-HXDLIN( 378)				if (::hx::IsNull( r )) {
-HXLINE( 378)					r = ::little::Little_obj::keywords->NULL_VALUE;
+HXDLIN( 383)				if (::hx::IsNull( r )) {
+HXLINE( 383)					r = ::little::Little_obj::keywords->NULL_VALUE;
             				}
-HXLINE( 379)				return ::little::interpreter::InterpTokens_obj::Characters(::little::tools::TextTools_obj::replaceLast(( (::String)(l) ),( (::String)(r) ),HX_("",00,00,00,00)));
+HXLINE( 384)				return ::little::interpreter::InterpTokens_obj::Characters(::little::tools::TextTools_obj::replaceLast(( (::String)(l) ),( (::String)(r) ),HX_("",00,00,00,00)));
             			}
-HXLINE( 381)			bool _hx_tmp1;
-HXDLIN( 381)			::String _hx_tmp2 = ::little::tools::Extensions_obj::type(lhs);
-HXDLIN( 381)			if ((_hx_tmp2 == ::little::Little_obj::keywords->TYPE_INT)) {
-HXLINE( 381)				::String _hx_tmp3 = ::little::tools::Extensions_obj::type(rhs);
-HXDLIN( 381)				_hx_tmp1 = (_hx_tmp3 == ::little::Little_obj::keywords->TYPE_INT);
+HXLINE( 386)			bool _hx_tmp1;
+HXDLIN( 386)			::String _hx_tmp2 = ::little::tools::Extensions_obj::type(lhs);
+HXDLIN( 386)			if ((_hx_tmp2 == ::little::Little_obj::keywords->TYPE_INT)) {
+HXLINE( 386)				::String _hx_tmp3 = ::little::tools::Extensions_obj::type(rhs);
+HXDLIN( 386)				_hx_tmp1 = (_hx_tmp3 == ::little::Little_obj::keywords->TYPE_INT);
             			}
             			else {
-HXLINE( 381)				_hx_tmp1 = false;
+HXLINE( 386)				_hx_tmp1 = false;
             			}
-HXDLIN( 381)			if (_hx_tmp1) {
-HXLINE( 382)				return ::little::interpreter::InterpTokens_obj::Number((( (int)(l) ) - ( (int)(r) )));
+HXDLIN( 386)			if (_hx_tmp1) {
+HXLINE( 387)				return ::little::interpreter::InterpTokens_obj::Number((( (int)(l) ) - ( (int)(r) )));
             			}
-HXLINE( 383)			return ::little::interpreter::InterpTokens_obj::Decimal((( (Float)(l) ) - ( (Float)(r) )));
+HXLINE( 388)			return ::little::interpreter::InterpTokens_obj::Decimal((( (Float)(l) ) - ( (Float)(r) )));
             		}
             		HX_END_LOCAL_FUNC2(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_7) HXARGC(2)
             		 ::little::interpreter::InterpTokens _hx_run( ::little::interpreter::InterpTokens lhs, ::little::interpreter::InterpTokens rhs){
-            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_392_addSigns)
-HXLINE( 393)			lhs = ::little::interpreter::Interpreter_obj::evaluate(lhs,null());
-HXDLIN( 393)			rhs = ::little::interpreter::Interpreter_obj::evaluate(rhs,null());
-HXLINE( 394)			 ::Dynamic l = ::little::tools::Conversion_obj::toHaxeValue(lhs);
-HXDLIN( 394)			 ::Dynamic r = ::little::tools::Conversion_obj::toHaxeValue(rhs);
-HXLINE( 396)			::String _hx_tmp = ::little::tools::Extensions_obj::type(lhs);
-HXDLIN( 396)			if ((_hx_tmp == ::little::Little_obj::keywords->TYPE_STRING)) {
-HXLINE( 397)				if (::hx::IsNull( l )) {
-HXLINE( 397)					l = ::little::Little_obj::keywords->NULL_VALUE;
+            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_397_addSigns)
+HXLINE( 398)			lhs = ::little::interpreter::Interpreter_obj::evaluate(lhs,null());
+HXDLIN( 398)			rhs = ::little::interpreter::Interpreter_obj::evaluate(rhs,null());
+HXLINE( 399)			 ::Dynamic l = ::little::tools::Conversion_obj::toHaxeValue(lhs);
+HXDLIN( 399)			 ::Dynamic r = ::little::tools::Conversion_obj::toHaxeValue(rhs);
+HXLINE( 401)			::String _hx_tmp = ::little::tools::Extensions_obj::type(lhs);
+HXDLIN( 401)			if ((_hx_tmp == ::little::Little_obj::keywords->TYPE_STRING)) {
+HXLINE( 402)				if (::hx::IsNull( l )) {
+HXLINE( 402)					l = ::little::Little_obj::keywords->NULL_VALUE;
             				}
-HXLINE( 398)				return ::little::interpreter::InterpTokens_obj::Characters(::little::tools::TextTools_obj::multiply(( (::String)(l) ),( (int)(r) )));
+HXLINE( 403)				return ::little::interpreter::InterpTokens_obj::Characters(::little::tools::TextTools_obj::multiply(( (::String)(l) ),( (int)(r) )));
             			}
-HXLINE( 400)			bool _hx_tmp1;
-HXDLIN( 400)			::String _hx_tmp2 = ::little::tools::Extensions_obj::type(lhs);
-HXDLIN( 400)			if ((_hx_tmp2 == ::little::Little_obj::keywords->TYPE_INT)) {
-HXLINE( 400)				::String _hx_tmp3 = ::little::tools::Extensions_obj::type(rhs);
-HXDLIN( 400)				_hx_tmp1 = (_hx_tmp3 == ::little::Little_obj::keywords->TYPE_INT);
+HXLINE( 405)			bool _hx_tmp1;
+HXDLIN( 405)			::String _hx_tmp2 = ::little::tools::Extensions_obj::type(lhs);
+HXDLIN( 405)			if ((_hx_tmp2 == ::little::Little_obj::keywords->TYPE_INT)) {
+HXLINE( 405)				::String _hx_tmp3 = ::little::tools::Extensions_obj::type(rhs);
+HXDLIN( 405)				_hx_tmp1 = (_hx_tmp3 == ::little::Little_obj::keywords->TYPE_INT);
             			}
             			else {
-HXLINE( 400)				_hx_tmp1 = false;
+HXLINE( 405)				_hx_tmp1 = false;
             			}
-HXDLIN( 400)			if (_hx_tmp1) {
-HXLINE( 401)				return ::little::interpreter::InterpTokens_obj::Number((( (int)(l) ) * ( (int)(r) )));
+HXDLIN( 405)			if (_hx_tmp1) {
+HXLINE( 406)				return ::little::interpreter::InterpTokens_obj::Number((( (int)(l) ) * ( (int)(r) )));
             			}
-HXLINE( 402)			return ::little::interpreter::InterpTokens_obj::Decimal((( (Float)(l) ) * ( (Float)(r) )));
+HXLINE( 407)			return ::little::interpreter::InterpTokens_obj::Decimal((( (Float)(l) ) * ( (Float)(r) )));
             		}
             		HX_END_LOCAL_FUNC2(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_8) HXARGC(2)
             		 ::little::interpreter::InterpTokens _hx_run( ::little::interpreter::InterpTokens lhs, ::little::interpreter::InterpTokens rhs){
-            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_410_addSigns)
-HXLINE( 411)			Float l = ( (Float)(::little::tools::Conversion_obj::toHaxeValue(lhs)) );
-HXDLIN( 411)			Float r = ( (Float)(::little::tools::Conversion_obj::toHaxeValue(rhs)) );
-HXLINE( 413)			if ((r == 0)) {
-HXLINE( 414)				return ::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(HX_("Cannot divide by 0",31,9f,6f,7a)),null());
+            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_415_addSigns)
+HXLINE( 416)			Float l = ( (Float)(::little::tools::Conversion_obj::toHaxeValue(lhs)) );
+HXDLIN( 416)			Float r = ( (Float)(::little::tools::Conversion_obj::toHaxeValue(rhs)) );
+HXLINE( 418)			if ((r == 0)) {
+HXLINE( 419)				return ::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(HX_("Cannot divide by 0",31,9f,6f,7a)),null());
             			}
-HXLINE( 415)			return ::little::interpreter::InterpTokens_obj::Decimal((l / r));
+HXLINE( 420)			return ::little::interpreter::InterpTokens_obj::Decimal((l / r));
             		}
             		HX_END_LOCAL_FUNC2(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_9) HXARGC(2)
             		 ::little::interpreter::InterpTokens _hx_run( ::little::interpreter::InterpTokens lhs, ::little::interpreter::InterpTokens rhs){
-            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_423_addSigns)
-HXLINE( 424)			lhs = ::little::interpreter::Interpreter_obj::evaluate(lhs,null());
-HXDLIN( 424)			rhs = ::little::interpreter::Interpreter_obj::evaluate(rhs,null());
-HXLINE( 425)			Float l = ( (Float)(::little::tools::Conversion_obj::toHaxeValue(lhs)) );
-HXDLIN( 425)			Float r = ( (Float)(::little::tools::Conversion_obj::toHaxeValue(rhs)) );
-HXLINE( 427)			bool _hx_tmp;
-HXDLIN( 427)			::String _hx_tmp1 = ::little::tools::Extensions_obj::type(lhs);
-HXDLIN( 427)			if ((_hx_tmp1 == ::little::Little_obj::keywords->TYPE_INT)) {
-HXLINE( 427)				::String _hx_tmp2 = ::little::tools::Extensions_obj::type(rhs);
-HXDLIN( 427)				_hx_tmp = (_hx_tmp2 == ::little::Little_obj::keywords->TYPE_INT);
+            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_428_addSigns)
+HXLINE( 429)			lhs = ::little::interpreter::Interpreter_obj::evaluate(lhs,null());
+HXDLIN( 429)			rhs = ::little::interpreter::Interpreter_obj::evaluate(rhs,null());
+HXLINE( 430)			Float l = ( (Float)(::little::tools::Conversion_obj::toHaxeValue(lhs)) );
+HXDLIN( 430)			Float r = ( (Float)(::little::tools::Conversion_obj::toHaxeValue(rhs)) );
+HXLINE( 432)			bool _hx_tmp;
+HXDLIN( 432)			::String _hx_tmp1 = ::little::tools::Extensions_obj::type(lhs);
+HXDLIN( 432)			if ((_hx_tmp1 == ::little::Little_obj::keywords->TYPE_INT)) {
+HXLINE( 432)				::String _hx_tmp2 = ::little::tools::Extensions_obj::type(rhs);
+HXDLIN( 432)				_hx_tmp = (_hx_tmp2 == ::little::Little_obj::keywords->TYPE_INT);
             			}
             			else {
-HXLINE( 427)				_hx_tmp = false;
+HXLINE( 432)				_hx_tmp = false;
             			}
-HXDLIN( 427)			if (_hx_tmp) {
-HXLINE( 428)				return ::little::interpreter::InterpTokens_obj::Number(::Std_obj::_hx_int(::Math_obj::pow(l,r)));
+HXDLIN( 432)			if (_hx_tmp) {
+HXLINE( 433)				return ::little::interpreter::InterpTokens_obj::Number(::Std_obj::_hx_int(::Math_obj::pow(l,r)));
             			}
-HXLINE( 429)			return ::little::interpreter::InterpTokens_obj::Decimal(::Math_obj::pow(l,r));
+HXLINE( 434)			return ::little::interpreter::InterpTokens_obj::Decimal(::Math_obj::pow(l,r));
             		}
             		HX_END_LOCAL_FUNC2(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_10) HXARGC(2)
             		 ::little::interpreter::InterpTokens _hx_run( ::little::interpreter::InterpTokens lhs, ::little::interpreter::InterpTokens rhs){
-            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_437_addSigns)
-HXLINE( 438)			Float l = ( (Float)(::little::tools::Conversion_obj::toHaxeValue(lhs)) );
-HXDLIN( 438)			Float r = ( (Float)(::little::tools::Conversion_obj::toHaxeValue(rhs)) );
-HXLINE( 440)			bool lPositive = (l >= 0);
-HXLINE( 441)			bool oddN = (::hx::Mod(r,2) == 1);
-HXLINE( 442)			if (!(lPositive)) {
-HXLINE( 443)				l = -(l);
+            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_442_addSigns)
+HXLINE( 443)			Float l = ( (Float)(::little::tools::Conversion_obj::toHaxeValue(lhs)) );
+HXDLIN( 443)			Float r = ( (Float)(::little::tools::Conversion_obj::toHaxeValue(rhs)) );
+HXLINE( 445)			bool lPositive = (l >= 0);
+HXLINE( 446)			bool oddN = (::hx::Mod(r,2) == 1);
+HXLINE( 447)			if (!(lPositive)) {
+HXLINE( 448)				l = -(l);
             			}
-HXLINE( 444)			int _hx_tmp;
-HXDLIN( 444)			bool _hx_tmp1;
-HXDLIN( 444)			if (!(lPositive)) {
-HXLINE( 444)				_hx_tmp1 = oddN;
-            			}
-            			else {
-HXLINE( 444)				_hx_tmp1 = false;
-            			}
-HXDLIN( 444)			if (_hx_tmp1) {
-HXLINE( 444)				_hx_tmp = -1;
+HXLINE( 449)			int _hx_tmp;
+HXDLIN( 449)			bool _hx_tmp1;
+HXDLIN( 449)			if (!(lPositive)) {
+HXLINE( 449)				_hx_tmp1 = oddN;
             			}
             			else {
-HXLINE( 444)				_hx_tmp = 1;
+HXLINE( 449)				_hx_tmp1 = false;
             			}
-HXDLIN( 444)			return ::little::interpreter::InterpTokens_obj::Decimal(::Math_obj::pow((l * ( (Float)(_hx_tmp) )),(( (Float)(1) ) / r)));
+HXDLIN( 449)			if (_hx_tmp1) {
+HXLINE( 449)				_hx_tmp = -1;
+            			}
+            			else {
+HXLINE( 449)				_hx_tmp = 1;
+            			}
+HXDLIN( 449)			return ::little::interpreter::InterpTokens_obj::Decimal(::Math_obj::pow((l * ( (Float)(_hx_tmp) )),(( (Float)(1) ) / r)));
             		}
             		HX_END_LOCAL_FUNC2(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_11) HXARGC(2)
             		 ::little::interpreter::InterpTokens _hx_run( ::little::interpreter::InterpTokens lhs, ::little::interpreter::InterpTokens rhs){
-            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_454_addSigns)
-HXLINE( 454)			bool _hx_tmp;
-HXDLIN( 454)			if (( (bool)(::little::tools::Conversion_obj::toHaxeValue(lhs)) )) {
-HXLINE( 454)				_hx_tmp = ( (bool)(::little::tools::Conversion_obj::toHaxeValue(rhs)) );
+            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_459_addSigns)
+HXLINE( 459)			bool _hx_tmp;
+HXDLIN( 459)			if (( (bool)(::little::tools::Conversion_obj::toHaxeValue(lhs)) )) {
+HXLINE( 459)				_hx_tmp = ( (bool)(::little::tools::Conversion_obj::toHaxeValue(rhs)) );
             			}
             			else {
-HXLINE( 454)				_hx_tmp = false;
+HXLINE( 459)				_hx_tmp = false;
             			}
-HXDLIN( 454)			if (_hx_tmp) {
-HXLINE( 454)				return ::little::interpreter::InterpTokens_obj::TrueValue_dyn();
+HXDLIN( 459)			if (_hx_tmp) {
+HXLINE( 459)				return ::little::interpreter::InterpTokens_obj::TrueValue_dyn();
             			}
             			else {
-HXLINE( 454)				return ::little::interpreter::InterpTokens_obj::FalseValue_dyn();
+HXLINE( 459)				return ::little::interpreter::InterpTokens_obj::FalseValue_dyn();
             			}
-HXDLIN( 454)			return null();
+HXDLIN( 459)			return null();
             		}
             		HX_END_LOCAL_FUNC2(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_12) HXARGC(2)
             		 ::little::interpreter::InterpTokens _hx_run( ::little::interpreter::InterpTokens lhs, ::little::interpreter::InterpTokens rhs){
-            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_460_addSigns)
-HXLINE( 460)			bool _hx_tmp;
-HXDLIN( 460)			if (!(( (bool)(::little::tools::Conversion_obj::toHaxeValue(lhs)) ))) {
-HXLINE( 460)				_hx_tmp = ( (bool)(::little::tools::Conversion_obj::toHaxeValue(rhs)) );
+            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_465_addSigns)
+HXLINE( 465)			bool _hx_tmp;
+HXDLIN( 465)			if (!(( (bool)(::little::tools::Conversion_obj::toHaxeValue(lhs)) ))) {
+HXLINE( 465)				_hx_tmp = ( (bool)(::little::tools::Conversion_obj::toHaxeValue(rhs)) );
             			}
             			else {
-HXLINE( 460)				_hx_tmp = true;
+HXLINE( 465)				_hx_tmp = true;
             			}
-HXDLIN( 460)			if (_hx_tmp) {
-HXLINE( 460)				return ::little::interpreter::InterpTokens_obj::TrueValue_dyn();
+HXDLIN( 465)			if (_hx_tmp) {
+HXLINE( 465)				return ::little::interpreter::InterpTokens_obj::TrueValue_dyn();
             			}
             			else {
-HXLINE( 460)				return ::little::interpreter::InterpTokens_obj::FalseValue_dyn();
+HXLINE( 465)				return ::little::interpreter::InterpTokens_obj::FalseValue_dyn();
             			}
-HXDLIN( 460)			return null();
+HXDLIN( 465)			return null();
             		}
             		HX_END_LOCAL_FUNC2(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_13) HXARGC(2)
             		 ::little::interpreter::InterpTokens _hx_run( ::little::interpreter::InterpTokens lhs, ::little::interpreter::InterpTokens rhs){
-            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_464_addSigns)
-HXLINE( 464)			 ::Dynamic _hx_tmp = ::little::tools::Conversion_obj::toHaxeValue(lhs);
-HXDLIN( 464)			if (::hx::IsEq( _hx_tmp,::little::tools::Conversion_obj::toHaxeValue(rhs) )) {
-HXLINE( 464)				return ::little::interpreter::InterpTokens_obj::TrueValue_dyn();
-            			}
-            			else {
-HXLINE( 464)				return ::little::interpreter::InterpTokens_obj::FalseValue_dyn();
-            			}
-HXDLIN( 464)			return null();
-            		}
-            		HX_END_LOCAL_FUNC2(return)
-
-            		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_14) HXARGC(2)
-            		 ::little::interpreter::InterpTokens _hx_run( ::little::interpreter::InterpTokens lhs, ::little::interpreter::InterpTokens rhs){
             			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_469_addSigns)
 HXLINE( 469)			 ::Dynamic _hx_tmp = ::little::tools::Conversion_obj::toHaxeValue(lhs);
-HXDLIN( 469)			if (::hx::IsNotEq( _hx_tmp,::little::tools::Conversion_obj::toHaxeValue(rhs) )) {
+HXDLIN( 469)			if (::hx::IsEq( _hx_tmp,::little::tools::Conversion_obj::toHaxeValue(rhs) )) {
 HXLINE( 469)				return ::little::interpreter::InterpTokens_obj::TrueValue_dyn();
             			}
             			else {
@@ -1079,143 +1101,157 @@ HXDLIN( 469)			return null();
             		}
             		HX_END_LOCAL_FUNC2(return)
 
-            		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_15) HXARGC(2)
+            		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_14) HXARGC(2)
             		 ::little::interpreter::InterpTokens _hx_run( ::little::interpreter::InterpTokens lhs, ::little::interpreter::InterpTokens rhs){
-            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_476_addSigns)
-HXLINE( 476)			 ::Dynamic _hx_tmp = ::little::tools::Conversion_obj::toHaxeValue(lhs);
-HXDLIN( 476)			if (::hx::IsNotEq( _hx_tmp,::little::tools::Conversion_obj::toHaxeValue(rhs) )) {
-HXLINE( 476)				return ::little::interpreter::InterpTokens_obj::TrueValue_dyn();
+            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_474_addSigns)
+HXLINE( 474)			 ::Dynamic _hx_tmp = ::little::tools::Conversion_obj::toHaxeValue(lhs);
+HXDLIN( 474)			if (::hx::IsNotEq( _hx_tmp,::little::tools::Conversion_obj::toHaxeValue(rhs) )) {
+HXLINE( 474)				return ::little::interpreter::InterpTokens_obj::TrueValue_dyn();
             			}
             			else {
-HXLINE( 476)				return ::little::interpreter::InterpTokens_obj::FalseValue_dyn();
+HXLINE( 474)				return ::little::interpreter::InterpTokens_obj::FalseValue_dyn();
             			}
-HXDLIN( 476)			return null();
+HXDLIN( 474)			return null();
+            		}
+            		HX_END_LOCAL_FUNC2(return)
+
+            		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_15) HXARGC(2)
+            		 ::little::interpreter::InterpTokens _hx_run( ::little::interpreter::InterpTokens lhs, ::little::interpreter::InterpTokens rhs){
+            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_481_addSigns)
+HXLINE( 481)			 ::Dynamic _hx_tmp = ::little::tools::Conversion_obj::toHaxeValue(lhs);
+HXDLIN( 481)			if (::hx::IsNotEq( _hx_tmp,::little::tools::Conversion_obj::toHaxeValue(rhs) )) {
+HXLINE( 481)				return ::little::interpreter::InterpTokens_obj::TrueValue_dyn();
+            			}
+            			else {
+HXLINE( 481)				return ::little::interpreter::InterpTokens_obj::FalseValue_dyn();
+            			}
+HXDLIN( 481)			return null();
             		}
             		HX_END_LOCAL_FUNC2(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_16) HXARGC(2)
             		 ::little::interpreter::InterpTokens _hx_run( ::little::interpreter::InterpTokens lhs, ::little::interpreter::InterpTokens rhs){
-            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_484_addSigns)
-HXLINE( 485)			 ::Dynamic l = ::little::tools::Conversion_obj::toHaxeValue(lhs);
-HXDLIN( 485)			 ::Dynamic r = ::little::tools::Conversion_obj::toHaxeValue(rhs);
-HXLINE( 487)			::String _hx_tmp = ::little::tools::Extensions_obj::type(lhs);
-HXDLIN( 487)			if ((_hx_tmp == ::little::Little_obj::keywords->TYPE_STRING)) {
-HXLINE( 488)				if (::hx::IsGreater( l->__Field(HX_("length",e6,94,07,9f),::hx::paccDynamic),r->__Field(HX_("length",e6,94,07,9f),::hx::paccDynamic) )) {
-HXLINE( 488)					return ::little::interpreter::InterpTokens_obj::TrueValue_dyn();
+            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_489_addSigns)
+HXLINE( 490)			 ::Dynamic l = ::little::tools::Conversion_obj::toHaxeValue(lhs);
+HXDLIN( 490)			 ::Dynamic r = ::little::tools::Conversion_obj::toHaxeValue(rhs);
+HXLINE( 492)			::String _hx_tmp = ::little::tools::Extensions_obj::type(lhs);
+HXDLIN( 492)			if ((_hx_tmp == ::little::Little_obj::keywords->TYPE_STRING)) {
+HXLINE( 493)				if (::hx::IsGreater( l->__Field(HX_("length",e6,94,07,9f),::hx::paccDynamic),r->__Field(HX_("length",e6,94,07,9f),::hx::paccDynamic) )) {
+HXLINE( 493)					return ::little::interpreter::InterpTokens_obj::TrueValue_dyn();
             				}
             				else {
-HXLINE( 488)					return ::little::interpreter::InterpTokens_obj::FalseValue_dyn();
+HXLINE( 493)					return ::little::interpreter::InterpTokens_obj::FalseValue_dyn();
             				}
             			}
-HXLINE( 489)			if (::hx::IsGreater( l,r )) {
-HXLINE( 489)				return ::little::interpreter::InterpTokens_obj::TrueValue_dyn();
+HXLINE( 494)			if (::hx::IsGreater( l,r )) {
+HXLINE( 494)				return ::little::interpreter::InterpTokens_obj::TrueValue_dyn();
             			}
             			else {
-HXLINE( 489)				return ::little::interpreter::InterpTokens_obj::FalseValue_dyn();
+HXLINE( 494)				return ::little::interpreter::InterpTokens_obj::FalseValue_dyn();
             			}
-HXDLIN( 489)			return null();
+HXDLIN( 494)			return null();
             		}
             		HX_END_LOCAL_FUNC2(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_17) HXARGC(2)
             		 ::little::interpreter::InterpTokens _hx_run( ::little::interpreter::InterpTokens lhs, ::little::interpreter::InterpTokens rhs){
-            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_498_addSigns)
-HXLINE( 499)			 ::Dynamic l = ::little::tools::Conversion_obj::toHaxeValue(lhs);
-HXDLIN( 499)			 ::Dynamic r = ::little::tools::Conversion_obj::toHaxeValue(rhs);
-HXLINE( 501)			::String _hx_tmp = ::little::tools::Extensions_obj::type(lhs);
-HXDLIN( 501)			if ((_hx_tmp == ::little::Little_obj::keywords->TYPE_STRING)) {
-HXLINE( 502)				if (::hx::IsGreaterEq( l->__Field(HX_("length",e6,94,07,9f),::hx::paccDynamic),r->__Field(HX_("length",e6,94,07,9f),::hx::paccDynamic) )) {
-HXLINE( 502)					return ::little::interpreter::InterpTokens_obj::TrueValue_dyn();
+            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_503_addSigns)
+HXLINE( 504)			 ::Dynamic l = ::little::tools::Conversion_obj::toHaxeValue(lhs);
+HXDLIN( 504)			 ::Dynamic r = ::little::tools::Conversion_obj::toHaxeValue(rhs);
+HXLINE( 506)			::String _hx_tmp = ::little::tools::Extensions_obj::type(lhs);
+HXDLIN( 506)			if ((_hx_tmp == ::little::Little_obj::keywords->TYPE_STRING)) {
+HXLINE( 507)				if (::hx::IsGreaterEq( l->__Field(HX_("length",e6,94,07,9f),::hx::paccDynamic),r->__Field(HX_("length",e6,94,07,9f),::hx::paccDynamic) )) {
+HXLINE( 507)					return ::little::interpreter::InterpTokens_obj::TrueValue_dyn();
             				}
             				else {
-HXLINE( 502)					return ::little::interpreter::InterpTokens_obj::FalseValue_dyn();
+HXLINE( 507)					return ::little::interpreter::InterpTokens_obj::FalseValue_dyn();
             				}
             			}
-HXLINE( 503)			if (::hx::IsGreaterEq( l,r )) {
-HXLINE( 503)				return ::little::interpreter::InterpTokens_obj::TrueValue_dyn();
+HXLINE( 508)			if (::hx::IsGreaterEq( l,r )) {
+HXLINE( 508)				return ::little::interpreter::InterpTokens_obj::TrueValue_dyn();
             			}
             			else {
-HXLINE( 503)				return ::little::interpreter::InterpTokens_obj::FalseValue_dyn();
+HXLINE( 508)				return ::little::interpreter::InterpTokens_obj::FalseValue_dyn();
             			}
-HXDLIN( 503)			return null();
+HXDLIN( 508)			return null();
             		}
             		HX_END_LOCAL_FUNC2(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_18) HXARGC(2)
             		 ::little::interpreter::InterpTokens _hx_run( ::little::interpreter::InterpTokens lhs, ::little::interpreter::InterpTokens rhs){
-            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_512_addSigns)
-HXLINE( 513)			 ::Dynamic l = ::little::tools::Conversion_obj::toHaxeValue(lhs);
-HXDLIN( 513)			 ::Dynamic r = ::little::tools::Conversion_obj::toHaxeValue(rhs);
-HXLINE( 515)			::String _hx_tmp = ::little::tools::Extensions_obj::type(lhs);
-HXDLIN( 515)			if ((_hx_tmp == ::little::Little_obj::keywords->TYPE_STRING)) {
-HXLINE( 516)				if (::hx::IsLess( l->__Field(HX_("length",e6,94,07,9f),::hx::paccDynamic),r->__Field(HX_("length",e6,94,07,9f),::hx::paccDynamic) )) {
-HXLINE( 516)					return ::little::interpreter::InterpTokens_obj::TrueValue_dyn();
+            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_517_addSigns)
+HXLINE( 518)			 ::Dynamic l = ::little::tools::Conversion_obj::toHaxeValue(lhs);
+HXDLIN( 518)			 ::Dynamic r = ::little::tools::Conversion_obj::toHaxeValue(rhs);
+HXLINE( 520)			::String _hx_tmp = ::little::tools::Extensions_obj::type(lhs);
+HXDLIN( 520)			if ((_hx_tmp == ::little::Little_obj::keywords->TYPE_STRING)) {
+HXLINE( 521)				if (::hx::IsLess( l->__Field(HX_("length",e6,94,07,9f),::hx::paccDynamic),r->__Field(HX_("length",e6,94,07,9f),::hx::paccDynamic) )) {
+HXLINE( 521)					return ::little::interpreter::InterpTokens_obj::TrueValue_dyn();
             				}
             				else {
-HXLINE( 516)					return ::little::interpreter::InterpTokens_obj::FalseValue_dyn();
+HXLINE( 521)					return ::little::interpreter::InterpTokens_obj::FalseValue_dyn();
             				}
             			}
-HXLINE( 517)			if (::hx::IsLess( l,r )) {
-HXLINE( 517)				return ::little::interpreter::InterpTokens_obj::TrueValue_dyn();
+HXLINE( 522)			if (::hx::IsLess( l,r )) {
+HXLINE( 522)				return ::little::interpreter::InterpTokens_obj::TrueValue_dyn();
             			}
             			else {
-HXLINE( 517)				return ::little::interpreter::InterpTokens_obj::FalseValue_dyn();
+HXLINE( 522)				return ::little::interpreter::InterpTokens_obj::FalseValue_dyn();
             			}
-HXDLIN( 517)			return null();
+HXDLIN( 522)			return null();
             		}
             		HX_END_LOCAL_FUNC2(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_19) HXARGC(2)
             		 ::little::interpreter::InterpTokens _hx_run( ::little::interpreter::InterpTokens lhs, ::little::interpreter::InterpTokens rhs){
-            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_526_addSigns)
-HXLINE( 527)			 ::Dynamic l = ::little::tools::Conversion_obj::toHaxeValue(lhs);
-HXDLIN( 527)			 ::Dynamic r = ::little::tools::Conversion_obj::toHaxeValue(rhs);
-HXLINE( 529)			::String _hx_tmp = ::little::tools::Extensions_obj::type(lhs);
-HXDLIN( 529)			if ((_hx_tmp == ::little::Little_obj::keywords->TYPE_STRING)) {
-HXLINE( 530)				if (::hx::IsLessEq( l->__Field(HX_("length",e6,94,07,9f),::hx::paccDynamic),r->__Field(HX_("length",e6,94,07,9f),::hx::paccDynamic) )) {
-HXLINE( 530)					return ::little::interpreter::InterpTokens_obj::TrueValue_dyn();
+            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_531_addSigns)
+HXLINE( 532)			 ::Dynamic l = ::little::tools::Conversion_obj::toHaxeValue(lhs);
+HXDLIN( 532)			 ::Dynamic r = ::little::tools::Conversion_obj::toHaxeValue(rhs);
+HXLINE( 534)			::String _hx_tmp = ::little::tools::Extensions_obj::type(lhs);
+HXDLIN( 534)			if ((_hx_tmp == ::little::Little_obj::keywords->TYPE_STRING)) {
+HXLINE( 535)				if (::hx::IsLessEq( l->__Field(HX_("length",e6,94,07,9f),::hx::paccDynamic),r->__Field(HX_("length",e6,94,07,9f),::hx::paccDynamic) )) {
+HXLINE( 535)					return ::little::interpreter::InterpTokens_obj::TrueValue_dyn();
             				}
             				else {
-HXLINE( 530)					return ::little::interpreter::InterpTokens_obj::FalseValue_dyn();
+HXLINE( 535)					return ::little::interpreter::InterpTokens_obj::FalseValue_dyn();
             				}
             			}
-HXLINE( 531)			if (::hx::IsLessEq( l,r )) {
-HXLINE( 531)				return ::little::interpreter::InterpTokens_obj::TrueValue_dyn();
+HXLINE( 536)			if (::hx::IsLessEq( l,r )) {
+HXLINE( 536)				return ::little::interpreter::InterpTokens_obj::TrueValue_dyn();
             			}
             			else {
-HXLINE( 531)				return ::little::interpreter::InterpTokens_obj::FalseValue_dyn();
+HXLINE( 536)				return ::little::interpreter::InterpTokens_obj::FalseValue_dyn();
             			}
-HXDLIN( 531)			return null();
+HXDLIN( 536)			return null();
             		}
             		HX_END_LOCAL_FUNC2(return)
 
-            	HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_277_addSigns)
-HXLINE( 283)		::little::Little_obj::plugin->registerOperator(::little::Little_obj::keywords->POSITIVE_SIGN, ::Dynamic(::hx::Anon_obj::Create(4)
+            	HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_282_addSigns)
+HXLINE( 288)		::little::Little_obj::plugin->registerOperator(::little::Little_obj::keywords->POSITIVE_SIGN, ::Dynamic(::hx::Anon_obj::Create(4)
             			->setFixed(0,HX_("singleSidedOperatorCallback",ee,de,f9,ae), ::Dynamic(new _hx_Closure_0()))
             			->setFixed(1,HX_("priority",64,7b,3e,bb),HX_("last",56,0a,ad,47))
             			->setFixed(2,HX_("rhsAllowedTypes",ce,6d,8a,11),::Array_obj< ::String >::__new(2)->init(0,::little::Little_obj::keywords->TYPE_FLOAT)->init(1,::little::Little_obj::keywords->TYPE_INT))
             			->setFixed(3,HX_("operatorType",7e,dc,35,71),::little::interpreter::memory::OperatorType_obj::RHS_ONLY_dyn())));
-HXLINE( 295)		::little::Little_obj::plugin->registerOperator(::little::Little_obj::keywords->NEGATE_SIGN, ::Dynamic(::hx::Anon_obj::Create(4)
+HXLINE( 300)		::little::Little_obj::plugin->registerOperator(::little::Little_obj::keywords->NEGATE_SIGN, ::Dynamic(::hx::Anon_obj::Create(4)
             			->setFixed(0,HX_("singleSidedOperatorCallback",ee,de,f9,ae), ::Dynamic(new _hx_Closure_1()))
             			->setFixed(1,HX_("priority",64,7b,3e,bb),((HX_("with ",5a,cf,6e,ca) + ::little::Little_obj::keywords->POSITIVE_SIGN) + HX_("_",5f,00,00,00)))
             			->setFixed(2,HX_("rhsAllowedTypes",ce,6d,8a,11),::Array_obj< ::String >::__new(2)->init(0,::little::Little_obj::keywords->TYPE_FLOAT)->init(1,::little::Little_obj::keywords->TYPE_INT))
             			->setFixed(3,HX_("operatorType",7e,dc,35,71),::little::interpreter::memory::OperatorType_obj::RHS_ONLY_dyn())));
-HXLINE( 307)		::little::Little_obj::plugin->registerOperator(::little::Little_obj::keywords->SQRT_SIGN, ::Dynamic(::hx::Anon_obj::Create(4)
+HXLINE( 312)		::little::Little_obj::plugin->registerOperator(::little::Little_obj::keywords->SQRT_SIGN, ::Dynamic(::hx::Anon_obj::Create(4)
             			->setFixed(0,HX_("singleSidedOperatorCallback",ee,de,f9,ae), ::Dynamic(new _hx_Closure_2()))
             			->setFixed(1,HX_("priority",64,7b,3e,bb),HX_("first",30,78,9d,00))
             			->setFixed(2,HX_("rhsAllowedTypes",ce,6d,8a,11),::Array_obj< ::String >::__new(2)->init(0,::little::Little_obj::keywords->TYPE_FLOAT)->init(1,::little::Little_obj::keywords->TYPE_INT))
             			->setFixed(3,HX_("operatorType",7e,dc,35,71),::little::interpreter::memory::OperatorType_obj::RHS_ONLY_dyn())));
-HXLINE( 318)		::little::Little_obj::plugin->registerOperator(::little::Little_obj::keywords->NOT_SIGN, ::Dynamic(::hx::Anon_obj::Create(4)
+HXLINE( 323)		::little::Little_obj::plugin->registerOperator(::little::Little_obj::keywords->NOT_SIGN, ::Dynamic(::hx::Anon_obj::Create(4)
             			->setFixed(0,HX_("singleSidedOperatorCallback",ee,de,f9,ae), ::Dynamic(new _hx_Closure_3()))
             			->setFixed(1,HX_("priority",64,7b,3e,bb),((HX_("with ",5a,cf,6e,ca) + ::little::Little_obj::keywords->POSITIVE_SIGN) + HX_("_",5f,00,00,00)))
             			->setFixed(2,HX_("rhsAllowedTypes",ce,6d,8a,11),::Array_obj< ::String >::__new(1)->init(0,::little::Little_obj::keywords->TYPE_BOOLEAN))
             			->setFixed(3,HX_("operatorType",7e,dc,35,71),::little::interpreter::memory::OperatorType_obj::RHS_ONLY_dyn())));
-HXLINE( 333)		::little::Little_obj::plugin->registerOperator(::little::Little_obj::keywords->FACTORIAL_SIGN, ::Dynamic(::hx::Anon_obj::Create(4)
+HXLINE( 338)		::little::Little_obj::plugin->registerOperator(::little::Little_obj::keywords->FACTORIAL_SIGN, ::Dynamic(::hx::Anon_obj::Create(4)
             			->setFixed(0,HX_("lhsAllowedTypes",48,af,a4,93),::Array_obj< ::String >::__new(2)->init(0,::little::Little_obj::keywords->TYPE_FLOAT)->init(1,::little::Little_obj::keywords->TYPE_INT))
             			->setFixed(1,HX_("singleSidedOperatorCallback",ee,de,f9,ae), ::Dynamic(new _hx_Closure_4()))
             			->setFixed(2,HX_("priority",64,7b,3e,bb),((HX_("with ",5a,cf,6e,ca) + ::little::Little_obj::keywords->SQRT_SIGN) + HX_("_",5f,00,00,00)))
             			->setFixed(3,HX_("operatorType",7e,dc,35,71),::little::interpreter::memory::OperatorType_obj::LHS_ONLY_dyn())));
-HXLINE( 349)		::little::Little_obj::plugin->registerOperator(::little::Little_obj::keywords->ADD_SIGN, ::Dynamic(::hx::Anon_obj::Create(5)
+HXLINE( 354)		::little::Little_obj::plugin->registerOperator(::little::Little_obj::keywords->ADD_SIGN, ::Dynamic(::hx::Anon_obj::Create(5)
             			->setFixed(0,HX_("lhsAllowedTypes",48,af,a4,93),::Array_obj< ::String >::__new(3)->init(0,::little::Little_obj::keywords->TYPE_FLOAT)->init(1,::little::Little_obj::keywords->TYPE_INT)->init(2,::little::Little_obj::keywords->TYPE_STRING))
             			->setFixed(1,HX_("priority",64,7b,3e,bb),((HX_("with ",5a,cf,6e,ca) + ::little::Little_obj::keywords->POSITIVE_SIGN) + HX_("_",5f,00,00,00)))
             			->setFixed(2,HX_("allowedTypeCombos",07,42,33,d4),::Array_obj< ::Dynamic>::__new(2)->init(0, ::Dynamic(::hx::Anon_obj::Create(2)
@@ -1225,7 +1261,7 @@ HXLINE( 349)		::little::Little_obj::plugin->registerOperator(::little::Little_ob
             				->setFixed(1,HX_("rhs",fd,db,56,00),::little::Little_obj::keywords->TYPE_STRING))))
             			->setFixed(3,HX_("rhsAllowedTypes",ce,6d,8a,11),::Array_obj< ::String >::__new(3)->init(0,::little::Little_obj::keywords->TYPE_FLOAT)->init(1,::little::Little_obj::keywords->TYPE_INT)->init(2,::little::Little_obj::keywords->TYPE_STRING))
             			->setFixed(4,HX_("callback",c5,99,06,7f), ::Dynamic(new _hx_Closure_5()))));
-HXLINE( 368)		::little::Little_obj::plugin->registerOperator(::little::Little_obj::keywords->SUBTRACT_SIGN, ::Dynamic(::hx::Anon_obj::Create(5)
+HXLINE( 373)		::little::Little_obj::plugin->registerOperator(::little::Little_obj::keywords->SUBTRACT_SIGN, ::Dynamic(::hx::Anon_obj::Create(5)
             			->setFixed(0,HX_("lhsAllowedTypes",48,af,a4,93),::Array_obj< ::String >::__new(2)->init(0,::little::Little_obj::keywords->TYPE_FLOAT)->init(1,::little::Little_obj::keywords->TYPE_INT))
             			->setFixed(1,HX_("priority",64,7b,3e,bb),(HX_("with ",5a,cf,6e,ca) + ::little::Little_obj::keywords->ADD_SIGN))
             			->setFixed(2,HX_("allowedTypeCombos",07,42,33,d4),::Array_obj< ::Dynamic>::__new(1)->init(0, ::Dynamic(::hx::Anon_obj::Create(2)
@@ -1233,7 +1269,7 @@ HXLINE( 368)		::little::Little_obj::plugin->registerOperator(::little::Little_ob
             				->setFixed(1,HX_("rhs",fd,db,56,00),::little::Little_obj::keywords->TYPE_STRING))))
             			->setFixed(3,HX_("rhsAllowedTypes",ce,6d,8a,11),::Array_obj< ::String >::__new(2)->init(0,::little::Little_obj::keywords->TYPE_FLOAT)->init(1,::little::Little_obj::keywords->TYPE_INT))
             			->setFixed(4,HX_("callback",c5,99,06,7f), ::Dynamic(new _hx_Closure_6()))));
-HXLINE( 387)		::little::Little_obj::plugin->registerOperator(::little::Little_obj::keywords->MULTIPLY_SIGN, ::Dynamic(::hx::Anon_obj::Create(5)
+HXLINE( 392)		::little::Little_obj::plugin->registerOperator(::little::Little_obj::keywords->MULTIPLY_SIGN, ::Dynamic(::hx::Anon_obj::Create(5)
             			->setFixed(0,HX_("lhsAllowedTypes",48,af,a4,93),::Array_obj< ::String >::__new(2)->init(0,::little::Little_obj::keywords->TYPE_FLOAT)->init(1,::little::Little_obj::keywords->TYPE_INT))
             			->setFixed(1,HX_("priority",64,7b,3e,bb),((((HX_("between ",58,fd,6b,76) + ::little::Little_obj::keywords->ADD_SIGN) + HX_(" ",20,00,00,00)) + ::little::Little_obj::keywords->SQRT_SIGN) + HX_("_",5f,00,00,00)))
             			->setFixed(2,HX_("allowedTypeCombos",07,42,33,d4),::Array_obj< ::Dynamic>::__new(1)->init(0, ::Dynamic(::hx::Anon_obj::Create(2)
@@ -1241,43 +1277,43 @@ HXLINE( 387)		::little::Little_obj::plugin->registerOperator(::little::Little_ob
             				->setFixed(1,HX_("rhs",fd,db,56,00),::little::Little_obj::keywords->TYPE_INT))))
             			->setFixed(3,HX_("rhsAllowedTypes",ce,6d,8a,11),::Array_obj< ::String >::__new(2)->init(0,::little::Little_obj::keywords->TYPE_FLOAT)->init(1,::little::Little_obj::keywords->TYPE_INT))
             			->setFixed(4,HX_("callback",c5,99,06,7f), ::Dynamic(new _hx_Closure_7()))));
-HXLINE( 406)		::little::Little_obj::plugin->registerOperator(::little::Little_obj::keywords->DIVIDE_SIGN, ::Dynamic(::hx::Anon_obj::Create(4)
+HXLINE( 411)		::little::Little_obj::plugin->registerOperator(::little::Little_obj::keywords->DIVIDE_SIGN, ::Dynamic(::hx::Anon_obj::Create(4)
             			->setFixed(0,HX_("lhsAllowedTypes",48,af,a4,93),::Array_obj< ::String >::__new(2)->init(0,::little::Little_obj::keywords->TYPE_FLOAT)->init(1,::little::Little_obj::keywords->TYPE_INT))
             			->setFixed(1,HX_("priority",64,7b,3e,bb),(HX_("with ",5a,cf,6e,ca) + ::little::Little_obj::keywords->MULTIPLY_SIGN))
             			->setFixed(2,HX_("rhsAllowedTypes",ce,6d,8a,11),::Array_obj< ::String >::__new(2)->init(0,::little::Little_obj::keywords->TYPE_FLOAT)->init(1,::little::Little_obj::keywords->TYPE_INT))
             			->setFixed(3,HX_("callback",c5,99,06,7f), ::Dynamic(new _hx_Closure_8()))));
-HXLINE( 419)		::little::Little_obj::plugin->registerOperator(::little::Little_obj::keywords->POW_SIGN, ::Dynamic(::hx::Anon_obj::Create(4)
+HXLINE( 424)		::little::Little_obj::plugin->registerOperator(::little::Little_obj::keywords->POW_SIGN, ::Dynamic(::hx::Anon_obj::Create(4)
             			->setFixed(0,HX_("lhsAllowedTypes",48,af,a4,93),::Array_obj< ::String >::__new(2)->init(0,::little::Little_obj::keywords->TYPE_FLOAT)->init(1,::little::Little_obj::keywords->TYPE_INT))
             			->setFixed(1,HX_("priority",64,7b,3e,bb),(HX_("before ",c1,9a,d7,51) + ::little::Little_obj::keywords->MULTIPLY_SIGN))
             			->setFixed(2,HX_("rhsAllowedTypes",ce,6d,8a,11),::Array_obj< ::String >::__new(2)->init(0,::little::Little_obj::keywords->TYPE_FLOAT)->init(1,::little::Little_obj::keywords->TYPE_INT))
             			->setFixed(3,HX_("callback",c5,99,06,7f), ::Dynamic(new _hx_Closure_9()))));
-HXLINE( 433)		::little::Little_obj::plugin->registerOperator(::little::Little_obj::keywords->SQRT_SIGN, ::Dynamic(::hx::Anon_obj::Create(4)
+HXLINE( 438)		::little::Little_obj::plugin->registerOperator(::little::Little_obj::keywords->SQRT_SIGN, ::Dynamic(::hx::Anon_obj::Create(4)
             			->setFixed(0,HX_("lhsAllowedTypes",48,af,a4,93),::Array_obj< ::String >::__new(2)->init(0,::little::Little_obj::keywords->TYPE_FLOAT)->init(1,::little::Little_obj::keywords->TYPE_INT))
             			->setFixed(1,HX_("priority",64,7b,3e,bb),(HX_("with ",5a,cf,6e,ca) + ::little::Little_obj::keywords->POW_SIGN))
             			->setFixed(2,HX_("rhsAllowedTypes",ce,6d,8a,11),::Array_obj< ::String >::__new(2)->init(0,::little::Little_obj::keywords->TYPE_FLOAT)->init(1,::little::Little_obj::keywords->TYPE_INT))
             			->setFixed(3,HX_("callback",c5,99,06,7f), ::Dynamic(new _hx_Closure_10()))));
-HXLINE( 450)		::little::Little_obj::plugin->registerOperator(::little::Little_obj::keywords->AND_SIGN, ::Dynamic(::hx::Anon_obj::Create(4)
+HXLINE( 455)		::little::Little_obj::plugin->registerOperator(::little::Little_obj::keywords->AND_SIGN, ::Dynamic(::hx::Anon_obj::Create(4)
             			->setFixed(0,HX_("lhsAllowedTypes",48,af,a4,93),::Array_obj< ::String >::__new(1)->init(0,::little::Little_obj::keywords->TYPE_BOOLEAN))
             			->setFixed(1,HX_("priority",64,7b,3e,bb),HX_("last",56,0a,ad,47))
             			->setFixed(2,HX_("rhsAllowedTypes",ce,6d,8a,11),::Array_obj< ::String >::__new(1)->init(0,::little::Little_obj::keywords->TYPE_BOOLEAN))
             			->setFixed(3,HX_("callback",c5,99,06,7f), ::Dynamic(new _hx_Closure_11()))));
-HXLINE( 456)		::little::Little_obj::plugin->registerOperator(::little::Little_obj::keywords->OR_SIGN, ::Dynamic(::hx::Anon_obj::Create(4)
+HXLINE( 461)		::little::Little_obj::plugin->registerOperator(::little::Little_obj::keywords->OR_SIGN, ::Dynamic(::hx::Anon_obj::Create(4)
             			->setFixed(0,HX_("lhsAllowedTypes",48,af,a4,93),::Array_obj< ::String >::__new(1)->init(0,::little::Little_obj::keywords->TYPE_BOOLEAN))
             			->setFixed(1,HX_("priority",64,7b,3e,bb),(HX_("with ",5a,cf,6e,ca) + ::little::Little_obj::keywords->AND_SIGN))
             			->setFixed(2,HX_("rhsAllowedTypes",ce,6d,8a,11),::Array_obj< ::String >::__new(1)->init(0,::little::Little_obj::keywords->TYPE_BOOLEAN))
             			->setFixed(3,HX_("callback",c5,99,06,7f), ::Dynamic(new _hx_Closure_12()))));
-HXLINE( 462)		::little::Little_obj::plugin->registerOperator(::little::Little_obj::keywords->EQUALS_SIGN, ::Dynamic(::hx::Anon_obj::Create(2)
+HXLINE( 467)		::little::Little_obj::plugin->registerOperator(::little::Little_obj::keywords->EQUALS_SIGN, ::Dynamic(::hx::Anon_obj::Create(2)
             			->setFixed(0,HX_("priority",64,7b,3e,bb),HX_("last",56,0a,ad,47))
             			->setFixed(1,HX_("callback",c5,99,06,7f), ::Dynamic(new _hx_Closure_13()))));
-HXLINE( 467)		::little::Little_obj::plugin->registerOperator(::little::Little_obj::keywords->NOT_EQUALS_SIGN, ::Dynamic(::hx::Anon_obj::Create(2)
+HXLINE( 472)		::little::Little_obj::plugin->registerOperator(::little::Little_obj::keywords->NOT_EQUALS_SIGN, ::Dynamic(::hx::Anon_obj::Create(2)
             			->setFixed(0,HX_("priority",64,7b,3e,bb),(HX_("with ",5a,cf,6e,ca) + ::little::Little_obj::keywords->EQUALS_SIGN))
             			->setFixed(1,HX_("callback",c5,99,06,7f), ::Dynamic(new _hx_Closure_14()))));
-HXLINE( 472)		::little::Little_obj::plugin->registerOperator(::little::Little_obj::keywords->XOR_SIGN, ::Dynamic(::hx::Anon_obj::Create(4)
+HXLINE( 477)		::little::Little_obj::plugin->registerOperator(::little::Little_obj::keywords->XOR_SIGN, ::Dynamic(::hx::Anon_obj::Create(4)
             			->setFixed(0,HX_("lhsAllowedTypes",48,af,a4,93),::Array_obj< ::String >::__new(1)->init(0,::little::Little_obj::keywords->TYPE_BOOLEAN))
             			->setFixed(1,HX_("priority",64,7b,3e,bb),(HX_("with ",5a,cf,6e,ca) + ::little::Little_obj::keywords->AND_SIGN))
             			->setFixed(2,HX_("rhsAllowedTypes",ce,6d,8a,11),::Array_obj< ::String >::__new(1)->init(0,::little::Little_obj::keywords->TYPE_BOOLEAN))
             			->setFixed(3,HX_("callback",c5,99,06,7f), ::Dynamic(new _hx_Closure_15()))));
-HXLINE( 479)		::little::Little_obj::plugin->registerOperator(::little::Little_obj::keywords->LARGER_SIGN, ::Dynamic(::hx::Anon_obj::Create(5)
+HXLINE( 484)		::little::Little_obj::plugin->registerOperator(::little::Little_obj::keywords->LARGER_SIGN, ::Dynamic(::hx::Anon_obj::Create(5)
             			->setFixed(0,HX_("lhsAllowedTypes",48,af,a4,93),::Array_obj< ::String >::__new(2)->init(0,::little::Little_obj::keywords->TYPE_FLOAT)->init(1,::little::Little_obj::keywords->TYPE_INT))
             			->setFixed(1,HX_("priority",64,7b,3e,bb),(HX_("with ",5a,cf,6e,ca) + ::little::Little_obj::keywords->EQUALS_SIGN))
             			->setFixed(2,HX_("allowedTypeCombos",07,42,33,d4),::Array_obj< ::Dynamic>::__new(1)->init(0, ::Dynamic(::hx::Anon_obj::Create(2)
@@ -1285,7 +1321,7 @@ HXLINE( 479)		::little::Little_obj::plugin->registerOperator(::little::Little_ob
             				->setFixed(1,HX_("rhs",fd,db,56,00),::little::Little_obj::keywords->TYPE_STRING))))
             			->setFixed(3,HX_("rhsAllowedTypes",ce,6d,8a,11),::Array_obj< ::String >::__new(2)->init(0,::little::Little_obj::keywords->TYPE_FLOAT)->init(1,::little::Little_obj::keywords->TYPE_INT))
             			->setFixed(4,HX_("callback",c5,99,06,7f), ::Dynamic(new _hx_Closure_16()))));
-HXLINE( 493)		::little::Little_obj::plugin->registerOperator(::little::Little_obj::keywords->LARGER_EQUALS_SIGN, ::Dynamic(::hx::Anon_obj::Create(5)
+HXLINE( 498)		::little::Little_obj::plugin->registerOperator(::little::Little_obj::keywords->LARGER_EQUALS_SIGN, ::Dynamic(::hx::Anon_obj::Create(5)
             			->setFixed(0,HX_("lhsAllowedTypes",48,af,a4,93),::Array_obj< ::String >::__new(2)->init(0,::little::Little_obj::keywords->TYPE_FLOAT)->init(1,::little::Little_obj::keywords->TYPE_INT))
             			->setFixed(1,HX_("priority",64,7b,3e,bb),(HX_("with ",5a,cf,6e,ca) + ::little::Little_obj::keywords->EQUALS_SIGN))
             			->setFixed(2,HX_("allowedTypeCombos",07,42,33,d4),::Array_obj< ::Dynamic>::__new(1)->init(0, ::Dynamic(::hx::Anon_obj::Create(2)
@@ -1293,7 +1329,7 @@ HXLINE( 493)		::little::Little_obj::plugin->registerOperator(::little::Little_ob
             				->setFixed(1,HX_("rhs",fd,db,56,00),::little::Little_obj::keywords->TYPE_STRING))))
             			->setFixed(3,HX_("rhsAllowedTypes",ce,6d,8a,11),::Array_obj< ::String >::__new(2)->init(0,::little::Little_obj::keywords->TYPE_FLOAT)->init(1,::little::Little_obj::keywords->TYPE_INT))
             			->setFixed(4,HX_("callback",c5,99,06,7f), ::Dynamic(new _hx_Closure_17()))));
-HXLINE( 507)		::little::Little_obj::plugin->registerOperator(::little::Little_obj::keywords->SMALLER_SIGN, ::Dynamic(::hx::Anon_obj::Create(5)
+HXLINE( 512)		::little::Little_obj::plugin->registerOperator(::little::Little_obj::keywords->SMALLER_SIGN, ::Dynamic(::hx::Anon_obj::Create(5)
             			->setFixed(0,HX_("lhsAllowedTypes",48,af,a4,93),::Array_obj< ::String >::__new(2)->init(0,::little::Little_obj::keywords->TYPE_FLOAT)->init(1,::little::Little_obj::keywords->TYPE_INT))
             			->setFixed(1,HX_("priority",64,7b,3e,bb),(HX_("with ",5a,cf,6e,ca) + ::little::Little_obj::keywords->EQUALS_SIGN))
             			->setFixed(2,HX_("allowedTypeCombos",07,42,33,d4),::Array_obj< ::Dynamic>::__new(1)->init(0, ::Dynamic(::hx::Anon_obj::Create(2)
@@ -1301,7 +1337,7 @@ HXLINE( 507)		::little::Little_obj::plugin->registerOperator(::little::Little_ob
             				->setFixed(1,HX_("rhs",fd,db,56,00),::little::Little_obj::keywords->TYPE_STRING))))
             			->setFixed(3,HX_("rhsAllowedTypes",ce,6d,8a,11),::Array_obj< ::String >::__new(2)->init(0,::little::Little_obj::keywords->TYPE_FLOAT)->init(1,::little::Little_obj::keywords->TYPE_INT))
             			->setFixed(4,HX_("callback",c5,99,06,7f), ::Dynamic(new _hx_Closure_18()))));
-HXLINE( 521)		::little::Little_obj::plugin->registerOperator(::little::Little_obj::keywords->SMALLER_EQUALS_SIGN, ::Dynamic(::hx::Anon_obj::Create(5)
+HXLINE( 526)		::little::Little_obj::plugin->registerOperator(::little::Little_obj::keywords->SMALLER_EQUALS_SIGN, ::Dynamic(::hx::Anon_obj::Create(5)
             			->setFixed(0,HX_("lhsAllowedTypes",48,af,a4,93),::Array_obj< ::String >::__new(2)->init(0,::little::Little_obj::keywords->TYPE_FLOAT)->init(1,::little::Little_obj::keywords->TYPE_INT))
             			->setFixed(1,HX_("priority",64,7b,3e,bb),(HX_("with ",5a,cf,6e,ca) + ::little::Little_obj::keywords->EQUALS_SIGN))
             			->setFixed(2,HX_("allowedTypeCombos",07,42,33,d4),::Array_obj< ::Dynamic>::__new(1)->init(0, ::Dynamic(::hx::Anon_obj::Create(2)
@@ -1317,149 +1353,149 @@ STATIC_HX_DEFINE_DYNAMIC_FUNC0(PrepareRun_obj,addSigns,(void))
 void PrepareRun_obj::addConditions(){
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_0) HXARGC(2)
             		 ::little::interpreter::InterpTokens _hx_run(::Array< ::Dynamic> params,::Array< ::Dynamic> body){
-            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_540_addConditions)
-HXLINE( 541)			 ::little::interpreter::InterpTokens val = ::little::interpreter::InterpTokens_obj::NullValue_dyn();
-HXLINE( 542)			int safetyNet = 0;
-HXLINE( 543)			while((safetyNet < 500000)){
-HXLINE( 544)				 ::Dynamic condition = ::little::tools::Conversion_obj::toHaxeValue(::little::interpreter::Interpreter_obj::calculate(params));
-HXLINE( 545)				bool _hx_tmp;
-HXDLIN( 545)				if (::Std_obj::isOfType(condition,::hx::ClassOf< bool >())) {
-HXLINE( 545)					_hx_tmp = ( (bool)(condition) );
+            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_545_addConditions)
+HXLINE( 546)			 ::little::interpreter::InterpTokens val = ::little::interpreter::InterpTokens_obj::NullValue_dyn();
+HXLINE( 547)			int safetyNet = 0;
+HXLINE( 548)			while((safetyNet < 500000)){
+HXLINE( 549)				 ::Dynamic condition = ::little::tools::Conversion_obj::toHaxeValue(::little::interpreter::Interpreter_obj::calculate(params));
+HXLINE( 550)				bool _hx_tmp;
+HXDLIN( 550)				if (::Std_obj::isOfType(condition,::hx::ClassOf< bool >())) {
+HXLINE( 550)					_hx_tmp = ( (bool)(condition) );
             				}
             				else {
-HXLINE( 545)					_hx_tmp = false;
+HXLINE( 550)					_hx_tmp = false;
             				}
-HXDLIN( 545)				if (_hx_tmp) {
-HXLINE( 546)					val = ::little::interpreter::Interpreter_obj::run(body,null());
-HXLINE( 547)					safetyNet = (safetyNet + 1);
+HXDLIN( 550)				if (_hx_tmp) {
+HXLINE( 551)					val = ::little::interpreter::Interpreter_obj::run(body,null());
+HXLINE( 552)					safetyNet = (safetyNet + 1);
             				}
             				else {
-HXLINE( 549)					bool _hx_tmp1;
-HXDLIN( 549)					if (::Std_obj::isOfType(condition,::hx::ClassOf< bool >())) {
-HXLINE( 549)						_hx_tmp1 = !(( (bool)(condition) ));
+HXLINE( 554)					bool _hx_tmp1;
+HXDLIN( 554)					if (::Std_obj::isOfType(condition,::hx::ClassOf< bool >())) {
+HXLINE( 554)						_hx_tmp1 = !(( (bool)(condition) ));
             					}
             					else {
-HXLINE( 549)						_hx_tmp1 = false;
+HXLINE( 554)						_hx_tmp1 = false;
             					}
-HXDLIN( 549)					if (_hx_tmp1) {
-HXLINE( 550)						return val;
+HXDLIN( 554)					if (_hx_tmp1) {
+HXLINE( 555)						return val;
             					}
             					else {
-HXLINE( 553)						::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage((((((HX_("`",60,00,00,00) + ::little::Little_obj::keywords->CONDITION__WHILE_LOOP) + HX_("` condition must be a ",aa,db,e8,9f)) + ::little::Little_obj::keywords->TYPE_BOOLEAN) + HX_(" or ",7d,71,7b,15)) + ::little::Little_obj::keywords->FALSE_VALUE)),HX_("Interpreter",9a,09,07,b9));
-HXLINE( 554)						return val;
+HXLINE( 558)						::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage((((((HX_("`",60,00,00,00) + ::little::Little_obj::keywords->CONDITION__WHILE_LOOP) + HX_("` condition must be a ",aa,db,e8,9f)) + ::little::Little_obj::keywords->TYPE_BOOLEAN) + HX_(" or ",7d,71,7b,15)) + ::little::Little_obj::keywords->FALSE_VALUE)),HX_("Interpreter",9a,09,07,b9));
+HXLINE( 559)						return val;
             					}
             				}
             			}
-HXLINE( 557)			if ((safetyNet >= 500000)) {
-HXLINE( 558)				 ::little::interpreter::Runtime _hx_tmp2 = ::little::Little_obj::runtime;
-HXDLIN( 558)				::String _hx_tmp3 = ((HX_("Too much iteration in `",cf,6e,da,26) + ::little::Little_obj::keywords->CONDITION__WHILE_LOOP) + HX_("` loop (is `",d6,93,22,71));
-HXDLIN( 558)				::String _hx_tmp4 = ((_hx_tmp3 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(params,null())) + HX_("` forever `",e7,76,c2,50));
-HXDLIN( 558)				_hx_tmp2->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((_hx_tmp4 + ::little::Little_obj::keywords->TRUE_VALUE) + HX_("`?)",6a,0f,49,00))),HX_("Interpreter",9a,09,07,b9));
+HXLINE( 562)			if ((safetyNet >= 500000)) {
+HXLINE( 563)				 ::little::interpreter::Runtime _hx_tmp2 = ::little::Little_obj::runtime;
+HXDLIN( 563)				::String _hx_tmp3 = ((HX_("Too much iteration in `",cf,6e,da,26) + ::little::Little_obj::keywords->CONDITION__WHILE_LOOP) + HX_("` loop (is `",d6,93,22,71));
+HXDLIN( 563)				::String _hx_tmp4 = ((_hx_tmp3 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(params,null())) + HX_("` forever `",e7,76,c2,50));
+HXDLIN( 563)				_hx_tmp2->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((_hx_tmp4 + ::little::Little_obj::keywords->TRUE_VALUE) + HX_("`?)",6a,0f,49,00))),HX_("Interpreter",9a,09,07,b9));
             			}
-HXLINE( 561)			return val;
+HXLINE( 566)			return val;
             		}
             		HX_END_LOCAL_FUNC2(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_1) HXARGC(2)
             		 ::little::interpreter::InterpTokens _hx_run(::Array< ::Dynamic> params,::Array< ::Dynamic> body){
-            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_564_addConditions)
-HXLINE( 565)			 ::little::interpreter::InterpTokens val = ::little::interpreter::InterpTokens_obj::NullValue_dyn();
-HXLINE( 566)			bool cond = ( (bool)(::little::tools::Conversion_obj::toHaxeValue(::little::interpreter::Interpreter_obj::calculate(params))) );
-HXLINE( 567)			bool _hx_tmp;
-HXDLIN( 567)			if (::Std_obj::isOfType(cond,::hx::ClassOf< bool >())) {
-HXLINE( 567)				_hx_tmp = cond;
+            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_569_addConditions)
+HXLINE( 570)			 ::little::interpreter::InterpTokens val = ::little::interpreter::InterpTokens_obj::NullValue_dyn();
+HXLINE( 571)			bool cond = ( (bool)(::little::tools::Conversion_obj::toHaxeValue(::little::interpreter::Interpreter_obj::calculate(params))) );
+HXLINE( 572)			bool _hx_tmp;
+HXDLIN( 572)			if (::Std_obj::isOfType(cond,::hx::ClassOf< bool >())) {
+HXLINE( 572)				_hx_tmp = cond;
             			}
             			else {
-HXLINE( 567)				_hx_tmp = false;
+HXLINE( 572)				_hx_tmp = false;
             			}
-HXDLIN( 567)			if (_hx_tmp) {
-HXLINE( 568)				val = ::little::interpreter::Interpreter_obj::run(body,null());
+HXDLIN( 572)			if (_hx_tmp) {
+HXLINE( 573)				val = ::little::interpreter::Interpreter_obj::run(body,null());
             			}
             			else {
-HXLINE( 570)				if (!(::Std_obj::isOfType(cond,::hx::ClassOf< bool >()))) {
-HXLINE( 571)					::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage((((HX_("`",60,00,00,00) + ::little::Little_obj::keywords->CONDITION__IF) + HX_("` condition must be a ",aa,db,e8,9f)) + ::little::Little_obj::keywords->TYPE_BOOLEAN)),HX_("Interpreter",9a,09,07,b9));
+HXLINE( 575)				if (!(::Std_obj::isOfType(cond,::hx::ClassOf< bool >()))) {
+HXLINE( 576)					::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage((((HX_("`",60,00,00,00) + ::little::Little_obj::keywords->CONDITION__IF) + HX_("` condition must be a ",aa,db,e8,9f)) + ::little::Little_obj::keywords->TYPE_BOOLEAN)),HX_("Interpreter",9a,09,07,b9));
             				}
             			}
-HXLINE( 574)			return val;
+HXLINE( 579)			return val;
             		}
             		HX_END_LOCAL_FUNC2(return)
 
             		HX_BEGIN_LOCAL_FUNC_S0(::hx::LocalFunc,_hx_Closure_2) HXARGC(2)
             		 ::little::interpreter::InterpTokens _hx_run(::Array< ::Dynamic> params,::Array< ::Dynamic> body){
-            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_577_addConditions)
-HXLINE( 578)			 ::little::interpreter::InterpTokens val = ::little::interpreter::InterpTokens_obj::NullValue_dyn();
-HXLINE( 579)			::Array< ::Dynamic> fp = ::Array_obj< ::Dynamic>::__new(0);
-HXLINE( 581)			{
-HXLINE( 581)				int _g = 0;
-HXDLIN( 581)				while((_g < params->length)){
-HXLINE( 581)					 ::little::interpreter::InterpTokens p = params->__get(_g).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 581)					_g = (_g + 1);
-HXLINE( 582)					if ((p->_hx_getIndex() == 8)) {
-HXLINE( 595)						 ::little::interpreter::InterpTokens _g1 = p->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 595)						 ::little::interpreter::InterpTokens _g2 = p->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
-HXLINE( 583)						{
-HXLINE( 595)							bool _hx_tmp;
-HXLINE( 591)							bool _hx_tmp1;
-HXLINE( 587)							bool _hx_tmp2;
-HXLINE( 583)							 ::Dynamic _hx_tmp3 = ::Type_obj::enumParameters(_g1)->__get(0);
-HXDLIN( 583)							if ((::hx::IsEq( _hx_tmp3,::little::Little_obj::keywords->FOR_LOOP_FROM ) == true)) {
-HXLINE( 583)								 ::little::interpreter::InterpTokens params1 = _g2;
-HXDLIN( 583)								{
-HXLINE( 584)									fp->push(::little::interpreter::InterpTokens_obj::Identifier(::little::Little_obj::keywords->FOR_LOOP_FROM));
-HXLINE( 585)									fp->push(::little::interpreter::InterpTokens_obj::Expression(::Type_obj::enumParameters(params1)->__get(0),null()));
+            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_582_addConditions)
+HXLINE( 583)			 ::little::interpreter::InterpTokens val = ::little::interpreter::InterpTokens_obj::NullValue_dyn();
+HXLINE( 584)			::Array< ::Dynamic> fp = ::Array_obj< ::Dynamic>::__new(0);
+HXLINE( 586)			{
+HXLINE( 586)				int _g = 0;
+HXDLIN( 586)				while((_g < params->length)){
+HXLINE( 586)					 ::little::interpreter::InterpTokens p = params->__get(_g).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 586)					_g = (_g + 1);
+HXLINE( 587)					if ((p->_hx_getIndex() == 8)) {
+HXLINE( 600)						 ::little::interpreter::InterpTokens _g1 = p->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 600)						 ::little::interpreter::InterpTokens _g2 = p->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
+HXLINE( 588)						{
+HXLINE( 600)							bool _hx_tmp;
+HXLINE( 596)							bool _hx_tmp1;
+HXLINE( 592)							bool _hx_tmp2;
+HXLINE( 588)							 ::Dynamic _hx_tmp3 = ::Type_obj::enumParameters(_g1)->__get(0);
+HXDLIN( 588)							if ((::hx::IsEq( _hx_tmp3,::little::Little_obj::keywords->FOR_LOOP_FROM ) == true)) {
+HXLINE( 588)								 ::little::interpreter::InterpTokens params1 = _g2;
+HXDLIN( 588)								{
+HXLINE( 589)									fp->push(::little::interpreter::InterpTokens_obj::Identifier(::little::Little_obj::keywords->FOR_LOOP_FROM));
+HXLINE( 590)									fp->push(::little::interpreter::InterpTokens_obj::Expression(::Type_obj::enumParameters(params1)->__get(0),null()));
             								}
             							}
             							else {
-HXLINE( 587)								 ::Dynamic _hx_tmp4 = ::Type_obj::enumParameters(_g1)->__get(0);
-HXDLIN( 587)								_hx_tmp2 = ::hx::IsEq( _hx_tmp4,::little::Little_obj::keywords->FOR_LOOP_TO );
-HXDLIN( 587)								if ((_hx_tmp2 == true)) {
-HXLINE( 587)									 ::little::interpreter::InterpTokens params2 = _g2;
-HXDLIN( 587)									{
-HXLINE( 588)										fp->push(::little::interpreter::InterpTokens_obj::Identifier(::little::Little_obj::keywords->FOR_LOOP_TO));
-HXLINE( 589)										fp->push(::little::interpreter::InterpTokens_obj::Expression(::Type_obj::enumParameters(params2)->__get(0),null()));
+HXLINE( 592)								 ::Dynamic _hx_tmp4 = ::Type_obj::enumParameters(_g1)->__get(0);
+HXDLIN( 592)								_hx_tmp2 = ::hx::IsEq( _hx_tmp4,::little::Little_obj::keywords->FOR_LOOP_TO );
+HXDLIN( 592)								if ((_hx_tmp2 == true)) {
+HXLINE( 592)									 ::little::interpreter::InterpTokens params2 = _g2;
+HXDLIN( 592)									{
+HXLINE( 593)										fp->push(::little::interpreter::InterpTokens_obj::Identifier(::little::Little_obj::keywords->FOR_LOOP_TO));
+HXLINE( 594)										fp->push(::little::interpreter::InterpTokens_obj::Expression(::Type_obj::enumParameters(params2)->__get(0),null()));
             									}
             								}
             								else {
-HXLINE( 591)									 ::Dynamic _hx_tmp5 = ::Type_obj::enumParameters(_g1)->__get(0);
-HXDLIN( 591)									_hx_tmp1 = ::hx::IsEq( _hx_tmp5,::little::Little_obj::keywords->FOR_LOOP_JUMP );
-HXDLIN( 591)									if ((_hx_tmp1 == true)) {
-HXLINE( 591)										 ::little::interpreter::InterpTokens params3 = _g2;
-HXDLIN( 591)										{
-HXLINE( 592)											fp->push(::little::interpreter::InterpTokens_obj::Identifier(::little::Little_obj::keywords->FOR_LOOP_JUMP));
-HXLINE( 593)											fp->push(::little::interpreter::InterpTokens_obj::Expression(::Type_obj::enumParameters(params3)->__get(0),null()));
+HXLINE( 596)									 ::Dynamic _hx_tmp5 = ::Type_obj::enumParameters(_g1)->__get(0);
+HXDLIN( 596)									_hx_tmp1 = ::hx::IsEq( _hx_tmp5,::little::Little_obj::keywords->FOR_LOOP_JUMP );
+HXDLIN( 596)									if ((_hx_tmp1 == true)) {
+HXLINE( 596)										 ::little::interpreter::InterpTokens params3 = _g2;
+HXDLIN( 596)										{
+HXLINE( 597)											fp->push(::little::interpreter::InterpTokens_obj::Identifier(::little::Little_obj::keywords->FOR_LOOP_JUMP));
+HXLINE( 598)											fp->push(::little::interpreter::InterpTokens_obj::Expression(::Type_obj::enumParameters(params3)->__get(0),null()));
             										}
             									}
             									else {
-HXLINE( 595)										::Array< ::Dynamic> _this = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::BLOCK_dyn())->copy();
-HXDLIN( 595)										::Array< ::String > result = ::Array_obj< ::String >::__new(_this->length);
-HXDLIN( 595)										{
-HXLINE( 595)											int _g3 = 0;
-HXDLIN( 595)											int _g4 = _this->length;
-HXDLIN( 595)											while((_g3 < _g4)){
-HXLINE( 595)												_g3 = (_g3 + 1);
-HXDLIN( 595)												int i = (_g3 - 1);
-HXDLIN( 595)												{
-HXLINE( 595)													::String inValue = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this,i)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 595)													result->__unsafe_set(i,inValue);
+HXLINE( 600)										::Array< ::Dynamic> _this = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::BLOCK_dyn())->copy();
+HXDLIN( 600)										::Array< ::String > result = ::Array_obj< ::String >::__new(_this->length);
+HXDLIN( 600)										{
+HXLINE( 600)											int _g3 = 0;
+HXDLIN( 600)											int _g4 = _this->length;
+HXDLIN( 600)											while((_g3 < _g4)){
+HXLINE( 600)												_g3 = (_g3 + 1);
+HXDLIN( 600)												int i = (_g3 - 1);
+HXDLIN( 600)												{
+HXLINE( 600)													::String inValue = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this,i)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 600)													result->__unsafe_set(i,inValue);
             												}
             											}
             										}
-HXDLIN( 595)										if (result->contains(::Type_obj::enumConstructor(_g1).toLowerCase())) {
-HXLINE( 595)											::Array< ::String > _hx_tmp6 = ::Array_obj< ::String >::__new(3)->init(0,::little::Little_obj::keywords->FOR_LOOP_FROM)->init(1,::little::Little_obj::keywords->FOR_LOOP_TO)->init(2,::little::Little_obj::keywords->FOR_LOOP_JUMP);
-HXDLIN( 595)											_hx_tmp = _hx_tmp6->contains(::Type_obj::enumParameters(::little::interpreter::Interpreter_obj::evaluate(_g1,null()))->__get(0));
+HXDLIN( 600)										if (result->contains(::Type_obj::enumConstructor(_g1).toLowerCase())) {
+HXLINE( 600)											::Array< ::String > _hx_tmp6 = ::Array_obj< ::String >::__new(3)->init(0,::little::Little_obj::keywords->FOR_LOOP_FROM)->init(1,::little::Little_obj::keywords->FOR_LOOP_TO)->init(2,::little::Little_obj::keywords->FOR_LOOP_JUMP);
+HXDLIN( 600)											_hx_tmp = _hx_tmp6->contains(::Type_obj::enumParameters(::little::interpreter::Interpreter_obj::evaluate(_g1,null()))->__get(0));
             										}
             										else {
-HXLINE( 595)											_hx_tmp = false;
+HXLINE( 600)											_hx_tmp = false;
             										}
-HXDLIN( 595)										if ((_hx_tmp == true)) {
-HXLINE( 595)											 ::little::interpreter::InterpTokens params4 = _g2;
-HXDLIN( 595)											{
-HXLINE( 596)												fp->push(::little::interpreter::InterpTokens_obj::Identifier(::Type_obj::enumParameters(::little::interpreter::Interpreter_obj::evaluate(::Type_obj::enumParameters(p)->__get(0),null()))->__get(0)));
-HXLINE( 597)												fp->push(::little::interpreter::InterpTokens_obj::Expression(::Type_obj::enumParameters(params4)->__get(0),null()));
+HXDLIN( 600)										if ((_hx_tmp == true)) {
+HXLINE( 600)											 ::little::interpreter::InterpTokens params4 = _g2;
+HXDLIN( 600)											{
+HXLINE( 601)												fp->push(::little::interpreter::InterpTokens_obj::Identifier(::Type_obj::enumParameters(::little::interpreter::Interpreter_obj::evaluate(::Type_obj::enumParameters(p)->__get(0),null()))->__get(0)));
+HXLINE( 602)												fp->push(::little::interpreter::InterpTokens_obj::Expression(::Type_obj::enumParameters(params4)->__get(0),null()));
             											}
             										}
             										else {
-HXLINE( 599)											fp->push(p);
+HXLINE( 604)											fp->push(p);
             										}
             									}
             								}
@@ -1467,175 +1503,175 @@ HXLINE( 599)											fp->push(p);
             						}
             					}
             					else {
-HXLINE( 599)						fp->push(p);
+HXLINE( 604)						fp->push(p);
             					}
             				}
             			}
-HXLINE( 603)			params = fp;
-HXLINE( 604)			::Array< ::Dynamic> _this1 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::VARIABLE_DECLARATION_dyn())->copy();
-HXDLIN( 604)			::Array< ::String > result1 = ::Array_obj< ::String >::__new(_this1->length);
-HXDLIN( 604)			{
-HXLINE( 604)				int _g5 = 0;
-HXDLIN( 604)				int _g6 = _this1->length;
-HXDLIN( 604)				while((_g5 < _g6)){
-HXLINE( 604)					_g5 = (_g5 + 1);
-HXDLIN( 604)					int i1 = (_g5 - 1);
-HXDLIN( 604)					{
-HXLINE( 604)						::String inValue1 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this1,i1)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 604)						result1->__unsafe_set(i1,inValue1);
+HXLINE( 608)			params = fp;
+HXLINE( 609)			::Array< ::Dynamic> _this1 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::VARIABLE_DECLARATION_dyn())->copy();
+HXDLIN( 609)			::Array< ::String > result1 = ::Array_obj< ::String >::__new(_this1->length);
+HXDLIN( 609)			{
+HXLINE( 609)				int _g5 = 0;
+HXDLIN( 609)				int _g6 = _this1->length;
+HXDLIN( 609)				while((_g5 < _g6)){
+HXLINE( 609)					_g5 = (_g5 + 1);
+HXDLIN( 609)					int i1 = (_g5 - 1);
+HXDLIN( 609)					{
+HXLINE( 609)						::String inValue1 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this1,i1)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 609)						result1->__unsafe_set(i1,inValue1);
             					}
             				}
             			}
-HXDLIN( 604)			if (!(result1->contains(::Type_obj::enumConstructor(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >()).toLowerCase()))) {
-HXLINE( 605)				 ::little::interpreter::Runtime _hx_tmp7 = ::little::Little_obj::runtime;
-HXDLIN( 605)				::String _hx_tmp8 = ((HX_("`",60,00,00,00) + ::little::Little_obj::keywords->CONDITION__FOR_LOOP) + HX_("` loop must start with a variable to count on (expected definition/block, found: `",2c,38,3e,45));
-HXDLIN( 605)				_hx_tmp7->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((_hx_tmp8 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())) + HX_("`)",c9,53,00,00))),null());
-HXLINE( 606)				return val;
+HXDLIN( 609)			if (!(result1->contains(::Type_obj::enumConstructor(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >()).toLowerCase()))) {
+HXLINE( 610)				 ::little::interpreter::Runtime _hx_tmp7 = ::little::Little_obj::runtime;
+HXDLIN( 610)				::String _hx_tmp8 = ((HX_("`",60,00,00,00) + ::little::Little_obj::keywords->CONDITION__FOR_LOOP) + HX_("` loop must start with a variable to count on (expected definition/block, found: `",2c,38,3e,45));
+HXDLIN( 610)				_hx_tmp7->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((_hx_tmp8 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())) + HX_("`)",c9,53,00,00))),null());
+HXLINE( 611)				return val;
             			}
-HXLINE( 608)			::String typeName = ::little::tools::Extensions_obj::asJoinedStringPath(::Type_obj::enumParameters(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())->__get(1));
-HXLINE( 609)			if (!(::Array_obj< ::String >::__new(4)->init(0,::little::Little_obj::keywords->TYPE_INT)->init(1,::little::Little_obj::keywords->TYPE_FLOAT)->init(2,::little::Little_obj::keywords->TYPE_DYNAMIC)->init(3,::little::Little_obj::keywords->TYPE_UNKNOWN)->contains(typeName))) {
-HXLINE( 610)				::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((((((((((HX_("`",60,00,00,00) + ::little::Little_obj::keywords->CONDITION__FOR_LOOP) + HX_("` loop's variable must be of type ",97,f5,f6,31)) + ::little::Little_obj::keywords->TYPE_INT) + HX_(", ",74,26,00,00)) + ::little::Little_obj::keywords->TYPE_FLOAT) + HX_(" or ",7d,71,7b,15)) + ::little::Little_obj::keywords->TYPE_DYNAMIC) + HX_(" (given: ",5b,4a,09,39)) + typeName) + HX_(")",29,00,00,00))),null());
+HXLINE( 613)			::String typeName = ::little::tools::Extensions_obj::asJoinedStringPath(::Type_obj::enumParameters(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())->__get(1));
+HXLINE( 614)			if (!(::Array_obj< ::String >::__new(4)->init(0,::little::Little_obj::keywords->TYPE_INT)->init(1,::little::Little_obj::keywords->TYPE_FLOAT)->init(2,::little::Little_obj::keywords->TYPE_DYNAMIC)->init(3,::little::Little_obj::keywords->TYPE_UNKNOWN)->contains(typeName))) {
+HXLINE( 615)				::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((((((((((HX_("`",60,00,00,00) + ::little::Little_obj::keywords->CONDITION__FOR_LOOP) + HX_("` loop's variable must be of type ",97,f5,f6,31)) + ::little::Little_obj::keywords->TYPE_INT) + HX_(", ",74,26,00,00)) + ::little::Little_obj::keywords->TYPE_FLOAT) + HX_(" or ",7d,71,7b,15)) + ::little::Little_obj::keywords->TYPE_DYNAMIC) + HX_(" (given: ",5b,4a,09,39)) + typeName) + HX_(")",29,00,00,00))),null());
             			}
-HXLINE( 613)			 ::Dynamic from = null();
-HXDLIN( 613)			 ::Dynamic to = null();
-HXDLIN( 613)			Float jump = ( (Float)(1) );
-HXLINE( 615)			::Array< ::Dynamic> currentExpression = ::Array_obj< ::Dynamic>::__new(0);
-HXLINE( 616)			int currentlySet = -1;
-HXLINE( 617)			{
-HXLINE( 617)				int _g7 = 1;
-HXDLIN( 617)				int _g8 = params->length;
-HXDLIN( 617)				while((_g7 < _g8)){
-HXLINE( 617)					_g7 = (_g7 + 1);
-HXDLIN( 617)					int i2 = (_g7 - 1);
-HXLINE( 618)					{
-HXLINE( 618)						 ::little::interpreter::InterpTokens _g9 = params->__get(i2).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 618)						if ((_g9->_hx_getIndex() == 25)) {
-HXLINE( 643)							::String _g10 = _g9->_hx_getString(0);
-HXLINE( 619)							{
-HXLINE( 643)								bool _hx_tmp9;
-HXLINE( 631)								bool _hx_tmp10;
-HXLINE( 619)								if (((_g10 == ::little::Little_obj::keywords->FOR_LOOP_FROM) == true)) {
-HXLINE( 620)									if ((currentExpression->length > 0)) {
-HXLINE( 621)										switch((int)(currentlySet)){
+HXLINE( 618)			 ::Dynamic from = null();
+HXDLIN( 618)			 ::Dynamic to = null();
+HXDLIN( 618)			Float jump = ( (Float)(1) );
+HXLINE( 620)			::Array< ::Dynamic> currentExpression = ::Array_obj< ::Dynamic>::__new(0);
+HXLINE( 621)			int currentlySet = -1;
+HXLINE( 622)			{
+HXLINE( 622)				int _g7 = 1;
+HXDLIN( 622)				int _g8 = params->length;
+HXDLIN( 622)				while((_g7 < _g8)){
+HXLINE( 622)					_g7 = (_g7 + 1);
+HXDLIN( 622)					int i2 = (_g7 - 1);
+HXLINE( 623)					{
+HXLINE( 623)						 ::little::interpreter::InterpTokens _g9 = params->__get(i2).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 623)						if ((_g9->_hx_getIndex() == 25)) {
+HXLINE( 648)							::String _g10 = _g9->_hx_getString(0);
+HXLINE( 624)							{
+HXLINE( 648)								bool _hx_tmp9;
+HXLINE( 636)								bool _hx_tmp10;
+HXLINE( 624)								if (((_g10 == ::little::Little_obj::keywords->FOR_LOOP_FROM) == true)) {
+HXLINE( 625)									if ((currentExpression->length > 0)) {
+HXLINE( 626)										switch((int)(currentlySet)){
             											case (int)-1: {
-HXLINE( 622)												::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((((((((HX_("Invalid `",d7,c2,00,23) + ::little::Little_obj::keywords->CONDITION__FOR_LOOP) + HX_("` loop syntax: expected a `",fe,dd,34,60)) + ::little::Little_obj::keywords->FOR_LOOP_TO) + HX_("`, `",0c,fb,95,3f)) + ::little::Little_obj::keywords->FOR_LOOP_FROM) + HX_("` or `",e3,7f,ca,18)) + ::little::Little_obj::keywords->FOR_LOOP_JUMP) + HX_("` after the variable",0f,a8,6f,68))),null());
+HXLINE( 627)												::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((((((((HX_("Invalid `",d7,c2,00,23) + ::little::Little_obj::keywords->CONDITION__FOR_LOOP) + HX_("` loop syntax: expected a `",fe,dd,34,60)) + ::little::Little_obj::keywords->FOR_LOOP_TO) + HX_("`, `",0c,fb,95,3f)) + ::little::Little_obj::keywords->FOR_LOOP_FROM) + HX_("` or `",e3,7f,ca,18)) + ::little::Little_obj::keywords->FOR_LOOP_JUMP) + HX_("` after the variable",0f,a8,6f,68))),null());
             											}
             											break;
             											case (int)0: {
-HXLINE( 623)												::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((((HX_("Cannot repeat `",f8,e0,2f,6b) + ::little::Little_obj::keywords->FOR_LOOP_FROM) + HX_("` tag twice in `",a3,14,dc,54)) + ::little::Little_obj::keywords->CONDITION__FOR_LOOP) + HX_("` loop.",8a,05,72,dc))),null());
+HXLINE( 628)												::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((((HX_("Cannot repeat `",f8,e0,2f,6b) + ::little::Little_obj::keywords->FOR_LOOP_FROM) + HX_("` tag twice in `",a3,14,dc,54)) + ::little::Little_obj::keywords->CONDITION__FOR_LOOP) + HX_("` loop.",8a,05,72,dc))),null());
             											}
             											break;
             											case (int)1: {
-HXLINE( 624)												to = ::little::tools::Conversion_obj::toHaxeValue(::little::interpreter::Interpreter_obj::calculate(currentExpression));
+HXLINE( 629)												to = ::little::tools::Conversion_obj::toHaxeValue(::little::interpreter::Interpreter_obj::calculate(currentExpression));
             											}
             											break;
             											case (int)2: {
-HXLINE( 625)												jump = ( (Float)(::little::tools::Conversion_obj::toHaxeValue(::little::interpreter::Interpreter_obj::calculate(currentExpression))) );
+HXLINE( 630)												jump = ( (Float)(::little::tools::Conversion_obj::toHaxeValue(::little::interpreter::Interpreter_obj::calculate(currentExpression))) );
             											}
             											break;
             										}
             									}
-HXLINE( 628)									currentExpression = ::Array_obj< ::Dynamic>::__new(0);
-HXLINE( 629)									currentlySet = 0;
+HXLINE( 633)									currentExpression = ::Array_obj< ::Dynamic>::__new(0);
+HXLINE( 634)									currentlySet = 0;
             								}
             								else {
-HXLINE( 631)									_hx_tmp10 = (_g10 == ::little::Little_obj::keywords->FOR_LOOP_TO);
-HXDLIN( 631)									if ((_hx_tmp10 == true)) {
-HXLINE( 632)										if ((currentExpression->length > 0)) {
-HXLINE( 633)											switch((int)(currentlySet)){
+HXLINE( 636)									_hx_tmp10 = (_g10 == ::little::Little_obj::keywords->FOR_LOOP_TO);
+HXDLIN( 636)									if ((_hx_tmp10 == true)) {
+HXLINE( 637)										if ((currentExpression->length > 0)) {
+HXLINE( 638)											switch((int)(currentlySet)){
             												case (int)-1: {
-HXLINE( 634)													::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((((((((HX_("Invalid `",d7,c2,00,23) + ::little::Little_obj::keywords->CONDITION__FOR_LOOP) + HX_("` loop syntax: expected a `",fe,dd,34,60)) + ::little::Little_obj::keywords->FOR_LOOP_TO) + HX_("`, `",0c,fb,95,3f)) + ::little::Little_obj::keywords->FOR_LOOP_FROM) + HX_("` or `",e3,7f,ca,18)) + ::little::Little_obj::keywords->FOR_LOOP_JUMP) + HX_("` after the variable",0f,a8,6f,68))),null());
+HXLINE( 639)													::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((((((((HX_("Invalid `",d7,c2,00,23) + ::little::Little_obj::keywords->CONDITION__FOR_LOOP) + HX_("` loop syntax: expected a `",fe,dd,34,60)) + ::little::Little_obj::keywords->FOR_LOOP_TO) + HX_("`, `",0c,fb,95,3f)) + ::little::Little_obj::keywords->FOR_LOOP_FROM) + HX_("` or `",e3,7f,ca,18)) + ::little::Little_obj::keywords->FOR_LOOP_JUMP) + HX_("` after the variable",0f,a8,6f,68))),null());
             												}
             												break;
             												case (int)0: {
-HXLINE( 635)													from = ::little::tools::Conversion_obj::toHaxeValue(::little::interpreter::Interpreter_obj::calculate(currentExpression));
+HXLINE( 640)													from = ::little::tools::Conversion_obj::toHaxeValue(::little::interpreter::Interpreter_obj::calculate(currentExpression));
             												}
             												break;
             												case (int)1: {
-HXLINE( 636)													::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((((HX_("Cannot repeat `",f8,e0,2f,6b) + ::little::Little_obj::keywords->FOR_LOOP_TO) + HX_("` tag twice in `",a3,14,dc,54)) + ::little::Little_obj::keywords->CONDITION__FOR_LOOP) + HX_("` loop.",8a,05,72,dc))),null());
+HXLINE( 641)													::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((((HX_("Cannot repeat `",f8,e0,2f,6b) + ::little::Little_obj::keywords->FOR_LOOP_TO) + HX_("` tag twice in `",a3,14,dc,54)) + ::little::Little_obj::keywords->CONDITION__FOR_LOOP) + HX_("` loop.",8a,05,72,dc))),null());
             												}
             												break;
             												case (int)2: {
-HXLINE( 637)													jump = ( (Float)(::little::tools::Conversion_obj::toHaxeValue(::little::interpreter::Interpreter_obj::calculate(currentExpression))) );
+HXLINE( 642)													jump = ( (Float)(::little::tools::Conversion_obj::toHaxeValue(::little::interpreter::Interpreter_obj::calculate(currentExpression))) );
             												}
             												break;
             											}
             										}
-HXLINE( 640)										currentExpression = ::Array_obj< ::Dynamic>::__new(0);
-HXLINE( 641)										currentlySet = 1;
+HXLINE( 645)										currentExpression = ::Array_obj< ::Dynamic>::__new(0);
+HXLINE( 646)										currentlySet = 1;
             									}
             									else {
-HXLINE( 643)										_hx_tmp9 = (_g10 == ::little::Little_obj::keywords->FOR_LOOP_JUMP);
-HXDLIN( 643)										if ((_hx_tmp9 == true)) {
-HXLINE( 644)											if ((currentExpression->length > 0)) {
-HXLINE( 645)												switch((int)(currentlySet)){
+HXLINE( 648)										_hx_tmp9 = (_g10 == ::little::Little_obj::keywords->FOR_LOOP_JUMP);
+HXDLIN( 648)										if ((_hx_tmp9 == true)) {
+HXLINE( 649)											if ((currentExpression->length > 0)) {
+HXLINE( 650)												switch((int)(currentlySet)){
             													case (int)-1: {
-HXLINE( 646)														::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((((((((HX_("Invalid `",d7,c2,00,23) + ::little::Little_obj::keywords->CONDITION__FOR_LOOP) + HX_("` loop syntax: expected a `",fe,dd,34,60)) + ::little::Little_obj::keywords->FOR_LOOP_TO) + HX_("`, `",0c,fb,95,3f)) + ::little::Little_obj::keywords->FOR_LOOP_FROM) + HX_("` or `",e3,7f,ca,18)) + ::little::Little_obj::keywords->FOR_LOOP_JUMP) + HX_("` after the variable",0f,a8,6f,68))),null());
+HXLINE( 651)														::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((((((((HX_("Invalid `",d7,c2,00,23) + ::little::Little_obj::keywords->CONDITION__FOR_LOOP) + HX_("` loop syntax: expected a `",fe,dd,34,60)) + ::little::Little_obj::keywords->FOR_LOOP_TO) + HX_("`, `",0c,fb,95,3f)) + ::little::Little_obj::keywords->FOR_LOOP_FROM) + HX_("` or `",e3,7f,ca,18)) + ::little::Little_obj::keywords->FOR_LOOP_JUMP) + HX_("` after the variable",0f,a8,6f,68))),null());
             													}
             													break;
             													case (int)0: {
-HXLINE( 647)														from = ::little::tools::Conversion_obj::toHaxeValue(::little::interpreter::Interpreter_obj::calculate(currentExpression));
+HXLINE( 652)														from = ::little::tools::Conversion_obj::toHaxeValue(::little::interpreter::Interpreter_obj::calculate(currentExpression));
             													}
             													break;
             													case (int)1: {
-HXLINE( 648)														to = ::little::tools::Conversion_obj::toHaxeValue(::little::interpreter::Interpreter_obj::calculate(currentExpression));
+HXLINE( 653)														to = ::little::tools::Conversion_obj::toHaxeValue(::little::interpreter::Interpreter_obj::calculate(currentExpression));
             													}
             													break;
             													case (int)2: {
-HXLINE( 649)														::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((((HX_("Cannot repeat `",f8,e0,2f,6b) + ::little::Little_obj::keywords->FOR_LOOP_JUMP) + HX_("` tag twice in `",a3,14,dc,54)) + ::little::Little_obj::keywords->CONDITION__FOR_LOOP) + HX_("` loop.",8a,05,72,dc))),null());
+HXLINE( 654)														::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((((HX_("Cannot repeat `",f8,e0,2f,6b) + ::little::Little_obj::keywords->FOR_LOOP_JUMP) + HX_("` tag twice in `",a3,14,dc,54)) + ::little::Little_obj::keywords->CONDITION__FOR_LOOP) + HX_("` loop.",8a,05,72,dc))),null());
             													}
             													break;
             												}
             											}
-HXLINE( 652)											currentExpression = ::Array_obj< ::Dynamic>::__new(0);
-HXLINE( 653)											currentlySet = 2;
+HXLINE( 657)											currentExpression = ::Array_obj< ::Dynamic>::__new(0);
+HXLINE( 658)											currentlySet = 2;
             										}
             										else {
-HXLINE( 655)											currentExpression->push(params->__get(i2).StaticCast<  ::little::interpreter::InterpTokens >());
+HXLINE( 660)											currentExpression->push(params->__get(i2).StaticCast<  ::little::interpreter::InterpTokens >());
             										}
             									}
             								}
             							}
             						}
             						else {
-HXLINE( 655)							currentExpression->push(params->__get(i2).StaticCast<  ::little::interpreter::InterpTokens >());
+HXLINE( 660)							currentExpression->push(params->__get(i2).StaticCast<  ::little::interpreter::InterpTokens >());
             						}
             					}
             				}
             			}
-HXLINE( 658)			switch((int)(currentlySet)){
+HXLINE( 663)			switch((int)(currentlySet)){
             				case (int)-1: {
-HXLINE( 659)					::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((((((((HX_("Invalid `",d7,c2,00,23) + ::little::Little_obj::keywords->CONDITION__FOR_LOOP) + HX_("` loop syntax: expected a `",fe,dd,34,60)) + ::little::Little_obj::keywords->FOR_LOOP_TO) + HX_("`, `",0c,fb,95,3f)) + ::little::Little_obj::keywords->FOR_LOOP_FROM) + HX_("` or `",e3,7f,ca,18)) + ::little::Little_obj::keywords->FOR_LOOP_JUMP) + HX_("` after the variable",0f,a8,6f,68))),null());
+HXLINE( 664)					::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((((((((HX_("Invalid `",d7,c2,00,23) + ::little::Little_obj::keywords->CONDITION__FOR_LOOP) + HX_("` loop syntax: expected a `",fe,dd,34,60)) + ::little::Little_obj::keywords->FOR_LOOP_TO) + HX_("`, `",0c,fb,95,3f)) + ::little::Little_obj::keywords->FOR_LOOP_FROM) + HX_("` or `",e3,7f,ca,18)) + ::little::Little_obj::keywords->FOR_LOOP_JUMP) + HX_("` after the variable",0f,a8,6f,68))),null());
             				}
             				break;
             				case (int)0: {
-HXLINE( 660)					::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((((HX_("Cannot repeat `",f8,e0,2f,6b) + ::little::Little_obj::keywords->FOR_LOOP_FROM) + HX_("` tag twice in `",a3,14,dc,54)) + ::little::Little_obj::keywords->CONDITION__FOR_LOOP) + HX_("` loop.",8a,05,72,dc))),null());
+HXLINE( 665)					::little::Little_obj::runtime->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((((HX_("Cannot repeat `",f8,e0,2f,6b) + ::little::Little_obj::keywords->FOR_LOOP_FROM) + HX_("` tag twice in `",a3,14,dc,54)) + ::little::Little_obj::keywords->CONDITION__FOR_LOOP) + HX_("` loop.",8a,05,72,dc))),null());
             				}
             				break;
             				case (int)1: {
-HXLINE( 661)					to = ::little::tools::Conversion_obj::toHaxeValue(::little::interpreter::Interpreter_obj::calculate(currentExpression));
+HXLINE( 666)					to = ::little::tools::Conversion_obj::toHaxeValue(::little::interpreter::Interpreter_obj::calculate(currentExpression));
             				}
             				break;
             				case (int)2: {
-HXLINE( 662)					jump = ( (Float)(::little::tools::Conversion_obj::toHaxeValue(::little::interpreter::Interpreter_obj::calculate(currentExpression))) );
+HXLINE( 667)					jump = ( (Float)(::little::tools::Conversion_obj::toHaxeValue(::little::interpreter::Interpreter_obj::calculate(currentExpression))) );
             				}
             				break;
             			}
-HXLINE( 665)			if (::hx::IsLess( from,to )) {
-HXLINE( 666)				while(::hx::IsLess( from,to )){
-HXLINE( 668)					 ::little::interpreter::InterpTokens params5 = params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >();
-HXLINE( 667)					val = ::little::interpreter::Interpreter_obj::run(::Array_obj< ::Dynamic>::__new(1)->init(0,::little::interpreter::InterpTokens_obj::Write(::Array_obj< ::Dynamic>::__new(1)->init(0,params5),::little::tools::Conversion_obj::toLittleValue(from)))->concat(body),null());
-HXLINE( 670)					from = (from + jump);
+HXLINE( 670)			if (::hx::IsLess( from,to )) {
+HXLINE( 671)				while(::hx::IsLess( from,to )){
+HXLINE( 673)					 ::little::interpreter::InterpTokens params5 = params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >();
+HXLINE( 672)					val = ::little::interpreter::Interpreter_obj::run(::Array_obj< ::Dynamic>::__new(1)->init(0,::little::interpreter::InterpTokens_obj::Write(::Array_obj< ::Dynamic>::__new(1)->init(0,params5),::little::tools::Conversion_obj::toLittleValue(from)))->concat(body),null());
+HXLINE( 675)					from = (from + jump);
             				}
             			}
             			else {
-HXLINE( 673)				while(::hx::IsGreater( from,to )){
-HXLINE( 675)					 ::little::interpreter::InterpTokens params6 = params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >();
-HXLINE( 674)					val = ::little::interpreter::Interpreter_obj::run(::Array_obj< ::Dynamic>::__new(1)->init(0,::little::interpreter::InterpTokens_obj::Write(::Array_obj< ::Dynamic>::__new(1)->init(0,params6),::little::tools::Conversion_obj::toLittleValue(from)))->concat(body),null());
-HXLINE( 677)					from = (from - jump);
+HXLINE( 678)				while(::hx::IsGreater( from,to )){
+HXLINE( 680)					 ::little::interpreter::InterpTokens params6 = params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >();
+HXLINE( 679)					val = ::little::interpreter::Interpreter_obj::run(::Array_obj< ::Dynamic>::__new(1)->init(0,::little::interpreter::InterpTokens_obj::Write(::Array_obj< ::Dynamic>::__new(1)->init(0,params6),::little::tools::Conversion_obj::toLittleValue(from)))->concat(body),null());
+HXLINE( 682)					from = (from - jump);
             				}
             			}
-HXLINE( 682)			return val;
+HXLINE( 687)			return val;
             		}
             		HX_END_LOCAL_FUNC2(return)
 
@@ -1643,75 +1679,75 @@ HXLINE( 682)			return val;
             		 ::little::interpreter::InterpTokens _hx_run(::Array< ::Dynamic> params,::Array< ::Dynamic> body){
             			HX_BEGIN_LOCAL_FUNC_S4(::hx::LocalFunc,_hx_Closure_3,::Array< ::Dynamic>,listener,::Array< ::String >,ident,::Array< ::Dynamic>,params,::Array< ::Dynamic>,body) HXARGC(1)
             			void _hx_run(::Array< ::String > setIdentifiers){
-            				HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_703_addConditions)
-HXLINE( 704)				bool cond = ( (bool)(::little::tools::Conversion_obj::toHaxeValue(::little::interpreter::Interpreter_obj::calculate(params))) );
-HXLINE( 705)				bool _hx_tmp;
-HXDLIN( 705)				if (setIdentifiers->contains(ident->__get(0))) {
-HXLINE( 705)					_hx_tmp = cond;
+            				HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_708_addConditions)
+HXLINE( 709)				bool cond = ( (bool)(::little::tools::Conversion_obj::toHaxeValue(::little::interpreter::Interpreter_obj::calculate(params))) );
+HXLINE( 710)				bool _hx_tmp;
+HXDLIN( 710)				if (setIdentifiers->contains(ident->__get(0))) {
+HXLINE( 710)					_hx_tmp = cond;
             				}
             				else {
-HXLINE( 705)					_hx_tmp = false;
+HXLINE( 710)					_hx_tmp = false;
             				}
-HXDLIN( 705)				if (_hx_tmp) {
-HXLINE( 706)					::little::interpreter::Interpreter_obj::run(body,null());
-HXLINE( 707)					::little::Little_obj::runtime->onWriteValue->remove(listener->__get(0));
+HXDLIN( 710)				if (_hx_tmp) {
+HXLINE( 711)					::little::interpreter::Interpreter_obj::run(body,null());
+HXLINE( 712)					::little::Little_obj::runtime->onWriteValue->remove(listener->__get(0));
             				}
             			}
             			HX_END_LOCAL_FUNC1((void))
 
-            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_685_addConditions)
-HXLINE( 686)			 ::little::interpreter::InterpTokens val = ::little::interpreter::InterpTokens_obj::NullValue_dyn();
-HXLINE( 687)			::Array< ::String > ident = ::Array_obj< ::String >::fromData( _hx_array_data_c62cc60f_88,1);
-HXLINE( 688)			::Array< ::Dynamic> _this = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::BLOCK_dyn())->copy();
-HXDLIN( 688)			::Array< ::String > result = ::Array_obj< ::String >::__new(_this->length);
-HXDLIN( 688)			{
-HXLINE( 688)				int _g = 0;
-HXDLIN( 688)				int _g1 = _this->length;
-HXDLIN( 688)				while((_g < _g1)){
-HXLINE( 688)					_g = (_g + 1);
-HXDLIN( 688)					int i = (_g - 1);
-HXDLIN( 688)					{
-HXLINE( 688)						::String inValue = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this,i)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 688)						result->__unsafe_set(i,inValue);
+            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_690_addConditions)
+HXLINE( 691)			 ::little::interpreter::InterpTokens val = ::little::interpreter::InterpTokens_obj::NullValue_dyn();
+HXLINE( 692)			::Array< ::String > ident = ::Array_obj< ::String >::fromData( _hx_array_data_c62cc60f_90,1);
+HXLINE( 693)			::Array< ::Dynamic> _this = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::BLOCK_dyn())->copy();
+HXDLIN( 693)			::Array< ::String > result = ::Array_obj< ::String >::__new(_this->length);
+HXDLIN( 693)			{
+HXLINE( 693)				int _g = 0;
+HXDLIN( 693)				int _g1 = _this->length;
+HXDLIN( 693)				while((_g < _g1)){
+HXLINE( 693)					_g = (_g + 1);
+HXDLIN( 693)					int i = (_g - 1);
+HXDLIN( 693)					{
+HXLINE( 693)						::String inValue = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this,i)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 693)						result->__unsafe_set(i,inValue);
             					}
             				}
             			}
-HXDLIN( 688)			if (result->contains(::Type_obj::enumConstructor(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >()).toLowerCase())) {
-HXLINE( 689)				 ::little::interpreter::InterpTokens output = ::little::interpreter::Interpreter_obj::run(( (::Array< ::Dynamic>)(::Type_obj::enumParameters(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())->__get(0)) ),null());
-HXLINE( 690)				::String _hx_tmp = ((((HX_("`",60,00,00,00) + ::little::Little_obj::keywords->CONDITION__AFTER) + HX_("` condition that starts with a code block must have it's code block return an identifier using the `",67,82,d4,41)) + ::little::Little_obj::keywords->READ_FUNCTION_NAME) + HX_("` function (returned: ",55,76,0e,87));
-HXDLIN( 690)				::little::interpreter::Interpreter_obj::_hx_assert(output,::Array_obj< ::Dynamic>::__new(2)->init(0,::little::tools::InterpTokensSimple_obj::IDENTIFIER_dyn())->init(1,::little::tools::InterpTokensSimple_obj::PROPERTY_ACCESS_dyn()),((_hx_tmp + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),output)) + HX_(")",29,00,00,00)));
-HXLINE( 691)				ident[0] = ::little::tools::Extensions_obj::asJoinedStringPath(output);
-HXLINE( 692)				params[0] = output;
+HXDLIN( 693)			if (result->contains(::Type_obj::enumConstructor(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >()).toLowerCase())) {
+HXLINE( 694)				 ::little::interpreter::InterpTokens output = ::little::interpreter::Interpreter_obj::run(( (::Array< ::Dynamic>)(::Type_obj::enumParameters(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())->__get(0)) ),null());
+HXLINE( 695)				::String _hx_tmp = ((((HX_("`",60,00,00,00) + ::little::Little_obj::keywords->CONDITION__AFTER) + HX_("` condition that starts with a code block must have it's code block return an identifier using the `",67,82,d4,41)) + ::little::Little_obj::keywords->READ_FUNCTION_NAME) + HX_("` function (returned: ",55,76,0e,87));
+HXDLIN( 695)				::little::interpreter::Interpreter_obj::_hx_assert(output,::Array_obj< ::Dynamic>::__new(2)->init(0,::little::tools::InterpTokensSimple_obj::IDENTIFIER_dyn())->init(1,::little::tools::InterpTokensSimple_obj::PROPERTY_ACCESS_dyn()),((_hx_tmp + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),output)) + HX_(")",29,00,00,00)));
+HXLINE( 696)				ident[0] = ::little::tools::Extensions_obj::asJoinedStringPath(output);
+HXLINE( 697)				params[0] = output;
             			}
             			else {
-HXLINE( 693)				::Array< ::Dynamic> _this1 = ::Array_obj< ::Dynamic>::__new(2)->init(0,::little::tools::InterpTokensSimple_obj::IDENTIFIER_dyn())->init(1,::little::tools::InterpTokensSimple_obj::PROPERTY_ACCESS_dyn())->copy();
-HXDLIN( 693)				::Array< ::String > result1 = ::Array_obj< ::String >::__new(_this1->length);
-HXDLIN( 693)				{
-HXLINE( 693)					int _g2 = 0;
-HXDLIN( 693)					int _g3 = _this1->length;
-HXDLIN( 693)					while((_g2 < _g3)){
-HXLINE( 693)						_g2 = (_g2 + 1);
-HXDLIN( 693)						int i1 = (_g2 - 1);
-HXDLIN( 693)						{
-HXLINE( 693)							::String inValue1 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this1,i1)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 693)							result1->__unsafe_set(i1,inValue1);
+HXLINE( 698)				::Array< ::Dynamic> _this1 = ::Array_obj< ::Dynamic>::__new(2)->init(0,::little::tools::InterpTokensSimple_obj::IDENTIFIER_dyn())->init(1,::little::tools::InterpTokensSimple_obj::PROPERTY_ACCESS_dyn())->copy();
+HXDLIN( 698)				::Array< ::String > result1 = ::Array_obj< ::String >::__new(_this1->length);
+HXDLIN( 698)				{
+HXLINE( 698)					int _g2 = 0;
+HXDLIN( 698)					int _g3 = _this1->length;
+HXDLIN( 698)					while((_g2 < _g3)){
+HXLINE( 698)						_g2 = (_g2 + 1);
+HXDLIN( 698)						int i1 = (_g2 - 1);
+HXDLIN( 698)						{
+HXLINE( 698)							::String inValue1 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this1,i1)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 698)							result1->__unsafe_set(i1,inValue1);
             						}
             					}
             				}
-HXDLIN( 693)				if (result1->contains(::Type_obj::enumConstructor(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >()).toLowerCase())) {
-HXLINE( 694)					ident[0] = ::little::tools::Extensions_obj::extractIdentifier(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >());
+HXDLIN( 698)				if (result1->contains(::Type_obj::enumConstructor(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >()).toLowerCase())) {
+HXLINE( 699)					ident[0] = ::little::tools::Extensions_obj::extractIdentifier(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >());
             				}
             				else {
-HXLINE( 696)					 ::little::interpreter::Runtime _hx_tmp1 = ::little::Little_obj::runtime;
-HXDLIN( 696)					::String _hx_tmp2 = ((HX_("`",60,00,00,00) + ::little::Little_obj::keywords->CONDITION__AFTER) + HX_("` condition must start with a variable to watch (expected definition, found: `",5a,6a,88,2d));
-HXDLIN( 696)					_hx_tmp1->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((_hx_tmp2 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())) + HX_("`)",c9,53,00,00))),null());
-HXLINE( 697)					return val;
+HXLINE( 701)					 ::little::interpreter::Runtime _hx_tmp1 = ::little::Little_obj::runtime;
+HXDLIN( 701)					::String _hx_tmp2 = ((HX_("`",60,00,00,00) + ::little::Little_obj::keywords->CONDITION__AFTER) + HX_("` condition must start with a variable to watch (expected definition, found: `",5a,6a,88,2d));
+HXDLIN( 701)					_hx_tmp1->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((_hx_tmp2 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())) + HX_("`)",c9,53,00,00))),null());
+HXLINE( 702)					return val;
             				}
             			}
-HXLINE( 703)			::Array< ::Dynamic> listener = ::Array_obj< ::Dynamic>::__new(1)->init(0,null());
-HXDLIN( 703)			listener[0] =  ::Dynamic(new _hx_Closure_3(listener,ident,params,body));
-HXLINE( 711)			::little::Little_obj::runtime->onWriteValue->push(listener->__get(0));
-HXLINE( 713)			return val;
+HXLINE( 708)			::Array< ::Dynamic> listener = ::Array_obj< ::Dynamic>::__new(1)->init(0,null());
+HXDLIN( 708)			listener[0] =  ::Dynamic(new _hx_Closure_3(listener,ident,params,body));
+HXLINE( 716)			::little::Little_obj::runtime->onWriteValue->push(listener->__get(0));
+HXLINE( 718)			return val;
             		}
             		HX_END_LOCAL_FUNC2(return)
 
@@ -1719,81 +1755,81 @@ HXLINE( 713)			return val;
             		 ::little::interpreter::InterpTokens _hx_run(::Array< ::Dynamic> params,::Array< ::Dynamic> body){
             			HX_BEGIN_LOCAL_FUNC_S3(::hx::LocalFunc,_hx_Closure_5,::Array< ::String >,ident,::Array< ::Dynamic>,params,::Array< ::Dynamic>,body) HXARGC(1)
             			void _hx_run(::Array< ::String > setIdentifiers){
-            				HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_732_addConditions)
-HXLINE( 733)				bool cond = ( (bool)(::little::tools::Conversion_obj::toHaxeValue(::little::interpreter::Interpreter_obj::calculate(params))) );
-HXLINE( 734)				bool listener;
-HXDLIN( 734)				if (setIdentifiers->contains(ident->__get(0))) {
-HXLINE( 734)					listener = cond;
+            				HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_737_addConditions)
+HXLINE( 738)				bool cond = ( (bool)(::little::tools::Conversion_obj::toHaxeValue(::little::interpreter::Interpreter_obj::calculate(params))) );
+HXLINE( 739)				bool listener;
+HXDLIN( 739)				if (setIdentifiers->contains(ident->__get(0))) {
+HXLINE( 739)					listener = cond;
             				}
             				else {
-HXLINE( 734)					listener = false;
+HXLINE( 739)					listener = false;
             				}
-HXDLIN( 734)				if (listener) {
-HXLINE( 735)					::little::interpreter::Interpreter_obj::run(body,null());
+HXDLIN( 739)				if (listener) {
+HXLINE( 740)					::little::interpreter::Interpreter_obj::run(body,null());
             				}
             			}
             			HX_END_LOCAL_FUNC1((void))
 
-            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_716_addConditions)
-HXLINE( 717)			 ::little::interpreter::InterpTokens val = ::little::interpreter::InterpTokens_obj::NullValue_dyn();
-HXLINE( 718)			::Array< ::String > ident = ::Array_obj< ::String >::fromData( _hx_array_data_c62cc60f_91,1);
-HXLINE( 719)			::Array< ::Dynamic> _this = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::BLOCK_dyn())->copy();
-HXDLIN( 719)			::Array< ::String > result = ::Array_obj< ::String >::__new(_this->length);
-HXDLIN( 719)			{
-HXLINE( 719)				int _g = 0;
-HXDLIN( 719)				int _g1 = _this->length;
-HXDLIN( 719)				while((_g < _g1)){
-HXLINE( 719)					_g = (_g + 1);
-HXDLIN( 719)					int i = (_g - 1);
-HXDLIN( 719)					{
-HXLINE( 719)						::String inValue = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this,i)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 719)						result->__unsafe_set(i,inValue);
+            			HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_721_addConditions)
+HXLINE( 722)			 ::little::interpreter::InterpTokens val = ::little::interpreter::InterpTokens_obj::NullValue_dyn();
+HXLINE( 723)			::Array< ::String > ident = ::Array_obj< ::String >::fromData( _hx_array_data_c62cc60f_93,1);
+HXLINE( 724)			::Array< ::Dynamic> _this = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::BLOCK_dyn())->copy();
+HXDLIN( 724)			::Array< ::String > result = ::Array_obj< ::String >::__new(_this->length);
+HXDLIN( 724)			{
+HXLINE( 724)				int _g = 0;
+HXDLIN( 724)				int _g1 = _this->length;
+HXDLIN( 724)				while((_g < _g1)){
+HXLINE( 724)					_g = (_g + 1);
+HXDLIN( 724)					int i = (_g - 1);
+HXDLIN( 724)					{
+HXLINE( 724)						::String inValue = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this,i)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 724)						result->__unsafe_set(i,inValue);
             					}
             				}
             			}
-HXDLIN( 719)			if (result->contains(::Type_obj::enumConstructor(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >()).toLowerCase())) {
-HXLINE( 720)				 ::little::interpreter::InterpTokens output = ::little::interpreter::Interpreter_obj::evaluate(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >(),null());
-HXLINE( 721)				::String _hx_tmp = ((((HX_("`",60,00,00,00) + ::little::Little_obj::keywords->CONDITION__WHENEVER) + HX_("` condition that starts with a code block must have it's code block return a `",17,a3,dd,df)) + ::little::Little_obj::keywords->TYPE_STRING) + HX_("` (returned: ",dd,e3,41,77));
-HXDLIN( 721)				::little::interpreter::Interpreter_obj::_hx_assert(output,::Array_obj< ::Dynamic>::__new(2)->init(0,::little::tools::InterpTokensSimple_obj::IDENTIFIER_dyn())->init(1,::little::tools::InterpTokensSimple_obj::PROPERTY_ACCESS_dyn()),((_hx_tmp + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),output)) + HX_(")",29,00,00,00)));
-HXLINE( 722)				ident[0] = ( (::String)(::little::tools::Conversion_obj::toHaxeValue(output)) );
+HXDLIN( 724)			if (result->contains(::Type_obj::enumConstructor(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >()).toLowerCase())) {
+HXLINE( 725)				 ::little::interpreter::InterpTokens output = ::little::interpreter::Interpreter_obj::evaluate(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >(),null());
+HXLINE( 726)				::String _hx_tmp = ((((HX_("`",60,00,00,00) + ::little::Little_obj::keywords->CONDITION__WHENEVER) + HX_("` condition that starts with a code block must have it's code block return a `",17,a3,dd,df)) + ::little::Little_obj::keywords->TYPE_STRING) + HX_("` (returned: ",dd,e3,41,77));
+HXDLIN( 726)				::little::interpreter::Interpreter_obj::_hx_assert(output,::Array_obj< ::Dynamic>::__new(2)->init(0,::little::tools::InterpTokensSimple_obj::IDENTIFIER_dyn())->init(1,::little::tools::InterpTokensSimple_obj::PROPERTY_ACCESS_dyn()),((_hx_tmp + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),output)) + HX_(")",29,00,00,00)));
+HXLINE( 727)				ident[0] = ( (::String)(::little::tools::Conversion_obj::toHaxeValue(output)) );
             			}
             			else {
-HXLINE( 723)				::Array< ::Dynamic> _this1 = ::Array_obj< ::Dynamic>::__new(2)->init(0,::little::tools::InterpTokensSimple_obj::IDENTIFIER_dyn())->init(1,::little::tools::InterpTokensSimple_obj::PROPERTY_ACCESS_dyn())->copy();
-HXDLIN( 723)				::Array< ::String > result1 = ::Array_obj< ::String >::__new(_this1->length);
-HXDLIN( 723)				{
-HXLINE( 723)					int _g2 = 0;
-HXDLIN( 723)					int _g3 = _this1->length;
-HXDLIN( 723)					while((_g2 < _g3)){
-HXLINE( 723)						_g2 = (_g2 + 1);
-HXDLIN( 723)						int i1 = (_g2 - 1);
-HXDLIN( 723)						{
-HXLINE( 723)							::String inValue1 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this1,i1)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 723)							result1->__unsafe_set(i1,inValue1);
+HXLINE( 728)				::Array< ::Dynamic> _this1 = ::Array_obj< ::Dynamic>::__new(2)->init(0,::little::tools::InterpTokensSimple_obj::IDENTIFIER_dyn())->init(1,::little::tools::InterpTokensSimple_obj::PROPERTY_ACCESS_dyn())->copy();
+HXDLIN( 728)				::Array< ::String > result1 = ::Array_obj< ::String >::__new(_this1->length);
+HXDLIN( 728)				{
+HXLINE( 728)					int _g2 = 0;
+HXDLIN( 728)					int _g3 = _this1->length;
+HXDLIN( 728)					while((_g2 < _g3)){
+HXLINE( 728)						_g2 = (_g2 + 1);
+HXDLIN( 728)						int i1 = (_g2 - 1);
+HXDLIN( 728)						{
+HXLINE( 728)							::String inValue1 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this1,i1)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 728)							result1->__unsafe_set(i1,inValue1);
             						}
             					}
             				}
-HXDLIN( 723)				if (result1->contains(::Type_obj::enumConstructor(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >()).toLowerCase())) {
-HXLINE( 724)					ident[0] = ::little::tools::Extensions_obj::extractIdentifier(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >());
+HXDLIN( 728)				if (result1->contains(::Type_obj::enumConstructor(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >()).toLowerCase())) {
+HXLINE( 729)					ident[0] = ::little::tools::Extensions_obj::extractIdentifier(params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >());
             				}
             				else {
-HXLINE( 726)					 ::little::interpreter::Runtime _hx_tmp1 = ::little::Little_obj::runtime;
-HXDLIN( 726)					::String _hx_tmp2 = ((HX_("`",60,00,00,00) + ::little::Little_obj::keywords->CONDITION__WHENEVER) + HX_("` condition must start with a variable to watch (expected definition, found: `",5a,6a,88,2d));
-HXDLIN( 726)					_hx_tmp1->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((_hx_tmp2 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())) + HX_("`)",c9,53,00,00))),null());
-HXLINE( 727)					return val;
+HXLINE( 731)					 ::little::interpreter::Runtime _hx_tmp1 = ::little::Little_obj::runtime;
+HXDLIN( 731)					::String _hx_tmp2 = ((HX_("`",60,00,00,00) + ::little::Little_obj::keywords->CONDITION__WHENEVER) + HX_("` condition must start with a variable to watch (expected definition, found: `",5a,6a,88,2d));
+HXDLIN( 731)					_hx_tmp1->throwError(::little::interpreter::InterpTokens_obj::ErrorMessage(((_hx_tmp2 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),params->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())) + HX_("`)",c9,53,00,00))),null());
+HXLINE( 732)					return val;
             				}
             			}
-HXLINE( 732)			 ::Dynamic listener =  ::Dynamic(new _hx_Closure_5(ident,params,body));
-HXLINE( 739)			::little::Little_obj::runtime->onWriteValue->push(listener);
-HXLINE( 741)			return val;
+HXLINE( 737)			 ::Dynamic listener =  ::Dynamic(new _hx_Closure_5(ident,params,body));
+HXLINE( 744)			::little::Little_obj::runtime->onWriteValue->push(listener);
+HXLINE( 746)			return val;
             		}
             		HX_END_LOCAL_FUNC2(return)
 
-            	HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_539_addConditions)
-HXLINE( 540)		::little::Little_obj::plugin->registerCondition(::little::Little_obj::keywords->CONDITION__WHILE_LOOP,HX_("A loop that executes code until the condition is not met",3c,2b,63,eb), ::Dynamic(new _hx_Closure_0()));
-HXLINE( 564)		::little::Little_obj::plugin->registerCondition(::little::Little_obj::keywords->CONDITION__IF,HX_("Executes the following block of code if the given condition is true.",87,a7,66,82), ::Dynamic(new _hx_Closure_1()));
-HXLINE( 577)		::little::Little_obj::plugin->registerCondition(::little::Little_obj::keywords->CONDITION__FOR_LOOP,HX_("A loop that executes code while changing a variable, until it meets a condition",7b,7e,27,f9), ::Dynamic(new _hx_Closure_2()));
-HXLINE( 685)		::little::Little_obj::plugin->registerCondition(::little::Little_obj::keywords->CONDITION__AFTER,null(), ::Dynamic(new _hx_Closure_4()));
-HXLINE( 716)		::little::Little_obj::plugin->registerCondition(::little::Little_obj::keywords->CONDITION__WHENEVER,null(), ::Dynamic(new _hx_Closure_6()));
+            	HX_STACKFRAME(&_hx_pos_0b0d584b35e606f8_544_addConditions)
+HXLINE( 545)		::little::Little_obj::plugin->registerCondition(::little::Little_obj::keywords->CONDITION__WHILE_LOOP,HX_("A loop that executes code until the condition is not met",3c,2b,63,eb), ::Dynamic(new _hx_Closure_0()));
+HXLINE( 569)		::little::Little_obj::plugin->registerCondition(::little::Little_obj::keywords->CONDITION__IF,HX_("Executes the following block of code if the given condition is true.",87,a7,66,82), ::Dynamic(new _hx_Closure_1()));
+HXLINE( 582)		::little::Little_obj::plugin->registerCondition(::little::Little_obj::keywords->CONDITION__FOR_LOOP,HX_("A loop that executes code while changing a variable, until it meets a condition",7b,7e,27,f9), ::Dynamic(new _hx_Closure_2()));
+HXLINE( 690)		::little::Little_obj::plugin->registerCondition(::little::Little_obj::keywords->CONDITION__AFTER,null(), ::Dynamic(new _hx_Closure_4()));
+HXLINE( 721)		::little::Little_obj::plugin->registerCondition(::little::Little_obj::keywords->CONDITION__WHENEVER,null(), ::Dynamic(new _hx_Closure_6()));
             	}
 
 

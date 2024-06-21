@@ -41,6 +41,7 @@ class PrepareRun {
 		Little.plugin.registerType(Little.keywords.TYPE_FLOAT, []);
 		Little.plugin.registerType(Little.keywords.TYPE_STRING, []);
 		Little.plugin.registerType(Little.keywords.TYPE_SIGN, []);
+		Little.plugin.registerType(Little.keywords.TYPE_BOOLEAN, []);
 
 		Little.plugin.registerType(Little.keywords.TYPE_MODULE, [
 			'public ${Little.keywords.TYPE_STRING} ${Little.keywords.TYPE_CAST_FUNCTION_PREFIX}${Little.keywords.TYPE_STRING} ()' => (address, _, _) -> {
@@ -53,7 +54,11 @@ class PrepareRun {
 		// 		return Conversion.toLittleValue(Date.now().toString());
 		// 	}
 		// ]);
-		
+		Little.plugin.registerType(Little.keywords.TYPE_BOOLEAN, [
+			'public ${Little.keywords.TYPE_STRING} ${Little.keywords.TYPE_CAST_FUNCTION_PREFIX}${Little.keywords.TYPE_STRING} ()' => (_, value, _) -> {
+				return value.is(TRUE_VALUE) ? Conversion.toLittleValue("true") : Conversion.toLittleValue("false");
+			}
+		]);
 
 		Little.plugin.registerType(Little.keywords.TYPE_INT, [
 			'public ${Little.keywords.TYPE_STRING} ${Little.keywords.TYPE_CAST_FUNCTION_PREFIX}${Little.keywords.TYPE_STRING} ()' => (_, value, _) -> {

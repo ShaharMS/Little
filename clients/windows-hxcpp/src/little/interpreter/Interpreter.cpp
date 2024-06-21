@@ -14,6 +14,9 @@
 #ifndef INCLUDED_haxe_IMap
 #include <haxe/IMap.h>
 #endif
+#ifndef INCLUDED_haxe_Log
+#include <haxe/Log.h>
+#endif
 #ifndef INCLUDED_haxe_ds_ObjectMap
 #include <haxe/ds/ObjectMap.h>
 #endif
@@ -91,10 +94,10 @@ HX_LOCAL_STACK_FRAME(_hx_pos_1e0c988bb7772661_254_write,"little.interpreter.Inte
 HX_LOCAL_STACK_FRAME(_hx_pos_1e0c988bb7772661_296_call,"little.interpreter.Interpreter","call",0x49e3ff9e,"little.interpreter.Interpreter.call","little/interpreter/Interpreter.hx",296,0x1c9adf12)
 HX_LOCAL_STACK_FRAME(_hx_pos_1e0c988bb7772661_363_read,"little.interpreter.Interpreter","read",0x53d13256,"little.interpreter.Interpreter.read","little/interpreter/Interpreter.hx",363,0x1c9adf12)
 HX_LOCAL_STACK_FRAME(_hx_pos_1e0c988bb7772661_372_typeCast,"little.interpreter.Interpreter","typeCast",0x0f2e8999,"little.interpreter.Interpreter.typeCast","little/interpreter/Interpreter.hx",372,0x1c9adf12)
-HX_LOCAL_STACK_FRAME(_hx_pos_1e0c988bb7772661_394_run,"little.interpreter.Interpreter","run",0x0e26e04b,"little.interpreter.Interpreter.run","little/interpreter/Interpreter.hx",394,0x1c9adf12)
-HX_LOCAL_STACK_FRAME(_hx_pos_1e0c988bb7772661_471_evaluate,"little.interpreter.Interpreter","evaluate",0x61f9c759,"little.interpreter.Interpreter.evaluate","little/interpreter/Interpreter.hx",471,0x1c9adf12)
-HX_LOCAL_STACK_FRAME(_hx_pos_1e0c988bb7772661_565_calculate,"little.interpreter.Interpreter","calculate",0x38fb4e66,"little.interpreter.Interpreter.calculate","little/interpreter/Interpreter.hx",565,0x1c9adf12)
-HX_LOCAL_STACK_FRAME(_hx_pos_1e0c988bb7772661_634_group,"little.interpreter.Interpreter","group",0xb674ec3f,"little.interpreter.Interpreter.group","little/interpreter/Interpreter.hx",634,0x1c9adf12)
+HX_LOCAL_STACK_FRAME(_hx_pos_1e0c988bb7772661_395_run,"little.interpreter.Interpreter","run",0x0e26e04b,"little.interpreter.Interpreter.run","little/interpreter/Interpreter.hx",395,0x1c9adf12)
+HX_LOCAL_STACK_FRAME(_hx_pos_1e0c988bb7772661_472_evaluate,"little.interpreter.Interpreter","evaluate",0x61f9c759,"little.interpreter.Interpreter.evaluate","little/interpreter/Interpreter.hx",472,0x1c9adf12)
+HX_LOCAL_STACK_FRAME(_hx_pos_1e0c988bb7772661_566_calculate,"little.interpreter.Interpreter","calculate",0x38fb4e66,"little.interpreter.Interpreter.calculate","little/interpreter/Interpreter.hx",566,0x1c9adf12)
+HX_LOCAL_STACK_FRAME(_hx_pos_1e0c988bb7772661_635_group,"little.interpreter.Interpreter","group",0xb674ec3f,"little.interpreter.Interpreter.group","little/interpreter/Interpreter.hx",635,0x1c9adf12)
 namespace little{
 namespace interpreter{
 
@@ -1371,31 +1374,38 @@ STATIC_HX_DEFINE_DYNAMIC_FUNC1(Interpreter_obj,read,return )
             	HX_STACKFRAME(&_hx_pos_1e0c988bb7772661_372_typeCast)
 HXLINE( 373)		::Array< ::String > preType = ::little::tools::Extensions_obj::asStringPath(::little::tools::Extensions_obj::asTokenPath(::little::tools::Extensions_obj::type(::little::interpreter::Interpreter_obj::evaluate(value,null()))));
 HXLINE( 374)		::Array< ::String > postType = ::little::tools::Extensions_obj::asStringPath(::little::tools::Extensions_obj::asTokenPath(::little::tools::Extensions_obj::extractIdentifier(type)));
-HXLINE( 375)		bool _hx_tmp;
-HXDLIN( 375)		::String _hx_tmp1 = preType->join(::little::Little_obj::keywords->PROPERTY_ACCESS_SIGN);
-HXDLIN( 375)		if ((_hx_tmp1 != postType->join(::little::Little_obj::keywords->PROPERTY_ACCESS_SIGN))) {
-HXLINE( 375)			::String _hx_tmp2 = postType->join(::little::Little_obj::keywords->PROPERTY_ACCESS_SIGN);
-HXDLIN( 375)			_hx_tmp = (_hx_tmp2 == ::little::Little_obj::keywords->TYPE_UNKNOWN);
+HXLINE( 375)		::haxe::Log_obj::trace(preType, ::Dynamic(::hx::Anon_obj::Create(5)
+            			->setFixed(0,HX_("className",a3,92,3d,dc),HX_("little.interpreter.Interpreter",6e,d9,f3,2f))
+            			->setFixed(1,HX_("customParams",d7,51,18,ed),::cpp::VirtualArray_obj::__new(2)->init(0,postType)->init(1,value))
+            			->setFixed(2,HX_("methodName",cc,19,0f,12),HX_("typeCast",99,22,85,ae))
+            			->setFixed(3,HX_("fileName",e7,5a,43,62),HX_("src/little/interpreter/Interpreter.hx",e7,a3,e4,c4))
+            			->setFixed(4,HX_("lineNumber",dd,81,22,76),375)));
+HXLINE( 376)		bool _hx_tmp;
+HXDLIN( 376)		::String _hx_tmp1 = preType->join(::little::Little_obj::keywords->PROPERTY_ACCESS_SIGN);
+HXDLIN( 376)		if ((_hx_tmp1 != postType->join(::little::Little_obj::keywords->PROPERTY_ACCESS_SIGN))) {
+HXLINE( 376)			::String _hx_tmp2 = postType->join(::little::Little_obj::keywords->PROPERTY_ACCESS_SIGN);
+HXDLIN( 376)			_hx_tmp = (_hx_tmp2 == ::little::Little_obj::keywords->TYPE_UNKNOWN);
             		}
             		else {
-HXLINE( 375)			_hx_tmp = true;
+HXLINE( 376)			_hx_tmp = true;
             		}
-HXDLIN( 375)		if (_hx_tmp) {
-HXLINE( 375)			return value;
+HXDLIN( 376)		if (_hx_tmp) {
+HXLINE( 376)			return value;
             		}
-HXLINE( 377)		::String _hx_tmp3 = ::little::Little_obj::keywords->TYPE_CAST_FUNCTION_PREFIX;
-HXDLIN( 377)		preType->push((_hx_tmp3 + postType->join(HX_("_",5f,00,00,00))));
-HXLINE( 378)		value = ::little::interpreter::Interpreter_obj::call(::little::tools::Extensions_obj::asTokenPath(preType->join(::little::Little_obj::keywords->PROPERTY_ACCESS_SIGN)),::little::interpreter::InterpTokens_obj::PartArray(::Array_obj< ::Dynamic>::__new(1)->init(0,value)));
-HXLINE( 380)		{
-HXLINE( 380)			int _g = 0;
-HXDLIN( 380)			::Array< ::Dynamic> _g1 = ::little::Little_obj::runtime->onTypeCast;
-HXDLIN( 380)			while((_g < _g1->length)){
-HXLINE( 380)				 ::Dynamic listener = _g1->__get(_g);
-HXDLIN( 380)				_g = (_g + 1);
-HXLINE( 381)				listener(value,::little::tools::Extensions_obj::asJoinedStringPath(type));
+HXLINE( 378)		 ::little::interpreter::InterpTokens val = ::little::interpreter::Interpreter_obj::evaluate(value,null());
+HXLINE( 379)		::String func = ::little::Little_obj::keywords->TYPE_CAST_FUNCTION_PREFIX;
+HXDLIN( 379)		 ::little::interpreter::InterpTokens func1 = ::little::interpreter::InterpTokens_obj::Identifier((func + postType->join(HX_("_",5f,00,00,00))));
+HXLINE( 380)		value = ::little::interpreter::Interpreter_obj::call(::little::interpreter::InterpTokens_obj::PropertyAccess(val,func1),::little::interpreter::InterpTokens_obj::PartArray(::Array_obj< ::Dynamic>::__new(0)));
+HXLINE( 381)		{
+HXLINE( 381)			int _g = 0;
+HXDLIN( 381)			::Array< ::Dynamic> _g1 = ::little::Little_obj::runtime->onTypeCast;
+HXDLIN( 381)			while((_g < _g1->length)){
+HXLINE( 381)				 ::Dynamic listener = _g1->__get(_g);
+HXDLIN( 381)				_g = (_g + 1);
+HXLINE( 382)				listener(value,::little::tools::Extensions_obj::asJoinedStringPath(type));
             			}
             		}
-HXLINE( 384)		return value;
+HXLINE( 385)		return value;
             	}
 
 
@@ -1403,245 +1413,245 @@ STATIC_HX_DEFINE_DYNAMIC_FUNC2(Interpreter_obj,typeCast,return )
 
  ::little::interpreter::InterpTokens Interpreter_obj::run(::Array< ::Dynamic> body,::hx::Null< bool >  __o_propagateReturns){
             		bool propagateReturns = __o_propagateReturns.Default(false);
-            	HX_STACKFRAME(&_hx_pos_1e0c988bb7772661_394_run)
-HXLINE( 395)		 ::little::interpreter::InterpTokens returnVal = null();
-HXLINE( 396)		::little::Little_obj::memory->referrer->pushScope();
-HXLINE( 397)		int i = 0;
-HXLINE( 398)		while((i < body->length)){
-HXLINE( 399)			 ::little::interpreter::InterpTokens token = body->__get(i).StaticCast<  ::little::interpreter::InterpTokens >();
-HXLINE( 401)			if (::hx::IsNull( token )) {
-HXLINE( 401)				i = (i + 1);
-HXDLIN( 401)				continue;
+            	HX_STACKFRAME(&_hx_pos_1e0c988bb7772661_395_run)
+HXLINE( 396)		 ::little::interpreter::InterpTokens returnVal = null();
+HXLINE( 397)		::little::Little_obj::memory->referrer->pushScope();
+HXLINE( 398)		int i = 0;
+HXLINE( 399)		while((i < body->length)){
+HXLINE( 400)			 ::little::interpreter::InterpTokens token = body->__get(i).StaticCast<  ::little::interpreter::InterpTokens >();
+HXLINE( 402)			if (::hx::IsNull( token )) {
+HXLINE( 402)				i = (i + 1);
+HXDLIN( 402)				continue;
             			}
-HXLINE( 402)			::little::Little_obj::runtime->currentToken = token;
-HXLINE( 403)			switch((int)(token->_hx_getIndex())){
+HXLINE( 403)			::little::Little_obj::runtime->currentToken = token;
+HXLINE( 404)			switch((int)(token->_hx_getIndex())){
             				case (int)0: {
-HXLINE( 404)					int line = token->_hx_getInt(0);
-HXLINE( 405)					::little::interpreter::Interpreter_obj::setLine(line);
+HXLINE( 405)					int line = token->_hx_getInt(0);
+HXLINE( 406)					::little::interpreter::Interpreter_obj::setLine(line);
             				}
             				break;
             				case (int)1: {
-HXLINE( 407)					::String module = token->_hx_getString(0);
-HXDLIN( 407)					::little::interpreter::Interpreter_obj::setModule(module);
+HXLINE( 408)					::String module = token->_hx_getString(0);
+HXDLIN( 408)					::little::interpreter::Interpreter_obj::setModule(module);
             				}
             				break;
             				case (int)2: {
-HXLINE( 408)					::little::interpreter::Interpreter_obj::splitLine();
+HXLINE( 409)					::little::interpreter::Interpreter_obj::splitLine();
             				}
             				break;
             				case (int)3: {
-HXLINE( 409)					 ::little::interpreter::InterpTokens name = token->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 409)					 ::little::interpreter::InterpTokens type = token->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 409)					 ::little::interpreter::InterpTokens doc = token->_hx_getObject(2).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 409)					{
-HXLINE( 410)						 ::little::interpreter::InterpTokens _hx_tmp;
-HXDLIN( 410)						::Array< ::Dynamic> _this = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::BLOCK_dyn())->copy();
-HXDLIN( 410)						::Array< ::String > result = ::Array_obj< ::String >::__new(_this->length);
-HXDLIN( 410)						{
-HXLINE( 410)							int _g = 0;
-HXDLIN( 410)							int _g1 = _this->length;
-HXDLIN( 410)							while((_g < _g1)){
-HXLINE( 410)								_g = (_g + 1);
-HXDLIN( 410)								int i1 = (_g - 1);
-HXDLIN( 410)								{
-HXLINE( 410)									::String inValue = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this,i1)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 410)									result->__unsafe_set(i1,inValue);
+HXLINE( 410)					 ::little::interpreter::InterpTokens name = token->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 410)					 ::little::interpreter::InterpTokens type = token->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 410)					 ::little::interpreter::InterpTokens doc = token->_hx_getObject(2).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 410)					{
+HXLINE( 411)						 ::little::interpreter::InterpTokens _hx_tmp;
+HXDLIN( 411)						::Array< ::Dynamic> _this = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::BLOCK_dyn())->copy();
+HXDLIN( 411)						::Array< ::String > result = ::Array_obj< ::String >::__new(_this->length);
+HXDLIN( 411)						{
+HXLINE( 411)							int _g = 0;
+HXDLIN( 411)							int _g1 = _this->length;
+HXDLIN( 411)							while((_g < _g1)){
+HXLINE( 411)								_g = (_g + 1);
+HXDLIN( 411)								int i1 = (_g - 1);
+HXDLIN( 411)								{
+HXLINE( 411)									::String inValue = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this,i1)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 411)									result->__unsafe_set(i1,inValue);
             								}
             							}
             						}
-HXDLIN( 410)						if (result->contains(::Type_obj::enumConstructor(name).toLowerCase())) {
-HXLINE( 410)							_hx_tmp = ::little::interpreter::Interpreter_obj::evaluate(name,null());
+HXDLIN( 411)						if (result->contains(::Type_obj::enumConstructor(name).toLowerCase())) {
+HXLINE( 411)							_hx_tmp = ::little::interpreter::Interpreter_obj::evaluate(name,null());
             						}
             						else {
-HXLINE( 410)							_hx_tmp = name;
+HXLINE( 411)							_hx_tmp = name;
             						}
-HXDLIN( 410)						 ::little::interpreter::InterpTokens _hx_tmp1;
-HXDLIN( 410)						::Array< ::Dynamic> _this1 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::BLOCK_dyn())->copy();
-HXDLIN( 410)						::Array< ::String > result1 = ::Array_obj< ::String >::__new(_this1->length);
-HXDLIN( 410)						{
-HXLINE( 410)							int _g2 = 0;
-HXDLIN( 410)							int _g3 = _this1->length;
-HXDLIN( 410)							while((_g2 < _g3)){
-HXLINE( 410)								_g2 = (_g2 + 1);
-HXDLIN( 410)								int i2 = (_g2 - 1);
-HXDLIN( 410)								{
-HXLINE( 410)									::String inValue1 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this1,i2)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 410)									result1->__unsafe_set(i2,inValue1);
+HXDLIN( 411)						 ::little::interpreter::InterpTokens _hx_tmp1;
+HXDLIN( 411)						::Array< ::Dynamic> _this1 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::BLOCK_dyn())->copy();
+HXDLIN( 411)						::Array< ::String > result1 = ::Array_obj< ::String >::__new(_this1->length);
+HXDLIN( 411)						{
+HXLINE( 411)							int _g2 = 0;
+HXDLIN( 411)							int _g3 = _this1->length;
+HXDLIN( 411)							while((_g2 < _g3)){
+HXLINE( 411)								_g2 = (_g2 + 1);
+HXDLIN( 411)								int i2 = (_g2 - 1);
+HXDLIN( 411)								{
+HXLINE( 411)									::String inValue1 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this1,i2)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 411)									result1->__unsafe_set(i2,inValue1);
             								}
             							}
             						}
-HXDLIN( 410)						if (result1->contains(::Type_obj::enumConstructor(type).toLowerCase())) {
-HXLINE( 410)							_hx_tmp1 = ::little::interpreter::Interpreter_obj::evaluate(type,null());
+HXDLIN( 411)						if (result1->contains(::Type_obj::enumConstructor(type).toLowerCase())) {
+HXLINE( 411)							_hx_tmp1 = ::little::interpreter::Interpreter_obj::evaluate(type,null());
             						}
             						else {
-HXLINE( 410)							_hx_tmp1 = type;
+HXLINE( 411)							_hx_tmp1 = type;
             						}
-HXDLIN( 410)						 ::little::interpreter::InterpTokens _hx_tmp2;
-HXDLIN( 410)						if (::hx::IsNotNull( doc )) {
-HXLINE( 410)							_hx_tmp2 = ::little::interpreter::Interpreter_obj::evaluate(doc,null());
+HXDLIN( 411)						 ::little::interpreter::InterpTokens _hx_tmp2;
+HXDLIN( 411)						if (::hx::IsNotNull( doc )) {
+HXLINE( 411)							_hx_tmp2 = ::little::interpreter::Interpreter_obj::evaluate(doc,null());
             						}
             						else {
-HXLINE( 410)							_hx_tmp2 = ::little::interpreter::InterpTokens_obj::Characters(HX_("",00,00,00,00));
+HXLINE( 411)							_hx_tmp2 = ::little::interpreter::InterpTokens_obj::Characters(HX_("",00,00,00,00));
             						}
-HXDLIN( 410)						::little::interpreter::Interpreter_obj::declareVariable(_hx_tmp,_hx_tmp1,_hx_tmp2);
-HXLINE( 411)						returnVal = ::little::interpreter::InterpTokens_obj::NullValue_dyn();
+HXDLIN( 411)						::little::interpreter::Interpreter_obj::declareVariable(_hx_tmp,_hx_tmp1,_hx_tmp2);
+HXLINE( 412)						returnVal = ::little::interpreter::InterpTokens_obj::NullValue_dyn();
             					}
             				}
             				break;
             				case (int)4: {
-HXLINE( 413)					 ::little::interpreter::InterpTokens name1 = token->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 413)					 ::little::interpreter::InterpTokens params = token->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 413)					 ::little::interpreter::InterpTokens type1 = token->_hx_getObject(2).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 413)					 ::little::interpreter::InterpTokens doc1 = token->_hx_getObject(3).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 413)					{
-HXLINE( 414)						 ::little::interpreter::InterpTokens _hx_tmp3;
-HXDLIN( 414)						::Array< ::Dynamic> _this2 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::BLOCK_dyn())->copy();
-HXDLIN( 414)						::Array< ::String > result2 = ::Array_obj< ::String >::__new(_this2->length);
-HXDLIN( 414)						{
-HXLINE( 414)							int _g4 = 0;
-HXDLIN( 414)							int _g5 = _this2->length;
-HXDLIN( 414)							while((_g4 < _g5)){
-HXLINE( 414)								_g4 = (_g4 + 1);
-HXDLIN( 414)								int i3 = (_g4 - 1);
-HXDLIN( 414)								{
-HXLINE( 414)									::String inValue2 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this2,i3)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 414)									result2->__unsafe_set(i3,inValue2);
+HXLINE( 414)					 ::little::interpreter::InterpTokens name1 = token->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 414)					 ::little::interpreter::InterpTokens params = token->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 414)					 ::little::interpreter::InterpTokens type1 = token->_hx_getObject(2).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 414)					 ::little::interpreter::InterpTokens doc1 = token->_hx_getObject(3).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 414)					{
+HXLINE( 415)						 ::little::interpreter::InterpTokens _hx_tmp3;
+HXDLIN( 415)						::Array< ::Dynamic> _this2 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::BLOCK_dyn())->copy();
+HXDLIN( 415)						::Array< ::String > result2 = ::Array_obj< ::String >::__new(_this2->length);
+HXDLIN( 415)						{
+HXLINE( 415)							int _g4 = 0;
+HXDLIN( 415)							int _g5 = _this2->length;
+HXDLIN( 415)							while((_g4 < _g5)){
+HXLINE( 415)								_g4 = (_g4 + 1);
+HXDLIN( 415)								int i3 = (_g4 - 1);
+HXDLIN( 415)								{
+HXLINE( 415)									::String inValue2 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this2,i3)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 415)									result2->__unsafe_set(i3,inValue2);
             								}
             							}
             						}
-HXDLIN( 414)						if (result2->contains(::Type_obj::enumConstructor(name1).toLowerCase())) {
-HXLINE( 414)							_hx_tmp3 = ::little::interpreter::Interpreter_obj::evaluate(name1,null());
+HXDLIN( 415)						if (result2->contains(::Type_obj::enumConstructor(name1).toLowerCase())) {
+HXLINE( 415)							_hx_tmp3 = ::little::interpreter::Interpreter_obj::evaluate(name1,null());
             						}
             						else {
-HXLINE( 414)							_hx_tmp3 = name1;
+HXLINE( 415)							_hx_tmp3 = name1;
             						}
-HXDLIN( 414)						 ::little::interpreter::InterpTokens _hx_tmp4;
-HXDLIN( 414)						if (::hx::IsNotNull( doc1 )) {
-HXLINE( 414)							_hx_tmp4 = ::little::interpreter::Interpreter_obj::evaluate(doc1,null());
+HXDLIN( 415)						 ::little::interpreter::InterpTokens _hx_tmp4;
+HXDLIN( 415)						if (::hx::IsNotNull( doc1 )) {
+HXLINE( 415)							_hx_tmp4 = ::little::interpreter::Interpreter_obj::evaluate(doc1,null());
             						}
             						else {
-HXLINE( 414)							_hx_tmp4 = ::little::interpreter::InterpTokens_obj::Characters(HX_("",00,00,00,00));
+HXLINE( 415)							_hx_tmp4 = ::little::interpreter::InterpTokens_obj::Characters(HX_("",00,00,00,00));
             						}
-HXDLIN( 414)						::little::interpreter::Interpreter_obj::declareFunction(_hx_tmp3,params,_hx_tmp4);
-HXLINE( 415)						returnVal = ::little::interpreter::InterpTokens_obj::NullValue_dyn();
+HXDLIN( 415)						::little::interpreter::Interpreter_obj::declareFunction(_hx_tmp3,params,_hx_tmp4);
+HXLINE( 416)						returnVal = ::little::interpreter::InterpTokens_obj::NullValue_dyn();
             					}
             				}
             				break;
             				case (int)6: {
-HXLINE( 417)					 ::little::interpreter::InterpTokens name2 = token->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 417)					 ::little::interpreter::InterpTokens exp = token->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 417)					 ::little::interpreter::InterpTokens body1 = token->_hx_getObject(2).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 417)					{
-HXLINE( 418)						returnVal = ::little::interpreter::Interpreter_obj::condition(name2,exp,body1);
-HXLINE( 419)						bool _hx_tmp5;
-HXDLIN( 419)						if (::hx::IsNotNull( returnVal )) {
-HXLINE( 419)							::Array< ::Dynamic> _this3 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::FUNCTION_RETURN_dyn())->copy();
-HXDLIN( 419)							::Array< ::String > result3 = ::Array_obj< ::String >::__new(_this3->length);
-HXDLIN( 419)							{
-HXLINE( 419)								int _g6 = 0;
-HXDLIN( 419)								int _g7 = _this3->length;
-HXDLIN( 419)								while((_g6 < _g7)){
-HXLINE( 419)									_g6 = (_g6 + 1);
-HXDLIN( 419)									int i4 = (_g6 - 1);
-HXDLIN( 419)									{
-HXLINE( 419)										::String inValue3 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this3,i4)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 419)										result3->__unsafe_set(i4,inValue3);
+HXLINE( 418)					 ::little::interpreter::InterpTokens name2 = token->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 418)					 ::little::interpreter::InterpTokens exp = token->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 418)					 ::little::interpreter::InterpTokens body1 = token->_hx_getObject(2).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 418)					{
+HXLINE( 419)						returnVal = ::little::interpreter::Interpreter_obj::condition(name2,exp,body1);
+HXLINE( 420)						bool _hx_tmp5;
+HXDLIN( 420)						if (::hx::IsNotNull( returnVal )) {
+HXLINE( 420)							::Array< ::Dynamic> _this3 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::FUNCTION_RETURN_dyn())->copy();
+HXDLIN( 420)							::Array< ::String > result3 = ::Array_obj< ::String >::__new(_this3->length);
+HXDLIN( 420)							{
+HXLINE( 420)								int _g6 = 0;
+HXDLIN( 420)								int _g7 = _this3->length;
+HXDLIN( 420)								while((_g6 < _g7)){
+HXLINE( 420)									_g6 = (_g6 + 1);
+HXDLIN( 420)									int i4 = (_g6 - 1);
+HXDLIN( 420)									{
+HXLINE( 420)										::String inValue3 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this3,i4)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 420)										result3->__unsafe_set(i4,inValue3);
             									}
             								}
             							}
-HXDLIN( 419)							_hx_tmp5 = result3->contains(::Type_obj::enumConstructor(returnVal).toLowerCase());
+HXDLIN( 420)							_hx_tmp5 = result3->contains(::Type_obj::enumConstructor(returnVal).toLowerCase());
             						}
             						else {
-HXLINE( 419)							_hx_tmp5 = false;
+HXLINE( 420)							_hx_tmp5 = false;
             						}
-HXDLIN( 419)						if (_hx_tmp5) {
-HXLINE( 419)							return ::little::interpreter::Interpreter_obj::evaluate(returnVal,null());
+HXDLIN( 420)						if (_hx_tmp5) {
+HXLINE( 420)							return ::little::interpreter::Interpreter_obj::evaluate(returnVal,null());
             						}
             					}
             				}
             				break;
             				case (int)8: {
-HXLINE( 424)					 ::little::interpreter::InterpTokens name3 = token->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 424)					 ::little::interpreter::InterpTokens params1 = token->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
-HXLINE( 425)					returnVal = ::little::interpreter::Interpreter_obj::call(name3,params1);
+HXLINE( 425)					 ::little::interpreter::InterpTokens name3 = token->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 425)					 ::little::interpreter::InterpTokens params1 = token->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
+HXLINE( 426)					returnVal = ::little::interpreter::Interpreter_obj::call(name3,params1);
             				}
             				break;
             				case (int)9: {
-HXLINE( 427)					 ::little::interpreter::InterpTokens value = token->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 427)					 ::little::interpreter::InterpTokens type2 = token->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
-HXLINE( 428)					::Array< ::Dynamic> _this4 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::HAXE_EXTERN_dyn())->copy();
-HXDLIN( 428)					::Array< ::String > result4 = ::Array_obj< ::String >::__new(_this4->length);
-HXDLIN( 428)					{
-HXLINE( 428)						int _g8 = 0;
-HXDLIN( 428)						int _g9 = _this4->length;
-HXDLIN( 428)						while((_g8 < _g9)){
-HXLINE( 428)							_g8 = (_g8 + 1);
-HXDLIN( 428)							int i5 = (_g8 - 1);
-HXDLIN( 428)							{
-HXLINE( 428)								::String inValue4 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this4,i5)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 428)								result4->__unsafe_set(i5,inValue4);
+HXLINE( 428)					 ::little::interpreter::InterpTokens value = token->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 428)					 ::little::interpreter::InterpTokens type2 = token->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
+HXLINE( 429)					::Array< ::Dynamic> _this4 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::HAXE_EXTERN_dyn())->copy();
+HXDLIN( 429)					::Array< ::String > result4 = ::Array_obj< ::String >::__new(_this4->length);
+HXDLIN( 429)					{
+HXLINE( 429)						int _g8 = 0;
+HXDLIN( 429)						int _g9 = _this4->length;
+HXDLIN( 429)						while((_g8 < _g9)){
+HXLINE( 429)							_g8 = (_g8 + 1);
+HXDLIN( 429)							int i5 = (_g8 - 1);
+HXDLIN( 429)							{
+HXLINE( 429)								::String inValue4 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this4,i5)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 429)								result4->__unsafe_set(i5,inValue4);
             							}
             						}
             					}
-HXDLIN( 428)					if (result4->contains(::Type_obj::enumConstructor(value).toLowerCase())) {
-HXLINE( 429)						return ::Type_obj::enumParameters(value)->__get(0)();
+HXDLIN( 429)					if (result4->contains(::Type_obj::enumConstructor(value).toLowerCase())) {
+HXLINE( 430)						return ::Type_obj::enumParameters(value)->__get(0)();
             					}
-HXLINE( 433)					 ::little::interpreter::InterpTokens v = ::little::interpreter::Interpreter_obj::evaluate(value,null());
-HXLINE( 434)					 ::little::interpreter::InterpTokens t = ::little::tools::Extensions_obj::asTokenPath(::little::tools::Extensions_obj::type(v));
-HXLINE( 435)					if (propagateReturns) {
-HXLINE( 435)						return ::little::interpreter::InterpTokens_obj::FunctionReturn(v,t);
+HXLINE( 434)					 ::little::interpreter::InterpTokens v = ::little::interpreter::Interpreter_obj::evaluate(value,null());
+HXLINE( 435)					 ::little::interpreter::InterpTokens t = ::little::tools::Extensions_obj::asTokenPath(::little::tools::Extensions_obj::type(v));
+HXLINE( 436)					if (propagateReturns) {
+HXLINE( 436)						return ::little::interpreter::InterpTokens_obj::FunctionReturn(v,t);
             					}
             					else {
-HXLINE( 435)						return v;
+HXLINE( 436)						return v;
             					}
             				}
             				break;
             				case (int)10: {
-HXLINE( 421)					::Array< ::Dynamic> assignees = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 421)					 ::little::interpreter::InterpTokens value1 = token->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
-HXLINE( 422)					returnVal = ::little::interpreter::Interpreter_obj::write(assignees,value1);
+HXLINE( 422)					::Array< ::Dynamic> assignees = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 422)					 ::little::interpreter::InterpTokens value1 = token->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
+HXLINE( 423)					returnVal = ::little::interpreter::Interpreter_obj::write(assignees,value1);
             				}
             				break;
             				case (int)13: {
-HXLINE( 437)					::Array< ::Dynamic> body2 = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 437)					 ::little::interpreter::InterpTokens type3 = token->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
-HXLINE( 438)					returnVal = ::little::interpreter::Interpreter_obj::run(body2,null());
+HXLINE( 438)					::Array< ::Dynamic> body2 = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 438)					 ::little::interpreter::InterpTokens type3 = token->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
+HXLINE( 439)					returnVal = ::little::interpreter::Interpreter_obj::run(body2,null());
             				}
             				break;
             				case (int)15: {
-HXLINE( 440)					 ::little::interpreter::InterpTokens name4 = token->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 440)					 ::little::interpreter::InterpTokens property = token->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
-HXLINE( 441)					returnVal = ::little::interpreter::Interpreter_obj::evaluate(token,null());
+HXLINE( 441)					 ::little::interpreter::InterpTokens name4 = token->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 441)					 ::little::interpreter::InterpTokens property = token->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
+HXLINE( 442)					returnVal = ::little::interpreter::Interpreter_obj::evaluate(token,null());
             				}
             				break;
             				case (int)25: {
-HXLINE( 443)					::String name5 = token->_hx_getString(0);
-HXLINE( 444)					returnVal = ::little::interpreter::Interpreter_obj::read(token);
+HXLINE( 444)					::String name5 = token->_hx_getString(0);
+HXLINE( 445)					returnVal = ::little::interpreter::Interpreter_obj::read(token);
             				}
             				break;
             				case (int)28: {
-HXLINE( 446)					 ::Dynamic func = token->_hx_getObject(0);
-HXLINE( 447)					returnVal = func();
+HXLINE( 447)					 ::Dynamic func = token->_hx_getObject(0);
+HXLINE( 448)					returnVal = func();
             				}
             				break;
             				default:{
-HXLINE( 449)					returnVal = ::little::interpreter::Interpreter_obj::evaluate(token,null());
+HXLINE( 450)					returnVal = ::little::interpreter::Interpreter_obj::evaluate(token,null());
             				}
             			}
-HXLINE( 451)			{
-HXLINE( 451)				int _g10 = 0;
-HXDLIN( 451)				::Array< ::Dynamic> _g11 = ::little::Little_obj::runtime->onTokenInterpreted;
-HXDLIN( 451)				while((_g10 < _g11->length)){
-HXLINE( 451)					 ::Dynamic listener = _g11->__get(_g10);
-HXDLIN( 451)					_g10 = (_g10 + 1);
-HXLINE( 452)					listener(token);
+HXLINE( 452)			{
+HXLINE( 452)				int _g10 = 0;
+HXDLIN( 452)				::Array< ::Dynamic> _g11 = ::little::Little_obj::runtime->onTokenInterpreted;
+HXDLIN( 452)				while((_g10 < _g11->length)){
+HXLINE( 452)					 ::Dynamic listener = _g11->__get(_g10);
+HXDLIN( 452)					_g10 = (_g10 + 1);
+HXLINE( 453)					listener(token);
             				}
             			}
-HXLINE( 453)			::little::Little_obj::runtime->previousToken = token;
-HXLINE( 457)			i = (i + 1);
+HXLINE( 454)			::little::Little_obj::runtime->previousToken = token;
+HXLINE( 458)			i = (i + 1);
             		}
-HXLINE( 459)		::little::Little_obj::memory->referrer->popScope();
-HXLINE( 460)		return returnVal;
+HXLINE( 460)		::little::Little_obj::memory->referrer->popScope();
+HXLINE( 461)		return returnVal;
             	}
 
 
@@ -1650,572 +1660,572 @@ STATIC_HX_DEFINE_DYNAMIC_FUNC2(Interpreter_obj,run,return )
  ::little::interpreter::InterpTokens Interpreter_obj::evaluate( ::little::interpreter::InterpTokens exp, ::Dynamic __o_dontThrow){
             		 ::Dynamic dontThrow = __o_dontThrow;
             		if (::hx::IsNull(__o_dontThrow)) dontThrow = false;
-            	HX_STACKFRAME(&_hx_pos_1e0c988bb7772661_471_evaluate)
-HXDLIN( 471)		switch((int)(exp->_hx_getIndex())){
+            	HX_STACKFRAME(&_hx_pos_1e0c988bb7772661_472_evaluate)
+HXDLIN( 472)		switch((int)(exp->_hx_getIndex())){
             			case (int)0: {
-HXLINE( 478)				int line = exp->_hx_getInt(0);
-HXLINE( 479)				::little::interpreter::Interpreter_obj::setLine(line);
-HXLINE( 480)				return ::little::interpreter::InterpTokens_obj::NullValue_dyn();
+HXLINE( 479)				int line = exp->_hx_getInt(0);
+HXLINE( 480)				::little::interpreter::Interpreter_obj::setLine(line);
+HXLINE( 481)				return ::little::interpreter::InterpTokens_obj::NullValue_dyn();
             			}
             			break;
             			case (int)1: {
-HXLINE( 482)				::String module = exp->_hx_getString(0);
-HXLINE( 483)				::little::interpreter::Interpreter_obj::setModule(module);
-HXLINE( 484)				return ::little::interpreter::InterpTokens_obj::NullValue_dyn();
+HXLINE( 483)				::String module = exp->_hx_getString(0);
+HXLINE( 484)				::little::interpreter::Interpreter_obj::setModule(module);
+HXLINE( 485)				return ::little::interpreter::InterpTokens_obj::NullValue_dyn();
             			}
             			break;
             			case (int)2: {
-HXLINE( 487)				::little::interpreter::Interpreter_obj::splitLine();
-HXLINE( 488)				return ::little::interpreter::InterpTokens_obj::NullValue_dyn();
+HXLINE( 488)				::little::interpreter::Interpreter_obj::splitLine();
+HXLINE( 489)				return ::little::interpreter::InterpTokens_obj::NullValue_dyn();
             			}
             			break;
             			case (int)3: {
-HXLINE( 515)				 ::little::interpreter::InterpTokens name = exp->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 515)				 ::little::interpreter::InterpTokens type = exp->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 515)				 ::little::interpreter::InterpTokens doc = exp->_hx_getObject(2).StaticCast<  ::little::interpreter::InterpTokens >();
-HXLINE( 516)				 ::little::interpreter::InterpTokens _hx_tmp;
-HXDLIN( 516)				::Array< ::Dynamic> _this = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::BLOCK_dyn())->copy();
-HXDLIN( 516)				::Array< ::String > result = ::Array_obj< ::String >::__new(_this->length);
-HXDLIN( 516)				{
-HXLINE( 516)					int _g = 0;
-HXDLIN( 516)					int _g1 = _this->length;
-HXDLIN( 516)					while((_g < _g1)){
-HXLINE( 516)						_g = (_g + 1);
-HXDLIN( 516)						int i = (_g - 1);
-HXDLIN( 516)						{
-HXLINE( 516)							::String inValue = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this,i)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 516)							result->__unsafe_set(i,inValue);
+HXLINE( 516)				 ::little::interpreter::InterpTokens name = exp->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 516)				 ::little::interpreter::InterpTokens type = exp->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 516)				 ::little::interpreter::InterpTokens doc = exp->_hx_getObject(2).StaticCast<  ::little::interpreter::InterpTokens >();
+HXLINE( 517)				 ::little::interpreter::InterpTokens _hx_tmp;
+HXDLIN( 517)				::Array< ::Dynamic> _this = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::BLOCK_dyn())->copy();
+HXDLIN( 517)				::Array< ::String > result = ::Array_obj< ::String >::__new(_this->length);
+HXDLIN( 517)				{
+HXLINE( 517)					int _g = 0;
+HXDLIN( 517)					int _g1 = _this->length;
+HXDLIN( 517)					while((_g < _g1)){
+HXLINE( 517)						_g = (_g + 1);
+HXDLIN( 517)						int i = (_g - 1);
+HXDLIN( 517)						{
+HXLINE( 517)							::String inValue = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this,i)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 517)							result->__unsafe_set(i,inValue);
             						}
             					}
             				}
-HXDLIN( 516)				if (result->contains(::Type_obj::enumConstructor(name).toLowerCase())) {
-HXLINE( 516)					_hx_tmp = ::little::interpreter::Interpreter_obj::evaluate(name,null());
+HXDLIN( 517)				if (result->contains(::Type_obj::enumConstructor(name).toLowerCase())) {
+HXLINE( 517)					_hx_tmp = ::little::interpreter::Interpreter_obj::evaluate(name,null());
             				}
             				else {
-HXLINE( 516)					_hx_tmp = name;
+HXLINE( 517)					_hx_tmp = name;
             				}
-HXDLIN( 516)				 ::little::interpreter::InterpTokens _hx_tmp1;
-HXDLIN( 516)				::Array< ::Dynamic> _this1 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::BLOCK_dyn())->copy();
-HXDLIN( 516)				::Array< ::String > result1 = ::Array_obj< ::String >::__new(_this1->length);
-HXDLIN( 516)				{
-HXLINE( 516)					int _g2 = 0;
-HXDLIN( 516)					int _g3 = _this1->length;
-HXDLIN( 516)					while((_g2 < _g3)){
-HXLINE( 516)						_g2 = (_g2 + 1);
-HXDLIN( 516)						int i1 = (_g2 - 1);
-HXDLIN( 516)						{
-HXLINE( 516)							::String inValue1 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this1,i1)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 516)							result1->__unsafe_set(i1,inValue1);
+HXDLIN( 517)				 ::little::interpreter::InterpTokens _hx_tmp1;
+HXDLIN( 517)				::Array< ::Dynamic> _this1 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::BLOCK_dyn())->copy();
+HXDLIN( 517)				::Array< ::String > result1 = ::Array_obj< ::String >::__new(_this1->length);
+HXDLIN( 517)				{
+HXLINE( 517)					int _g2 = 0;
+HXDLIN( 517)					int _g3 = _this1->length;
+HXDLIN( 517)					while((_g2 < _g3)){
+HXLINE( 517)						_g2 = (_g2 + 1);
+HXDLIN( 517)						int i1 = (_g2 - 1);
+HXDLIN( 517)						{
+HXLINE( 517)							::String inValue1 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this1,i1)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 517)							result1->__unsafe_set(i1,inValue1);
             						}
             					}
             				}
-HXDLIN( 516)				if (result1->contains(::Type_obj::enumConstructor(type).toLowerCase())) {
-HXLINE( 516)					_hx_tmp1 = ::little::interpreter::Interpreter_obj::evaluate(type,null());
+HXDLIN( 517)				if (result1->contains(::Type_obj::enumConstructor(type).toLowerCase())) {
+HXLINE( 517)					_hx_tmp1 = ::little::interpreter::Interpreter_obj::evaluate(type,null());
             				}
             				else {
-HXLINE( 516)					_hx_tmp1 = type;
+HXLINE( 517)					_hx_tmp1 = type;
             				}
-HXDLIN( 516)				::little::interpreter::Interpreter_obj::declareVariable(_hx_tmp,_hx_tmp1,::little::interpreter::Interpreter_obj::evaluate(doc,null()));
-HXLINE( 517)				return ::little::interpreter::InterpTokens_obj::NullValue_dyn();
+HXDLIN( 517)				::little::interpreter::Interpreter_obj::declareVariable(_hx_tmp,_hx_tmp1,::little::interpreter::Interpreter_obj::evaluate(doc,null()));
+HXLINE( 518)				return ::little::interpreter::InterpTokens_obj::NullValue_dyn();
             			}
             			break;
             			case (int)4: {
-HXLINE( 519)				 ::little::interpreter::InterpTokens name1 = exp->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 519)				 ::little::interpreter::InterpTokens params = exp->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 519)				 ::little::interpreter::InterpTokens type1 = exp->_hx_getObject(2).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 519)				 ::little::interpreter::InterpTokens doc1 = exp->_hx_getObject(3).StaticCast<  ::little::interpreter::InterpTokens >();
-HXLINE( 520)				 ::little::interpreter::InterpTokens _hx_tmp2;
-HXDLIN( 520)				::Array< ::Dynamic> _this2 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::BLOCK_dyn())->copy();
-HXDLIN( 520)				::Array< ::String > result2 = ::Array_obj< ::String >::__new(_this2->length);
-HXDLIN( 520)				{
-HXLINE( 520)					int _g4 = 0;
-HXDLIN( 520)					int _g5 = _this2->length;
-HXDLIN( 520)					while((_g4 < _g5)){
-HXLINE( 520)						_g4 = (_g4 + 1);
-HXDLIN( 520)						int i2 = (_g4 - 1);
-HXDLIN( 520)						{
-HXLINE( 520)							::String inValue2 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this2,i2)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 520)							result2->__unsafe_set(i2,inValue2);
+HXLINE( 520)				 ::little::interpreter::InterpTokens name1 = exp->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 520)				 ::little::interpreter::InterpTokens params = exp->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 520)				 ::little::interpreter::InterpTokens type1 = exp->_hx_getObject(2).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 520)				 ::little::interpreter::InterpTokens doc1 = exp->_hx_getObject(3).StaticCast<  ::little::interpreter::InterpTokens >();
+HXLINE( 521)				 ::little::interpreter::InterpTokens _hx_tmp2;
+HXDLIN( 521)				::Array< ::Dynamic> _this2 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::BLOCK_dyn())->copy();
+HXDLIN( 521)				::Array< ::String > result2 = ::Array_obj< ::String >::__new(_this2->length);
+HXDLIN( 521)				{
+HXLINE( 521)					int _g4 = 0;
+HXDLIN( 521)					int _g5 = _this2->length;
+HXDLIN( 521)					while((_g4 < _g5)){
+HXLINE( 521)						_g4 = (_g4 + 1);
+HXDLIN( 521)						int i2 = (_g4 - 1);
+HXDLIN( 521)						{
+HXLINE( 521)							::String inValue2 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this2,i2)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 521)							result2->__unsafe_set(i2,inValue2);
             						}
             					}
             				}
-HXDLIN( 520)				if (result2->contains(::Type_obj::enumConstructor(name1).toLowerCase())) {
-HXLINE( 520)					_hx_tmp2 = ::little::interpreter::Interpreter_obj::evaluate(name1,null());
+HXDLIN( 521)				if (result2->contains(::Type_obj::enumConstructor(name1).toLowerCase())) {
+HXLINE( 521)					_hx_tmp2 = ::little::interpreter::Interpreter_obj::evaluate(name1,null());
             				}
             				else {
-HXLINE( 520)					_hx_tmp2 = name1;
+HXLINE( 521)					_hx_tmp2 = name1;
             				}
-HXDLIN( 520)				::little::interpreter::Interpreter_obj::declareFunction(_hx_tmp2,params,::little::interpreter::Interpreter_obj::evaluate(doc1,null()));
-HXLINE( 521)				return ::little::interpreter::InterpTokens_obj::NullValue_dyn();
+HXDLIN( 521)				::little::interpreter::Interpreter_obj::declareFunction(_hx_tmp2,params,::little::interpreter::Interpreter_obj::evaluate(doc1,null()));
+HXLINE( 522)				return ::little::interpreter::InterpTokens_obj::NullValue_dyn();
             			}
             			break;
             			case (int)5: {
-HXLINE( 473)				 ::haxe::ds::ObjectMap callers = exp->_hx_getObject(0).StaticCast<  ::haxe::ds::ObjectMap >();
-HXDLIN( 473)				return ::little::interpreter::InterpTokens_obj::Characters(HX_("<condition>",7f,a1,59,e5));
+HXLINE( 474)				 ::haxe::ds::ObjectMap callers = exp->_hx_getObject(0).StaticCast<  ::haxe::ds::ObjectMap >();
+HXDLIN( 474)				return ::little::interpreter::InterpTokens_obj::Characters(HX_("<condition>",7f,a1,59,e5));
             			}
             			break;
             			case (int)6: {
-HXLINE( 514)				 ::little::interpreter::InterpTokens name2 = exp->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 514)				 ::little::interpreter::InterpTokens exp1 = exp->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 514)				 ::little::interpreter::InterpTokens body = exp->_hx_getObject(2).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 514)				return ::little::interpreter::Interpreter_obj::condition(name2,exp1,body);
+HXLINE( 515)				 ::little::interpreter::InterpTokens name2 = exp->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 515)				 ::little::interpreter::InterpTokens exp1 = exp->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 515)				 ::little::interpreter::InterpTokens body = exp->_hx_getObject(2).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 515)				return ::little::interpreter::Interpreter_obj::condition(name2,exp1,body);
             			}
             			break;
             			case (int)7: {
-HXLINE( 472)				 ::little::tools::BaseOrderedMap _g6 = exp->_hx_getObject(0).StaticCast<  ::little::tools::BaseOrderedMap >();
-HXDLIN( 472)				 ::little::interpreter::InterpTokens _g7 = exp->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 472)				return exp;
+HXLINE( 473)				 ::little::tools::BaseOrderedMap _g6 = exp->_hx_getObject(0).StaticCast<  ::little::tools::BaseOrderedMap >();
+HXDLIN( 473)				 ::little::interpreter::InterpTokens _g7 = exp->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 473)				return exp;
             			}
             			break;
             			case (int)8: {
-HXLINE( 501)				 ::little::interpreter::InterpTokens name3 = exp->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 501)				 ::little::interpreter::InterpTokens params1 = exp->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
-HXLINE( 502)				int currentLine = ::little::Little_obj::runtime->line;
-HXLINE( 503)				return ::little::interpreter::Interpreter_obj::call(name3,params1);
+HXLINE( 502)				 ::little::interpreter::InterpTokens name3 = exp->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 502)				 ::little::interpreter::InterpTokens params1 = exp->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
+HXLINE( 503)				int currentLine = ::little::Little_obj::runtime->line;
+HXLINE( 504)				return ::little::interpreter::Interpreter_obj::call(name3,params1);
             			}
             			break;
             			case (int)9: {
-HXLINE( 540)				 ::little::interpreter::InterpTokens value = exp->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 540)				 ::little::interpreter::InterpTokens t = exp->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 540)				return ::little::interpreter::Interpreter_obj::evaluate(::little::interpreter::Interpreter_obj::typeCast(value,t),null());
+HXLINE( 541)				 ::little::interpreter::InterpTokens value = exp->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 541)				 ::little::interpreter::InterpTokens t = exp->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 541)				return ::little::interpreter::Interpreter_obj::evaluate(::little::interpreter::Interpreter_obj::typeCast(value,t),null());
             			}
             			break;
             			case (int)10: {
-HXLINE( 513)				::Array< ::Dynamic> assignees = exp->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 513)				 ::little::interpreter::InterpTokens value1 = exp->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 513)				return ::little::interpreter::Interpreter_obj::write(assignees,value1);
+HXLINE( 514)				::Array< ::Dynamic> assignees = exp->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 514)				 ::little::interpreter::InterpTokens value1 = exp->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 514)				return ::little::interpreter::Interpreter_obj::write(assignees,value1);
             			}
             			break;
             			case (int)11: {
-HXLINE( 512)				 ::little::interpreter::InterpTokens value2 = exp->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 512)				 ::little::interpreter::InterpTokens t1 = exp->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 512)				return ::little::interpreter::Interpreter_obj::typeCast(value2,t1);
+HXLINE( 513)				 ::little::interpreter::InterpTokens value2 = exp->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 513)				 ::little::interpreter::InterpTokens t1 = exp->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 513)				return ::little::interpreter::Interpreter_obj::typeCast(value2,t1);
             			}
             			break;
             			case (int)12: {
-HXLINE( 490)				::Array< ::Dynamic> parts = exp->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 490)				 ::little::interpreter::InterpTokens t2 = exp->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
-HXLINE( 491)				::String _hx_tmp3 = ::little::tools::Extensions_obj::asJoinedStringPath(t2);
-HXDLIN( 491)				if ((_hx_tmp3 == ::little::Little_obj::keywords->TYPE_UNKNOWN)) {
-HXLINE( 491)					return ::little::interpreter::Interpreter_obj::calculate(parts);
+HXLINE( 491)				::Array< ::Dynamic> parts = exp->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 491)				 ::little::interpreter::InterpTokens t2 = exp->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
+HXLINE( 492)				::String _hx_tmp3 = ::little::tools::Extensions_obj::asJoinedStringPath(t2);
+HXDLIN( 492)				if ((_hx_tmp3 == ::little::Little_obj::keywords->TYPE_UNKNOWN)) {
+HXLINE( 492)					return ::little::interpreter::Interpreter_obj::calculate(parts);
             				}
-HXLINE( 492)				return ::little::interpreter::Interpreter_obj::typeCast(::little::interpreter::Interpreter_obj::calculate(parts),t2);
+HXLINE( 493)				return ::little::interpreter::Interpreter_obj::typeCast(::little::interpreter::Interpreter_obj::calculate(parts),t2);
             			}
             			break;
             			case (int)13: {
-HXLINE( 494)				::Array< ::Dynamic> body1 = exp->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 494)				 ::little::interpreter::InterpTokens t3 = exp->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
-HXLINE( 495)				int currentLine1 = ::little::Little_obj::runtime->line;
-HXLINE( 496)				 ::little::interpreter::InterpTokens returnVal = ::little::interpreter::Interpreter_obj::run(body1,null());
-HXLINE( 497)				::little::interpreter::Interpreter_obj::setLine(currentLine1);
-HXLINE( 498)				::String _hx_tmp4 = ::little::tools::Extensions_obj::asJoinedStringPath(t3);
-HXDLIN( 498)				if ((_hx_tmp4 == ::little::Little_obj::keywords->TYPE_UNKNOWN)) {
-HXLINE( 498)					return ::little::interpreter::Interpreter_obj::evaluate(returnVal,dontThrow);
+HXLINE( 495)				::Array< ::Dynamic> body1 = exp->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 495)				 ::little::interpreter::InterpTokens t3 = exp->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
+HXLINE( 496)				int currentLine1 = ::little::Little_obj::runtime->line;
+HXLINE( 497)				 ::little::interpreter::InterpTokens returnVal = ::little::interpreter::Interpreter_obj::run(body1,null());
+HXLINE( 498)				::little::interpreter::Interpreter_obj::setLine(currentLine1);
+HXLINE( 499)				::String _hx_tmp4 = ::little::tools::Extensions_obj::asJoinedStringPath(t3);
+HXDLIN( 499)				if ((_hx_tmp4 == ::little::Little_obj::keywords->TYPE_UNKNOWN)) {
+HXLINE( 499)					return ::little::interpreter::Interpreter_obj::evaluate(returnVal,dontThrow);
             				}
-HXLINE( 499)				return ::little::interpreter::Interpreter_obj::evaluate(::little::interpreter::Interpreter_obj::typeCast(returnVal,t3),dontThrow);
+HXLINE( 500)				return ::little::interpreter::Interpreter_obj::evaluate(::little::interpreter::Interpreter_obj::typeCast(returnVal,t3),dontThrow);
             			}
             			break;
             			case (int)14: {
-HXLINE( 506)				::Array< ::Dynamic> parts1 = exp->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXLINE( 507)				::Array< ::Dynamic> _g8 = ::Array_obj< ::Dynamic>::__new(0);
-HXDLIN( 507)				{
-HXLINE( 507)					int _g9 = 0;
-HXDLIN( 507)					while((_g9 < parts1->length)){
-HXLINE( 507)						 ::little::interpreter::InterpTokens p = parts1->__get(_g9).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 507)						_g9 = (_g9 + 1);
-HXDLIN( 507)						_g8->push(::little::interpreter::Interpreter_obj::evaluate(p,dontThrow));
+HXLINE( 507)				::Array< ::Dynamic> parts1 = exp->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXLINE( 508)				::Array< ::Dynamic> _g8 = ::Array_obj< ::Dynamic>::__new(0);
+HXDLIN( 508)				{
+HXLINE( 508)					int _g9 = 0;
+HXDLIN( 508)					while((_g9 < parts1->length)){
+HXLINE( 508)						 ::little::interpreter::InterpTokens p = parts1->__get(_g9).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 508)						_g9 = (_g9 + 1);
+HXDLIN( 508)						_g8->push(::little::interpreter::Interpreter_obj::evaluate(p,dontThrow));
             					}
             				}
-HXDLIN( 507)				return ::little::interpreter::InterpTokens_obj::PartArray(_g8);
+HXDLIN( 508)				return ::little::interpreter::InterpTokens_obj::PartArray(_g8);
             			}
             			break;
             			case (int)15: {
-HXLINE( 523)				 ::little::interpreter::InterpTokens name4 = exp->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 523)				 ::little::interpreter::InterpTokens property = exp->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
-HXLINE( 524)				::Array< ::Dynamic> path = ::little::tools::Extensions_obj::toIdentifierPath(exp);
-HXLINE( 528)				::Array< ::Dynamic> _g10 = ::Array_obj< ::Dynamic>::__new(0);
-HXDLIN( 528)				{
-HXLINE( 528)					int _g11 = 0;
-HXDLIN( 528)					::Array< ::Dynamic> _g12 = path;
-HXDLIN( 528)					while((_g11 < _g12->length)){
-HXLINE( 528)						 ::little::interpreter::InterpTokens v = _g12->__get(_g11).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 528)						_g11 = (_g11 + 1);
-HXDLIN( 528)						::Array< ::Dynamic> _this3 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::IDENTIFIER_dyn())->copy();
-HXDLIN( 528)						::Array< ::String > result3 = ::Array_obj< ::String >::__new(_this3->length);
-HXDLIN( 528)						{
-HXLINE( 528)							int _g13 = 0;
-HXDLIN( 528)							int _g14 = _this3->length;
-HXDLIN( 528)							while((_g13 < _g14)){
-HXLINE( 528)								_g13 = (_g13 + 1);
-HXDLIN( 528)								int i3 = (_g13 - 1);
-HXDLIN( 528)								{
-HXLINE( 528)									::String inValue3 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this3,i3)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 528)									result3->__unsafe_set(i3,inValue3);
+HXLINE( 524)				 ::little::interpreter::InterpTokens name4 = exp->_hx_getObject(0).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 524)				 ::little::interpreter::InterpTokens property = exp->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
+HXLINE( 525)				::Array< ::Dynamic> path = ::little::tools::Extensions_obj::toIdentifierPath(exp);
+HXLINE( 529)				::Array< ::Dynamic> _g10 = ::Array_obj< ::Dynamic>::__new(0);
+HXDLIN( 529)				{
+HXLINE( 529)					int _g11 = 0;
+HXDLIN( 529)					::Array< ::Dynamic> _g12 = path;
+HXDLIN( 529)					while((_g11 < _g12->length)){
+HXLINE( 529)						 ::little::interpreter::InterpTokens v = _g12->__get(_g11).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 529)						_g11 = (_g11 + 1);
+HXDLIN( 529)						::Array< ::Dynamic> _this3 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::IDENTIFIER_dyn())->copy();
+HXDLIN( 529)						::Array< ::String > result3 = ::Array_obj< ::String >::__new(_this3->length);
+HXDLIN( 529)						{
+HXLINE( 529)							int _g13 = 0;
+HXDLIN( 529)							int _g14 = _this3->length;
+HXDLIN( 529)							while((_g13 < _g14)){
+HXLINE( 529)								_g13 = (_g13 + 1);
+HXDLIN( 529)								int i3 = (_g13 - 1);
+HXDLIN( 529)								{
+HXLINE( 529)									::String inValue3 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this3,i3)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 529)									result3->__unsafe_set(i3,inValue3);
             								}
             							}
             						}
-HXDLIN( 528)						if (!(result3->contains(::Type_obj::enumConstructor(v).toLowerCase()))) {
-HXLINE( 528)							_g10->push(v);
+HXDLIN( 529)						if (!(result3->contains(::Type_obj::enumConstructor(v).toLowerCase()))) {
+HXLINE( 529)							_g10->push(v);
             						}
             					}
             				}
-HXDLIN( 528)				if ((_g10->length == 0)) {
-HXLINE( 529)					return ::little::interpreter::Interpreter_obj::read(exp);
+HXDLIN( 529)				if ((_g10->length == 0)) {
+HXLINE( 530)					return ::little::interpreter::Interpreter_obj::read(exp);
             				}
             				else {
-HXLINE( 530)					bool _hx_tmp5;
-HXDLIN( 530)					::Array< ::Dynamic> _this4 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::IDENTIFIER_dyn())->copy();
-HXDLIN( 530)					::Array< ::String > result4 = ::Array_obj< ::String >::__new(_this4->length);
-HXDLIN( 530)					{
-HXLINE( 530)						int _g15 = 0;
-HXDLIN( 530)						int _g16 = _this4->length;
-HXDLIN( 530)						while((_g15 < _g16)){
-HXLINE( 530)							_g15 = (_g15 + 1);
-HXDLIN( 530)							int i4 = (_g15 - 1);
-HXDLIN( 530)							{
-HXLINE( 530)								::String inValue4 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this4,i4)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 530)								result4->__unsafe_set(i4,inValue4);
+HXLINE( 531)					bool _hx_tmp5;
+HXDLIN( 531)					::Array< ::Dynamic> _this4 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::IDENTIFIER_dyn())->copy();
+HXDLIN( 531)					::Array< ::String > result4 = ::Array_obj< ::String >::__new(_this4->length);
+HXDLIN( 531)					{
+HXLINE( 531)						int _g15 = 0;
+HXDLIN( 531)						int _g16 = _this4->length;
+HXDLIN( 531)						while((_g15 < _g16)){
+HXLINE( 531)							_g15 = (_g15 + 1);
+HXDLIN( 531)							int i4 = (_g15 - 1);
+HXDLIN( 531)							{
+HXLINE( 531)								::String inValue4 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this4,i4)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 531)								result4->__unsafe_set(i4,inValue4);
             							}
             						}
             					}
-HXDLIN( 530)					if (!(result4->contains(::Type_obj::enumConstructor(path->__get(0).StaticCast<  ::little::interpreter::InterpTokens >()).toLowerCase()))) {
-HXLINE( 530)						::Array< ::Dynamic> _g17 = ::Array_obj< ::Dynamic>::__new(0);
-HXDLIN( 530)						{
-HXLINE( 530)							int _g18 = 0;
-HXDLIN( 530)							::Array< ::Dynamic> _g19 = path->slice(1,null());
-HXDLIN( 530)							while((_g18 < _g19->length)){
-HXLINE( 530)								 ::little::interpreter::InterpTokens v1 = _g19->__get(_g18).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 530)								_g18 = (_g18 + 1);
-HXDLIN( 530)								::Array< ::Dynamic> _this5 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::IDENTIFIER_dyn())->copy();
-HXDLIN( 530)								::Array< ::String > result5 = ::Array_obj< ::String >::__new(_this5->length);
-HXDLIN( 530)								{
-HXLINE( 530)									int _g20 = 0;
-HXDLIN( 530)									int _g21 = _this5->length;
-HXDLIN( 530)									while((_g20 < _g21)){
-HXLINE( 530)										_g20 = (_g20 + 1);
-HXDLIN( 530)										int i5 = (_g20 - 1);
-HXDLIN( 530)										{
-HXLINE( 530)											::String inValue5 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this5,i5)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 530)											result5->__unsafe_set(i5,inValue5);
+HXDLIN( 531)					if (!(result4->contains(::Type_obj::enumConstructor(path->__get(0).StaticCast<  ::little::interpreter::InterpTokens >()).toLowerCase()))) {
+HXLINE( 531)						::Array< ::Dynamic> _g17 = ::Array_obj< ::Dynamic>::__new(0);
+HXDLIN( 531)						{
+HXLINE( 531)							int _g18 = 0;
+HXDLIN( 531)							::Array< ::Dynamic> _g19 = path->slice(1,null());
+HXDLIN( 531)							while((_g18 < _g19->length)){
+HXLINE( 531)								 ::little::interpreter::InterpTokens v1 = _g19->__get(_g18).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 531)								_g18 = (_g18 + 1);
+HXDLIN( 531)								::Array< ::Dynamic> _this5 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::IDENTIFIER_dyn())->copy();
+HXDLIN( 531)								::Array< ::String > result5 = ::Array_obj< ::String >::__new(_this5->length);
+HXDLIN( 531)								{
+HXLINE( 531)									int _g20 = 0;
+HXDLIN( 531)									int _g21 = _this5->length;
+HXDLIN( 531)									while((_g20 < _g21)){
+HXLINE( 531)										_g20 = (_g20 + 1);
+HXDLIN( 531)										int i5 = (_g20 - 1);
+HXDLIN( 531)										{
+HXLINE( 531)											::String inValue5 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this5,i5)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 531)											result5->__unsafe_set(i5,inValue5);
             										}
             									}
             								}
-HXDLIN( 530)								if (!(result5->contains(::Type_obj::enumConstructor(v1).toLowerCase()))) {
-HXLINE( 530)									_g17->push(v1);
+HXDLIN( 531)								if (!(result5->contains(::Type_obj::enumConstructor(v1).toLowerCase()))) {
+HXLINE( 531)									_g17->push(v1);
             								}
             							}
             						}
-HXDLIN( 530)						_hx_tmp5 = (_g17->length == 0);
+HXDLIN( 531)						_hx_tmp5 = (_g17->length == 0);
             					}
             					else {
-HXLINE( 530)						_hx_tmp5 = false;
+HXLINE( 531)						_hx_tmp5 = false;
             					}
-HXDLIN( 530)					if (_hx_tmp5) {
-HXLINE( 531)						 ::little::interpreter::InterpTokens value3 = ::little::interpreter::Interpreter_obj::evaluate(path->__get(0).StaticCast<  ::little::interpreter::InterpTokens >(),null());
-HXLINE( 532)						 ::little::interpreter::memory::Memory _hx_tmp6 = ::little::Little_obj::memory;
-HXDLIN( 532)						 ::Dynamic _hx_tmp7 =  ::Dynamic(::hx::Anon_obj::Create(2)
+HXDLIN( 531)					if (_hx_tmp5) {
+HXLINE( 532)						 ::little::interpreter::InterpTokens value3 = ::little::interpreter::Interpreter_obj::evaluate(path->__get(0).StaticCast<  ::little::interpreter::InterpTokens >(),null());
+HXLINE( 533)						 ::little::interpreter::memory::Memory _hx_tmp6 = ::little::Little_obj::memory;
+HXDLIN( 533)						 ::Dynamic _hx_tmp7 =  ::Dynamic(::hx::Anon_obj::Create(2)
             							->setFixed(0,HX_("objectAddress",b5,00,cc,8b),::little::Little_obj::memory->store(value3))
             							->setFixed(1,HX_("objectValue",32,9c,e7,a0),value3));
-HXLINE( 535)						::Array< ::Dynamic> _this6 = path->slice(1,null());
-HXDLIN( 535)						::Array< ::String > result6 = ::Array_obj< ::String >::__new(_this6->length);
-HXDLIN( 535)						{
-HXLINE( 535)							int _g22 = 0;
-HXDLIN( 535)							int _g23 = _this6->length;
-HXDLIN( 535)							while((_g22 < _g23)){
-HXLINE( 535)								_g22 = (_g22 + 1);
-HXDLIN( 535)								int i6 = (_g22 - 1);
-HXDLIN( 535)								{
-HXLINE( 535)									::String inValue6 = ::little::tools::Extensions_obj::extractIdentifier(_hx_array_unsafe_get(_this6,i6));
-HXDLIN( 535)									result6->__unsafe_set(i6,inValue6);
+HXLINE( 536)						::Array< ::Dynamic> _this6 = path->slice(1,null());
+HXDLIN( 536)						::Array< ::String > result6 = ::Array_obj< ::String >::__new(_this6->length);
+HXDLIN( 536)						{
+HXLINE( 536)							int _g22 = 0;
+HXDLIN( 536)							int _g23 = _this6->length;
+HXDLIN( 536)							while((_g22 < _g23)){
+HXLINE( 536)								_g22 = (_g22 + 1);
+HXDLIN( 536)								int i6 = (_g22 - 1);
+HXDLIN( 536)								{
+HXLINE( 536)									::String inValue6 = ::little::tools::Extensions_obj::extractIdentifier(_hx_array_unsafe_get(_this6,i6));
+HXDLIN( 536)									result6->__unsafe_set(i6,inValue6);
             								}
             							}
             						}
-HXLINE( 532)						return _hx_tmp6->readFrom(_hx_tmp7,result6)->__Field(HX_("objectValue",32,9c,e7,a0),::hx::paccDynamic);
+HXLINE( 533)						return _hx_tmp6->readFrom(_hx_tmp7,result6)->__Field(HX_("objectValue",32,9c,e7,a0),::hx::paccDynamic);
             					}
             					else {
-HXLINE( 537)						::String _hx_tmp8 = ((HX_("Cannot access ",ff,bb,d7,b7) + path->join(::little::Little_obj::keywords->PROPERTY_ACCESS_SIGN)) + HX_(", path cannot contain a raw value in the middle (for property: ",d1,1e,8e,a7));
-HXDLIN( 537)						::Array< ::Dynamic> _g24 = ::Array_obj< ::Dynamic>::__new(0);
-HXDLIN( 537)						{
-HXLINE( 537)							int _g25 = 0;
-HXDLIN( 537)							::Array< ::Dynamic> _g26 = path->slice(1,null());
-HXDLIN( 537)							while((_g25 < _g26->length)){
-HXLINE( 537)								 ::little::interpreter::InterpTokens v2 = _g26->__get(_g25).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 537)								_g25 = (_g25 + 1);
-HXDLIN( 537)								::Array< ::Dynamic> _this7 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::IDENTIFIER_dyn())->copy();
-HXDLIN( 537)								::Array< ::String > result7 = ::Array_obj< ::String >::__new(_this7->length);
-HXDLIN( 537)								{
-HXLINE( 537)									int _g27 = 0;
-HXDLIN( 537)									int _g28 = _this7->length;
-HXDLIN( 537)									while((_g27 < _g28)){
-HXLINE( 537)										_g27 = (_g27 + 1);
-HXDLIN( 537)										int i7 = (_g27 - 1);
-HXDLIN( 537)										{
-HXLINE( 537)											::String inValue7 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this7,i7)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 537)											result7->__unsafe_set(i7,inValue7);
+HXLINE( 538)						::String _hx_tmp8 = ((HX_("Cannot access ",ff,bb,d7,b7) + path->join(::little::Little_obj::keywords->PROPERTY_ACCESS_SIGN)) + HX_(", path cannot contain a raw value in the middle (for property: ",d1,1e,8e,a7));
+HXDLIN( 538)						::Array< ::Dynamic> _g24 = ::Array_obj< ::Dynamic>::__new(0);
+HXDLIN( 538)						{
+HXLINE( 538)							int _g25 = 0;
+HXDLIN( 538)							::Array< ::Dynamic> _g26 = path->slice(1,null());
+HXDLIN( 538)							while((_g25 < _g26->length)){
+HXLINE( 538)								 ::little::interpreter::InterpTokens v2 = _g26->__get(_g25).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 538)								_g25 = (_g25 + 1);
+HXDLIN( 538)								::Array< ::Dynamic> _this7 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::IDENTIFIER_dyn())->copy();
+HXDLIN( 538)								::Array< ::String > result7 = ::Array_obj< ::String >::__new(_this7->length);
+HXDLIN( 538)								{
+HXLINE( 538)									int _g27 = 0;
+HXDLIN( 538)									int _g28 = _this7->length;
+HXDLIN( 538)									while((_g27 < _g28)){
+HXLINE( 538)										_g27 = (_g27 + 1);
+HXDLIN( 538)										int i7 = (_g27 - 1);
+HXDLIN( 538)										{
+HXLINE( 538)											::String inValue7 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this7,i7)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 538)											result7->__unsafe_set(i7,inValue7);
             										}
             									}
             								}
-HXDLIN( 537)								if (!(result7->contains(::Type_obj::enumConstructor(v2).toLowerCase()))) {
-HXLINE( 537)									_g24->push(v2);
+HXDLIN( 538)								if (!(result7->contains(::Type_obj::enumConstructor(v2).toLowerCase()))) {
+HXLINE( 538)									_g24->push(v2);
             								}
             							}
             						}
-HXDLIN( 537)						return ::little::interpreter::Interpreter_obj::error((_hx_tmp8 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),_g24->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())),null());
+HXDLIN( 538)						return ::little::interpreter::Interpreter_obj::error((_hx_tmp8 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),_g24->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())),null());
             					}
             				}
             			}
             			break;
             			case (int)16: {
-HXLINE( 472)				int _g29 = exp->_hx_getInt(0);
-HXDLIN( 472)				return exp;
+HXLINE( 473)				int _g29 = exp->_hx_getInt(0);
+HXDLIN( 473)				return exp;
             			}
             			break;
             			case (int)17: {
-HXLINE( 472)				Float _g30 = exp->_hx_getFloat(0);
-HXDLIN( 472)				return exp;
+HXLINE( 473)				Float _g30 = exp->_hx_getFloat(0);
+HXDLIN( 473)				return exp;
             			}
             			break;
             			case (int)18: {
-HXLINE( 472)				::String _g31 = exp->_hx_getString(0);
-HXDLIN( 472)				return exp;
+HXLINE( 473)				::String _g31 = exp->_hx_getString(0);
+HXDLIN( 473)				return exp;
             			}
             			break;
             			case (int)20: {
-HXLINE( 472)				int _g32 = exp->_hx_getInt(0);
-HXDLIN( 472)				return exp;
+HXLINE( 473)				int _g32 = exp->_hx_getInt(0);
+HXDLIN( 473)				return exp;
             			}
             			break;
             			case (int)21: {
-HXLINE( 472)				::String _g33 = exp->_hx_getString(0);
-HXDLIN( 472)				return exp;
+HXLINE( 473)				::String _g33 = exp->_hx_getString(0);
+HXDLIN( 473)				return exp;
             			}
             			break;
             			case (int)22: case (int)23: case (int)24: {
-HXLINE( 472)				return exp;
+HXLINE( 473)				return exp;
             			}
             			break;
             			case (int)25: {
-HXLINE( 509)				::String word = exp->_hx_getString(0);
-HXLINE( 510)				return ::little::interpreter::Interpreter_obj::read(exp);
+HXLINE( 510)				::String word = exp->_hx_getString(0);
+HXLINE( 511)				return ::little::interpreter::Interpreter_obj::read(exp);
             			}
             			break;
             			case (int)26: {
-HXLINE( 472)				 ::haxe::ds::StringMap _g34 = exp->_hx_getObject(0).StaticCast<  ::haxe::ds::StringMap >();
-HXDLIN( 472)				::String _g35 = exp->_hx_getString(1);
-HXDLIN( 472)				return exp;
+HXLINE( 473)				 ::haxe::ds::StringMap _g34 = exp->_hx_getObject(0).StaticCast<  ::haxe::ds::StringMap >();
+HXDLIN( 473)				::String _g35 = exp->_hx_getString(1);
+HXDLIN( 473)				return exp;
             			}
             			break;
             			case (int)27: {
-HXLINE( 474)				::String msg = exp->_hx_getString(0);
-HXLINE( 475)				if (!(( (bool)(dontThrow) ))) {
-HXLINE( 475)					::little::Little_obj::runtime->throwError(exp,HX_("Interpreter, Value Evaluator",32,36,56,9c));
+HXLINE( 475)				::String msg = exp->_hx_getString(0);
+HXLINE( 476)				if (!(( (bool)(dontThrow) ))) {
+HXLINE( 476)					::little::Little_obj::runtime->throwError(exp,HX_("Interpreter, Value Evaluator",32,36,56,9c));
             				}
-HXLINE( 476)				return exp;
+HXLINE( 477)				return exp;
             			}
             			break;
             			case (int)28: {
-HXLINE( 541)				 ::Dynamic func = exp->_hx_getObject(0);
-HXDLIN( 541)				return func();
+HXLINE( 542)				 ::Dynamic func = exp->_hx_getObject(0);
+HXDLIN( 542)				return func();
             			}
             			break;
             			default:{
-HXLINE( 542)				return ::little::interpreter::Interpreter_obj::evaluate(::little::interpreter::InterpTokens_obj::ErrorMessage(((HX_("Unable to evaluate token `",ea,8c,2b,77) + ::Std_obj::string(exp)) + HX_("`",60,00,00,00))),dontThrow);
+HXLINE( 543)				return ::little::interpreter::Interpreter_obj::evaluate(::little::interpreter::InterpTokens_obj::ErrorMessage(((HX_("Unable to evaluate token `",ea,8c,2b,77) + ::Std_obj::string(exp)) + HX_("`",60,00,00,00))),dontThrow);
             			}
             		}
-HXLINE( 471)		return null();
+HXLINE( 472)		return null();
             	}
 
 
 STATIC_HX_DEFINE_DYNAMIC_FUNC2(Interpreter_obj,evaluate,return )
 
  ::little::interpreter::InterpTokens Interpreter_obj::calculate(::Array< ::Dynamic> p){
-            	HX_STACKFRAME(&_hx_pos_1e0c988bb7772661_565_calculate)
-HXLINE( 566)		while(true){
-HXLINE( 566)			bool _hx_tmp;
-HXDLIN( 566)			bool _hx_tmp1;
-HXDLIN( 566)			if ((p->length == 1)) {
-HXLINE( 566)				_hx_tmp1 = ::Std_obj::isOfType(::Type_obj::enumParameters(p->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())->__get(0),::hx::ArrayBase::__mClass);
+            	HX_STACKFRAME(&_hx_pos_1e0c988bb7772661_566_calculate)
+HXLINE( 567)		while(true){
+HXLINE( 567)			bool _hx_tmp;
+HXDLIN( 567)			bool _hx_tmp1;
+HXDLIN( 567)			if ((p->length == 1)) {
+HXLINE( 567)				_hx_tmp1 = ::Std_obj::isOfType(::Type_obj::enumParameters(p->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())->__get(0),::hx::ArrayBase::__mClass);
             			}
             			else {
-HXLINE( 566)				_hx_tmp1 = false;
+HXLINE( 567)				_hx_tmp1 = false;
             			}
-HXDLIN( 566)			if (_hx_tmp1) {
-HXLINE( 566)				::Array< ::Dynamic> _this = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::BLOCK_dyn())->copy();
-HXDLIN( 566)				::Array< ::String > result = ::Array_obj< ::String >::__new(_this->length);
-HXDLIN( 566)				{
-HXLINE( 566)					int _g = 0;
-HXDLIN( 566)					int _g1 = _this->length;
-HXDLIN( 566)					while((_g < _g1)){
-HXLINE( 566)						_g = (_g + 1);
-HXDLIN( 566)						int i = (_g - 1);
-HXDLIN( 566)						{
-HXLINE( 566)							::String inValue = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this,i)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 566)							result->__unsafe_set(i,inValue);
+HXDLIN( 567)			if (_hx_tmp1) {
+HXLINE( 567)				::Array< ::Dynamic> _this = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::BLOCK_dyn())->copy();
+HXDLIN( 567)				::Array< ::String > result = ::Array_obj< ::String >::__new(_this->length);
+HXDLIN( 567)				{
+HXLINE( 567)					int _g = 0;
+HXDLIN( 567)					int _g1 = _this->length;
+HXDLIN( 567)					while((_g < _g1)){
+HXLINE( 567)						_g = (_g + 1);
+HXDLIN( 567)						int i = (_g - 1);
+HXDLIN( 567)						{
+HXLINE( 567)							::String inValue = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this,i)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 567)							result->__unsafe_set(i,inValue);
             						}
             					}
             				}
-HXDLIN( 566)				_hx_tmp = !(result->contains(::Type_obj::enumConstructor(p->__get(0).StaticCast<  ::little::interpreter::InterpTokens >()).toLowerCase()));
+HXDLIN( 567)				_hx_tmp = !(result->contains(::Type_obj::enumConstructor(p->__get(0).StaticCast<  ::little::interpreter::InterpTokens >()).toLowerCase()));
             			}
             			else {
-HXLINE( 566)				_hx_tmp = false;
+HXLINE( 567)				_hx_tmp = false;
             			}
-HXDLIN( 566)			if (!(_hx_tmp)) {
-HXLINE( 566)				goto _hx_goto_66;
+HXDLIN( 567)			if (!(_hx_tmp)) {
+HXLINE( 567)				goto _hx_goto_66;
             			}
-HXDLIN( 566)			p = ( (::Array< ::Dynamic>)(::Type_obj::enumParameters(p->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())->__get(0)) );
+HXDLIN( 567)			p = ( (::Array< ::Dynamic>)(::Type_obj::enumParameters(p->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())->__get(0)) );
             		}
             		_hx_goto_66:;
-HXLINE( 568)		::Array< ::Dynamic> tokens = ::little::interpreter::Interpreter_obj::group(p);
-HXLINE( 569)		 ::little::interpreter::InterpTokens castType = null();
-HXLINE( 571)		if ((tokens->length == 1)) {
-HXLINE( 572)			::Array< ::Dynamic> _this1 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::PART_ARRAY_dyn())->copy();
-HXDLIN( 572)			::Array< ::String > result1 = ::Array_obj< ::String >::__new(_this1->length);
-HXDLIN( 572)			{
-HXLINE( 572)				int _g2 = 0;
-HXDLIN( 572)				int _g3 = _this1->length;
-HXDLIN( 572)				while((_g2 < _g3)){
-HXLINE( 572)					_g2 = (_g2 + 1);
-HXDLIN( 572)					int i1 = (_g2 - 1);
-HXDLIN( 572)					{
-HXLINE( 572)						::String inValue1 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this1,i1)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 572)						result1->__unsafe_set(i1,inValue1);
+HXLINE( 569)		::Array< ::Dynamic> tokens = ::little::interpreter::Interpreter_obj::group(p);
+HXLINE( 570)		 ::little::interpreter::InterpTokens castType = null();
+HXLINE( 572)		if ((tokens->length == 1)) {
+HXLINE( 573)			::Array< ::Dynamic> _this1 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::PART_ARRAY_dyn())->copy();
+HXDLIN( 573)			::Array< ::String > result1 = ::Array_obj< ::String >::__new(_this1->length);
+HXDLIN( 573)			{
+HXLINE( 573)				int _g2 = 0;
+HXDLIN( 573)				int _g3 = _this1->length;
+HXDLIN( 573)				while((_g2 < _g3)){
+HXLINE( 573)					_g2 = (_g2 + 1);
+HXDLIN( 573)					int i1 = (_g2 - 1);
+HXDLIN( 573)					{
+HXLINE( 573)						::String inValue1 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this1,i1)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 573)						result1->__unsafe_set(i1,inValue1);
             					}
             				}
             			}
-HXDLIN( 572)			if (result1->contains(::Type_obj::enumConstructor(tokens->__get(0).StaticCast<  ::little::interpreter::InterpTokens >()).toLowerCase())) {
-HXLINE( 572)				tokens = ( (::Array< ::Dynamic>)(::Type_obj::enumParameters(tokens->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())->__get(0)) );
+HXDLIN( 573)			if (result1->contains(::Type_obj::enumConstructor(tokens->__get(0).StaticCast<  ::little::interpreter::InterpTokens >()).toLowerCase())) {
+HXLINE( 573)				tokens = ( (::Array< ::Dynamic>)(::Type_obj::enumParameters(tokens->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())->__get(0)) );
             			}
             			else {
-HXLINE( 573)				::Array< ::Dynamic> _this2 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::EXPRESSION_dyn())->copy();
-HXDLIN( 573)				::Array< ::String > result2 = ::Array_obj< ::String >::__new(_this2->length);
-HXDLIN( 573)				{
-HXLINE( 573)					int _g4 = 0;
-HXDLIN( 573)					int _g5 = _this2->length;
-HXDLIN( 573)					while((_g4 < _g5)){
-HXLINE( 573)						_g4 = (_g4 + 1);
-HXDLIN( 573)						int i2 = (_g4 - 1);
-HXDLIN( 573)						{
-HXLINE( 573)							::String inValue2 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this2,i2)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 573)							result2->__unsafe_set(i2,inValue2);
+HXLINE( 574)				::Array< ::Dynamic> _this2 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::EXPRESSION_dyn())->copy();
+HXDLIN( 574)				::Array< ::String > result2 = ::Array_obj< ::String >::__new(_this2->length);
+HXDLIN( 574)				{
+HXLINE( 574)					int _g4 = 0;
+HXDLIN( 574)					int _g5 = _this2->length;
+HXDLIN( 574)					while((_g4 < _g5)){
+HXLINE( 574)						_g4 = (_g4 + 1);
+HXDLIN( 574)						int i2 = (_g4 - 1);
+HXDLIN( 574)						{
+HXLINE( 574)							::String inValue2 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this2,i2)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 574)							result2->__unsafe_set(i2,inValue2);
             						}
             					}
             				}
-HXDLIN( 573)				if (result2->contains(::Type_obj::enumConstructor(tokens->__get(0).StaticCast<  ::little::interpreter::InterpTokens >()).toLowerCase())) {
-HXLINE( 574)					tokens = ( (::Array< ::Dynamic>)(::Type_obj::enumParameters(tokens->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())->__get(0)) );
-HXLINE( 575)					castType = ::Type_obj::enumParameters(tokens->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())->__get(1);
+HXDLIN( 574)				if (result2->contains(::Type_obj::enumConstructor(tokens->__get(0).StaticCast<  ::little::interpreter::InterpTokens >()).toLowerCase())) {
+HXLINE( 575)					tokens = ( (::Array< ::Dynamic>)(::Type_obj::enumParameters(tokens->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())->__get(0)) );
+HXLINE( 576)					castType = ::Type_obj::enumParameters(tokens->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())->__get(1);
             				}
             				else {
-HXLINE( 576)					::Array< ::Dynamic> _this3 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::BLOCK_dyn())->copy();
-HXDLIN( 576)					::Array< ::String > result3 = ::Array_obj< ::String >::__new(_this3->length);
-HXDLIN( 576)					{
-HXLINE( 576)						int _g6 = 0;
-HXDLIN( 576)						int _g7 = _this3->length;
-HXDLIN( 576)						while((_g6 < _g7)){
-HXLINE( 576)							_g6 = (_g6 + 1);
-HXDLIN( 576)							int i3 = (_g6 - 1);
-HXDLIN( 576)							{
-HXLINE( 576)								::String inValue3 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this3,i3)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 576)								result3->__unsafe_set(i3,inValue3);
+HXLINE( 577)					::Array< ::Dynamic> _this3 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::BLOCK_dyn())->copy();
+HXDLIN( 577)					::Array< ::String > result3 = ::Array_obj< ::String >::__new(_this3->length);
+HXDLIN( 577)					{
+HXLINE( 577)						int _g6 = 0;
+HXDLIN( 577)						int _g7 = _this3->length;
+HXDLIN( 577)						while((_g6 < _g7)){
+HXLINE( 577)							_g6 = (_g6 + 1);
+HXDLIN( 577)							int i3 = (_g6 - 1);
+HXDLIN( 577)							{
+HXLINE( 577)								::String inValue3 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this3,i3)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 577)								result3->__unsafe_set(i3,inValue3);
             							}
             						}
             					}
-HXDLIN( 576)					if (result3->contains(::Type_obj::enumConstructor(tokens->__get(0).StaticCast<  ::little::interpreter::InterpTokens >()).toLowerCase())) {
-HXLINE( 577)						tokens = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::interpreter::Interpreter_obj::run(( (::Array< ::Dynamic>)(::Type_obj::enumParameters(tokens->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())->__get(0)) ),null()));
-HXLINE( 578)						castType = ::Type_obj::enumParameters(tokens->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())->__get(1);
+HXDLIN( 577)					if (result3->contains(::Type_obj::enumConstructor(tokens->__get(0).StaticCast<  ::little::interpreter::InterpTokens >()).toLowerCase())) {
+HXLINE( 578)						tokens = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::interpreter::Interpreter_obj::run(( (::Array< ::Dynamic>)(::Type_obj::enumParameters(tokens->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())->__get(0)) ),null()));
+HXLINE( 579)						castType = ::Type_obj::enumParameters(tokens->__get(0).StaticCast<  ::little::interpreter::InterpTokens >())->__get(1);
             					}
             				}
             			}
             		}
-HXLINE( 582)		 ::little::interpreter::InterpTokens calculated = null();
-HXLINE( 583)		::String sign = HX_("",00,00,00,00);
-HXLINE( 585)		::Array< ::Dynamic> _g8 = ::Array_obj< ::Dynamic>::__new(0);
-HXDLIN( 585)		{
-HXLINE( 585)			int _g9 = 0;
-HXDLIN( 585)			::Array< ::Dynamic> _g10 = tokens;
-HXDLIN( 585)			while((_g9 < _g10->length)){
-HXLINE( 585)				 ::little::interpreter::InterpTokens v = _g10->__get(_g9).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 585)				_g9 = (_g9 + 1);
-HXDLIN( 585)				if (::hx::IsNotNull( v )) {
-HXLINE( 585)					_g8->push(v);
+HXLINE( 583)		 ::little::interpreter::InterpTokens calculated = null();
+HXLINE( 584)		::String sign = HX_("",00,00,00,00);
+HXLINE( 586)		::Array< ::Dynamic> _g8 = ::Array_obj< ::Dynamic>::__new(0);
+HXDLIN( 586)		{
+HXLINE( 586)			int _g9 = 0;
+HXDLIN( 586)			::Array< ::Dynamic> _g10 = tokens;
+HXDLIN( 586)			while((_g9 < _g10->length)){
+HXLINE( 586)				 ::little::interpreter::InterpTokens v = _g10->__get(_g9).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 586)				_g9 = (_g9 + 1);
+HXDLIN( 586)				if (::hx::IsNotNull( v )) {
+HXLINE( 586)					_g8->push(v);
             				}
             			}
             		}
-HXDLIN( 585)		tokens = _g8;
-HXLINE( 586)		{
-HXLINE( 586)			int _g11 = 0;
-HXDLIN( 586)			while((_g11 < tokens->length)){
-HXLINE( 586)				 ::little::interpreter::InterpTokens token = tokens->__get(_g11).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 586)				_g11 = (_g11 + 1);
-HXLINE( 587)				switch((int)(token->_hx_getIndex())){
+HXDLIN( 586)		tokens = _g8;
+HXLINE( 587)		{
+HXLINE( 587)			int _g11 = 0;
+HXDLIN( 587)			while((_g11 < tokens->length)){
+HXLINE( 587)				 ::little::interpreter::InterpTokens token = tokens->__get(_g11).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 587)				_g11 = (_g11 + 1);
+HXLINE( 588)				switch((int)(token->_hx_getIndex())){
             					case (int)1: {
-HXLINE( 610)						::String module = token->_hx_getString(0);
-HXDLIN( 610)						::little::interpreter::Interpreter_obj::setModule(module);
+HXLINE( 611)						::String module = token->_hx_getString(0);
+HXDLIN( 611)						::little::interpreter::Interpreter_obj::setModule(module);
             					}
             					break;
             					case (int)12: {
-HXLINE( 601)						::Array< ::Dynamic> parts = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 601)						 ::little::interpreter::InterpTokens t = token->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 601)						{
-HXLINE( 602)							 ::little::interpreter::InterpTokens val;
-HXDLIN( 602)							if (::hx::IsNotNull( t )) {
-HXLINE( 602)								val = ::little::interpreter::Interpreter_obj::typeCast(::little::interpreter::Interpreter_obj::calculate(parts),t);
+HXLINE( 602)						::Array< ::Dynamic> parts = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 602)						 ::little::interpreter::InterpTokens t = token->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 602)						{
+HXLINE( 603)							 ::little::interpreter::InterpTokens val;
+HXDLIN( 603)							if (::hx::IsNotNull( t )) {
+HXLINE( 603)								val = ::little::interpreter::Interpreter_obj::typeCast(::little::interpreter::Interpreter_obj::calculate(parts),t);
             							}
             							else {
-HXLINE( 602)								val = ::little::interpreter::Interpreter_obj::calculate(parts);
+HXLINE( 603)								val = ::little::interpreter::Interpreter_obj::calculate(parts);
             							}
-HXLINE( 603)							bool _hx_tmp2;
-HXDLIN( 603)							if ((sign != HX_("",00,00,00,00))) {
-HXLINE( 603)								_hx_tmp2 = ::hx::IsNull( calculated );
+HXLINE( 604)							bool _hx_tmp2;
+HXDLIN( 604)							if ((sign != HX_("",00,00,00,00))) {
+HXLINE( 604)								_hx_tmp2 = ::hx::IsNull( calculated );
             							}
             							else {
-HXLINE( 603)								_hx_tmp2 = false;
+HXLINE( 604)								_hx_tmp2 = false;
             							}
-HXDLIN( 603)							if (_hx_tmp2) {
-HXLINE( 603)								 ::little::interpreter::memory::Operators _this4 = ::little::Little_obj::memory->operators;
-HXDLIN( 603)								if (_this4->rhsOnly->exists(sign)) {
-HXLINE( 603)									calculated = _this4->rhsOnly->get(sign)(val);
+HXDLIN( 604)							if (_hx_tmp2) {
+HXLINE( 604)								 ::little::interpreter::memory::Operators _this4 = ::little::Little_obj::memory->operators;
+HXDLIN( 604)								if (_this4->rhsOnly->exists(sign)) {
+HXLINE( 604)									calculated = _this4->rhsOnly->get(sign)(val);
             								}
             								else {
-HXLINE( 603)									if (_this4->lhsOnly->exists(sign)) {
-HXLINE( 603)										::String calculated1 = ((((((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" is used incorrectly - should appear before the sign (",29,81,2a,a6)) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),val)) + sign) + HX_(" instead of ",6b,58,98,3a)) + sign);
-HXDLIN( 603)										calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage(((calculated1 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),val)) + HX_(")",29,00,00,00)));
+HXLINE( 604)									if (_this4->lhsOnly->exists(sign)) {
+HXLINE( 604)										::String calculated1 = ((((((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" is used incorrectly - should appear before the sign (",29,81,2a,a6)) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),val)) + sign) + HX_(" instead of ",6b,58,98,3a)) + sign);
+HXDLIN( 604)										calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage(((calculated1 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),val)) + HX_(")",29,00,00,00)));
             									}
             									else {
-HXLINE( 603)										if (_this4->standard->exists(sign)) {
-HXLINE( 603)											calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage(((((((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" is used incorrectly - should appear between two values (",82,3d,63,2b)) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),val)) + HX_(" ",20,00,00,00)) + sign) + HX_(" <some value>)",cc,84,e4,c7)));
+HXLINE( 604)										if (_this4->standard->exists(sign)) {
+HXLINE( 604)											calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage(((((((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" is used incorrectly - should appear between two values (",82,3d,63,2b)) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),val)) + HX_(" ",20,00,00,00)) + sign) + HX_(" <some value>)",cc,84,e4,c7)));
             										}
             										else {
-HXLINE( 603)											calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage(((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" does not exist. did you make a typo?",01,50,3a,bc)));
+HXLINE( 604)											calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage(((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" does not exist. did you make a typo?",01,50,3a,bc)));
             										}
             									}
             								}
             							}
             							else {
-HXLINE( 604)								if (::hx::IsNull( calculated )) {
-HXLINE( 604)									calculated = val;
+HXLINE( 605)								if (::hx::IsNull( calculated )) {
+HXLINE( 605)									calculated = val;
             								}
             								else {
-HXLINE( 605)									if ((sign == HX_("",00,00,00,00))) {
-HXLINE( 605)										::String _hx_tmp3 = ((HX_("Two values cannot come one after the other (",42,c5,33,7a) + ::Std_obj::string(calculated)) + HX_(", ",74,26,00,00));
-HXDLIN( 605)										::little::interpreter::Interpreter_obj::error(((_hx_tmp3 + ::Std_obj::string(token)) + HX_("). At least one of them should be an operator, or, put an operator in between.",d3,f6,27,3d)),null());
+HXLINE( 606)									if ((sign == HX_("",00,00,00,00))) {
+HXLINE( 606)										::String _hx_tmp3 = ((HX_("Two values cannot come one after the other (",42,c5,33,7a) + ::Std_obj::string(calculated)) + HX_(", ",74,26,00,00));
+HXDLIN( 606)										::little::interpreter::Interpreter_obj::error(((_hx_tmp3 + ::Std_obj::string(token)) + HX_("). At least one of them should be an operator, or, put an operator in between.",d3,f6,27,3d)),null());
             									}
             									else {
-HXLINE( 607)										 ::little::interpreter::memory::Operators _this5 = ::little::Little_obj::memory->operators;
-HXDLIN( 607)										if (_this5->standard->exists(sign)) {
-HXLINE( 607)											calculated = _this5->standard->get(sign)(calculated,val);
+HXLINE( 608)										 ::little::interpreter::memory::Operators _this5 = ::little::Little_obj::memory->operators;
+HXDLIN( 608)										if (_this5->standard->exists(sign)) {
+HXLINE( 608)											calculated = _this5->standard->get(sign)(calculated,val);
             										}
             										else {
-HXLINE( 607)											if (_this5->lhsOnly->exists(sign)) {
-HXLINE( 607)												::String calculated2 = (((((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" is used incorrectly - should not appear between two values, only to the right of one of them (",4f,06,ab,f0)) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),val)) + sign) + HX_(" or ",7d,71,7b,15));
-HXDLIN( 607)												calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage((((calculated2 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),calculated)) + sign) + HX_(")",29,00,00,00)));
+HXLINE( 608)											if (_this5->lhsOnly->exists(sign)) {
+HXLINE( 608)												::String calculated2 = (((((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" is used incorrectly - should not appear between two values, only to the right of one of them (",4f,06,ab,f0)) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),val)) + sign) + HX_(" or ",7d,71,7b,15));
+HXDLIN( 608)												calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage((((calculated2 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),calculated)) + sign) + HX_(")",29,00,00,00)));
             											}
             											else {
-HXLINE( 607)												if (_this5->rhsOnly->exists(sign)) {
-HXLINE( 607)													::String calculated3 = ((((((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" is used incorrectly - should not appear between two values, only to the left of one of them (",62,67,e6,71)) + sign) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),val)) + HX_(" or ",7d,71,7b,15)) + sign);
-HXDLIN( 607)													calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage(((calculated3 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),calculated)) + HX_(")",29,00,00,00)));
+HXLINE( 608)												if (_this5->rhsOnly->exists(sign)) {
+HXLINE( 608)													::String calculated3 = ((((((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" is used incorrectly - should not appear between two values, only to the left of one of them (",62,67,e6,71)) + sign) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),val)) + HX_(" or ",7d,71,7b,15)) + sign);
+HXDLIN( 608)													calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage(((calculated3 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),calculated)) + HX_(")",29,00,00,00)));
             												}
             												else {
-HXLINE( 607)													calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage(((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" does not exist. did you make a typo?",01,50,3a,bc)));
+HXLINE( 608)													calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage(((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" does not exist. did you make a typo?",01,50,3a,bc)));
             												}
             											}
             										}
@@ -2226,62 +2236,62 @@ HXLINE( 607)													calculated = ::little::interpreter::InterpTokens_obj::E
             					}
             					break;
             					case (int)14: {
-HXLINE( 588)						::Array< ::Dynamic> parts1 = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXLINE( 589)						bool _hx_tmp4;
-HXDLIN( 589)						if ((sign != HX_("",00,00,00,00))) {
-HXLINE( 589)							_hx_tmp4 = ::hx::IsNull( calculated );
+HXLINE( 589)						::Array< ::Dynamic> parts1 = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXLINE( 590)						bool _hx_tmp4;
+HXDLIN( 590)						if ((sign != HX_("",00,00,00,00))) {
+HXLINE( 590)							_hx_tmp4 = ::hx::IsNull( calculated );
             						}
             						else {
-HXLINE( 589)							_hx_tmp4 = false;
+HXLINE( 590)							_hx_tmp4 = false;
             						}
-HXDLIN( 589)						if (_hx_tmp4) {
-HXLINE( 589)							 ::little::interpreter::memory::Operators _this6 = ::little::Little_obj::memory->operators;
-HXDLIN( 589)							 ::little::interpreter::InterpTokens rhs = ::little::interpreter::Interpreter_obj::calculate(parts1);
-HXDLIN( 589)							if (_this6->rhsOnly->exists(sign)) {
-HXLINE( 589)								calculated = _this6->rhsOnly->get(sign)(rhs);
+HXDLIN( 590)						if (_hx_tmp4) {
+HXLINE( 590)							 ::little::interpreter::memory::Operators _this6 = ::little::Little_obj::memory->operators;
+HXDLIN( 590)							 ::little::interpreter::InterpTokens rhs = ::little::interpreter::Interpreter_obj::calculate(parts1);
+HXDLIN( 590)							if (_this6->rhsOnly->exists(sign)) {
+HXLINE( 590)								calculated = _this6->rhsOnly->get(sign)(rhs);
             							}
             							else {
-HXLINE( 589)								if (_this6->lhsOnly->exists(sign)) {
-HXLINE( 589)									::String calculated4 = ((((((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" is used incorrectly - should appear before the sign (",29,81,2a,a6)) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),rhs)) + sign) + HX_(" instead of ",6b,58,98,3a)) + sign);
-HXDLIN( 589)									calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage(((calculated4 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),rhs)) + HX_(")",29,00,00,00)));
+HXLINE( 590)								if (_this6->lhsOnly->exists(sign)) {
+HXLINE( 590)									::String calculated4 = ((((((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" is used incorrectly - should appear before the sign (",29,81,2a,a6)) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),rhs)) + sign) + HX_(" instead of ",6b,58,98,3a)) + sign);
+HXDLIN( 590)									calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage(((calculated4 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),rhs)) + HX_(")",29,00,00,00)));
             								}
             								else {
-HXLINE( 589)									if (_this6->standard->exists(sign)) {
-HXLINE( 589)										calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage(((((((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" is used incorrectly - should appear between two values (",82,3d,63,2b)) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),rhs)) + HX_(" ",20,00,00,00)) + sign) + HX_(" <some value>)",cc,84,e4,c7)));
+HXLINE( 590)									if (_this6->standard->exists(sign)) {
+HXLINE( 590)										calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage(((((((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" is used incorrectly - should appear between two values (",82,3d,63,2b)) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),rhs)) + HX_(" ",20,00,00,00)) + sign) + HX_(" <some value>)",cc,84,e4,c7)));
             									}
             									else {
-HXLINE( 589)										calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage(((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" does not exist. did you make a typo?",01,50,3a,bc)));
+HXLINE( 590)										calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage(((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" does not exist. did you make a typo?",01,50,3a,bc)));
             									}
             								}
             							}
             						}
             						else {
-HXLINE( 590)							if (::hx::IsNull( calculated )) {
-HXLINE( 590)								calculated = ::little::interpreter::Interpreter_obj::calculate(parts1);
+HXLINE( 591)							if (::hx::IsNull( calculated )) {
+HXLINE( 591)								calculated = ::little::interpreter::Interpreter_obj::calculate(parts1);
             							}
             							else {
-HXLINE( 591)								if ((sign == HX_("",00,00,00,00))) {
-HXLINE( 591)									::String _hx_tmp5 = ((HX_("Two values cannot come one after the other (",42,c5,33,7a) + ::Std_obj::string(calculated)) + HX_(", ",74,26,00,00));
-HXDLIN( 591)									::little::interpreter::Interpreter_obj::error(((_hx_tmp5 + ::Std_obj::string(token)) + HX_("). At least one of them should be an operator, or, put an operator in between.",d3,f6,27,3d)),null());
+HXLINE( 592)								if ((sign == HX_("",00,00,00,00))) {
+HXLINE( 592)									::String _hx_tmp5 = ((HX_("Two values cannot come one after the other (",42,c5,33,7a) + ::Std_obj::string(calculated)) + HX_(", ",74,26,00,00));
+HXDLIN( 592)									::little::interpreter::Interpreter_obj::error(((_hx_tmp5 + ::Std_obj::string(token)) + HX_("). At least one of them should be an operator, or, put an operator in between.",d3,f6,27,3d)),null());
             								}
             								else {
-HXLINE( 593)									 ::little::interpreter::memory::Operators _this7 = ::little::Little_obj::memory->operators;
-HXDLIN( 593)									 ::little::interpreter::InterpTokens rhs1 = ::little::interpreter::Interpreter_obj::calculate(parts1);
-HXDLIN( 593)									if (_this7->standard->exists(sign)) {
-HXLINE( 593)										calculated = _this7->standard->get(sign)(calculated,rhs1);
+HXLINE( 594)									 ::little::interpreter::memory::Operators _this7 = ::little::Little_obj::memory->operators;
+HXDLIN( 594)									 ::little::interpreter::InterpTokens rhs1 = ::little::interpreter::Interpreter_obj::calculate(parts1);
+HXDLIN( 594)									if (_this7->standard->exists(sign)) {
+HXLINE( 594)										calculated = _this7->standard->get(sign)(calculated,rhs1);
             									}
             									else {
-HXLINE( 593)										if (_this7->lhsOnly->exists(sign)) {
-HXLINE( 593)											::String calculated5 = (((((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" is used incorrectly - should not appear between two values, only to the right of one of them (",4f,06,ab,f0)) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),rhs1)) + sign) + HX_(" or ",7d,71,7b,15));
-HXDLIN( 593)											calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage((((calculated5 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),calculated)) + sign) + HX_(")",29,00,00,00)));
+HXLINE( 594)										if (_this7->lhsOnly->exists(sign)) {
+HXLINE( 594)											::String calculated5 = (((((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" is used incorrectly - should not appear between two values, only to the right of one of them (",4f,06,ab,f0)) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),rhs1)) + sign) + HX_(" or ",7d,71,7b,15));
+HXDLIN( 594)											calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage((((calculated5 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),calculated)) + sign) + HX_(")",29,00,00,00)));
             										}
             										else {
-HXLINE( 593)											if (_this7->rhsOnly->exists(sign)) {
-HXLINE( 593)												::String calculated6 = ((((((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" is used incorrectly - should not appear between two values, only to the left of one of them (",62,67,e6,71)) + sign) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),rhs1)) + HX_(" or ",7d,71,7b,15)) + sign);
-HXDLIN( 593)												calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage(((calculated6 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),calculated)) + HX_(")",29,00,00,00)));
+HXLINE( 594)											if (_this7->rhsOnly->exists(sign)) {
+HXLINE( 594)												::String calculated6 = ((((((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" is used incorrectly - should not appear between two values, only to the left of one of them (",62,67,e6,71)) + sign) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),rhs1)) + HX_(" or ",7d,71,7b,15)) + sign);
+HXDLIN( 594)												calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage(((calculated6 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),calculated)) + HX_(")",29,00,00,00)));
             											}
             											else {
-HXLINE( 593)												calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage(((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" does not exist. did you make a typo?",01,50,3a,bc)));
+HXLINE( 594)												calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage(((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" does not exist. did you make a typo?",01,50,3a,bc)));
             											}
             										}
             									}
@@ -2291,28 +2301,28 @@ HXLINE( 593)												calculated = ::little::interpreter::InterpTokens_obj::Er
             					}
             					break;
             					case (int)21: {
-HXLINE( 596)						::String s = token->_hx_getString(0);
-HXDLIN( 596)						{
-HXLINE( 597)							sign = s;
-HXLINE( 598)							if ((tokens->length == 1)) {
-HXLINE( 598)								return token;
+HXLINE( 597)						::String s = token->_hx_getString(0);
+HXDLIN( 597)						{
+HXLINE( 598)							sign = s;
+HXLINE( 599)							if ((tokens->length == 1)) {
+HXLINE( 599)								return token;
             							}
-HXLINE( 599)							if (__hxcpp_enum_eq(tokens->__get((tokens->length - 1)).StaticCast<  ::little::interpreter::InterpTokens >(),token)) {
-HXLINE( 599)								 ::little::interpreter::memory::Operators _this8 = ::little::Little_obj::memory->operators;
-HXDLIN( 599)								if (::haxe::IMap_obj::exists(_this8->lhsOnly,sign)) {
-HXLINE( 599)									calculated = ::haxe::IMap_obj::get(_this8->lhsOnly,sign)(calculated);
+HXLINE( 600)							if (__hxcpp_enum_eq(tokens->__get((tokens->length - 1)).StaticCast<  ::little::interpreter::InterpTokens >(),token)) {
+HXLINE( 600)								 ::little::interpreter::memory::Operators _this8 = ::little::Little_obj::memory->operators;
+HXDLIN( 600)								if (::haxe::IMap_obj::exists(_this8->lhsOnly,sign)) {
+HXLINE( 600)									calculated = ::haxe::IMap_obj::get(_this8->lhsOnly,sign)(calculated);
             								}
             								else {
-HXLINE( 599)									if (::haxe::IMap_obj::exists(_this8->rhsOnly,sign)) {
-HXLINE( 599)										::String calculated7 = (((((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" is used incorrectly - should appear after the sign (",84,65,00,88)) + sign) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),calculated)) + HX_(" instead of ",6b,58,98,3a));
-HXDLIN( 599)										calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage((((calculated7 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),calculated)) + sign) + HX_(")",29,00,00,00)));
+HXLINE( 600)									if (::haxe::IMap_obj::exists(_this8->rhsOnly,sign)) {
+HXLINE( 600)										::String calculated7 = (((((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" is used incorrectly - should appear after the sign (",84,65,00,88)) + sign) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),calculated)) + HX_(" instead of ",6b,58,98,3a));
+HXDLIN( 600)										calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage((((calculated7 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),calculated)) + sign) + HX_(")",29,00,00,00)));
             									}
             									else {
-HXLINE( 599)										if (::haxe::IMap_obj::exists(_this8->standard,sign)) {
-HXLINE( 599)											calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage(((((((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" is used incorrectly - should appear between two values (",82,3d,63,2b)) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),calculated)) + HX_(" ",20,00,00,00)) + sign) + HX_(" <some value>)",cc,84,e4,c7)));
+HXLINE( 600)										if (::haxe::IMap_obj::exists(_this8->standard,sign)) {
+HXLINE( 600)											calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage(((((((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" is used incorrectly - should appear between two values (",82,3d,63,2b)) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),calculated)) + HX_(" ",20,00,00,00)) + sign) + HX_(" <some value>)",cc,84,e4,c7)));
             										}
             										else {
-HXLINE( 599)											calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage(((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" does not exist. did you make a typo?",01,50,3a,bc)));
+HXLINE( 600)											calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage(((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" does not exist. did you make a typo?",01,50,3a,bc)));
             										}
             									}
             								}
@@ -2321,71 +2331,71 @@ HXLINE( 599)											calculated = ::little::interpreter::InterpTokens_obj::Err
             					}
             					break;
             					default:{
-HXLINE( 612)						bool _hx_tmp6;
-HXDLIN( 612)						if ((sign != HX_("",00,00,00,00))) {
-HXLINE( 612)							_hx_tmp6 = ::hx::IsNull( calculated );
+HXLINE( 613)						bool _hx_tmp6;
+HXDLIN( 613)						if ((sign != HX_("",00,00,00,00))) {
+HXLINE( 613)							_hx_tmp6 = ::hx::IsNull( calculated );
             						}
             						else {
-HXLINE( 612)							_hx_tmp6 = false;
+HXLINE( 613)							_hx_tmp6 = false;
             						}
-HXDLIN( 612)						if (_hx_tmp6) {
-HXLINE( 612)							 ::little::interpreter::memory::Operators _this9 = ::little::Little_obj::memory->operators;
-HXDLIN( 612)							if (_this9->rhsOnly->exists(sign)) {
-HXLINE( 612)								calculated = _this9->rhsOnly->get(sign)(token);
+HXDLIN( 613)						if (_hx_tmp6) {
+HXLINE( 613)							 ::little::interpreter::memory::Operators _this9 = ::little::Little_obj::memory->operators;
+HXDLIN( 613)							if (_this9->rhsOnly->exists(sign)) {
+HXLINE( 613)								calculated = _this9->rhsOnly->get(sign)(token);
             							}
             							else {
-HXLINE( 612)								if (_this9->lhsOnly->exists(sign)) {
-HXLINE( 612)									::String calculated8 = ((((((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" is used incorrectly - should appear before the sign (",29,81,2a,a6)) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),token)) + sign) + HX_(" instead of ",6b,58,98,3a)) + sign);
-HXDLIN( 612)									calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage(((calculated8 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),token)) + HX_(")",29,00,00,00)));
+HXLINE( 613)								if (_this9->lhsOnly->exists(sign)) {
+HXLINE( 613)									::String calculated8 = ((((((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" is used incorrectly - should appear before the sign (",29,81,2a,a6)) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),token)) + sign) + HX_(" instead of ",6b,58,98,3a)) + sign);
+HXDLIN( 613)									calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage(((calculated8 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),token)) + HX_(")",29,00,00,00)));
             								}
             								else {
-HXLINE( 612)									if (_this9->standard->exists(sign)) {
-HXLINE( 612)										calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage(((((((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" is used incorrectly - should appear between two values (",82,3d,63,2b)) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),token)) + HX_(" ",20,00,00,00)) + sign) + HX_(" <some value>)",cc,84,e4,c7)));
+HXLINE( 613)									if (_this9->standard->exists(sign)) {
+HXLINE( 613)										calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage(((((((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" is used incorrectly - should appear between two values (",82,3d,63,2b)) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),token)) + HX_(" ",20,00,00,00)) + sign) + HX_(" <some value>)",cc,84,e4,c7)));
             									}
             									else {
-HXLINE( 612)										calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage(((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" does not exist. did you make a typo?",01,50,3a,bc)));
+HXLINE( 613)										calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage(((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" does not exist. did you make a typo?",01,50,3a,bc)));
             									}
             								}
             							}
             						}
             						else {
-HXLINE( 613)							bool _hx_tmp7;
-HXDLIN( 613)							if ((sign == HX_("",00,00,00,00))) {
-HXLINE( 613)								_hx_tmp7 = ::hx::IsNotNull( calculated );
+HXLINE( 614)							bool _hx_tmp7;
+HXDLIN( 614)							if ((sign == HX_("",00,00,00,00))) {
+HXLINE( 614)								_hx_tmp7 = ::hx::IsNotNull( calculated );
             							}
             							else {
-HXLINE( 613)								_hx_tmp7 = false;
+HXLINE( 614)								_hx_tmp7 = false;
             							}
-HXDLIN( 613)							if (_hx_tmp7) {
-HXLINE( 613)								::String _hx_tmp8 = ((HX_("Unexpected token: ",b0,5c,c5,d0) + ::Std_obj::string(token)) + HX_(" After calculating ",61,4f,84,68));
-HXDLIN( 613)								HX_STACK_DO_THROW((_hx_tmp8 + ::Std_obj::string(calculated)));
+HXDLIN( 614)							if (_hx_tmp7) {
+HXLINE( 614)								::String _hx_tmp8 = ((HX_("Unexpected token: ",b0,5c,c5,d0) + ::Std_obj::string(token)) + HX_(" After calculating ",61,4f,84,68));
+HXDLIN( 614)								HX_STACK_DO_THROW((_hx_tmp8 + ::Std_obj::string(calculated)));
             							}
             							else {
-HXLINE( 614)								if (::hx::IsNull( calculated )) {
-HXLINE( 614)									calculated = token;
+HXLINE( 615)								if (::hx::IsNull( calculated )) {
+HXLINE( 615)									calculated = token;
             								}
             								else {
-HXLINE( 615)									if ((sign == HX_("",00,00,00,00))) {
-HXLINE( 615)										::String _hx_tmp9 = ((HX_("Two values cannot come one after the other (",42,c5,33,7a) + ::Std_obj::string(calculated)) + HX_(", ",74,26,00,00));
-HXDLIN( 615)										::little::interpreter::Interpreter_obj::error(((_hx_tmp9 + ::Std_obj::string(token)) + HX_("). At least one of them should be an operator, or, put an operator in between.",d3,f6,27,3d)),null());
+HXLINE( 616)									if ((sign == HX_("",00,00,00,00))) {
+HXLINE( 616)										::String _hx_tmp9 = ((HX_("Two values cannot come one after the other (",42,c5,33,7a) + ::Std_obj::string(calculated)) + HX_(", ",74,26,00,00));
+HXDLIN( 616)										::little::interpreter::Interpreter_obj::error(((_hx_tmp9 + ::Std_obj::string(token)) + HX_("). At least one of them should be an operator, or, put an operator in between.",d3,f6,27,3d)),null());
             									}
             									else {
-HXLINE( 617)										 ::little::interpreter::memory::Operators _this10 = ::little::Little_obj::memory->operators;
-HXDLIN( 617)										if (_this10->standard->exists(sign)) {
-HXLINE( 617)											calculated = _this10->standard->get(sign)(calculated,token);
+HXLINE( 618)										 ::little::interpreter::memory::Operators _this10 = ::little::Little_obj::memory->operators;
+HXDLIN( 618)										if (_this10->standard->exists(sign)) {
+HXLINE( 618)											calculated = _this10->standard->get(sign)(calculated,token);
             										}
             										else {
-HXLINE( 617)											if (_this10->lhsOnly->exists(sign)) {
-HXLINE( 617)												::String calculated9 = (((((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" is used incorrectly - should not appear between two values, only to the right of one of them (",4f,06,ab,f0)) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),token)) + sign) + HX_(" or ",7d,71,7b,15));
-HXDLIN( 617)												calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage((((calculated9 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),calculated)) + sign) + HX_(")",29,00,00,00)));
+HXLINE( 618)											if (_this10->lhsOnly->exists(sign)) {
+HXLINE( 618)												::String calculated9 = (((((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" is used incorrectly - should not appear between two values, only to the right of one of them (",4f,06,ab,f0)) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),token)) + sign) + HX_(" or ",7d,71,7b,15));
+HXDLIN( 618)												calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage((((calculated9 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),calculated)) + sign) + HX_(")",29,00,00,00)));
             											}
             											else {
-HXLINE( 617)												if (_this10->rhsOnly->exists(sign)) {
-HXLINE( 617)													::String calculated10 = ((((((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" is used incorrectly - should not appear between two values, only to the left of one of them (",62,67,e6,71)) + sign) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),token)) + HX_(" or ",7d,71,7b,15)) + sign);
-HXDLIN( 617)													calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage(((calculated10 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),calculated)) + HX_(")",29,00,00,00)));
+HXLINE( 618)												if (_this10->rhsOnly->exists(sign)) {
+HXLINE( 618)													::String calculated10 = ((((((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" is used incorrectly - should not appear between two values, only to the left of one of them (",62,67,e6,71)) + sign) + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),token)) + HX_(" or ",7d,71,7b,15)) + sign);
+HXDLIN( 618)													calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage(((calculated10 + ::little::tools::PrettyPrinter_obj::stringifyInterpreter(null(),calculated)) + HX_(")",29,00,00,00)));
             												}
             												else {
-HXLINE( 617)													calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage(((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" does not exist. did you make a typo?",01,50,3a,bc)));
+HXLINE( 618)													calculated = ::little::interpreter::InterpTokens_obj::ErrorMessage(((HX_("Operator ",dc,f3,17,42) + sign) + HX_(" does not exist. did you make a typo?",01,50,3a,bc)));
             												}
             											}
             										}
@@ -2397,380 +2407,380 @@ HXLINE( 617)													calculated = ::little::interpreter::InterpTokens_obj::E
             				}
             			}
             		}
-HXLINE( 624)		if (::hx::IsNotNull( castType )) {
-HXLINE( 625)			return ::little::interpreter::Interpreter_obj::typeCast(calculated,castType);
+HXLINE( 625)		if (::hx::IsNotNull( castType )) {
+HXLINE( 626)			return ::little::interpreter::Interpreter_obj::typeCast(calculated,castType);
             		}
-HXLINE( 627)		return calculated;
+HXLINE( 628)		return calculated;
             	}
 
 
 STATIC_HX_DEFINE_DYNAMIC_FUNC1(Interpreter_obj,calculate,return )
 
 ::Array< ::Dynamic> Interpreter_obj::group(::Array< ::Dynamic> tokens){
-            	HX_STACKFRAME(&_hx_pos_1e0c988bb7772661_634_group)
-HXLINE( 635)		::Array< ::Dynamic> post = tokens;
-HXLINE( 636)		::Array< ::Dynamic> pre = ::Array_obj< ::Dynamic>::__new(0);
-HXLINE( 638)		{
-HXLINE( 638)			 ::Dynamic operatorGroup = ::little::Little_obj::memory->operators->iterateByPriority();
-HXDLIN( 638)			while(( (bool)(operatorGroup->__Field(HX_("hasNext",6d,a5,46,18),::hx::paccDynamic)()) )){
-HXLINE( 638)				::Array< ::Dynamic> operatorGroup1 = ( (::Array< ::Dynamic>)(operatorGroup->__Field(HX_("next",f3,84,02,49),::hx::paccDynamic)()) );
-HXLINE( 639)				pre = post->copy();
-HXLINE( 640)				post = ::Array_obj< ::Dynamic>::__new(0);
-HXLINE( 645)				int i = 0;
-HXLINE( 646)				while((i < pre->length)){
-HXLINE( 647)					 ::little::interpreter::InterpTokens token;
-HXDLIN( 647)					::Array< ::Dynamic> _this = ::Array_obj< ::Dynamic>::__new(2)->init(0,::little::tools::InterpTokensSimple_obj::IDENTIFIER_dyn())->init(1,::little::tools::InterpTokensSimple_obj::BLOCK_dyn())->copy();
-HXDLIN( 647)					::Array< ::String > result = ::Array_obj< ::String >::__new(_this->length);
-HXDLIN( 647)					{
-HXLINE( 647)						int _g = 0;
-HXDLIN( 647)						int _g1 = _this->length;
-HXDLIN( 647)						while((_g < _g1)){
-HXLINE( 647)							_g = (_g + 1);
-HXDLIN( 647)							int i1 = (_g - 1);
-HXDLIN( 647)							{
-HXLINE( 647)								::String inValue = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this,i1)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 647)								result->__unsafe_set(i1,inValue);
+            	HX_STACKFRAME(&_hx_pos_1e0c988bb7772661_635_group)
+HXLINE( 636)		::Array< ::Dynamic> post = tokens;
+HXLINE( 637)		::Array< ::Dynamic> pre = ::Array_obj< ::Dynamic>::__new(0);
+HXLINE( 639)		{
+HXLINE( 639)			 ::Dynamic operatorGroup = ::little::Little_obj::memory->operators->iterateByPriority();
+HXDLIN( 639)			while(( (bool)(operatorGroup->__Field(HX_("hasNext",6d,a5,46,18),::hx::paccDynamic)()) )){
+HXLINE( 639)				::Array< ::Dynamic> operatorGroup1 = ( (::Array< ::Dynamic>)(operatorGroup->__Field(HX_("next",f3,84,02,49),::hx::paccDynamic)()) );
+HXLINE( 640)				pre = post->copy();
+HXLINE( 641)				post = ::Array_obj< ::Dynamic>::__new(0);
+HXLINE( 646)				int i = 0;
+HXLINE( 647)				while((i < pre->length)){
+HXLINE( 648)					 ::little::interpreter::InterpTokens token;
+HXDLIN( 648)					::Array< ::Dynamic> _this = ::Array_obj< ::Dynamic>::__new(2)->init(0,::little::tools::InterpTokensSimple_obj::IDENTIFIER_dyn())->init(1,::little::tools::InterpTokensSimple_obj::BLOCK_dyn())->copy();
+HXDLIN( 648)					::Array< ::String > result = ::Array_obj< ::String >::__new(_this->length);
+HXDLIN( 648)					{
+HXLINE( 648)						int _g = 0;
+HXDLIN( 648)						int _g1 = _this->length;
+HXDLIN( 648)						while((_g < _g1)){
+HXLINE( 648)							_g = (_g + 1);
+HXDLIN( 648)							int i1 = (_g - 1);
+HXDLIN( 648)							{
+HXLINE( 648)								::String inValue = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this,i1)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 648)								result->__unsafe_set(i1,inValue);
             							}
             						}
             					}
-HXDLIN( 647)					if (result->contains(::Type_obj::enumConstructor(pre->__get(i).StaticCast<  ::little::interpreter::InterpTokens >()).toLowerCase())) {
-HXLINE( 647)						token = ::little::interpreter::Interpreter_obj::evaluate(pre->__get(i).StaticCast<  ::little::interpreter::InterpTokens >(),null());
+HXDLIN( 648)					if (result->contains(::Type_obj::enumConstructor(pre->__get(i).StaticCast<  ::little::interpreter::InterpTokens >()).toLowerCase())) {
+HXLINE( 648)						token = ::little::interpreter::Interpreter_obj::evaluate(pre->__get(i).StaticCast<  ::little::interpreter::InterpTokens >(),null());
             					}
             					else {
-HXLINE( 647)						token = pre->__get(i).StaticCast<  ::little::interpreter::InterpTokens >();
+HXLINE( 648)						token = pre->__get(i).StaticCast<  ::little::interpreter::InterpTokens >();
             					}
-HXLINE( 649)					switch((int)(token->_hx_getIndex())){
+HXLINE( 650)					switch((int)(token->_hx_getIndex())){
             						case (int)12: {
-HXLINE( 719)							::Array< ::Dynamic> parts = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
-HXDLIN( 719)							 ::little::interpreter::InterpTokens type = token->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
-HXDLIN( 719)							post->push(::little::interpreter::InterpTokens_obj::Expression(::little::interpreter::Interpreter_obj::group(parts),type));
+HXLINE( 720)							::Array< ::Dynamic> parts = token->_hx_getObject(0).StaticCast< ::Array< ::Dynamic> >();
+HXDLIN( 720)							 ::little::interpreter::InterpTokens type = token->_hx_getObject(1).StaticCast<  ::little::interpreter::InterpTokens >();
+HXDLIN( 720)							post->push(::little::interpreter::InterpTokens_obj::Expression(::little::interpreter::Interpreter_obj::group(parts),type));
             						}
             						break;
             						case (int)21: {
-HXLINE( 650)							::String _g2 = token->_hx_getString(0);
-HXDLIN( 650)							{
-HXLINE( 650)								::Array< ::Dynamic> _g3 = ::Array_obj< ::Dynamic>::__new(0);
-HXDLIN( 650)								{
-HXLINE( 650)									int _g4 = 0;
-HXDLIN( 650)									::Array< ::Dynamic> _g5 = operatorGroup1;
-HXDLIN( 650)									while((_g4 < _g5->length)){
-HXLINE( 650)										 ::Dynamic v = _g5->__get(_g4);
-HXDLIN( 650)										_g4 = (_g4 + 1);
-HXDLIN( 650)										if (::hx::IsEq( v->__Field(HX_("sign",3d,90,53,4c),::hx::paccDynamic),_g2 )) {
-HXLINE( 650)											_g3->push(v);
+HXLINE( 651)							::String _g2 = token->_hx_getString(0);
+HXDLIN( 651)							{
+HXLINE( 651)								::Array< ::Dynamic> _g3 = ::Array_obj< ::Dynamic>::__new(0);
+HXDLIN( 651)								{
+HXLINE( 651)									int _g4 = 0;
+HXDLIN( 651)									::Array< ::Dynamic> _g5 = operatorGroup1;
+HXDLIN( 651)									while((_g4 < _g5->length)){
+HXLINE( 651)										 ::Dynamic v = _g5->__get(_g4);
+HXDLIN( 651)										_g4 = (_g4 + 1);
+HXDLIN( 651)										if (::hx::IsEq( v->__Field(HX_("sign",3d,90,53,4c),::hx::paccDynamic),_g2 )) {
+HXLINE( 651)											_g3->push(v);
             										}
             									}
             								}
-HXDLIN( 650)								if (((_g3->length > 0) == true)) {
-HXLINE( 656)									if ((i == (pre->length - 1))) {
-HXLINE( 657)										post->push(::little::interpreter::InterpTokens_obj::PartArray(::Array_obj< ::Dynamic>::__new(2)->init(0,post->pop().StaticCast<  ::little::interpreter::InterpTokens >())->init(1,token)));
-HXLINE( 658)										goto _hx_goto_75;
+HXDLIN( 651)								if (((_g3->length > 0) == true)) {
+HXLINE( 657)									if ((i == (pre->length - 1))) {
+HXLINE( 658)										post->push(::little::interpreter::InterpTokens_obj::PartArray(::Array_obj< ::Dynamic>::__new(2)->init(0,post->pop().StaticCast<  ::little::interpreter::InterpTokens >())->init(1,token)));
+HXLINE( 659)										goto _hx_goto_75;
             									}
-HXLINE( 661)									 ::little::interpreter::InterpTokens lookbehind;
-HXDLIN( 661)									if ((post->length > 0)) {
-HXLINE( 661)										lookbehind = post->__get((post->length - 1)).StaticCast<  ::little::interpreter::InterpTokens >();
+HXLINE( 662)									 ::little::interpreter::InterpTokens lookbehind;
+HXDLIN( 662)									if ((post->length > 0)) {
+HXLINE( 662)										lookbehind = post->__get((post->length - 1)).StaticCast<  ::little::interpreter::InterpTokens >();
             									}
             									else {
-HXLINE( 661)										lookbehind = ::little::interpreter::InterpTokens_obj::Sign(HX_("_",5f,00,00,00));
+HXLINE( 662)										lookbehind = ::little::interpreter::InterpTokens_obj::Sign(HX_("_",5f,00,00,00));
             									}
-HXLINE( 662)									 ::little::interpreter::InterpTokens lookahead;
-HXDLIN( 662)									::Array< ::Dynamic> _this1 = ::Array_obj< ::Dynamic>::__new(2)->init(0,::little::tools::InterpTokensSimple_obj::IDENTIFIER_dyn())->init(1,::little::tools::InterpTokensSimple_obj::BLOCK_dyn())->copy();
-HXDLIN( 662)									::Array< ::String > result1 = ::Array_obj< ::String >::__new(_this1->length);
-HXDLIN( 662)									{
-HXLINE( 662)										int _g6 = 0;
-HXDLIN( 662)										int _g7 = _this1->length;
-HXDLIN( 662)										while((_g6 < _g7)){
-HXLINE( 662)											_g6 = (_g6 + 1);
-HXDLIN( 662)											int i2 = (_g6 - 1);
-HXDLIN( 662)											{
-HXLINE( 662)												::String inValue1 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this1,i2)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 662)												result1->__unsafe_set(i2,inValue1);
+HXLINE( 663)									 ::little::interpreter::InterpTokens lookahead;
+HXDLIN( 663)									::Array< ::Dynamic> _this1 = ::Array_obj< ::Dynamic>::__new(2)->init(0,::little::tools::InterpTokensSimple_obj::IDENTIFIER_dyn())->init(1,::little::tools::InterpTokensSimple_obj::BLOCK_dyn())->copy();
+HXDLIN( 663)									::Array< ::String > result1 = ::Array_obj< ::String >::__new(_this1->length);
+HXDLIN( 663)									{
+HXLINE( 663)										int _g6 = 0;
+HXDLIN( 663)										int _g7 = _this1->length;
+HXDLIN( 663)										while((_g6 < _g7)){
+HXLINE( 663)											_g6 = (_g6 + 1);
+HXDLIN( 663)											int i2 = (_g6 - 1);
+HXDLIN( 663)											{
+HXLINE( 663)												::String inValue1 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this1,i2)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 663)												result1->__unsafe_set(i2,inValue1);
             											}
             										}
             									}
-HXDLIN( 662)									if (result1->contains(::Type_obj::enumConstructor(pre->__get((i + 1)).StaticCast<  ::little::interpreter::InterpTokens >()).toLowerCase())) {
-HXLINE( 662)										lookahead = ::little::interpreter::Interpreter_obj::evaluate(pre->__get((i + 1)).StaticCast<  ::little::interpreter::InterpTokens >(),null());
+HXDLIN( 663)									if (result1->contains(::Type_obj::enumConstructor(pre->__get((i + 1)).StaticCast<  ::little::interpreter::InterpTokens >()).toLowerCase())) {
+HXLINE( 663)										lookahead = ::little::interpreter::Interpreter_obj::evaluate(pre->__get((i + 1)).StaticCast<  ::little::interpreter::InterpTokens >(),null());
             									}
             									else {
-HXLINE( 662)										lookahead = pre->__get((i + 1)).StaticCast<  ::little::interpreter::InterpTokens >();
+HXLINE( 663)										lookahead = pre->__get((i + 1)).StaticCast<  ::little::interpreter::InterpTokens >();
             									}
-HXLINE( 664)									bool _hx_tmp;
-HXDLIN( 664)									::Array< ::Dynamic> _this2 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::SIGN_dyn())->copy();
-HXDLIN( 664)									::Array< ::String > result2 = ::Array_obj< ::String >::__new(_this2->length);
-HXDLIN( 664)									{
-HXLINE( 664)										int _g8 = 0;
-HXDLIN( 664)										int _g9 = _this2->length;
-HXDLIN( 664)										while((_g8 < _g9)){
-HXLINE( 664)											_g8 = (_g8 + 1);
-HXDLIN( 664)											int i3 = (_g8 - 1);
-HXDLIN( 664)											{
-HXLINE( 664)												::String inValue2 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this2,i3)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 664)												result2->__unsafe_set(i3,inValue2);
+HXLINE( 665)									bool _hx_tmp;
+HXDLIN( 665)									::Array< ::Dynamic> _this2 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::SIGN_dyn())->copy();
+HXDLIN( 665)									::Array< ::String > result2 = ::Array_obj< ::String >::__new(_this2->length);
+HXDLIN( 665)									{
+HXLINE( 665)										int _g8 = 0;
+HXDLIN( 665)										int _g9 = _this2->length;
+HXDLIN( 665)										while((_g8 < _g9)){
+HXLINE( 665)											_g8 = (_g8 + 1);
+HXDLIN( 665)											int i3 = (_g8 - 1);
+HXDLIN( 665)											{
+HXLINE( 665)												::String inValue2 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this2,i3)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 665)												result2->__unsafe_set(i3,inValue2);
             											}
             										}
             									}
-HXDLIN( 664)									if (result2->contains(::Type_obj::enumConstructor(lookahead).toLowerCase())) {
-HXLINE( 664)										::Array< ::Dynamic> _g10 = ::Array_obj< ::Dynamic>::__new(0);
-HXDLIN( 664)										{
-HXLINE( 664)											int _g11 = 0;
-HXDLIN( 664)											::Array< ::Dynamic> _g12 = operatorGroup1;
-HXDLIN( 664)											while((_g11 < _g12->length)){
-HXLINE( 664)												 ::Dynamic v1 = _g12->__get(_g11);
-HXDLIN( 664)												_g11 = (_g11 + 1);
-HXDLIN( 664)												::String v2 = ( (::String)(v1->__Field(HX_("sign",3d,90,53,4c),::hx::paccDynamic)) );
-HXDLIN( 664)												if (::hx::IsEq( v2,::Type_obj::enumParameters(lookahead)->__get(0) )) {
-HXLINE( 664)													_g10->push(v1);
+HXDLIN( 665)									if (result2->contains(::Type_obj::enumConstructor(lookahead).toLowerCase())) {
+HXLINE( 665)										::Array< ::Dynamic> _g10 = ::Array_obj< ::Dynamic>::__new(0);
+HXDLIN( 665)										{
+HXLINE( 665)											int _g11 = 0;
+HXDLIN( 665)											::Array< ::Dynamic> _g12 = operatorGroup1;
+HXDLIN( 665)											while((_g11 < _g12->length)){
+HXLINE( 665)												 ::Dynamic v1 = _g12->__get(_g11);
+HXDLIN( 665)												_g11 = (_g11 + 1);
+HXDLIN( 665)												::String v2 = ( (::String)(v1->__Field(HX_("sign",3d,90,53,4c),::hx::paccDynamic)) );
+HXDLIN( 665)												if (::hx::IsEq( v2,::Type_obj::enumParameters(lookahead)->__get(0) )) {
+HXLINE( 665)													_g10->push(v1);
             												}
             											}
             										}
-HXDLIN( 664)										_hx_tmp = (_g10->length > 0);
+HXDLIN( 665)										_hx_tmp = (_g10->length > 0);
             									}
             									else {
-HXLINE( 664)										_hx_tmp = false;
+HXLINE( 665)										_hx_tmp = false;
             									}
-HXDLIN( 664)									if (_hx_tmp) {
-HXLINE( 675)										::Array< ::Dynamic> _g13 = ::Array_obj< ::Dynamic>::__new(0);
-HXDLIN( 675)										{
-HXLINE( 675)											int _g14 = 0;
-HXDLIN( 675)											::Array< ::Dynamic> _g15 = operatorGroup1;
-HXDLIN( 675)											while((_g14 < _g15->length)){
-HXLINE( 675)												 ::Dynamic v3 = _g15->__get(_g14);
-HXDLIN( 675)												_g14 = (_g14 + 1);
-HXDLIN( 675)												bool _hx_tmp1;
-HXDLIN( 675)												::String v4 = ( (::String)(v3->__Field(HX_("sign",3d,90,53,4c),::hx::paccDynamic)) );
-HXDLIN( 675)												if (::hx::IsEq( v4,::Type_obj::enumParameters(token)->__get(0) )) {
-HXLINE( 675)													_hx_tmp1 = ::hx::IsPointerEq( v3->__Field(HX_("side",97,8d,53,4c),::hx::paccDynamic),::little::interpreter::memory::OperatorType_obj::LHS_ONLY_dyn() );
+HXDLIN( 665)									if (_hx_tmp) {
+HXLINE( 676)										::Array< ::Dynamic> _g13 = ::Array_obj< ::Dynamic>::__new(0);
+HXDLIN( 676)										{
+HXLINE( 676)											int _g14 = 0;
+HXDLIN( 676)											::Array< ::Dynamic> _g15 = operatorGroup1;
+HXDLIN( 676)											while((_g14 < _g15->length)){
+HXLINE( 676)												 ::Dynamic v3 = _g15->__get(_g14);
+HXDLIN( 676)												_g14 = (_g14 + 1);
+HXDLIN( 676)												bool _hx_tmp1;
+HXDLIN( 676)												::String v4 = ( (::String)(v3->__Field(HX_("sign",3d,90,53,4c),::hx::paccDynamic)) );
+HXDLIN( 676)												if (::hx::IsEq( v4,::Type_obj::enumParameters(token)->__get(0) )) {
+HXLINE( 676)													_hx_tmp1 = ::hx::IsPointerEq( v3->__Field(HX_("side",97,8d,53,4c),::hx::paccDynamic),::little::interpreter::memory::OperatorType_obj::LHS_ONLY_dyn() );
             												}
             												else {
-HXLINE( 675)													_hx_tmp1 = false;
+HXLINE( 676)													_hx_tmp1 = false;
             												}
-HXDLIN( 675)												if (_hx_tmp1) {
-HXLINE( 675)													_g13->push(v3);
+HXDLIN( 676)												if (_hx_tmp1) {
+HXLINE( 676)													_g13->push(v3);
             												}
             											}
             										}
-HXDLIN( 675)										if ((_g13->length > 0)) {
-HXLINE( 676)											post->push(::little::interpreter::InterpTokens_obj::PartArray(::Array_obj< ::Dynamic>::__new(2)->init(0,post->pop().StaticCast<  ::little::interpreter::InterpTokens >())->init(1,token)));
+HXDLIN( 676)										if ((_g13->length > 0)) {
+HXLINE( 677)											post->push(::little::interpreter::InterpTokens_obj::PartArray(::Array_obj< ::Dynamic>::__new(2)->init(0,post->pop().StaticCast<  ::little::interpreter::InterpTokens >())->init(1,token)));
             										}
             										else {
-HXLINE( 677)											::Array< ::Dynamic> _g16 = ::Array_obj< ::Dynamic>::__new(0);
-HXDLIN( 677)											{
-HXLINE( 677)												int _g17 = 0;
-HXDLIN( 677)												::Array< ::Dynamic> _g18 = operatorGroup1;
-HXDLIN( 677)												while((_g17 < _g18->length)){
-HXLINE( 677)													 ::Dynamic v5 = _g18->__get(_g17);
-HXDLIN( 677)													_g17 = (_g17 + 1);
-HXDLIN( 677)													bool _hx_tmp2;
-HXDLIN( 677)													::String v6 = ( (::String)(v5->__Field(HX_("sign",3d,90,53,4c),::hx::paccDynamic)) );
-HXDLIN( 677)													if (::hx::IsEq( v6,::Type_obj::enumParameters(token)->__get(0) )) {
-HXLINE( 677)														_hx_tmp2 = ::hx::IsPointerEq( v5->__Field(HX_("side",97,8d,53,4c),::hx::paccDynamic),::little::interpreter::memory::OperatorType_obj::LHS_RHS_dyn() );
+HXLINE( 678)											::Array< ::Dynamic> _g16 = ::Array_obj< ::Dynamic>::__new(0);
+HXDLIN( 678)											{
+HXLINE( 678)												int _g17 = 0;
+HXDLIN( 678)												::Array< ::Dynamic> _g18 = operatorGroup1;
+HXDLIN( 678)												while((_g17 < _g18->length)){
+HXLINE( 678)													 ::Dynamic v5 = _g18->__get(_g17);
+HXDLIN( 678)													_g17 = (_g17 + 1);
+HXDLIN( 678)													bool _hx_tmp2;
+HXDLIN( 678)													::String v6 = ( (::String)(v5->__Field(HX_("sign",3d,90,53,4c),::hx::paccDynamic)) );
+HXDLIN( 678)													if (::hx::IsEq( v6,::Type_obj::enumParameters(token)->__get(0) )) {
+HXLINE( 678)														_hx_tmp2 = ::hx::IsPointerEq( v5->__Field(HX_("side",97,8d,53,4c),::hx::paccDynamic),::little::interpreter::memory::OperatorType_obj::LHS_RHS_dyn() );
             													}
             													else {
-HXLINE( 677)														_hx_tmp2 = false;
+HXLINE( 678)														_hx_tmp2 = false;
             													}
-HXDLIN( 677)													if (_hx_tmp2) {
-HXLINE( 677)														_g16->push(v5);
+HXDLIN( 678)													if (_hx_tmp2) {
+HXLINE( 678)														_g16->push(v5);
             													}
             												}
             											}
-HXDLIN( 677)											if ((_g16->length > 0)) {
-HXLINE( 678)												 ::little::interpreter::InterpTokens operand1 = post->pop().StaticCast<  ::little::interpreter::InterpTokens >();
-HXLINE( 679)												 ::little::interpreter::InterpTokens op = lookahead;
-HXLINE( 681)												if (((i + 2) >= pre->length)) {
-HXLINE( 681)													::little::interpreter::Interpreter_obj::error(HX_("Expression ended with an operator, when an operand was expected.",1c,b3,e6,48),null());
+HXDLIN( 678)											if ((_g16->length > 0)) {
+HXLINE( 679)												 ::little::interpreter::InterpTokens operand1 = post->pop().StaticCast<  ::little::interpreter::InterpTokens >();
+HXLINE( 680)												 ::little::interpreter::InterpTokens op = lookahead;
+HXLINE( 682)												if (((i + 2) >= pre->length)) {
+HXLINE( 682)													::little::interpreter::Interpreter_obj::error(HX_("Expression ended with an operator, when an operand was expected.",1c,b3,e6,48),null());
             												}
-HXLINE( 682)												 ::little::interpreter::InterpTokens lookahead2;
-HXDLIN( 682)												::Array< ::Dynamic> _this3 = ::Array_obj< ::Dynamic>::__new(2)->init(0,::little::tools::InterpTokensSimple_obj::IDENTIFIER_dyn())->init(1,::little::tools::InterpTokensSimple_obj::BLOCK_dyn())->copy();
-HXDLIN( 682)												::Array< ::String > result3 = ::Array_obj< ::String >::__new(_this3->length);
-HXDLIN( 682)												{
-HXLINE( 682)													int _g19 = 0;
-HXDLIN( 682)													int _g20 = _this3->length;
-HXDLIN( 682)													while((_g19 < _g20)){
-HXLINE( 682)														_g19 = (_g19 + 1);
-HXDLIN( 682)														int i4 = (_g19 - 1);
-HXDLIN( 682)														{
-HXLINE( 682)															::String inValue3 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this3,i4)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 682)															result3->__unsafe_set(i4,inValue3);
+HXLINE( 683)												 ::little::interpreter::InterpTokens lookahead2;
+HXDLIN( 683)												::Array< ::Dynamic> _this3 = ::Array_obj< ::Dynamic>::__new(2)->init(0,::little::tools::InterpTokensSimple_obj::IDENTIFIER_dyn())->init(1,::little::tools::InterpTokensSimple_obj::BLOCK_dyn())->copy();
+HXDLIN( 683)												::Array< ::String > result3 = ::Array_obj< ::String >::__new(_this3->length);
+HXDLIN( 683)												{
+HXLINE( 683)													int _g19 = 0;
+HXDLIN( 683)													int _g20 = _this3->length;
+HXDLIN( 683)													while((_g19 < _g20)){
+HXLINE( 683)														_g19 = (_g19 + 1);
+HXDLIN( 683)														int i4 = (_g19 - 1);
+HXDLIN( 683)														{
+HXLINE( 683)															::String inValue3 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this3,i4)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 683)															result3->__unsafe_set(i4,inValue3);
             														}
             													}
             												}
-HXDLIN( 682)												if (result3->contains(::Type_obj::enumConstructor(pre->__get((i + 2)).StaticCast<  ::little::interpreter::InterpTokens >()).toLowerCase())) {
-HXLINE( 682)													lookahead2 = ::little::interpreter::Interpreter_obj::evaluate(pre->__get((i + 2)).StaticCast<  ::little::interpreter::InterpTokens >(),null());
+HXDLIN( 683)												if (result3->contains(::Type_obj::enumConstructor(pre->__get((i + 2)).StaticCast<  ::little::interpreter::InterpTokens >()).toLowerCase())) {
+HXLINE( 683)													lookahead2 = ::little::interpreter::Interpreter_obj::evaluate(pre->__get((i + 2)).StaticCast<  ::little::interpreter::InterpTokens >(),null());
             												}
             												else {
-HXLINE( 682)													lookahead2 = pre->__get((i + 2)).StaticCast<  ::little::interpreter::InterpTokens >();
+HXLINE( 683)													lookahead2 = pre->__get((i + 2)).StaticCast<  ::little::interpreter::InterpTokens >();
             												}
-HXLINE( 684)												::Array< ::Dynamic> _this4 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::SIGN_dyn())->copy();
-HXDLIN( 684)												::Array< ::String > result4 = ::Array_obj< ::String >::__new(_this4->length);
-HXDLIN( 684)												{
-HXLINE( 684)													int _g21 = 0;
-HXDLIN( 684)													int _g22 = _this4->length;
-HXDLIN( 684)													while((_g21 < _g22)){
-HXLINE( 684)														_g21 = (_g21 + 1);
-HXDLIN( 684)														int i5 = (_g21 - 1);
-HXDLIN( 684)														{
-HXLINE( 684)															::String inValue4 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this4,i5)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 684)															result4->__unsafe_set(i5,inValue4);
+HXLINE( 685)												::Array< ::Dynamic> _this4 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::SIGN_dyn())->copy();
+HXDLIN( 685)												::Array< ::String > result4 = ::Array_obj< ::String >::__new(_this4->length);
+HXDLIN( 685)												{
+HXLINE( 685)													int _g21 = 0;
+HXDLIN( 685)													int _g22 = _this4->length;
+HXDLIN( 685)													while((_g21 < _g22)){
+HXLINE( 685)														_g21 = (_g21 + 1);
+HXDLIN( 685)														int i5 = (_g21 - 1);
+HXDLIN( 685)														{
+HXLINE( 685)															::String inValue4 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this4,i5)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 685)															result4->__unsafe_set(i5,inValue4);
             														}
             													}
             												}
-HXDLIN( 684)												if (!(result4->contains(::Type_obj::enumConstructor(lookahead2).toLowerCase()))) {
-HXLINE( 685)													post->push(::little::interpreter::InterpTokens_obj::PartArray(::Array_obj< ::Dynamic>::__new(3)->init(0,operand1)->init(1,token)->init(2,::little::interpreter::InterpTokens_obj::PartArray(::Array_obj< ::Dynamic>::__new(2)->init(0,lookahead)->init(1,lookahead2)))));
-HXLINE( 686)													i = (i + 2);
+HXDLIN( 685)												if (!(result4->contains(::Type_obj::enumConstructor(lookahead2).toLowerCase()))) {
+HXLINE( 686)													post->push(::little::interpreter::InterpTokens_obj::PartArray(::Array_obj< ::Dynamic>::__new(3)->init(0,operand1)->init(1,token)->init(2,::little::interpreter::InterpTokens_obj::PartArray(::Array_obj< ::Dynamic>::__new(2)->init(0,lookahead)->init(1,lookahead2)))));
+HXLINE( 687)													i = (i + 2);
             												}
             												else {
-HXLINE( 688)													::Array< ::Dynamic> g = ::Array_obj< ::Dynamic>::__new(0);
-HXLINE( 689)													while(true){
-HXLINE( 689)														bool _hx_tmp3;
-HXDLIN( 689)														::Array< ::Dynamic> _this5 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::SIGN_dyn())->copy();
-HXDLIN( 689)														::Array< ::String > result5 = ::Array_obj< ::String >::__new(_this5->length);
-HXDLIN( 689)														{
-HXLINE( 689)															int _g23 = 0;
-HXDLIN( 689)															int _g24 = _this5->length;
-HXDLIN( 689)															while((_g23 < _g24)){
-HXLINE( 689)																_g23 = (_g23 + 1);
-HXDLIN( 689)																int i6 = (_g23 - 1);
-HXDLIN( 689)																{
-HXLINE( 689)																	::String inValue5 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this5,i6)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 689)																	result5->__unsafe_set(i6,inValue5);
+HXLINE( 689)													::Array< ::Dynamic> g = ::Array_obj< ::Dynamic>::__new(0);
+HXLINE( 690)													while(true){
+HXLINE( 690)														bool _hx_tmp3;
+HXDLIN( 690)														::Array< ::Dynamic> _this5 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::SIGN_dyn())->copy();
+HXDLIN( 690)														::Array< ::String > result5 = ::Array_obj< ::String >::__new(_this5->length);
+HXDLIN( 690)														{
+HXLINE( 690)															int _g23 = 0;
+HXDLIN( 690)															int _g24 = _this5->length;
+HXDLIN( 690)															while((_g23 < _g24)){
+HXLINE( 690)																_g23 = (_g23 + 1);
+HXDLIN( 690)																int i6 = (_g23 - 1);
+HXDLIN( 690)																{
+HXLINE( 690)																	::String inValue5 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this5,i6)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 690)																	result5->__unsafe_set(i6,inValue5);
             																}
             															}
             														}
-HXDLIN( 689)														if (result5->contains(::Type_obj::enumConstructor(lookahead2).toLowerCase())) {
-HXLINE( 689)															::Array< ::Dynamic> _g25 = ::Array_obj< ::Dynamic>::__new(0);
-HXDLIN( 689)															{
-HXLINE( 689)																int _g26 = 0;
-HXDLIN( 689)																::Array< ::Dynamic> _g27 = operatorGroup1;
-HXDLIN( 689)																while((_g26 < _g27->length)){
-HXLINE( 689)																	 ::Dynamic v7 = _g27->__get(_g26);
-HXDLIN( 689)																	_g26 = (_g26 + 1);
-HXDLIN( 689)																	bool _hx_tmp4;
-HXDLIN( 689)																	::String v8 = ( (::String)(v7->__Field(HX_("sign",3d,90,53,4c),::hx::paccDynamic)) );
-HXDLIN( 689)																	if (::hx::IsEq( v8,::Type_obj::enumParameters(lookahead2)->__get(0) )) {
-HXLINE( 689)																		_hx_tmp4 = ::hx::IsPointerEq( v7->__Field(HX_("side",97,8d,53,4c),::hx::paccDynamic),::little::interpreter::memory::OperatorType_obj::RHS_ONLY_dyn() );
+HXDLIN( 690)														if (result5->contains(::Type_obj::enumConstructor(lookahead2).toLowerCase())) {
+HXLINE( 690)															::Array< ::Dynamic> _g25 = ::Array_obj< ::Dynamic>::__new(0);
+HXDLIN( 690)															{
+HXLINE( 690)																int _g26 = 0;
+HXDLIN( 690)																::Array< ::Dynamic> _g27 = operatorGroup1;
+HXDLIN( 690)																while((_g26 < _g27->length)){
+HXLINE( 690)																	 ::Dynamic v7 = _g27->__get(_g26);
+HXDLIN( 690)																	_g26 = (_g26 + 1);
+HXDLIN( 690)																	bool _hx_tmp4;
+HXDLIN( 690)																	::String v8 = ( (::String)(v7->__Field(HX_("sign",3d,90,53,4c),::hx::paccDynamic)) );
+HXDLIN( 690)																	if (::hx::IsEq( v8,::Type_obj::enumParameters(lookahead2)->__get(0) )) {
+HXLINE( 690)																		_hx_tmp4 = ::hx::IsPointerEq( v7->__Field(HX_("side",97,8d,53,4c),::hx::paccDynamic),::little::interpreter::memory::OperatorType_obj::RHS_ONLY_dyn() );
             																	}
             																	else {
-HXLINE( 689)																		_hx_tmp4 = false;
+HXLINE( 690)																		_hx_tmp4 = false;
             																	}
-HXDLIN( 689)																	if (_hx_tmp4) {
-HXLINE( 689)																		_g25->push(v7);
+HXDLIN( 690)																	if (_hx_tmp4) {
+HXLINE( 690)																		_g25->push(v7);
             																	}
             																}
             															}
-HXDLIN( 689)															_hx_tmp3 = (_g25->length > 0);
+HXDLIN( 690)															_hx_tmp3 = (_g25->length > 0);
             														}
             														else {
-HXLINE( 689)															_hx_tmp3 = false;
+HXLINE( 690)															_hx_tmp3 = false;
             														}
-HXDLIN( 689)														if (!(_hx_tmp3)) {
-HXLINE( 689)															goto _hx_goto_85;
+HXDLIN( 690)														if (!(_hx_tmp3)) {
+HXLINE( 690)															goto _hx_goto_85;
             														}
-HXLINE( 690)														g->push(lookahead2);
-HXLINE( 691)														i = (i + 1);
-HXLINE( 692)														if (((i + 2) >= pre->length)) {
-HXLINE( 692)															::little::interpreter::Interpreter_obj::error(HX_("Expression ended with an operator, when an operand was expected.",1c,b3,e6,48),null());
+HXLINE( 691)														g->push(lookahead2);
+HXLINE( 692)														i = (i + 1);
+HXLINE( 693)														if (((i + 2) >= pre->length)) {
+HXLINE( 693)															::little::interpreter::Interpreter_obj::error(HX_("Expression ended with an operator, when an operand was expected.",1c,b3,e6,48),null());
             														}
-HXLINE( 693)														::Array< ::Dynamic> _this6 = ::Array_obj< ::Dynamic>::__new(2)->init(0,::little::tools::InterpTokensSimple_obj::IDENTIFIER_dyn())->init(1,::little::tools::InterpTokensSimple_obj::BLOCK_dyn())->copy();
-HXDLIN( 693)														::Array< ::String > result6 = ::Array_obj< ::String >::__new(_this6->length);
-HXDLIN( 693)														{
-HXLINE( 693)															int _g28 = 0;
-HXDLIN( 693)															int _g29 = _this6->length;
-HXDLIN( 693)															while((_g28 < _g29)){
-HXLINE( 693)																_g28 = (_g28 + 1);
-HXDLIN( 693)																int i7 = (_g28 - 1);
-HXDLIN( 693)																{
-HXLINE( 693)																	::String inValue6 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this6,i7)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 693)																	result6->__unsafe_set(i7,inValue6);
+HXLINE( 694)														::Array< ::Dynamic> _this6 = ::Array_obj< ::Dynamic>::__new(2)->init(0,::little::tools::InterpTokensSimple_obj::IDENTIFIER_dyn())->init(1,::little::tools::InterpTokensSimple_obj::BLOCK_dyn())->copy();
+HXDLIN( 694)														::Array< ::String > result6 = ::Array_obj< ::String >::__new(_this6->length);
+HXDLIN( 694)														{
+HXLINE( 694)															int _g28 = 0;
+HXDLIN( 694)															int _g29 = _this6->length;
+HXDLIN( 694)															while((_g28 < _g29)){
+HXLINE( 694)																_g28 = (_g28 + 1);
+HXDLIN( 694)																int i7 = (_g28 - 1);
+HXDLIN( 694)																{
+HXLINE( 694)																	::String inValue6 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this6,i7)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 694)																	result6->__unsafe_set(i7,inValue6);
             																}
             															}
             														}
-HXDLIN( 693)														if (result6->contains(::Type_obj::enumConstructor(pre->__get((i + 2)).StaticCast<  ::little::interpreter::InterpTokens >()).toLowerCase())) {
-HXLINE( 693)															lookahead2 = ::little::interpreter::Interpreter_obj::evaluate(pre->__get((i + 2)).StaticCast<  ::little::interpreter::InterpTokens >(),null());
+HXDLIN( 694)														if (result6->contains(::Type_obj::enumConstructor(pre->__get((i + 2)).StaticCast<  ::little::interpreter::InterpTokens >()).toLowerCase())) {
+HXLINE( 694)															lookahead2 = ::little::interpreter::Interpreter_obj::evaluate(pre->__get((i + 2)).StaticCast<  ::little::interpreter::InterpTokens >(),null());
             														}
             														else {
-HXLINE( 693)															lookahead2 = pre->__get((i + 2)).StaticCast<  ::little::interpreter::InterpTokens >();
+HXLINE( 694)															lookahead2 = pre->__get((i + 2)).StaticCast<  ::little::interpreter::InterpTokens >();
             														}
             													}
             													_hx_goto_85:;
-HXLINE( 696)													g->push(lookahead2);
-HXLINE( 698)													i = (i + 1);
-HXLINE( 700)													 ::little::interpreter::InterpTokens operand2;
-HXDLIN( 700)													if ((g->length == 1)) {
-HXLINE( 700)														operand2 = g->__get(0).StaticCast<  ::little::interpreter::InterpTokens >();
+HXLINE( 697)													g->push(lookahead2);
+HXLINE( 699)													i = (i + 1);
+HXLINE( 701)													 ::little::interpreter::InterpTokens operand2;
+HXDLIN( 701)													if ((g->length == 1)) {
+HXLINE( 701)														operand2 = g->__get(0).StaticCast<  ::little::interpreter::InterpTokens >();
             													}
             													else {
-HXLINE( 700)														operand2 = ::little::interpreter::InterpTokens_obj::PartArray(::little::interpreter::Interpreter_obj::group(g));
+HXLINE( 701)														operand2 = ::little::interpreter::InterpTokens_obj::PartArray(::little::interpreter::Interpreter_obj::group(g));
             													}
-HXLINE( 701)													post->push(::little::interpreter::InterpTokens_obj::PartArray(::Array_obj< ::Dynamic>::__new(3)->init(0,operand1)->init(1,op)->init(2,operand2)));
+HXLINE( 702)													post->push(::little::interpreter::InterpTokens_obj::PartArray(::Array_obj< ::Dynamic>::__new(3)->init(0,operand1)->init(1,op)->init(2,operand2)));
             												}
             											}
             											else {
-HXLINE( 703)												::Array< ::Dynamic> _g30 = ::Array_obj< ::Dynamic>::__new(0);
-HXDLIN( 703)												{
-HXLINE( 703)													int _g31 = 0;
-HXDLIN( 703)													::Array< ::Dynamic> _g32 = operatorGroup1;
-HXDLIN( 703)													while((_g31 < _g32->length)){
-HXLINE( 703)														 ::Dynamic v9 = _g32->__get(_g31);
-HXDLIN( 703)														_g31 = (_g31 + 1);
-HXDLIN( 703)														bool _hx_tmp5;
-HXDLIN( 703)														::String v10 = ( (::String)(v9->__Field(HX_("sign",3d,90,53,4c),::hx::paccDynamic)) );
-HXDLIN( 703)														if (::hx::IsEq( v10,::Type_obj::enumParameters(token)->__get(0) )) {
-HXLINE( 703)															_hx_tmp5 = ::hx::IsPointerEq( v9->__Field(HX_("side",97,8d,53,4c),::hx::paccDynamic),::little::interpreter::memory::OperatorType_obj::RHS_ONLY_dyn() );
+HXLINE( 704)												::Array< ::Dynamic> _g30 = ::Array_obj< ::Dynamic>::__new(0);
+HXDLIN( 704)												{
+HXLINE( 704)													int _g31 = 0;
+HXDLIN( 704)													::Array< ::Dynamic> _g32 = operatorGroup1;
+HXDLIN( 704)													while((_g31 < _g32->length)){
+HXLINE( 704)														 ::Dynamic v9 = _g32->__get(_g31);
+HXDLIN( 704)														_g31 = (_g31 + 1);
+HXDLIN( 704)														bool _hx_tmp5;
+HXDLIN( 704)														::String v10 = ( (::String)(v9->__Field(HX_("sign",3d,90,53,4c),::hx::paccDynamic)) );
+HXDLIN( 704)														if (::hx::IsEq( v10,::Type_obj::enumParameters(token)->__get(0) )) {
+HXLINE( 704)															_hx_tmp5 = ::hx::IsPointerEq( v9->__Field(HX_("side",97,8d,53,4c),::hx::paccDynamic),::little::interpreter::memory::OperatorType_obj::RHS_ONLY_dyn() );
             														}
             														else {
-HXLINE( 703)															_hx_tmp5 = false;
+HXLINE( 704)															_hx_tmp5 = false;
             														}
-HXDLIN( 703)														if (_hx_tmp5) {
-HXLINE( 703)															_g30->push(v9);
+HXDLIN( 704)														if (_hx_tmp5) {
+HXLINE( 704)															_g30->push(v9);
             														}
             													}
             												}
-HXDLIN( 703)												if ((_g30->length > 0)) {
-HXLINE( 704)													::little::interpreter::Interpreter_obj::error(HX_("An operator that expects a right side can't be preceded by an operator that expects a left side.",a2,08,9f,d7),null());
+HXDLIN( 704)												if ((_g30->length > 0)) {
+HXLINE( 705)													::little::interpreter::Interpreter_obj::error(HX_("An operator that expects a right side can't be preceded by an operator that expects a left side.",a2,08,9f,d7),null());
             												}
             											}
             										}
             									}
             									else {
-HXLINE( 711)										::Array< ::Dynamic> _this7 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::SIGN_dyn())->copy();
-HXDLIN( 711)										::Array< ::String > result7 = ::Array_obj< ::String >::__new(_this7->length);
-HXDLIN( 711)										{
-HXLINE( 711)											int _g33 = 0;
-HXDLIN( 711)											int _g34 = _this7->length;
-HXDLIN( 711)											while((_g33 < _g34)){
-HXLINE( 711)												_g33 = (_g33 + 1);
-HXDLIN( 711)												int i8 = (_g33 - 1);
-HXDLIN( 711)												{
-HXLINE( 711)													::String inValue7 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this7,i8)),HX_("_",5f,00,00,00)).toLowerCase();
-HXDLIN( 711)													result7->__unsafe_set(i8,inValue7);
+HXLINE( 712)										::Array< ::Dynamic> _this7 = ::Array_obj< ::Dynamic>::__new(1)->init(0,::little::tools::InterpTokensSimple_obj::SIGN_dyn())->copy();
+HXDLIN( 712)										::Array< ::String > result7 = ::Array_obj< ::String >::__new(_this7->length);
+HXDLIN( 712)										{
+HXLINE( 712)											int _g33 = 0;
+HXDLIN( 712)											int _g34 = _this7->length;
+HXDLIN( 712)											while((_g33 < _g34)){
+HXLINE( 712)												_g33 = (_g33 + 1);
+HXDLIN( 712)												int i8 = (_g33 - 1);
+HXDLIN( 712)												{
+HXLINE( 712)													::String inValue7 = ::little::tools::TextTools_obj::remove(::Type_obj::enumConstructor(_hx_array_unsafe_get(_this7,i8)),HX_("_",5f,00,00,00)).toLowerCase();
+HXDLIN( 712)													result7->__unsafe_set(i8,inValue7);
             												}
             											}
             										}
-HXDLIN( 711)										if (result7->contains(::Type_obj::enumConstructor(lookahead).toLowerCase())) {
-HXLINE( 712)											post->push(::little::interpreter::InterpTokens_obj::PartArray(::Array_obj< ::Dynamic>::__new(2)->init(0,post->pop().StaticCast<  ::little::interpreter::InterpTokens >())->init(1,token)));
+HXDLIN( 712)										if (result7->contains(::Type_obj::enumConstructor(lookahead).toLowerCase())) {
+HXLINE( 713)											post->push(::little::interpreter::InterpTokens_obj::PartArray(::Array_obj< ::Dynamic>::__new(2)->init(0,post->pop().StaticCast<  ::little::interpreter::InterpTokens >())->init(1,token)));
             										}
             										else {
-HXLINE( 714)											post->push(::little::interpreter::InterpTokens_obj::PartArray(::Array_obj< ::Dynamic>::__new(3)->init(0,post->pop().StaticCast<  ::little::interpreter::InterpTokens >())->init(1,token)->init(2,lookahead)));
-HXLINE( 715)											i = (i + 1);
+HXLINE( 715)											post->push(::little::interpreter::InterpTokens_obj::PartArray(::Array_obj< ::Dynamic>::__new(3)->init(0,post->pop().StaticCast<  ::little::interpreter::InterpTokens >())->init(1,token)->init(2,lookahead)));
+HXLINE( 716)											i = (i + 1);
             										}
             									}
             								}
             								else {
-HXLINE( 720)									post->push(token);
+HXLINE( 721)									post->push(token);
             								}
             							}
             						}
             						break;
             						default:{
-HXLINE( 720)							post->push(token);
+HXLINE( 721)							post->push(token);
             						}
             					}
-HXLINE( 722)					i = (i + 1);
+HXLINE( 723)					i = (i + 1);
             				}
             				_hx_goto_75:;
             			}
             		}
-HXLINE( 726)		return post;
+HXLINE( 727)		return post;
             	}
 
 

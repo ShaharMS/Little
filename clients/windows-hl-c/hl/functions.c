@@ -794,8 +794,8 @@ venum* little_tools_PrepareRun_addTypes__$10(int,venum*,hl__types__ArrayObj);
 venum* little_tools_PrepareRun_addTypes__$11(int,venum*,hl__types__ArrayObj);
 venum* little_tools_PrepareRun_addTypes__$12(int,venum*,hl__types__ArrayObj);
 venum* little_tools_PrepareRun_addTypes__$13(int,venum*,hl__types__ArrayObj);
-venum* little_tools_PrepareRun_addTypes__$14(int,venum*);
-venum* little_tools_PrepareRun_addTypes__$15(int,venum*,hl__types__ArrayObj);
+venum* little_tools_PrepareRun_addTypes__$14(int,venum*,hl__types__ArrayObj);
+venum* little_tools_PrepareRun_addTypes__$15(int,venum*);
 venum* little_tools_PrepareRun_addTypes__$16(int,venum*,hl__types__ArrayObj);
 venum* little_tools_PrepareRun_addTypes__$17(int,venum*,hl__types__ArrayObj);
 venum* little_tools_PrepareRun_addTypes__$18(int,venum*,hl__types__ArrayObj);
@@ -807,19 +807,20 @@ venum* little_tools_PrepareRun_addTypes__$23(int,venum*,hl__types__ArrayObj);
 venum* little_tools_PrepareRun_addTypes__$24(int,venum*,hl__types__ArrayObj);
 venum* little_tools_PrepareRun_addTypes__$25(int,venum*,hl__types__ArrayObj);
 venum* little_tools_PrepareRun_addTypes__$26(int,venum*,hl__types__ArrayObj);
-venum* little_tools_PrepareRun_addTypes__$27(hl__types__ArrayObj);
+venum* little_tools_PrepareRun_addTypes__$27(int,venum*,hl__types__ArrayObj);
 venum* little_tools_PrepareRun_addTypes__$28(hl__types__ArrayObj);
 venum* little_tools_PrepareRun_addTypes__$29(hl__types__ArrayObj);
-vvirtual* little_tools_PrepareRun_addTypes__$30(int,venum*);
+venum* little_tools_PrepareRun_addTypes__$30(hl__types__ArrayObj);
 vvirtual* little_tools_PrepareRun_addTypes__$31(int,venum*);
-venum* little_tools_PrepareRun_addTypes__$32(int,venum*,hl__types__ArrayObj);
+vvirtual* little_tools_PrepareRun_addTypes__$32(int,venum*);
 venum* little_tools_PrepareRun_addTypes__$33(int,venum*,hl__types__ArrayObj);
-venum* little_tools_PrepareRun_addTypes__$34(hl__types__ArrayObj);
+venum* little_tools_PrepareRun_addTypes__$34(int,venum*,hl__types__ArrayObj);
 venum* little_tools_PrepareRun_addTypes__$35(hl__types__ArrayObj);
 venum* little_tools_PrepareRun_addTypes__$36(hl__types__ArrayObj);
 venum* little_tools_PrepareRun_addTypes__$37(hl__types__ArrayObj);
-venum* little_tools_PrepareRun_addTypes__$38(void);
+venum* little_tools_PrepareRun_addTypes__$38(hl__types__ArrayObj);
 venum* little_tools_PrepareRun_addTypes__$39(void);
+venum* little_tools_PrepareRun_addTypes__$40(void);
 venum* little_tools_PrepareRun_addFunctions__$1(hl__types__ArrayObj);
 venum* little_tools_PrepareRun_addFunctions__$2(hl__types__ArrayObj);
 venum* little_tools_PrepareRun_addFunctions__$3(hl__types__ArrayObj);
@@ -2348,6 +2349,7 @@ void *hl_functions_ptrs[] = {String_toUpperCase,\
 	little_tools_PrepareRun_addTypes__$37,\
 	little_tools_PrepareRun_addTypes__$38,\
 	little_tools_PrepareRun_addTypes__$39,\
+	little_tools_PrepareRun_addTypes__$40,\
 	little_tools_PrepareRun_addFunctions__$1,\
 	little_tools_PrepareRun_addFunctions__$2,\
 	little_tools_PrepareRun_addFunctions__$3,\
@@ -3213,6 +3215,7 @@ hl_type *hl_functions_types[] = {&t$fun_0cf7b0f,\
 	&t$fun_0cf7b0f,\
 	&t$fun_b1ff775,\
 	&t$fun_1b2ab6c,\
+	&t$fun_0dde2f1,\
 	&t$fun_0dde2f1,\
 	&t$fun_0dde2f1,\
 	&t$fun_0dde2f1,\

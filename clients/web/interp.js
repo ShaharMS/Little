@@ -7390,12 +7390,6 @@ little_Little.run = function(code,debug) {
 			little_Little.debug = previous;
 		}
 	} catch( _g ) {
-		var e = haxe_Exception.caught(_g);
-		if(e.get_message() == "Quitting...") {
-			haxe_Log.trace(e.get_message(),{ fileName : "src/little/Little.hx", lineNumber : 146, className : "little.Little", methodName : "run"});
-		} else {
-			haxe_Log.trace(e.details(),{ fileName : "src/little/Little.hx", lineNumber : 146, className : "little.Little", methodName : "run"});
-		}
 	}
 };
 little_Little.compile = function(code) {
@@ -8136,11 +8130,13 @@ little_interpreter_Interpreter.read = function(name) {
 little_interpreter_Interpreter.typeCast = function(value,type) {
 	var preType = little_tools_Extensions.asStringPath(little_tools_Extensions.asTokenPath(little_tools_Extensions.type(little_interpreter_Interpreter.evaluate(value))));
 	var postType = little_tools_Extensions.asStringPath(little_tools_Extensions.asTokenPath(little_tools_Extensions.extractIdentifier(type)));
+	haxe_Log.trace(preType,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 375, className : "little.interpreter.Interpreter", methodName : "typeCast", customParams : [postType,value]});
 	if(preType.join(little_Little.keywords.PROPERTY_ACCESS_SIGN) == postType.join(little_Little.keywords.PROPERTY_ACCESS_SIGN) || postType.join(little_Little.keywords.PROPERTY_ACCESS_SIGN) == little_Little.keywords.TYPE_UNKNOWN) {
 		return value;
 	}
-	preType.push(little_Little.keywords.TYPE_CAST_FUNCTION_PREFIX + postType.join("_"));
-	value = little_interpreter_Interpreter.call(little_tools_Extensions.asTokenPath(preType.join(little_Little.keywords.PROPERTY_ACCESS_SIGN)),little_interpreter_InterpTokens.PartArray([value]));
+	var val = little_interpreter_Interpreter.evaluate(value);
+	var func = little_interpreter_InterpTokens.Identifier(little_Little.keywords.TYPE_CAST_FUNCTION_PREFIX + postType.join("_"));
+	value = little_interpreter_Interpreter.call(little_interpreter_InterpTokens.PropertyAccess(val,func),little_interpreter_InterpTokens.PartArray([]));
 	var _g = 0;
 	var _g1 = little_Little.runtime.onTypeCast;
 	while(_g < _g1.length) {
@@ -12042,11 +12038,32 @@ little_tools_PrepareRun.addTypes = function() {
 	little_Little.plugin.registerType(little_Little.keywords.TYPE_FLOAT,new haxe_ds_StringMap());
 	little_Little.plugin.registerType(little_Little.keywords.TYPE_STRING,new haxe_ds_StringMap());
 	little_Little.plugin.registerType(little_Little.keywords.TYPE_SIGN,new haxe_ds_StringMap());
+	little_Little.plugin.registerType(little_Little.keywords.TYPE_BOOLEAN,new haxe_ds_StringMap());
 	var tmp = little_Little.plugin;
 	var tmp1 = little_Little.keywords.TYPE_MODULE;
 	var _g = new haxe_ds_StringMap();
 	_g.h["public " + little_Little.keywords.TYPE_STRING + " " + little_Little.keywords.TYPE_CAST_FUNCTION_PREFIX + little_Little.keywords.TYPE_STRING + " ()"] = function(address,_,_1) {
 		return little_tools_Conversion.toLittleValue(little_Little.memory.getTypeName(address));
+	};
+	tmp.registerType(tmp1,_g);
+	var tmp = little_Little.plugin;
+	var tmp1 = little_Little.keywords.TYPE_BOOLEAN;
+	var _g = new haxe_ds_StringMap();
+	_g.h["public " + little_Little.keywords.TYPE_STRING + " " + little_Little.keywords.TYPE_CAST_FUNCTION_PREFIX + little_Little.keywords.TYPE_STRING + " ()"] = function(_,value,_1) {
+		var _this = [little_tools_InterpTokensSimple.TRUE_VALUE].slice();
+		var result = new Array(_this.length);
+		var _g = 0;
+		var _g1 = _this.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var x = _this[i];
+			result[i] = little_tools_TextTools.remove($hxEnums[x.__enum__].__constructs__[x._hx_index]._hx_name,"_").toLowerCase();
+		}
+		if(result.indexOf($hxEnums[value.__enum__].__constructs__[value._hx_index]._hx_name.toLowerCase()) != -1) {
+			return little_tools_Conversion.toLittleValue("true");
+		} else {
+			return little_tools_Conversion.toLittleValue("false");
+		}
 	};
 	tmp.registerType(tmp1,_g);
 	var tmp = little_Little.plugin;
