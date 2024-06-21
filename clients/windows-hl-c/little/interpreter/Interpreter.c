@@ -123,13 +123,6 @@ extern String s$6e5dc89;
 extern hl_type t$vrt_f317fe3;
 extern hl_type t$_i32;
 void hl_types_ArrayObj_unshift(hl__types__ArrayObj,vdynamic*);
-#include <haxe/Log.h>
-extern haxe__$Log g$_haxe_Log;
-extern hl_type t$vrt_eaa6a3b;
-extern String s$9081d88;
-extern String s$little_interpreter_Interpreter;
-extern String s$typeCast;
-hl__types__ArrayDyn hl_types_ArrayDyn_alloc(hl__types__ArrayBase,bool*);
 #include <little/interpreter/memory/Referrer.h>
 void little_interpreter_memory_Referrer_pushScope(little__interpreter__memory__Referrer);
 extern venum* g$bfc99fb;
@@ -3593,22 +3586,17 @@ venum* little_interpreter_Interpreter_read(venum* r0) {
 }
 
 venum* little_interpreter_Interpreter_typeCast(venum* r0,venum* r1) {
-	bool *r18;
-	String r4, r21;
-	little__$Little r20;
-	vvirtual *r11;
-	hl__types__ArrayObj r2, r7, r10, r16;
-	hl_type *r15;
-	venum *r3, *r23, *r24, *r25;
-	bool r17;
-	haxe__$Log r9;
-	little__interpreter__Runtime r26;
-	little__KeywordConfig r19;
-	hl__types__ArrayDyn r13;
-	vclosure *r8, *r28;
-	vdynamic *r5, *r22;
-	varray *r14;
-	int r12, r27;
+	String r4, r11;
+	little__$Little r10;
+	hl__types__ArrayObj r2, r7, r8;
+	hl_type *r17;
+	venum *r3, *r13, *r14, *r15;
+	little__interpreter__Runtime r19;
+	little__KeywordConfig r9;
+	vclosure *r21;
+	vdynamic *r5, *r12;
+	int r18, r20;
+	varray *r16;
 	r5 = NULL;
 	r3 = little_interpreter_Interpreter_evaluate(r0,r5);
 	r4 = little_tools_Extensions_type(r3);
@@ -3617,103 +3605,78 @@ venum* little_interpreter_Interpreter_typeCast(venum* r0,venum* r1) {
 	r4 = little_tools_Extensions_extractIdentifier(r1);
 	r3 = little_tools_Extensions_asTokenPath(r4);
 	r7 = little_tools_Extensions_asStringPath(r3);
-	r9 = (haxe__$Log)g$_haxe_Log;
-	r8 = r9->trace;
-	if( r8 == NULL ) hl_null_access();
-	r11 = hl_alloc_virtual(&t$vrt_eaa6a3b);
-	r4 = (String)s$9081d88;
-	if( hl_vfields(r11)[2] ) *(String*)(hl_vfields(r11)[2]) = (String)r4; else hl_dyn_setp(r11->value,37969014/*fileName*/,&t$String,r4);
-	r12 = 375;
-	if( hl_vfields(r11)[3] ) *(int*)(hl_vfields(r11)[3]) = (int)r12; else hl_dyn_seti(r11->value,371360620/*lineNumber*/,&t$_i32,r12);
-	r4 = (String)s$little_interpreter_Interpreter;
-	if( hl_vfields(r11)[0] ) *(String*)(hl_vfields(r11)[0]) = (String)r4; else hl_dyn_setp(r11->value,-63073762/*className*/,&t$String,r4);
-	r4 = (String)s$typeCast;
-	if( hl_vfields(r11)[4] ) *(String*)(hl_vfields(r11)[4]) = (String)r4; else hl_dyn_setp(r11->value,302979532/*methodName*/,&t$String,r4);
-	r15 = &t$_dyn;
-	r12 = 2;
-	r14 = hl_alloc_array(r15,r12);
-	r12 = 0;
-	((hl__types__ArrayObj*)(r14 + 1))[r12] = r7;
-	r12 = 1;
-	((venum**)(r14 + 1))[r12] = r0;
-	r16 = hl_types_ArrayObj_alloc(r14);
-	r17 = true;
-	r18 = &r17;
-	r13 = hl_types_ArrayDyn_alloc(((hl__types__ArrayBase)r16),r18);
-	if( hl_vfields(r11)[1] ) *(hl__types__ArrayDyn*)(hl_vfields(r11)[1]) = (hl__types__ArrayDyn)r13; else hl_dyn_setp(r11->value,-317173289/*customParams*/,&t$hl_types_ArrayDyn,r13);
-	r8->hasValue ? ((void (*)(vdynamic*,vdynamic*,vvirtual*))r8->fun)((vdynamic*)r8->value,((vdynamic*)r2),r11) : ((void (*)(vdynamic*,vvirtual*))r8->fun)(((vdynamic*)r2),r11);
 	if( r2 == NULL ) hl_null_access();
-	r20 = (little__$Little)g$_little_Little;
-	r19 = r20->keywords;
-	if( r19 == NULL ) hl_null_access();
-	r4 = r19->PROPERTY_ACCESS_SIGN;
+	r10 = (little__$Little)g$_little_Little;
+	r9 = r10->keywords;
+	if( r9 == NULL ) hl_null_access();
+	r4 = r9->PROPERTY_ACCESS_SIGN;
 	r4 = hl_types_ArrayObj_join(r2,r4);
 	if( r7 == NULL ) hl_null_access();
-	r20 = (little__$Little)g$_little_Little;
-	r19 = r20->keywords;
-	if( r19 == NULL ) hl_null_access();
-	r21 = r19->PROPERTY_ACCESS_SIGN;
-	r21 = hl_types_ArrayObj_join(r7,r21);
-	if( r4 == r21 || (r4 && r21 && String___compare(r4,(vdynamic*)r21) == 0) ) goto label$5bf8726_16_56;
-	r20 = (little__$Little)g$_little_Little;
-	r19 = r20->keywords;
-	if( r19 == NULL ) hl_null_access();
-	r4 = r19->PROPERTY_ACCESS_SIGN;
+	r10 = (little__$Little)g$_little_Little;
+	r9 = r10->keywords;
+	if( r9 == NULL ) hl_null_access();
+	r11 = r9->PROPERTY_ACCESS_SIGN;
+	r11 = hl_types_ArrayObj_join(r7,r11);
+	if( r4 == r11 || (r4 && r11 && String___compare(r4,(vdynamic*)r11) == 0) ) goto label$5bf8726_16_31;
+	r10 = (little__$Little)g$_little_Little;
+	r9 = r10->keywords;
+	if( r9 == NULL ) hl_null_access();
+	r4 = r9->PROPERTY_ACCESS_SIGN;
 	r4 = hl_types_ArrayObj_join(r7,r4);
-	r20 = (little__$Little)g$_little_Little;
-	r19 = r20->keywords;
-	if( r19 == NULL ) hl_null_access();
-	r21 = r19->TYPE_UNKNOWN;
-	if( r4 != r21 && (!r4 || !r21 || String___compare(r4,(vdynamic*)r21) != 0) ) goto label$5bf8726_16_57;
-	label$5bf8726_16_56:
+	r10 = (little__$Little)g$_little_Little;
+	r9 = r10->keywords;
+	if( r9 == NULL ) hl_null_access();
+	r11 = r9->TYPE_UNKNOWN;
+	if( r4 != r11 && (!r4 || !r11 || String___compare(r4,(vdynamic*)r11) != 0) ) goto label$5bf8726_16_32;
+	label$5bf8726_16_31:
 	return r0;
-	label$5bf8726_16_57:
+	label$5bf8726_16_32:
 	r5 = NULL;
 	r3 = little_interpreter_Interpreter_evaluate(r0,r5);
-	r20 = (little__$Little)g$_little_Little;
-	r19 = r20->keywords;
+	r10 = (little__$Little)g$_little_Little;
+	r9 = r10->keywords;
+	if( r9 == NULL ) hl_null_access();
+	r4 = r9->TYPE_CAST_FUNCTION_PREFIX;
+	r11 = (String)s$b14a7b8;
+	r11 = hl_types_ArrayObj_join(r7,r11);
+	r4 = String___add__(r4,r11);
+	r13 = hl_alloc_enum(&t$little_interpreter_InterpTokens,25);
+	((little_interpreter_InterpTokens_Identifier*)r13)->p0 = r4;
+	r14 = hl_alloc_enum(&t$little_interpreter_InterpTokens,15);
+	((little_interpreter_InterpTokens_PropertyAccess*)r14)->p0 = r3;
+	((little_interpreter_InterpTokens_PropertyAccess*)r14)->p1 = r13;
+	r17 = &t$little_interpreter_InterpTokens;
+	r18 = 0;
+	r16 = hl_alloc_array(r17,r18);
+	r8 = hl_types_ArrayObj_alloc(r16);
+	r15 = hl_alloc_enum(&t$little_interpreter_InterpTokens,14);
+	((little_interpreter_InterpTokens_PartArray*)r15)->p0 = r8;
+	r14 = little_interpreter_Interpreter_call(r14,r15);
+	r0 = r14;
+	r18 = 0;
+	r10 = (little__$Little)g$_little_Little;
+	r19 = r10->runtime;
 	if( r19 == NULL ) hl_null_access();
-	r4 = r19->TYPE_CAST_FUNCTION_PREFIX;
-	r21 = (String)s$b14a7b8;
-	r21 = hl_types_ArrayObj_join(r7,r21);
-	r4 = String___add__(r4,r21);
-	r23 = hl_alloc_enum(&t$little_interpreter_InterpTokens,25);
-	((little_interpreter_InterpTokens_Identifier*)r23)->p0 = r4;
-	r24 = hl_alloc_enum(&t$little_interpreter_InterpTokens,15);
-	((little_interpreter_InterpTokens_PropertyAccess*)r24)->p0 = r3;
-	((little_interpreter_InterpTokens_PropertyAccess*)r24)->p1 = r23;
-	r15 = &t$little_interpreter_InterpTokens;
-	r12 = 0;
-	r14 = hl_alloc_array(r15,r12);
-	r10 = hl_types_ArrayObj_alloc(r14);
-	r25 = hl_alloc_enum(&t$little_interpreter_InterpTokens,14);
-	((little_interpreter_InterpTokens_PartArray*)r25)->p0 = r10;
-	r24 = little_interpreter_Interpreter_call(r24,r25);
-	r0 = r24;
-	r12 = 0;
-	r20 = (little__$Little)g$_little_Little;
-	r26 = r20->runtime;
-	if( r26 == NULL ) hl_null_access();
-	r10 = r26->onTypeCast;
-	label$5bf8726_16_80:
-	if( r10 == NULL ) hl_null_access();
-	r27 = r10->length;
-	if( r12 >= r27 ) goto label$5bf8726_16_96;
-	r27 = r10->length;
-	if( ((unsigned)r12) < ((unsigned)r27) ) goto label$5bf8726_16_88;
-	r28 = NULL;
-	goto label$5bf8726_16_91;
-	label$5bf8726_16_88:
-	r14 = r10->array;
-	r22 = ((vdynamic**)(r14 + 1))[r12];
-	r28 = (vclosure*)r22;
-	label$5bf8726_16_91:
-	++r12;
-	if( r28 == NULL ) hl_null_access();
+	r8 = r19->onTypeCast;
+	label$5bf8726_16_55:
+	if( r8 == NULL ) hl_null_access();
+	r20 = r8->length;
+	if( r18 >= r20 ) goto label$5bf8726_16_71;
+	r20 = r8->length;
+	if( ((unsigned)r18) < ((unsigned)r20) ) goto label$5bf8726_16_63;
+	r21 = NULL;
+	goto label$5bf8726_16_66;
+	label$5bf8726_16_63:
+	r16 = r8->array;
+	r12 = ((vdynamic**)(r16 + 1))[r18];
+	r21 = (vclosure*)r12;
+	label$5bf8726_16_66:
+	++r18;
+	if( r21 == NULL ) hl_null_access();
 	r4 = little_tools_Extensions_asJoinedStringPath(r1);
-	r28->hasValue ? ((void (*)(vdynamic*,venum*,String))r28->fun)((vdynamic*)r28->value,r0,r4) : ((void (*)(venum*,String))r28->fun)(r0,r4);
-	goto label$5bf8726_16_80;
-	label$5bf8726_16_96:
+	r21->hasValue ? ((void (*)(vdynamic*,venum*,String))r21->fun)((vdynamic*)r21->value,r0,r4) : ((void (*)(venum*,String))r21->fun)(r0,r4);
+	goto label$5bf8726_16_55;
+	label$5bf8726_16_71:
 	return r0;
 }
 

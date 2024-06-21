@@ -450,7 +450,6 @@
    <depend name="include/Std.h"/>
    <depend name="include/Type.h"/>
    <depend name="include/haxe/IMap.h"/>
-   <depend name="include/haxe/Log.h"/>
    <depend name="include/haxe/ds/ObjectMap.h"/>
    <depend name="include/haxe/ds/StringMap.h"/>
    <depend name="include/little/KeywordConfig.h"/>

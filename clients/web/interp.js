@@ -8130,7 +8130,6 @@ little_interpreter_Interpreter.read = function(name) {
 little_interpreter_Interpreter.typeCast = function(value,type) {
 	var preType = little_tools_Extensions.asStringPath(little_tools_Extensions.asTokenPath(little_tools_Extensions.type(little_interpreter_Interpreter.evaluate(value))));
 	var postType = little_tools_Extensions.asStringPath(little_tools_Extensions.asTokenPath(little_tools_Extensions.extractIdentifier(type)));
-	haxe_Log.trace(preType,{ fileName : "src/little/interpreter/Interpreter.hx", lineNumber : 375, className : "little.interpreter.Interpreter", methodName : "typeCast", customParams : [postType,value]});
 	if(preType.join(little_Little.keywords.PROPERTY_ACCESS_SIGN) == postType.join(little_Little.keywords.PROPERTY_ACCESS_SIGN) || postType.join(little_Little.keywords.PROPERTY_ACCESS_SIGN) == little_Little.keywords.TYPE_UNKNOWN) {
 		return value;
 	}
